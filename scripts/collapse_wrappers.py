@@ -205,6 +205,11 @@ def main():
         last = n.rsplit(".", 1)[-1]
         ok = True
         for c in rev[m]:
+            # Rewriting the caller's header would lose `meta` or `import all`, even on
+            # an unrelated import and even when the body never mentions the wrapper.
+            if mods[c].exotic:
+                ok = False
+                break
             body = mods[c].body
             if last not in body:
                 continue
