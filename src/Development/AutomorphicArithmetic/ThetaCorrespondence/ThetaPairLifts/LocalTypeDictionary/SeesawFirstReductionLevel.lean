@@ -555,12 +555,12 @@ theorem exists_partner : ∀ (D : D7) (S : HSp D) (Λ : Submodule (𝓞 D.host.E
   have hform : ∀ a b : S.V, S.hT a b = GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.form σ J (co b) (co a) := fun a b => by
     rw [GlobalTheory.RelFlag.hT_eq_form]
     simp only [GlobalTheory.SgAlg.form, GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.form, GlobalTheory.IntPair.co, dotProduct, Matrix.mulVec, hJ,
-      Matrix.transpose_apply, hσs, starRingEnd_apply, Finset.mul_sum, Finset.sum_mul]
+      Matrix.transpose_apply, hσs, starRingEnd_apply, Finset.mul_sum]
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
     simp only [hco]; ring
   have hframe : ∀ i, co (S.frame i) = Pi.single i 1 := fun i => by
-    ext j; simp [hco, Module.Basis.equivFun_apply, Finsupp.single_apply, Pi.single_apply, eq_comm]
+    ext j; simp [hco, Pi.single_apply, eq_comm]
   have hherm : ∀ i j, σ (J j i) = J i j := fun i j => by
     have h1 := S.herm.eq (S.frame i) (S.frame j)
     have e1 : S.hT (S.frame i) (S.frame j) = J j i := by
@@ -638,7 +638,7 @@ theorem _root_.GlobalTheory.T.exists_hyperbolicPartner_splitting_selfDualLattice
     IsSelfDualC S Λ → x ≠ 0 → S.hT x x = 0 →
     ∃ y : S.V, S.hT y y = 0 ∧ S.hT x y = 1 ∧
       ∀ z, GlobalTheory.SqStepK.InLat S Λ z → GlobalTheory.SqStepK.InLat S Λ (S.hT y z • x) ∧ GlobalTheory.SqStepK.InLat S Λ (S.hT x z • y) := by
-  first | exact @GlobalTheory.HypPairSelfDual.exists_partner | exact GlobalTheory.HypPairSelfDual.exists_partner | (intros; apply GlobalTheory.HypPairSelfDual.exists_partner <;> assumption)
+  first | exact @GlobalTheory.HypPairSelfDual.exists_partner
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsHyperbolicPartnerSplittingSelfDualLatticeStatement =====
@@ -762,7 +762,7 @@ theorem exists_isotropic_of_negIdx : ∀ (D : D7) (S : HSp D) (k : ℕ), NegIdx 
     refine Finset.sum_eq_zero fun j _ => ?_
     by_cases hj : j = i
     · subst hj; simp [hi]
-    · simp [Pi.single_apply, hj]
+    · simp [hj]
   push_neg at hz
 
   have hs : ∀ φ : D.host.E →+* ℂ, (∃ i, 0 < (φ (d i)).re) ∧ ∃ j, (φ (d j)).re < 0 := by
@@ -819,7 +819,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_isotropic_hermitianSpace_of_negativeIndex : ∀ (D : D7) (S : HSp D) (k : ℕ), NegIdx S k → 1 ≤ k → k + 1 ≤ S.rank → 3 ≤ S.rank →
     ∃ x : S.V, x ≠ 0 ∧ S.hT x x = 0 := by
-  first | exact @GlobalTheory.IsoNegIdx.exists_isotropic_of_negIdx | exact GlobalTheory.IsoNegIdx.exists_isotropic_of_negIdx | (intros; apply GlobalTheory.IsoNegIdx.exists_isotropic_of_negIdx <;> assumption)
+  first | exact @GlobalTheory.IsoNegIdx.exists_isotropic_of_negIdx
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsIsotropicHermitianSpaceOfNegativeIndexStatement =====
@@ -865,7 +865,7 @@ theorem exists_compl : ∀ (D : D7) (S : HSp D) (Λ : Submodule (𝓞 D.host.E) 
   have hW : ∀ w, w ∈ W ↔ S.hT x w = 0 ∧ S.hT y w = 0 := by
     intro w
     simp only [W, LinearMap.mem_ker, funext_iff, LinearMap.pi_apply, Fin.forall_fin_two, Matrix.cons_val_zero,
-      Matrix.cons_val_one, Pi.zero_apply, Matrix.head_cons]
+      Matrix.cons_val_one, Pi.zero_apply]
   have hdec : ∀ z, z - S.hT y z • x - S.hT x z • y ∈ W := by
     intro z
     rw [hW]
@@ -1003,7 +1003,7 @@ theorem _root_.GlobalTheory.T.exists_selfDual_orthogonalComplement_hyperbolicPla
     (∀ z, GlobalTheory.SqStepK.InLat S Λ z → GlobalTheory.SqStepK.InLat S Λ (S.hT y z • x) ∧ GlobalTheory.SqStepK.InLat S Λ (S.hT x z • y)) →
     ∃ (S₁ : HSp D) (Λ₁ : Submodule (𝓞 D.host.E) (Fin S₁.rank → D.host.E)) (ι : S₁.V →ₗ[D.host.E] S.V),
       GlobalTheory.SqStepK.PlaneSplit S S₁ Λ Λ₁ ι x y ∧ IsSelfDualC S₁ Λ₁ ∧ S₁.sig = s := by
-  first | exact @GlobalTheory.PlaneCompl.exists_compl | exact GlobalTheory.PlaneCompl.exists_compl | (intros; apply GlobalTheory.PlaneCompl.exists_compl <;> assumption)
+  first | exact @GlobalTheory.PlaneCompl.exists_compl
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsSelfDualOrthogonalComplementHyperbolicPlanStatement =====
@@ -1114,7 +1114,7 @@ theorem _root_.GlobalTheory.T.hyperbolicPlaneComplement_negativeIndex_pred : ∀
     Formalism.BasicNotions.HSpace.IsIsomEmb S₁ S ι → S.hT x x = 0 → S.hT y y = 0 → S.hT x y = 1 →
     (∀ u, S.hT x (ι u) = 0 ∧ S.hT y (ι u) = 0) → NegIdx S (q + 1) →
     ∀ τ : D.host.E →+* ℂ, Formalism.UG.HasSignature (S₁.gram.map τ) (S₁.rank - q) q := by
-  first | exact @GlobalTheory.PlaneComplementSig.sig | exact GlobalTheory.PlaneComplementSig.sig | (intros; apply GlobalTheory.PlaneComplementSig.sig <;> assumption)
+  first | exact @GlobalTheory.PlaneComplementSig.sig
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HyperbolicPlaneComplementNegativeIndexPredStatement =====
@@ -1183,7 +1183,7 @@ theorem _root_.GlobalTheory.T.hyperbolicPlane_split_selfDual_hermitian_complemen
     IsSelfDualC S Λ → NegIdx S (q + 1) → q + 2 ≤ S.rank → 3 ≤ S.rank →
     ∃ (S₁ : HSp D) (Λ₁ : Submodule (𝓞 D.host.E) (Fin S₁.rank → D.host.E)) (ι : S₁.V →ₗ[D.host.E] S.V) (x y : S.V),
       GlobalTheory.SqStepK.PlaneSplit S S₁ Λ Λ₁ ι x y ∧ S₁.SigOK ∧ IsSelfDualC S₁ Λ₁ ∧ NegIdx S₁ q := by
-  first | exact @GlobalTheory.PlaneComplement.plane_split_complement | exact GlobalTheory.PlaneComplement.plane_split_complement | (intros; apply GlobalTheory.PlaneComplement.plane_split_complement <;> assumption)
+  first | exact @GlobalTheory.PlaneComplement.plane_split_complement
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HyperbolicPlaneSplitSelfDualHermitianComplementStatement =====
@@ -1207,18 +1207,8 @@ noncomputable section
 namespace GlobalTheory.SmallTriple
 open GlobalTheory.Grid MeasureTheory
 variable {D : D7}
-private theorem eta_sq_eq_one_alt {η : (AF D.host.F)ˣ →* Circle} (h : IsEta D η) (a : (AF D.host.F)ˣ) : η a ^ 2 = 1 := by
-  have h2 : Module.finrank D.host.F D.host.E = 2 := D.sp.cm.deg2
-  have : Module.Finite D.host.F D.host.E := Module.Finite.of_restrictScalars_finite ℚ _ _
-  have e := h.2.2.1 (idF D a)
-  have e2 : Units.map (Algebra.norm (AF D.host.F) : AE D →* AF D.host.F) (idF D a) = a ^ 2 := by
-    ext1
-    show Algebra.norm (AF D.host.F) (algebraMap (AF D.host.F) (AE D) (a : AF D.host.F)) = ((a ^ 2 : (AF D.host.F)ˣ) : AF D.host.F)
-    let b := (Module.finBasis D.host.F D.host.E).baseChange (AF D.host.F)
-    rw [Algebra.norm_algebraMap_of_basis b, Fintype.card_fin, h2, Units.val_pow_eq_pow_val]
-  rwa [e2, map_pow] at e
 private theorem restriction_eta_add_two {χ : (AE D)ˣ →* Circle} {n : ℕ} (h : ResEta D χ (n + 2)) : ResEta D χ n :=
-  ⟨h.1, fun η hη a => by rw [h.2 η hη a, pow_add, eta_sq_eq_one_alt hη, mul_one]⟩
+  ⟨h.1, fun η hη a => by rw [h.2 η hη a, pow_add, _root_.Formalism.L2.Theta.eta_sq hη, mul_one]⟩
 private theorem exists_weil_representation (hP : GlobalTheory.Published.WeilRepresentationUnitaryPair) {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsStdChar D ψ (-1))
     (ε : Bool) (S W : HSp D) {χS χW : (AE D)ˣ →* Circle} (h1 : IsHeckeChar D χS) (h2 : IsHeckeChar D χW)
     (h3 : ResEta D χS S.rank) (h4 : ResEta D χW W.rank) : ∃ ω : WRep S W, IsWeil ψ ε S W χS χW ω := by
@@ -1276,11 +1266,6 @@ theorem exists_small_triple : _root_.GlobalTheory.FunPr.ThetaLocalInputs → ∀
     ⟨by omega, hA, hB, hW, hω, hω', hv, hv', hX.idem, hX.expo, hf, hf', hX.meas, hm'⟩⟩
 end GlobalTheory.SmallTriple
 end
-theorem _root_.GlobalTheory.T.exists_small_triple_of_weil_vacuum : _root_.GlobalTheory.FunPr.ThetaLocalInputs → ∀ (D : D7) (T : Type) (A A' WW B' WW₁ : HSp D) (X : Tri T A A' WW)
-    (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (α β : T → ((AE D)ˣ →* Circle)) (νH : T → HChar D.host.E)
-    (S : T → Finset (Formalism.L2.DIV.Pl D.host.E)) (rB : GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.Rig B') (rW : GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.Rig WW₁),
-    IsInfFam θ → X.Is ψ θ α β νH S → rB.Is → rW.Is → B'.rank + 2 = A'.rank → WW₁.rank + 2 = WW.rank →
-    ∃ Y : Tri T A B' WW₁, Y.rA = X.rA ∧ Y.rA' = rB ∧ Y.rW = rW ∧ Y.Is ψ θ α β νH S := _root_.GlobalTheory.SmallTriple.exists_small_triple
 end
 end -- clump:auto
 end -- clump:auto
@@ -1324,7 +1309,7 @@ theorem quadratic_tower_step_base_stage : _root_.GlobalTheory.FunPr.ThetaLocalIn
     GlobalTheory.T.hyperbolicPlane_split_selfDual_hermitian_complement D WW X.rW.Λ (p + q) hXI.rigW.1 (by simpa only [add_assoc] using hnW) (by omega) (by omega)
   obtain ⟨rB, eB, hB⟩ := GlobalTheory.RigExists.exists_rig D B' Λ₁ hsig hsd
   obtain ⟨rW, eW, hW⟩ := GlobalTheory.RigExists.exists_rig D WW₁ ΛW hsig' hsd'
-  obtain ⟨Y, e1, e2, e3, hY⟩ := _root_.GlobalTheory.T.exists_small_triple_of_weil_vacuum hP D T A A' WW B' WW₁ X W.ψ W.θ _ _ _ _ rB rW W.θ_is hXI hB hW
+  obtain ⟨Y, e1, e2, e3, hY⟩ := _root_.GlobalTheory.SmallTriple.exists_small_triple hP D T A A' WW B' WW₁ X W.ψ W.θ _ _ _ _ rB rW W.θ_is hXI hB hW
     (by have := hs.1; omega) (by have := hs'.1; omega)
   refine ⟨B', WW₁, Y, ⟨hp, by omega, hrA, by have := hs.1; omega, hnA, hneg, hneg', hY⟩, e1, ⟨ι, x, y, ?_⟩, ⟨ι', x', y', ?_⟩⟩
   · rw [e2, eB]; exact hs
@@ -1333,24 +1318,6 @@ end GlobalTheory.SqStepK.PiLocalization₂
 end
 end
 
-section
-open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.IndefR Formalism.IndefR.Datum Formalism.IndefR.Links Formalism.L2.Theta IsDedekindDomain NumberField Finset
-open Formalism.DivisionValues (vw)
-open Formalism.L2.Host (HChar)
-open GlobalTheory.ChiGrid GlobalTheory.FunObj GlobalTheory.FunObj.SqNum GlobalTheory.RowTest
-open GlobalTheory.CMVal (IsHeckeL)
-open GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle (Tri)
-open GlobalTheory.SqTop
-open GlobalTheory.ConstRatio (NegIdx Factor)
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
-theorem _root_.GlobalTheory.T.quadratic_tower_step_stage_induction : _root_.GlobalTheory.FunPr.ThetaLocalInputs → GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.ThetaIntegralsAgree → GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.LocalMatching →
-  GBig fun {D} T _ _ G μ₀ _ _ _ => ∀ (W : G.Weil) (S : GridChoice W Set.univ), IsStdChar D W.ψ (-1) →
-    NumbersIn D.what₂.embLL S μ₀ → ∀ (i j : Fin D.R.m) (p q : ℕ) (A A' WW : HSp D) (X : Tri T A A' WW),
-      GlobalTheory.SqTower.IsStageC W i j p (q + 1) X → ∃ (B' WW₁ : HSp D) (Y : Tri T A B' WW₁),
-        GlobalTheory.SqTower.IsStageC W i j p q Y ∧ GlobalTheory.SqStepK.IsStepB X Y := by
-  first | exact @_root_.GlobalTheory.SqStepK.PiLocalization₂.quadratic_tower_step_base_stage | exact _root_.GlobalTheory.SqStepK.PiLocalization₂.quadratic_tower_step_base_stage | (intros; apply _root_.GlobalTheory.SqStepK.PiLocalization₂.quadratic_tower_step_base_stage <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.QuadraticTowerStepStageInduction =====
@@ -1570,17 +1537,6 @@ theorem isSum_of_split {S S₁ : HSp D} {Λ Λ₁ ι x y} (hs : PlaneSplit S S�
   · rw [form_smul_left, hJ, hD_swap, hxy, star_one, map_one, mul_one]
     exact mul_ne_zero (inv_ne_zero hc') hc
 
-theorem scale_ne_zero (D : D7) : D.host.AA ≠ 0 := by
-  refine mul_ne_zero ?_ (inv_ne_zero ?_)
-  · rw [FractionalIdeal.coeIdeal_ne_zero]
-    intro h
-    exact D.host.ccK_ne_bot ((Ideal.map_eq_bot_iff_of_injective (RingOfIntegers.algebraMap.injective _ _)).1 h)
-  · rw [FractionalIdeal.coeIdeal_ne_zero]
-    intro h
-    have h1 := D.host.𝔟_spec.1
-    rw [h, Ideal.bot_mul] at h1
-    exact differentIdeal_ne_bot h1
-
 theorem split_scLat {S S₁ : HSp D} {Λ Λ₁ ι x y} (hs : PlaneSplit S S₁ Λ Λ₁ ι x y)
     {𝔞 : FractionalIdeal (nonZeroDivisors (𝓞 D.host.E)) D.host.E} (h𝔞 : 𝔞 ≠ 0) :
     PlaneSplit S S₁ (GlobalTheory.SkewLat.scLat 𝔞 Λ) (GlobalTheory.SkewLat.scLat 𝔞 Λ₁) ι x y := by
@@ -1659,7 +1615,7 @@ theorem plane_skew {B : Base D.host.F D.host.E} (hB : B.IsGood D.sp.cm.sig) {S S
     ∃ Y' H, (reS Y Y').IsSkew D.sp.cm.sig B r s ∧ Plane.IsAdapted D.sp.cm.sig B H (reS Y Y') Y₁ i₀ i₁ := by
   obtain rfl : S.rank = n := o.1
   obtain rfl : S₁.rank = n₁ := o₁.1
-  obtain ⟨x', y', ι', h, h'⟩ := isSum_of_split (split_scLat hs (scale_ne_zero D)) (ε := RingHom.id _) (fun _ => rfl)
+  obtain ⟨x', y', ι', h, h'⟩ := isSum_of_split (split_scLat hs (_root_.GlobalTheory.LatVacFull.AA_ne_zero D)) (ε := RingHom.id _) (fun _ => rfl)
     GlobalTheory.ChiGrid.cmHost_imaginaryGenerator_ne_zero Y Y₁ (overW_crd o).1 (overW_crd o₁).1 (overW_crd o).2 (overW_crd o₁).2
   exact h.adapt_skew hB.cm hs.1 h' hY hY₁ h01 h1n
 
@@ -1709,13 +1665,6 @@ namespace GlobalTheory.HermitianSkewAdaptation
 open GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK GlobalTheory.PlaneSkew
 open GlobalTheory.AdelicU (IsSplitBasis)
 open scoped Matrix
-section Planes
-variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
-end Planes
-section Transport
-open GlobalTheory.SqStepK GlobalTheory.SqStepBig
-variable {D : D7}
-end Transport
 section Cast
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
 theorem const_pair_alt (hP : _root_.GlobalTheory.FunPr.ThetaLocalInputs) (hK : ThetaIntegralsAgree) (hM : LocalMatching) {B : Base F E} (hB : B.IsGood σ)
@@ -1755,7 +1704,7 @@ theorem tower_stage_successor_relation_alt : _root_.GlobalTheory.FunPr.ThetaLoca
           GlobalTheory.SqStepK.HasConstR Bs Γ₁ R₁ (GlobalTheory.SqStep.chs G i j t')
             (d₁ * (((GlobalTheory.SqStep.chs G i j t').ν k₁ / (GlobalTheory.SqStep.chs G i j μ₀).ν k₁ : Circle) : ℂ) * c t') := by
   intro hP hK hM
-  refine gbig_of_three GlobalTheory.T.exists_realEmbeddings_sharedBase_towerStage (_root_.GlobalTheory.T.tower_stage_fit_factor_alt hP hK hM) GlobalTheory.T.exists_realEmbeddings_sharedBase_towerStage ?_
+  refine gbig_of_three GlobalTheory.T.exists_realEmbeddings_sharedBase_towerStage (_root_.GlobalTheory.SqStepBig.quadratic_tower_large_step_stage_dictionary hP hK hM) GlobalTheory.T.exists_realEmbeddings_sharedBase_towerStage ?_
   rintro D T Lc sc G μ₀ C x b qb qd - W S hψ hN i j p q A A' WW B' WW₁ X Y lam c e hX hY ⟨hA, ⟨ι, x, y, hs⟩, ι', x', y', hs'⟩ hF hc he t
   obtain ⟨emb, hemb⟩ := qb W hψ i j _ _ A A' WW X hX
   obtain ⟨Bs, -, f⟩ := hemb t
@@ -1783,35 +1732,6 @@ end GlobalTheory.HermitianSkewAdaptation
 end
 end
 
-section
-open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.IndefR Formalism.IndefR.Datum Formalism.IndefR.Links Formalism.L2.Theta IsDedekindDomain NumberField Finset
-open Formalism.DivisionValues (vw)
-open Formalism.L2.Host (HChar)
-open GlobalTheory.ChiGrid GlobalTheory.FunObj GlobalTheory.FunObj.SqNum GlobalTheory.RowTest
-open GlobalTheory.CMVal (IsHeckeL)
-open GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle (Tri)
-open GlobalTheory.SqTop
-open GlobalTheory.ConstRatio (NegIdx Factor)
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-theorem _root_.GlobalTheory.T.tower_stage_successor_coefficients_alt : _root_.GlobalTheory.FunPr.ThetaLocalInputs → GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.ThetaIntegralsAgree → GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.LocalMatching →
-  GBig fun {D} T _ _ G μ₀ _ _ _ => ∀ (W : G.Weil) (S : GridChoice W Set.univ), IsStdChar D W.ψ (-1) →
-    NumbersIn D.what₂.embLL S μ₀ → ∀ (i j : Fin D.R.m) (p q : ℕ) (A A' WW B' WW₁ : HSp D) (X : Tri T A A' WW)
-      (Y : Tri T A B' WW₁) (lam c : T → ℂ) (e : ℕ), GlobalTheory.SqTower.IsStageC W i j p (q + 1) X →
-      GlobalTheory.SqTower.IsStageC W i j p q Y → GlobalTheory.SqStepK.IsStepB X Y → Factor X W.ψ W.θ lam → Factor Y W.ψ W.θ c →
-      A.rank = A'.rank + 2 * e → ∀ t, ∃ (Bs : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Base D.host.F D.host.E) (b : ℕ)
-        (Γ : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Geo D.sp.cm.sig A.rank (b + 2)) (Γ₁ : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Geo D.sp.cm.sig A.rank b)
-        (H : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Plane D.host.E (b + 2) b) (H' : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Plane D.host.E (A.rank + (b + 2)) (A.rank + b))
-        (R : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.RealMaps D.host.F A.rank (b + 2)) (R₁ : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.RealMaps D.host.F A.rank b) (d d₁ : ℂ)
-        (k k₁ : (GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.AE (F := D.host.F) (E := D.host.E))ˣ),
-        GlobalTheory.SqStep.BaseFits G W i j t Bs ∧ A'.rank = b + 2 ∧ Γ₁.V = Γ.V ∧ Γ₁.p = Γ.p ∧ Γ₁.q + 1 = Γ.q ∧
-        H.IsAdapted D.sp.cm.sig Bs Γ.V' Γ₁.V' 0 (b + 1) ∧ H'.IsAdapted D.sp.cm.sig Bs Γ.W Γ₁.W A.rank (A.rank + b + 1) ∧
-        d ≠ 0 ∧ d₁ ≠ 0 ∧ ∀ t' ∈ ({t, μ₀} : Set T),
-          GlobalTheory.SqStepK.HasConstR Bs Γ R (GlobalTheory.SqStep.chs G i j t')
-            (d * (((GlobalTheory.SqStep.chs G i j t').ν k / (GlobalTheory.SqStep.chs G i j μ₀).ν k : Circle) : ℂ) * lam t') ∧
-          GlobalTheory.SqStepK.HasConstR Bs Γ₁ R₁ (GlobalTheory.SqStep.chs G i j t')
-            (d₁ * (((GlobalTheory.SqStep.chs G i j t').ν k₁ / (GlobalTheory.SqStep.chs G i j μ₀).ν k₁ : Circle) : ℂ) * c t') := by
-  first | exact @_root_.GlobalTheory.HermitianSkewAdaptation.tower_stage_successor_relation_alt | exact _root_.GlobalTheory.HermitianSkewAdaptation.tower_stage_successor_relation_alt | (intros; apply _root_.GlobalTheory.HermitianSkewAdaptation.tower_stage_successor_relation_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.TowerStageSuccessorCoefficients =====
@@ -1854,7 +1774,7 @@ theorem seesaw_first_reduction : _root_.GlobalTheory.FunPr.ThetaLocalInputs → 
               GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.stepFac Bs (GlobalTheory.SqStep.chs G i j μ₀) e₁ e₂ s 𝔟 𝔠 (-(e : ℤ)) * c t := by
   intro hP hK hM
   obtain ⟨e₁, e₂, s, hSB⟩ := hK.2.1
-  refine gbig_three_is (_root_.GlobalTheory.T.quadratic_tower_step_stage_induction hP hK hM) (_root_.GlobalTheory.T.tower_stage_successor_coefficients_alt hP hK hM) (_root_.GlobalTheory.T.exists_factor_of_isStageC hP hK hM) ?_
+  refine gbig_three_is (_root_.GlobalTheory.SqStepK.PiLocalization₂.quadratic_tower_step_base_stage hP hK hM) (_root_.GlobalTheory.HermitianSkewAdaptation.tower_stage_successor_relation_alt hP hK hM) (_root_.GlobalTheory.StageFactor.theta_tower_stage_norm_factorization hP hK hM) ?_
   intro D T Lc sc G μ₀ C x b hL hy hd hf W S hψ hN i j p q A A' WW X lam e hX hF he
   obtain ⟨B', WW₁, Y, hY, hst⟩ := hy W S hψ hN i j p q A A' WW X hX
   obtain ⟨c, hc⟩ := hf W S hψ hN i j p q A B' WW₁ Y hY

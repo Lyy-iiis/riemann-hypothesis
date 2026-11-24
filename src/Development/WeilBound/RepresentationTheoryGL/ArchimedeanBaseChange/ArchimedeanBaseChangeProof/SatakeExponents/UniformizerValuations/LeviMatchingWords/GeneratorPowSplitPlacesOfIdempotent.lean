@@ -184,7 +184,7 @@ theorem det_lr {k : Type} [Field k] {a b : ℕ} (A : Matrix (Fin a) (Fin a) k) (
     simp only [LinearMap.comp_apply, LinearEquiv.coe_coe, hL, Matrix.toLin'_apply, Matrix.mulVec, dotProduct,
       Fintype.sum_prod_type, Matrix.kroneckerMap_apply, Matrix.transpose_apply]
     show (A * (Matrix.of fun l c => v (l, c)) * B) i j = _
-    simp only [Matrix.mul_apply, Finset.sum_mul, Finset.mul_sum, Matrix.of_apply]
+    simp only [Matrix.mul_apply, Finset.sum_mul, Matrix.of_apply]
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl fun l _ => Finset.sum_congr rfl fun c _ => ?_
     ring
@@ -487,7 +487,7 @@ section -- clump:auto
 
 namespace GlobalTheory.CompanionTheory.LeviMatchingWords
 
-theorem matchLMWordSOf : PositivityTheory.Rg.BcB.F.MLM.MatchLMWordSOf := GlobalTheory.CompanionTheory.MatchWordS.matchLMWordSOf
+alias matchLMWordSOf := _root_.GlobalTheory.CompanionTheory.MatchWordS.matchLMWordSOf
 
 end GlobalTheory.CompanionTheory.LeviMatchingWords
 end -- clump:auto
@@ -584,7 +584,7 @@ theorem ordL_norm_entry (hU : Unr E) {n : ℕ} {w : Pl E} (u : Fin n → (w.adic
   obtain ⟨-, -, hcv, -⟩ := GlobalTheory.ConjAtPlace.main E hU w
   have hinv : ordL (((u i.rev)⁻¹ : (w.adicCompletion E)ˣ) : w.adicCompletion E) = - y i.rev := by
     have h1 := GlobalTheory.CompanionTheory.UnitaryCorrection.ordL_mul_of_ne (u i.rev).ne_zero ((u i.rev)⁻¹).ne_zero
-    rw [← Units.val_mul, mul_inv_cancel, Units.val_one, GlobalTheory.CompanionTheory.UnitaryCorrection.ordL_one, hu] at h1
+    rw [← Units.val_mul, mul_inv_cancel, Units.val_one, _root_.Formalism.UG.P.fSatake_ord_one, hu] at h1
     omega
   have hmap : ordL ((Units.map (cj w : w.adicCompletion E →* w.adicCompletion E) (u i.rev)⁻¹ :
       (w.adicCompletion E)ˣ) : w.adicCompletion E) = - y i.rev := by
@@ -1406,7 +1406,7 @@ theorem hasVals_nrm (hU : Unr E) {w : Pl E} (hw : ¬ IsSplitAt w) {ϖ : (w.adicC
     rw [GlobalTheory.CompanionTheory.UnitaryCorrection.ordL_mul_of_ne (Units.ne_zero _) (Units.ne_zero _),
       GlobalTheory.CompanionTheory.UnitaryContraction.ordL_zpow, hϖ.1,
       GlobalTheory.CompanionTheory.UnitaryCorrection.ordL_congr (b := (1 : w.adicCompletion E)) (by rw [hv, map_one]),
-      GlobalTheory.CompanionTheory.UnitaryCorrection.ordL_one]
+      _root_.Formalism.UG.P.fSatake_ord_one]
     simp
   rw [← GlobalTheory.CompanionTheory.MatchLinear.charpoly_nrmL_twConj hU a w δ m, hdu, GlobalTheory.CompanionTheory.TwSide.nrmL_diagT hw, GlobalTheory.SmGL.val_diagT,
     Matrix.charpoly_diagonal]

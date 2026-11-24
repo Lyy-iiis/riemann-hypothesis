@@ -514,7 +514,6 @@ theorem continuous_finOf : Continuous (finOf : (κ → AF F) → κ → FiniteAd
 private theorem continuous_infiniteAdeleRing_ringEquiv_mixedSpace :
     Continuous (InfiniteAdeleRing.ringEquiv_mixedSpace F) := by
   first
-  | exact (InfiniteAdeleRing.homeomorph_mixedSpace F).continuous
   | (rw [show (InfiniteAdeleRing.ringEquiv_mixedSpace F : InfiniteAdeleRing F → mixedEmbedding.mixedSpace F) =
         fun x => (fun v : {w : InfinitePlace F // w.IsReal} =>
           InfinitePlace.Completion.extensionEmbeddingOfIsReal v.2 (x v.1),
@@ -545,10 +544,8 @@ private theorem totallyDisconnectedSpace_finiteAdeleRing :
   have hf : Continuous f := by
     first
     | exact RestrictedProduct.continuous_coe
-    | fun_prop
   have hi : Function.Injective f := by
     first
-    | exact RestrictedProduct.coe_injective
     | exact fun x y h => Subtype.ext h
   refine ⟨fun s _ hs => ?_⟩
   have h1 : (f '' s).Subsingleton := (hs.image f hf.continuousOn).subsingleton
@@ -893,7 +890,7 @@ open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.Inde
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
 
 theorem annih : Annih := fun F _ _ ψ hψ u hu => by
-  obtain ⟨c, hc⟩ := (GlobalTheory.CompanionTheory.AdeleAnn.unitary_and_annihilator_eq F ψ hψ.1
+  obtain ⟨c, hc⟩ := (_root_.UpperTheory.Reformulated.B.UnitaryAnnihilator.unitary_and_annihilator_eq F ψ hψ.1
     (fun h => by
       obtain ⟨x, hx⟩ := GlobalTheory.StdCharFromIsStd.exists_ne_one hψ
       exact hx (by rw [h]; rfl)) hψ.2.1).2 u fun a => hu _ ⟨a, rfl⟩

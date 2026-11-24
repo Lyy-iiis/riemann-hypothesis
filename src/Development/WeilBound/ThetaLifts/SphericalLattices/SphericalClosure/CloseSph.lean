@@ -1239,7 +1239,7 @@ theorem exists_rot {ι : Type} [Fintype ι] {n : ℕ} (G : ι → Matrix (Fin n)
     rw [← coe_evalRingHom, RingHom.map_det]
     congr 1
     ext i j
-    by_cases e : i = j <;> simp [e, one_apply]
+    by_cases e : i = j <;> simp [e]
   have q0 : ∏ w, q w ≠ 0 := Finset.prod_ne_zero_iff.2 fun w _ e => by
     have := ev w Complex.I
     rw [e, Complex.I_mul_I] at this
@@ -1696,9 +1696,9 @@ theorem PositivityTheory.Sph.Tr.closeSph
   have h_Weil6_ThKEst_EpsOf : PositivityTheory.ThKEst.EpsOf := (PositivityTheory.ThKEst.epsOf_of)
   have h_Weil6_ThKEst_TriplePair : PositivityTheory.ThKEst.TriplePair := (PositivityTheory.ThKEst.Sq.triplePair_holds)
   have h_Weil6_ThKEst_DomWeilU : PositivityTheory.ThKEst.DomWeilU := (PositivityTheory.ThKEst.domWeilU hSiegelSet)
-  have h_Weil6_ThKEst_DomWeil : PositivityTheory.ThKEst.DomWeil := (PositivityTheory.ThKClose.domWeil_of h_Weil6_ThKEst_DomWeilU)
+  have h_Weil6_ThKEst_DomWeil : PositivityTheory.ThKEst.DomWeil := (_root_.PositivityTheory.ThKEst.domWeil_of_U h_Weil6_ThKEst_DomWeilU)
   have h_Weil6_ThKEst_SoSemiU : PositivityTheory.ThKEst.SoSemiU := (PositivityTheory.ThKEst.soSemiU hSiegelSet)
-  have h_Weil6_ThKEst_SoSemi : PositivityTheory.ThKEst.SoSemi := (PositivityTheory.ThKClose.soSemi_of h_Weil6_ThKEst_SoSemiU)
+  have h_Weil6_ThKEst_SoSemi : PositivityTheory.ThKEst.SoSemi := (_root_.PositivityTheory.ThKEst.soSemi_of_U h_Weil6_ThKEst_SoSemiU)
   have h_GlobalTheory_ThK_SoDecay : GlobalTheory.ThK.SoDecay := (PositivityTheory.ThKEst.soDecay hSiegelSet)
   have h_Weil6_ThKEst_FinVolU : PositivityTheory.ThKEst.FinVolU := (PositivityTheory.ThKEst.finVolU)
   have h_Weil6_ThKEst_SoFin : PositivityTheory.ThKEst.SoFin := (PositivityTheory.ThKEst.soFin_of)
@@ -1720,9 +1720,9 @@ theorem PositivityTheory.Sph.Tr.closeSph
   have h_Weil6_ThKF_ArchOp : PositivityTheory.ThKF.ArchOp := (PositivityTheory.ThKF.A.archOp)
   have h_Weil6_ThKF_ArchUniq : PositivityTheory.ThKF.ArchUniq := (PositivityTheory.ThKF.A.archUniq)
   have h_GlobalTheory_RealLift_DerEx : GlobalTheory.RealLift.DerEx := (PositivityTheory.RL.derEx)
-  have h_GlobalTheory_RealLift_FockEx : GlobalTheory.RealLift.FockEx := (PositivityTheory.KRealA.i_fockex h_GlobalTheory_RealLift_DerEx)
+  have h_GlobalTheory_RealLift_FockEx : GlobalTheory.RealLift.FockEx := (_root_.PositivityTheory.RL.fockEx h_GlobalTheory_RealLift_DerEx)
   have h_GlobalTheory_RealLift_ActsLaws : GlobalTheory.RealLift.ActsLaws := (PositivityTheory.KRealA.i_actslaws)
-  have h_GlobalTheory_RealLift_VacLine : GlobalTheory.RealLift.VacLine := (PositivityTheory.KRealA.i_vacline h_GlobalTheory_RealLift_DerEx)
+  have h_GlobalTheory_RealLift_VacLine : GlobalTheory.RealLift.VacLine := (_root_.PositivityTheory.RL.vacLine h_GlobalTheory_RealLift_DerEx)
   have h_GlobalTheory_RealLift_PolRange : GlobalTheory.RealLift.PolRange := (PositivityTheory.ThKEnd.Comp.PR.polRange_of h_GlobalTheory_RealLift_ActsLaws h_GlobalTheory_RealLift_DerEx h_GlobalTheory_RealLift_VacLine)
   have h_GlobalTheory_RealLift_LieFirst : GlobalTheory.RealLift.LieFirst := (PositivityTheory.RL.lieFirst h_GlobalTheory_RealLift_LieSecond)
   have h_Weil6_ThKR_JoinTri : PositivityTheory.ThKR.JoinTri := PositivityTheory.ThKR.Join.joinTri_of h_GlobalTheory_RealLift_FockEx h_GlobalTheory_RealLift_PolRange h_GlobalTheory_RealLift_LieFirst h_GlobalTheory_RealLift_LieSecond

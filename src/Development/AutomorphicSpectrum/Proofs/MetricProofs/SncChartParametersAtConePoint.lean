@@ -195,15 +195,6 @@ open MvPolynomial ReciprocityTheory.AnForm.R GlobalTheory.CompanionTheory.Ar.Cmp
 
 namespace GlobalTheory.CompanionTheory.Ar.Cmp.Kext
 
-theorem exists_algHom_adjoin_inv :
-    ∀ (Ω : Type) [Field Ω] [Algebra ℚ Ω] (σ : Type) (τ : σ → Ω) (F : MvPolynomial σ ℚ)
-      (S : Subalgebra ℚ Ω) (E : Type) [CommRing E] [Algebra ℚ E] (u : σ → E),
-      aeval τ F ≠ 0 → S = Algebra.adjoin ℚ (insert (aeval τ F)⁻¹ (Set.range τ)) →
-      (∀ G : MvPolynomial σ ℚ, aeval τ G = 0 → aeval u G = 0) → IsUnit (aeval u F) →
-      ∃ φ : S →ₐ[ℚ] E, ∀ (G : MvPolynomial σ ℚ) (s : S), (s : Ω) = aeval τ G →
-        φ s = aeval u G :=
-  _root_.UpperTheory.Reformulated.B.Yde9.main
-
 end GlobalTheory.CompanionTheory.Ar.Cmp.Kext
 end -- clump:auto
 end -- clump:auto
@@ -270,7 +261,7 @@ theorem read_in_field {Ω : Type} [Field Ω] [Algebra ℚ Ω] {σ : Type} (τ : 
   have hunit : IsUnit (aeval (fun q => π (X q)) F) := by
     rw [hau]
     exact IsUnit.mk0 _ (fun h => hFq ((hπ _).1 h))
-  obtain ⟨φ, hφ⟩ := GlobalTheory.CompanionTheory.Ar.Cmp.Kext.exists_algHom_adjoin_inv Ω σ τ F S E (fun q => π (X q)) hF hS
+  obtain ⟨φ, hφ⟩ := _root_.UpperTheory.Reformulated.B.Yde9.main Ω σ τ F S E (fun q => π (X q)) hF hS
     (fun G hG => by rw [hau]; exact (hπ _).2 (hker G hG)) hunit
   have hτS : ∀ q, τ q ∈ S := fun q => by
     rw [hS]
@@ -391,7 +382,7 @@ theorem exists_mul_pow_eq_aeval_of_mem_adjoin_inv :
     · exact ⟨1, 1, by simp [hf]⟩
     · exact ⟨0, X q, by simp⟩
   | algebraMap r =>
-    exact ⟨0, C r, by simp [MvPolynomial.algebraMap_eq]⟩
+    exact ⟨0, C r, by simp⟩
   | add a b _ _ iha ihb =>
     obtain ⟨N, G, h⟩ := iha
     obtain ⟨M, H, h'⟩ := ihb
@@ -556,8 +547,8 @@ theorem aeval_dualPt {σ : Type} [Fintype σ] (t v : σ → ℂ) (G : MvPolynomi
   | mul_X p q hp =>
     refine ⟨by simp [hp.1, dualPt], ?_⟩
     simp only [map_mul, aeval_X, snd_mul, hp.1, hp.2, dualPt, fst_add, fst_inl, fst_inr, snd_add, snd_inl, snd_inr,
-      Derivation.leibniz, pderiv_X, eval_mul, eval_X, smul_eq_mul, op_smul_eq_mul, add_zero, zero_add, map_add]
-    simp [Pi.single_apply, mul_add, Finset.sum_add_distrib, Finset.mul_sum, Finset.sum_mul, mul_comm, mul_left_comm, mul_assoc]
+      Derivation.leibniz, pderiv_X, eval_X, smul_eq_mul, op_smul_eq_mul, add_zero, zero_add, map_add]
+    simp [Pi.single_apply, mul_add, Finset.sum_add_distrib, Finset.mul_sum, mul_comm, mul_left_comm]
 
 theorem snd_eq_zero_of_span {S : Type} [CommRing S] [Algebra ℚ S]
     (φ : S →ₐ[ℚ] TrivSqZeroExt ℂ ℂ) {e : ℕ} (z : Fin e → S)
@@ -798,7 +789,7 @@ private theorem gradP_eq_eval_pderiv (t : Fin m → ℂ) (a : MvPolynomial (Fin 
     by_cases hij : i = j
     · subst hij
       simp
-    · simp [Pi.single_apply, hij, Ne.symm hij]
+    · simp [hij, Ne.symm hij]
 
 theorem span_algebraMap_eq_map_ptIdeal (e : ℕ) (I : Ideal (MvPolynomial (Fin m) ℂ)) (t : Fin m → ℂ)
     (r : Fin e → MvPolynomial (Fin m) ℂ) (hI : ∀ h ∈ I, eval t h = 0) (hr : ∀ l, eval t (r l) = 0)

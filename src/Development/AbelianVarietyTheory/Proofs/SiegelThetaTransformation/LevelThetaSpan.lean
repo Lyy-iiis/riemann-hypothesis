@@ -250,15 +250,7 @@ theorem lact_one {Ψ : Finset (E →+* ℂ)} (x : Frame Ψ r) : lact (1 : GL (Fi
   rw [Matrix.map_one _ (map_zero _) (map_one _), Matrix.one_mul]
 
 omit [NumberField E] [IsCMField E] in
-theorem lact_mul {Ψ : Finset (E →+* ℂ)} (γ' γ : GL (Fin r) E) (x : Frame Ψ r) :
-    lact (γ' * γ) x = lact γ' (lact γ x) := by
-  first
-  | exact @_root_.GlobalTheory.LeftActionFrameMul.lact_mul_frame
-  | exact _root_.GlobalTheory.LeftActionFrameMul.lact_mul_frame
-  | (apply _root_.GlobalTheory.LeftActionFrameMul.lact_mul_frame <;> assumption)
-  | (intros; apply _root_.GlobalTheory.LeftActionFrameMul.lact_mul_frame <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.LeftActionFrameMul.lact_mul_frame <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.LeftActionFrameMul.lact_mul_frame ..)
+alias lact_mul := _root_.GlobalTheory.LeftActionFrameMul.lact_mul_frame
 
 omit [NumberField E] [IsCMField E] in
 theorem continuous_lact {Ψ : Finset (E →+* ℂ)} (γ : GL (Fin r) E) :
@@ -277,17 +269,6 @@ theorem countable_fg : {L : Lt E r | L.FG}.Countable := by
   exact ⟨s, hs⟩
 
 
-omit [IsCMField E] in
-theorem exists_den {L : Lt E r} (hL : L.FG) :
-    ∃ d : 𝓞 E, d ≠ 0 ∧ ∀ v ∈ L, ∀ a, ∃ c : 𝓞 E, (c : E) = (d : E) * v a := by
-  first
-  | exact @_root_.GlobalTheory.CommonDenominatorExistence.exists_common_denominator
-  | exact _root_.GlobalTheory.CommonDenominatorExistence.exists_common_denominator
-  | (apply _root_.GlobalTheory.CommonDenominatorExistence.exists_common_denominator <;> assumption)
-  | (intros; apply _root_.GlobalTheory.CommonDenominatorExistence.exists_common_denominator <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.CommonDenominatorExistence.exists_common_denominator <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.CommonDenominatorExistence.exists_common_denominator ..)
-
 theorem eq_zero_of_small (X : Data E r) (c : 𝓞 E) (h : ∀ τ : X.Ψ, ‖τ.1 (c : E)‖ < 1) : c = 0 := by
   by_contra hc
   obtain ⟨σ, hσ⟩ := NumberField.exists_conjugate_one_le_norm hc
@@ -303,7 +284,7 @@ theorem eq_zero_of_small (X : Data E r) (c : 𝓞 E) (h : ∀ τ : X.Ψ, ‖τ.1
 theorem exists_nhds (X : Data E r) {L : Lt E r} (hL : L.FG)
     (hsp : Submodule.span E (L : Set (Fin r → E)) = ⊤) {x : Frame X.Ψ r} (hx : x ∈ X.dom) :
     ∃ U ∈ 𝓝 x, ∀ γ : GL (Fin r) E, mapL γ L = L → lact γ x ∈ U → γ = 1 := by
-  obtain ⟨d, hd0, hd⟩ := exists_den hL
+  obtain ⟨d, hd0, hd⟩ := _root_.GlobalTheory.CommonDenominatorExistence.exists_common_denominator hL
   obtain ⟨s, hs⟩ := hL
   let f : (Fin r → E) → X.Ψ → Fin r → Frame X.Ψ r → ℝ := fun v τ a y =>
     ‖τ.1 (d : E) * ((mat y τ *ᵥ ((mat x τ)⁻¹ *ᵥ fun b => τ.1 (v b))) a - τ.1 (v a))‖
@@ -912,12 +893,6 @@ namespace GlobalTheory.SW
 
 open Coef
 
-private theorem classSum_congr_of_eqOn_Vset {E : Type} [Field E] [NumberField E] [IsCMField E]
-    {n M : ℕ} {f g : Lt E n → ℂ} (h : ∀ Λ ∈ Vset E n M, f Λ = g Λ) :
-    classSum M f = classSum M g := by
-  unfold classSum
-  exact finsum_congr fun c => by rw [h _ (Quot.out c).2]
-
 theorem lattice_operator_coefficients : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (r : ℕ) (X : Data E r) (g : ℕ) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (idx : Fin g ≃ X.Ψ × Fin r) (n : ℕ), IsSympl X bas → Even n → ∀ (M : ℕ) (Δ : Subgroup (GL (Fin r) E)) (𝓛 : Set (Lt E r)) (Φ : Lt E r → Lt E n → TF n g) (μ : GL (Fin r) E → Lt E r → ℂ), 0 < M → IsSystem X bas idx M Δ 𝓛 Φ μ → ∃ (a θ : ℝ), 0 < a ∧ θ < 1 ∧ (∀ L ∈ 𝓛, classSum M (fun Λ => ip (Φ L Λ) (Φ L Λ)) = a ∧ Summable (fun L' : {L' // L' ∈ 𝓛 ∧ L' ≠ L} => ‖classSum M (fun Λ => ip (Φ L Λ) (Φ L'.1 Λ))‖) ∧ ∑' L' : {L' // L' ∈ 𝓛 ∧ L' ≠ L}, ‖classSum M (fun Λ => ip (Φ L Λ) (Φ L'.1 Λ))‖ ≤ θ * a) ∧ ∀ γ ∈ Δ, ∀ L ∈ 𝓛, ∀ L' ∈ 𝓛, classSum M (fun Λ => ip (Φ (mapL γ L) Λ) (Φ (mapL γ L') Λ)) * μ γ L * conj (μ γ L') = classSum M (fun Λ => ip (Φ L Λ) (Φ L' Λ)) := by
   intro E _ _ _ r X g bas idx n hs hn M Δ 𝓛 Φ μ hM hsys
   obtain ⟨m, hm, hconst, hbd⟩ := Coef.exists_mass (E := E) (n := n) hM
@@ -951,7 +926,7 @@ theorem lattice_operator_coefficients : ∀ (E : Type) [Field E] [NumberField E]
           (hsys.sb _ (hsys.stab γ hγ L' hL') Λ hΛ)]
       ring
     rw [mul_assoc, Coef.classSum_mul hM]
-    exact classSum_congr_of_eqOn_Vset fun Λ hΛ => (key Λ hΛ).symm
+    exact _root_.GlobalTheory.SW.Base.classSum_congr fun Λ hΛ => (key Λ hΛ).symm
 
 end GlobalTheory.SW
 end -- clump:auto
@@ -1054,7 +1029,6 @@ theorem exists_mean {K V : Type} [Group K] [TopologicalSpace K] [IsTopologicalGr
       intro t
       rw [← setIntegral_comp_of_stable hS.measurableSet (hν t) (hAS t) hkF]
       refine setIntegral_congr_fun hS.measurableSet fun x hx => ?_
-      beta_reduce
       rw [← hkA t x hx]
       have := hχ0 t
       field_simp
@@ -1214,7 +1188,6 @@ theorem integral_mul_ortho (la : Wt X.Ψ r) {x₀ : Frame X.Ψ r}
       linear_combination (-κ (X.lmulC (T t) x) x₀) * h1)
   rw [← hGI, ← integral_mul_const, ← integral_mul_const]
   refine setIntegral_congr_fun hS.measurableSet fun x hx => ?_
-  beta_reduce
   rw [mul_assoc, key x (hSU hx), hG0', mul_assoc]
 
 end GlobalTheory.SW.Repro
@@ -1244,7 +1217,6 @@ theorem kern_reproducing : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E
   have hI : ∫ x in slab X δ, κ x₀ x * κ x x₀ = ((∫ x in slab X δ, ‖κ x₀ x‖ ^ 2 : ℝ) : ℂ) := by
     rw [← integral_complex_ofReal]
     refine setIntegral_congr_fun hS.measurableSet fun x hx => ?_
-    beta_reduce
     rw [hsym x₀ hx₀' x (hSU hx), Complex.mul_conj']
     push_cast
     rfl
@@ -1288,13 +1260,11 @@ theorem kern_reproducing : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E
     rw [← setIntegral_comp_of_stable hS.measurableSet hu1 hu2 (f := fun x => κ x' x * F x)
       (((hcont x' hx'').mul (hF.continuousOn.mono hSU)).aestronglyMeasurable hS.measurableSet)]
     refine setIntegral_congr_fun hS.measurableSet fun x hx => ?_
-    beta_reduce
     rw [← hinv u huu x₀ hx₀' x (hSU hx), hux]
   have h3 : ∫ x in slab X δ, κ (rmul x' b) x * F x =
       bchar (wtOf X hr c c' n) b * ∫ x in slab X δ, κ x' x * F x := by
     rw [← integral_const_mul]
     refine setIntegral_congr_fun hS.measurableSet fun x hx => ?_
-    beta_reduce
     rw [(hhol x (hSU hx)).2 x' hx'' b hb, mul_assoc]
   rw [h2, hI, hux, hre] at key
   have hk1 : ((κ x₀ x₀).re : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 hk0.ne'
@@ -1437,19 +1407,6 @@ theorem unfold_span (Γ I Y A J : Type) [Group Γ] [Countable Γ] [Countable I] 
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ} (X : Data E r)
 
-theorem pnorm_of_gram (la : Wt X.Ψ r) (F : Frame X.Ψ r → ℂ) {x : Frame X.Ψ r}
-    (hx : ∀ τ : X.Ψ, gram τ.1 X.Gm (mat x τ) = sgnM X) : X.pnorm la F x = ‖F x‖ := by
-  have h : ∀ τ i, ‖dmin X.Gm x τ i‖ = 1 := fun τ i => by
-    unfold dmin lminor
-    rw [hx τ, sgnM, Matrix.submatrix_diagonal _ _ (Fin.castLE_injective _), Matrix.det_diagonal,
-      norm_prod]
-    refine Finset.prod_eq_one fun a _ => ?_
-    simp only [Function.comp_apply, sgn]
-    split_ifs <;> simp
-  unfold Data.pnorm
-  simp [h]
-
-
 omit [NumberField E] [IsCMField E] in
 theorem norm_bchar_le {Ψ : Finset (E →+* ℂ)} (la : Wt Ψ r) (C : ℝ) {b : Frame Ψ r}
     (hb : ∀ τ i, ‖b τ i i‖ ≤ C ∧ ‖(b τ i i)⁻¹‖ ≤ C) :
@@ -1488,7 +1445,7 @@ theorem bound_on (la : Wt X.Ψ r) (S : Set (Frame X.Ψ r)) (K B : ℝ)
   have h3 := norm_bchar_le la K fun τ i => hbK τ i i
   rw [h1 x' (hd _ hx') b hb, norm_mul]
   refine mul_le_mul h3 ?_ (norm_nonneg _) ((norm_nonneg _).trans h3)
-  rw [← pnorm_of_gram X la _ hx']
+  rw [← _root_.GlobalTheory.SW.Repro.pnorm_ortho X la _ hx']
   exact h2 x' (hd _ hx')
 
 @[reducible] noncomputable def frameAct (Δ : Subgroup (GL (Fin r) E)) :

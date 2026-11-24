@@ -231,15 +231,15 @@ theorem realifyE_apply (X : Matrix (Fin m) (Fin m) ℂ) (p : Fin m × Fin m × B
 theorem unrealify_realifyE (X : Matrix (Fin m) (Fin m) ℂ) : unrealify (realifyE X) = X := by
   funext i j
   apply Complex.ext
-  · first | rfl | simp [unrealify, realifyE, realifyFun]
-  · first | rfl | simp [unrealify, realifyE, realifyFun]
+  · first | rfl
+  · first | rfl
 
 theorem realifyE_unrealify (x : EuclideanSpace ℝ (Fin m × Fin m × Bool)) : realifyE (unrealify x) = x := by
   refine PiLp.ext fun p => ?_
   obtain ⟨i, j, b⟩ := p
   cases b
-  · first | rfl | simp [unrealify, realifyE, realifyFun]
-  · first | rfl | simp [unrealify, realifyE, realifyFun]
+  · first | rfl
+  · first | rfl
 
 theorem realifyE_add (X Y : Matrix (Fin m) (Fin m) ℂ) : realifyE (X + Y) = realifyE X + realifyE Y := by
   refine PiLp.ext fun p => ?_
@@ -251,11 +251,6 @@ theorem realifyE_smul (c : ℝ) (X : Matrix (Fin m) (Fin m) ℂ) : realifyE (c �
   obtain ⟨i, j, b⟩ := p
   cases b <;> simp [realifyE, realifyFun]
 
-theorem unrealify_add (x y : EuclideanSpace ℝ (Fin m × Fin m × Bool)) :
-    unrealify (x + y) = unrealify x + unrealify y := by
-  rw [← realifyE_unrealify x, ← realifyE_unrealify y, ← realifyE_add, unrealify_realifyE, unrealify_realifyE,
-    unrealify_realifyE]
-
 theorem unrealify_smul (c : ℝ) (x : EuclideanSpace ℝ (Fin m × Fin m × Bool)) :
     unrealify (c • x) = c • unrealify x := by
   rw [← realifyE_unrealify x, ← realifyE_smul, unrealify_realifyE, unrealify_realifyE]
@@ -263,7 +258,7 @@ theorem unrealify_smul (c : ℝ) (x : EuclideanSpace ℝ (Fin m × Fin m × Bool
 def adE (A B : Matrix (Fin m) (Fin m) ℂ) :
     EuclideanSpace ℝ (Fin m × Fin m × Bool) →ₗ[ℝ] EuclideanSpace ℝ (Fin m × Fin m × Bool) where
   toFun x := realifyE (A * unrealify x * B)
-  map_add' x y := by simp only [unrealify_add, Matrix.mul_add, Matrix.add_mul, realifyE_add]
+  map_add' x y := by simp only [_root_.Formalism.MainNotions.S.Gauge.unrealify_add, Matrix.mul_add, Matrix.add_mul, realifyE_add]
   map_smul' c x := by
     simp only [unrealify_smul, Matrix.mul_smul, Matrix.smul_mul, realifyE_smul, RingHom.id_apply]
 

@@ -134,10 +134,10 @@ theorem unit_a (X : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ)
     intro l
     unfold Hpk eI esI
     simp only [Fin.ext_iff]
-    split_ifs <;> first | rfl | (exfalso; omega) | omega | norm_num | simp_all | (simp_all; omega)
+    split_ifs <;> first | rfl | (exfalso; omega)
   have h := unit_entry X hU (eI k r ⟨a.val + 1, ha⟩) (esI k r a)
   simp only [hcol, hrow, mul_ite, mul_one, mul_zero, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq',
-    Finset.sum_ite_eq, Finset.mem_univ, if_true] at h
+    Finset.mem_univ, if_true] at h
   linear_combination h
 
 theorem unit_w (X : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ)
@@ -329,17 +329,13 @@ theorem Formalism.FourierDecayAlt.P.second_expansion_identity : Formalism.Fourie
 theorem Formalism.FourierDecayAlt.P.column_indicator_expansion : Formalism.FourierDecayAlt.C3.ExpansionCovector :=
   Formalism.FourierDecayAlt.P.SignAntidiagonal.column_indicator_expansion
 
-theorem Formalism.FourierDecayAlt.P.chain_first_identity : Formalism.FourierDecayAlt.C3.LastColumnChain :=
-  Formalism.FourierDecayAlt.P.SignAntidiagonal.chain_first_identity
+alias Formalism.FourierDecayAlt.P.chain_first_identity := _root_.Formalism.FourierDecayAlt.P.SignAntidiagonal.chain_first_identity
 
 theorem Formalism.FourierDecayAlt.P.leading_term_identity : Formalism.FourierDecayAlt.C3.LeadAA :=
   Formalism.FourierDecayAlt.P.SignAntidiagonal.leading_term_identity
 
 theorem Formalism.FourierDecayAlt.P.leading_term_vector_identity : Formalism.FourierDecayAlt.C3.LeadAAv :=
   Formalism.FourierDecayAlt.P.SignAntidiagonal.leading_term_vector_identity
-
-theorem Formalism.FourierDecayAlt.P.dpsi_is_derivation : Formalism.FourierDecayAlt.C3.DpsiDerivation :=
-  Formalism.FourierDecayAlt.P.SignAntidiagonal.dpsi_is_derivation
 
 theorem Formalism.FourierDecayAlt.P.isotropicNormalFormFull_statement : Formalism.FourierDecayAlt.C3.IsotropicNormalFormFull :=
   Formalism.FourierDecayAlt.P.SignAntidiagonal.isotropicNormalFormFull_statement

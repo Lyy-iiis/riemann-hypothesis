@@ -106,6 +106,7 @@ import Mathlib.RingTheory.Coalgebra.IsFrobenius
 import Mathlib.RingTheory.Etale.Weakly
 import Mathlib.RingTheory.HopfAlgebra.Basic
 import Mathlib.RingTheory.TotallySplit
+import Mathlib.RingTheory.PicardGroup
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LocalVolumeUnramifiedAlmostAll, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LocalVolumeUnramifiedAlmostAllStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ScalarExtensionFibreIntegral, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilProductOfLocalIdentities, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ThetaMeasureExtensionByScalar, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ThetaMeasureExtensionByScalarStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeExtendByScalarBlock, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeOfCongruentForm, Development.WeilBound.RepresentationTheoryGL.SiegelWeil.ArchimedeanSiegelWeil.PlaceIntegrals.SiegelWeilFreeOfBlockNonemptyFrames, Development.WeilBound.RepresentationTheoryGL.SiegelWeil.ArchimedeanSiegelWeil.PlaceIntegrals.SiegelWeilFreeOfBlockNonemptyFramesStatement
@@ -192,7 +193,7 @@ open scoped TensorProduct ENNReal NNReal Matrix
 open GlobalTheory.CompanionTheory.WeilSiegel.Frame GlobalTheory.CompanionTheory.WeilSiegel.Free
 
 theorem _root_.GlobalTheory.T.local_volume_unramified_almost_all : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E), IsCMExt F E σ → ∀ (M : ℕ) (J : Matrix (Fin M) (Fin M) E), IsHermND σ J → ∀ t : F, t ≠ 0 → ∀ (n : ℕ) (T : Matrix (Fin n) (Fin n) E) (hT : ∀ a b, σ (T b a) = T a b) (d : ℕ) (b : Module.Basis (Fin d) F E), ∀ᶠ v : HeightOneSpectrum (𝓞 F) in Filter.cofinite, ∀ (μ : Measure (Fin n → Fin M → Fv F v ⊗[F] E)) (ν : Measure (HermR (Fv F v) σ n)) m, μ.IsAddHaarMeasure → ν.IsAddHaarMeasure → IsGramFibFree (Fv F v) σ J n μ ν m → ∀ h : HA (Fv F v) σ (blockOne (algebraMap F E t) J), m (hermOf (Fv F v) σ T hT) {X | actW (Fv F v) σ _ h (consTup X) ∈ latV b v} = (latV b v).indicator (fun _ => m (hermOf (Fv F v) σ T hT) (latV b v)) (actW (Fv F v) σ _ h (fun _ : Fin 1 => Fin.cons 1 (fun _ => 0))) := by
-  first | exact @GlobalTheory.CompanionTheory.SW.StageGoodFree.stage_good_free | exact GlobalTheory.CompanionTheory.SW.StageGoodFree.stage_good_free | (intros; apply GlobalTheory.CompanionTheory.SW.StageGoodFree.stage_good_free <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.SW.StageGoodFree.stage_good_free
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LocalVolumeUnramifiedAlmostAllStatement =====
@@ -226,8 +227,8 @@ theorem compact_finite_block : ∀ (F E : Type) [Field F] [NumberField F] [Field
   have e0 : gramR R σ (blockOne (algebraMap F E t) J) (fun _ : Fin 1 => Fin.cons 1 fun _ => 0) =
       (hermScal R σ (algebraMap F R t) : HermR R σ 1) := by
     funext a a'
-    simp only [gramR, hR, HeckeCharacterZeroLocus.SiegelWeilU.hR, hform, JR, blockOne, Fin.sum_univ_succ, hermScal, Fin.cons_zero, Fin.cons_succ,
-      map_one, map_zero, one_mul, mul_one, mul_zero, zero_mul, Finset.sum_const_zero, add_zero, Matrix.map_apply,
+    simp only [gramR, HeckeCharacterZeroLocus.SiegelWeilU.hR, hform, JR, blockOne, Fin.sum_univ_succ, hermScal, Fin.cons_zero, Fin.cons_succ,
+      map_one, map_zero, one_mul, mul_one, mul_zero, Finset.sum_const_zero, add_zero, Matrix.map_apply,
       Matrix.of_apply]
     exact (Algebra.TensorProduct.includeRight : E →ₐ[F] R ⊗[F] E).commutes t
   obtain ⟨s, sm, s1, s2⟩ := _root_.GlobalTheory.CompanionTheory.SW.OrbitSection.orbit_section F E σ hcm _ _ hJ' R hR (fun _ : Fin 1 => Fin.cons 1 fun _ => 0) (by
@@ -750,7 +751,7 @@ open scoped TensorProduct ENNReal NNReal Matrix
 open GlobalTheory.CompanionTheory.WeilSiegel.Frame GlobalTheory.CompanionTheory.WeilSiegel.Free
 
 theorem _root_.GlobalTheory.T.theta_measure_extension_by_scalar : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E), IsCMExt F E σ → ∀ (M : ℕ) (J : Matrix (Fin M) (Fin M) E), IsHermND σ J → ∀ t : F, t ≠ 0 → ∀ (n : ℕ) (T : Matrix (Fin n) (Fin n) E) (μ : Measure (HA (AF F) σ (blockOne (algebraMap F E t) J))) 𝓕, IsHaarH F E σ (M + 1) _ μ → IsFDH F E σ (M + 1) _ μ 𝓕 → ∀ (μ₁ : Measure (HA (AF F) σ J)) 𝓕₁, IsHaarH F E σ M J μ₁ → IsFDH F E σ M J μ₁ 𝓕₁ → ∀ (Φ : (Fin (n + 1) → Fin (M + 1) → AF F ⊗[F] E) → ℝ≥0∞) (Ψ : (Fin 1 → Fin (M + 1) → AF F ⊗[F] E) → ℝ≥0∞), Measurable Φ → Measurable Ψ → (∀ h : HA (AF F) σ (blockOne (algebraMap F E t) J), Ψ (actW (AF F) σ _ h (fun _ => Fin.cons 1 (fun _ => 0))) = ∫⁻ X, Φ (actW (AF F) σ _ h (consTup X)) ∂(thetaMeas σ J μ₁ 𝓕₁ (framesE σ J T))) → ∫⁻ X, Φ X ∂(thetaMeas σ _ μ 𝓕 (framesE σ (blockOne (algebraMap F E t) J) (blockOne (algebraMap F E t) T))) = ∫⁻ y, Ψ y ∂(thetaMeas σ _ μ 𝓕 {y : Fin 1 → Fin (M + 1) → E | gramE σ (blockOne (algebraMap F E t) J) y = fun _ _ => algebraMap F E t}) := by
-  first | exact @GlobalTheory.CompanionTheory.WeilSiegel.Free.FrameTheta.theta_stage_frames | exact GlobalTheory.CompanionTheory.WeilSiegel.Free.FrameTheta.theta_stage_frames | (intros; apply GlobalTheory.CompanionTheory.WeilSiegel.Free.FrameTheta.theta_stage_frames <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WeilSiegel.Free.FrameTheta.theta_stage_frames
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ThetaMeasureExtensionByScalarStatement =====
@@ -1445,7 +1446,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeOfCongruentForm =====
 
 -- ===== clump member: Development.WeilBound.RepresentationTheoryGL.SiegelWeil.ArchimedeanSiegelWeil.PlaceIntegrals.SiegelWeilFreeOfBlockNonemptyFrames =====
--- clump-header: {"m": "Development.WeilBound.RepresentationTheoryGL.SiegelWeil.ArchimedeanSiegelWeil.PlaceIntegrals.SiegelWeilFreeOfBlockNonemptyFrames", "h": "module\n\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.TrMMemFramesEIff\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HypOneZeroZero\npublic import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.SiegelWeilMeasureOfCongruentForm\npublic import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.SiegelWeilMeasureOfCongruentTarget\npublic import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.BlockOneDetHermitianGram\npublic import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.HermitianOneByOneIsScalar\npublic import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.SplitAnisotropic\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeExtendByScalarBlock\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeOfCongruentForm\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeOfCongruentMatrix\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeZeroRankOneOfThreeLe\npublic import Development.WeilBound.RepresentationTheoryGL.SiegelWeil.ArchimedeanSiegelWeil.PlaceIntegrals.ZeroBlockCoefficientRankIncrease\nimport CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.CoordinateHaarMeasure\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.PiTensorProduct\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Std.Tactic.BVDecide.Normalize.Prop\n\n"}
+-- clump-header: {"m": "Development.WeilBound.RepresentationTheoryGL.SiegelWeil.ArchimedeanSiegelWeil.PlaceIntegrals.SiegelWeilFreeOfBlockNonemptyFrames", "h": "module\n\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.TrMMemFramesEIff\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HypOneZeroZero\npublic import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.SiegelWeilMeasureOfCongruentForm\npublic import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.SiegelWeilMeasureOfCongruentTarget\npublic import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.BlockOneDetHermitianGram\npublic import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.HermitianOneByOneIsScalar\npublic import CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.SplitAnisotropic\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeExtendByScalarBlock\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeOfCongruentForm\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeOfCongruentMatrix\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SiegelWeilFreeZeroRankOneOfThreeLe\npublic import Development.WeilBound.RepresentationTheoryGL.SiegelWeil.ArchimedeanSiegelWeil.PlaceIntegrals.ZeroBlockCoefficientRankIncrease\nimport CompanionTheory.SpectralGeometry.LocalGlobalProofs.AdelicAnalysis.CoordinateHaarMeasure\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.PiTensorProduct\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Std.Tactic.BVDecide.Normalize.Prop\nimport Mathlib.RingTheory.PicardGroup\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1460,41 +1461,11 @@ section Alg
 
 variable {F E : Type} [Field F] [Field E] [Algebra F E]
 
-theorem hE_add_right (σ : E →ₐ[F] E) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) (x y z : Fin M → E) :
-    hE σ J x (y + z) = hE σ J x y + hE σ J x z := by
-  simp [hE, hform, mul_add, Finset.sum_add_distrib]
-
-theorem hE_add_left (σ : E →ₐ[F] E) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) (x y z : Fin M → E) :
-    hE σ J (x + y) z = hE σ J x z + hE σ J y z := by
-  simp [hE, hform, add_mul, Finset.sum_add_distrib]
-
-theorem hE_smul_right (σ : E →ₐ[F] E) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) (c : E)
-    (x y : Fin M → E) : hE σ J x (c • y) = c * hE σ J x y := by
-  simp only [hE, hform, Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
-  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-  ring
-
-theorem hE_smul_left (σ : E →ₐ[F] E) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) (c : E)
-    (x y : Fin M → E) : hE σ J (c • x) y = σ c * hE σ J x y := by
-  simp only [hE, hform, Pi.smul_apply, smul_eq_mul, Finset.mul_sum, map_mul,
-    AlgHom.coe_toRingHom, RingHom.coe_coe]
-  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-  ring
-
-theorem hE_herm (σ : E →ₐ[F] E) (hσ : ∀ e, σ (σ e) = e) {M : ℕ} (J : Matrix (Fin M) (Fin M) E)
-    (hJ : ∀ i j, σ (J j i) = J i j) (y z : Fin M → E) : σ (hE σ J y z) = hE σ J z y := by
-
-  simp only [hE, hform, map_sum, map_mul, AlgHom.coe_toRingHom, RingHom.coe_coe, hσ]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-  rw [hJ i j]
-  ring
-
 def hLin (σ : E →ₐ[F] E) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) (x : Fin M → E) :
     (Fin M → E) →ₗ[E] E where
   toFun y := hE σ J x y
-  map_add' := hE_add_right σ J x
-  map_smul' c y := by simp [hE_smul_right]
+  map_add' := _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right σ J x
+  map_smul' c y := by simp [_root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right]
 
 theorem hLin_apply (σ : E →ₐ[F] E) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) (x y : Fin M → E) :
     hLin σ J x y = hE σ J x y := rfl
@@ -1504,7 +1475,7 @@ theorem hE_sum_right (σ : E →ₐ[F] E) {M : ℕ} {ι : Type} (J : Matrix (Fin
     hE σ J x (∑ k ∈ s, c k • y k) = ∑ k ∈ s, c k * hE σ J x (y k) := by
 
   rw [← hLin_apply, map_sum]
-  exact Finset.sum_congr rfl fun k _ => by rw [hLin_apply, hE_smul_right]
+  exact Finset.sum_congr rfl fun k _ => by rw [hLin_apply, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right]
 
 theorem cT_mul_apply (σ : E →ₐ[F] E) {M N : ℕ} (J : Matrix (Fin M) (Fin M) E)
     (col : Fin N → Fin M → E) (i j : Fin N) :
@@ -1519,7 +1490,7 @@ theorem split_herm (σ : E →ₐ[F] E) (hσ : ∀ e, σ (σ e) = e) {n : ℕ}
     (s : E) (x : Fin (n + 1) → E) (hs0 : s ≠ 0) (hx : hE σ T x x = s) :
     ∃ (g : GL (Fin (n + 1)) E) (T₁ : Matrix (Fin n) (Fin n) E), (∀ a b, σ (T₁ b a) = T₁ a b) ∧
       blockOne s T₁ = cT (σ : E →+* E) (g : Matrix (Fin (n + 1)) (Fin (n + 1)) E) * T * g := by
-  have hherm := hE_herm σ hσ T hT
+  have hherm := _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_herm σ hσ T hT
   have hsurj : Function.Surjective (hLin σ T x) := fun e =>
     ⟨(e / s) • x, by rw [map_smul, hLin_apply, hx, smul_eq_mul]; field_simp⟩
   have hfr : Module.finrank E (LinearMap.ker (hLin σ T x)) = n := by
@@ -1577,19 +1548,19 @@ theorem exists_value (σ : E →ₐ[F] E) (hCM : IsCMExt F E σ) {n : ℕ}
     (T : Matrix (Fin n) (Fin n) E) (hT : ∀ a b, σ (T b a) = T a b) (h0 : T ≠ 0) :
     ∃ (t : F) (x : Fin n → E), t ≠ 0 ∧ hE σ T x x = algebraMap F E t := by
   obtain ⟨hσ, δ, hδ, hδs⟩ := HaarCoord.conj_facts hCM
-  have hherm := hE_herm σ hσ T hT
+  have hherm := _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_herm σ hσ T hT
   have hne : ∃ x, hE σ T x x ≠ 0 := by
     by_contra hall
     push_neg at hall
     have key : ∀ x y, hE σ T x y + hE σ T y x = 0 := by
       intro x y
       have h := hall (x + y)
-      rw [hE_add_left, hE_add_right, hE_add_right, hall x, hall y] at h
+      rw [_root_.GlobalTheory.CompanionTheory.SW.WittIso.hE_add_left, _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right, _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right, hall x, hall y] at h
       simpa using h
     have key2 : ∀ x y, hE σ T x y = 0 := by
       intro x y
       have h1 := key x (δ • y)
-      rw [hE_smul_right, hE_smul_left, hδs] at h1
+      rw [_root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, _root_.GlobalTheory.CompanionTheory.SW.WittIso.hE_smul_left, hδs] at h1
       have h2 := key x y
       have h3 : δ * (hE σ T x y - hE σ T y x) = 0 := by linear_combination h1
       have h4 := (mul_eq_zero.1 h3).resolve_left hδ
@@ -1632,7 +1603,7 @@ theorem split_hyp (σ : E →ₐ[F] E) (hCM : IsCMExt F E σ) {M : ℕ}
       hypOne J₁ = cT (σ : E →+* E) (g : Matrix (Fin (M + 2)) (Fin (M + 2)) E) * J * g ∧
       ∀ i, (g : Matrix (Fin (M + 2)) (Fin (M + 2)) E) i 0 = x i := by
   obtain ⟨hσ, -⟩ := HaarCoord.conj_facts hCM
-  have hherm := hE_herm σ hσ J hJ.1
+  have hherm := _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_herm σ hσ J hJ.1
 
   have hex : ∃ y₀, hE σ J x y₀ ≠ 0 := by
     by_contra hall
@@ -1650,19 +1621,19 @@ theorem split_hyp (σ : E →ₐ[F] E) (hCM : IsCMExt F E σ) {M : ℕ}
     simpa using this
   obtain ⟨y₀, hy₀⟩ := hex
   obtain ⟨y₁, hxy₁⟩ : ∃ y₁, hE σ J x y₁ = 1 :=
-    ⟨(hE σ J x y₀)⁻¹ • y₀, by rw [hE_smul_right]; exact inv_mul_cancel₀ hy₀⟩
+    ⟨(hE σ J x y₀)⁻¹ • y₀, by rw [_root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right]; exact inv_mul_cancel₀ hy₀⟩
   have hy₁x : hE σ J y₁ x = 1 := by rw [← hherm, hxy₁, map_one]
   obtain ⟨q, hq⟩ : ∃ q, q = hE σ J y₁ y₁ := ⟨_, rfl⟩
   have hqs : σ q = q := by rw [hq]; exact hherm _ _
   obtain ⟨y, hy⟩ : ∃ y : Fin (M + 2) → E, y = y₁ + (-(q / 2)) • x := ⟨_, rfl⟩
   have hxy : hE σ J x y = 1 := by
-    rw [hy, hE_add_right, hE_smul_right, hxy₁, hxx]; simp
+    rw [hy, _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, hxy₁, hxx]; simp
   have hyx : hE σ J y x = 1 := by rw [← hherm, hxy, map_one]
   have hyy : hE σ J y y = 0 := by
     have hs2 : σ (-(q / 2)) = -(q / 2) := by
       rw [map_neg, map_div₀, hqs, map_ofNat]
-    rw [hy, hE_add_right, hE_add_left, hE_add_left, hE_smul_right, hE_smul_right, hE_smul_left,
-      hE_smul_left, hs2, hy₁x, hxy₁, hxx, ← hq]
+    rw [hy, _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right, _root_.GlobalTheory.CompanionTheory.SW.WittIso.hE_add_left, _root_.GlobalTheory.CompanionTheory.SW.WittIso.hE_add_left, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, _root_.GlobalTheory.CompanionTheory.SW.WittIso.hE_smul_left,
+      _root_.GlobalTheory.CompanionTheory.SW.WittIso.hE_smul_left, hs2, hy₁x, hxy₁, hxx, ← hq]
     field_simp
     ring
   let ψ : (Fin (M + 2) → E) →ₗ[E] (Fin 2 → E) := LinearMap.pi ![hLin σ J x, hLin σ J y]
@@ -1673,9 +1644,9 @@ theorem split_hyp (σ : E →ₐ[F] E) (hCM : IsCMExt F E σ) {M : ℕ}
       funext i
       fin_cases i
       · change ψ _ 0 = e 0
-        rw [hψ0, hE_add_right, hE_smul_right, hE_smul_right, hxy, hxx]; simp
+        rw [hψ0, _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, hxy, hxx]; simp
       · change ψ _ 1 = e 1
-        rw [hψ1, hE_add_right, hE_smul_right, hE_smul_right, hyx, hyy]; simp⟩
+        rw [hψ1, _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, hyx, hyy]; simp⟩
   have hfr : Module.finrank E (LinearMap.ker ψ) = M := by
     have h := LinearMap.finrank_range_add_finrank_ker ψ
     rw [LinearMap.range_eq_top.2 hsurj, finrank_top] at h
@@ -1707,8 +1678,8 @@ theorem split_hyp (σ : E →ₐ[F] E) (hCM : IsCMExt F E σ) {M : ℕ}
     have hsy := congrArg (hE σ J y) hsum
     have hz0 : hE σ J x 0 = 0 := GlobalTheory.CompanionTheory.SW.BlockAlg.hE_zero_right σ J x
     have hz1 : hE σ J y 0 = 0 := GlobalTheory.CompanionTheory.SW.BlockAlg.hE_zero_right σ J y
-    rw [hz0, hE_add_right, hE_add_right, hE_smul_right, hE_smul_right, hE_sum_right, hxx, hxy] at hsx
-    rw [hz1, hE_add_right, hE_add_right, hE_smul_right, hE_smul_right, hE_sum_right, hyx, hyy] at hsy
+    rw [hz0, _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right, _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, hE_sum_right, hxx, hxy] at hsx
+    rw [hz1, _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right, _root_.GlobalTheory.CompanionTheory.SW.HermRep.hE_add_right, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, _root_.GlobalTheory.CompanionTheory.WeilSiegel.HypStep.WittOne.hE_smul_right, hE_sum_right, hyx, hyy] at hsy
     simp only [hb0, hb1, mul_zero, Finset.sum_const_zero, add_zero, mul_one, zero_add] at hsx hsy
     have hker : ∑ k : Fin M, v k.succ.succ • b k = 0 := by
       apply Subtype.ext
@@ -1993,7 +1964,7 @@ open GlobalTheory.CompanionTheory.WeilSiegel.Frame
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.siegelWeil_free_of_block_nonempty_frames : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E), HeckeCharacterZeroLocus.SiegelWeilU.IsCMExt F E σ → ∀ (M : ℕ) (J : Matrix (Fin M) (Fin M) E), HeckeCharacterZeroLocus.SiegelWeilU.IsHermND σ J → ∀ (n t : ℕ) (T : Matrix (Fin n) (Fin n) E) (hT : ∀ a b, σ (T b a) = T a b), IsBlockM t T → 2 * n < M → (framesE σ J T).Nonempty → SWFree σ J T hT := by
-  first | exact @GlobalTheory.CompanionTheory.WeilSiegel.Free.swFree_block | exact GlobalTheory.CompanionTheory.WeilSiegel.Free.swFree_block
+  first | exact @GlobalTheory.CompanionTheory.WeilSiegel.Free.swFree_block
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.WeilBound.RepresentationTheoryGL.SiegelWeil.ArchimedeanSiegelWeil.PlaceIntegrals.SiegelWeilFreeOfBlockNonemptyFramesStatement =====

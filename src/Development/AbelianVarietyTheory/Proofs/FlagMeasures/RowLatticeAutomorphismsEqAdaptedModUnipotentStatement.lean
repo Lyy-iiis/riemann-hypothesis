@@ -56,6 +56,7 @@ import Mathlib.Analysis.SpecialFunctions.Bernstein
 import Mathlib.Data.Nat.Choose.Multinomial
 import Mathlib.Tactic.Linter.Style
 import Formalism.HermitianLattices.HermitianLatticesProofs.UnimodularSpan
+import Formalism.SharpRestriction.CuspSpanNormBounds.LatticeGluingRadicals
 import Mathlib.Tactic.Linter.HaveILetI
 
 -- This file was produced by scripts/clump.py from the modules listed below.
@@ -120,7 +121,7 @@ theorem witt_partners {E V : Type} [Field E] [CharZero E] [StarRing E] [AddCommG
 
     simp only [map_sub, map_sum, map_smulₛₗ, LinearMap.sub_apply, LinearMap.sum_apply, RingHom.id_apply, Finset.sum_apply,
     LinearMap.smul_apply, smul_eq_mul, hee, hge, hg'e, mul_zero, Finset.sum_const_zero, sub_zero,
-    mul_ite, mul_one, Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true, starRingEnd_apply]
+    mul_ite, mul_one, Finset.sum_ite_eq', Finset.mem_univ, if_true, starRingEnd_apply]
     have hM : star (h (g b) (g a)) = h (g a) (g b) := hsymm _ _
     have h2 : star (2 : E) = 2 := by simp
     rw [star_div₀, hM, h2]
@@ -174,8 +175,8 @@ theorem diag_isometry {E V : Type} [Field E] [StarRing E] [AddCommGroup V] [Modu
     intro x y
     rw [hL x]
 
-    simp only [map_add (f := _), LinearMap.add_apply, map_sum, Finset.sum_apply, LinearMap.sum_apply, map_smulₛₗ,
-    LinearMap.smul_apply, smul_eq_mul, key_e, key_f, key_x, RingHom.id_apply, starRingEnd_apply]
+    simp only [map_add (f := _), LinearMap.add_apply, map_sum, LinearMap.sum_apply, map_smulₛₗ,
+    LinearMap.smul_apply, smul_eq_mul, key_e, key_f, key_x, starRingEnd_apply]
     have : ∀ a, ((α a - 1) * h (f a) y) * star (h (e a) x) + ((β a - 1) * h (e a) y) * star (h (f a) x) +
         star ((α a - 1) * h (f a) x) * (β a * h (e a) y) + star ((β a - 1) * h (e a) x) * (α a * h (f a) y) = 0 := by
       intro a
@@ -222,7 +223,7 @@ theorem flag_torus (D : D7) (T : D.host.E) (F0 : FlagG (VS D) D.R.rS T) (γ : GV
       · rintro (h | rfl) <;> omega
     simp only [FlagG.Xa, this, Set.image_union, Set.image_singleton, Submodule.span_union]
   have hXa_top : F0.Xa D.R.rS = F0.X := by
-    have : {j : Fin D.R.rS | (j : ℕ) < D.R.rS} = Set.univ := by ext j; simp [j.2]
+    have : {j : Fin D.R.rS | (j : ℕ) < D.R.rS} = Set.univ := by ext j; simp
     simp only [FlagG.Xa, FlagG.X, this, Set.image_univ]
   have he_mem : ∀ i : Fin D.R.rS, F0.e i ∈ F0.Xa ((i : ℕ) + 1) := fun i =>
     Submodule.subset_span ⟨i, by simp, rfl⟩
@@ -263,14 +264,14 @@ theorem flag_torus (D : D7) (T : D.host.E) (F0 : FlagG (VS D) D.R.rS T) (γ : GV
   intro a
   induction a using Fin.lastCases with
   | last =>
-    simp only [frame, lf, FlagG.fvec, Fin.snoc_last, Fin.val_last, LinearEquiv.mul_apply, hγz, Xflag]
+    simp only [frame, FlagG.fvec, Fin.snoc_last, Fin.val_last, LinearEquiv.mul_apply, hγz, Xflag]
     rw [hXa_top]
     exact hperp _ (fun x hx => by
       have := Submodule.span_le (p := LinearMap.ker ((VS D).hT.flip F0.z)) |>.2 (by
         rintro _ ⟨a, rfl⟩; simpa using F0.z_orth a) hx
       simpa using this)
   | cast i =>
-    simp only [frame, lf, FlagG.fvec, Fin.snoc_castSucc, Fin.coe_castSucc, LinearEquiv.mul_apply, Xflag]
+    simp only [frame, FlagG.fvec, Fin.snoc_castSucc, Fin.coe_castSucc, LinearEquiv.mul_apply, Xflag]
     have : γ (F0.e i) = (γ (F0.e i) - u i • F0.e i) + u i • F0.e i := by abel
     rw [this, map_add (f := _), map_smul, ht_e, smul_smul, mul_inv_cancel₀ (hu0 i), one_smul, add_sub_cancel_right]
     exact ht_Xa _ _ (hu i)
@@ -289,8 +290,6 @@ open scoped Classical ENNReal
 open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat Formalism.MainNotions.S.LocalSplitGroups Formalism.L2.SG.HidaSetting Formalism.L2.SG.TermOp Formalism.L2.SG.Full Formalism.L2.SG.RowsConc Formalism.L2.SG.NGData Formalism.L2.SG.TermLoc GlobalTheory.Unfold
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.exists_isometry_unitriangularizing_flag_stabilizer : ∀ (D : D7) (T : D.host.E) (F0 : FlagG (VS D) D.R.rS T) (γ : GV D), γ ∈ stabF D F0 → ∃ t ∈ Formalism.HermitianLatticesTheory.isom (VS D).hT, (∀ x ∈ perpS (VS D) F0.X, t x - x ∈ F0.X) ∧ Adapt (t * γ) (lf D F0) (lf D F0) := by
-  first | exact @GlobalTheory.FlagTorus.flag_torus | exact GlobalTheory.FlagTorus.flag_torus | (intros; apply GlobalTheory.FlagTorus.flag_torus <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsIsometryUnitriangularizingFlagStabilizerStatement =====
@@ -316,7 +315,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsNeZeroSmulMem =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsLatticeRepresentativeNormalised =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsLatticeRepresentativeNormalised", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.SemilocalFrames.LocClosed\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsNeZeroSmulMem\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.LinearFormsBoundedRepresentatives\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.HermitianLattices.HermitianLatticesProofs.UnimodularSpan\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsLatticeRepresentativeNormalised", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.SemilocalFrames.LocClosed\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsNeZeroSmulMem\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.LinearFormsBoundedRepresentatives\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.HermitianLattices.HermitianLatticesProofs.UnimodularSpan\nimport Formalism.SharpRestriction.CuspSpanNormBounds.LatticeGluingRadicals\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -331,34 +330,6 @@ namespace GlobalTheory.RowPartner
 section Gen
 
 variable {E : Type} [Field E] [NumberField E] [StarRing E] {S : HSpace E} {r : ℕ} {T : E}
-
-theorem mem_orth_iff (U : Submodule E S.V) (y : S.V) : y ∈ orth S U ↔ ∀ x ∈ U, S.hT x y = 0 := by
-  simp [orth, Submodule.mem_iInf]
-
-theorem X_iso (F : LFlag S r T) {x y : S.V} (hx : x ∈ Xsp F) (hy : y ∈ Xsp F) : S.hT x y = 0 := by
-  induction hx using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨a, rfl⟩ := hx
-    induction hy using Submodule.span_induction with
-    | mem y hy => obtain ⟨b, rfl⟩ := hy; exact F.fl.e_iso a b
-    | zero => simp
-    | add u v _ _ hu hv => simp [hu, hv]
-    | smul c u _ hu => simp [hu]
-  | zero => simp
-  | add u v _ _ hu hv => simp [hu, hv]
-  | smul c u _ hu => simp [hu]
-
-theorem z_mem_orth (F : LFlag S r T) : F.fl.z ∈ orth S (Xsp F) := by
-  rw [mem_orth_iff]
-  intro x hx
-  induction hx using Submodule.span_induction with
-  | mem x hx => obtain ⟨a, rfl⟩ := hx; exact F.fl.z_orth a
-  | zero => simp
-  | add u v _ _ hu hv => simp [hu, hv]
-  | smul c u _ hu => simp [hu]
-
-theorem X_le_orth (F : LFlag S r T) : Xsp F ≤ orth S (Xsp F) := fun y hy =>
-  (mem_orth_iff _ _).2 fun x hx => X_iso F hx hy
 
 theorem half_not_int : ¬ ∃ o : 𝓞 E, (o : E) = algebraMap ℚ E (1 / 2) := by
   rintro ⟨o, ho⟩
@@ -398,7 +369,7 @@ theorem z_not_mem_X (Λ : Submodule (𝓞 E) S.V) (F : LFlag S r T)
   apply half_not_int (E := E)
   apply hprim
   have hc : algebraMap ℚ E (1 / 2) • F.fl.z ∈ Xsp F := (Xsp F).smul_mem _ hz
-  exact ⟨Submodule.mem_sup_right hc, X_le_orth F hc⟩
+  exact ⟨Submodule.mem_sup_right hc, _root_.Formalism.MainNotions.LatticeGluingRadicals.c_X_iso F hc⟩
 
 theorem exists_partner_rep (Λ : Submodule (𝓞 E) S.V) (F : LFlag S r T)
     (hlat : Submodule.IsLattice E Λ) (hU : Formalism.HermitianLatticesTheory.IsUnimodular S.hT Λ) (hz : F.fl.z ∈ Λ)
@@ -409,8 +380,8 @@ theorem exists_partner_rep (Λ : Submodule (𝓞 E) S.V) (F : LFlag S r T)
   have hφ0 : ∀ y ∈ Xsp F, φ y = 0 := fun y hy => by simpa using congr($hφX ⟨y, hy⟩)
   set U : Submodule E S.V := Xsp F ⊔ Submodule.span E {F.fl.z} with hUdef
   set M0 : Submodule (𝓞 E) S.V := Λ ⊓ toO S U with hM0
-  have hUo : U ≤ orth S (Xsp F) := sup_le (X_le_orth F)
-    ((Submodule.span_singleton_le_iff_mem _ _).2 (z_mem_orth F))
+  have hUo : U ≤ orth S (Xsp F) := sup_le (_root_.Formalism.MainNotions.LatticeGluingRadicals.c_X_iso F)
+    ((Submodule.span_singleton_le_iff_mem _ _).2 (_root_.Formalism.L2.SG.FourParts.z_mem_orth F))
   have hprimM : IsPrimitiveSub M0 Λ := by
     refine ⟨inf_le_left, le_antisymm (le_inf inf_le_left fun x hx => Submodule.subset_span hx) ?_⟩
     refine inf_le_inf_left _ ?_
@@ -425,7 +396,7 @@ theorem exists_partner_rep (Λ : Submodule (𝓞 E) S.V) (F : LFlag S r T)
         have h1 : y + a • F.fl.z ∈ Lrep Λ F := ⟨hxΛ, hxo⟩
         have h2 : -y ∈ toO S (Xsp F) := (Xsp F).neg_mem hy
         have := Submodule.add_mem_sup h1 h2
-        simpa using this, (orth S (Xsp F)).smul_mem a (z_mem_orth F)⟩
+        simpa using this, (orth S (Xsp F)).smul_mem a (_root_.Formalism.L2.SG.FourParts.z_mem_orth F)⟩
     refine ⟨o, ?_⟩
     simp [map_add (f := _), hφ0 y hy, hφz, ho]
   choose ψ hψ using hint
@@ -438,7 +409,7 @@ theorem exists_partner_rep (Λ : Submodule (𝓞 E) S.V) (F : LFlag S r T)
         apply RingOfIntegers.ext
         simp only [hψ, RingHom.id_apply, smul_eq_mul, map_mul, Submodule.coe_smul]
         rw [← algebraMap_smul E c (x : S.V), map_smul]
-        simp [hψ] }
+        simp }
   have hfull : Submodule.IsFullLattice E Λ :=
     { toIsLattice := hlat, span_eq_top := span_eq_top_of_unimodular Λ hlat hU }
   obtain ⟨w, hw⟩ := GlobalTheory.LoopC.FunIdx.exists_dual_vec S M0 Λ hfull hprimM ψ'
@@ -449,7 +420,7 @@ theorem exists_partner_rep (Λ : Submodule (𝓞 E) S.V) (F : LFlag S r T)
     rwa [hU] at this
   refine ⟨w, ⟨hwΛ, ?_⟩, ?_⟩
   · show (w : S.V) ∈ orth S (Xsp F)
-    rw [mem_orth_iff]
+    rw [_root_.Formalism.MainNotions.LatticeGluingRadicals.a_mem_orth]
     intro x hx
     obtain ⟨c, hc0, hcx⟩ := exists_smul_mem_lat Λ hlat hU x
     have hcX : c • x ∈ Xsp F := by
@@ -491,7 +462,7 @@ open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNo
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_lattice_representative_normalised : ∀ (D : D7) (T : D.host.E) (F0 : FlagG (VS D) D.R.rS T) (Λ : LV D), IsRowLat D F0 Λ → ∃ σ ∈ Lrep Λ (lf D F0), (VS D).hT σ F0.z = 1 := by
-  first | exact @GlobalTheory.RowPartner.exists_partner_rowLat | exact GlobalTheory.RowPartner.exists_partner_rowLat | (intros; apply GlobalTheory.RowPartner.exists_partner_rowLat <;> assumption)
+  first | exact @GlobalTheory.RowPartner.exists_partner_rowLat
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsLatticeRepresentativeNormalisedStatement =====
@@ -517,12 +488,6 @@ theorem inv_apply' (a : GV D) (x : (VS D).V) : a⁻¹ x = a.symm x := rfl
 
 theorem Xa_mono {i j : ℕ} (h : i ≤ j) : F0.Xa i ≤ F0.Xa j :=
   Submodule.span_mono (Set.image_mono fun k (hk : k.1 < i) => lt_of_lt_of_le hk h)
-
-theorem Xa_top : F0.Xa D.R.rS = F0.X := by
-  unfold FlagG.Xa FlagG.X
-  congr 1
-  ext x
-  simp
 
 theorem frame_cs (i : Fin D.R.rS) : frame (lf D F0) i.castSucc = F0.e i := by
   simp [frame, FlagG.fvec]
@@ -603,7 +568,7 @@ theorem adapt_mapsTo {g : GV D} (hg : Adapt g (lf D F0) (lf D F0)) (j : ℕ) :
 theorem frameAdaptedIsometry_vector_sub_mem_flag {g : GV D} (hg : Adapt g (lf D F0) (lf D F0)) : g F0.z - F0.z ∈ F0.X := by
   have h := hg.2 (Fin.last _)
   rw [frame_last] at h
-  simpa [Xflag, Fin.val_last, Xa_top] using h
+  simpa [Xflag, Fin.val_last, _root_.Formalism.MainNotions.BridgeLemma₂.partial_isotropic_top] using h
 
 end GlobalTheory.AutQuot
 
@@ -635,7 +600,7 @@ def A0 : Subgroup (GV D) where
 variable {F0 Λ}
 
 theorem adaptedLatticeAutomorphism_mapsTo_flag {a : GV D} (ha : a ∈ A0 F0 Λ) : ∀ x ∈ F0.X, a x ∈ F0.X := by
-  rw [← Xa_top]; exact adapt_mapsTo F0 ha.1 _
+  rw [← _root_.Formalism.MainNotions.BridgeLemma₂.partial_isotropic_top]; exact adapt_mapsTo F0 ha.1 _
 
 theorem adaptedLatticeAutomorphism_mapsTo_perp {a : GV D} (ha : a ∈ A0 F0 Λ) : ∀ y ∈ perpS (VS D) F0.X, a y ∈ perpS (VS D) F0.X :=
   isom_mapsTo_perp ha.1.1 (adaptedLatticeAutomorphism_mapsTo_flag ha)
@@ -710,7 +675,7 @@ variable {F0 Λ}
 
 theorem stab_mapsX {γ : GV D} (hγ : γ ∈ stabF D F0) : ∀ x ∈ F0.X, γ x ∈ F0.X := by
   intro x hx
-  rw [← Xa_top] at hx ⊢
+  rw [← _root_.Formalism.MainNotions.BridgeLemma₂.partial_isotropic_top] at hx ⊢
   rw [← hγ.2.1 D.R.rS]
   exact ⟨x, hx, rfl⟩
 
@@ -744,7 +709,7 @@ theorem lift_fix (hΛ : IsRowLat D F0 Λ) {a : GV D} (ha : a ∈ A0 F0 Λ) :
 
 theorem stab_fix (hΛ : IsRowLat D F0 Λ) {γ : GV D} (hγ : γ ∈ stabF D F0) (hγΛ : Formalism.HermitianLatticesTheory.gmap γ Λ = Λ) :
     ∃ a ∈ A0 F0 Λ, ∀ y ∈ perpS (VS D) F0.X, a y - γ y ∈ F0.X := by
-  obtain ⟨t, ht, htP, hσ⟩ := GlobalTheory.T.exists_isometry_unitriangularizing_flag_stabilizer D T F0 γ hγ
+  obtain ⟨t, ht, htP, hσ⟩ := _root_.GlobalTheory.FlagTorus.flag_torus D T F0 γ hγ
   have hγX := stab_mapsX hγ
   have hγP := stab_mapsP hγ
   have htX : ∀ x ∈ F0.X, t x ∈ F0.X := fun x hx => by
@@ -792,7 +757,7 @@ theorem stab_fix (hΛ : IsRowLat D F0 Λ) {γ : GV D} (hγ : γ ∈ stabF D F0) 
         simpa using this
       have := hn.2.2 _ hz
       show _ ∈ F0.Xa (Fin.last D.R.rS).val
-      rw [Fin.val_last, Xa_top]
+      rw [Fin.val_last, _root_.Formalism.MainNotions.BridgeLemma₂.partial_isotropic_top]
       exact this
     · rw [frame_cs]
       have he : (t * γ) (F0.e i) ∈ F0.Xa (i.1 + 1) :=
@@ -902,7 +867,7 @@ theorem GlobalTheory.AutQuot.autQuot : ∀ (D : D7) (X : HidaSetting D) (Y : Ful
   intro D X Y u _ Λ hΛ
   have hR : IsRowLat D (X.Fu u) Λ := (Y.rowsOK u).1 Λ hΛ
   exact GlobalTheory.AutQuot.main_gen hR
-    (_root_.automorphism_lattice_finite D (D.sp.Y_sig 0) _ (D.mem u).A.T_prime.pos (X.Fu u) Λ hR)
+    (_root_.PI.AutLzFinite.SlopeTestRemainingChoices.autLzFin_main D (D.sp.Y_sig 0) _ (D.mem u).A.T_prime.pos (X.Fu u) Λ hR)
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -918,7 +883,7 @@ open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNo
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.rowLattice_automorphisms_eq_adapted_mod_unipotent : ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.Word), ∀ Λ ∈ Y.what₂ u, ∃ A N : Subgroup (GV D), (A : Set (GV D)) = Aut0 (lf D (X.Fu u)) Λ ∧ (N : Set (GV D)) = NLam Λ (lf D (X.Fu u)) ∧ N ≤ A ∧ (∀ a ∈ A, ∀ n ∈ N, a * n * a⁻¹ ∈ N) ∧ N.relIndex A = Nat.card (autLz D (X.Fu u) Λ) ∧ 0 < Nat.card (autLz D (X.Fu u) Λ) := by
-  first | exact @GlobalTheory.AutQuot.autQuot | exact GlobalTheory.AutQuot.autQuot | (intros; apply GlobalTheory.AutQuot.autQuot <;> assumption)
+  first | exact @GlobalTheory.AutQuot.autQuot
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.RowLatticeAutomorphismsEqAdaptedModUnipotentStatement =====

@@ -189,7 +189,7 @@ theorem mem_aL_image (σ : E →ₐ[F] E)
     rw [← htr, hsc, map_mul]
   have hone : (1 : Fv F v ⊗[F] E) ∈ OEv (E := E) v := by
     have := PI.UnitaryGroupMassFormula.LocJacTyp.Sd.inclR_mem (E := E) v 1
-    simp only [OneMemClass.coe_one, map_one] at this
+    simp only [map_one] at this
     exact this
   have hsmul : ∀ c ∈ v.adicCompletionIntegers F, ∀ x ∈ OEv (E := E) v, c • x ∈ OEv (E := E) v :=
     fun c hc x hx => by
@@ -243,11 +243,6 @@ open scoped ENNReal TensorProduct
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
   (v : HeightOneSpectrum (𝓞 F))
-
-theorem absV_pow (x : Fv F v) (n : ℕ) : absV v (x ^ n) = absV v x ^ n := by
-  induction n with
-  | zero => rw [pow_zero, pow_zero, VolOrdW.absV_one]
-  | succ n ih => rw [pow_succ, VolOrdW.absV_mul, ih, pow_succ]
 
 theorem meas_image (ι : Type) [Fintype ι] [DecidableEq ι] (μ : Measure (ι → Fv F v ⊗[F] E))
     [μ.IsAddHaarMeasure] (f : (ι → Fv F v ⊗[F] E) →ₗ[Fv F v] (ι → Fv F v ⊗[F] E))
@@ -343,7 +338,7 @@ theorem absV_det_bigL (hfin : Module.finrank F E = 2) {g : ℕ} (hg0 : g ≠ 0)
     exact (pow_ne_zero _ (pow_ne_zero _ hgv)) h2.symm
   refine ⟨hD, ?_⟩
   have h3 := congrArg (absV v) h2
-  rw [absV_pow, absV_pow, absV_pow, hg] at h3
+  rw [_root_.Formalism.L2.SG.Pf.NcVal.VolOrdW.absV_pow, _root_.Formalism.L2.SG.Pf.NcVal.VolOrdW.absV_pow, _root_.Formalism.L2.SG.Pf.NcVal.VolOrdW.absV_pow, hg] at h3
   have hpos := (VolOrdW.absV_pos v hD).le
   have hgpos : (0 : ℝ) ≤ (g : ℝ)⁻¹ ^ ((r + 1) ^ 2) := by positivity
   refine (pow_left_inj₀ hpos hgpos two_ne_zero).1 ?_

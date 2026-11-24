@@ -344,9 +344,6 @@ theorem goal1 (l : ℕ) [Fact l.Prime] (a : ℤ_[l]) (q : ℚ_[l]) : ‖a • q�
 
 end AbsoluteContinuitySecondLemma
 
-theorem norm_smul_le (l : ℕ) [Fact l.Prime] (a : ℤ_[l]) (q : ℚ_[l]) : ‖a • q‖ = ‖a‖ * ‖q‖ :=
-  AbsoluteContinuitySecondLemma.goal1 l a q
-
 namespace AbsoluteContinuityFirstLemma
 
 namespace AbsoluteContinuitySmulBound
@@ -382,13 +379,9 @@ theorem goal1 (l : ℕ) [Fact l.Prime] (M : Type u) [AddCommGroup M] [Module ℤ
 
 end AbsoluteContinuityFirstLemma
 
-theorem bdd (l : ℕ) [Fact l.Prime] (M : Type u) [AddCommGroup M] [Module ℤ_[l] M] [Module.Finite ℤ_[l] M]
-    (φ : M →ₗ[ℤ_[l]] ℚ_[l]) : ∃ C : ℝ, 0 ≤ C ∧ ∀ m, ‖φ m‖ ≤ C :=
-  AbsoluteContinuityFirstLemma.goal1 l M φ
-
 theorem AbsCont_of (hC : Chev.{u}) : AbsCont.{u, v} := by
   intro l _ G _ _ _ M _ _ _ ρ K hK h0 hopen φ x
-  obtain ⟨C, hC0, hCb⟩ := bdd l M φ
+  obtain ⟨C, hC0, hCb⟩ := _root_.LateralTheory.EWeil.AbsContPf.AbsoluteContinuityFirstLemma.goal1 l M φ
   have hl1 : (1 : ℝ) < l := by exact_mod_cast (Fact.out : l.Prime).one_lt
   have hlpos : (0 : ℝ) < l := by linarith
   rw [continuous_iff_continuousAt]
@@ -411,7 +404,7 @@ theorem AbsCont_of (hC : Chev.{u}) : AbsCont.{u, v} := by
       rw [← Module.End.mul_apply, ← map_mul, inv_mul_cancel_right]
     rw [this] at hg; exact hg
   obtain ⟨z, hz⟩ := hk _ hd
-  rw [dist_eq_norm, ← map_sub, hz, map_smul, norm_smul_le, PadicInt.norm_p_pow]
+  rw [dist_eq_norm, ← map_sub, hz, map_smul, _root_.LateralTheory.EWeil.AbsContPf.AbsoluteContinuitySecondLemma.goal1, PadicInt.norm_p_pow]
   have hzC := hCb z
   have hpow : (l : ℝ) ^ (-(N : ℤ)) = (l : ℝ)⁻¹ ^ N := by
     rw [zpow_neg, zpow_natCast, inv_pow]
@@ -925,7 +918,7 @@ theorem UpperTheory.Gal.Int.Geo.grHom_of :
       by_cases h : j' = j
       · subst h
         omega
-      · simp [Pi.single_apply, h]
+      · simp [h]
     have hw := (mem _ _).1 (hinv (c j + 1) g _ hv) i (by omega)
     simpa [Matrix.mulVec, dotProduct, Pi.single_apply] using hw
   let D : Matrix (Fin d) (Fin d) k → Matrix (Fin d) (Fin d) k :=
@@ -1228,7 +1221,7 @@ open UpperTheory.Gal.Int.Geo.HeightDescentDirectedColimits in
 theorem UpperTheory.Gal.Int.Geo.htDesc_of :
     HtDesc := by
   intro q k Ω _ _ _ _ X p hqc hqs n i y
-  obtain ⟨L, z, hz⟩ := (_root_.GlobalTheory.EtC.contCone_of_qcqs_affine (ZMod q) (tw q i) (GlobalTheory.T.tateTwist_finitary q i) _ (Gd k Ω p) (cn k Ω p) (cnLim p)
+  obtain ⟨L, z, hz⟩ := (_root_.GlobalTheory.EtC.contCone_of_qcqs_affine (ZMod q) (tw q i) (_root_.GlobalTheory.EtC.tw_finitary q i) _ (Gd k Ω p) (cn k Ω p) (cnLim p)
     (fun L => gd_compact p hqc L.unop.1) (fun L => gd_qs p hqs L.unop.1) (fun _ _ f => tr_affine p (leOfHom f.unop)) n).1 y
   exact ⟨L.unop.1, L.unop.2, z, hz⟩
 end -- clump:auto
@@ -1448,7 +1441,7 @@ private theorem galMap_geomMap {k : Type} [Field k] (Ω : Type) [Field Ω] [Alge
     (σ : Ω ≃ₐ[k] Ω) : galMap Ω p σ ≫ geomMap Ω p u hu = geomMap Ω p u hu ≫ galMap Ω q σ := by
   apply pullback.hom_ext
   · simp only [geomMap, Category.assoc, pullback.lift_fst, galMap_fst, galMap_fst_assoc]
-  · simp only [geomMap, Category.assoc, pullback.lift_snd, galMap_snd, galMap_snd_assoc, pullback.lift_snd_assoc]
+  · simp only [geomMap, Category.assoc, pullback.lift_snd, galMap_snd, pullback.lift_snd_assoc]
 
 private theorem galMap_inv_comp {k : Type} [Field k] (Ω : Type) [Field Ω] [Algebra k Ω] {X : Scheme.{0}}
     (p : X ⟶ Spec (CommRingCat.of k)) (σ : Ω ≃ₐ[k] Ω) : galMap Ω p σ⁻¹ ≫ galMap Ω p σ = 𝟙 _ := by

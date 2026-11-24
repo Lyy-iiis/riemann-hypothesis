@@ -172,7 +172,7 @@ open ReciprocityTheory.ChartRestriction.G.Key
 
 namespace GlobalTheory.ThetaInversion
 
-theorem inversion : Chi.InversionStatement := GlobalTheory.inversionStatement_holds
+alias inversion := _root_.GlobalTheory.inversionStatement_holds
 
 end GlobalTheory.ThetaInversion
 end -- clump:auto
@@ -197,10 +197,7 @@ namespace GlobalTheory.KeyDesc
 
 open GlobalTheory.KeyCancel
 
-theorem spMap_comp {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B) (g : B →+* C) :
-    spMap (g.comp f) = spMap g ≫ spMap f := by
-  show Spec.map _ = Spec.map _ ≫ Spec.map _
-  rw [← Spec.map_comp, ← CommRingCat.ofHom_comp]
+alias spMap_comp := _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp
 
 theorem dualMapR_algebraMap {A B : Type} [CommRing A] [CommRing B] (f : A →+* B) (a : A) :
     Chart.dualMapR f (algebraMap A _ a) = algebraMap B _ (f a) := by
@@ -364,10 +361,7 @@ theorem exists_factor {S K : Type} [CommRing S] [Countable S] [Field K] (i : S �
   exact (Subfield.cardinalMk_closure_le_max _).trans
     (max_le (Cardinal.le_aleph0_iff_set_countable.2 hc) le_rfl)
 
-theorem spMap_comp' {R R' R'' : Type} [CommRing R] [CommRing R'] [CommRing R''] (f : R →+* R') (f' : R' →+* R'') :
-    spMap (f'.comp f) = spMap f' ≫ spMap f := by
-  show Spec.map _ = Spec.map _ ≫ Spec.map _
-  rw [← Spec.map_comp, ← CommRingCat.ofHom_comp]
+alias spMap_comp' := _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp
 
 theorem exists_common_countable {k K : Type} [Field k] [Countable k] [Field K] (σ : k →+* K) (y₀ y₁ : KeyIn k)
     (x : KeyIn K) (h₀ : KeyPB x y₀ σ) (h₁ : KeyPB x y₁ σ) :
@@ -1449,7 +1443,7 @@ open GlobalTheory.KeyPow GlobalTheory.KeyKa
 
 
 theorem _root_.GlobalTheory.T.exists_unit_thetaKeyRule_smooth_base : ThetaUnifAV → Out.PolBaseChangeSt → ∀ N : ℕ → ℕ, KeyRule N 1 charHalf → ∀ (k S : Type) [Field k] [CharZero k] [CommRing S] [IsDomain S] [Algebra k S] [Algebra.Smooth k S] (y : KeyIn S), ∃ κ : Sˣ, ∀ (s : S →+* ℂ) (x : KeyIn ℂ) (t : ℂ), KeyPB x y s → (∃ (τ M : Matrix (Fin x.P.g) (Fin x.P.g) ℂ) (a b : Fin x.P.g → ℂ) (c : ℂ), charHalf _ a b ∧ c ≠ 0 ∧ NormalAt x τ M a b c ∧ t = M.det ^ 4 / c ^ 8) → t ^ N y.P.g = s κ := by
-  first | exact @GlobalTheory.KeySmoothBase.exists_unit_of_smooth | exact GlobalTheory.KeySmoothBase.exists_unit_of_smooth | (intros; apply GlobalTheory.KeySmoothBase.exists_unit_of_smooth <;> assumption)
+  first | exact @GlobalTheory.KeySmoothBase.exists_unit_of_smooth
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ThetaLawProofs.ExistsUnitThetaKeyRuleSmoothBaseStatement =====
@@ -1467,7 +1461,7 @@ open GlobalTheory.KeyPow GlobalTheory.KeyKa
 
 
 theorem _root_.GlobalTheory.T.thetaFrame_value_eq_unit_smooth_connected_base : Out.Laws → ThetaUnifAV → Key.Chi.InversionStatement → ∀ (S : Type) [CommRing S] [IsDomain S] [Algebra ℂ S] [Algebra.Smooth ℂ S] (y : KeyIn S) (N : ℕ) (r : Sˣ) (t : (S →ₐ[ℂ] ℂ) → ℂ) (s₀ : S →ₐ[ℂ] ℂ), 1 ≤ N → (∀ s, ∃ x : KeyIn ℂ, KeyPB x y s.toRingHom ∧ (∃ (τ M : Matrix (Fin x.P.g) (Fin x.P.g) ℂ) (a b : Fin x.P.g → ℂ) (c : ℂ), charHalf _ a b ∧ c ≠ 0 ∧ NormalAt x τ M a b c ∧ t s = M.det ^ 4 / c ^ 8)) → (∀ s, t s ^ N = s r ^ N) → t s₀ = s₀ r → ∀ s, t s = s r := by
-  first | exact @GlobalTheory.RootConst.value_eq_unit_of_pow_eq | exact GlobalTheory.RootConst.value_eq_unit_of_pow_eq | (intros; apply GlobalTheory.RootConst.value_eq_unit_of_pow_eq <;> assumption)
+  first | exact @GlobalTheory.RootConst.value_eq_unit_of_pow_eq
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ThetaLawProofs.ThetaFrameValueEqUnitSmoothConnectedBaseStatement =====
@@ -1485,7 +1479,7 @@ open GlobalTheory.KeyPow GlobalTheory.KeyKa
 
 
 theorem _root_.GlobalTheory.T.thetaFrame_value_independent_normalForm : ThetaUnifAV → Key.Chi.InversionStatement → ∀ (x : KeyIn ℂ) (t t' : ℂ), (∃ (τ M : Matrix (Fin x.P.g) (Fin x.P.g) ℂ) (a b : Fin x.P.g → ℂ) (c : ℂ), charHalf _ a b ∧ c ≠ 0 ∧ NormalAt x τ M a b c ∧ t = M.det ^ 4 / c ^ 8) → (∃ (τ M : Matrix (Fin x.P.g) (Fin x.P.g) ℂ) (a b : Fin x.P.g → ℂ) (c : ℂ), charHalf _ a b ∧ c ≠ 0 ∧ NormalAt x τ M a b c ∧ t' = M.det ^ 4 / c ^ 8) → t = t' := by
-  first | exact @GlobalTheory.NormalUnique.thetaFrame_value_unique | exact GlobalTheory.NormalUnique.thetaFrame_value_unique | (intros; apply GlobalTheory.NormalUnique.thetaFrame_value_unique <;> assumption)
+  first | exact @GlobalTheory.NormalUnique.thetaFrame_value_unique
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ThetaLawProofs.ThetaFrameValueIndependentNormalFormStatement =====

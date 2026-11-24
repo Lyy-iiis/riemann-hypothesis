@@ -409,15 +409,9 @@ section Vals
 variable {K : Type} [Fintype K] {ι : K → Type} [∀ k, Fintype (ι k)] {Ω : Type} [Field Ω]
   {y : (Σ k, ι k) → Ω} {L : Type} [Field L] {z : (Σ k, ι k) → L}
 
-theorem homog_const (n : ℤ) : IsMultiHomog (C n : MRing ι) 0 := by
-  intro m hm k
-  rw [C_apply] at hm
-  have h0 : m = 0 := by simpa using support_monomial_subset hm
-  simp [h0]
-
 theorem hasVal_one : HasVal y (0 : K → ℤ) (1 : Ω) z (1 : L) := by
   refine ⟨0, 0, 1, 1, ?_, ?_, fun k => by simp, by simp, by simp, by simp⟩ <;>
-  · simpa using homog_const (ι := ι) 1
+  · simpa using _root_.GlobalTheory.CompanionTheory.Ar.Flat.UnitChart.homog_C (ι := ι) 1
 
 theorem hasVal_mul {s s' : Ω} {w w' : L} (h : HasVal y (0 : K → ℤ) s z w)
     (h' : HasVal y (0 : K → ℤ) s' z w') : HasVal y (0 : K → ℤ) (s * s') z (w * w') := by
@@ -515,10 +509,10 @@ theorem ratio_hasVal (hz : z ∈ ptsOver L (mCoordIdeal y)) (k : K) (a b : ι k)
 theorem nat_hasVal (hz : z ∈ ptsOver L (mCoordIdeal y)) (n : ℕ) (hn : (n : L) ≠ 0) :
     (n : Ω) ≠ 0 ∧ HasVal y (0 : K → ℤ) (n : Ω)⁻¹ z (n : L)⁻¹ := by
   have h : HasVal y (0 : K → ℤ) (n : Ω) z (n : L) := by
-    refine ⟨0, 0, C (n : ℤ), 1, homog_const _, by simpa using homog_const (ι := ι) 1, fun k => by simp, ?_, ?_, ?_⟩
-    · simp [aeval_C]
+    refine ⟨0, 0, C (n : ℤ), 1, _root_.GlobalTheory.CompanionTheory.Ar.Flat.UnitChart.homog_C _, by simpa using _root_.GlobalTheory.CompanionTheory.Ar.Flat.UnitChart.homog_C (ι := ι) 1, fun k => by simp, ?_, ?_, ?_⟩
     · simp
-    · simp [aeval_C]
+    · simp
+    · simp
   exact hasVal_inv hz h hn
 
 end Ev
@@ -1014,7 +1008,7 @@ theorem genUnit_join : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H
     have hsgn : HodgeCpt.rootSgn D r = 1 ∨ HodgeCpt.rootSgn D r = -1 := by
       unfold HodgeCpt.rootSgn
       split_ifs <;> simp
-    rcases hsgn with h' | h' <;> rw [h'] <;> simp only [zpow_one, _root_.zpow_neg, inv_inv, inv_div] <;> constructor <;>
+    rcases hsgn with h' | h' <;> rw [h'] <;> simp only [zpow_one, _root_.zpow_neg, inv_div] <;> constructor <;>
       first | exact ut | exact ut₀
   obtain ⟨s, hsdef⟩ : ∃ s : M.Ω, s = i (m₂ * e₀ r * t₀ ^ (-HodgeCpt.rootSgn D r)) *
       (m₁ * e r * t ^ (-HodgeCpt.rootSgn D r))⁻¹ * (i t₀ / t) ^ HodgeCpt.rootSgn D r := ⟨_, rfl⟩

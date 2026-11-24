@@ -423,7 +423,7 @@ theorem clopen_sep (D : D7) {x y : Af D.host.F ⊗[D.host.F] D.host.E} (h : x �
   have hne : GlobalTheory.AfTensNbhd.coordEquiv D.host.F D.host.E x ≠ GlobalTheory.AfTensNbhd.coordEquiv D.host.F D.host.E y :=
     fun h' => h ((GlobalTheory.AfTensNbhd.coordEquiv D.host.F D.host.E).injective h')
   obtain ⟨k, hk⟩ := Function.ne_iff.1 hne
-  haveI : T2Space (Af D.host.F) := GlobalTheory.IntegralFinAdele.t2Space_finiteAdeleRing' D.host.F
+  haveI : T2Space (Af D.host.F) := _root_.GlobalTheory.AdelicUnitaryTop.t2Space_finiteAdeleRing_of_numberField D.host.F
   have hd : GlobalTheory.AfTensNbhd.coordEquiv D.host.F D.host.E y k - GlobalTheory.AfTensNbhd.coordEquiv D.host.F D.host.E x k ≠ 0 :=
     sub_ne_zero.2 hk.symm
   obtain ⟨G, hGo, hGs⟩ := GlobalTheory.SmallLevel.exists_open_subgroup D.host.F
@@ -890,7 +890,7 @@ private theorem schw {D : D7} (θ : InfFam D) {a n : ℕ} (h : GL (Fin a) (AE D)
   | smul c f _ i => exact Submodule.smul_mem _ c i
   | mem Φ hm =>
     obtain ⟨f, k, hk, rfl⟩ := hm
-    haveI : IsTopologicalRing (Af D.host.F ⊗[D.host.F] D.host.E) := by first | infer_instance | exact GlobalTheory.AdelicU.isTopologicalRing_tens | exact isTopologicalRing_tens
+    haveI : IsTopologicalRing (Af D.host.F ⊗[D.host.F] D.host.E) := by first | exact isTopologicalRing_tens
     let ρ : D.what₂.Tau → (AE D →+* ℂ) := fun τ => (θ τ).comp (infPart D)
     let L := famEquiv (fun τ => h.1.map (ρ τ)) (fun τ => h.2.map (ρ τ)) (fun τ => g.1.map (ρ τ)) (fun τ => g.2.map (ρ τ))
       (fun τ => map_inv _ h.3) (fun τ => map_inv _ h.4) (fun τ => map_inv _ g.3) (fun τ => map_inv _ g.4)
@@ -934,7 +934,7 @@ theorem GlobalTheory.CompanionTheory.AlgStab.algStab : IdemEx → AlgStab := by
     · rw [if_neg (fun c => hX (hI.1 c))] at this
       rw [if_neg hX]
       exact this
-  · haveI : IsTopologicalRing (AE D) := by first | infer_instance | exact GlobalTheory.AdelicU.isTopologicalRing_tens | exact isTopologicalRing_tens
+  · haveI : IsTopologicalRing (AE D) := by first | infer_instance | exact isTopologicalRing_tens
     exact hC.comp_homeomorph (twoSide h.1 h.2 g.1 g.2 h.3 h.4 g.3 g.4)
 end -- clump:auto
 end -- clump:auto

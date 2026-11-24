@@ -1,9 +1,9 @@
 module
 
 public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.EichLApply
+public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.EichESymmApply
 public import Formalism.SharpRestriction.CuspSpanNormBounds.BlockEnds
 public import Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.LocalTheoryWindows
-public import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.EichESymmApply
 public import Mathlib.LinearAlgebra.FiniteDimensional.Defs
 public import Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset
 public import Mathlib.Algebra.Order.Floor.Defs
@@ -78,7 +78,7 @@ import Formalism.HermitianLattices.HermitianLatticesProofs.UnimodularSpan
 -- Members: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.HTIntLeft, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.CommonMult, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.FiniteLeOfPosDef, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.DefFinWOf, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.WeightPositive, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.Stage1OfUnipotentIntegralIsGroup, Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.OFRepAll
 
 -- ===== clump member: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.HTIntLeft =====
--- clump-header: {"m": "Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.HTIntLeft", "h": "module\n\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.EichLApply\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.HTIntLeft", "h": "module\n\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.EichLApply\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.EichESymmApply\nimport Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CountingFormula.WeightPositive\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -123,14 +123,6 @@ theorem hT_int_left (D : Formalism.BasicNotions.D7) (n : ℤ) (x y : (VS D).V) :
     (VS D).hT ((n : D.host.E) • x) y = (n : D.host.E) * (VS D).hT x y := by
   rw [LinearMap.map_smulₛₗ₂, smul_eq_mul, starRingEnd_apply, star_intCast]
 
-private theorem hT_isIntegral_of_mem_unimodular (D : Formalism.BasicNotions.D7) {Λ : Submodule (𝓞 D.host.E) (VS D).V}
-    (hU : Formalism.HermitianLatticesTheory.IsUnimodular (VS D).hT Λ) {y v : (VS D).V} (hy : y ∈ Λ) (hv : v ∈ Λ) :
-    ∃ o : 𝓞 D.host.E, algebraMap (𝓞 D.host.E) D.host.E o = (VS D).hT y v := by
-  have h : Formalism.E.hdual (VS D).hT Λ = Λ := hU
-  have hv' : v ∈ Formalism.E.hdual (VS D).hT Λ := by rw [h]; exact hv
-  simp only [Formalism.E.hdual, Submodule.mem_iInf, Submodule.mem_comap, LinearMap.restrictScalars_apply] at hv'
-  exact Submodule.mem_one.mp (hv' y hy)
-
 theorem pW_lat (D : Formalism.BasicNotions.D7) {Λ : Submodule (𝓞 D.host.E) (VS D).V}
     (hU : Formalism.HermitianLatticesTheory.IsUnimodular (VS D).hT Λ) (heΛ : ∀ a, D.sp.hypE a ∈ Λ) (d : ℤ)
     (hdF : ∀ a, (d : D.host.E) • D.sp.hypF a ∈ Λ)
@@ -148,7 +140,7 @@ theorem pW_lat (D : Formalism.BasicNotions.D7) {Λ : Submodule (𝓞 D.host.E) (
   refine Λ.add_mem (Λ.sub_mem (Λ.sub_mem ?_ ?_) ?_) ?_
   · rw [pow_two, mul_smul]; exact hint d (hint d hv)
   · refine Λ.sum_mem (fun a _ => ?_)
-    obtain ⟨o, ho⟩ := hT_isIntegral_of_mem_unimodular D hU (hdF a) hv
+    obtain ⟨o, ho⟩ := _root_.PI.UnitaryGroupMassFormula.CntFormula.unimod_int D hU (hdF a) hv
     have heq : (d : D.host.E) ^ 2 • ((VS D).hT (D.sp.hypF a) v • D.sp.hypE a) =
         algebraMap (𝓞 D.host.E) D.host.E ((d : 𝓞 D.host.E) * o) • D.sp.hypE a := by
       simp only [smul_smul]
@@ -157,7 +149,7 @@ theorem pW_lat (D : Formalism.BasicNotions.D7) {Λ : Submodule (𝓞 D.host.E) (
       ring
     rw [heq]; exact hsm _ (heΛ a)
   · refine Λ.sum_mem (fun a _ => ?_)
-    obtain ⟨o, ho⟩ := hT_isIntegral_of_mem_unimodular D hU (heΛ a) hv
+    obtain ⟨o, ho⟩ := _root_.PI.UnitaryGroupMassFormula.CntFormula.unimod_int D hU (heΛ a) hv
     have heq : (d : D.host.E) ^ 2 • ((VS D).hT (D.sp.hypE a) v • D.sp.hypF a) =
         algebraMap (𝓞 D.host.E) D.host.E ((d : 𝓞 D.host.E) * o) • ((d : D.host.E) • D.sp.hypF a) := by
       simp only [smul_smul]
@@ -165,7 +157,7 @@ theorem pW_lat (D : Formalism.BasicNotions.D7) {Λ : Submodule (𝓞 D.host.E) (
       congr 1
       ring
     rw [heq]; exact hsm _ (hdF a)
-  · obtain ⟨o, ho⟩ := hT_isIntegral_of_mem_unimodular D hU hdz hv
+  · obtain ⟨o, ho⟩ := _root_.PI.UnitaryGroupMassFormula.CntFormula.unimod_int D hU hdz hv
     have hc : (VS D).hT (((d : D.host.E) * (D.sp.T : D.host.E)⁻¹) • D.sp.zm) v =
         (d : D.host.E) * (D.sp.T : D.host.E)⁻¹ * (VS D).hT D.sp.zm v := by
       rw [LinearMap.map_smulₛₗ₂, smul_eq_mul]
@@ -209,14 +201,6 @@ def tv (D : Formalism.BasicNotions.D7) (Z : MatZ D) (R : Matrix (Fin (D.R.rS + 1
     (x : (Fin D.R.rS → (VS D).V) × (VS D).V) (b : Fin (D.R.rS + 1)) : (VS D).V :=
   ∑ b', Pm D Z R b' b • pWf D x b'
 
-private theorem hT_swap_eq_star' (D : Formalism.BasicNotions.D7) (p q : (VS D).V) :
-    (VS D).hT q p = star ((VS D).hT p q) := by
-  first
-  | exact ((VS D).herm p q).symm
-  | exact ((VS D).herm.eq p q).symm
-  | simpa using ((VS D).herm p q).symm
-  | simpa using ((VS D).herm.eq p q).symm
-
 private theorem pW_add' (D : Formalism.BasicNotions.D7) (u v : (VS D).V) : pW D (u + v) = pW D u + pW D v := by
   unfold pW
   simp only [map_add (f := _), add_smul, Finset.sum_add_distrib, add_div]
@@ -236,7 +220,7 @@ private theorem hT_pW_self_of_hT_hypE_eq_zero (D : Formalism.BasicNotions.D7) (w
     (VS D).hT (pW D w) (pW D w) = (VS D).hT w w +
       (D.sp.T : D.host.E) * star ((VS D).hT D.sp.zm w / (D.sp.T : D.host.E)) *
         ((VS D).hT D.sp.zm w / (D.sp.T : D.host.E)) := by
-  have hs : ∀ p q : (VS D).V, (VS D).hT q p = star ((VS D).hT p q) := fun p q => hT_swap_eq_star' D p q
+  have hs : ∀ p q : (VS D).V, (VS D).hT q p = star ((VS D).hT p q) := fun p q => ((VS D).herm.eq p q).symm
   have hee : ∀ a a', (VS D).hT (D.sp.hypE a) (D.sp.hypE a') = 0 := D.sp.hyp_ee
   have hze : ∀ a, (VS D).hT D.sp.zm (D.sp.hypE a) = 0 := fun a => (D.sp.hyp_orthz a).1
   have hez : ∀ a, (VS D).hT (D.sp.hypE a) D.sp.zm = 0 := fun a => by rw [hs, hze, star_zero]
@@ -252,7 +236,7 @@ private theorem hT_pW_self_of_hT_hypE_eq_zero (D : Formalism.BasicNotions.D7) (w
     intro y
 
     simp only [hsdef, map_sum, LinearMap.sum_apply, map_smulₛₗ, LinearMap.smul_apply, smul_eq_mul,
-    starRingEnd_apply, LinearMap.map_sum₂, LinearMap.map_smulₛₗ₂]
+    starRingEnd_apply]
   have hys : ∀ y, (VS D).hT y s = ∑ a, (VS D).hT (D.sp.hypF a) w * (VS D).hT y (D.sp.hypE a) := by
     intro y
 
@@ -265,7 +249,7 @@ private theorem hT_pW_self_of_hT_hypE_eq_zero (D : Formalism.BasicNotions.D7) (w
   have h6 : (VS D).hT D.sp.zm w = (D.sp.T : D.host.E) * g := by
     rw [hg, mul_div_assoc', mul_comm, mul_div_assoc, div_self hT0, mul_one]
   simp only [map_add (f := _), map_sub, map_smul, map_smulₛₗ, LinearMap.add_apply, LinearMap.sub_apply,
-    LinearMap.smul_apply, smul_eq_mul, RingHom.id_apply, h1, h2, h3, h4, h5, hzz, hwz, h6,
+    LinearMap.smul_apply, smul_eq_mul, h1, h2, h3, h4, h5, hzz, hwz, h6,
     starRingEnd_apply, star_mul', star_natCast]
   ring
 
@@ -294,7 +278,7 @@ theorem tv_norm (D : Formalism.BasicNotions.D7) {T : D.host.E} (T' : D.host.E) (
     intro b1 b2
     rw [hG b1 b2]
     unfold Gfl
-    split_ifs <;> first | rfl | (exfalso; tauto)
+    split_ifs <;> first | rfl
   have hEw : ∀ a, (VS D).hT (D.sp.hypE a) w = 0 := by
     intro a
     have h0 : (betaZ D Z * Pm D Z R) a b = 0 := by rw [beta_Pm D Z R hR]; rfl
@@ -307,7 +291,7 @@ theorem tv_norm (D : Formalism.BasicNotions.D7) {T : D.host.E} (T' : D.host.E) (
       ∑ b1, ∑ b2, star (Pm D Z R b1 b) * Pm D Z R b2 b * Gfl D T' b1 b2 := by
     rw [hw]
 
-    simp only [LinearMap.map_sum₂, LinearMap.map_smulₛₗ₂, map_sum, map_smul, map_smulₛₗ,
+    simp only [map_sum, map_smul, map_smulₛₗ,
     LinearMap.sum_apply, LinearMap.smul_apply, smul_eq_mul, starRingEnd_apply, Finset.mul_sum]
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl (fun b1 _ => Finset.sum_congr rfl (fun b2 _ => ?_))
@@ -369,10 +353,6 @@ theorem int_mult (D : Formalism.BasicNotions.D7) (s : Finset D.host.E) :
   obtain ⟨n, hn, h⟩ := Algebra.IsAlgebraic.exists_integral_multiples ℤ s
   exact ⟨n, hn, fun k hk => ⟨⟨n • k, h k hk⟩, zsmul_eq_mul k n⟩⟩
 
-theorem lat_mult (D : Formalism.BasicNotions.D7) {Λ : Submodule (𝓞 D.host.E) (VS D).V} (hΛ : Submodule.IsFullLattice D.host.E Λ)
-    (v : (VS D).V) : ∃ n : ℤ, n ≠ 0 ∧ (n : D.host.E) • v ∈ Λ := by
-  exact UpperTheory.Reformulated.B.LocalTheoryWindows.lat_mult D hΛ v
-
 theorem common_mult (D : Formalism.BasicNotions.D7) {Λ : Submodule (𝓞 D.host.E) (VS D).V} (hΛ : Submodule.IsFullLattice D.host.E Λ)
     (vs : Finset (VS D).V) (ks : Finset D.host.E) :
     ∃ n : ℤ, n ≠ 0 ∧ (∀ v ∈ vs, (n : D.host.E) • v ∈ Λ) ∧
@@ -382,7 +362,7 @@ theorem common_mult (D : Formalism.BasicNotions.D7) {Λ : Submodule (𝓞 D.host
     | empty => exact ⟨1, one_ne_zero, by simp⟩
     | insert v vs hv ih =>
       obtain ⟨n, hn, h⟩ := ih
-      obtain ⟨m, hm, hmv⟩ := lat_mult D hΛ v
+      obtain ⟨m, hm, hmv⟩ := _root_.UpperTheory.Reformulated.B.LocalTheoryWindows.lat_mult D hΛ v
       refine ⟨m * n, mul_ne_zero hm hn, fun w hw => ?_⟩
       rcases Finset.mem_insert.1 hw with rfl | hw
       · have : ((m * n : ℤ) : D.host.E) • w = (n : D.host.E) • ((m : D.host.E) • w) := by
@@ -604,7 +584,7 @@ theorem defFinW_of (hW : WPos) : DefFinW := by
   rintro w ⟨hwP, h1, h2, h3, hc⟩
   have hwA0 : w ∈ A0 := Submodule.mem_inf.mpr ⟨hwP, ⟨h1, h2, h3⟩⟩
   refine ⟨⟨w, hA0U w hwA0⟩, ⟨hwA0, ?_⟩, rfl⟩
-  simp only [B, LinearMap.mk₂_apply, Subtype.coe_mk, hc]
+  simp only [B, LinearMap.mk₂_apply, hc]
   linarith
 
 end PI.UnitaryGroupMassFormula.CntFormula
@@ -739,7 +719,7 @@ theorem isotropic_zero (D : Formalism.BasicNotions.D7) (w : (VS D).V) (hE : ∀ 
       have hs := semidef D v hvE hvF hvz τ
       have hyw : (VS D).hT y w = star x := by rw [hswap]
       have e1 : (VS D).hT v v = -(2 * (n : D.host.E)) * (x * star x) + (VS D).hT y' y' := by
-        simp only [hv, map_sub, LinearMap.sub_apply, map_smulₛₗ, map_smul, LinearMap.smul_apply,
+        simp only [hv, map_sub, LinearMap.sub_apply, map_smulₛₗ, LinearMap.smul_apply,
           smul_eq_mul, starRingEnd_apply, star_natCast, h0, hy', star_star, hyw, ← hxdef, RingHom.id_apply]
         ring
       have e2 : (τ ((VS D).hT v v)).re =

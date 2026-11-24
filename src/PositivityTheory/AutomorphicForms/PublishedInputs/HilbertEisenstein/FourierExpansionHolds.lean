@@ -1331,7 +1331,7 @@ theorem kernF_le (c : HeightOneSpectrum (𝓞 F) → ℕ) (A Z : Ad F) :
     ‖kernF c A Z‖ ≤ 2 ^ Fintype.card (InfinitePlace F) * ‖PhiH c ![A, Z]‖ := by
   classical
   unfold kernF PhiH arch
-  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+  simp only [Matrix.cons_val_zero, Matrix.cons_val_one]
   rw [norm_mul, norm_mul, ← mul_assoc]
   exact mul_le_mul (arch_le _ _) (fin_le c A Z _ _ Iff.rfl Iff.rfl) (norm_nonneg _) (by positivity)
 
@@ -1408,7 +1408,7 @@ theorem summable_kern {ω : HChar F} {c : HeightOneSpectrum (𝓞 F) → ℕ} (h
     intro p q h
     have h0 := congrFun (congrArg Subtype.val h) 0
     have h1 := congrFun (congrArg Subtype.val h) 1
-    simp only [ι, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons] at h0 h1
+    simp only [ι, Matrix.cons_val_zero, Matrix.cons_val_one] at h0 h1
     exact Prod.ext (Units.ext h0) h1
   have hS' := hS.comp_injective hι
   let e : Fˣ × F ≃ Fˣ × F :=
@@ -1475,7 +1475,7 @@ theorem main_of (hsl : ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F
   rw [hth, ← rowEquiv.tsum_eq (fun ξ : {ξ : Fin 2 → F // ξ ≠ 0} => f ξ.1),
     Summable.tsum_sum (hfe.comp_injective Sum.inl_injective) (hfe.comp_injective Sum.inr_injective)]
   have h1 : ∑' b : Fˣ, f (rowEquiv (Sum.inl b)).1 = zeroRow c τ :=
-    tsum_congr fun b => by simp [f, rowEquiv, zeroRow]
+    tsum_congr fun b => by simp [f, rowEquiv]
   have hprod : Summable (fun p : Fˣ × F => f (rowEquiv (Sum.inr p)).1) := hfe.comp_injective Sum.inr_injective
   have h2 : ∀ a : Fˣ, ∑' b : F, f (rowEquiv (Sum.inr (a, b))).1 =
       ∑' ξ : F, (adelicChar F (-(algebraMap F (Ad F) ξ * xAd x)) : ℂ) * kern c (yAd y yf) (τ * diagonal F a) ξ :=
@@ -1502,16 +1502,12 @@ end UpperTheory.HilbertEisensteinWeightOne.FourierExpansionEisenstein.L3
 
 namespace UpperTheory.HilbertEisensteinWeightOne.FourierExpansionEisenstein
 
-theorem sPoint_proof_of_slice (hsl : ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F]
-    (c : HeightOneSpectrum (𝓞 F) → ℕ), {w | c w ≠ 0}.Finite → ∀ A : Ad F, slice c A ∈ schwartzBruhat F) :
-    SPois → SFin → SKern → SPoint := L3.main_of hsl
-
 end UpperTheory.HilbertEisensteinWeightOne.FourierExpansionEisenstein
 
 namespace UpperTheory.HilbertEisensteinWeightOne.FourierExpansionEisenstein
 
 theorem pointwise_theta_expansion : SPois → SFin → SKern → SPoint :=
-  sPoint_proof_of_slice (by intro F _ _ _ c hc A; exact slice_mem_sb hc A)
+  _root_.UpperTheory.HilbertEisensteinWeightOne.FourierExpansionEisenstein.L3.main_of (by intro F _ _ _ c hc A; exact slice_mem_sb hc A)
 
 end UpperTheory.HilbertEisensteinWeightOne.FourierExpansionEisenstein
 end -- clump:auto
@@ -1581,14 +1577,6 @@ theorem infId_val (y : (UpperTheory.V.TR.Rinf F)ˣ) :
   · change (1 : Af F) - 0 + 0 = 1
     rw [sub_zero, add_zero]
 
-theorem finId_val (yf : (Af F)ˣ) : ((finId F yf : (Ad F)ˣ) : Ad F) = (1, (yf : Af F)) := by
-  change 1 - sFin F 1 + sFin F yf.val = _
-  refine Prod.ext ?_ ?_
-  · change (1 : InfiniteAdeleRing F) - 0 + 0 = 1
-    rw [sub_zero, add_zero]
-  · change (1 : Af F) - 1 + (yf : Af F) = _
-    rw [sub_self, zero_add]
-
 theorem absD_gPt (x : UpperTheory.V.TR.Rinf F) (y : (UpperTheory.V.TR.Rinf F)ˣ) (hy : ∀ v, 0 < y.val v) (yf : (Af F)ˣ) :
     absD (gPt x y yf) = (∏ v, y.val v) * absF yf := by
   have hdet1 : Matrix.GeneralLinearGroup.det (aff y x) = y := by
@@ -1601,7 +1589,7 @@ theorem absD_gPt (x : UpperTheory.V.TR.Rinf F) (y : (UpperTheory.V.TR.Rinf F)ˣ)
   rw [map_mul, UpperTheory.V.TR.det_infGL, UpperTheory.V.TR.det_finGL, hdet1, hdet2, map_mul]
   change (IdeleGroup.ideleModule F _ : ℝ) * (IdeleGroup.ideleModule F _ : ℝ) = _
   rw [ideleModule_eq, ideleModule_eq]
-  simp only [infId_val, finId_val]
+  simp only [infId_val, _root_.UpperTheory.HilbertEisensteinWeightOne.FourierExpansionEisenstein.VanishingLemma.finId_val']
   have h1 : ∏ w : InfinitePlace F, ‖UpperTheory.V.TR.infEq F y.val w‖ ^ w.mult = ∏ v, y.val v := by
     refine Finset.prod_congr rfl fun w _ => ?_
     rw [(IsTotallyReal.isReal w).mult_eq_one, pow_one, norm_infEq, abs_of_pos (hy w)]

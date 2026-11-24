@@ -184,7 +184,7 @@ theorem UpperTheory.exists_cotangent_map_dual_basis_of_parameters :
     by_cases hlj : l = j
     · subst hlj
       simp
-    · simp [hlj, Pi.single_apply, Ne.symm hlj]
+    · simp [hlj, Ne.symm hlj]
   refine ⟨bs.equivFun.toLinearMap ∘ₗ ψ, ?_, h2, ?_, ?_⟩
   · intro b ω
     simp [hψ]
@@ -571,7 +571,7 @@ private noncomputable def tw {S : Type} [CommRing S] [Algebra ℂ S] (ev : S →
     refine TrivSqZeroExt.ext ?_ ?_ <;> simp [h1]
   map_zero' := by simp
   map_add' a b := by
-    refine TrivSqZeroExt.ext ?_ ?_ <;> simp <;> ring
+    refine TrivSqZeroExt.ext ?_ ?_ <;> simp
   map_mul' a b := by
     refine TrivSqZeroExt.ext ?_ ?_
     · simp
@@ -1214,7 +1214,7 @@ theorem UpperTheory.etaleCorrespondence_local_parameters_statement :
       rw [this]; exact hc
     · apply gm_inj s' hgY
       have h := congrArg Subtype.val hcg
-      simp only [Subalgebra.coe_mul, AddSubmonoidClass.coe_finsetSum, MulMemClass.coe_mul] at h
+      simp only [AddSubmonoidClass.coe_finsetSum, MulMemClass.coe_mul] at h
 
       rw [map_mul, map_sum]
       simp only [map_mul]

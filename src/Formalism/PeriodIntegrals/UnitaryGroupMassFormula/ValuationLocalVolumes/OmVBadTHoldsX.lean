@@ -748,7 +748,7 @@ private theorem natCard_ker_mul_card_pow_eq_of_surjective [Finite k] {a' : ℕ} 
   have hrn := LinearMap.finrank_range_add_finrank_ker (Matrix.mulVecLin B)
   rw [hs, finrank_top, Module.finrank_fin_fun, Module.finrank_fin_fun] at hrn
   have e : {u : Fin M → k // B.mulVec u = 0} ≃ LinearMap.ker (Matrix.mulVecLin B) :=
-    Equiv.subtypeEquivRight fun u => by simp [Matrix.mulVecLin_apply]
+    Equiv.subtypeEquivRight fun u => by simp
   rw [Nat.card_congr e]
   simp only [Nat.card_eq_fintype_card]
   rw [Module.card_eq_pow_finrank (K := k) (V := LinearMap.ker (Matrix.mulVecLin B)), ← pow_add]
@@ -928,7 +928,7 @@ theorem fFSplitB_holds : PI.OmVd.FFSplitB := by
       have := PI.OmVe.det_corOne T i₀ hrow 1
       rw [this, one_mul] at hunit
       exact hunit
-    have hinv : ∀ x : k × k, RingEquiv.prodComm.toRingHom (RingEquiv.prodComm.toRingHom x) = x := fun x => by simp [hσ]
+    have hinv : ∀ x : k × k, RingEquiv.prodComm.toRingHom (RingEquiv.prodComm.toRingHom x) = x := fun x => by simp
     have hJ' : ∀ i j, RingEquiv.prodComm.toRingHom (J j i) = J i j := fun i j => by rw [hσ]; exact hJ i j
     have hdiag : ∀ x : Fin M → k × k, ∃ c : k, PI.VolStabSW.ffH RingEquiv.prodComm.toRingHom J x x = (c, c) := by
       intro x
@@ -1010,10 +1010,6 @@ section -- clump:auto
 @[expose] public section
 
 namespace PI.OmVe.Top
-
-theorem fFInertB_holds : PI.OmVd.FFInertB := PI.OmVe.fFInertB_holds
-
-theorem fFSplitB_holds : PI.OmVd.FFSplitB := PI.OmVe.fFSplitB_holds
 
 end PI.OmVe.Top
 end -- clump:auto
@@ -1226,9 +1222,6 @@ variable {K : Type} [CommRing K] [TopologicalSpace K] [IsTopologicalRing K] {n M
 theorem continuous_mulTup (D : Matrix (Fin n) (Fin n) K) : Continuous (mulTup (M := M) D) := by
   first
   | (unfold mulTup; fun_prop)
-  | (simp only [mulTup]; fun_prop)
-  | (unfold mulTup; continuity)
-  | fun_prop
 
 def tupEquiv (D : (Matrix (Fin n) (Fin n) K)ˣ) :
     (Fin n → Fin M → K) ≃ₜ+ (Fin n → Fin M → K) where
@@ -1251,9 +1244,6 @@ theorem continuous_hermMap [IsTopologicalRing (R ⊗[F] E)] (D : Matrix (Fin n) 
     Continuous (hermMap R σ hσ D) := by
   first
   | (unfold hermMap; fun_prop)
-  | (simp only [hermMap]; fun_prop)
-  | (unfold hermMap; exact Continuous.subtype_mk (by fun_prop) _)
-  | (unfold hermMap; continuity)
 
 def hermEquiv [IsTopologicalRing (R ⊗[F] E)] (D : (Matrix (Fin n) (Fin n) (R ⊗[F] E))ˣ) :
     HermR R σ n ≃ₜ+ HermR R σ n where
@@ -1751,7 +1741,7 @@ theorem omVLocU_holds : OmVLocU X ψ := fun v a Y =>
 
 theorem omVBadT_holdsX : Formalism.L2.SG.Pf.NcX.OmVSt.OmVBadT X u' ψ :=
   PI.OmVg.omVBadT_of_ffX X u' ψ (Formalism.L2.SG.Pf.NcX.OmVSt.omega_standard_holds X ψ) (Formalism.L2.SG.Pf.NcX.OmVSt.omega_lattice_holds X)
-    (OmW.omVGram_holds X u') PI.OmVe.Top.fFInertB_holds PI.OmVe.Top.fFSplitB_holds
+    (OmW.omVGram_holds X u') _root_.PI.OmVe.fFInertB_holds _root_.PI.OmVe.fFSplitB_holds
 
 end Formalism.L2.SG.Pf.NcVal.OmVSt.OmVZ
 
@@ -1776,11 +1766,6 @@ theorem omVZ_holdsX : Formalism.L2.SG.Pf.NcVal.OmV X u' ψ :=
 end Formalism.L2.SG.Pf.NcX.OmVSt
 
 namespace Formalism.L2.SG.Pf.NcVal.OmVSt.OmVZ
-
-open Formalism.BasicNotions Formalism.L2.SG.HidaSetting Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes
-
-theorem omV_holdsX {D : D7} (X : HidaSetting D) (u' : D.what₂.Word) (ψ : AddChar (AF X.B.I.F) ℂ) : Formalism.L2.SG.Pf.NcVal.OmV X u' ψ :=
-  Formalism.L2.SG.Pf.NcX.OmVSt.omVZ_holdsX X u' ψ
 
 end Formalism.L2.SG.Pf.NcVal.OmVSt.OmVZ
 end -- clump:auto

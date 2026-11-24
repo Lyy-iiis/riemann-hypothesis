@@ -89,7 +89,7 @@ theorem numerical_nonvanishing_bound : Formalism.HermitianLattices.ZeroFreeRegio
     have h1 : ((4:ℝ) ^ (3 / ε)) ^ (ε / 3) ≤ x ^ (ε / 3) :=
       Real.rpow_le_rpow (by positivity) hx4 (by positivity)
     rw [← Real.rpow_mul (by norm_num : (0:ℝ) ≤ 4)] at h1
-    have h3 : 3 / ε * (ε / 3) = 1 := by field_simp <;> ring
+    have h3 : 3 / ε * (ε / 3) = 1 := by field_simp
     rw [h3, Real.rpow_one] at h1
     exact h1
   have hL : 0 < Real.log x := Real.log_pos (by linarith)
@@ -1637,7 +1637,6 @@ theorem logNE_le_of_rows (D : D7) {Y x eps : ℝ} (he : 0 < eps) (h1 : 1 < Y) (h
   have hNE : Real.log (GlobalTheoryTheory.NE D) ≤ 2 * Y ^ (eps / 5) * Real.log Y ^ 2 := by
     first
       | (unfold GlobalTheoryTheory.NE; push_cast; exact hlog)
-      | simpa [GlobalTheoryTheory.NE] using hlog
   have ha : Y ^ (eps / 5) ≤ x ^ (eps / 5) := Real.rpow_le_rpow hY0.le hY (by linarith)
   have hl0 : 0 ≤ Real.log Y := Real.log_nonneg h1.le
   have hl : Real.log Y ≤ Real.log x := Real.log_le_log hY0 hY
@@ -1655,11 +1654,6 @@ theorem one_lt_of_win {eps : ℝ} (Fm : FamP eps) {x Y : ℝ} (hx : 1 < x) (h : 
   have hp : 0 < 1 / Fm.J := one_div_pos.mpr (by linarith)
   exact lt_of_lt_of_le (Real.one_lt_rpow hx hp) h
 
-theorem eps_pos_of_fam {eps : ℝ} (Fm : FamP eps) : 0 < eps := by
-  obtain ⟨i⟩ := Fm.Ix_zero
-  have h0 := (Fm.L 0 i).sc.eps_pos
-  rwa [Fm.L_eps 0 i] at h0
-
 theorem pair_and_box_hypothesis_of_congruence_data_and_boxes {eps : ℝ} (Fm : FamP eps) (hR : QDRowsF Fm) (hB : BoxesF Fm) :
     ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x,
       (∃ Y : ℝ, 1 < Y ∧ Y ≤ x ∧ ShortIntervalPrimes.PairAt Y eps (Fm.D x i).host.q (Fm.D x i).host.d) ∧ ShortIntervalPrimes.PropTwoSixBoxHypothesis (Fm.D x i) x eps := by
@@ -1673,7 +1667,7 @@ theorem pair_and_box_hypothesis_of_congruence_data_and_boxes {eps : ℝ} (Fm : F
   obtain ⟨Y', ⟨hY1', hY2'⟩, -, hE⟩ := hB x hxB i
   have hY : 1 < Y := one_lt_of_win Fm hx1 hY1
   have hY' : 1 < Y' := one_lt_of_win Fm hx1 hY1'
-  have hlog := logNE_le_of_rows (Fm.D x i) (eps_pos_of_fam Fm) hY hY2 hQ
+  have hlog := logNE_le_of_rows (Fm.D x i) (_root_.Formalism.MainNotions.Lnk.fam_eps_pos Fm) hY hY2 hQ
   obtain ⟨a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, -⟩ := hQ
   exact ⟨⟨Y, hY, hY2, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10⟩, ⟨Y', hY', hY2', hE⟩, hlog⟩
 

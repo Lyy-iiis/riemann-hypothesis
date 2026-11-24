@@ -351,7 +351,7 @@ theorem GlobalTheory.exists_irreducible_sub_trivOutside_split : ∀ (L : Type) [
       show NG.rt L n κ (NG.rt L n k (v : GAf L n → ℂ)) = NG.rt L n k (v : GAf L n → ℂ)
       have hfx : NG.rt L n (k⁻¹ * κ * k) (v : GAf L n → ℂ) = v := hv.1.2 _ (cong_conj hkU hκ)
       rw [← rt_mul, e, rt_mul, hfx]
-    obtain ⟨u, huE, hu⟩ := GlobalTheory.SmoothRiesz.exists_mem_eq_on_of_finiteDimensional Bf hBfpos (Bf ⟨f, hfS⟩) E
+    obtain ⟨u, huE, hu⟩ := _root_.GlobalTheory.ExistsRepresentation.exists_represent Bf hBfpos (Bf ⟨f, hfS⟩) E
     have hfixH : ∀ k, NG.Cong L n N k → TrivOutside {s.v} k → NG.rt L n k (u : GAf L n → ℂ) = u := by
       intro k hkC hkT
       let u' : π.S := ⟨NG.rt L n k u, π.stable k u u.2⟩
@@ -427,7 +427,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.exists_irreducible_subspace_trivialOutside_splitPlace : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (π : NG.FinTyp L n) (B : π.S → π.S → ℂ), (∀ x y z (c : ℂ), B x (y + c • z) = B x y + c * B x z) → (∀ x y, B x y = starRingEnd ℂ (B y x)) → (∀ x, x ≠ 0 → 0 < (B x x).re) → (∀ h (x y x' y' : π.S), (x' : GAf L n → ℂ) = NG.rt L n h x → (y' : GAf L n → ℂ) = NG.rt L n h y → B x' y' = B x y) → (∀ N : ℕ, 0 < N → FiniteDimensional ℂ ↥(Submodule.span ℂ {f | f ∈ π.S ∧ ∀ κ, NG.Cong L n N κ → NG.rt L n κ f = f})) → ∀ s : SplitPlace L, ∃ W : Submodule ℂ (GAf L n → ℂ), W ≤ π.S ∧ W ≠ ⊥ ∧ (∀ x : GAf L n, TrivOutside {s.v} x → ∀ f ∈ W, NG.rt L n x f ∈ W) ∧ ∀ W' : Submodule ℂ (GAf L n → ℂ), W' ≤ W → (∀ x : GAf L n, TrivOutside {s.v} x → ∀ f ∈ W', NG.rt L n x f ∈ W') → W' = ⊥ ∨ W' = W := by
-  first | exact @GlobalTheory.exists_irreducible_sub_trivOutside_split | exact GlobalTheory.exists_irreducible_sub_trivOutside_split | (intros; apply GlobalTheory.exists_irreducible_sub_trivOutside_split <;> assumption)
+  first | exact @GlobalTheory.exists_irreducible_sub_trivOutside_split
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.ExistsIrreducibleSubspaceTrivialOutsideSplitPlacStatement =====

@@ -274,7 +274,7 @@ private theorem key {B S : Type} [CommRing B] [HenselianLocalRing B] [CommRing S
       rw [hFψ, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_X, Polynomial.eval_C, sub_self, zero_mul]
     have hder : (Polynomial.derivative (F.map ψ)).eval c ≠ 0 := by
       rw [hFψ, Polynomial.derivative_mul]
-      simp only [Polynomial.derivative_sub, Polynomial.derivative_X, Polynomial.derivative_C, sub_zero, one_mul, Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_X, Polynomial.eval_C, sub_self, zero_mul, add_zero]
+      simp only [Polynomial.derivative_sub, Polynomial.derivative_X, Polynomial.derivative_C, sub_zero, one_mul, Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_X, Polynomial.eval_C]
       rw [show c - ∏ i ∈ I0, θb i = 0 from sub_self _, zero_mul, add_zero]
       exact hGc
     have h1 : F.eval A ∈ IsLocalRing.maximalIdeal B := by
@@ -611,7 +611,7 @@ private theorem spl_adj_mul (X Y : M4 R) : adj (X * Y) = adj Y * adj X := by
 
 private theorem spl_adj_one : adj (1 : M4 R) = 1 := by
   ext i j
-  fin_cases i <;> fin_cases j <;> simp [adj_apply, sgn, Fin.rev, Matrix.one_apply]
+  fin_cases i <;> fin_cases j <;> simp [adj_apply, sgn, Fin.rev]
 
 private theorem spl_conj {ν : R} {X : M4 R} (h : IsGSp ν X) (u v : M4 R) (hv : v * u = 1) :
     adj (u * X * v) * (adj v * v) * (u * X * v) = ν • (adj v * v) := by
@@ -696,14 +696,6 @@ private theorem spl_int {B : Type} [CommRing B] [Algebra B K] (X : M4 B) (u : (M
 end Fld
 
 
-private theorem spl_near {l : ℕ} [Fact l.Prime] {O B : Type} [CommRing O] [Algebra ℤ_[l] O]
-    [Algebra O (PadicAlgCl l)] [IsScalarTower ℤ_[l] O (PadicAlgCl l)] [CommRing B] [IsDomain B] [HenselianLocalRing B]
-    [Algebra O B] (x y : B →ₐ[O] PadicAlgCl l) (d : O) (hd : algebraMap O (PadicAlgCl l) d ≠ 0) (t : B) (ht : x t = 0)
-    (v : FractionRing B) (hv : IsIntegral B v)
-    (hvt : algebraMap B _ (algebraMap O B d) * v = algebraMap B _ t) (κ : PadicAlgCl l)
-    (hκ : algebraMap O _ d * κ = y t) : ‖κ‖ < 1 :=
-  _root_.UpperTheory.Reformulated.B.MajorantSquareBound.spl_near x y d hd t ht v hv hvt κ hκ
-
 private theorem spl_red {l : ℕ} [Fact l.Prime] {O B H : Type} [CommRing O] [IsDomain O] [Algebra ℤ_[l] O]
     [Algebra O (PadicAlgCl l)] [IsScalarTower ℤ_[l] O (PadicAlgCl l)] [CommRing B] [IsDomain B] [HenselianLocalRing B]
     [Algebra O B] [Group H] (hO : Function.Injective (algebraMap O (PadicAlgCl l))) {I : Subgroup H}
@@ -737,7 +729,7 @@ private theorem spl_red {l : ℕ} [Fact l.Prime] {O B H : Type} [CommRing O] [Is
     rw [← spl_tr (algebraMap B (FractionRing B)), map_prod, map_prod]
     simp only [map_sub]
     exact h4 i g
-  refine spl_near ((Algebra.ofId O _).comp x) y d ((map_ne_zero_iff _ hO).2 hd) (t - algebraMap O B (d * ps i g)) ?_
+  refine _root_.UpperTheory.Reformulated.B.MajorantSquareBound.spl_near ((Algebra.ofId O _).comp x) y d ((map_ne_zero_iff _ hO).2 hd) (t - algebraMap O B (d * ps i g)) ?_
     (k i g - algebraMap B _ (algebraMap O B (ps i g))) (hint.sub isIntegral_algebraMap) ?_ _ ?_
   · rw [AlgHom.comp_apply, map_sub, hxt, AlgHom.commutes, Algebra.algebraMap_self, RingHom.id_apply, sub_self, map_zero]
   · rw [mul_sub, hk, map_sub, map_mul, map_mul]

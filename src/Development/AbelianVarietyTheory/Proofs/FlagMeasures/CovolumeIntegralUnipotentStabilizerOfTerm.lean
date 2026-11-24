@@ -597,8 +597,8 @@ theorem main_gen {Λ : Submodule (𝓞 E) S.V} (hΛ : Formalism.HermitianLattice
         rw [Matrix.mulVec_mulVec, ← hLZ, ← Matrix.mulVec_mulVec, lo_mulVec hL _ hy]
       rw [Matrix.sub_mulVec, Matrix.one_mulVec, cancel_lemma hZdet h2, sub_self]
     rw [hn, add_sub_cancel_left, ← hu, Fintype.sum_sum_type, hAm1, Matrix.fromBlocks_mulVec]
-    simp only [Sum.elim_inl, Sum.elim_inr, Matrix.zero_mulVec, add_zero, zero_add, hau, Pi.zero_apply, zero_smul,
-      Finset.sum_const_zero, hvdef, Pi.add_apply]
+    simp only [Sum.elim_inl, Sum.elim_inr, Matrix.zero_mulVec, add_zero, hau, Pi.zero_apply, zero_smul,
+      Finset.sum_const_zero, hvdef]
     exact comb_mem_X F _ (up_last hbU _)
   have horthF' : ∀ x ∈ orth S (Xsp F'), n x - x ∈ Xsp F' := by
     intro x hx
@@ -621,7 +621,7 @@ theorem main_gen {Λ : Submodule (𝓞 E) S.V} (hΛ : Formalism.HermitianLattice
       rw [Matrix.sub_mulVec, Matrix.one_mulVec, cancel_lemma hZH (cancel_lemma haH h2), sub_self]
     rw [hn, add_sub_cancel_left, ← hu, Fintype.sum_sum_type, hAm1, Matrix.fromBlocks_mulVec]
     simp only [Sum.elim_inl, Sum.elim_inr, Matrix.zero_mulVec, add_zero, zero_add, hbu, Pi.zero_apply, zero_smul,
-      Finset.sum_const_zero, hvdef, Pi.add_apply]
+      Finset.sum_const_zero, hvdef]
     exact comb_mem_X F' _ (up_last haU _)
   exact ⟨n, ⟨⟨hAut, fun j => flag_step F n hbU hnF j, horthF⟩, ⟨hAut, fun j => flag_step F' n haU hnF' j, horthF'⟩⟩,
     hnF'⟩
@@ -715,7 +715,7 @@ theorem Dr1_ne_zero {T' : ℕ} (F : LFlag S r T) (F' : LFlag S r (T' : E)) (τ :
     have h2 : (starRingEnd ℂ (τ (w (Fin.last r))) * τ (w (Fin.last r)) * -(T' : ℂ)).re =
         -(T' : ℝ) * Complex.normSq (τ (w (Fin.last r))) := by
       rw [mul_comm (starRingEnd ℂ _), Complex.mul_conj]
-      simp [Complex.ofReal_mul]
+      simp
       ring
     rw [h2] at hp
     have h3 : 0 ≤ (T' : ℝ) * Complex.normSq (τ (w (Fin.last r))) :=
@@ -847,7 +847,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.congruence_stabU_from_integral_unipotent_isometry : ∀ (D : D7) (u u' : D.what₂.Word) (F0 : Fb D u) (Λ : LatV D), Stand D u u' → IsBase D u F0 → IsRowLat D F0 Λ → ∀ F' : FlagU D u', IsTermF D Λ (lf D F0) F' → ∃ I : Ideal (𝓞 D.host.E), I ≠ ⊥ ∧ (Ideal.absNorm I : ℝ) ≤ (∏ τ, ‖embS D τ (Gval (lf D F0) F')‖) ^ 4 * ∏ τ, ‖embS D τ (Dr1 (lf D F0) F')‖ ^ 2 ∧ ∀ a ∈ GlobalTheory.LoopV.stabU (ZhatL (lf D F0) F'), GlobalTheory.LoopV.EntIn I (a - 1) → ∃ n ∈ NLam Λ (lf D F0) ∩ NLam Λ F', ∀ c, n (frame F' c) = ∑ i, a i c • frame F' i := by
-  first | exact @GlobalTheory.LoopV.Cong.congruence_mem | exact GlobalTheory.LoopV.Cong.congruence_mem | (intros; apply GlobalTheory.LoopV.Cong.congruence_mem <;> assumption)
+  first | exact @GlobalTheory.LoopV.Cong.congruence_mem
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.CongruenceStabUFromIntegralUnipotentIsometryStatement =====
@@ -992,7 +992,7 @@ theorem minor_pt_le {N : ℕ} (p : Point K N) (t : ℕ) (I J : Fin t → Fin N) 
     simp only [Matrix.map_apply, hw, Matrix.of_apply]
     split_ifs <;> simp
   rw [e]
-  refine (Formalism.HermitianLatticeCounting.Final.LatticeSumBounds.monomialMinor N σ (fun i => τ (d i)) t I J).trans ?_
+  refine (_root_.Formalism.HermitianLatticeCounting.P.normMinorMonomialLe N σ (fun i => τ (d i)) t I J).trans ?_
   have h := prodMaxOneNorm_le τ p.1 p.2.1 1 one_pos
   rw [p.2.2] at h
   simp only [inv_one, max_self, one_mul] at h
@@ -1064,7 +1064,7 @@ theorem leadMinor_cell {L U w : Matrix (Fin N) (Fin N) K} (hL : IsLoUni L) (hU :
     leadMinorE (L * w * U) l = leadMinorE w l := by
   unfold leadMinorE
   split_ifs with h
-  · convert Formalism.HermitianLatticeCounting.Final.LatticeSumBounds.leadingMinorInvariant K N l h L w U (fun i => (hL i i).2 rfl)
+  · convert _root_.Formalism.HermitianLatticeCounting.P.leadingMinorTriangularInvariant K N l h L w U (fun i => (hL i i).2 rfl)
       (fun i j hij => (hL i j).1 hij) (fun i => (hU i i).2 rfl) (fun i j hij => (hU i j).1 hij)
   · rfl
 
@@ -1087,7 +1087,7 @@ omit [Fintype ι] in
 theorem reduce_up {ρ : ℝ} (h1 : 1 ≤ ρ) (hρ : ∀ x : K, ∃ o : 𝓞 K, ∀ v, ‖τ v (x + o)‖ ≤ ρ)
     {U : Matrix (Fin N) (Fin N) K} (hU : IsUpUni U) :
     ∃ B : Matrix (Fin N) (Fin N) K, IsUpUni B ∧ EntIn ⊤ B ∧ ∀ v i j, ‖τ v ((U * B) i j)‖ ≤ ρ := by
-  obtain ⟨B, b1, b2, b3, b4⟩ := Formalism.HermitianLatticeCounting.Final.LatticeSumBounds.unipotentReduce K (algebraMap (𝓞 K) K).range
+  obtain ⟨B, b1, b2, b3, b4⟩ := _root_.Formalism.HermitianLatticeCounting.P.unitriangularReduction K (algebraMap (𝓞 K) K).range
     {x | ∀ v, ‖τ v x‖ ≤ ρ} N U
     (fun x => by obtain ⟨o, ho⟩ := hρ x; exact ⟨o, ⟨o, rfl⟩, ho⟩)
     (fun i => (hU i i).2 rfl) (fun i j hij => (hU i j).1 hij)
@@ -1165,7 +1165,7 @@ theorem cov_lead [StarRing K] (L U : Matrix (Fin N) (Fin N) K) (p : Point K N) (
     (fun v => κ * ∏ l ∈ Finset.range N, gg2 ‖τ v (leadMinorE (ptMat p) (l + 1))‖) hs hw hr hL' hU' hZ' hI
     (one_le_mul_of_one_le_of_one_le (one_le_pow₀ hκ1) (one_le_pow₀ (one_le_PiZ τ _)))
     (fun t J J' v => by
-      have := Formalism.HermitianLatticeCounting.Final.LatticeSumBounds.minorBound N ((Aᵀ * L).map (τ v)) ((ptMat p).map (τ v))
+      have := _root_.Formalism.HermitianLatticeCounting.P.normMinorMulLe N ((Aᵀ * L).map (τ v)) ((ptMat p).map (τ v))
         ((U * B).map (τ v)) ρ _ h1 (hLb v) (hBb v) (minor_pt_le (τ v) p) t J J'
       rw [← Matrix.map_mul, ← Matrix.map_mul] at this
       rw [RingHom.map_det]

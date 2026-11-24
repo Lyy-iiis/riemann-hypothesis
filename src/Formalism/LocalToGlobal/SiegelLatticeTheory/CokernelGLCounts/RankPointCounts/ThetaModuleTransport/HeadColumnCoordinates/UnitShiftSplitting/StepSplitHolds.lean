@@ -254,7 +254,7 @@ theorem firstProj_secondComponent (Y : Ix r → M.L.O) (b : Fin (r + 1)) : p1 g 
   simp [p1, p2, cmp2, e_rOf, c2]
 theorem secondProj_secondComponent (Y : Ix r → M.L.O) (b : Fin (r + 1)) :
     p2 g (cmp2 hs Y b : E) = p2 g (Y (Sum.inl b)) + (g.q : F) * p2 g (Y (Sum.inr b)) := by
-  simp [p1, p2, cmp2, e_rOf, c2]
+  simp [p2, cmp2, e_rOf, c2]
 theorem firstProj_uniformizer_mul (x : M.R) : p1 g ((q2 hs * x : M.R) : E) = 0 := by
   simp [p1, q2]
 theorem secondProj_uniformizer_mul (x : M.R) : p2 g ((q2 hs * x : M.R) : E) = (g.q : F) * p2 g (x : E) := by
@@ -418,8 +418,6 @@ theorem splitFirstProj_iotaTwo (hs : M.split = some g) (l : Fin (r + 1) → M.R)
     ph1 g ((iota2 hs l i : M.L.O) : E) = 0 := by
   rw [firstProj_apply, e_iota2]
 
-theorem splitSecondProj_conj (x : E) : ph2 g ((M.L.cj : E →+* E) x) = ph1 g x := secondProj_conj_eq_firstProj x
-
 theorem splitForm_iotaOne_iotaOne (hs : M.split = some g) (Zh : Matrix (Fin (r + 1)) (Fin (r + 1)) E) (T T' : F)
     (l w : Fin (r + 1) → M.R) :
     formG M.L.O (M.L.cj : E →+* E) (algebraMap F E ((g.q : F)⁻¹)) Zh (algebraMap F E T) (algebraMap F E T')
@@ -427,7 +425,7 @@ theorem splitForm_iotaOne_iotaOne (hs : M.split = some g) (Zh : Matrix (Fin (r +
   rw [eq_iff_ph (g := g)]
   unfold formG
 
-  simp only [map_sum, map_mul, map_zero, firstProj_conj_eq_secondProj, splitSecondProj_conj, splitSecondProj_iotaOne, mul_zero, zero_mul,
+  simp only [map_sum, map_mul, map_zero, firstProj_conj_eq_secondProj, _root_.Formalism.L2.SG.LocalCountModules.ThetaMbe0GWork.secondProj_conj_eq_firstProj, splitSecondProj_iotaOne, mul_zero, zero_mul,
   Finset.sum_const_zero]
   simp
 
@@ -438,7 +436,7 @@ theorem splitForm_iotaTwo_iotaTwo (hs : M.split = some g) (Zh : Matrix (Fin (r +
   rw [eq_iff_ph (g := g)]
   unfold formG
 
-  simp only [map_sum, map_mul, map_zero, firstProj_conj_eq_secondProj, splitSecondProj_conj, splitFirstProj_iotaTwo, mul_zero, zero_mul,
+  simp only [map_sum, map_mul, map_zero, firstProj_conj_eq_secondProj, _root_.Formalism.L2.SG.LocalCountModules.ThetaMbe0GWork.secondProj_conj_eq_firstProj, splitFirstProj_iotaTwo, mul_zero, zero_mul,
   Finset.sum_const_zero]
   simp
 

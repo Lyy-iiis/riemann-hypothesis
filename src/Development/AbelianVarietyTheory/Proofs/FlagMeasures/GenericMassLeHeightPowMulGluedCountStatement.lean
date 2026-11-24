@@ -70,6 +70,9 @@ import Formalism.LocalToGlobal.SiegelLatticeTheory.FlagStabilizerTensors.Poincar
 import Formalism.LocalToGlobal.SiegelLatticeTheory.HaarTransversals.HidaSetting
 import Mathlib.RingTheory.Coalgebra.CoassocSimps
 import Mathlib.Tactic.Linter.HaveILetI
+import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.FiniteRepSetOfOrtho
+import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.IsClassRepsMap
+import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.UnimodularOfMemGenusOrtho
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.FramesCommonStabiliserEqPairingMatrixStabiliser
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.MassOrbitClass
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.MemPerpSpan
@@ -223,12 +226,6 @@ private theorem isUnit_algebraMap_δ_mul_uP (Z : LocDat D) (p : PlF D) :
     IsUnit (algebraMap (D.s.atP p).Fp (D.s.atP p).Ep (Z.δ p) * (D.s.atP p).ιE (uP p : D.host.E)) :=
   LocFacts.isUnit_localConstant p Z
 
-private theorem isUnit_frFac' (Z : LocDat D) (p : PlF D) (a : Fin (D.R.rS + 1)) : IsUnit (frFac Z.δ p a) := by
-  obtain ⟨u, hu⟩ := isUnit_algebraMap_δ_mul_uP Z p
-  simp only [frFac]
-  rw [← hu, ← Units.val_pow_eq_pow_val, Ring.inverse_unit]
-  exact Units.isUnit _
-
 theorem chg_scaled (Z : LocDat D) (p : PlF D) {f g : Fin (D.R.rS + 1) → (VS D).V}
     {t : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) D.host.E} (h : Chg f t g) :
     Chg (scaled Z p f) (Matrix.diagonal (fun a => Ring.inverse (frFac Z.δ p a)) * t.map (D.s.atP p).ιE *
@@ -239,7 +236,7 @@ theorem chg_scaled (Z : LocDat D) (p : PlF D) {f g : Fin (D.R.rS + 1) → (VS D)
   Matrix.diagonal_mul, Matrix.map_apply]
   refine Finset.sum_congr rfl fun a _ => ?_
   congr 1
-  have hu := Ring.inverse_mul_cancel _ (isUnit_frFac' Z p a)
+  have hu := Ring.inverse_mul_cancel _ (_root_.Formalism.L2.SG.Pf.BBTie.bt_frFac_unit Z p a)
   linear_combination (-(frFac Z.δ p b * (D.s.atP p).ιE (t a b))) * hu
 
 end Loc
@@ -260,9 +257,9 @@ theorem one_flag (Z : LocDat D) {T : D.host.E} (hT : T ≠ 0) (F : LFlag (D.sp.Y
         Chg (f p) A (scaled Z p (frame G)) := by
   classical
   have hψφ : ∀ p a, Ring.inverse (frFac Z.δ p a) * frFac Z.δ p a = 1 :=
-    fun p a => Ring.inverse_mul_cancel _ (isUnit_frFac' Z p a)
+    fun p a => Ring.inverse_mul_cancel _ (_root_.Formalism.L2.SG.Pf.BBTie.bt_frFac_unit Z p a)
   have hφψ : ∀ p a, frFac Z.δ p a * Ring.inverse (frFac Z.δ p a) = 1 :=
-    fun p a => Ring.mul_inverse_cancel _ (isUnit_frFac' Z p a)
+    fun p a => Ring.mul_inverse_cancel _ (_root_.Formalism.L2.SG.Pf.BBTie.bt_frFac_unit Z p a)
   have hdd : ∀ p : PlF D, Matrix.diagonal (fun a => Ring.inverse (frFac Z.δ p a)) * Matrix.diagonal (frFac Z.δ p) = 1 := fun p => by
     rw [Matrix.diagonal_mul_diagonal]; simp only [hψφ]; exact Matrix.diagonal_one
   have hdd' : ∀ p : PlF D, Matrix.diagonal (frFac Z.δ p) * Matrix.diagonal (fun a => Ring.inverse (frFac Z.δ p a)) = 1 := fun p => by
@@ -433,7 +430,7 @@ open scoped Classical ENNReal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_rational_frames_prescribed_local_classes : ∀ (D : D7) (Z : LocDat D) (u u' : D.what₂.Word) (F : LFlag (D.sp.Y 0) D.R.rS (((D.mem u).A.T : ℕ) : D.host.E)) (F' : LFlag (D.sp.Y 0) D.R.rS (((D.mem u').A.T : ℕ) : D.host.E)) (P : Finset (PlF D)) (f f' : ∀ p : PlF D, Fin (D.R.rS + 1) → Vp D p), (∀ p ∈ P, Tri (D.s.atP p).Ep (scaled Z p (frame F)) (f p) ∧ Tri (D.s.atP p).Ep (scaled Z p (frame F')) (f' p)) → ∃ (G : LFlag (D.sp.Y 0) D.R.rS (((D.mem u).A.T : ℕ) : D.host.E)) (G' : LFlag (D.sp.Y 0) D.R.rS (((D.mem u').A.T : ℕ) : D.host.E)), StdOff Z P F G F' G' ∧ ∀ p ∈ P, ∃ A A' : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) (D.s.atP p).Ep, Uni A ∧ Uni A' ∧ (∀ a b, A a b ∈ (Z.M p).L.O ∧ A' a b ∈ (Z.M p).L.O ∧ A a b - A' a b ∈ Submodule.span (Z.M p).L.O {algebraMap (D.s.atP p).Fp (D.s.atP p).Ep (LocNG.theta (Z.M p))}) ∧ Chg (f p) A (scaled Z p (frame G)) ∧ Chg (f' p) A' (scaled Z p (frame G')) := by
-  first | exact @GlobalTheory.FrameChoice.choose_frames | exact GlobalTheory.FrameChoice.choose_frames | (intros; apply GlobalTheory.FrameChoice.choose_frames <;> assumption)
+  first | exact @GlobalTheory.FrameChoice.choose_frames
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsRationalFramesPrescribedLocalClassesStatement =====
@@ -528,13 +525,13 @@ open scoped Classical ENNReal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.flagPairValue_invariant_unitriangularChange : ∀ (D : D7) {T T' : D.host.E} (F G : LFlag (D.sp.Y 0) D.R.rS T) (F' G' : LFlag (D.sp.Y 0) D.R.rS T') (A A' : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) D.host.E), Uni A → Uni A' → ZhatL G G' = A.transpose.map star * ZhatL F F' * A' → Gval G G' = Gval F F' := by
-  first | exact @GlobalTheory.LocOver.gval_uni_change | exact GlobalTheory.LocOver.gval_uni_change | (intros; apply GlobalTheory.LocOver.gval_uni_change <;> assumption)
+  first | exact @GlobalTheory.LocOver.gval_uni_change
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.FlagPairValueInvariantUnitriangularChangeStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.GlueUnimodularLatticeRepsMoveIsometryFrames =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FlagMeasures.GlueUnimodularLatticeRepsMoveIsometryFrames", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.SemilocalFrames.GlobSet\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.CoassocSimps\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.CokernelGLCounts.RankPointCounts.NGAnalytic\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.CokernelGLCounts.RankPointCounts.StepHeightOfNormOne\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FlagMeasures.GlueUnimodularLatticeRepsMoveIsometryFrames", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.SemilocalFrames.GlobSet\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.CoassocSimps\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.CokernelGLCounts.RankPointCounts.NGAnalytic\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.CokernelGLCounts.RankPointCounts.StepHeightOfNormOne\nimport Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.FiniteRepSetOfOrtho\nimport Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.IsClassRepsMap\nimport Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.UnimodularOfMemGenusOrtho\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -553,34 +550,15 @@ section Gen
 variable {K V : Type} [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
   [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V]
 
-theorem mem_gmap (n : V ≃ₗ[K] V) (L : Submodule (𝓞 K) V) (x : V) :
-    x ∈ Formalism.HermitianLatticesTheory.gmap n L ↔ n.symm x ∈ L := by
-  simp only [Formalism.HermitianLatticesTheory.gmap, Submodule.mem_map, LinearMap.coe_restrictScalars, LinearEquiv.coe_coe]
-  constructor
-  · rintro ⟨y, hy, rfl⟩
-    simpa using hy
-  · intro hx
-    exact ⟨n.symm x, hx, n.apply_symm_apply x⟩
-
-theorem gmap_mul (a b : V ≃ₗ[K] V) (L : Submodule (𝓞 K) V) :
-    Formalism.HermitianLatticesTheory.gmap (a * b) L = Formalism.HermitianLatticesTheory.gmap a (Formalism.HermitianLatticesTheory.gmap b L) := by
-  ext x
-  rw [mem_gmap, mem_gmap, mem_gmap]
-  rfl
-
 theorem gmap_symm_gmap (n : V ≃ₗ[K] V) (L : Submodule (𝓞 K) V) :
     Formalism.HermitianLatticesTheory.gmap n.symm (Formalism.HermitianLatticesTheory.gmap n L) = L := by
   ext x
-  rw [mem_gmap, mem_gmap, LinearEquiv.symm_symm, LinearEquiv.symm_apply_apply]
+  rw [_root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap, _root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap, LinearEquiv.symm_symm, LinearEquiv.symm_apply_apply]
 
 theorem gmap_gmap_symm (n : V ≃ₗ[K] V) (L : Submodule (𝓞 K) V) :
     Formalism.HermitianLatticesTheory.gmap n (Formalism.HermitianLatticesTheory.gmap n.symm L) = L := by
   ext x
-  rw [mem_gmap, mem_gmap, LinearEquiv.symm_symm, LinearEquiv.apply_symm_apply]
-
-theorem gmap_injective (n : V ≃ₗ[K] V) : Function.Injective (Formalism.HermitianLatticesTheory.gmap (R := 𝓞 K) n) := by
-  intro L L' hLL
-  rw [← gmap_symm_gmap n L, hLL, gmap_symm_gmap]
+  rw [_root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap, _root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap, LinearEquiv.symm_symm, LinearEquiv.apply_symm_apply]
 
 theorem linearEquiv_map_smul_ringOfIntegers (n : V ≃ₗ[K] V) (s : 𝓞 K) (x : V) : n (s • x) = s • n x := by
   rw [← algebraMap_smul K s x, map_smul, algebraMap_smul]
@@ -597,14 +575,14 @@ theorem gmap_sup (n : V ≃ₗ[K] V) (L L' : Submodule (𝓞 K) V) :
 theorem gmap_iInf {ι : Type} (n : V ≃ₗ[K] V) (f : ι → Submodule (𝓞 K) V) :
     Formalism.HermitianLatticesTheory.gmap n (⨅ i, f i) = ⨅ i, Formalism.HermitianLatticesTheory.gmap n (f i) := by
   ext x
-  simp only [mem_gmap, Submodule.mem_iInf]
+  simp only [_root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap, Submodule.mem_iInf]
 
 theorem locP_gmap (n : V ≃ₗ[K] V) (p : Ideal (𝓞 K)) [p.IsPrime] (L : Submodule (𝓞 K) V) :
     Formalism.HermitianLatticesTheory.localization₂ p (Formalism.HermitianLatticesTheory.gmap n L) = Formalism.HermitianLatticesTheory.gmap n (Formalism.HermitianLatticesTheory.localization₂ p L) := by
   ext x
-  rw [mem_gmap]
+  rw [_root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap]
   show (∃ s ∈ p.primeCompl, s • x ∈ Formalism.HermitianLatticesTheory.gmap n L) ↔ ∃ s ∈ p.primeCompl, s • n.symm x ∈ L
-  simp only [mem_gmap, linearEquiv_map_smul_ringOfIntegers]
+  simp only [_root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap, linearEquiv_map_smul_ringOfIntegers]
 
 theorem mem_dual (h : V →ₗ⋆[K] V →ₗ[K] K) (L : Submodule (𝓞 K) V) (x : V) :
     x ∈ Formalism.HermitianLatticesTheory.dual h L ↔ ∀ y ∈ L, h y x ∈ (1 : Submodule (𝓞 K) K) := by
@@ -616,13 +594,13 @@ theorem dual_gmap (h : V →ₗ⋆[K] V →ₗ[K] K) (n : V ≃ₗ[K] V) (hn : n
     Formalism.HermitianLatticesTheory.dual h (Formalism.HermitianLatticesTheory.gmap n L) = Formalism.HermitianLatticesTheory.gmap n (Formalism.HermitianLatticesTheory.dual h L) := by
   have hiso : ∀ x y, h (n x) (n y) = h x y := hn
   ext x
-  rw [mem_gmap, mem_dual, mem_dual]
+  rw [_root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap, mem_dual, mem_dual]
   constructor
   · intro hx y hy
-    have := hx (n y) (by rw [mem_gmap, LinearEquiv.symm_apply_apply]; exact hy)
+    have := hx (n y) (by rw [_root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap, LinearEquiv.symm_apply_apply]; exact hy)
     rwa [← n.apply_symm_apply x, hiso] at this
   · intro hx y hy
-    rw [mem_gmap] at hy
+    rw [_root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap] at hy
     have := hx _ hy
     rwa [← hiso, LinearEquiv.apply_symm_apply, LinearEquiv.apply_symm_apply] at this
 
@@ -634,13 +612,13 @@ theorem gmap_inf_map (n : V ≃ₗ[K] V) (Λ : Submodule (𝓞 K) V) (U : Submod
     Formalism.HermitianLatticesTheory.gmap n Λ ⊓ (U.map (n : V →ₗ[K] V)).restrictScalars (𝓞 K) =
       Formalism.HermitianLatticesTheory.gmap n (Λ ⊓ U.restrictScalars (𝓞 K)) := by
   ext x
-  simp only [Submodule.mem_inf, Submodule.restrictScalars_mem, mem_gmap, Submodule.mem_map_equiv]
+  simp only [Submodule.mem_inf, Submodule.restrictScalars_mem, _root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap, Submodule.mem_map_equiv]
 
 theorem gmap_symm_inf (n : V ≃ₗ[K] V) (Λ : Submodule (𝓞 K) V) (U : Submodule K V) :
     Formalism.HermitianLatticesTheory.gmap n.symm Λ ⊓ U.restrictScalars (𝓞 K) =
       Formalism.HermitianLatticesTheory.gmap n.symm (Λ ⊓ (U.map (n : V →ₗ[K] V)).restrictScalars (𝓞 K)) := by
   ext x
-  simp only [Submodule.mem_inf, Submodule.restrictScalars_mem, mem_gmap, Submodule.mem_map_equiv,
+  simp only [Submodule.mem_inf, Submodule.restrictScalars_mem, _root_.Formalism.HermitianLattices.Ext.L3.RankOne.mem_gmap, Submodule.mem_map_equiv,
     LinearEquiv.symm_symm, LinearEquiv.symm_apply_apply]
 
 end Gen
@@ -715,11 +693,11 @@ theorem isomFix_unconj (h : V →ₗ⋆[K] V →ₗ[K] K) (n : V ≃ₗ[K] V) (h
 
 theorem gmap_conj (n g : V ≃ₗ[K] V) (Λ : Submodule (𝓞 K) V) :
     Formalism.HermitianLatticesTheory.gmap (n * g * n.symm) (Formalism.HermitianLatticesTheory.gmap n Λ) = Formalism.HermitianLatticesTheory.gmap n (Formalism.HermitianLatticesTheory.gmap g Λ) := by
-  rw [gmap_mul, gmap_mul, gmap_symm_gmap]
+  rw [_root_.Formalism.HermitianLattices.Ext.L3.autSub_gmap_mul, _root_.Formalism.HermitianLattices.Ext.L3.autSub_gmap_mul, gmap_symm_gmap]
 
 theorem gmap_unconj (n g : V ≃ₗ[K] V) (Λ : Submodule (𝓞 K) V) :
     Formalism.HermitianLatticesTheory.gmap (n.symm * g * n) Λ = Formalism.HermitianLatticesTheory.gmap n.symm (Formalism.HermitianLatticesTheory.gmap g (Formalism.HermitianLatticesTheory.gmap n Λ)) := by
-  rw [gmap_mul, gmap_mul]
+  rw [_root_.Formalism.HermitianLattices.Ext.L3.autSub_gmap_mul, _root_.Formalism.HermitianLattices.Ext.L3.autSub_gmap_mul]
 
 def stabEquiv (h : V →ₗ⋆[K] V →ₗ[K] K) (n : V ≃ₗ[K] V) (hn : n ∈ Formalism.HermitianLatticesTheory.isom h)
     (U : Submodule K V) (Λ : Submodule (𝓞 K) V) :
@@ -856,7 +834,7 @@ theorem glue_move : ∀ (D : D7) (T T' : D.host.E) (F G : LFlag (D.sp.Y 0) D.R.r
     rw [upair_move F G F' G' n hG hG', mmof_move F G F' G' n hG hG']
     exact isGlueReps_move _ n hn _ _ _ hs
   · unfold GlobalTheory.GenMass.glueSum
-    rw [Finset.sum_image (fun x _ y _ hxy => gmap_injective n hxy)]
+    rw [Finset.sum_image (fun x _ y _ hxy => _root_.Formalism.HermitianLattices.Ext.L3.gmap_injective n hxy)]
     refine Finset.sum_congr rfl fun Λ _ => ?_
     rw [upair_move F G F' G' n hG hG', card_stabFix_move _ n hn]
 
@@ -876,7 +854,7 @@ open scoped Classical ENNReal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.glueUnimodularLatticeReps_move_isometry_frames : ∀ (D : D7) (T T' : D.host.E) (F G : LFlag (D.sp.Y 0) D.R.rS T) (F' G' : LFlag (D.sp.Y 0) D.R.rS T') (n : GV D), n ∈ Formalism.HermitianLatticesTheory.isom (VS D).hT → (∀ a, frame G a = n (frame F a)) → (∀ a, frame G' a = n (frame F' a)) → ∀ s : Finset (LV D), Glue F F' s → ∃ s' : Finset (LV D), Glue G G' s' ∧ glueSum G G' s' = glueSum F F' s := by
-  first | exact @GlobalTheory.GlueMove.glue_move | exact GlobalTheory.GlueMove.glue_move | (intros; apply GlobalTheory.GlueMove.glue_move <;> assumption)
+  first | exact @GlobalTheory.GlueMove.glue_move
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.GlueUnimodularLatticeRepsMoveIsometryFramesStatement =====
@@ -992,7 +970,7 @@ open scoped Classical ENNReal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.localPairingClass_stable_unitriangularChange : ∀ {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F] {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E] (M : Loc.Model F E) {V : Type} [AddCommGroup V] [Module E V] (H : Loc.HermSp M V) (r : ℕ) (Y0 : Matrix (Fin (r + 1)) (Fin (r + 1)) E) (f f' g g' : Fin (r + 1) → V) (A A' : Matrix (Fin (r + 1)) (Fin (r + 1)) E), Uni A → Uni A' → (∀ a b, A a b ∈ M.L.O ∧ A' a b ∈ M.L.O ∧ A a b - A' a b ∈ Submodule.span M.L.O {algebraMap F E (LocNG.theta M)}) → Chg f A g → Chg f' A' g' → H.Zhat f f' ∈ clsLoc M Y0 → H.Zhat g g' ∈ clsLoc M Y0 := by
-  first | exact @GlobalTheory.ClsStable.zhat_mem_clsLoc_of_chg | exact GlobalTheory.ClsStable.zhat_mem_clsLoc_of_chg | (intros; apply GlobalTheory.ClsStable.zhat_mem_clsLoc_of_chg <;> assumption)
+  first | exact @GlobalTheory.ClsStable.zhat_mem_clsLoc_of_chg
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.LocalPairingClassStableUnitriangularChangeStatement =====
@@ -1604,7 +1582,7 @@ open scoped Classical ENNReal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.genericMass_le_heightPow_mul_gluedCount : ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.Word), 4 * D.R.rS + 7 ≤ D.R.k → ∀ {K : Type} (Fm : LocFam (zOf Y) K (NuC D)) (γ : PN.Pts D.host.E D.R.rS), 0 < Fm.V0 → (∃ (w : Point D.host.E (D.R.rS + 1)) (F : LFlag (D.sp.Y 0) D.R.rS (((D.mem u).A.T : ℕ) : D.host.E)) (F' : LFlag (D.sp.Y 0) D.R.rS (((D.mem u').A.T : ℕ) : D.host.E)) (Y0 : ∀ p : PlF D, Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) (D.s.atP p).Ep), toPts w = γ ∧ (∃ n ∈ NRat (lf D (X.Fu u)), ∀ a, frame F a = n (frame (lf D (X.Fu u)) a)) ∧ ZhatOM (ZhatL F F') = ptMat w ∧ TotPos (Gval F F') ∧ BaseOK (Tu D u) (Tu D u') F F' Fm.P Fm.d0 ∧ MassLaw F F' Fm.P Fm.d0 Fm.V0 ∧ ∀ p ∈ Fm.P, Fm.ngenL p = (ngenLoc (Fm.R p) (Fm.d0 p) (clsLoc ((zOf Y).M p) (Y0 p))).toReal ∧ ∃ (d : LocNG.Datum (Fm.FP p)) (t : Loc.Term (Vp D p) ((zOf Y).M p) D.R.rS), LocNG.IsTermOver (Fm.FP p) d t ∧ (locH (zOf Y) p).Zhat t.f t.f' ∈ clsLoc ((zOf Y).M p) (Y0 p)) → 0 < Fm.toL.ngenTot ∧ (∀ p ∈ Fm.P, 1 ≤ (Fm.FP p).Hp) ∧ ∃ (w : Point D.host.E (D.R.rS + 1)) (G' : LFlag (D.sp.Y 0) D.R.rS (((D.mem u').A.T : ℕ) : D.host.E)), toPts w = γ ∧ G'.zt = G'.fl.z ∧ TotPos (Gval (lf D (X.Fu u)) G') ∧ IsInCell (ZhatOM (ZhatL (lf D (X.Fu u)) G')) w ∧ ∀ s : Finset (LV D), Glue (lf D (X.Fu u)) G' s → s.Nonempty ∧ Fm.toL.ngenTot ≤ Fm.toL.Htot ^ (3 * (D.R.rS + 1) ^ 2) * glueSum (lf D (X.Fu u)) G' s := by
-  first | exact @GlobalTheory.GenMassBound.genericMass_le_heightPow_mul_glueSum | exact GlobalTheory.GenMassBound.genericMass_le_heightPow_mul_glueSum | (intros; apply GlobalTheory.GenMassBound.genericMass_le_heightPow_mul_glueSum <;> assumption)
+  first | exact @GlobalTheory.GenMassBound.genericMass_le_heightPow_mul_glueSum
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.GenericMassLeHeightPowMulGluedCountStatement =====

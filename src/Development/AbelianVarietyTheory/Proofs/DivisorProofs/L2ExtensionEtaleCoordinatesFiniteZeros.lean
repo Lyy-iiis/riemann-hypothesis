@@ -361,7 +361,7 @@ theorem _root_.GlobalTheory.OTY.ShellZero.shell_near_zero : ∀ (n : ℕ) (Y : T
     simp only [hψdef, _root_.GlobalTheory.Published.L2Extension.psi, h1, hlam, e.left_inv hx, hZ]
     rw [norm_one, one_pow, one_mul, mul_comm (Real.exp _)]
   have hψm : Measurable ψ := by
-    simp only [hψdef, _root_.GlobalTheory.Published.L2Extension.psi]
+    simp only [hψdef]
     exact measurable_const.mul (Real.measurable_log.comp (A.continuous_sqn hs).measurable)
   obtain ⟨ρ, hρ, hball, hshell⟩ := _root_.GlobalTheory.ShellMass.shell_mass n hn (e P) e.target Z lam e.open_target hp hZd hZ0
     hdet hlamc φ (2 / δ) (1 / 30) hφc (by positivity) (by norm_num)
@@ -603,20 +603,6 @@ namespace GlobalTheory.OTY
 
 open MeasureTheory Filter Topology Metric in
 open scoped ENNReal ContDiff in
-private lemma continuous_sqn_of_isSec' {n : ℕ} {Y : Type*} [TopologicalSpace Y] [T2Space Y]
-    [SecondCountableTopology Y] [MeasurableSpace Y] [BorelSpace Y] {ι La : Type*}
-    [AddCommGroup La] (A : _root_.ReciprocityTheory.L2DbarEstimates.Y.WeightedAtlas n Y ι La) {L : La} {N : ℕ} {s : Fin N → ι → Y → ℂ}
-    (hs : ∀ k, A.IsSec L (s k)) : Continuous (A.sqn L s) := by
-  have hsum : A.sqn L s = fun y => ∑ k, A.nsq L (s k) y := by
-    funext y
-    rfl
-  rw [hsum]
-  refine continuous_finsetSum _ fun k _ => ?_
-  have hk : A.IsSecOn L Set.univ (s k) := hs k
-  exact continuousOn_univ.mp (_root_.ReciprocityTheory.L2DbarEstimates.Y.api_nsq_contOn A isOpen_univ hk)
-
-open MeasureTheory Filter Topology Metric in
-open scoped ENNReal ContDiff in
 private lemma mem_zeroSet_of_sqn_eq_zero {n : ℕ} {Y : Type*} [TopologicalSpace Y] [T2Space Y]
     [SecondCountableTopology Y] [MeasurableSpace Y] [BorelSpace Y] {ι La : Type*}
     [AddCommGroup La] (A : _root_.ReciprocityTheory.L2DbarEstimates.Y.WeightedAtlas n Y ι La) {L : La} {N : ℕ} (s : Fin N → ι → Y → ℂ) {y : Y}
@@ -711,7 +697,7 @@ theorem _root_.GlobalTheory.OTY.exists_local_extension : ∀ (n : ℕ) (Y : Type
       rw [he] at hyc
       exact hyc
     · obtain ⟨x0, hx0, hmin⟩ := hΩo.isClosed_compl.isCompact.exists_isMinOn hne
-        (continuous_sqn_of_isSec' A hs).continuousOn
+        (_root_.ReciprocityTheory.L2DbarEstimates.Y.WeightedAtlas.continuous_sqn A hs).continuousOn
       refine ⟨A.sqn L s x0, lt_of_le_of_ne (A.sqn_nonneg L s x0)
         (fun h0 => hx0 (hZΩ x0 (mem_zeroSet_of_sqn_eq_zero A s h0.symm))), fun y hy => ?_⟩
       by_contra hyΩ
@@ -1359,7 +1345,7 @@ theorem GlobalTheory.OTY.extension_values_at_zeros : ∀ (n : ℕ) (Y : Type) [T
     have h0 : ∀ k, s k i (e.symm (e P)) = 0 := fun k => by rw [e.left_inv hPs]; exact hP' k
     ext k
     simp only [Z, WeightedAtlas.zLoc, PiLp.toLp_apply, div_one]
-    first | exact h0 k | simpa using h0 k | (simp; exact h0 k)
+    first | exact h0 k
   have hdet : (fderiv ℂ Z (e P)).det ≠ 0 := hjac P hP
   have hlam : ContinuousOn lam O :=
     ((A.smooth_ph L i).continuousOn).mono (fun v hv => hv.1)
@@ -1407,7 +1393,7 @@ theorem GlobalTheory.OTY.extension_values_at_zeros : ∀ (n : ℕ) (Y : Type) [T
         have h3 := hv hvB
         simp only [Pi.zero_apply, ENNReal.ofReal_eq_zero] at h3
         exact absurd h3 (not_le.2 (Real.exp_pos _))
-      first | exact measure_zero_iff_ae_nmem.2 h2 | exact measure_eq_zero_iff_ae_notMem.2 h2
+      first | exact measure_eq_zero_iff_ae_notMem.2 h2
     have hOW : volume (O \ W) = 0 := by
       apply measure_mono_null (t := {e P} ∪ (e.target ∩ e.symm ⁻¹' (nz A τ)ᶜ))
       · intro v hv
@@ -1582,8 +1568,6 @@ section -- clump:auto
 open MeasureTheory Filter Topology Metric ReciprocityTheory.L2DbarEstimates ReciprocityTheory.L2DbarEstimates.Y GlobalTheory.OTY GlobalTheory.Published.L2Extension
 open scoped ENNReal ContDiff
 
-theorem _root_.GlobalTheory.T.lintegral_sublevel_tail_le_of_finite : ∀ (Y : Type) [MeasurableSpace Y] (μ : Measure Y) (g : Y → ℝ≥0∞) (x : Y → ℝ), Measurable x → ∫⁻ y, g y ∂μ < ⊤ → Measurable g → ∀ ε : ℝ≥0∞, 0 < ε → ∃ T0 : ℝ, ∀ T, T0 ≤ T → ∫⁻ y in {y | x y ≤ -T + 1}, g y ∂μ ≤ ε := by
-  first | exact @GlobalTheory.lintegral_sublevel_tail_le | exact GlobalTheory.lintegral_sublevel_tail_le | (intros; apply GlobalTheory.lintegral_sublevel_tail_le <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LintegralSublevelTailLeOfFiniteStatement =====
@@ -1711,7 +1695,7 @@ theorem l2_extension_of_etale_coordinates : ∀ (n : ℕ) (Y : Type) [Topologica
       refine Measurable.ennreal_ofReal ?_
       exact ((measurable_const.div (measurable_const.add ((hψm'.const_mul δ).pow_const 2))).mul
         hNm).mul hψm'.neg.exp
-    obtain ⟨T0, hT0⟩ := GlobalTheory.T.lintegral_sublevel_tail_le_of_finite Y A.mu
+    obtain ⟨T0, hT0⟩ := _root_.GlobalTheory.lintegral_sublevel_tail_le Y A.mu
       (fun y => ENNReal.ofReal (1 / (1 + (δ * psi A L s y) ^ 2) *
         A.nsq (A.kap + E) h y * Real.exp (-psi A L s y)))
       (fun y => δ * psi A L s y) (hψm'.const_mul δ) hfin hggm

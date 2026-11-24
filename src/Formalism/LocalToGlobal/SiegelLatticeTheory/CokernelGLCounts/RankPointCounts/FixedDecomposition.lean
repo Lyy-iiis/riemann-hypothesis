@@ -321,16 +321,6 @@ theorem isFD_of_SF (Γ : Subgroup G) [Countable Γ] {Ω : Set G} (hΩ : SF (Γ :
     exact Subtype.ext (mul_inv_eq_one.1 h2)
   first
   | exact IsFundamentalDomain.mk' hΩ.1.nullMeasurableSet key
-  | exact
-      { nullMeasurableSet := hΩ.1.nullMeasurableSet
-        ae_covers := ae_of_all _ fun x => (key x).exists
-        aedisjoint := fun a b hab => Disjoint.aedisjoint (Set.disjoint_left.2 fun y hya hyb => by
-          obtain ⟨u, hu, rfl⟩ := Set.mem_smul_set.1 hya
-          obtain ⟨v, hv, hvu⟩ := Set.mem_smul_set.1 hyb
-          have e1 : (b⁻¹ * a) • u ∈ Ω := by rw [mul_smul, ← hvu, inv_smul_smul]; exact hv
-          have e2 : (1 : Γ) • u ∈ Ω := by rw [one_smul]; exact hu
-          have := (key u).unique e1 e2
-          exact hab (by rw [inv_mul_eq_one] at this; exact this.symm)) }
 
 private theorem measurableSMul_and_smulInvariantMeasure_subgroup (Γ : Subgroup G) (ν : Measure G)
     (hν : ∀ s ∈ Γ, ν.map (fun x => s * x) = ν) :
@@ -465,9 +455,6 @@ variable {G : Type*} [Group G] [MeasurableSpace G] [MeasurableMul₂ G] [Measura
 private theorem ennreal_eq_of_mul_left_eq {c a b : ℝ≥0∞} (h0 : c ≠ 0) (ht : c ≠ ⊤) (h : c * a = c * b) : a = b := by
   first
   | exact (ENNReal.mul_right_inj h0 ht).1 h
-  | (calc a = c⁻¹ * (c * a) := by rw [← mul_assoc, ENNReal.inv_mul_cancel h0 ht, one_mul]
-      _ = c⁻¹ * (c * b) := by rw [h]
-      _ = b := by rw [← mul_assoc, ENNReal.inv_mul_cancel h0 ht, one_mul])
 
 private theorem setIntegral_eq_of_fiber_measure_eq {A B : Set G} (hA : MeasurableSet A) (hB : MeasurableSet B)
     (c : ℝ≥0∞) (hc0 : c ≠ 0) (hct : c ≠ ⊤)
@@ -523,22 +510,18 @@ section Shift
 
 variable {G : Type*} [Group G] [MeasurableSpace G] [MeasurableMul G]
 
-theorem fd_instances (Γ : Subgroup G) (ν : Measure G) (hν : ∀ s ∈ Γ, ν.map (fun x => s * x) = ν) :
-    MeasurableSMul Γ G ∧ SMulInvariantMeasure Γ G ν := measurableSMul_and_smulInvariantMeasure_subgroup Γ ν hν
-
 theorem SF_measure_univ (Γ : Subgroup G) [Countable Γ] (ν : Measure G)
     (hν : ∀ s ∈ Γ, ν.map (fun x => s * x) = ν) {Ω : Set G} (hΩ : SF (Γ : Set G) Ω) :
     ν Set.univ = ∑' _g : Γ, ν Ω := by
-  obtain ⟨i1, i2⟩ := fd_instances Γ ν hν
+  obtain ⟨i1, i2⟩ := _root_.Formalism.L2.SG.MeasureShiftInvariance.measurableSMul_and_smulInvariantMeasure_subgroup Γ ν hν
   have hfd := isFD_of_SF Γ hΩ ν
   first
   | (rw [hfd.measure_eq_tsum Set.univ]; simp [Set.smul_set_univ])
-  | (rw [hfd.measure_eq_tsum' Set.univ]; simp [measure_smul])
 
 theorem SF_measure_cover (Γ : Subgroup G) [Countable Γ] (ν : Measure G)
     (hν : ∀ s ∈ Γ, ν.map (fun x => s * x) = ν) {Ω T K : Set G} (hΩ : SF (Γ : Set G) Ω)
     (hT : ∀ x ∈ T, ∃ s ∈ Γ, s * x ∈ K) : ν (Ω ∩ T) ≤ ν K := by
-  obtain ⟨i1, i2⟩ := fd_instances Γ ν hν
+  obtain ⟨i1, i2⟩ := _root_.Formalism.L2.SG.MeasureShiftInvariance.measurableSMul_and_smulInvariantMeasure_subgroup Γ ν hν
   have hfd := isFD_of_SF Γ hΩ ν
   calc ν (Ω ∩ T) ≤ ν (⋃ g : Γ, g⁻¹ • (K ∩ g • Ω)) := by
         refine measure_mono ?_
@@ -551,7 +534,6 @@ theorem SF_measure_cover (Γ : Subgroup G) [Countable Γ] (ν : Measure G)
     _ = ∑' g : Γ, ν (K ∩ g • Ω) := by
         first
         | simp only [measure_smul]
-        | (congr 1; funext g; exact measure_smul _ _)
     _ = ν K := (hfd.measure_eq_tsum' K).symm
 
 end Shift
@@ -1060,7 +1042,7 @@ theorem smat_wt {n k : ℕ} (ε : Fin n → Bool) (wf : Fin k → Fin n → ℂ)
   rw [smat_apply, hcoef, mulVec_single_one]
   show wf b + ∑ c, (G - 1) c b • wf c = ∑ c, G c b • wf c
   have e : ∑ c, (G - 1) c b • wf c = ∑ c, G c b • wf c - wf b := by
-    simp only [Matrix.transpose_apply, Matrix.sub_apply, sub_smul, Finset.sum_sub_distrib, Matrix.one_apply,
+    simp only [Matrix.sub_apply, sub_smul, Finset.sum_sub_distrib, Matrix.one_apply,
       ite_smul, one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true]
   rw [e]; abel
 

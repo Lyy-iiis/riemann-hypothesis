@@ -707,29 +707,6 @@ theorem isProbabilityMeasure_gaussProb {n : ℕ} (hn : 0 < n) : IsProbabilityMea
   rw [← hp.map_eq]
   infer_instance
 
-theorem eval_blockScale {B n : ℕ} (a : Fin B → ℕ) (g : MvPolynomial (Fin B × Fin n) ℂ)
-    (hm : IsMultiHomogeneous a g) (r : Fin B → ℂ) (x : Fin B × Fin n → ℂ) :
-    eval (fun p => r p.1 * x p) g = (∏ b, r b ^ a b) * eval x g := by
-  conv_lhs => rw [g.as_sum]
-  conv_rhs => rw [g.as_sum]
-
-  rw [map_sum, map_sum, Finset.mul_sum]
-  refine Finset.sum_congr rfl fun s hs => ?_
-  rw [eval_monomial, eval_monomial]
-  have h1 : (s.prod fun p e => (r p.1 * x p) ^ e) =
-      (s.prod fun p e => r p.1 ^ e) * s.prod fun p e => x p ^ e := by
-    rw [← Finsupp.prod_mul]
-    congr 1
-    funext p e
-    rw [mul_pow]
-  have h2 : (s.prod fun p e => r p.1 ^ e) = ∏ b, r b ^ a b := by
-    rw [Finsupp.prod_fintype _ _ (fun _ => pow_zero _), Fintype.prod_prod_type]
-    refine Finset.prod_congr rfl fun b _ => ?_
-    show ∏ y, r b ^ s (b, y) = _
-    rw [Finset.prod_pow_eq_pow_sum, hm s hs b]
-  rw [h1, h2]
-  ring
-
 theorem linSubst_incl {B N n : ℕ} (h : N ≤ n) (f : MvPolynomial (Fin B × Fin N) ℂ) :
     GlobalTheory.ChowHt.linSubst (Matrix.of fun (j : Fin N) (k : Fin n) =>
                  if (j : ℕ) = (k : ℕ) then (1 : ℂ) else 0) f =
@@ -815,7 +792,7 @@ theorem gauss_blockMean {B n : ℕ} (hn : 0 < n) (δ : ℕ) (g : MvPolynomial (F
       rw [norm_prod]
       refine Finset.prod_congr rfl fun b _ => ?_
       rw [norm_pow, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (hr b)]
-    have hs := eval_blockScale (fun _ => δ) g hm (fun b => ((q.2 b : ℝ) : ℂ)) (blockPoint q.1)
+    have hs := _root_.ReciprocityTheory.MultiplicativeHeights.eval_blockScale_eq_prod_pow_mul (fun _ => δ) g hm (fun b => ((q.2 b : ℝ) : ℂ)) (blockPoint q.1)
     rw [hfun, hs, norm_mul, hprod,
       Real.log_mul (Finset.prod_ne_zero_iff.2 fun b _ => pow_ne_zero _ (hr b).ne')
         (norm_ne_zero_iff.2 hq),
@@ -996,7 +973,7 @@ theorem exists_unitary {N m : ℕ} (Q : Matrix (Fin N) (Fin m) ℂ)
       simp only [v]
       rw [dif_pos hj]
       change Q j a = ∑ i, Q i a * (EuclideanSpace.basisFun (Fin N) ℂ j) i
-      simp [EuclideanSpace.basisFun_apply, Pi.single_apply]
+      simp [EuclideanSpace.basisFun_apply]
     · intro k hk
       have hne : (j : ℕ) ≠ (k : ℕ) := fun he => hk (Fin.ext he.symm)
       simp [hne]
@@ -1278,7 +1255,7 @@ private theorem aeval_linSubst {K L : Type} [Field K] [CommRing L] [Algebra K L]
   erw [MvPolynomial.aeval_bind₁]
   refine congrArg (fun g => MvPolynomial.aeval g f) ?_
   funext p
-  simp [MvPolynomial.aeval_X, MvPolynomial.aeval_C]
+  simp [MvPolynomial.aeval_X]
 
 private theorem isChowForm_of_isChowFormInt {k : Type} [Field k] {N : ℕ} {I : Ideal (MvPolynomial (Fin N) k)} {e dl : ℕ}
     {f : MvPolynomial (Fin (e + 1) × Fin N) k} (hf : IsChowFormInt I e dl f) :

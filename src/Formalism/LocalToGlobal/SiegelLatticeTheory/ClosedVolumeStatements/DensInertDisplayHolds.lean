@@ -108,7 +108,6 @@ theorem sum_mul_vecMul {n : Type} [Fintype n] (A : Matrix n n E) (w : n → E) (
 theorem herm {hT : V →ₗ⋆[E] V →ₗ[E] E} (hS : hT.IsSymm) (x y : V) : hT x y = star (hT y x) := by
   first
     | exact (hS.eq y x).symm
-    | exact (hS y x).symm
 
 theorem left_sub_sum (hT : V →ₗ⋆[E] V →ₗ[E] E) {ι : Type} [Fintype ι] (z : V) (c : ι → E)
     (f : ι → V) (x : V) :
@@ -516,7 +515,7 @@ theorem det_succ_schur {E : Type} [Field E] {r : ℕ} (Z : Matrix (Fin (r + 1)) 
     Matrix.invOf_eq_nonsing_inv, Matrix.det_unique (n := Fin 1)]
   congr 1
   rw [Matrix.sub_apply, Matrix.mul_assoc]
-  simp only [Matrix.mul_apply, Matrix.mulVec, dotProduct, Matrix.of_apply] <;> rfl
+  simp only [Matrix.mul_apply, Matrix.mulVec, dotProduct, Matrix.of_apply]
 
 theorem leadMinorE_succ {E : Type} [Field E] {r : ℕ} (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) :
     leadMinorE Z (r + 1) = Z.det := by

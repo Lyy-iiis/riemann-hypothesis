@@ -237,8 +237,8 @@ theorem UpperTheory.formally_smooth_surjective_derivation :
     · intro x y
       ext
       · simp
-      · simp [hmul, -Derivation.leibniz, add_mul, Finset.sum_add_distrib, Finset.mul_sum,
-          Finset.sum_mul, mul_assoc, mul_comm, mul_left_comm, mul_add, add_comm]
+      · simp [hmul, -Derivation.leibniz, Finset.sum_add_distrib, Finset.mul_sum,
+          mul_comm, mul_left_comm, mul_add, add_comm]
     · ext <;> simp
     · intro x y
       ext <;> simp [add_mul, Finset.sum_add_distrib]
@@ -543,7 +543,7 @@ private theorem ValueChart.rep_smul (C : ValueChart G p) (r : R) {φ : X.preshea
   obtain ⟨g, h1, h2, h3⟩ := h
   refine ⟨(epsMul r).comp g, fun b => ?_, fun b => ?_, ?_⟩
   · simp [epsMul, h1]
-  · simp [epsMul, h2, Finset.mul_sum, mul_left_comm]
+  · simp [epsMul, h2, mul_left_comm]
   · rw [h3, CommRingCat.ofHom_comp, Spec.map_comp, Category.assoc]
 
 private theorem ValueChart.rep_exists (C : ValueChart G p) (φ : X.presheaf.stalk p ⟶ CommRingCat.of R) (x : Spec (CommRingCat.of R) ⟶ X)
@@ -847,7 +847,7 @@ theorem isDerivAt0_all (e : Flat.FamExp G M B ψ) {b : Fin n → ℂ} (hb : b �
       funext c
       by_cases h : c = a
       · subst h; simp
-      · simp [Pi.single_apply, h]
+      · simp [h]
     have := hpt (Pi.single a 1)
     rwa [h3] at this
   have hsm : ∀ (c : ℂ) (w : Fin g → ℂ), IsDerivAt0 (fun z => (e.ex b z).left) w (N.pt w).left →
@@ -905,13 +905,6 @@ section Core
 variable {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ : Spec (CommRingCat.of Ω) ⟶ X} {G : Over X} [GrpObj G]
   {Li : Type} [AddCommGroup Li] [Module Ω Li]
 
-theorem exists_value_basis [IsCommMonObj G] [Smooth G.hom] (hξ : IsCptGen ξ) (M : LieModel G ξ Li) (z : Sp ℂ ⟶ X)
-    (h : genPt ξ ⤳ centre z) {V I : Type} [AddCommGroup V] [Module ℂ V] (Mz : LieModel G z V) [Fintype I]
-    (F : I → Li) (hli : LinearIndependent Ω F)
-    (hsp : M.lat ⟨centre z, h⟩ = Submodule.span (regAt ξ ⟨centre z, h⟩) (Set.range F)) :
-    ∃ y : Module.Basis I ℂ V, ∀ j, M.ValAt z (F j) (Mz.pt (y j)) :=
-  _root_.UpperTheory.Reformulated.B.Ga4.exists_value_basis hξ M z h Mz F hli hsp
-
 theorem eig_of_value (hξ : IsCptGen ξ) (M : LieModel G ξ Li) (z : Sp ℂ ⟶ X) {V : Type} [AddCommGroup V] [Module ℂ V]
     (Mz : LieModel G z V) {O : Type} [CommRing O] (act : OAct O G) (ρ : O →+* Module.End Ω Li)
     (hρ : M.IsActOf act.act ρ) (χ : O →+* Ω) (c : O →+* ℂ) (hc : ∀ a, Ar.ValAt ξ z (χ a) (c a))
@@ -935,7 +928,6 @@ theorem eig_of_value (hξ : IsCptGen ξ) (M : LieModel G ξ Li) (z : Sp ℂ ⟶ 
   rw [hs, ← mem_eig he a] at e2
   have e3 := e1.unique (hξ.inj _) e2
   apply Over.OverMorphism.ext
-  change (Mz.pt (Bz a y)).left = (Mz.pt (c a • y)).left
   rw [hB, Mz.pt_smul, Over.comp_left, hw]
   have e3' := congrArg (fun q => q.left) e3
   change v.left ≫ (act.act a).left = _ at e3'
@@ -1039,7 +1031,7 @@ theorem values_eig : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H :
     refine Over.OverMorphism.ext ?_
     rw [hMz, pt_linear e hb N hN (t.act.act a) (Bb a) (fun x => hB a x) x, Over.comp_left, Over.comp_left, hMz,
       Category.assoc, Category.assoc, m.act a]
-  obtain ⟨yb, hyb⟩ := exists_value_basis hgen 𝔐.M _ (𝔐.all _) Mz' _ hli hsp
+  obtain ⟨yb, hyb⟩ := _root_.UpperTheory.Reformulated.B.Ga4.exists_value_basis hgen 𝔐.M _ (𝔐.all _) Mz' _ hli hsp
   have hey : ∀ p : (Σ u, Fin (k u)), yb p ∈ eigSp Bb (σ p.1) := fun p =>
     eig_of_value hgen 𝔐.M _ Mz' 𝔐.t.act 𝔐.ρ 𝔐.act (𝔐.emb p.1) (σ p.1) (hσ p.1) Bb hBz (hmem p.1 p.2).2 (hyb p)
   have hx : ∀ i, yb ⟨lab, i⟩ = fun k' => ψ b (sc i k') := by

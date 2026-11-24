@@ -202,18 +202,6 @@ end GlobalTheory.SqStepArith
 namespace GlobalTheory.SqStepArith
 
 open Formalism.L2.Host in
-theorem levelLe_mul {L : Type} [Field L] [NumberField L] {a b : HChar L} {w : HeightOneSpectrum (𝓞 L)} {n : ℕ}
-    (ha : a.LevelLe w n) (hb : b.LevelLe w n) : (a * b).LevelLe w n := fun x hx h => by
-  change a.loc w x * b.loc w x = 1
-  rw [ha x hx h, hb x hx h, one_mul]
-
-open Formalism.L2.Host in
-theorem levelLe_inv {L : Type} [Field L] [NumberField L] {a : HChar L} {w : HeightOneSpectrum (𝓞 L)} {n : ℕ}
-    (ha : a.LevelLe w n) : (a⁻¹).LevelLe w n := fun x hx h => by
-  change (a.loc w x)⁻¹ = 1
-  rw [ha x hx h, inv_one]
-
-open Formalism.L2.Host in
 theorem levelLe_mono {L : Type} [Field L] [NumberField L] {a : HChar L} {w : HeightOneSpectrum (𝓞 L)} {m n : ℕ}
     (ha : a.LevelLe w m) (hmn : m ≤ n) : a.LevelLe w n := fun x hx h =>
   ha x hx (h.trans (WithZero.exp_le_exp.2 (by omega)))
@@ -227,11 +215,11 @@ theorem nuH_levelLe_two {D : D7} {T : Type} {Lc : LevCh D T} {sc : Consts} (G : 
   have hxi : (Lc.xiH t).LevelLe PP 1 := hL.xi_tame t PP
   refine ⟨?_, fun h => hchi.2 ?_⟩
   · rw [nuH, div_eq_mul_inv]
-    exact levelLe_mul (levelLe_mul (levelLe_mono hmu (by omega)) (levelLe_mono hxi (by omega))) (levelLe_inv hchi.1)
+    exact _root_.Formalism.L2.Host.HChar.LevelLe.mul (_root_.Formalism.L2.Host.HChar.LevelLe.mul (levelLe_mono hmu (by omega)) (levelLe_mono hxi (by omega))) (_root_.Formalism.L2.Host.HChar.LevelLe.inv hchi.1)
   · have e : G.ch.chiH (D.R.m - i) = Lc.C.mu0 j * Lc.xiH t / nuH G t i j := by
       rw [nuH, div_div_cancel]
     rw [e, div_eq_mul_inv]
-    exact levelLe_mul (levelLe_mul hmu hxi) (levelLe_inv h)
+    exact _root_.Formalism.L2.Host.HChar.LevelLe.mul (_root_.Formalism.L2.Host.HChar.LevelLe.mul hmu hxi) (_root_.Formalism.L2.Host.HChar.LevelLe.inv h)
 
 
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField in
@@ -485,7 +473,7 @@ theorem _root_.GlobalTheory.T.base_place_character_factor : ∀ {D : D7} {T : Ty
       g' ∣ ((Ideal.absNorm v.1.asIdeal : ℕ) : 𝓞 D.what₂.LL) ^ condExp G.pl v.1 ∧
       ((chrW (GlobalTheory.SqStep.chs G i j μ₀).ν (Bs.τ v) (Units.map (Int.castRingHom _).toMonoidHom s) : ℂ) * eps Bs.ψ (chrW (GlobalTheory.SqStep.chs G i j μ₀).ν (Bs.τ v)) z) =
         D.what₂.embLL (b * ((g : D.what₂.LL) / (g' : D.what₂.LL))) * ((chrW (GlobalTheory.SqStep.chs G i j t).ν (Bs.τ v) (Units.map (Int.castRingHom _).toMonoidHom s) : ℂ) * eps Bs.ψ (chrW (GlobalTheory.SqStep.chs G i j t).ν (Bs.τ v)) z) := by
-  first | exact @GlobalTheory.SqStepArith.base_place_factor_zero | exact GlobalTheory.SqStepArith.base_place_factor_zero | (intros; apply GlobalTheory.SqStepArith.base_place_factor_zero <;> assumption)
+  first | exact @GlobalTheory.SqStepArith.base_place_factor_zero
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.BasePlaceCharacterFactorStatement =====
@@ -511,7 +499,7 @@ theorem _root_.GlobalTheory.T.squareStepChar_idealValue_eq_base_mul_rootOfUnity 
     ∀ (W : G.Weil) (S : GridChoice W Set.univ), NumbersIn D.what₂.embLL S μ₀ → ∀ (i j : Fin D.R.m) (t : T)
     (𝔞 : FractionalIdeal (nonZeroDivisors (𝓞 D.host.E)) D.host.E), ∃ b : D.what₂.LL, (∃ n : ℕ, 0 < n ∧ b ^ n = 1) ∧
       ((idealVal (GlobalTheory.SqStep.chs G i j μ₀).ν 𝔞 : ℂˣ) : ℂ) = D.what₂.embLL b * ((idealVal (GlobalTheory.SqStep.chs G i j t).ν 𝔞 : ℂˣ) : ℂ) := by
-  first | exact @GlobalTheory.SqStepIdeal.idealVal_chs_base | exact GlobalTheory.SqStepIdeal.idealVal_chs_base | (intros; apply GlobalTheory.SqStepIdeal.idealVal_chs_base <;> assumption)
+  first | exact @GlobalTheory.SqStepIdeal.idealVal_chs_base
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.SquareStepCharIdealValueEqBaseMulRootOfUnityStatement =====
@@ -541,7 +529,7 @@ theorem _root_.GlobalTheory.T.localGaussSum_integer_dvd_residueCard_pow : ∀ {F
       (ν x : ℂ) ∈ Set.range σ) →
     (∀ ζ : ℂ, ζ ^ (Ideal.absNorm v.asIdeal ^ GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.condExp ν) = 1 → ζ ∈ Set.range σ) →
     ∃ g g' : 𝓞 K, σ g = gauss ψ ν ∧ g * g' = ((Ideal.absNorm v.asIdeal : ℕ) : 𝓞 K) ^ GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.condExp ν := by
-  first | exact @GlobalTheory.GaussDiv.gauss_dvd_pow | exact GlobalTheory.GaussDiv.gauss_dvd_pow | (intros; apply GlobalTheory.GaussDiv.gauss_dvd_pow <;> assumption)
+  first | exact @GlobalTheory.GaussDiv.gauss_dvd_pow
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalGaussSumIntegerDvdResidueCardPowStatement =====
@@ -640,7 +628,7 @@ theorem _root_.GlobalTheory.T.gaussSum_stepCharacter_twistPlace_dvd : ∀ {D : D
       GlobalTheory.AdelicU.splitPrime τ ∈ locPl G t → GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.condExp (chrW (GlobalTheory.SqStep.chs G i j t).ν τ) = 1 →
       ∃ g : 𝓞 D.what₂.LL, D.what₂.embLL (g : D.what₂.LL) = gauss ψ (chrW (GlobalTheory.SqStep.chs G i j t).ν τ) ∧
         g ∣ ((Ideal.absNorm v.asIdeal : ℕ) : 𝓞 D.what₂.LL) := by
-  first | exact @GlobalTheory.TwistGaussInt.gauss_dvd | exact GlobalTheory.TwistGaussInt.gauss_dvd | (intros; apply GlobalTheory.TwistGaussInt.gauss_dvd <;> assumption)
+  first | exact @GlobalTheory.TwistGaussInt.gauss_dvd
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.GaussSumStepCharacterTwistPlaceDvdStatement =====
@@ -712,7 +700,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels (Chars Base stepFa
 theorem _root_.GlobalTheory.T.mu0_and_chiH_unrAt_outside_S0 : ∀ {D : D7} {T : Type} {Lc : LevCh D T} {sc : Consts} (G : GridData Lc sc) {μ₀ : T}, Lc.Is μ₀ →
     ∀ (i j : Fin D.R.m) (t : T) (w : HeightOneSpectrum (𝓞 D.host.E)), w ∈ Lc.Q t → w.under (𝓞 D.host.F) ∉ G.pl.S0 →
       (Lc.C.mu0 j).UnrAt w ∧ (G.ch.chiH (D.R.m - i)).UnrAt w := by
-  first | exact @GlobalTheory.TwistUnr.mu0_chiH_unrAt | exact GlobalTheory.TwistUnr.mu0_chiH_unrAt | (intros; apply GlobalTheory.TwistUnr.mu0_chiH_unrAt <;> assumption)
+  first | exact @GlobalTheory.TwistUnr.mu0_chiH_unrAt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.Mu0ChiHUnramifiedOutsideStatement =====
@@ -981,7 +969,7 @@ theorem _root_.GlobalTheory.T.stepCharacter_uniformiserValue_unit_away_twist : �
       GlobalTheory.AdelicU.splitPrime τ ∈ twPl G t →
       ∃ x : D.what₂.LL, D.what₂.embLL x = ((chrW (GlobalTheory.SqStep.chs G i j t).ν τ (unifAt v) : ℂˣ) : ℂ) ∧
         GlobalTheory.Square.IsAwayUnit (Qn G t) x := by
-  first | exact @GlobalTheory.TwistStepVal.step_val | exact GlobalTheory.TwistStepVal.step_val | (intros; apply GlobalTheory.TwistStepVal.step_val <;> assumption)
+  first | exact @GlobalTheory.TwistStepVal.step_val
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.StepCharacterUniformiserValueUnitAwayTwistStatement =====
@@ -1070,7 +1058,7 @@ theorem _root_.GlobalTheory.T.twistPlace_stepCharacter_conductorExponent_one : �
     ∀ (i j : Fin D.R.m) (t : T) {v : HeightOneSpectrum (𝓞 D.host.F)} (τ : D.host.E →ₐ[D.host.F] Fv D.host.F v),
       (Lc.C.mu0 j).UnrAt (GlobalTheory.AdelicU.splitPrime τ) → (G.ch.chiH (D.R.m - i)).UnrAt (GlobalTheory.AdelicU.splitPrime τ) →
       GlobalTheory.AdelicU.splitPrime τ ∈ Lc.Q t → GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.condExp (chrW (GlobalTheory.SqStep.chs G i j t).ν τ) = 1 := by
-  first | exact @GlobalTheory.TwistCond.condExp_twist_eq_one | exact GlobalTheory.TwistCond.condExp_twist_eq_one | (intros; apply GlobalTheory.TwistCond.condExp_twist_eq_one <;> assumption)
+  first | exact @GlobalTheory.TwistCond.condExp_twist_eq_one
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TwistPlaceStepCharacterConductorExponentOneStatement =====
@@ -1147,7 +1135,7 @@ theorem twist_factor : ∀ {D : D7} {T : Type} {Lc : LevCh D T} {sc : Consts} (G
     have hn : ∀ n : ℕ, GlobalTheory.Square.IsAwayUnit (Qn G t) ((q : D.what₂.LL) ^ n) := by
       intro n
       have h1 : (((q : 𝓞 D.what₂.LL) ^ n : 𝓞 D.what₂.LL) : D.what₂.LL) = (q : D.what₂.LL) ^ n := by
-        simp only [RingOfIntegers.coe_eq_algebraMap, map_pow, map_natCast]
+        simp only [map_pow, map_natCast]
       rw [← h1]
       apply GlobalTheory.Square.AwayClosure.of_dvd (k := n)
       exact pow_dvd_pow_of_dvd (Nat.cast_dvd_cast hqd) n
@@ -1198,7 +1186,7 @@ theorem _root_.GlobalTheory.T.twistPlace_stepFactor_inverse_awayUnit : ∀ {D : 
     (Bs : Base D.host.F D.host.E), GlobalTheory.SqStep.BaseFits G W i j t Bs → ∀ (v : Bs.P), v.1 ∈ (GlobalTheory.SqStep.chs G i j t).T →
     v.1 ∉ G.pl.S0 → ∀ (s : ℤˣ) (z : ℤ), ((chrW (GlobalTheory.SqStep.chs G i j t).ν (Bs.τ v) (Units.map (Int.castRingHom _).toMonoidHom s) : ℂ) * eps Bs.ψ (chrW (GlobalTheory.SqStep.chs G i j t).ν (Bs.τ v)) z) ≠ 0 → ∃ b : D.what₂.LL, GlobalTheory.Square.IsAwayUnit (Qn G t) b ∧
       D.what₂.embLL b * ((chrW (GlobalTheory.SqStep.chs G i j t).ν (Bs.τ v) (Units.map (Int.castRingHom _).toMonoidHom s) : ℂ) * eps Bs.ψ (chrW (GlobalTheory.SqStep.chs G i j t).ν (Bs.τ v)) z) = 1 := by
-  first | exact @GlobalTheory.SqTwist.twist_factor | exact GlobalTheory.SqTwist.twist_factor | (intros; apply GlobalTheory.SqTwist.twist_factor <;> assumption)
+  first | exact @GlobalTheory.SqTwist.twist_factor
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TwistPlaceStepFactorInverseAwayUnitStatement =====
@@ -1379,7 +1367,7 @@ theorem _root_.GlobalTheory.T.thetaStepFactor_ratio_unit_gaussSumQuotient : GBig
       GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.stepFac Bs (GlobalTheory.SqStep.chs G i j t) e₁ e₂ s 𝔟 𝔠 z ≠ 0 →
       GlobalTheory.Square.StepRatio D.what₂.embLL (Qn G t) G.pl.S0 (condExp G.pl) (fun v => Ideal.absNorm v.asIdeal)
         (GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.stepFac Bs (GlobalTheory.SqStep.chs G i j μ₀) e₁ e₂ s 𝔟 𝔠 z) (GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.stepFac Bs (GlobalTheory.SqStep.chs G i j t) e₁ e₂ s 𝔟 𝔠 z) := by
-  first | exact @GlobalTheory.SqStepArith.stepFac_ratio | exact GlobalTheory.SqStepArith.stepFac_ratio | (intros; apply GlobalTheory.SqStepArith.stepFac_ratio <;> assumption)
+  first | exact @GlobalTheory.SqStepArith.stepFac_ratio
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaStepFactorRatioUnitGaussSumQuotientStatement =====

@@ -157,7 +157,7 @@ open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.tempered_rep_tempered_parameter : ∀ (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (A : ValuationSubring Ω) (w : HeightOneSpectrum (𝓞 E)) (h : IsPlaceOver A w) (rc : IrrGL (k := w.adicCompletion E) → WD h), IsRec h rc → ∀ (n : ℕ) (σ : IrrRep (GL (Fin n) (w.adicCompletion E))), GlobalTheory.LocGL.IsTemperedGL σ.ρ → (rc (cls σ)).tempered := by
-  first | exact @GlobalTheory.LocLanglands.tempered_of_isTemperedGL | exact GlobalTheory.LocLanglands.tempered_of_isTemperedGL | (intros; apply GlobalTheory.LocLanglands.tempered_of_isTemperedGL <;> assumption)
+  first | exact @GlobalTheory.LocLanglands.tempered_of_isTemperedGL
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.TemperedRepTemperedParameterStatement =====
@@ -220,7 +220,7 @@ theorem locG_rankOne_eq_rcAt {hL : GlobalTheory.Published.LocalLanglandsGL} {D :
       rw [hf', Multiset.singleton_inj, Units.val_inj, inv_inj] at hf
       rw [HChar.val_mul, HChar.val_inv, hf, mul_inv_cancel]
   have hcomp : IsComp χ w (χ.loc w) := ⟨GlobalTheory.CuspRep.ParLaws.isSmoothChar_loc χ w, fun x => rfl⟩
-  obtain ⟨ξ₀, -, huniq, -⟩ := GlobalTheory.T.heckeChar_localComponent_exists_unique_unitary D.host.E χ w
+  obtain ⟨ξ₀, -, huniq, -⟩ := _root_.GlobalTheory.HeckeComp.main D.host.E χ w
   have hξ : ξ = χ.loc w := (huniq _ h).trans (huniq _ hcomp).symm
   subst hξ
   rw [hloc, GlobalTheory.CuspRep.ParLaws.locPar_ofChar, rcAt]

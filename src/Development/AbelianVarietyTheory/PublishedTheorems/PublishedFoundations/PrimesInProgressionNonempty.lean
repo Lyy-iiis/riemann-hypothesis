@@ -67,27 +67,20 @@ def Linnik : Prop :=
   ∃ C L : ℝ, 0 < C ∧ 0 < L ∧ ∀ a q : ℕ, 1 ≤ a → 1 ≤ q → a.Coprime q →
     (leastPrimeMod a q : ℝ) ≤ C * (q : ℝ) ^ L
 
+theorem nat_sInf_le_iff {s : Set ℕ} (hs : s.Nonempty) {b : ℝ} :
+    ↑(sInf s) ≤ b ↔ ∃ n ∈ s, ↑n ≤ b :=
+  ⟨fun h => ⟨_, Nat.sInf_mem hs, h⟩,
+    fun ⟨_, hn, h⟩ => (Nat.mono_cast (Nat.sInf_le hn)).trans h⟩
+
 private theorem exists_prime_modEq_of_coprime (a q : ℕ) (hq : 1 ≤ q) (h : a.Coprime q) :
-    ∃ p : ℕ, p.Prime ∧ p ≡ a [MOD q] := by
-  haveI : NeZero q := ⟨by omega⟩
-  have hu : IsUnit (a : ZMod q) := (ZMod.isUnit_iff_coprime a q).2 h
-  obtain ⟨p, -, hp, hpa⟩ := Nat.forall_exists_prime_gt_and_eq_mod hu 0
-  exact ⟨p, hp, (ZMod.natCast_eq_natCast_iff p a q).1 hpa⟩
+    ∃ p : ℕ, p.Prime ∧ p ≡ a [MOD q] :=
+  (Nat.infinite_setOfPred_prime_and_modEq (ne_of_gt hq) h).nonempty
 
 theorem _root_.GlobalTheory.Published.linnik_iff_exists_prime : _root_.GlobalTheory.Published.Linnik ↔
     ∃ C L : ℝ, 0 < C ∧ 0 < L ∧ ∀ a q : ℕ, 1 ≤ a → 1 ≤ q → a.Coprime q →
       ∃ p : ℕ, p.Prime ∧ p ≡ a [MOD q] ∧ (p : ℝ) ≤ C * (q : ℝ) ^ L := by
-  constructor
-  · rintro ⟨C, L, hC, hL, hb⟩
-    refine ⟨C, L, hC, hL, fun a q ha hq h => ?_⟩
-    have hne : (_root_.GlobalTheory.Published.primesInProgression a q).Nonempty :=
-      exists_prime_modEq_of_coprime a q hq h
-    have hmem := Nat.sInf_mem hne
-    exact ⟨_, hmem.1, hmem.2, hb a q ha hq h⟩
-  · rintro ⟨C, L, hC, hL, hb⟩
-    refine ⟨C, L, hC, hL, fun a q ha hq h => ?_⟩
-    obtain ⟨p, hp, hpa, hpC⟩ := hb a q ha hq h
-    have hle : _root_.GlobalTheory.Published.leastPrimeMod a q ≤ p := Nat.sInf_le ⟨hp, hpa⟩
-    exact le_trans (by exact_mod_cast hle) hpC
+  simp only [Linnik, ← and_assoc]
+  congr! with C L a q ha hq h
+  exact nat_sInf_le_iff (s := primesInProgression a q) (exists_prime_modEq_of_coprime a q hq h)
 
 end GlobalTheory.Published

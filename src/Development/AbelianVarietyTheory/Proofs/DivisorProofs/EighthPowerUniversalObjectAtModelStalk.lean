@@ -68,6 +68,7 @@ import Development.AbelianVarietyTheory.Proofs.AbelianSchemeLawProofs.PolBaseCha
 import Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsSpecializesIsLocalization
 import Development.AbelianVarietyTheory.Proofs.ModuliProofs.SiegelPrePullbackPrincipalRingChange
 import Development.AbelianVarietyTheory.Proofs.ModuliProofs.ThetaLevelShapePrimitivityPullbackDescent
+import Mathlib.CategoryTheory.Monoidal.Opposite.Mon
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AbelianVarietyTheory.Proofs.UniformizationProofs.IsSemiAbelianOfIsPowGrp, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsEighthPowerProjectionsExtendFromGeneric, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsEighthPowerProjectionsExtendFromGenericStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.EighthPowerUniversalObjectAtModelStalk
@@ -219,13 +220,13 @@ open Classical
 
 
 theorem _root_.GlobalTheory.T.exists_eighth_power_projections_extend_from_generic : ∀ (R : Type) [CommRing R] [IsDomain R] [IsNoetherianRing R] [IsIntegrallyClosed R] (G C : Over (Sp R)) [GrpObj G] [IsCommMonObj G] [GrpObj C] [IsCommMonObj C], IsSemiAbelian G → IsAbelianScheme C → ∀ pr' : Fin 8 → ((Over.pullback (jK R)).obj G ⟶ (Over.pullback (jK R)).obj C), (∀ a, IsMonHom (pr' a)) → (∀ (T' : Over (Sp (FractionRing R))) (y : Fin 8 → (T' ⟶ (Over.pullback (jK R)).obj C)), ∃! x : T' ⟶ (Over.pullback (jK R)).obj G, ∀ a, x ≫ pr' a = y a) → ∃ prO : Fin 8 → (G ⟶ C), (∀ a, IsMonHom (prO a)) ∧ (∀ a, (Over.pullback (jK R)).map (prO a) = pr' a) ∧ ∀ (T' : Over (Sp R)) (y : Fin 8 → (T' ⟶ C)), ∃! x : T' ⟶ G, ∀ a, x ≫ prO a = y a := by
-  first | exact @GlobalTheory.PowExtend.exists_pow_projections | exact GlobalTheory.PowExtend.exists_pow_projections | (intros; apply GlobalTheory.PowExtend.exists_pow_projections <;> assumption)
+  first | exact @GlobalTheory.PowExtend.exists_pow_projections
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsEighthPowerProjectionsExtendFromGenericStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.EighthPowerUniversalObjectAtModelStalk =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.EighthPowerUniversalObjectAtModelStalk", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.SharpOverIff\nimport Development.AbelianVarietyTheory.Proofs.AbelianSchemeLawProofs.PolBaseChangeOfRelAmpleLocal\nimport Development.AbelianVarietyTheory.Proofs.CubicalLineBundles.IsAbelianSchemeAndExtendOfGenericHoms\nimport Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsSpecializesIsLocalization\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.EighthPowerProjectionsGroupPullbackStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ElementaryMatrixEndomorphismGroupPullbackTranspo\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ElementaryMatrixEndomorphismGroupPullbackTranspoStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsEighthPowerProjectionsExtendFromGenericStatement\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUniqueHomExtensionOfIsOpenImmersion\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HasDivisorOfForallCompleteDvrPoints\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.LineBundleIsoEighthPowerGroupPullbackStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SquareDecompositionExtendsFromGenericFibreSemiAb\nimport Development.AbelianVarietyTheory.Proofs.ModuliProofs.SiegelPrePullbackPrincipalRingChange\nimport Development.AbelianVarietyTheory.Proofs.ModuliProofs.ThetaLevelShapePrimitivityPullbackDescent\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.EighthPowerUniversalObjectAtModelStalk", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.SharpOverIff\nimport Development.AbelianVarietyTheory.Proofs.AbelianSchemeLawProofs.PolBaseChangeOfRelAmpleLocal\nimport Development.AbelianVarietyTheory.Proofs.CubicalLineBundles.IsAbelianSchemeAndExtendOfGenericHoms\nimport Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsSpecializesIsLocalization\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.EighthPowerProjectionsGroupPullbackStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ElementaryMatrixEndomorphismGroupPullbackTranspo\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ElementaryMatrixEndomorphismGroupPullbackTranspoStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsEighthPowerProjectionsExtendFromGenericStatement\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUniqueHomExtensionOfIsOpenImmersion\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HasDivisorOfForallCompleteDvrPoints\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.LineBundleIsoEighthPowerGroupPullbackStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SquareDecompositionExtendsFromGenericFibreSemiAb\nimport Development.AbelianVarietyTheory.Proofs.ModuliProofs.SiegelPrePullbackPrincipalRingChange\nimport Development.AbelianVarietyTheory.Proofs.ModuliProofs.ThetaLevelShapePrimitivityPullbackDescent\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.CategoryTheory.Monoidal.Opposite.Mon\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -241,15 +242,6 @@ open MonObj
 noncomputable section
 
 namespace GlobalTheory.Poinc.Eq8.StalkPow
-
-theorem lbIso_pull_of_comp {X Y Z : Scheme.{0}} {L : LB X} {M : LB Y} {a : Y ⟶ X} (h : LBIso M (L.pull a)) (j : Z ⟶ Y)
-    {a' : Z ⟶ X} (e : a' = j ≫ a) : LBIso (M.pull j) (L.pull a') :=
-  LBIso.chartPull (ReciprocityTheory.ChartRestriction.G.Geo.Tor.chartPullPull M j j rfl)
-    (ReciprocityTheory.ChartRestriction.G.Geo.Tor.chartPullSame L _ (fun _ => a) _ j fun _ => e) h
-
-theorem tensor_left_hom_ext {S : Scheme.{0}} {A : Over S} {X : Scheme.{0}} {a b : X ⟶ (A ⊗ A).left}
-    (h₁ : a ≫ (fst A A).left = b ≫ (fst A A).left) (h₂ : a ≫ (snd A A).left = b ≫ (snd A A).left) : a = b := by
-  apply pullback.hom_ext <;> assumption
 
 theorem exists_isSquare {S S' : Scheme.{0}} {G : Over S} {G' : Over S'} {f : S' ⟶ S} (h : G'.left ⟶ G.left)
     (w : h ≫ G.hom = G'.hom ≫ f) : ∃ h₂ : (G' ⊗ G').left ⟶ (G ⊗ G).left, IsSquare h h₂ := by
@@ -325,13 +317,13 @@ theorem exists_siegPB_compare : ∀ {h M₁ : ℕ} {B B₁ B₂ : Type} [CommRin
     pullback.condition
   refine ⟨_, χ₂, χ₂', hχ, hsq, hsq', ?_⟩
   have e : χ₂' ≫ φ₂₁ = χ₂ ≫ φ₂₂ := by
-    apply tensor_left_hom_ext
+    apply _root_.GlobalTheory.GrpSpread.sq_ext
     · rw [Category.assoc, hsq₁.1, ← Category.assoc, hsq'.1, Category.assoc, Category.assoc, hsq₂.1, ← Category.assoc χ₂,
         hsq.1, Category.assoc, hχ1]
     · rw [Category.assoc, hsq₁.2, ← Category.assoc, hsq'.2, Category.assoc, Category.assoc, hsq₂.2, ← Category.assoc χ₂,
         hsq.2, Category.assoc, hχ1]
-  have B1 := lbIso_pull_of_comp hP₁ χ₂' rfl
-  have B2 := lbIso_pull_of_comp hP₂ χ₂ e
+  have B1 := _root_.GlobalTheory.Ex.GenericFibre.lbIso_pull hP₁ χ₂' rfl
+  have B2 := _root_.GlobalTheory.Ex.GenericFibre.lbIso_pull hP₂ χ₂ e
   exact LBIso.trans (pull_isLB o₁.isLB _) (pull_isLB o.isLB _) (pull_isLB o₂.isLB _) B1 B2.symm
 
 theorem eighth_power_at_stalk : ∀ (g n : ℕ) (o : Type) [CommRing o] (ζ : o) (F : SFam g n ζ) (W : Matrix (Fin 8) (Fin 8) ℤ), ∀ (o' Ω : Type) [CommRing o'] [Field Ω] [Algebra o' Ω] [ArithBase o' Ω] (S : ThetaSys o' Ω) (ρ : S.Real) (u : Sp S.R ⟶ F.X) c pr, SharpBy F W ρ.P u c pr → ∀ (M : RatModel o' Ω) (U₀ : M.Z.Opens) (EE : M.Lat S.J) (FinalForm : ZHOut ρ M U₀ EE), S.Over₀ M U₀ → ∀ (V : M.Z.Opens) (v : V.toScheme ⟶ F.X), (∀ x : Sp Ω ⟶ V.toScheme, x ≫ V.ι = M.pt → x ≫ v = spMap S.R.val.toRingHom ≫ u) → ∀ z : V.toScheme, ∃ (cO : SiegPre g n ζ ((V.toScheme.fromSpecStalk z ≫ v) ≫ F.s)) (prO : Fin 8 → ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G ⟶ cO.A)), SiegPB cO F.univ (V.toScheme.fromSpecStalk z ≫ v) ∧ (∀ a, IsMonHom (prO a)) ∧ (∀ (T' : Over (Spec (V.toScheme.presheaf.stalk z))) (y : Fin 8 → (T' ⟶ cO.A)), ∃! x : T' ⟶ (Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G, ∀ a, x ≫ prO a = y a) ∧ LBIso (FinalForm.L.L.pull (pullback.fst FinalForm.G.hom (V.toScheme.fromSpecStalk z ≫ V.ι))) (LB.LinComb cO.P (K := Fin 8 × Fin 8) (fun ab => (lift (prO ab.1) (prO ab.2)).left) (fun ab => W ab.1 ab.2)) ∧ ∀ (a b : Fin 8) (f : FinalForm.G ⟶ FinalForm.G), MatOn FinalForm pr a b f → MatEnd prO a b ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).map f) := by
@@ -384,13 +376,13 @@ theorem eighth_power_at_stalk : ∀ (g n : ℕ) (o : Type) [CommRing o] (ζ : o)
     have hLB0 : (FinalForm.L.L.pull (pullback.fst FinalForm.G.hom (V.toScheme.fromSpecStalk z ≫ V.ι))).IsLB := pull_isLB FinalForm.L.isLB _
     have hLB1 : (LB.LinComb cO.P (K := Fin 8 × Fin 8) (fun ab => (lift (prO ab.1) (prO ab.2)).left) (fun ab => W ab.1 ab.2)).IsLB :=
       LB.isLB_linComb cO.isLB _ _
-    have A1 := lbIso_pull_of_comp (GlobalTheory.PolBaseChange.lbIso_refl hLB0)
+    have A1 := _root_.GlobalTheory.Ex.GenericFibre.lbIso_pull (GlobalTheory.PolBaseChange.lbIso_refl hLB0)
       (pullback.fst ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G).hom (jK (V.toScheme.presheaf.stalk z))) hψφ
-    have A2 := lbIso_pull_of_comp (GlobalTheory.PolBaseChange.lbIso_refl (pull_isLB FinalForm.L.isLB FinalForm.φ)) ψ rfl
-    have A3 := lbIso_pull_of_comp (L := ρ.P.L) (a := pullback.fst ρ.P.A.hom FinalForm.u₀) ⟨FinalForm.w, FinalForm.w_gen⟩ ψ rfl
+    have A2 := _root_.GlobalTheory.Ex.GenericFibre.lbIso_pull (GlobalTheory.PolBaseChange.lbIso_refl (pull_isLB FinalForm.L.isLB FinalForm.φ)) ψ rfl
+    have A3 := _root_.GlobalTheory.Ex.GenericFibre.lbIso_pull (L := ρ.P.L) (a := pullback.fst ρ.P.A.hom FinalForm.u₀) ⟨FinalForm.w, FinalForm.w_gen⟩ ψ rfl
     have X1 := LBIso.trans (pull_isLB hLB0 _) (pull_isLB FinalForm.L.isLB _) (pull_isLB ρ.P.isLB _) A1
       (LBIso.trans (pull_isLB FinalForm.L.isLB _) (pull_isLB (pull_isLB FinalForm.L.isLB _) _) (pull_isLB ρ.P.isLB _) A2.symm A3)
-    have X2 := GlobalTheory.T.lineBundleIso_eighthPower_groupPullback c.P (cO.P.pull χ₂') ρ.P.L _ pr pr' W c.isLB (pull_isLB cO.isLB _) ρ.P.isLB
+    have X2 := _root_.GlobalTheory.Poinc.Eq8.lbIso_eighth_pull c.P (cO.P.pull χ₂') ρ.P.L _ pr pr' W c.isLB (pull_isLB cO.isLB _) ρ.P.isLB
       (pull_isLB hLB0 _) hsq hP hpr'χ X1 hLc
     have X3 := GlobalTheory.ShapePull.iso_linComb_pull (GlobalTheory.PolBaseChange.lbIso_refl (pull_isLB cO.isLB χ₂'))
       (K := Fin 8 × Fin 8) (fun ab => (lift (pr' ab.1) (pr' ab.2)).left) (fun ab => (lift (prO ab.1) (prO ab.2)).left)
@@ -399,7 +391,7 @@ theorem eighth_power_at_stalk : ∀ (g n : ℕ) (o : Type) [CommRing o] (ζ : o)
         have e₁ : ∀ q, (pr' q).left ≫ pullback.fst cO.A.hom (jK (V.toScheme.presheaf.stalk z)) =
             pullback.fst ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G).hom (jK (V.toScheme.presheaf.stalk z)) ≫ (prO q).left := by
           intro q; rw [← hprOg q]; exact pullback.lift_fst _ _ _
-        apply tensor_left_hom_ext
+        apply _root_.GlobalTheory.GrpSpread.sq_ext
         · rw [Category.assoc _ χ₂', hsq'.1, ← Category.assoc (Over.Hom.left (lift (pr' ab.1) (pr' ab.2))),
             ← Over.comp_left, lift_fst, e₁, Category.assoc (pullback.fst _ _) (Over.Hom.left (lift (prO ab.1) (prO ab.2))),
             ← Over.comp_left, lift_fst]
@@ -439,8 +431,8 @@ theorem eighth_power_at_stalk : ∀ (g n : ℕ) (o : Type) [CommRing o] (ζ : o)
       apply GlobalTheory.MatEndPull.ext_of_pb (isGrpPullback_pullback cO.A (jK (V.toScheme.presheaf.stalk z)))
       have e1 : ((Over.pullback (jK (V.toScheme.presheaf.stalk z))).map (1 : ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G) ⟶ cO.A)).left ≫ pullback.fst cO.A.hom (jK (V.toScheme.presheaf.stalk z)) =
           pullback.fst ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G).hom (jK (V.toScheme.presheaf.stalk z)) ≫ (1 : ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G) ⟶ cO.A).left := pullback.lift_fst _ _ _
-      rw [e1, GlobalTheory.MatEndPull.one_left_eq, GlobalTheory.MatEndPull.one_left_eq, Category.assoc ((Over.pullback (jK (V.toScheme.presheaf.stalk z))).obj ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G)).hom,
-        GlobalTheory.MatEndPull.unit_pull (isGrpPullback_pullback cO.A (jK (V.toScheme.presheaf.stalk z))), ← Category.assoc (pullback.fst _ _) ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G).hom,
+      rw [e1, _root_.ReciprocityTheory.ChartRestriction.G.Chart.one_left', _root_.ReciprocityTheory.ChartRestriction.G.Chart.one_left', Category.assoc ((Over.pullback (jK (V.toScheme.presheaf.stalk z))).obj ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G)).hom,
+        _root_.ReciprocityTheory.ChartRestriction.G.Out.PullGtPf.IsGrpPullback.one_left (isGrpPullback_pullback cO.A (jK (V.toScheme.presheaf.stalk z))), ← Category.assoc (pullback.fst _ _) ((Over.pullback (V.toScheme.fromSpecStalk z ≫ V.ι)).obj FinalForm.G).hom,
         pullback.condition]
       exact Category.assoc _ _ _
     haveI : IsMonHom f := hfm

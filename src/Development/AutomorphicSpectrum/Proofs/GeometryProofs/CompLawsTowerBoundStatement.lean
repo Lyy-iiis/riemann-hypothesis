@@ -50,6 +50,7 @@ import Formalism.LocalToGlobal.ProjectiveLattices.FrameCharts
 import Mathlib.RingTheory.Valuation.LocalSubring
 import Mathlib.Tactic.Basify
 import Mathlib.Tactic.Linter.Style
+import Mathlib.Algebra.Azumaya.Basic
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicSpectrum.Proofs.GeometryProofs.FrameOfGeoRead, Development.AutomorphicSpectrum.Proofs.GeometryProofs.CompLawsTowerBound, Development.AutomorphicSpectrum.Proofs.GeometryProofs.CompLawsTowerBoundStatement
@@ -80,7 +81,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.FrameOfGeoRead =====
 
 -- ===== clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.CompLawsTowerBound =====
--- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.GeometryProofs.CompLawsTowerBound", "h": "module\n\npublic import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.GeoRead\npublic import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.ModelSmall\npublic import Development.AbelianVarietyTheory.Definitions.RegularCharts.Reframe\npublic import Development.AutomorphicSpectrum.Definitions.DivisibilityTowers.GoodOrigin\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.MemSuppOnIffIdemMulOfNatural\nimport Development.AbelianVarietyTheory.Proofs.GenericRegularity.EvaluationLawsGenericFramesAtlasHold\nimport Development.AbelianVarietyTheory.Proofs.GenericRegularity.FrameBorelGroupoidProperties\nimport Development.AbelianVarietyTheory.Proofs.HomogeneousIdeals.IsDomainAndIsIntegrallyClosedAtPrimeOfSmoothOfCo\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsIntegerExponentSectionOfChartRegular\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.FrameOfGeoRead\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.LabelSigBijective\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.RootOriginGenericFrameRelayStatement\nimport Formalism.LocalToGlobal.ProjectiveLattices.FrameCharts\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.Valuation.LocalSubring\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AutomorphicSpectrum.Definitions.GlobalGeometry.DefiniteFormStabilizerFiniteAwayFromP\n\n"}
+-- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.GeometryProofs.CompLawsTowerBound", "h": "module\n\npublic import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.GeoRead\npublic import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.ModelSmall\npublic import Development.AbelianVarietyTheory.Definitions.RegularCharts.Reframe\npublic import Development.AutomorphicSpectrum.Definitions.DivisibilityTowers.GoodOrigin\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.MemSuppOnIffIdemMulOfNatural\nimport Development.AbelianVarietyTheory.Proofs.GenericRegularity.EvaluationLawsGenericFramesAtlasHold\nimport Development.AbelianVarietyTheory.Proofs.GenericRegularity.FrameBorelGroupoidProperties\nimport Development.AbelianVarietyTheory.Proofs.HomogeneousIdeals.IsDomainAndIsIntegrallyClosedAtPrimeOfSmoothOfCo\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsIntegerExponentSectionOfChartRegular\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.FrameOfGeoRead\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.LabelSigBijective\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.RootOriginGenericFrameRelayStatement\nimport Formalism.LocalToGlobal.ProjectiveLattices.FrameCharts\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.Valuation.LocalSubring\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AutomorphicSpectrum.Definitions.GlobalGeometry.DefiniteFormStabilizerFiniteAwayFromP\nimport Mathlib.Algebra.Azumaya.Basic\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -225,13 +226,6 @@ theorem exOf_root (u : GlobalTheory.AllWt.Weight Dw) (r : RootIx Dw) :
       omega)
     simp [HodgeCpt.rootSgn, h, this]
 
-theorem zpow_sum_exp {G I : Type} [CommGroup G] (g : G) (s : Finset I) (f : I → ℤ) :
-    g ^ (∑ i ∈ s, f i) = ∏ i ∈ s, g ^ f i := by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert i s hi ih => rw [Finset.sum_insert hi, Finset.prod_insert hi, zpow_add, ih]
-
 theorem unit_calc {G K : Type} [CommGroup G] [Fintype K] (tt ph : Ix Dw → G) (u : GlobalTheory.AllWt.Weight Dw)
     (v ee : RootIx Dw → G) (yy : K → G) (xd : RootIx Dw → K → ℤ) (a : K → ℤ)
     (hw : GlobalTheory.AllWt.exOf Dw u 0 none = 0)
@@ -254,7 +248,7 @@ theorem unit_calc {G K : Type} [CommGroup G] [Fintype K] (tt ph : Ix Dw → G) (
     simp only [ha, ← Finset.prod_zpow]
     rw [Finset.prod_comm]
     refine Finset.prod_congr rfl fun k _ => ?_
-    rw [← Finset.sum_neg_distrib, zpow_sum_exp]
+    rw [← Finset.sum_neg_distrib, _root_.GlobalTheory.SharpFamRel.zpow_finsetSum]
     refine Finset.prod_congr rfl fun r _ => ?_
     rw [← zpow_mul]
     congr 1
@@ -310,7 +304,7 @@ theorem chart_reg : _root_.GlobalTheory.CompanionTheory.Ar.Top.Given → ∀ (E 
       have := hV x
       rw [← hφ] at this
       exact this
-    choose v hv using GlobalTheory.T.root_origin_generic_frame_relay E H Dw l Xo c Y (o.S B) (T.M B b) (o.Sys b) (o.Fx b) (o.toTowerOrigin.Or B b) Fr h C V (φ.comp C.R.val) z _ hψ hd hVψ cc h1 h2
+    choose v hv using _root_.GlobalTheory.CompanionTheory.Ar.Plug.KeyRootZ.diag_root_line E H Dw l Xo c Y (o.S B) (T.M B b) (o.Sys b) (o.Fx b) (o.toTowerOrigin.Or B b) Fr h C V (φ.comp C.R.val) z _ hψ hd hVψ cc h1 h2
     let yy : (T.M B b).K → ((T.M B b).Ω)ˣ := fun k => Units.mk0 _ (h1 k)
     let ee : RootIx Dw → ((T.M B b).Ω)ˣ := fun r => Units.mk0 _ ((o.toTowerOrigin.Or B b).lines r).1
     let ph : Ix Dw → ((T.M B b).Ω)ˣ := fun i => Units.map (φ : Om C.Z →* (T.M B b).Ω) (C.t i)
@@ -418,8 +412,7 @@ theorem exists_section_of_trace : _root_.GlobalTheory.CompanionTheory.Ar.Top.Giv
     Formalism.L2.Pj.evalAt_mul _ _ _ _ _
   rw [h4, h3, one_mul, hgv Z, hbb]
 
-theorem _root_.GlobalTheory.CompanionTheory.Relay.comp_laws_tower_bound : _root_.GlobalTheory.CompanionTheory.Ar.Top.Given → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l) (r : ℕ) (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) (h : GenFrEx Xo c) (e : Comp Xo c → Rul Xo c), CompLaws U h e → ∀ (Y : Model Xo c (algebraMap (𝓞 c.F) c.F)) [DecidableEq (CMType H)] (T : Top.RootTower (CMType H) (Dw.p + Dw.q)) (o : _root_.GlobalTheory.CompanionTheory.Ar.Top.GoodOrigin Y T) (B : ℕ) (b : T.Comp) (Fr : Small.GenFrame (o.toTowerOrigin.Or B b)) (Z : Comp Xo c) (Rd : Reading Fr h Z) (_ : GeoRead Rd) (u : GlobalTheory.AllWt.Weight Dw), ∀ s ∈ chartLatNm (T.M B b).y (degOf (T.M B b) u) 1, ∃ f ∈ GlobalTheory.AllWt.secZ Xo c (GlobalTheory.AllWt.exOf Dw u 0), f ∈ GlobalTheory.AllWt.suppOn Z ∧ evC h Z f = trOf Rd u s :=
-  GlobalTheory.CompanionTheory.Ar.Plug.exists_section_of_trace
+alias _root_.GlobalTheory.CompanionTheory.Relay.comp_laws_tower_bound := _root_.GlobalTheory.CompanionTheory.Ar.Plug.exists_section_of_trace
 
 end GlobalTheory.CompanionTheory.Ar.Plug
 end -- clump:auto
@@ -440,8 +433,6 @@ open Formalism.L2.Pj ReciprocityTheory.ChartRestriction.G ReciprocityTheory.Char
 open GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.Rec GlobalTheory.CompanionTheory.Ar.Plug
 attribute [-instance] GlobalTheory.CompHt.fintypePsi
 
-theorem _root_.GlobalTheory.T.comp_laws_tower_bound : Top.Given → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l) (r : ℕ) (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) (h : GenFrEx Xo c) (e : Comp Xo c → Rul Xo c), CompLaws U h e → ∀ (Y : Model Xo c (algebraMap (𝓞 c.F) c.F)) [DecidableEq (CMType H)] (T : Top.RootTower (CMType H) (Dw.p + Dw.q)) (o : Top.GoodOrigin Y T) (B : ℕ) (b : T.Comp) (Fr : Small.GenFrame (o.toTowerOrigin.Or B b)) (Z : Comp Xo c) (Rd : Reading Fr h Z) (_ : GeoRead Rd) (u : GlobalTheory.AllWt.Weight Dw), ∀ s ∈ chartLatNm (T.M B b).y (degOf (T.M B b) u) 1, ∃ f ∈ GlobalTheory.AllWt.secZ Xo c (GlobalTheory.AllWt.exOf Dw u 0), f ∈ GlobalTheory.AllWt.suppOn Z ∧ evC h Z f = trOf Rd u s := by
-  first | exact @GlobalTheory.CompanionTheory.Relay.comp_laws_tower_bound | exact GlobalTheory.CompanionTheory.Relay.comp_laws_tower_bound | (intros; apply GlobalTheory.CompanionTheory.Relay.comp_laws_tower_bound <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.CompLawsTowerBoundStatement =====

@@ -66,7 +66,7 @@ section Gen
 
 variable {E : Type} [Field E] [NumberField E] [StarRing E] {S : HSpace E} {r : ℕ}
 
-theorem herm (x y : S.V) : S.hT x y = star (S.hT y x) := Formalism.MainNotions.LatticeGluingRadicals.b_herm y x
+theorem herm (x y : S.V) : S.hT x y = star (S.hT y x) := _root_.Formalism.MainNotions.LatticeGluingRadicals.a_herm y x
 
 def pr (e f : Fin r → S.V) : S.V →ₗ[E] S.V :=
   LinearMap.id - ∑ a, (S.hT (f a)).smulRight (e a) - ∑ a, (S.hT (e a)).smulRight (f a)
@@ -174,8 +174,8 @@ theorem expand (h : DualFr e f) (c d c' d' : Fin r → E) (w w' : S.V)
   have h1 := perp_e' hwe
   have h2 := perp_e' (e := f) hwf
 
-  simp [map_add (f := _), map_sum, LinearMap.add_apply, LinearMap.sum_apply, LinearMap.map_smulₛₗ₂, map_smul,
-  h.1, h.2.1, h.2.2, fe h, hwe, hwf, hwe', hwf', h1, h2, Finset.sum_add_distrib]
+  simp [map_add (f := _), map_sum, LinearMap.add_apply, LinearMap.sum_apply, map_smul,
+  h.1, h.2.1, h.2.2, fe h, hwe', hwf', h1, h2, Finset.sum_add_distrib]
   rw [add_comm]
   congr 1 <;> refine Finset.sum_congr rfl fun x _ => ?_ <;> simp [starRingEnd_apply, mul_comm]
 
@@ -298,13 +298,10 @@ theorem map_latSpan (aa : Fin r → FractionalIdeal (nonZeroDivisors (𝓞 E)) E
   · rintro ⟨a, x, hx, rfl⟩
     exact ⟨_, ⟨a, x, hx, rfl⟩, by simp⟩
 
-theorem mem_orth_iff {U : Submodule E S.V} {v : S.V} : v ∈ orth S U ↔ ∀ x ∈ U, S.hT x v = 0 := by
-  simp [orth, Submodule.mem_iInf]
-
 variable {T : E} (F0 : FlagG S r T)
 
 theorem perp_iff {v : S.V} : v ∈ orth S F0.X ↔ ∀ a, S.hT (F0.e a) v = 0 := by
-  rw [mem_orth_iff]
+  rw [_root_.Formalism.MainNotions.LatticeGluingRadicals.p_mem_orth]
   constructor
   · intro h a; exact h _ (Submodule.subset_span ⟨a, rfl⟩)
   · intro h x hx; exact (perpX h hx).1
@@ -558,7 +555,7 @@ open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNo
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.row_lattices_same_inner_differ_by_rational_unipotent : ∀ (D : D7) (T : D.host.E) (F0 : FlagG (VS D) D.R.rS T) (Λa Λb : LV D) (σ : GV D), IsRowLat D F0 Λa → IsRowLat D F0 Λb → Adapt σ (lf D F0) (lf D F0) → Lsub (Formalism.HermitianLatticesTheory.gmap σ Λa) (lf D F0) = Lsub Λb (lf D F0) → ∃ n ∈ NRat (lf D F0), Formalism.HermitianLatticesTheory.gmap (n * σ) Λa = Λb := by
-  first | exact @GlobalTheory.Unfold.sameInner_unip | exact GlobalTheory.Unfold.sameInner_unip | (intros; apply GlobalTheory.Unfold.sameInner_unip <;> assumption)
+  first | exact @GlobalTheory.Unfold.sameInner_unip
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.RowLatticesSameInnerDifferByRationalUnipotentStatement =====

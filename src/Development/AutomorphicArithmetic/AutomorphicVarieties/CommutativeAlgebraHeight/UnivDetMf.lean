@@ -1401,7 +1401,7 @@ theorem UpperTheory.V.CA.univDet :
       have hu' := hu.map (TrivSqZeroExt.fstHom (ResidueField O) (ResidueField O) (ResidueField O))
       have h0 : TrivSqZeroExt.fstHom (ResidueField O) (ResidueField O) (ResidueField O)
           (x - algebraMap O (DualNumber (ResidueField O)) (cst (TrivSqZeroExt.fst x))) = 0 := by
-        simp [TrivSqZeroExt.algebraMap_eq_inl, cst_spec]
+        simp
         rw [sub_eq_zero]
         exact (cst_spec _).symm
       rw [h0] at hu'
@@ -1423,7 +1423,7 @@ theorem UpperTheory.V.CA.univDet :
       intro E hE i g
       obtain ⟨E0, hE0⟩ := exists_comap_quot E (U : Subgroup G) (hU E hE.cont (hred E hE))
       rw [← hE0, coord_comap, coord_comap]
-      simp [QuotientGroup.out_eq']
+      simp
     apply d_gext
     intro g i h1 h2
     change coord D (i, g) = coord D' (i, g)
@@ -1444,9 +1444,7 @@ section -- clump:auto
 
 open TensorProduct IsLocalRing Polynomial UpperTheory.V.W UpperTheory.V.Alg UpperTheory.V.CA
 
-private theorem lc_of_ker {G M : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Group M]
-    (φ : G →* M) (h : IsOpen (φ.ker : Set G)) : IsLocallyConstant φ :=
-  _root_.UpperTheory.Reformulated.B.LocallyConstantOfKernel.lc_of_ker φ h
+private alias lc_of_ker := _root_.UpperTheory.Reformulated.B.LocallyConstantOfKernel.lc_of_ker
 
 private theorem chi_ofRep {n : ℕ} {A G : Type} [CommRing A] [Group G] (ρ : G →* Matrix (Fin n) (Fin n) A) (g : G) :
     (GDet.ofRep ρ).chi (MonoidAlgebra.single g 1) =

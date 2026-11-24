@@ -664,7 +664,6 @@ theorem UpperTheory.V.Th.Sp.msp :
       linear_combination hp + hq
     · intro p v hp
       rw [map_mul, MvPolynomial.eval₂_mul, MvPolynomial.eval₂_X, map_mul]
-      beta_reduce
       linear_combination (ψ (MvPolynomial.X v)) * hp +
         h (MvPolynomial.eval₂ (x : B →+* O) (fun p => α p.1 p.2) p) * hδX v
   have hk := key a
@@ -841,10 +840,10 @@ theorem UpperTheory.V.Th.Sp.trp :
       split_ifs <;> simp
   have hchar : (A.map f).charpoly = ((Finset.univ.val.map fun i => f (α i)).map fun a => X - C a).prod := by
     rw [Matrix.charpoly_map, h, Polynomial.map_prod]
-    simp [Finset.prod_eq_multiset_prod, Multiset.map_map, Function.comp_def]
+    simp [Finset.prod_eq_multiset_prod, Function.comp_def]
 
   rw [htr, haeval, GlobalTheory.CompanionTheory.TraceSpec.trace_aeval_matrix, hchar, Polynomial.roots_multiset_prod_X_sub_C, map_sum]
-  simp [Multiset.map_map, Finset.sum_eq_multiset_sum, Function.comp_def]
+  simp [Finset.sum_eq_multiset_sum, Function.comp_def]
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.TheoremsMuLinked.SpectralEigenvalues.TrPoly =====
@@ -1028,7 +1027,7 @@ private theorem chi_rep {n : ℕ} {A G : Type} [CommRing A] [Group G] (ρ : G �
   rw [map_sub, MonoidAlgebra.mapRingHom_single, Matrix.charpoly]
   congr 1
   ext i j : 2
-  by_cases h : i = j <;> simp [GDet.repAlg, Matrix.charmatrix, h, Matrix.one_apply, Matrix.diagonal_apply]
+  by_cases h : i = j <;> simp [GDet.repAlg, Matrix.charmatrix, h]
 
 private theorem g_dvd {O : Type} [CommRing O] {q n : ℕ} (Nq : Fin q → ℕ) (α : Fin q → Fin n → O) :
     (∏ j, ∏ i, ∏ k ∈ Finset.univ.erase i, (α j i - α j k)) ∣ fEl Nq α :=

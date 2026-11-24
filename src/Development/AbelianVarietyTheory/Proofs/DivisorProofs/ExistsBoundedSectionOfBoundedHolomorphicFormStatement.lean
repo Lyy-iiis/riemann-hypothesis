@@ -213,12 +213,6 @@ theorem lact_mul {E : Type} [Field E] {Ψ : Finset (E →+* ℂ)} {r : ℕ} (γ 
     (γ : Matrix (Fin r) (Fin r) E).map τ.1 * ((γ' : Matrix (Fin r) (Fin r) E).map τ.1 * mat x τ)
   rw [Units.val_mul, Matrix.map_mul, Matrix.mul_assoc]
 
-theorem archM_mul {D : D7} (V : HSp D) (θ : Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ) (g h : GA D V) :
-    archM V θ (g * h) = archM V θ g * archM V θ h := by
-  unfold archM
-  rw [map_mul, Units.val_mul, Matrix.map_mul]
-
-
 open ReciprocityTheory.ChartRestriction.G.FD in
 theorem exists_sec (D : D7) (θ : InfFam D) (V : HSp D) (S : D.what₂.Tau → SPar) (M : DSModel V S)
     (w : D.what₂.Tau → Fin V.rank → ℤ) (Comp : Type) (X : Comp → Data D.host.E V.rank)
@@ -275,7 +269,7 @@ theorem exists_sec (D : D7) (θ : InfFam D) (V : HSp D) (S : D.what₂.Tau → S
       rw [hx]
       funext ρ
       have := hy' ρ (ε ρ) (hε ρ)
-      rw [archM_mul, hLa] at this
+      rw [_root_.GlobalTheory.PointAtPlace.archM_mul, hLa] at this
       exact this.symm
     · rw [hf _ hLu, hfP _ (hUG _), hmul, hmue _ hLu, hx, mul_assoc]
       simp only [hLa]
@@ -444,7 +438,7 @@ open scoped TensorProduct InnerProductSpace ContDiff
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_boundedSection_of_boundedHolomorphicForm : ∀ (D : D7) (θ : InfFam D) (V : HSp D) (S : D.what₂.Tau → SPar) (M : DSModel V S) (w : D.what₂.Tau → Fin V.rank → ℤ) (r : ℕ) (hr : V.rank = r) (Comp : Type) (X : Comp → ReciprocityTheory.ChartRestriction.G.FD.Data D.host.E r) (la : ∀ k, ReciprocityTheory.ChartRestriction.G.FD.Wt (X k).Ψ r) (dict : GA D V → Σ k, ReciprocityTheory.ChartRestriction.G.FD.Frame (X k).Ψ r) (mu : GA D V → ℂ) (c : Comp → ℂ) (Kf : Subgroup (GA D V)), HolShape M → GoodDict θ M w hr X la dict mu c Kf → ∀ φ, HolForm θ M w (Kf : Set (GA D V)) (fun _ => 1) φ → ∃ P : FDSec X, P ∈ offZero X ∧ (∀ k, (X k).IsBddSec (la k) (P k)) ∧ adel V dict (muPin V dict mu c) P = φ := by
-  first | exact @GlobalTheory.HolDict.IntoSec.exists_bddSec_adel_eq | exact GlobalTheory.HolDict.IntoSec.exists_bddSec_adel_eq | (intros; apply GlobalTheory.HolDict.IntoSec.exists_bddSec_adel_eq <;> assumption)
+  first | exact @GlobalTheory.HolDict.IntoSec.exists_bddSec_adel_eq
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsBoundedSectionOfBoundedHolomorphicFormStatement =====

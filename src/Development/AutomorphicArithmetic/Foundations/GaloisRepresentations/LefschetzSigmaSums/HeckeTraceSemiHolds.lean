@@ -133,7 +133,7 @@ theorem conjRep_of : ConjRep := by
         simp [twMap]
       map_mul' := fun g h => by
         ext x
-        simp [twMap, Module.End.mul_apply] }
+        simp [twMap] }
   exact ⟨Tw σ V, twAdd σ V, twMod σ V, tw_finite σ V, ξ', toTw σ V, tw_smul σ V, fun g x => rfl⟩
 
 end UpperTheory.Gal.LocalSmoothExtension
@@ -213,7 +213,6 @@ theorem cxFlat_of : CxFlat := by
       else 0) S ?_
   intro z hz
   refine hS z ?_
-  beta_reduce at hz
   split_ifs at hz with hfix
   · have h12 := left_ne_zero_of_mul hz
     exact ⟨hfix, left_ne_zero_of_mul h12, right_ne_zero_of_mul h12⟩
@@ -854,7 +853,7 @@ private theorem rev_lin (r : ℂ) (hr : r ≠ 0) :
   · rw [revAt_le (by norm_num)]
     simp [coeff_X, coeff_C, coeff_one]
   · rw [revAt_eq_self_of_lt (by omega)]
-    simp [coeff_X, coeff_one, coeff_C]
+    simp [coeff_X, coeff_one]
 
 open Polynomial in
 private theorem rev_prod (s : Multiset ℂ) (hs : ∀ z ∈ s, z ≠ 0) :
@@ -1244,7 +1243,7 @@ theorem UpperTheory.Gal.LocalSmoothExtension.traceSemi_of :
       by_cases hjk : j = k
       · subst hjk
         simp
-      · simp [Finsupp.single_apply, hjk]
+      · simp [hjk]
 
     rw [LinearMap.trace_eq_matrix_trace ℂ b, LinearMap.trace_eq_matrix_trace ℂ b', Matrix.trace,
     Matrix.trace, map_sum]
@@ -1267,14 +1266,13 @@ section -- clump:auto
 
 namespace UpperTheory.Gal.LocalSmoothExtension
 
-theorem InvRoots_holds : InvRoots := invRoots_of
-theorem InvPolProps_holds : InvPolProps := invPolProps_of InvRoots_holds
+theorem InvPolProps_holds : InvPolProps := invPolProps_of _root_.UpperTheory.Gal.LocalSmoothExtension.invRoots_of
 theorem RootW_holds : RootW :=
-  rootW_of UpperTheory.Gal.W2.RootSumW_holds UpperTheory.Gal.W2.RootSumWOff_holds listsEx_of schWEq_of
+  rootW_of _root_.UpperTheory.Gal.W2.rootSumW_of _root_.UpperTheory.Gal.W2.rootSumWOff_of listsEx_of schWEq_of
 theorem EigOf_holds : EigOf := eigOf_of UpperTheory.Gal.CertificateRingHomMap.pProjOne_holds
 theorem CxLin_holds : CxLin := cxLin_of cxFlat_of
 theorem GroupTop_of (h₁ : GlobalTheory.RootSumWeights.MarkWeightedFixedPointEqDefinitePairOdd) (h₂ : GlobalTheory.LKDef.TraceDefinitePairsEqAutomorphicTrace) : GroupTop :=
-  groupTop_of h₁ h₂ RootW_holds InvRoots_holds InvPolProps_holds markRoots_of dPairPol_of dSumCongr_of testOf_of testOne_of
+  groupTop_of h₁ h₂ RootW_holds _root_.UpperTheory.Gal.LocalSmoothExtension.invRoots_of InvPolProps_holds markRoots_of dPairPol_of dSumCongr_of testOf_of testOne_of
 theorem HeckeTraceSemi_holds : HeckeTraceSemi := heckeTraceSemi_of traceSemi_of
 theorem SpecConj_holds : SpecConj :=
   specConj_of traceSemi_of conjRep_of HeckeTraceSemi_holds goodConj_of (schWConj_of schWEq_of) polyFnConj_of

@@ -95,6 +95,7 @@ import Mathlib.Tactic.ENatToNat
 import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.BlockMatrixMul
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.StabilizerVolume.TopoAF
 import Mathlib.Topology.Compactness.Paracompact
+import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.PolarPartIdentity
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterContinuousUnit, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterContinuousUnitStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterQuadraticTrace, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterQuadraticTraceStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CoefficientLeviEquivarianceStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CoefficientUnipotentLeviInvarianceStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ContinuousOnDifferentiableOnIntegral, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ContinuousOnDifferentiableOnIntegralStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.EisensteinFamilyHeightBound, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.EisensteinFamilyHeightBoundStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ExistsFirstBlockGroupEmbedding, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ExistsFirstBlockGroupEmbeddingStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPowerSummableRationalHermitian, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPowerSummableRationalHermitianStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPullbackFirstBlock, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPullbackFirstBlockStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.IntegrableOfSummableFundamentalDomain, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.IntegrableOfSummableFundamentalDomainStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPowerIntegrableWeylOrbit, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPowerIntegrableWeylOrbitStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightRightTranslateCompactBoundStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ParabolicUnipotentLeviFactorStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SchwartzHeightMajorantIntegrable, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SchwartzHeightMajorantIntegrableStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ShiftCommutesLeviEmbedding, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ShiftCommutesLeviEmbeddingStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ShiftUnipotentLeviCommutator, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ShiftUnipotentLeviCommutatorStatement, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.RegularSectionOfHeights
@@ -137,7 +138,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.centre_character_continuous_unit : ∀ (D : D7) (ρ : ℕ) (ψ : AddChar (AF D.host.F) ℂ), IsCharAF D.host.F ψ → ∀ b₀ : HermE D ρ,
   Continuous (chz ψ b₀) ∧ ∀ z, ‖chz ψ b₀ z‖ = 1 := by
-  first | exact @GlobalTheory.CompanionTheory.CentreChar.continuous_and_norm_chz | exact GlobalTheory.CompanionTheory.CentreChar.continuous_and_norm_chz | (intros; apply GlobalTheory.CompanionTheory.CentreChar.continuous_and_norm_chz <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.CentreChar.continuous_and_norm_chz
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterContinuousUnitStatement =====
@@ -192,7 +193,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 theorem _root_.GlobalTheory.T.centre_character_quadratic_trace : ∀ (D : D7) (ρ p : ℕ) (ψ : AddChar (AF D.host.F) ℂ) (b₀ : HermE D ρ) (b : Mx D p p) (y : Mx D ρ p) (z₀ : hermA D ρ),
   z₀.1 = HMul.hMul (HMul.hMul y b : Mx D ρ p) (adj y) →
     chz ψ b₀ z₀ = ψ (halfTr (Matrix.trace (HMul.hMul b (pr b₀ y y) : Mx D p p))) := by
-  first | exact @GlobalTheory.CompanionTheory.ChzConj.chz_conj | exact GlobalTheory.CompanionTheory.ChzConj.chz_conj | (intros; apply GlobalTheory.CompanionTheory.ChzConj.chz_conj <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.ChzConj.chz_conj
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterQuadraticTraceStatement =====
@@ -214,7 +215,7 @@ theorem _root_.GlobalTheory.T.coefficient_levi_equivariance : ∀ (D : D7) (n ρ
   (χ : (AE D)ˣ →* Circle) (z : ℂ) (f : G D n → ℂ), IsLaw χ z f → ∀ (g₀ : G D p) (a : GL (Fin p) (AE D)),
   mat g₀ = blk4 a.1 0 0 (adj (a⁻¹).1) → ∀ x : G D n, Wz M m ψ b₀ f (M.emb g₀ * x) =
     (χ (Matrix.GeneralLinearGroup.det a) : ℂ) * npow (absA D (Matrix.GeneralLinearGroup.det a)) (z + (n : ℂ) / 2) * Wz M m ψ b₀ f x := by
-  first | exact @GlobalTheory.CompanionTheory.WzLevi.wz_emb | exact GlobalTheory.CompanionTheory.WzLevi.wz_emb | (intros; apply GlobalTheory.CompanionTheory.WzLevi.wz_emb <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WzLevi.wz_emb
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CoefficientLeviEquivarianceStatement =====
@@ -236,7 +237,7 @@ theorem _root_.GlobalTheory.T.coefficient_unipotent_levi_invariance : ∀ (D : D
   ∀ (b₀ : HermE D ρ) (χ : (AE D)ˣ →* Circle) (z : ℂ) (f : G D n → ℂ), IsLaw χ z f → ∀ (g₁ : G D p) (b : Mx D p p),
   mat g₁ = blk4 1 b 0 1 → ∀ (z₀ : hermA D ρ) (x₀ : Mx D ρ p) (x : G D n),
     Wz M m ψ b₀ f (M.nzx z₀ x₀ * M.emb g₁ * x) = chz ψ b₀ z₀ * Wz M m ψ b₀ f x := by
-  first | exact @GlobalTheory.CompanionTheory.WzHeis.wz_heis | exact GlobalTheory.CompanionTheory.WzHeis.wz_heis | (intros; apply GlobalTheory.CompanionTheory.WzHeis.wz_heis <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WzHeis.wz_heis
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CoefficientUnipotentLeviInvarianceStatement =====
@@ -318,7 +319,7 @@ theorem _root_.GlobalTheory.T.continuousOn_differentiableOn_parameter_integral :
   (∀ z₀ ∈ U, ∀ t₀ : T, ∃ V ∈ 𝓝 z₀, ∃ N ∈ 𝓝 t₀, ∃ w : Y → ℝ, Integrable w μ ∧ ∀ z ∈ V, ∀ t ∈ N, ∀ y, ‖F z t y‖ ≤ w y) →
   ContinuousOn (fun u : ℂ × T => ∫ y, F u.1 u.2 y ∂μ) (U ×ˢ Set.univ) ∧
     ∀ t, DifferentiableOn ℂ (fun z => ∫ y, F z t y ∂μ) U := by
-  first | exact @GlobalTheory.CompanionTheory.Param.continuousOn_differentiableOn_integral | exact GlobalTheory.CompanionTheory.Param.continuousOn_differentiableOn_integral | (intros; apply GlobalTheory.CompanionTheory.Param.continuousOn_differentiableOn_integral <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Param.continuousOn_differentiableOn_integral
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ContinuousOnDifferentiableOnIntegralStatement =====
@@ -408,7 +409,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 theorem _root_.GlobalTheory.T.eisenstein_family_height_bound : ∀ (D : D7) (n : ℕ) (H : G D n → ℝ≥0), IsHt H → (∃ C : Set (G D n), IsCompact C ∧ ∀ g, ∃ q ∈ P D n, ∃ c ∈ C, g = q * c) →
   ∀ (χ : (AE D)ˣ →* Circle) (s₁ : ℂ) (φ : G D n → ℂ), Continuous φ → IsLaw χ s₁ φ →
     ∃ B : ℝ, 0 ≤ B ∧ ∀ (z : ℂ) (g : G D n), ‖fam H φ s₁ z g‖ ≤ B * (H g : ℝ) ^ (z.re + (n : ℝ) / 2) := by
-  first | exact @GlobalTheory.CompanionTheory.FamMajorant.fam_majorant | exact GlobalTheory.CompanionTheory.FamMajorant.fam_majorant | (intros; apply GlobalTheory.CompanionTheory.FamMajorant.fam_majorant <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.FamMajorant.fam_majorant
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.EisensteinFamilyHeightBoundStatement =====
@@ -460,7 +461,7 @@ def firstMon (hn : ρ + p = n) : Mx D (ρ + ρ) (ρ + ρ) →* Mx D (n + n) (n +
     generalize b21 N = c'
     generalize b22 N = d'
     rw [submatrix_fromBlocks_mul, first_block_embedding_block, first_block_embedding_block, first_block_embedding_block, submatrix_fromBlocks_mul]
-    simp only [block_mul₂, bl_add, Matrix.mul_zero, Matrix.zero_mul, Matrix.mul_one, Matrix.one_mul, add_zero, zero_add]
+    simp only [block_mul₂, bl_add, Matrix.mul_zero, Matrix.zero_mul, Matrix.mul_one, add_zero, zero_add]
 
 theorem firstM_isU (hn : ρ + p = n) (M : Mx D (ρ + ρ) (ρ + ρ))
     (h : (adj M * blk4 0 1 (-1) 0 * M : Mx D (ρ + ρ) (ρ + ρ)) = blk4 0 1 (-1) 0) :
@@ -476,8 +477,8 @@ theorem firstM_isU (hn : ρ + p = n) (M : Mx D (ρ + ρ) (ρ + ρ))
   have o : bl hn (1 : Mx D ρ ρ) 0 0 (1 : Mx D p p) = 1 := blockRowSubstitution_one hn
   have m : bl hn (-1 : Mx D ρ ρ) 0 0 (-1 : Mx D p p) = -1 := blockMatrix_neg_one hn
   rw [first_block_embedding_block, adjoint_symplectic_block_product]
-  simp only [adj_bl, adj_one, adj_zero, block_mul₂, block_sub, bl_add, Matrix.mul_zero, Matrix.zero_mul, Matrix.mul_one,
-    Matrix.one_mul, add_zero, zero_add, sub_zero, zero_sub, sub_self, e1, e2, e3, e4, z, o, m]
+  simp only [adj_bl, adj_one, adj_zero, block_mul₂, block_sub, Matrix.mul_zero, Matrix.zero_mul, Matrix.mul_one,
+    add_zero, zero_add, sub_zero, zero_sub, sub_self, e1, e2, e3, e4, z, o, m]
 
 def firstF (hn : ρ + p = n) (g : G D ρ) : G D n :=
   mkG (Units.map (firstMon hn) (matHom _ D.sp.cm.sig (Jst D ρ) g)) (firstM_isU hn _ (isU_mat g))
@@ -563,8 +564,6 @@ namespace GlobalTheory.CompanionTheory.HermSum
 
 open GlobalTheory.StdUnn.Model (submatrix_fromBlocks_mul block_matrix_one)
 
-theorem mat_mul_block_decomposition {D : D7} {n : ℕ} (g h : G D n) : mat (g * h) = mat g * mat h := rfl
-
 theorem weyl_mul_inv {R : Type} [CommRing R] {k : ℕ} :
     blk4 (0 : Matrix (Fin k) (Fin k) R) 1 (-1) 0 * blk4 0 (-1) 1 0 = 1 := by
   rw [submatrix_fromBlocks_mul]
@@ -575,12 +574,9 @@ theorem weyl_conj {R : Type} [CommRing R] {k : ℕ} (d : Matrix (Fin k) (Fin k) 
   rw [submatrix_fromBlocks_mul, submatrix_fromBlocks_mul]
   simp
 
-private theorem mat_one_eq_one {D : D7} {n : ℕ} : mat (1 : G D n) = 1 := by
-  simp only [GlobalTheory.StdUnn.mat, map_one, Units.val_one]
-
 private theorem mat_inv_eq_of_mat_mul_eq_one {D : D7} {n : ℕ} (g : G D n) (M : Mx D (n + n) (n + n))
     (h : mat g * M = 1) : mat g⁻¹ = M := by
-  have h1 : mat g⁻¹ * mat g = 1 := by rw [← mat_mul_block_decomposition, inv_mul_cancel, mat_one_eq_one]
+  have h1 : mat g⁻¹ * mat g = 1 := by rw [← _root_.GlobalTheory.StdUnn.LeftInvSect.mat_mul, inv_mul_cancel, _root_.GlobalTheory.StdUnn.LeftInvSect.mat_one]
   calc mat g⁻¹ = mat g⁻¹ * (mat g * M) := by rw [h, mul_one]
     _ = M := by rw [← mul_assoc, h1, one_mul]
 
@@ -627,7 +623,7 @@ theorem summable_height_rpow : ∀ (D : D7) (ρ : ℕ) (H : G D ρ → ℝ≥0),
       push_cast
       ring
     rw [e2]
-    simp only [hΦ, e1, MonoidHom.one_apply, OneMemClass.coe_one, NNReal.coe_mul, GlobalTheory.Doubling.npow]
+    simp only [hΦ, e1, MonoidHom.one_apply, NNReal.coe_mul, GlobalTheory.Doubling.npow]
     rw [Real.mul_rpow (NNReal.coe_nonneg _) (NNReal.coe_nonneg _), Complex.ofReal_mul,
       ← Complex.ofReal_cpow (NNReal.coe_nonneg _)]
     simp
@@ -682,7 +678,7 @@ theorem summable_height_rpow : ∀ (D : D7) (ρ : ℕ) (H : G D ρ → ℝ≥0),
     have h2 : (w * nb ζ'.1) * (w * nb ζ.1)⁻¹ ∈ P D ρ := Subgroup.mem_subgroupOf.mp h1
     have hm : mat ((w * nb ζ'.1) * (w * nb ζ.1)⁻¹) =
         blk4 1 0 (-(((ζ'.1 : hermA D ρ) : Mx D ρ ρ) + -((ζ.1 : hermA D ρ) : Mx D ρ ρ))) 1 := by
-      rw [mul_inv_rev, mat_mul_block_decomposition, mat_mul_block_decomposition, mat_mul_block_decomposition, hw, hnb, hwinv, hnbinv ζ, ← mul_assoc,
+      rw [mul_inv_rev, _root_.GlobalTheory.StdUnn.LeftInvSect.mat_mul, _root_.GlobalTheory.StdUnn.LeftInvSect.mat_mul, _root_.GlobalTheory.StdUnn.LeftInvSect.mat_mul, hw, hnb, hwinv, hnbinv ζ, ← mul_assoc,
         mul_assoc (blk4 0 1 (-1) 0), GlobalTheory.CompanionTheory.PcB.block_unipotent_mul]
       exact weyl_conj _
     have h3 := eq_zero_of_mem_P_of_mat_eq_blk4 _ h2 _ hm
@@ -732,7 +728,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 theorem _root_.GlobalTheory.T.height_power_summable_rational_hermitian : ∀ (D : D7) (ρ : ℕ) (H : G D ρ → ℝ≥0), IsHt H → ∀ (w : G D ρ) (nb : hermA D ρ → G D ρ),
   mat w = blk4 0 1 (-1) 0 → (∀ z : hermA D ρ, mat (nb z) = blk4 1 z.1 0 1) → ∀ τ : ℝ, (ρ : ℝ) < τ →
     Summable (fun ζ : ratHerm D ρ => (H (w * nb ζ.1) : ℝ) ^ τ) := by
-  first | exact @GlobalTheory.CompanionTheory.HermSum.summable_height_rpow | exact GlobalTheory.CompanionTheory.HermSum.summable_height_rpow | (intros; apply GlobalTheory.CompanionTheory.HermSum.summable_height_rpow <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.HermSum.summable_height_rpow
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPowerSummableRationalHermitianStatement =====
@@ -816,7 +812,7 @@ theorem _root_.GlobalTheory.T.height_pullback_first_block : ∀ (D : D7) (n ρ p
   (∀ (h : G D ρ) (a b c d : Mx D ρ ρ), mat h = blk4 a b c d →
     mat (ι h) = blk4 (bl hn a 0 0 1) (bl hn b 0 0 0) (bl hn c 0 0 0) (bl hn d 0 0 1)) →
   ∀ H : G D n → ℝ≥0, IsHt H → IsHt (fun h : G D ρ => H (ι h)) := by
-  first | exact @GlobalTheory.CompanionTheory.HtPull.isHt_blockPull | exact GlobalTheory.CompanionTheory.HtPull.isHt_blockPull | (intros; apply GlobalTheory.CompanionTheory.HtPull.isHt_blockPull <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.HtPull.isHt_blockPull
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPullbackFirstBlockStatement =====
@@ -908,7 +904,7 @@ theorem _root_.GlobalTheory.T.integrable_of_summable_fundamental_domain : ∀ (D
   ∀ f : hermA D ρ → ℝ, Continuous f → (∀ z, 0 ≤ f z) → Summable (fun ζ : ratHerm D ρ => f ζ.1) →
   ∀ K : Set (hermA D ρ), (∀ x, ∃ γ ∈ ratHerm D ρ, γ + x ∈ K) → ∀ κ : ℝ, 0 ≤ κ →
     (∀ ζ ∈ ratHerm D ρ, ∀ z ∈ K, f (ζ + z) ≤ κ * f ζ) → Integrable f lz := by
-  first | exact @GlobalTheory.CompanionTheory.HermFD.integrable_of_periodisation_bound | exact GlobalTheory.CompanionTheory.HermFD.integrable_of_periodisation_bound | (intros; apply GlobalTheory.CompanionTheory.HermFD.integrable_of_periodisation_bound <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.HermFD.integrable_of_periodisation_bound
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.IntegrableOfSummableFundamentalDomainStatement =====
@@ -951,11 +947,11 @@ theorem integrable_height_rpow : ∀ (D : D7) (n ρ p : ℕ) (hn : ρ + p = n) (
     rw [Matrix.fromBlocks_one, Matrix.submatrix_one_equiv]
   have hJ1 : GlobalTheory.StdUnn.blk4 (0 : Mx D ρ ρ) 1 (-1) 0 * GlobalTheory.StdUnn.blk4 0 (-1) 1 0 = 1 := by
     rw [GlobalTheory.StdUnn.Model.submatrix_fromBlocks_mul]
-    simp only [zero_mul, mul_zero, one_mul, mul_one, zero_add, add_zero, neg_mul, mul_neg, neg_neg, neg_zero]
+    simp only [mul_zero, mul_one, zero_add, add_zero, mul_neg, neg_neg, neg_zero]
     exact hone
   have hJ2 : GlobalTheory.StdUnn.blk4 (0 : Mx D ρ ρ) (-1) 1 0 * GlobalTheory.StdUnn.blk4 0 1 (-1) 0 = 1 := by
     rw [GlobalTheory.StdUnn.Model.submatrix_fromBlocks_mul]
-    simp only [zero_mul, mul_zero, one_mul, mul_one, zero_add, add_zero, neg_mul, mul_neg, neg_neg, neg_zero]
+    simp only [mul_zero, mul_one, zero_add, add_zero, mul_neg, neg_neg, neg_zero]
     exact hone
   let u : GL (Fin (ρ + ρ)) (AE D) := ⟨GlobalTheory.StdUnn.blk4 0 1 (-1) 0, GlobalTheory.StdUnn.blk4 0 (-1) 1 0, hJ1, hJ2⟩
   have hu : GlobalTheory.MixModel.adj (u : Mx D (ρ + ρ) (ρ + ρ)) * GlobalTheory.StdUnn.blk4 0 1 (-1) 0 * (u : Mx D (ρ + ρ) (ρ + ρ)) =
@@ -963,7 +959,7 @@ theorem integrable_height_rpow : ∀ (D : D7) (n ρ p : ℕ) (hn : ρ + p = n) (
     show GlobalTheory.MixModel.adj (GlobalTheory.StdUnn.blk4 (0 : Mx D ρ ρ) 1 (-1) 0) * GlobalTheory.StdUnn.blk4 0 1 (-1) 0 *
       GlobalTheory.StdUnn.blk4 0 1 (-1) 0 = GlobalTheory.StdUnn.blk4 0 1 (-1) 0
     rw [GlobalTheory.CompanionTheory.JacobiMaps.adjoint_symplectic_block_product, hadj0, hadj1, hadjn1]
-    simp only [zero_mul, mul_zero, one_mul, mul_one, sub_zero, zero_sub, neg_neg, mul_neg, neg_mul, sub_self, neg_zero]
+    simp only [mul_zero, mul_one, sub_zero, zero_sub, neg_neg, mul_neg, sub_self, neg_zero]
   obtain ⟨ι, hιc, hιm⟩ := GlobalTheory.T.exists_first_block_group_embedding D n ρ p hn
   have hH' := GlobalTheory.T.height_pullback_first_block D n ρ p hn ι hιc hιm H hH
   let w' : G D ρ := GlobalTheory.CompanionTheory.JacobiMaps.mkG u hu
@@ -1023,7 +1019,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 theorem _root_.GlobalTheory.T.height_power_integrable_weyl_orbit : ∀ (D : D7) (n ρ p : ℕ) (hn : ρ + p = n) (M : Maps D hn) (m : Meas D ρ p) (H : G D n → ℝ≥0), IsHt H →
   (∃ C : Set (G D n), IsCompact C ∧ ∀ g, ∃ q ∈ P D n, ∃ c ∈ C, g = q * c) → ∀ τ : ℝ, (ρ : ℝ) < τ →
     Integrable (fun ζ : hermA D ρ => (H (M.w * M.nzx ζ 0) : ℝ) ^ τ) m.lz := by
-  first | exact @GlobalTheory.CompanionTheory.HermConv.integrable_height_rpow | exact GlobalTheory.CompanionTheory.HermConv.integrable_height_rpow | (intros; apply GlobalTheory.CompanionTheory.HermConv.integrable_height_rpow <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.HermConv.integrable_height_rpow
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPowerIntegrableWeylOrbitStatement =====
@@ -1043,7 +1039,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.height_right_translate_compact_bound : ∀ (D : D7) (n : ℕ) (H : G D n → ℝ≥0), IsHt H → (∃ C : Set (G D n), IsCompact C ∧ ∀ g, ∃ q ∈ P D n, ∃ c ∈ C, g = q * c) →
   ∀ C : Set (G D n), IsCompact C → ∃ κ : ℝ, 1 ≤ κ ∧ ∀ c ∈ C, ∀ x : G D n, (H (x * c) : ℝ) ≤ κ * (H x : ℝ) := by
-  first | exact @GlobalTheory.CompanionTheory.HtRightTranslate.height_mul_le | exact GlobalTheory.CompanionTheory.HtRightTranslate.height_mul_le | (intros; apply GlobalTheory.CompanionTheory.HtRightTranslate.height_mul_le <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.HtRightTranslate.height_mul_le
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightRightTranslateCompactBoundStatement =====
@@ -1063,7 +1059,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.parabolic_unipotent_levi_factor : ∀ (D : D7) (p : ℕ) (q : G D p), q ∈ P D p → ∀ a : GL (Fin p) (AE D), blkA (mat q) = a.1 →
   ∃ (g₁ g₂ : G D p) (b : Mx D p p), q = g₁ * g₂ ∧ mat g₁ = blk4 1 b 0 1 ∧ mat g₂ = blk4 a.1 0 0 (adj (a⁻¹).1) := by
-  first | exact @GlobalTheory.CompanionTheory.SiegelNM.unip_mul_levi | exact GlobalTheory.CompanionTheory.SiegelNM.unip_mul_levi | (intros; apply GlobalTheory.CompanionTheory.SiegelNM.unip_mul_levi <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.SiegelNM.unip_mul_levi
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ParabolicUnipotentLeviFactorStatement =====
@@ -1210,7 +1206,7 @@ theorem blockMatrix_conj_lowerUnipotent (hn : ρ + p = n) (α β : R) (h : α * 
         (bl hn (α • (1 : Matrix (Fin ρ) (Fin ρ) R)) 0 0 1) = bl hn 1 0 (α • c) 1 := by
   rw [blockMatrix_multiply, blockMatrix_multiply]
   congr 1
-  · simp [smul_smul, h, mul_comm β α]
+  · simp [smul_smul, h]
   · simp
   · simp
   · simp
@@ -1400,7 +1396,7 @@ theorem exists_shear_bound (D : D7) (n ρ p : ℕ) (hn : ρ + p = n) (M : Maps D
       (e0.symm '' (({0} : Set (D.what₂.Tau → Fin ρ → Fin p → ℂ)) ×ˢ S))) :=
     ⟨y₂, Or.inr ⟨(0, f), ⟨rfl, hsupp y hy⟩, rfl⟩, rfl⟩
   have hexp : M.sh y = e (Real.log r) * M.sh y₀ * e (-Real.log r) * M.sh y₂ := by
-    rw [← hsh₁, GlobalTheory.CompanionTheory.FJE.sh_add, ← hsum]
+    rw [← hsh₁, _root_.GlobalTheory.CompanionTheory.PcB.sh_mul, ← hsum]
   have hE : 0 ≤ Real.exp N * r ^ N := by positivity
   have hκ₀' : 0 ≤ κ₀ := zero_le_one.trans hκ₀
   have s1 := hb₀ _ hy₂C (x * e (Real.log r) * M.sh y₀ * e (-Real.log r))
@@ -1474,7 +1470,7 @@ theorem _root_.GlobalTheory.T.schwartz_height_majorant_integrable : ∀ (D : D7)
   ∀ H : G D n → ℝ≥0, IsHt H → (∃ C : Set (G D n), IsCompact C ∧ ∀ g, ∃ q ∈ P D n, ∃ c ∈ C, g = q * c) →
   ∀ Φ ∈ schwartzA θ ρ p, ∀ τ : ℝ, 0 ≤ τ → ∃ W : Mx D ρ p → ℝ, Integrable W m.μ ∧
     ∀ (x : G D n) (y : Mx D ρ p), (H (x * M.sh y) : ℝ) ^ τ * ‖Φ y‖ ≤ W y * (H x : ℝ) ^ τ := by
-  first | exact @GlobalTheory.CompanionTheory.ShearGrowth.height_shear_majorant | exact GlobalTheory.CompanionTheory.ShearGrowth.height_shear_majorant | (intros; apply GlobalTheory.CompanionTheory.ShearGrowth.height_shear_majorant <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.ShearGrowth.height_shear_majorant
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SchwartzHeightMajorantIntegrableStatement =====
@@ -1568,9 +1564,6 @@ open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
-theorem _root_.GlobalTheory.T.shift_commutes_levi_embedding : ∀ (D : D7) (n ρ p : ℕ) (hn : ρ + p = n) (M : Maps D hn) (g₀ : G D p) (a : GL (Fin p) (AE D)),
-  mat g₀ = blk4 a.1 0 0 (adj (a⁻¹).1) → ∀ y : Mx D ρ p, M.sh y * M.emb g₀ = M.emb g₀ * M.sh (HMul.hMul y a.1 : Mx D ρ p) := by
-  first | exact @GlobalTheory.CompanionTheory.PcB.sh_emb_levi | exact GlobalTheory.CompanionTheory.PcB.sh_emb_levi | (intros; apply GlobalTheory.CompanionTheory.PcB.sh_emb_levi <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ShiftCommutesLeviEmbeddingStatement =====
@@ -1632,13 +1625,13 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 theorem _root_.GlobalTheory.T.shift_unipotent_levi_commutator : ∀ (D : D7) (n ρ p : ℕ) (hn : ρ + p = n) (M : Maps D hn) (g₁ : G D p) (b : Mx D p p), mat g₁ = blk4 1 b 0 1 →
   ∀ y : Mx D ρ p, ∃ (z₀ : hermA D ρ) (x₀ : Mx D ρ p), M.sh y * M.emb g₁ = M.nzx z₀ x₀ * M.emb g₁ * M.sh y ∧
     z₀.1 = HMul.hMul (HMul.hMul y b : Mx D ρ p) (adj y) := by
-  first | exact @GlobalTheory.CompanionTheory.ShEmbUnip.sh_emb_unip | exact GlobalTheory.CompanionTheory.ShEmbUnip.sh_emb_unip | (intros; apply GlobalTheory.CompanionTheory.ShEmbUnip.sh_emb_unip <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.ShEmbUnip.sh_emb_unip
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ShiftUnipotentLeviCommutatorStatement =====
 
 -- ===== clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.RegularSectionOfHeights =====
--- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.BlockDecomposition.RegularSectionOfHeights", "h": "module\n\npublic import Development.WeilBound.RepresentationTheoryGL.RegularisedSiegelWeil.ThetaIdempotents.MapsExist\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntegralMulRight\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterContinuousUnitStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterQuadraticTraceStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CoefficientLeviEquivarianceStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CoefficientUnipotentLeviInvarianceStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ContinuousOnDifferentiableOnIntegralStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.EisensteinFamilyHeightBoundStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPowerIntegrableWeylOrbitStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightRightTranslateCompactBoundStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ParabolicUnipotentLeviFactorStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SchwartzHeightMajorantIntegrableStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ShiftCommutesLeviEmbeddingStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ShiftUnipotentLeviCommutatorStatement\nimport Formalism.LocalToGlobal.IndefiniteReal.FinitePlaces.IdemElt\nimport Formalism.PeriodIntegrals.UnitaryGroupMassFormula.AdelicLocalCompactness.T2SpaceTensorProductFiniteExtension\nimport Formalism.PeriodIntegrals.UnitaryGroupMassFormula.StabilizerVolume.TopoAF\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Compactness.Paracompact\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.BlockDecomposition.RegularSectionOfHeights", "h": "module\n\npublic import Development.WeilBound.RepresentationTheoryGL.RegularisedSiegelWeil.ThetaIdempotents.MapsExist\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntegralMulRight\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterContinuousUnitStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterQuadraticTraceStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CoefficientLeviEquivarianceStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CoefficientUnipotentLeviInvarianceStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ContinuousOnDifferentiableOnIntegralStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.EisensteinFamilyHeightBoundStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightPowerIntegrableWeylOrbitStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HeightRightTranslateCompactBoundStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ParabolicUnipotentLeviFactorStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SchwartzHeightMajorantIntegrableStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ShiftCommutesLeviEmbeddingStatement\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ShiftUnipotentLeviCommutatorStatement\nimport Formalism.LocalToGlobal.IndefiniteReal.FinitePlaces.IdemElt\nimport Formalism.PeriodIntegrals.UnitaryGroupMassFormula.AdelicLocalCompactness.T2SpaceTensorProductFiniteExtension\nimport Formalism.PeriodIntegrals.UnitaryGroupMassFormula.StabilizerVolume.TopoAF\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Compactness.Paracompact\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.PolarPartIdentity\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1729,9 +1722,6 @@ section Main
 
 variable {hn : ρ + p = n} (M : Maps D hn) (m : Meas D ρ p) {ψ : AddChar (AF D.host.F) ℂ} (b₀ : HermE D ρ)
 
-theorem continuous_jacobi_map_origin : Continuous fun ζ : hermA D ρ => M.nzx ζ 0 :=
-  M.nzx_cont.comp (continuous_id.prodMk continuous_const)
-
 theorem wz_family (hψ : IsCharAF D.host.F ψ) {H : G D n → ℝ≥0} (hH : IsHt H)
     (hcpt : ∃ C : Set (G D n), IsCompact C ∧ ∀ g, ∃ q ∈ P D n, ∃ c ∈ C, g = q * c)
     {χ : (AE D)ˣ →* Circle} {s₁ : ℂ} {φ : G D n → ℂ} (hφ : Continuous φ) (hlaw : IsLaw χ s₁ φ) :
@@ -1747,7 +1737,7 @@ theorem wz_family (hψ : IsCharAF D.host.F ψ) {H : G D n → ℝ≥0} (hH : IsH
     (fun z c ζ => fam H φ s₁ z (M.w * M.nzx ζ 0 * c) * conj (chz ψ b₀ ζ)) ?_ ?_ ?_
   · refine Continuous.continuousOn (Continuous.mul ?_ ?_)
     · refine (continuous_fam hH hφ s₁).comp (continuous_fst.prodMk ?_)
-      exact (continuous_const.mul ((continuous_jacobi_map_origin M).comp (continuous_snd.comp continuous_snd))).mul
+      exact (continuous_const.mul ((_root_.GlobalTheory.CompanionTheory.PcB.continuous_nz M).comp (continuous_snd.comp continuous_snd))).mul
         (continuous_fst.comp continuous_snd)
     · exact Complex.continuous_conj.comp (hcz.comp (continuous_snd.comp continuous_snd))
   · exact fun c ζ => ((differentiable_fam hH φ s₁ _).mul_const _).differentiableOn
@@ -1768,25 +1758,6 @@ theorem wz_family (hψ : IsCharAF D.host.F ψ) {H : G D n → ℝ≥0} (hH : IsH
     exact mul_nonneg hB (Real.rpow_nonneg (by linarith) _)
 
 end Main
-
-theorem isLaw_fam {H : G D n → ℝ≥0} (hH : IsHt H) {χ : (AE D)ˣ →* Circle} {s₁ : ℂ} {φ : G D n → ℂ} (hl : IsLaw χ s₁ φ) (z : ℂ) :
-    IsLaw χ z (fam H φ s₁ z) := by
-  intro q hq a ha g
-  have h1 : absA D (Matrix.GeneralLinearGroup.det a) * absA D (Matrix.GeneralLinearGroup.det a)⁻¹ = 1 := by
-    rw [← map_mul]; simp
-  have hne : (absA D (Matrix.GeneralLinearGroup.det a) : ℝ) ≠ 0 := by
-    exact_mod_cast left_ne_zero_of_mul_eq_one h1
-  have hc : ((absA D (Matrix.GeneralLinearGroup.det a) : ℝ) : ℂ) ≠ 0 := by exact_mod_cast hne
-  simp only [fam]
-  rw [hH.2.2 q hq a ha g, hl q hq a ha g]
-  unfold npow
-  push_cast
-  rw [Complex.mul_cpow_ofReal_nonneg (NNReal.coe_nonneg _) (NNReal.coe_nonneg _)]
-  have e : ((absA D (Matrix.GeneralLinearGroup.det a) : ℝ) : ℂ) ^ (z + (n : ℂ) / 2) =
-      ((absA D (Matrix.GeneralLinearGroup.det a) : ℝ) : ℂ) ^ (z - s₁) *
-        ((absA D (Matrix.GeneralLinearGroup.det a) : ℝ) : ℂ) ^ (s₁ + (n : ℂ) / 2) := by
-    rw [← Complex.cpow_add _ _ hc]; congr 1; ring
-  rw [e]; ring
 
 section Main2
 
@@ -1883,7 +1854,7 @@ theorem rsec_levi {χ χ' : (AE D)ˣ →* Circle} {θ : InfFam D} {Ω : G D p �
       (fun y' : Mx D ρ p => Wz M m ψ b₀ f (M.sh y' * M.emb h * g) * conj (Ω h y')) (HMul.hMul y a.1 : Mx D ρ p) := by
     intro y
     have e1 : M.sh y * M.emb (g₀ * h) * g = M.emb g₀ * (M.sh (HMul.hMul y a.1 : Mx D ρ p) * M.emb h * g) := by
-      rw [map_mul, ← mul_assoc, GlobalTheory.T.shift_commutes_levi_embedding D n ρ p hn M g₀ a ha y]
+      rw [map_mul, ← mul_assoc, _root_.GlobalTheory.CompanionTheory.PcB.sh_emb_levi D n ρ p hn M g₀ a ha y]
       simp only [mul_assoc]
     rw [e1, GlobalTheory.T.coefficient_levi_equivariance D n ρ p hn M m ψ b₀ χ z f hf g₀ a ha, hΩ.levi g₀ a ha h y]
     simp only [map_mul]
@@ -1938,7 +1909,7 @@ end Law
 theorem rSec_of_htExist : HtExist → RSec := by
   intro hHt D n ρ p hn M m ψ hψ b₀ _ χ χ' _ _ θ hθ Ω hΩ H hH s₁ φ hφ hlaw g
   obtain ⟨h1, h2⟩ := rsec_family M m b₀ hψ hθ hΩ hH (hHt D n).2 hφ hlaw g
-  exact ⟨h1, h2, fun z _ => rsec_law M m b₀ hψ hΩ (isLaw_fam hH hlaw z) g⟩
+  exact ⟨h1, h2, fun z _ => rsec_law M m b₀ hψ hΩ (_root_.GlobalTheory.CompanionTheory.RswPolar.isLaw_fam hH hlaw z) g⟩
 
 end GlobalTheory.CompanionTheory.RSecPf
 

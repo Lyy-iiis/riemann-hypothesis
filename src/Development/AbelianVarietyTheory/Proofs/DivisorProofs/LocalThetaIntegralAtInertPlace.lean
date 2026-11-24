@@ -217,23 +217,15 @@ theorem map_norm_det {n : ℕ} {K : Type} [CommRing K] (φ : AF F →+* K) (t : 
 theorem exists_bound {n : ℕ} (W : Spc F E n) (hL : W.L.FG) (v : Pl (F := F)) :
     ∃ C : ℝ, ∀ z ∈ GlobalTheory.InertSph.latAt W v, ∀ x, ‖evFin F v ((bas F E n).repr z x)‖ ≤ C := by
   first
-  | exact @_root_.GlobalTheory.CoordinateEmbeddingMaps.main
-  | exact _root_.GlobalTheory.CoordinateEmbeddingMaps.main
   | (apply _root_.GlobalTheory.CoordinateEmbeddingMaps.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.CoordinateEmbeddingMaps.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.CoordinateEmbeddingMaps.main <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.CoordinateEmbeddingMaps.main ..)
-
-theorem exists_mul_mem {n : ℕ} (L : Submodule (𝓞 E) (Fin n → E)) (hL : L.IsFullLattice E) (y : Fin n → E) :
-    ∃ D : ℤ, D ≠ 0 ∧ D • y ∈ L := by
-  exact _root_.GlobalTheory.LatticeIntegerMultipleMembership.exists_int_smul_mem_of_isLattice L hL y
 
 theorem exists_entry_bound {n : ℕ} (W : Spc F E n) (hL : W.L.IsFullLattice E) (v : Pl (F := F)) :
     ∃ C : ℝ, ∀ t : Matrix (Fin n) (Fin n) (_root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.AE (F := F) (E := E)),
       (∀ z ∈ GlobalTheory.InertSph.latAt W v, t *ᵥ z ∈ GlobalTheory.InertSph.latAt W v) → ∀ x y, ‖evFin F v (big t x y)‖ ≤ C := by
   obtain ⟨C, hC⟩ := exists_bound W hL.fg v
   choose D hD0 hD using fun x : (Σ _ : Fin n, Fin (Module.finrank F E)) =>
-    exists_mul_mem W.L hL (Pi.single x.1 (Module.finBasis F E x.2))
+    _root_.GlobalTheory.LatticeIntegerMultipleMembership.exists_int_smul_mem_of_isLattice W.L hL (Pi.single x.1 (Module.finBasis F E x.2))
   haveI : CharZero (Fv F v) := algebraRat.charZero _
   refine ⟨∑ y, |C| / ‖(D y : Fv F v)‖, fun t ht x y => ?_⟩
   set e := GlobalTheory.EmbChart.atPlace v (1 : Fv F v) with he

@@ -81,7 +81,7 @@ theorem _root_.GlobalTheory.T.exists_conj_referenceChartIndex : ∀ {B : Base} {
       ∀ (g : ↥(levGAt I.sel (I.tup a) (I.idx a) (I.Tp a) i b).grp) (g0 : ↥(levGAt I.sel (I.tup I.mu0) (I.idx I.mu0) (I.Tp I.mu0) i b0).grp),
         (∀ w, g0.1 w = x w * g.1 w * (x w)⁻¹) →
         (levGAt I.sel (I.tup a) (I.idx a) (I.Tp a) i b).chr g = (levGAt I.sel (I.tup I.mu0) (I.idx I.mu0) (I.Tp I.mu0) i b0).chr g0 := by
-  first | exact @GlobalTheory.Mem.Col2.TC.ChTw.Match.IdxMatch.idx_match | exact GlobalTheory.Mem.Col2.TC.ChTw.Match.IdxMatch.idx_match | (intros; apply GlobalTheory.Mem.Col2.TC.ChTw.Match.IdxMatch.idx_match <;> assumption)
+  first | exact @GlobalTheory.Mem.Col2.TC.ChTw.Match.IdxMatch.idx_match
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsConjReferenceChartIndexStatement =====
@@ -246,7 +246,7 @@ theorem _root_.GlobalTheory.T.exists_reference_class_matching_coupling_coset : �
         κ.2.2 = 1 → (i + 1 = B.R.m → ∀ w, κ0.2.1.1 w = y w * κ.2.1.1 w * (y w)⁻¹) →
         (cosetIn ((I.stp u a i).act c.1 κ ((I.stp u a i).rep c)) = cosetIn ((I.stp u a i).rep c) ↔
           cosetIn ((I.stp u I.mu0 i).act c0.1 κ0 ((I.stp u I.mu0 i).rep c0)) = cosetIn ((I.stp u I.mu0 i).rep c0)) := by
-  first | exact @GlobalTheory.Mem.Col2.TC.ChTw.Match.coset_match | exact GlobalTheory.Mem.Col2.TC.ChTw.Match.coset_match | (intros; apply GlobalTheory.Mem.Col2.TC.ChTw.Match.coset_match <;> assumption)
+  first | exact @GlobalTheory.Mem.Col2.TC.ChTw.Match.coset_match
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsReferenceClassMatchingCouplingCosetStatement =====
@@ -303,7 +303,7 @@ theorem mat_frOf {n : ℕ} {M : Matrix (Fin n) (Fin n) (𝓞 E)} (h : IsUnit (ma
     mat (frOf M) i j = algebraMap (𝓞 E) E (M i j) := by
   show frOf M (Pi.single j 1) i = _
   rw [frOf_apply h]
-  simp [matE, Matrix.mulVec_single_one]
+  simp [matE]
 
 theorem isFr_frOf {n : ℕ} {P : HeightOneSpectrum (𝓞 E)} {M : Matrix (Fin n) (Fin n) (𝓞 E)} (hM : M.det ∉ P.asIdeal) :
     IsUnit (matE M).det ∧ CharValCompare.IsFr P (stdLat E n) (frOf M) := by
@@ -513,13 +513,6 @@ section -- clump:auto
 open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Col Formalism.L2.DIV Formalism.L2.Ker Formalism.UG Formalism.L2.Forms GlobalTheory.Mem GlobalTheory.Mem.Chr GlobalTheory.Mem.Col2 GlobalTheory.Mem.Col2.TC GlobalTheory.Mem.Col2.TC.ChTw GlobalTheory.Mem.Col2.TC.ChTw.Match Matrix
 attribute [local instance] GlobalTheory.Mem.Col2.starE Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.exists_unitaryAdelic_lift_typePrime_reductions : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → ∀ (l : I.Laws) (u : B.Word) (n : ℕ)
-    (x : ∀ w : (B.primes X).vGs, GL (Fin n) (𝓞 B.fields.E ⧸ w.1.asIdeal)), ∃ t : GA B n,
-      (∃ p : DecoF B.fields.E n ∅ ∅ ∅, PtOf t p ∧ p.deco.1.N = stdLat B.fields.E n) ∧
-      (∀ v : HeightOneSpectrum (𝓞 B.host.F), ((B.T u : 𝓞 B.host.F) ∈ v.asIdeal ∨ ∀ j, (B.host.g j : 𝓞 B.host.F) ∉ v.asIdeal) →
-        bc (prV (E := B.host.E) v) t = 1) ∧
-      ∀ (w : (B.primes X).vGs) (r j : Fin n), HasRes w.1 (adAt B.host.F w.1 ((t : Matrix (Fin n) (Fin n) _) r j)) ((x w).1 r j) := by
-  first | exact @GlobalTheory.Mem.Col2.TC.ChTw.Match.exists_unitary_lift | exact GlobalTheory.Mem.Col2.TC.ChTw.Match.exists_unitary_lift | (intros; apply GlobalTheory.Mem.Col2.TC.ChTw.Match.exists_unitary_lift <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsUnitaryAdelicLiftTypePrimeReductionsStatement =====
@@ -599,22 +592,6 @@ theorem hasRes_matMul {n : ℕ} {P : HeightOneSpectrum (𝓞 E)} {A B : Matrix (
     rw [map_mul]
     exact hasRes_mul (hA i k) (hB k j)
 
-private theorem hasRes_unique {P : HeightOneSpectrum (𝓞 E)}
-    {a : P.adicCompletion E} {c d : 𝓞 E ⧸ P.asIdeal} (hc : HasRes P a c) (hd : HasRes P a d) : c = d := by
-  obtain ⟨r, rfl, hr⟩ := hc
-  obtain ⟨s, rfl, hs⟩ := hd
-  rw [Ideal.Quotient.eq]
-  have key : Valued.v (algebraMap E (P.adicCompletion E) (algebraMap (𝓞 E) E (r - s))) < 1 := by
-    have e : algebraMap E (P.adicCompletion E) (algebraMap (𝓞 E) E (r - s)) =
-        (a - algebraMap E (P.adicCompletion E) (algebraMap (𝓞 E) E s)) -
-          (a - algebraMap E (P.adicCompletion E) (algebraMap (𝓞 E) E r)) := by
-      rw [map_sub, map_sub]; ring
-    rw [e]
-    exact (Valuation.map_sub _ _ _).trans_lt (max_lt hs hr)
-  by_contra hne
-  rw [GlobalTheory.Mem.Dil.val_eq_one hne] at key
-  exact lt_irrefl _ key
-
 private theorem hasRes_inv_entry_of_le_one [StarRing E] {n : ℕ} (P : HeightOneSpectrum (𝓞 E)) (t : GL (Fin n) (AfE F E)) (X : GL (Fin n) (𝓞 E ⧸ P.asIdeal))
     (ht : ∀ i j, HasRes P (adAt F P ((t : Matrix (Fin n) (Fin n) (AfE F E)) i j)) ((X : Matrix (Fin n) (Fin n) (𝓞 E ⧸ P.asIdeal)) i j))
     (hti : ∀ i j, Valued.v (adAt F P (((t⁻¹ : GL (Fin n) (AfE F E)) : Matrix (Fin n) (Fin n) (AfE F E)) i j)) ≤ 1)
@@ -636,7 +613,7 @@ private theorem hasRes_inv_entry_of_le_one [StarRing E] {n : ℕ} (P : HeightOne
       split_ifs
       · rw [map_one]; exact hasRes_one P
       · rw [map_zero]; exact hasRes_zero P
-    exact hasRes_unique h1 h2
+    exact _root_.GlobalTheory.Mem.Col2.HasRes.unique h1 h2
   rw [Units.inv_eq_of_mul_eq_one_right hXY]
   exact hY i j
 
@@ -741,7 +718,7 @@ theorem conj_unitary_preserves_stdLat_of_ptOf : ∀ {B : Base} {X : PreX B.toPre
     have hTc : ((B.T u : ℕ) : 𝓞 B.host.E) =
         X.piT u * ⟨B.host.conj (X.piT u : B.host.E), hcI⟩ := by
       apply RingOfIntegers.ext
-      simp only [RingOfIntegers.coe_eq_algebraMap, map_mul, map_natCast]
+      simp only [RingOfIntegers.coe_eq_algebraMap, map_natCast]
       exact (X.piT_norm u).symm
     have hbc : bc (prV (E := B.host.E) (P.1.under (𝓞 B.host.F))) t = 1 := by
       apply hT
@@ -830,7 +807,7 @@ theorem _root_.GlobalTheory.T.localConditions_conj_unitary_keepsStdLattice : ∀
     (∀ v : HeightOneSpectrum (𝓞 B.host.F), (B.T u : 𝓞 B.host.F) ∈ v.asIdeal → bc (prV (E := B.host.E) v) t = 1) →
     (∀ (w : (B.primes X).vGs) (r j : Fin n), HasRes w.1 (adAt B.host.F w.1 ((t : Matrix (Fin n) (Fin n) _) r j)) ((x w).1 r j)) →
     (LocalCondMoveDecoratedLattice u n (t⁻¹ * s * t) h ↔ LocalCondMoveDecoratedLattice u n s (fun w => x w * h w * (x w)⁻¹)) := by
-  first | exact @GlobalTheory.Mem.Col2.TC.ChTw.Match.conj_unitary_preserves_stdLat_of_ptOf | exact GlobalTheory.Mem.Col2.TC.ChTw.Match.conj_unitary_preserves_stdLat_of_ptOf | (intros; apply GlobalTheory.Mem.Col2.TC.ChTw.Match.conj_unitary_preserves_stdLat_of_ptOf <;> assumption)
+  first | exact @GlobalTheory.Mem.Col2.TC.ChTw.Match.conj_unitary_preserves_stdLat_of_ptOf
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.LocalConditionsConjUnitaryKeepsStdLatticeStatement =====
@@ -950,13 +927,6 @@ section -- clump:auto
 open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Col Formalism.L2.DIV Formalism.L2.Ker Formalism.UG Formalism.L2.Forms GlobalTheory.Mem GlobalTheory.Mem.Chr GlobalTheory.Mem.Col2 GlobalTheory.Mem.Col2.TC GlobalTheory.Mem.Col2.TC.ChTw GlobalTheory.Mem.Col2.TC.ChTw.Match Matrix
 attribute [local instance] GlobalTheory.Mem.Col2.starE Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.twistLocalCondition_conj_iff_frameChange_trivial : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → ∀ (l : I.Laws) (u : B.Word) (a : I.ι)
-    (Q : Finset (HeightOneSpectrum (𝓞 B.host.F))), (∀ v, v ∈ Q ↔ I.UnderQ a v) → ∀ (n : ℕ) (t s : GA B n) (θ : GLQ B.fields.E n (I.Q a)),
-    (∀ v : HeightOneSpectrum (𝓞 B.host.F), ((B.T u : 𝓞 B.host.F) ∈ v.asIdeal ∨ ∀ j, (B.host.g j : 𝓞 B.host.F) ∉ v.asIdeal) →
-      bc (prV (E := B.host.E) v) t = 1) →
-    (∀ v ∈ Q, bc (prV (E := B.host.E) v) s = 1) →
-    (LocCQ (I.Q a) n (t⁻¹ * s * t) θ ↔ θ = 1) := by
-  first | exact @GlobalTheory.Mem.Col2.TC.ChTw.Match.locCQ_conj_iff_eq_one | exact GlobalTheory.Mem.Col2.TC.ChTw.Match.locCQ_conj_iff_eq_one | (intros; apply GlobalTheory.Mem.Col2.TC.ChTw.Match.locCQ_conj_iff_eq_one <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.TwistLocalConditionConjIffFrameChangeTrivialStatement =====
@@ -1016,12 +986,12 @@ theorem match_idx : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.
         rw [hxc' g ⟨_, hm'⟩ (fun w => rfl)]
         have : g0 = ⟨y, hy⟩ * ⟨_, hm'⟩ * (⟨y, hy⟩)⁻¹ := Subtype.ext ((funext h).trans (hconj g.1))
         rw [this, map_mul, map_mul, map_inv, mul_comm (_ * _), ← mul_assoc, inv_mul_cancel, one_mul]
-      obtain ⟨t, ht_std, ht_off, ht_res⟩ := GlobalTheory.T.exists_unitaryAdelic_lift_typePrime_reductions I hI l u (B.R.N i) x
+      obtain ⟨t, ht_std, ht_off, ht_res⟩ := _root_.GlobalTheory.Mem.Col2.TC.ChTw.Match.exists_unitary_lift I hI l u (B.R.N i) x
       refine ⟨c0, t, ht_std, ht_off, β.2.choose, Subtype.ext β.2.choose_spec, fun s hs => ⟨?_, ?_⟩⟩
       · intro κ hκ
         obtain ⟨hg, hco, hC0, hCQ⟩ := (GlobalTheory.T.localMove_classRep_iff_localConditions I hI u a i hi _ _ κ).1 hκ
         rw [GlobalTheory.T.localConditions_conj_unitary_keepsStdLattice I hI l u (B.R.N i) t s x _ ht_std (fun v hv => ht_off v (Or.inl hv)) ht_res] at hC0
-        have hθ : κ.2.2 = 1 := Subtype.ext ((GlobalTheory.T.twistLocalCondition_conj_iff_frameChange_trivial I hI l u a Q hQ (B.R.N i) t s _ ht_off hs).1 hCQ)
+        have hθ : κ.2.2 = 1 := Subtype.ext ((_root_.GlobalTheory.Mem.Col2.TC.ChTw.Match.locCQ_conj_iff_eq_one I hI l u a Q hQ (B.R.N i) t s _ ht_off hs).1 hCQ)
         have hmem := (hxg κ.2.1.1).1 κ.2.1.2
         let κ0 : (I.stp u I.mu0 i).G c0.1 := (1, ⟨_, hmem⟩, 1)
         have hg0 : (I.stp u I.mu0 i).gam c0.1 κ0 = 1 := by
@@ -1063,9 +1033,9 @@ theorem match_idx : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.
           show κ0.2.1.1 w = y w * ((x w)⁻¹ * κ0.2.1.1 w * x w) * (y w)⁻¹
           rw [hx1 h w]
           group
-        · rw [GlobalTheory.T.localConditions_conj_unitary_keepsStdLattice I hI l u (B.R.N i) t s x _ ht_std (fun v hv => ht_off v (Or.inl hv)) ht_res, e]
+        · rw [_root_.GlobalTheory.Mem.Col2.TC.ChTw.Match.conj_unitary_preserves_stdLat_of_ptOf I hI l u (B.R.N i) t s x _ ht_std (fun v hv => ht_off v (Or.inl hv)) ht_res, e]
           exact hC0
-        · exact (GlobalTheory.T.twistLocalCondition_conj_iff_frameChange_trivial I hI l u a Q hQ (B.R.N i) t s _ ht_off hs).2 rfl
+        · exact (_root_.GlobalTheory.Mem.Col2.TC.ChTw.Match.locCQ_conj_iff_eq_one I hI l u a Q hQ (B.R.N i) t s _ ht_off hs).2 rfl
     exact ⟨fun β => (key β).choose, fun β => (key β).choose_spec.choose, fun β => (key β).choose_spec.choose_spec.1,
       fun β => (key β).choose_spec.choose_spec.2.1, fun h => absurd h ha, fun β => (key β).choose_spec.choose_spec.2.2⟩
 

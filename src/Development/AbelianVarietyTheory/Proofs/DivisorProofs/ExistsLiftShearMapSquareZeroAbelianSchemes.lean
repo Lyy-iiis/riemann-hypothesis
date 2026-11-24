@@ -119,7 +119,7 @@ theorem _root_.GlobalTheory.T.hodgeFiltration_comp_iso_lift_iff : ∀ (R R₀ : 
     (A₀ B₀ : Over (Sp R₀)) [GrpObj A₀] [GrpObj B₀] (σ : A₀ ⟶ B₀) [IsMonHom σ] [IsIso σ] (X : Over (Sp R)) (j : B₀.left ⟶ X.left)
     (wj : j ≫ X.hom = B₀.hom ≫ spMap π) (w : (σ.left ≫ j) ≫ X.hom = A₀.hom ≫ spMap π) (d : Crys κ (spMap π) A₀),
     d ∈ schemeFil κ A₀ X (σ.left ≫ j) w ↔ push κ (spMap π) σ d ∈ schemeFil κ B₀ X j wj := by
-  first | exact @GlobalTheory.SqLift.schemeFil_comp_iso | exact GlobalTheory.SqLift.schemeFil_comp_iso | (intros; apply GlobalTheory.SqLift.schemeFil_comp_iso <;> assumption)
+  first | exact @GlobalTheory.SqLift.schemeFil_comp_iso
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HodgeFiltrationCompIsoLiftIffStatement =====
@@ -259,7 +259,7 @@ theorem _root_.GlobalTheory.T.hodgeFiltration_tensor_lifts_iff_projections : ∀
     ∀ (wl : l ≫ (X ⊗ Y).hom = (A₀ ⊗ B₀).hom ≫ spMap π) (d : Crys κ (spMap π) (A₀ ⊗ B₀)),
     d ∈ schemeFil κ (A₀ ⊗ B₀) (X ⊗ Y) l wl ↔
       push κ (spMap π) (fst A₀ B₀) d ∈ schemeFil κ A₀ X i wi ∧ push κ (spMap π) (snd A₀ B₀) d ∈ schemeFil κ B₀ Y j wj := by
-  first | exact @GlobalTheory.SqLift.ProdFil.schemeFil_tensor_iff | exact GlobalTheory.SqLift.ProdFil.schemeFil_tensor_iff | (intros; apply GlobalTheory.SqLift.ProdFil.schemeFil_tensor_iff <;> assumption)
+  first | exact @GlobalTheory.SqLift.ProdFil.schemeFil_tensor_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HodgeFiltrationTensorLiftsIffProjectionsStatement =====
@@ -281,10 +281,6 @@ attribute [local instance] Over.cartesianMonoidalCategory
 namespace GlobalTheory.ShearLift
 
 variable {S : Scheme.{0}}
-
-theorem isMonHom_mul {H G : Over S} [GrpObj H] [GrpObj G] [IsCommMonObj G] (f g : H ⟶ G) [IsMonHom f]
-    [IsMonHom g] : IsMonHom (f * g) :=
-  inferInstanceAs (IsMonHom (lift f g ≫ μ[G]))
 
 theorem isCommMonObj_of_isGrpPullback {S' : Scheme.{0}} {G' : Over S'} {G : Over S} [GrpObj G'] [GrpObj G]
     [IsCommMonObj G] {b : S' ⟶ S} {φ : G'.left ⟶ G.left} (h : IsGrpPullback G' G b φ) : IsCommMonObj G' := by
@@ -345,7 +341,7 @@ theorem exists_lift_shear : ∀ (R R₀ : Type) [CommRing R] [CommRing R₀] (I 
     e e' he he' hie hje l hl₁ hl₂ f₀ _ hf
   haveI : IsCommMonObj B' := hBab.comm
   haveI : IsCommMonObj B₀ := isCommMonObj_of_isGrpPullback hB
-  haveI hm : IsMonHom ((fst A₀ B₀ ≫ f₀) * snd A₀ B₀) := isMonHom_mul _ _
+  haveI hm : IsMonHom ((fst A₀ B₀ ≫ f₀) * snd A₀ B₀) := _root_.GlobalTheory.Serre.isMonHom_mul _ _
   obtain ⟨σ, hσ⟩ : ∃ σ : A₀ ⊗ B₀ ⟶ A₀ ⊗ B₀, σ = lift (fst A₀ B₀) ((fst A₀ B₀ ≫ f₀) * snd A₀ B₀) := ⟨_, rfl⟩
   obtain ⟨τ, hτ⟩ : ∃ τ : A₀ ⊗ B₀ ⟶ A₀ ⊗ B₀, τ = lift (fst A₀ B₀) ((fst A₀ B₀ ≫ f₀)⁻¹ * snd A₀ B₀) := ⟨_, rfl⟩
   haveI : IsMonHom σ := by rw [hσ]; infer_instance

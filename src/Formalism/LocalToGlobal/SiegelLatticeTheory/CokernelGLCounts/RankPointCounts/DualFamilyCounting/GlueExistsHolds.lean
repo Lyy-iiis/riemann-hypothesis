@@ -386,12 +386,7 @@ namespace Formalism.L2.SG.Pf.FamilyMeetLattice
 
 open Formalism.HermitianLattices.Ext.L3 Formalism.L2.SG.Pf.Cnt Formalism.L2.SG.Pf.GluingBases
 
-theorem alg_eq {K F : Type} [Field K] [NumberField K] [StarRing K] [Field F] [NumberField F] [Algebra F K]
-    (t : 𝓞 F) : algebraMap (𝓞 K) K (algebraMap (𝓞 F) (𝓞 K) t) = algebraMap F K (t : F) := by
-  first
-    | rfl
-    | exact (IsScalarTower.algebraMap_apply (𝓞 F) (𝓞 K) K t).symm.trans (IsScalarTower.algebraMap_apply (𝓞 F) F K t)
-    | simp
+alias alg_eq := _root_.Formalism.HermitianLattices.Ext.L3.MeanB.algebraMap_comp
 
 theorem family_meet_holds : FamMeet := by
   intro K F V _ _ _ _ _ _ _ _ _ _ _ hK hF h hs hnd U hUc M hM hMi 𝔭 h𝔭 b a hba π w c τ hg
@@ -586,7 +581,7 @@ theorem badFinite {Λ₀ : Submodule (𝓞 K) V} (hΛ₀ : Submodule.IsFullLatti
     rw [← hM.2]; exact Submodule.subset_span hy
   obtain ⟨n₁, hn₁, h₁⟩ : ∃ n : ℤ, n ≠ 0 ∧ ∀ x ∈ M, n • x ∈ N := by
     refine exists_zsmul_of_fg hM.1 fun y hy => ?_
-    obtain ⟨m, hm, hmy⟩ := Formalism.HermitianLatticesTheory.traceReal_mult Λ₀ hΛ₀ y
+    obtain ⟨m, hm, hmy⟩ := _root_.Bl.general_b_fact_second'''''.goal1 Λ₀ hΛ₀ y
     exact ⟨m, hm, Submodule.mem_inf.2 ⟨hmy, zsmul_mem (hMU y hy) m⟩⟩
   have hNfg : N.FG := Submodule.FG.of_le hΛ₀.fg inf_le_left
   obtain ⟨n₂, hn₂, h₂⟩ : ∃ n : ℤ, n ≠ 0 ∧ ∀ x ∈ N, n • x ∈ M := by
@@ -714,13 +709,10 @@ section -- clump:auto
 
 namespace Formalism.L2.SG.Pf.Cnt
 
-theorem glueExists_of (hloc : Formalism.L2.SG.Pf.G7.GlueLocal) : GlueExists :=
-  Formalism.L2.SG.Pf.G7.glueExists_of_local hloc
-
 theorem glueExists_of_fam (hJ : JordanExists) (hV : Formalism.L2.SG.Pf.GluingBases.GlueVecs)
     (h0 : Formalism.L2.SG.Pf.GluingBases.FamTop) (h1 : Formalism.L2.SG.Pf.GluingBases.FamGram) (h2 : Formalism.L2.SG.Pf.GluingBases.FamDual) :
     GlueExists :=
-  glueExists_of (Formalism.L2.SG.Pf.GluingBases.glueLocal_of_fam hJ hV h0 h1 h2 Formalism.L2.SG.Pf.FamilyMeetLattice.family_meet_holds)
+  _root_.Formalism.L2.SG.Pf.G7.glueExists_of_local (Formalism.L2.SG.Pf.GluingBases.glueLocal_of_fam hJ hV h0 h1 h2 Formalism.L2.SG.Pf.FamilyMeetLattice.family_meet_holds)
 
 end Formalism.L2.SG.Pf.Cnt
 end -- clump:auto
@@ -1264,7 +1256,7 @@ theorem NU.mul {x y : K} (hx : NU 𝔭 x) (hy : NU 𝔭 y) : NU 𝔭 (x * y) := 
 theorem NU.inv {x : K} (hx : NU 𝔭 x) : NU 𝔭 x⁻¹ := by
   obtain ⟨a, ha, h1, h2⟩ := hx
   have hs : star a⁻¹ = (star a)⁻¹ := by
-    first | exact star_inv₀ a | exact star_inv' a | simp
+    first | exact star_inv₀ a
   have e : x⁻¹ * (a⁻¹ * star a⁻¹) = (x * (a * star a))⁻¹ := by
     rw [hs, mul_inv, mul_inv]
   refine ⟨a⁻¹, inv_ne_zero ha, ?_, ?_⟩
@@ -1280,9 +1272,9 @@ theorem NU.of_mul_left {x y : K} (hxy : NU 𝔭 (x * y)) (hy : NU 𝔭 y) (hy0 :
 theorem NU.norm_mul {u z : K} (h1 : u ∈ SP K 𝔭) (h2 : u⁻¹ ∈ SP K 𝔭) (hz : z ≠ 0) :
     NU 𝔭 (star z * u * z) := by
   have hs : star z⁻¹ = (star z)⁻¹ := by
-    first | exact star_inv₀ z | exact star_inv' z | simp
+    first | exact star_inv₀ z
   have hsz : star z ≠ 0 := by
-    first | exact star_ne_zero.2 hz | simpa using hz
+    first | exact star_ne_zero.2 hz
   have e : star z * u * z * (z⁻¹ * star z⁻¹) = u := by
     rw [hs]
     calc star z * u * z * (z⁻¹ * (star z)⁻¹) = u * (z * z⁻¹) * (star z * (star z)⁻¹) := by ring
@@ -1301,7 +1293,7 @@ theorem NU.prod {ι : Type} (s : Finset ι) (f : ι → K) (hf : ∀ i ∈ s, NU
 theorem NU.pair {A C : K} (hA : A ≠ 0) (hAs : star A = A) (h1 : C * A⁻¹ ∈ SP K 𝔭)
     (h2 : A * C⁻¹ ∈ SP K 𝔭) : NU 𝔭 (A * C) := by
   have hs : star A⁻¹ = (star A)⁻¹ := by
-    first | exact star_inv₀ A | exact star_inv' A | simp
+    first | exact star_inv₀ A
   have e : A * C * (A⁻¹ * star A⁻¹) = C * A⁻¹ := by
     rw [hs, hAs]
     calc A * C * (A⁻¹ * A⁻¹) = C * A⁻¹ * (A * A⁻¹) := by ring
@@ -1432,7 +1424,7 @@ theorem last_unit_holds : LastUnit := by
           obtain ⟨a', ha'⟩ := Formalism.HermitianLatticesTheory.star_algebraMap_ringOfIntegers_mem_range a
           refine ⟨a' * b, ?_⟩
           rw [map_mul, ha', hb, ← algebraMap_smul K a x, LinearMap.map_smulₛₗ₂]
-          simp only [LinearMap.smul_apply, starRingEnd_apply, smul_eq_mul]
+          simp only [starRingEnd_apply, smul_eq_mul]
       exact key y (by rw [hS]; exact hy)
     rw [eq_top_iff]
     intro x _

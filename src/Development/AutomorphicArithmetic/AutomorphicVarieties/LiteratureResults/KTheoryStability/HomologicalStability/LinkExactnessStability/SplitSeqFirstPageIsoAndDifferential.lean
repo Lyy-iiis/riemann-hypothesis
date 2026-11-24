@@ -145,7 +145,7 @@ private theorem exists_gl_vecMul_single_eq_and_fixes_single_of_le {R : Type} [Co
       rw [h] at hk
       simp [L] at hk
       omega
-    simp [Pi.single_apply, hne]
+    simp [hne]
   have hr : Unimodular R (fun i : Fin (m - 1 + 1) => v ⟨i, by have := i.isLt; omega⟩) := by
     show Ideal.span _ = ⊤
     rw [Ideal.eq_top_iff_one, ← hwv]
@@ -199,7 +199,7 @@ private theorem exists_gl_vecMul_single_eq_and_fixes_single_of_le {R : Type} [Co
         ring
       · simp
     rw [e1, Fin.sum_univ_eq_sum_range F n, ← Finset.sum_subset (s₁ := Finset.range (m - 1)) (s₂ := Finset.range n)
-      (by intro k hk; rw [Finset.mem_range] at hk ⊢; exact lt_of_lt_of_le hk (by first | omega | exact L.isLt.le))
+      (by intro k hk; rw [Finset.mem_range] at hk ⊢; exact lt_of_lt_of_le hk (by first | omega))
       (fun k _ hk => dif_neg (by simp only [Finset.mem_range] at hk; omega)),
       ← Fin.sum_univ_eq_sum_range F (m - 1)]
     apply Finset.sum_congr rfl
@@ -228,7 +228,7 @@ private theorem exists_gl_vecMul_single_eq_and_fixes_single_of_le {R : Type} [Co
         intro h
         rw [h] at hk
         simp [L] at hk
-      simp [Pi.single_apply, hne]
+      simp [hne]
     · rw [if_neg hk, add_zero]
       by_cases hk2 : k = L
       · rw [hk2, v2L]
@@ -237,7 +237,7 @@ private theorem exists_gl_vecMul_single_eq_and_fixes_single_of_le {R : Type} [Co
           have : (k : ℕ) ≠ m - 1 := fun h => hk2 (Fin.ext (by simpa [L] using h))
           omega
         simp only [v2, v1, z2, Pi.add_apply, Pi.smul_apply, smul_eq_mul, hv k hkm, z1m k hkm, hsL k hkm]
-        simp [Pi.single_apply, hk2]
+        simp
   have hg0v : Matrix.mulVec ((T3 * T2 * T1 : GL (Fin n) R) : Matrix (Fin n) (Fin n) R) v = Pi.single L 1 := by
     rw [Units.val_mul, Units.val_mul, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, s1, s2, s3]
   have gg0 := splitSet_transitive_lemma_3 (T3 * T2) T1 (splitSet_transitive_lemma_3 T3 T2 gT3 gT2) gT1
@@ -340,8 +340,6 @@ theorem splitSet_transitive : ∀ (R : Type) [CommRing R] (s : ℕ), StableRange
         split_ifs with hc
         · first
             | exact absurd (congrArg Fin.val hc) (by simp)
-            | exact absurd hc (by simp [Fin.ext_iff])
-            | simp [Fin.ext_iff] at hc
         · rfl
       have hw : ∀ k : Fin n, n - p ≤ (k : ℕ) → (pairAct R n g0⁻¹ a).2 k = 0 := by
         intro k hk
@@ -354,8 +352,6 @@ theorem splitSet_transitive : ∀ (R : Type) [CommRing R] (s : ℕ), StableRange
         split_ifs with hc
         · first
             | exact absurd (congrArg Fin.val hc) (by simp)
-            | exact absurd hc (by simp [Fin.ext_iff])
-            | simp [Fin.ext_iff] at hc
         · rfl
       obtain ⟨g1, hg1v, hg1w, hg1good⟩ := exists_gl_vecMul_single_eq_and_fixes_single_of_le s hs (m := n - p) (by omega) (by omega)
         _ _ hv hw hwv
@@ -401,12 +397,6 @@ theorem splitSet_transitive : ∀ (R : Type) [CommRing R] (s : ℕ), StableRange
 
 end GlobalTheory.HomStab
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab GlobalTheory.SeqCx UpperTheory.V.KL
-theorem _root_.GlobalTheory.T.GL_transitive_splitSet_of_stableRangeLe : ∀ (R : Type) [CommRing R] (s : ℕ), StableRangeLe R s → ∀ (n p : ℕ) (h : p ≤ n), p + s ≤ n → ∀ y : SplitSet R n p, ∃ g : GL (Fin n) R, g • stdSeq R n p h = y := by
-  first
-  | exact @GlobalTheory.HomStab.splitSet_transitive
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.GLTransitiveSplitSetOfStableRangeLe =====
@@ -497,12 +487,6 @@ theorem isIso_map_succ_of_shortExact : ∀ (k G H : Type) [CommRing k] [Group G]
 
 end GlobalTheory.HomStab
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab
-theorem _root_.GlobalTheory.T.groupHomology_dimension_shift_isIso : ∀ (k G H : Type) [CommRing k] [Group G] [Group H] (φ : H →* G) (X : ShortComplex (Rep k H)) (Y : ShortComplex (Rep k G)), X.ShortExact → Y.ShortExact → ∀ (u₁ : X.X₁ ⟶ Rep.res φ Y.X₁) (u₂ : X.X₂ ⟶ Rep.res φ Y.X₂) (u₃ : X.X₃ ⟶ Rep.res φ Y.X₃), (∀ a, u₂.hom (X.f.hom a) = Y.f.hom (u₁.hom a)) → (∀ a, u₃.hom (X.g.hom a) = Y.g.hom (u₂.hom a)) → ∀ n : ℕ, IsZero (groupHomology X.X₂ (n + 1)) → IsZero (groupHomology Y.X₂ (n + 1)) → IsIso (groupHomology.map φ u₁ n) → IsIso (groupHomology.map φ u₂ n) → IsIso (groupHomology.map φ u₃ (n + 1)) := by
-  first
-  | exact @GlobalTheory.HomStab.isIso_map_succ_of_shortExact
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.GroupHomologyDimensionShiftIsIso =====
@@ -545,12 +529,6 @@ theorem permCoef_shortExact : ∀ (k G : Type) [CommRing k] [Group G] (X : Type)
 
 end GlobalTheory.HomStab
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab
-theorem _root_.GlobalTheory.T.permCoef_preserves_shortExact : ∀ (k G : Type) [CommRing k] [Group G] (X : Type) [MulAction G X] (S : ShortComplex (Rep k G)), S.ShortExact → ∃ h : permCoef X S.f ≫ permCoef X S.g = 0, (ShortComplex.mk (permCoef X S.f) (permCoef X S.g) h).ShortExact := by
-  first
-  | exact @GlobalTheory.HomStab.permCoef_shortExact
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.PermCoefPreservesShortExact =====
@@ -594,7 +572,7 @@ def permFreeIso (k G : Type) [CommRing k] [Group G] (X ι : Type) [MulAction G X
       simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply, MonoidAlgebra.lsingle_apply]
       rw [permRep_single]
       erw [Representation.free_single_single]
-      simp [freeLEquiv_single, Representation.free_single_single, mul_smul] }
+      simp [freeLEquiv_single, mul_smul] }
 
 theorem main : ∀ (k G : Type) [CommRing k] [Group G] (X ι : Type) [MulAction G X],
     Projective (permT X (Rep.free k G ι)) := by
@@ -605,13 +583,6 @@ end GlobalTheory.HomStab
 
 end
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab
-theorem _root_.GlobalTheory.T.projective_perm_tensor_free : ∀ (k G : Type) [CommRing k] [Group G] (X ι : Type) [MulAction G X], Projective (permT X (Rep.free k G ι)) := by
-  first
-  | exact @GlobalTheory.HomStab.main
-  | exact @GlobalTheory.HomStab.freeLEquiv_single
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.ProjectivePermTensorFree =====
@@ -655,14 +626,6 @@ theorem GlobalTheory.HomStab.projective_res_free_of_injective : ∀ (k G H : Typ
   intro k G H _ _ _ φ hφ ι
   exact GlobalTheory.HomStab.projective_res_of_injective φ hφ _
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab
-theorem _root_.GlobalTheory.T.projective_res_free_rep_of_injective : ∀ (k G H : Type) [CommRing k] [Group G] [Group H] (φ : H →* G), Function.Injective φ → ∀ ι : Type, Projective (Rep.res φ (Rep.free k G ι)) := by
-  first
-  | exact @GlobalTheory.HomStab.projective_res_free_of_injective
-  | exact @GlobalTheory.HomStab.projective_res_of_injective
-  | exact @GlobalTheory.HomStab.resFunctor_isEquivalence_of_bijective
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.ProjectiveResFreeRepOfInjective =====
@@ -773,14 +736,6 @@ theorem GlobalTheory.HomStab.isIso_map_ptMap_zero : ∀ (k G H X : Type) [CommRi
       rw [key, ← permInv (s y), act, hs, ← Module.End.mul_apply, ← map_mul, mul_inv_cancel, map_one,
         Module.End.one_apply]
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab
-theorem _root_.GlobalTheory.T.shapiro_isIso_groupHomology_zero : ∀ (k G H X : Type) [CommRing k] [Group G] [Group H] [MulAction G X] (φ : H →* G) (x : X) (hx : ∀ h, φ h • x = x), φ.range = MulAction.stabilizer G x → (∀ y : X, ∃ g : G, g • x = y) → ∀ A : Rep k G, IsIso (groupHomology.map φ (ptMap φ x hx A) 0) := by
-  first
-  | exact @GlobalTheory.HomStab.isIso_map_ptMap_zero
-  | exact @GlobalTheory.HomStab.ShapiroZero.linkExactnessStability_hom_fact
-  | exact @GlobalTheory.HomStab.ShapiroZero.H0π_smul
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.ShapiroIsIsoGroupHomologyZero =====
@@ -799,15 +754,15 @@ theorem shapiro_pt : ∀ (k G H X : Type) [CommRing k] [Group G] [Group H] [MulA
   have key : ∀ (n : ℕ) (A : Rep k G), IsIso (groupHomology.map φ (ptMap φ x hx A) n) := by
     intro n
     induction n with
-    | zero => exact fun A => GlobalTheory.T.shapiro_isIso_groupHomology_zero k G H X φ x hx hr ht A
+    | zero => exact fun A => _root_.GlobalTheory.HomStab.isIso_map_ptMap_zero k G H X φ x hx hr ht A
     | succ n ih =>
       intro A
-      obtain ⟨ι, K, i, e, h, hS⟩ := GlobalTheory.T.exists_free_resolution_short_exact k G A
+      obtain ⟨ι, K, i, e, h, hS⟩ := _root_.GlobalTheory.HomStab.exists_free_shortExact k G A
       have hX := hS.map_of_exact (Rep.resFunctor (k := k) φ)
-      obtain ⟨hz, hY⟩ := GlobalTheory.T.permCoef_preserves_shortExact k G X _ hS
-      refine GlobalTheory.T.groupHomology_dimension_shift_isIso k G H φ _ _ hX hY (ptMap φ x hx K) (ptMap φ x hx (Rep.free k G ι))
-        (ptMap φ x hx A) ?_ ?_ n (GlobalTheory.T.projective_rep_groupHomology_pos_vanishes k H _ (GlobalTheory.T.projective_res_free_rep_of_injective k G H φ hi ι) n)
-        (GlobalTheory.T.projective_rep_groupHomology_pos_vanishes k G _ (GlobalTheory.T.projective_perm_tensor_free k G X ι) n) (ih K) (ih _)
+      obtain ⟨hz, hY⟩ := _root_.GlobalTheory.HomStab.permCoef_shortExact k G X _ hS
+      refine _root_.GlobalTheory.HomStab.isIso_map_succ_of_shortExact k G H φ _ _ hX hY (ptMap φ x hx K) (ptMap φ x hx (Rep.free k G ι))
+        (ptMap φ x hx A) ?_ ?_ n (_root_.GlobalTheory.HomStab.isZero_groupHomology_succ_of_projective k H _ (_root_.GlobalTheory.HomStab.projective_res_free_of_injective k G H φ hi ι) n)
+        (_root_.GlobalTheory.HomStab.isZero_groupHomology_succ_of_projective k G _ (_root_.GlobalTheory.HomStab.main k G X ι) n) (ih K) (ih _)
       · intro a
         exact (Finsupp.mapRange_single (hf := map_zero (Rep.Hom.hom i))).symm
       · intro a
@@ -816,12 +771,6 @@ theorem shapiro_pt : ∀ (k G H X : Type) [CommRing k] [Group G] [Group H] [MulA
 
 end GlobalTheory.HomStab
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab
-theorem _root_.GlobalTheory.T.shapiro_lemma_transitive_groupHomology : ∀ (k G H X : Type) [CommRing k] [Group G] [Group H] [MulAction G X] (φ : H →* G) (x : X) (hx : ∀ h, φ h • x = x), Function.Injective φ → φ.range = MulAction.stabilizer G x → (∀ y : X, ∃ g : G, g • x = y) → (∀ (n : ℕ) (A : Rep k G), IsIso (groupHomology.map φ (ptMap φ x hx A) n)) ∧ ∀ n : ℕ, IsIso (ptH (k := k) φ x hx n) := by
-  first
-  | exact @GlobalTheory.HomStab.shapiro_pt
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.ShapiroLemmaTransitiveGroupHomology =====
@@ -841,7 +790,7 @@ variable (R : Type) [CommRing R]
 
 theorem padMat_castLE {m n : ℕ} (h : m ≤ n) (A : Matrix (Fin m) (Fin m) R) (i j : Fin m) :
     (padMat R A : Matrix (Fin n) (Fin n) R) (Fin.castLE h i) (Fin.castLE h j) = A i j := by
-  simp [padMat, Fin.coe_castLE, i.2, j.2]
+  simp [padMat, i.2, j.2]
 
 theorem stab_injective {m n : ℕ} (h : m ≤ n) : Function.Injective (stab R m n h) := by
   intro g g' e
@@ -957,12 +906,6 @@ namespace GlobalTheory.StabSeq
 theorem stab_injective_range_eq : ∀ (R : Type) [CommRing R] (n p : ℕ) (h : p ≤ n), Function.Injective (stab R (n - p) n (Nat.sub_le n p)) ∧ (stab R (n - p) n (Nat.sub_le n p)).range = MulAction.stabilizer (GL (Fin n) R) (stdSeq R n p h) :=
   fun R _ n p h => ⟨stab_injective R _, range_eq R n p h⟩
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab GlobalTheory.SeqCx UpperTheory.V.KL
-theorem _root_.GlobalTheory.T.stabilizer_stdSeq_iso_GL_of_complement : ∀ (R : Type) [CommRing R] (n p : ℕ) (h : p ≤ n), Function.Injective (stab R (n - p) n (Nat.sub_le n p)) ∧ (stab R (n - p) n (Nat.sub_le n p)).range = MulAction.stabilizer (GL (Fin n) R) (stdSeq R n p h) := by
-  first
-  | exact @GlobalTheory.StabSeq.stab_injective_range_eq
-end
 end GlobalTheory.StabSeq -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -994,7 +937,7 @@ theorem pm_id : pm R (id : Fin n → Fin n) = 1 := by
   by_cases h : a = b
   · subst h
     simp [pm]
-  · simp [pm, Matrix.one_apply, h, Ne.symm h]
+  · simp [pm, h, Ne.symm h]
 
 def pmU (f g : Fin n → Fin n) (h1 : ∀ k, f (g k) = k) (h2 : ∀ k, g (f k) = k) : GL (Fin n) R :=
   ⟨pm R f, pm R g, by rw [pm_mul, show f ∘ g = id from funext h1, pm_id],
@@ -1090,7 +1033,7 @@ theorem GlobalTheory.HomStab.exists_perm_face_stdSeq : ∀ (R : Type) [CommRing 
       split_ifs <;> omega
     · intro j h1 h2
       have hjp : j < p := by simpa [stdList] using h2
-      simp only [List.getElem_map, List.getElem_eraseIdx, stdList, List.getElem_ofFn, Fin.val_mk]
+      simp only [List.getElem_map, List.getElem_eraseIdx, stdList, List.getElem_ofFn]
       split_ifs with hj
       · exact pairAct_pmU R _ _ _ _ _ (by omega) _ (by simp only [cyc_val, Fin.val_mk]; split_ifs <;> omega)
       · exact pairAct_pmU R _ _ _ _ _ (by omega) _ (by simp only [cyc_val, Fin.val_mk]; split_ifs <;> omega)
@@ -1142,12 +1085,6 @@ theorem GlobalTheory.HomStab.exists_perm_face_stdSeq : ∀ (R : Type) [CommRing 
 
 end
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab GlobalTheory.SeqCx UpperTheory.V.KL
-theorem _root_.GlobalTheory.T.face_stdSeq_GL_conjugate_commuting_stab : ∀ (R : Type) [CommRing R] (n p : ℕ) (h : p + 1 ≤ n) (i : Fin (p + 1)), ∃ g : GL (Fin n) R, g • face R n p i (stdSeq R n (p + 1) h) = stdSeq R n p (by omega) ∧ ∀ x : GL (Fin (n - (p + 1))) R, g * stab R (n - (p + 1)) n (Nat.sub_le _ _) x = stab R (n - (p + 1)) n (Nat.sub_le _ _) x * g := by
-  first
-  | exact @GlobalTheory.HomStab.exists_perm_face_stdSeq
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.FaceStdSeqGLConjugateCommutingStab =====
@@ -1168,8 +1105,8 @@ theorem chainsMap_id_add {k G : Type} [CommRing k] [Group G] {A B : Rep k G} (f 
   apply groupHomology.inhomogeneousChains.ext
   intro x
   ext a : 2
-  simp only [groupHomology.chainsMap_f_single, HomologicalComplex.add_f_apply]
-  simp [groupHomology.chainsMap_f_single]
+  simp only [HomologicalComplex.add_f_apply]
+  simp
   rw [← Finsupp.single_add]
   rfl
 
@@ -1193,14 +1130,6 @@ theorem hMap_additive : ∀ (k G : Type) [CommRing k] [Group G] (A B : Rep k G) 
 
 end GlobalTheory.HomStab
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab
-theorem _root_.GlobalTheory.T.hMap_sum_zsmul_add : ∀ (k G : Type) [CommRing k] [Group G] (A B : Rep k G) (n : ℕ), (∀ f g : A ⟶ B, hMap (f + g) n = hMap f n + hMap g n) ∧ hMap (0 : A ⟶ B) n = 0 ∧ (∀ (m : ℤ) (f : A ⟶ B), hMap (m • f) n = m • hMap f n) ∧ ∀ (ι : Type) (T : Finset ι) (f : ι → (A ⟶ B)), hMap (∑ i ∈ T, f i) n = ∑ i ∈ T, hMap (f i) n := by
-  first
-  | exact @GlobalTheory.HomStab.hMap_additive
-  | exact @GlobalTheory.HomStab.hMap_add
-  | exact @GlobalTheory.HomStab.chainsMap_id_add
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.HMapSumZsmulAdd =====
@@ -1288,15 +1217,15 @@ theorem ptH_comp_hMap_splitD : ∀ (R : Type) [CommRing R] (n p q : ℕ) (h : p 
       Finsupp.mapDomain (fun z => g • z) (Finsupp.mapRange id rfl (Finsupp.single (f x) a))
     rw [Finsupp.mapRange_id, Finsupp.mapDomain_single]
   unfold splitD
-  rw [(GlobalTheory.T.hMap_sum_zsmul_add ℤ _ _ _ q).2.2.2 _ Finset.univ, Preadditive.comp_sum]
+  rw [(_root_.GlobalTheory.HomStab.hMap_additive ℤ _ _ _ q).2.2.2 _ Finset.univ, Preadditive.comp_sum]
   rw [Finset.sum_congr rfl (g := fun i : Fin (p + 1) => ((-1 : ℤ) ^ (i : ℕ)) •
       (grpHMap (stab R (n - (p + 1)) (n - p) (by omega)) q ≫
         ptH (k := ℤ) (stab R (n - p) n (Nat.sub_le _ _)) (stdSeq R n p (by omega)) h₀ q)) ?_]
   · rw [← Finset.sum_smul, altSum_neg_one]
     split_ifs <;> simp
   · intro i _
-    rw [(GlobalTheory.T.hMap_sum_zsmul_add ℤ _ _ _ q).2.2.1, Preadditive.comp_zsmul]
-    obtain ⟨g, hg, hc⟩ := GlobalTheory.T.face_stdSeq_GL_conjugate_commuting_stab R n p h i
+    rw [(_root_.GlobalTheory.HomStab.hMap_additive ℤ _ _ _ q).2.2.1, Preadditive.comp_zsmul]
+    obtain ⟨g, hg, hc⟩ := _root_.GlobalTheory.HomStab.exists_perm_face_stdSeq R n p h i
     have hface := hpoint _ _ _ _ _ (stab R (n - p) n (Nat.sub_le _ _))
       (stab R (n - (p + 1)) n (Nat.sub_le _ _)) (stab R (n - (p + 1)) (n - p) (by omega))
       _ h₁ _ h₀ (face R n p i) (face_smul R n p i) g hσ hg hc q
@@ -1304,14 +1233,6 @@ theorem ptH_comp_hMap_splitD : ∀ (R : Type) [CommRing R] (n p q : ℕ) (h : p 
 
 end GlobalTheory.HomStab
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab GlobalTheory.SeqCx UpperTheory.V.KL
-theorem _root_.GlobalTheory.T.standardSeqPoint_comp_splitSeqDifferential : ∀ (R : Type) [CommRing R] (n p q : ℕ) (h : p + 1 ≤ n) (h₁ : ∀ x, stab R (n - (p + 1)) n (Nat.sub_le _ _) x • stdSeq R n (p + 1) h = stdSeq R n (p + 1) h) (h₀ : ∀ x, stab R (n - p) n (Nat.sub_le _ _) x • stdSeq R n p (by omega) = stdSeq R n p (by omega)), ptH (k := ℤ) (stab R (n - (p + 1)) n (Nat.sub_le _ _)) (stdSeq R n (p + 1) h) h₁ q ≫ hMap (splitD R n p) q = if Even p then grpHMap (stab R (n - (p + 1)) (n - p) (by omega)) q ≫ ptH (k := ℤ) (stab R (n - p) n (Nat.sub_le _ _)) (stdSeq R n p (by omega)) h₀ q else 0 := by
-  first
-  | exact @GlobalTheory.HomStab.ptH_comp_hMap_splitD
-  | exact @GlobalTheory.HomStab.stab_comp_stab
-  | exact @GlobalTheory.HomStab.altSum_neg_one
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.StandardSeqPointCompSplitSeqDifferential =====
@@ -1330,7 +1251,7 @@ namespace GlobalTheory.HomStab
 theorem stab_smul_stdSeq (R : Type) [CommRing R] (n p : ℕ) (h : p ≤ n) (x : GL (Fin (n - p)) R) :
     stab R (n - p) n (Nat.sub_le _ _) x • stdSeq R n p h = stdSeq R n p h := by
   have hmem : stab R (n - p) n (Nat.sub_le n p) x ∈ (stab R (n - p) n (Nat.sub_le n p)).range := ⟨x, rfl⟩
-  rw [(GlobalTheory.T.stabilizer_stdSeq_iso_GL_of_complement R n p h).2] at hmem
+  rw [(_root_.GlobalTheory.StabSeq.stab_injective_range_eq R n p h).2] at hmem
   exact hmem
 
 theorem firstPage_split : ∀ (R : Type) [CommRing R] (s : ℕ), StableRangeLe R s → ∀ n : ℕ,
@@ -1344,26 +1265,19 @@ theorem firstPage_split : ∀ (R : Type) [CommRing R] (s : ℕ), StableRangeLe R
   · intro p q hp
     have h : p ≤ n := by omega
     simp only [dif_pos h]
-    exact (GlobalTheory.T.shapiro_lemma_transitive_groupHomology ℤ (GL (Fin n) R) (GL (Fin (n - p)) R) (SplitSet R n p)
+    exact (_root_.GlobalTheory.HomStab.shapiro_pt ℤ (GL (Fin n) R) (GL (Fin (n - p)) R) (SplitSet R n p)
       (stab R (n - p) n (Nat.sub_le _ _)) (stdSeq R n p h) (stab_smul_stdSeq R n p h)
-      (GlobalTheory.T.stabilizer_stdSeq_iso_GL_of_complement R n p h).1 (GlobalTheory.T.stabilizer_stdSeq_iso_GL_of_complement R n p h).2
-      (fun y => GlobalTheory.T.GL_transitive_splitSet_of_stableRangeLe R s hs n p h hp y)).2 q
+      (_root_.GlobalTheory.StabSeq.stab_injective_range_eq R n p h).1 (_root_.GlobalTheory.StabSeq.stab_injective_range_eq R n p h).2
+      (fun y => _root_.GlobalTheory.HomStab.splitSet_transitive R s hs n p h hp y)).2 q
   · intro p q hp
     have h0 : p ≤ n := by omega
     simp only [dif_pos hp, dif_pos h0]
-    exact GlobalTheory.T.standardSeqPoint_comp_splitSeqDifferential R n p q hp (stab_smul_stdSeq R n (p + 1) hp) (stab_smul_stdSeq R n p h0)
+    exact _root_.GlobalTheory.HomStab.ptH_comp_hMap_splitD R n p q hp (stab_smul_stdSeq R n (p + 1) hp) (stab_smul_stdSeq R n p h0)
 
 end GlobalTheory.HomStab
 
 end
 
-section
-open CategoryTheory CategoryTheory.Limits GlobalTheory.HomStab GlobalTheory.SeqCx UpperTheory.V.KL
-theorem _root_.GlobalTheory.T.splitSeq_firstPage_iso_and_differential : ∀ (R : Type) [CommRing R] (s : ℕ), StableRangeLe R s → ∀ n : ℕ, ∃ e : ∀ p q, grpH (GL (Fin (n - p)) R) q ⟶ groupHomology (splitRep R n p) q, (∀ p q, p + s ≤ n → IsIso (e p q)) ∧ ∀ p q, p + 1 ≤ n → e (p + 1) q ≫ hMap (splitD R n p) q = if Even p then grpHMap (stab R (n - (p + 1)) (n - p) (by omega)) q ≫ e p q else 0 := by
-  first
-  | exact @GlobalTheory.HomStab.firstPage_split
-  | exact @GlobalTheory.HomStab.stab_smul_stdSeq
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.LiteratureResults.KTheoryStability.HomologicalStability.LinkExactnessStability.SplitSeqFirstPageIsoAndDifferential =====

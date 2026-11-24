@@ -87,7 +87,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.UnitLemma GlobalTheory.InertUnitOrb
 
 theorem _root_.GlobalTheory.T.isIntegral_matrix_iff_bounded_powers : ∀ (K : UQ) {L : Type} [Field L] [Valued L (WithZero (Multiplicative ℤ))] (e : K.E ≃+* L), (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → ∀ (n : ℕ) (M : Matrix (Fin n) (Fin n) K.E), IsIntegral K.O M ↔ ∃ m : ℤ, ∀ k : ℕ, ∀ i j, Valued.v (e ((M ^ k) i j)) ≤ WithZero.exp m := by
-  first | exact @GlobalTheory.IntMatBound.isIntegral_iff_bounded | exact GlobalTheory.IntMatBound.isIntegral_iff_bounded | (intros; apply GlobalTheory.IntMatBound.isIntegral_iff_bounded <;> assumption)
+  first | exact @GlobalTheory.IntMatBound.isIntegral_iff_bounded
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsIntegralMatrixIffBoundedPowersStatement =====
@@ -155,7 +155,7 @@ theorem cptPart_iff_intUnits_of_model : ∀ (E : Type) [Field E] [NumberField E]
           WithZero.exp m := by
       rw [hinv, isIntegral_iff_of_mulVec B ψ _ _ (hτ s⁻¹), GlobalTheory.T.isIntegral_matrix_iff_bounded_powers K e hint n]
       simp only [hmat, Subgroup.coe_inv]
-    rw [GlobalTheory.T.isCompact_closure_zpowers_iff_bounded_entries w n (UL n w) hcl (s : UL n w)]
+    rw [_root_.GlobalTheory.PowersCompact.isCompact_closure_zpowers_iff w n (UL n w) hcl (s : UL n w)]
     show _ ↔ IsIntegral K.O _ ∧ IsIntegral K.O _
     rw [hI1, hI2]
     simp only [SubgroupClass.coe_zpow]
@@ -205,7 +205,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.UnitLemma GlobalTheory.InertUnitOrb
 
 theorem _root_.GlobalTheory.T.compactPart_centralizer_iff_integralUnits_of_model : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (K : UQ) (e : K.E ≃+* w.adicCompletion E), (∀ x, e (K.c x) = cj w (e x)) → (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → ∀ (n : ℕ) (B : InvAlg K) (ψ : B.A ≃ₗ[K.E] (Fin n → K.E)), ∀ (x : B.Aˣ) (γ : UL n w), IsModel B ((((γ : UL n w) : GLw n w) : Matrix (Fin n) (Fin n) (w.adicCompletion E)).map e.symm) x ψ → B.P.Separable → ∀ τ : twCent (MonoidHom.id (UL n w)) γ ≃* B.T, (∀ (t : twCent (MonoidHom.id (UL n w)) γ) (y : B.A), ψ (((τ t : B.Aˣ) : B.A) * y) = (((((t : UL n w) : UL n w) : GLw n w) : Matrix (Fin n) (Fin n) (w.adicCompletion E)).map e.symm) *ᵥ ψ y) → ∀ t : twCent (MonoidHom.id (UL n w)) γ, ((t : UL n w) ∈ cptPart (twCent (MonoidHom.id (UL n w)) γ) ↔ ((τ t : B.Aˣ)) ∈ intUnits K.O B.A) := by
-  first | exact @GlobalTheory.InertUnitOrb.cptPart_iff_intUnits_of_model | exact GlobalTheory.InertUnitOrb.cptPart_iff_intUnits_of_model | (intros; apply GlobalTheory.InertUnitOrb.cptPart_iff_intUnits_of_model <;> assumption)
+  first | exact @GlobalTheory.InertUnitOrb.cptPart_iff_intUnits_of_model
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.CompactPartCentralizerIffIntegralUnitsOfModelStatement =====
@@ -442,7 +442,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.UnitLemma GlobalTheory.InertUnitOrb
 
 theorem _root_.GlobalTheory.T.localUnitaryCentralizer_equiv_normOneTorus : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (K : UQ) (e : K.E ≃+* w.adicCompletion E), (∀ x, e (K.c x) = cj w (e x)) → (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → ∀ (n : ℕ) (B : InvAlg K) (ψ : B.A ≃ₗ[K.E] (Fin n → K.E)), ∀ (x : B.Aˣ) (γ : UL n w), IsModel B ((((γ : UL n w) : GLw n w) : Matrix (Fin n) (Fin n) (w.adicCompletion E)).map e.symm) x ψ → B.P.Separable → ∃ τ : twCent (MonoidHom.id (UL n w)) γ ≃* B.T, ∀ (t : twCent (MonoidHom.id (UL n w)) γ) (y : B.A), ψ (((τ t : B.Aˣ) : B.A) * y) = (((((t : UL n w) : UL n w) : GLw n w) : Matrix (Fin n) (Fin n) (w.adicCompletion E)).map e.symm) *ᵥ ψ y := by
-  first | exact @GlobalTheory.CentTorusModel.cent_equiv_torus | exact GlobalTheory.CentTorusModel.cent_equiv_torus | (intros; apply GlobalTheory.CentTorusModel.cent_equiv_torus <;> assumption)
+  first | exact @GlobalTheory.CentTorusModel.cent_equiv_torus
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalUnitaryCentralizerEquivNormOneTorusStatement =====
@@ -483,17 +483,17 @@ theorem twOrb_id_indicator (G : Type) [Group G] [TopologicalSpace G] (K : Subgro
     rw [he]
     by_cases h : Q⁻¹ * γ * Q ∈ K
     · have h' : (k : G)⁻¹ * (Q⁻¹ * γ * Q) * k ∈ K := K.mul_mem (K.mul_mem (K.inv_mem k.2) h) k.2
-      simp [Set.indicator_apply, h, h']
+      simp [h, h']
     · have h' : (k : G)⁻¹ * (Q⁻¹ * γ * Q) * k ∉ K := by
         intro h'
         apply h
         have := K.mul_mem (K.mul_mem k.2 h') (K.inv_mem k.2)
         simpa [mul_assoc] using this
-      simp [Set.indicator_apply, h, h']
+      simp [h, h']
   rw [hfun, avg_const_fun]
   by_cases h : Q⁻¹ * γ * Q ∈ K
-  · simp [Set.indicator_apply, h]
-  · simp [Set.indicator_apply, h]
+  · simp [h]
+  · simp [h]
 
 end GlobalTheory.OrbIndUnit
 end -- clump:auto
@@ -511,7 +511,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.UnitLemma GlobalTheory.InertUnitOrb
 
 theorem _root_.GlobalTheory.T.orbitalIntegral_indicator_eq_finsum_relIndex : ∀ (G : Type) [Group G] [TopologicalSpace G] (K : Subgroup G) (γ : G), twOrb (MonoidHom.id G) K γ ((K : Set G).indicator 1) = ∑ᶠ q : DoubleCoset.Quotient (twCent (MonoidHom.id G) γ : Set G) (K : Set G), if (Quotient.out q)⁻¹ * γ * Quotient.out q ∈ K then (((twCent (MonoidHom.id G) γ ⊓ K.map (MulAut.conj (Quotient.out q)).toMonoidHom).relIndex (cptPart (twCent (MonoidHom.id G) γ)) : ℕ) : ℂ) else 0 := by
-  first | exact @GlobalTheory.OrbIndUnit.twOrb_id_indicator | exact GlobalTheory.OrbIndUnit.twOrb_id_indicator | (intros; apply GlobalTheory.OrbIndUnit.twOrb_id_indicator <;> assumption)
+  first | exact @GlobalTheory.OrbIndUnit.twOrb_id_indicator
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.OrbitalIntegralIndicatorEqFinsumRelIndexStatement =====
@@ -556,7 +556,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.UnitLemma GlobalTheory.InertUnitOrb
 
 theorem _root_.GlobalTheory.T.relIndex_eq_relIndex_inf_of_mulEquiv_subgroup : ∀ (G H : Type) [Group G] [Group H] (T : Subgroup G) (S : Subgroup H) (τ : T ≃* S) (A₁ A₂ : Subgroup G) (B₁ B₂ : Subgroup H), A₁ ≤ T → A₂ ≤ T → (∀ t : T, (t : G) ∈ A₁ ↔ ((τ t : S) : H) ∈ B₁) → (∀ t : T, (t : G) ∈ A₂ ↔ ((τ t : S) : H) ∈ B₂) → A₁.relIndex A₂ = (B₁ ⊓ S).relIndex (B₂ ⊓ S) := by
-  first | exact @GlobalTheory.relIndex_eq_of_mulEquiv_subgroup | exact GlobalTheory.relIndex_eq_of_mulEquiv_subgroup | (intros; apply GlobalTheory.relIndex_eq_of_mulEquiv_subgroup <;> assumption)
+  first | exact @GlobalTheory.relIndex_eq_of_mulEquiv_subgroup
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.RelIndexEqOfMulEquivSubgroupStatement =====
@@ -913,22 +913,6 @@ noncomputable section
 
 namespace GlobalTheory.InertUnitOrb.LatOnto
 
-open GlobalTheory.InertUnitOrb.ModelOfN
-
-theorem exists_orthonormal_mem {K : UQ} (n : ℕ) : ∀ (V : Type) [AddCommGroup V] [Module K.E V] [Module K.O V]
-    [IsScalarTower K.O K.E V] [FiniteDimensional K.E V] (h : V → V → K.E),
-    (∀ y y' z, h (y + y') z = h y z + h y' z) → (∀ (a : K.E) y z, h (a • y) z = a * h y z) →
-    (∀ y z, h z y = K.c (h y z)) → Module.finrank K.E V = n → ∀ L : Submodule K.O V, L.FG →
-    Submodule.span K.E (L : Set V) = ⊤ → (∀ y, y ∈ L ↔ ∀ z ∈ L, h y z ∈ (algebraMap K.O K.E).range) →
-    ∃ v : Fin n → V, (∀ i, v i ∈ L) ∧ ∀ i j, h (v i) (v j) = if i = j then 1 else 0 := by
-  first
-  | exact @_root_.GlobalTheory.InvolutionTraceUnit.exists_orthonormal
-  | exact _root_.GlobalTheory.InvolutionTraceUnit.exists_orthonormal
-  | (apply _root_.GlobalTheory.InvolutionTraceUnit.exists_orthonormal <;> assumption)
-  | (intros; apply _root_.GlobalTheory.InvolutionTraceUnit.exists_orthonormal <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.InvolutionTraceUnit.exists_orthonormal <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.InvolutionTraceUnit.exists_orthonormal ..)
-
 end GlobalTheory.InertUnitOrb.LatOnto
 
 namespace GlobalTheory.InertUnitOrb.LatOnto
@@ -950,7 +934,7 @@ theorem exists_unitLat_eq : ∀ (E : Type) [Field E] [NumberField E] [IsCMField 
     congr 1
     ring
   have hn : Module.finrank K.E B.A = n := by rw [ψ.finrank_eq, Module.finrank_fin_fun]
-  obtain ⟨v, hvL, hv⟩ := exists_orthonormal_mem n B.A (B.herm x) hadd hsmul hsym hn L hLat.1 hLat.2 hdual
+  obtain ⟨v, hvL, hv⟩ := _root_.GlobalTheory.InvolutionTraceUnit.exists_orthonormal n B.A (B.herm x) hadd hsmul hsym hn L hLat.1 hLat.2 hdual
   obtain ⟨b, hb⟩ := exists_basis_of_orthonormal (B.herm x) hadd hsmul hn v hv
   let P : Matrix (Fin n) (Fin n) K.E := Matrix.of fun i j => ψ (v j) i
   let Pc : Matrix (Fin n) (Fin n) K.E := Formalism.UG.cT (K.c : K.E →+* K.E) P
@@ -1039,7 +1023,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.UnitLemma GlobalTheory.InertUnitOrb
 
 theorem _root_.GlobalTheory.T.self_dual_lattice_standard_hermitian : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (K : UQ) (e : K.E ≃+* w.adicCompletion E), (∀ x, e (K.c x) = cj w (e x)) → (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → ∀ (n : ℕ) (B : InvAlg K) (ψ : B.A ≃ₗ[K.E] (Fin n → K.E)), ∀ (x : B.Aˣ), B.σ (x : B.A) = x → (∀ y z, stdH K n (ψ y) (ψ z) = B.herm x y z) → ∀ L : Submodule K.O B.A, IsLat K.O K.E L → (∀ y, y ∈ L ↔ ∀ z ∈ L, B.herm x y z ∈ (algebraMap K.O K.E).range) → ∃ q : UL n w, unitLat e B ψ q = L := by
-  first | exact @GlobalTheory.InertUnitOrb.LatOnto.exists_unitLat_eq | exact GlobalTheory.InertUnitOrb.LatOnto.exists_unitLat_eq | (intros; apply GlobalTheory.InertUnitOrb.LatOnto.exists_unitLat_eq <;> assumption)
+  first | exact @GlobalTheory.InertUnitOrb.LatOnto.exists_unitLat_eq
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.SelfDualLatticeStandardHermitianStatement =====
@@ -1096,7 +1080,7 @@ theorem mem_KGL_of_int {E : Type} [Field E] [NumberField E] {n : ℕ} (w : Pl E)
   · rw [map_mul, hN, hN', map_one]; exact M.mul_inv
   · rw [map_mul, hN, hN', map_one]; exact M.inv_mul
   · apply Units.ext
-    simp only [Formalism.UG.bc, Units.coe_map, MonoidHom.coe_coe]
+    simp only [Formalism.UG.bc, Units.coe_map]
     exact hN
 
 end GlobalTheory.InertUnitOrb.LatStable
@@ -1196,7 +1180,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.UnitLemma GlobalTheory.InertUnitOrb
 
 theorem _root_.GlobalTheory.T.unitLattice_stable_iff_conj_integral : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (K : UQ) (e : K.E ≃+* w.adicCompletion E), (∀ x, e (K.c x) = cj w (e x)) → (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → ∀ (n : ℕ) (B : InvAlg K) (ψ : B.A ≃ₗ[K.E] (Fin n → K.E)), ∀ (γ : UL n w), (∀ y, ψ (B.g * y) = ((((γ : UL n w) : GLw n w) : Matrix (Fin n) (Fin n) (w.adicCompletion E)).map e.symm) *ᵥ ψ y) → ∀ q : UL n w, ((∀ y ∈ unitLat e B ψ q, B.g * y ∈ unitLat e B ψ q) ↔ q⁻¹ * γ * q ∈ KL n w) := by
-  first | exact @GlobalTheory.InertUnitOrb.LatStable.unitLat_stable_iff | exact GlobalTheory.InertUnitOrb.LatStable.unitLat_stable_iff | (intros; apply GlobalTheory.InertUnitOrb.LatStable.unitLat_stable_iff <;> assumption)
+  first | exact @GlobalTheory.InertUnitOrb.LatStable.unitLat_stable_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.UnitLatticeStableIffConjIntegralStatement =====
@@ -1303,7 +1287,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.UnitLemma GlobalTheory.InertUnitOrb
 
 theorem _root_.GlobalTheory.T.unitaryLattice_eq_iff_inv_mul_integral : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (K : UQ) (e : K.E ≃+* w.adicCompletion E), (∀ x, e (K.c x) = cj w (e x)) → (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → ∀ (n : ℕ) (B : InvAlg K) (ψ : B.A ≃ₗ[K.E] (Fin n → K.E)), ∀ q q' : UL n w, unitLat e B ψ q = unitLat e B ψ q' ↔ q⁻¹ * q' ∈ KL n w := by
-  first | exact @GlobalTheory.InertUnitLat.unitLat_eq_iff | exact GlobalTheory.InertUnitLat.unitLat_eq_iff | (intros; apply GlobalTheory.InertUnitLat.unitLat_eq_iff <;> assumption)
+  first | exact @GlobalTheory.InertUnitLat.unitLat_eq_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.UnitaryLatticeEqIffInvMulIntegralStatement =====
@@ -1352,7 +1336,7 @@ theorem single_mem_intVec (K : UQ) {n : ℕ} (i : Fin n) : (Pi.single i (1 : K.E
   intro j
   by_cases h : j = i
   · subst h; exact ⟨1, by simp⟩
-  · exact ⟨0, by simp [Pi.single_apply, h]⟩
+  · exact ⟨0, by simp [h]⟩
 
 theorem unitLat_isLat_selfDual : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (K : UQ) (e : K.E ≃+* w.adicCompletion E), (∀ x, e (K.c x) = cj w (e x)) → (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → ∀ (n : ℕ) (B : InvAlg K) (ψ : B.A ≃ₗ[K.E] (Fin n → K.E)), ∀ (x : B.Aˣ), B.σ (x : B.A) = x → (∀ y z, stdH K n (ψ y) (ψ z) = B.herm x y z) → ∀ q : UL n w, IsLat K.O K.E (unitLat e B ψ q) ∧ ∀ y, y ∈ unitLat e B ψ q ↔ ∀ z ∈ unitLat e B ψ q, B.herm x y z ∈ (algebraMap K.O K.E).range := by
   intro E _ _ _ _ w hns K e he hint n B ψ x hx hψ q
@@ -1447,7 +1431,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.UnitLemma GlobalTheory.InertUnitOrb
 
 theorem _root_.GlobalTheory.T.unitaryLattice_isLattice_selfDual_hermitianModel : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (K : UQ) (e : K.E ≃+* w.adicCompletion E), (∀ x, e (K.c x) = cj w (e x)) → (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → ∀ (n : ℕ) (B : InvAlg K) (ψ : B.A ≃ₗ[K.E] (Fin n → K.E)), ∀ (x : B.Aˣ), B.σ (x : B.A) = x → (∀ y z, stdH K n (ψ y) (ψ z) = B.herm x y z) → ∀ q : UL n w, IsLat K.O K.E (unitLat e B ψ q) ∧ ∀ y, y ∈ unitLat e B ψ q ↔ ∀ z ∈ unitLat e B ψ q, B.herm x y z ∈ (algebraMap K.O K.E).range := by
-  first | exact @GlobalTheory.InertUnitOrb.SelfDualLat.unitLat_isLat_selfDual | exact GlobalTheory.InertUnitOrb.SelfDualLat.unitLat_isLat_selfDual | (intros; apply GlobalTheory.InertUnitOrb.SelfDualLat.unitLat_isLat_selfDual <;> assumption)
+  first | exact @GlobalTheory.InertUnitOrb.SelfDualLat.unitLat_isLat_selfDual
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.UnitaryLatticeIsLatticeSelfDualHermitianModelStatement =====
@@ -1562,12 +1546,12 @@ theorem finsum_ite_subtype' {α M : Type} [AddCommMonoid M] (p : α → Prop) [D
 theorem orb_eq_N : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (K : GlobalTheory.UnitLemma.UQ) (e : K.E ≃+* w.adicCompletion E), (∀ x, e (K.c x) = cj w (e x)) → (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → ∀ (n : ℕ) (B : GlobalTheory.UnitLemma.InvAlg K), B.P.Separable → ∀ (γ : UL n w) (x : B.Aˣ) (ψ : B.A ≃ₗ[K.E] (Fin n → K.E)), GlobalTheory.InertUnitOrb.IsModel B (γ.1.val.map e.symm) x ψ → twOrb (MonoidHom.id _) (KL n w) γ ((KL n w : Set (UL n w)).indicator 1) = ((B.N x : ℚ) : ℂ) := by
   intro E _ _ _ hE w hw K e he hint n B hsep γ x ψ hM
   obtain ⟨hx, hg, hh⟩ := hM
-  obtain ⟨τ, hτ⟩ := exists_torus_equiv E hE w hw K e he hint n B ψ x γ ⟨hx, hg, hh⟩ hsep
-  have hcpt := cptPart_iff_intUnits E hE w hw K e he hint n B ψ x γ ⟨hx, hg, hh⟩ hsep τ hτ
-  have hS1 := unitLat_selfDual E hE w hw K e he hint n B ψ x hx hh
-  have hS1b := unitLat_stable_iff E hE w hw K e he hint n B ψ γ hg
-  have hS2 := unitLat_eq_iff E hE w hw K e he hint n B ψ
-  have hS3 := exists_unitLat_eq E hE w hw K e he hint n B ψ x hx hh
+  obtain ⟨τ, hτ⟩ := _root_.GlobalTheory.CentTorusModel.cent_equiv_torus E hE w hw K e he hint n B ψ x γ ⟨hx, hg, hh⟩ hsep
+  have hcpt := _root_.GlobalTheory.InertUnitOrb.cptPart_iff_intUnits_of_model E hE w hw K e he hint n B ψ x γ ⟨hx, hg, hh⟩ hsep τ hτ
+  have hS1 := _root_.GlobalTheory.InertUnitOrb.SelfDualLat.unitLat_isLat_selfDual E hE w hw K e he hint n B ψ x hx hh
+  have hS1b := _root_.GlobalTheory.InertUnitOrb.LatStable.unitLat_stable_iff E hE w hw K e he hint n B ψ γ hg
+  have hS2 := _root_.GlobalTheory.InertUnitLat.unitLat_eq_iff E hE w hw K e he hint n B ψ
+  have hS3 := _root_.GlobalTheory.InertUnitOrb.LatOnto.exists_unitLat_eq E hE w hw K e he hint n B ψ x hx hh
   have hS6 : ∀ (t : twCent (MonoidHom.id (UL n w)) γ) (q : UL n w),
       unitLat e B ψ ((t : UL n w) * q) = mulLat K.O ((τ t : B.Aˣ) : B.A) (unitLat e B ψ q) :=
     fun t q => unitLat_mul E hE w hw K e he hint n B ψ t q (τ t) (hτ t)
@@ -1586,7 +1570,7 @@ theorem orb_eq_N : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E
   have hconj : ∀ (Q s : UL n w), s ∈ (KL n w).map (MulAut.conj Q).toMonoidHom ↔ Q⁻¹ * s * Q ∈ KL n w := by
     intro Q s
     rw [Subgroup.mem_map_equiv, MulAut.conj_symm_apply]
-  rw [twOrb_unit]
+  rw [_root_.GlobalTheory.OrbIndUnit.twOrb_id_indicator]
   unfold InvAlg.N orbSum
   rw [ratCast_finsum']
   rw [finsum_ite_subtype']
@@ -1634,7 +1618,7 @@ theorem orb_eq_N : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E
     rw [← hta, ← hS6] at hRa
     simp only [one_mul, Rat.cast_natCast]
     congr 1
-    refine relIndex_transport (UL n w) B.Aˣ _ B.T τ _ _ (stabLat K.O R.1) (intUnits K.O B.A) inf_le_left hcle ?_ hcpt
+    refine _root_.GlobalTheory.relIndex_eq_of_mulEquiv_subgroup (UL n w) B.Aˣ _ B.T τ _ _ (stabLat K.O R.1) (intUnits K.O B.A) inf_le_left hcle ?_ hcpt
     intro s
     rw [mem_stabLat_iff, hRa, ← hS6, hS2, Subgroup.mem_inf, hconj]
     simp only [SetLike.coe_mem, true_and]
@@ -1660,7 +1644,7 @@ open scoped Classical TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.inert_orbitalIntegral_unit_eq_lattice_count : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (K : GlobalTheory.UnitLemma.UQ) (e : K.E ≃+* w.adicCompletion E), (∀ x, e (K.c x) = cj w (e x)) → (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → ∀ (n : ℕ) (B : GlobalTheory.UnitLemma.InvAlg K), B.P.Separable → ∀ (γ : UL n w) (x : B.Aˣ) (ψ : B.A ≃ₗ[K.E] (Fin n → K.E)), GlobalTheory.InertUnitOrb.IsModel B (γ.1.val.map e.symm) x ψ → twOrb (MonoidHom.id _) (KL n w) γ ((KL n w : Set (UL n w)).indicator 1) = ((B.N x : ℚ) : ℂ) := by
-  first | exact @GlobalTheory.InertUnitOrb.orb_eq_N | exact GlobalTheory.InertUnitOrb.orb_eq_N | (intros; apply GlobalTheory.InertUnitOrb.orb_eq_N <;> assumption)
+  first | exact @GlobalTheory.InertUnitOrb.orb_eq_N
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.InertOrbitalIntegralUnitEqLatticeCountStatement =====

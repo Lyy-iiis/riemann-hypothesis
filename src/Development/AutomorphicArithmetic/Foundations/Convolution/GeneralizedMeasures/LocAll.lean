@@ -58,6 +58,7 @@ import Mathlib.Topology.Sheaves.Init
 import GroundTheory.AutomorphicForms.CompactFormulaCountable
 import Mathlib.RingTheory.Henselian
 import Mathlib.Tactic.Basify
+import GroundTheory.AutomorphicForms.Satake
 import Mathlib.RingTheory.WittVector.IsPoly
 import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Tactic.ReduceModChar
@@ -134,7 +135,7 @@ theorem mapIso_torusPow (c : F ≃+* F') (hv : ∀ x, c x ∈ 𝒪[F'] ↔ x ∈
   rw [Units.val_mul, coe_torusPow, coe_torusPow, coe_diagGL, Matrix.diagonal_mul_diagonal]
   by_cases hij : i = j
   · subst hij
-    simp only [Matrix.diagonal_apply_eq, map_zpow₀, RingEquiv.coe_toRingHom]
+    simp only [Matrix.diagonal_apply_eq, map_zpow₀]
     rw [hu, mul_zpow]
     simp [Units.val_zpow_eq_zpow_val]
   · simp [Matrix.diagonal_apply_ne _ hij]
@@ -402,23 +403,11 @@ end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.Foundations.Convolution.IntegrableConvolution.LocHeckeSplit =====
 
 -- ===== clump member: Development.AutomorphicArithmetic.Foundations.Convolution.SphericalHeckeOperators.PolyAlg =====
--- clump-header: {"m": "Development.AutomorphicArithmetic.Foundations.Convolution.SphericalHeckeOperators.PolyAlg", "h": "module\n\npublic import Development.AutomorphicArithmetic.Foundations.Convolution.SphericalHeckeOperators.SymSum\npublic import Development.AutomorphicArithmetic.Foundations.Convolution.TensFun\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Development.AutomorphicArithmetic.Foundations.Convolution.SphericalHeckeOperators.PolyAlg", "h": "module\n\npublic import Development.AutomorphicArithmetic.Foundations.Convolution.SphericalHeckeOperators.SymSum\npublic import Development.AutomorphicArithmetic.Foundations.Convolution.TensFun\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\nimport GroundTheory.AutomorphicForms.Satake\n\n"}
 section -- clump:auto
 @[expose] public section
 
 open MeasureTheory NumberField GroundTheory.Automorphic GroundTheory.Automorphic.Spherical UpperTheory.ConvolutionTheory UpperTheory.ConvolutionTheory.H
-
-private theorem evalAt_polynomialEmbed {n : ℕ} (z : Fin n → ℂˣ) (Q : MvPolynomial (Fin n) ℂ) :
-    evalAt z (polyEmb (n := n) Q) = MvPolynomial.aeval (fun j : Fin n => (z j : ℂ)) Q := by
-  have h : (evalAt z).comp (polyEmb (n := n)) = MvPolynomial.aeval (fun j : Fin n => (z j : ℂ)) := by
-    refine MvPolynomial.algHom_ext fun i => ?_
-    rw [AlgHom.comp_apply, polyEmb_X, evalAt_single, MvPolynomial.aeval_X, one_mul,
-      monomialChar_apply, Finset.prod_eq_single i]
-    · simp
-    · intro j _ hj
-      simp [Pi.single_eq_of_ne hj]
-    · simp
-  exact AlgHom.congr_fun h Q
 
 private theorem baseChange_polynomialEmbed {n : ℕ} (l : ℕ) (Q : MvPolynomial (Fin n) ℂ) :
     bc l (polyEmb (n := n) Q) = polyEmb (n := n) (MvPolynomial.expand l Q) := by
@@ -484,7 +473,7 @@ theorem UpperTheory.ConvolutionTheory.H.polyAlg :
     rw [← MvPolynomial.esymmAlgHom_apply, hγ]
     rfl
   · intro γ z
-    rw [evalAt_polynomialEmbed]
+    rw [_root_.GroundTheory.Automorphic.Spherical.evalAt_polyEmb]
     have h : (MvPolynomial.aeval (fun j : Fin n => (z j : ℂ))).comp
           (MvPolynomial.aeval (fun i : Fin n => MvPolynomial.esymm (Fin n) ℂ (i + 1))) =
         MvPolynomial.aeval (fun i : Fin n => (Finset.univ.val.map fun j => (z j : ℂ)).esymm (i + 1)) := by

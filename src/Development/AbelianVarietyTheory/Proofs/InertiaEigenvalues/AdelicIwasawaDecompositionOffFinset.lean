@@ -218,17 +218,12 @@ theorem tl_zero (ϖ : ∀ v : HeightOneSpectrum (𝓞 E), (v.adicCompletion E)ˣ
     rfl
   rw [this, map_one, map_one]
 
-theorem GL_ext_pLoc {x y : GL (Fin n) (Af E)}
-    (h : ∀ w, GeneralLinearGroup.map (pLoc E w) x = GeneralLinearGroup.map (pLoc E w) y) : x = y :=
-  Units.ext (Matrix.ext fun i k => IsDedekindDomain.FiniteAdeleRing.ext _ fun v =>
-    congrArg (fun x : GL (Fin n) (v.adicCompletion E) => x.val i k) (h v))
-
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField in
 theorem tl_single (ϖ : ∀ v : HeightOneSpectrum (𝓞 E), (v.adicCompletion E)ˣ) (v : HeightOneSpectrum (𝓞 E)) (a : Fin n → ℤ) :
     tl n ϖ (Finsupp.single v a) = finGL E n (locGL E n v (GlobalTheory.IwaCell.tD (ϖ v) a)) := by
   unfold tl
   congr 1
-  apply GL_ext_pLoc
+  apply _root_.GlobalTheory.CuspRep.LocUniq.gl_ext
   intro w
   by_cases hw : w = v
   · subst hw
@@ -251,7 +246,7 @@ theorem tl_single (ϖ : ∀ v : HeightOneSpectrum (𝓞 E), (v.adicCompletion E)
     · subst hij
       simp only [Matrix.diagonal_apply_eq]
       change ((ϖ w ^ (Finsupp.mapRange (fun x : Fin n → ℤ => x i) rfl (Finsupp.single v a)) w : (w.adicCompletion E)ˣ) : w.adicCompletion E) = _
-      simp [Finsupp.single_apply, Ne.symm hw]
+      simp [Ne.symm hw]
     · simp [Matrix.diagonal_apply_ne _ hij, Matrix.one_apply_ne hij]
 
 section

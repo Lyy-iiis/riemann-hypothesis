@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Download every artifact named in a Lake map that is missing from a local Lake cache.
 
-usage: fetch-artifacts.py <map.jsonl> <cache-dir> [--sha256 <file>]
+usage: fetch-artifacts.py <map.jsonl> <cache-dir> [--sha256 <file> [--verify-existing]]
+                          [--base-url <url>] [--user-agent <agent>]
 Stock Lake 4.37 does not download artifacts lazily during `lake build`: a mapped module whose
 artifact is absent locally is simply compiled. So restores must prefetch. One curl process
 downloads up to 500 files at a time (fd soft limit raised to match) and retries transport
@@ -9,7 +10,10 @@ errors and CDN 5xx. Files land in <cache-dir>/artifacts/<hash16>.ltar atomically
 there is always complete. Objects are content-addressed and write-once (If-None-Match) in R2.
 --sha256 names a JSON object {"<hash16>.ltar": "<sha256>"} (e.g. from a CI module manifest):
 those downloads are verified before they are moved into the cache, and a mismatch is discarded
-and downloaded again. Up to three passes; exit 1 if anything is still missing.
+and downloaded again. With --verify-existing, artifacts already in the cache are checked too
+(a symlink or mismatch is removed and downloaded again). Up to three passes; exit 1 if anything
+is still missing. scripts/ci-cache-get.py (`lake exe cache get`) uses this with its own
+--user-agent.
 """
 import hashlib, json, os, resource, subprocess, sys, tempfile
 from concurrent.futures import ThreadPoolExecutor
@@ -24,13 +28,24 @@ def sha256(path):
         return hashlib.file_digest(f, "sha256").hexdigest()
 
 
+def option(args, name, default=None):
+    if name not in args:
+        return default
+    i = args.index(name)
+    value = args[i + 1]
+    del args[i:i + 2]
+    return value
+
+
 def main():
     args = sys.argv[1:]
-    digests = {}
-    if "--sha256" in args:
-        i = args.index("--sha256")
-        digests = json.loads(Path(args[i + 1]).read_text())
-        del args[i:i + 2]
+    digests = option(args, "--sha256")
+    digests = json.loads(Path(digests).read_text()) if digests else {}
+    base = option(args, "--base-url", PUBLIC)
+    agent = option(args, "--user-agent", "rh-buildq/1")
+    verify_existing = "--verify-existing" in args
+    if verify_existing:
+        args.remove("--verify-existing")
     mapping, cache = Path(args[0]), Path(args[1]) / "artifacts"
     cache.mkdir(parents=True, exist_ok=True)
     soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
@@ -39,16 +54,28 @@ def main():
         resource.setrlimit(resource.RLIMIT_NOFILE, (want, hard))
     lines = mapping.read_text().splitlines()[1:]
     names = sorted({json.loads(l)[1] for l in lines if l})
-    missing = [n for n in names if not (cache / n).exists()]
+
+    def present(n):
+        p = cache / n
+        if not verify_existing:
+            return p.exists()
+        if p.is_symlink() or (p.exists() and n in digests and sha256(p) != digests[n]):
+            print(f"fetch-artifacts: discarding corrupt local {n}", flush=True)
+            p.unlink()
+            return False
+        return p.is_file()
+
+    with ThreadPoolExecutor(32) as pool:
+        missing = [n for n, ok in zip(names, pool.map(present, names)) if not ok]
     print(f"fetch-artifacts: {len(names)} mapped, {len(missing)} missing locally", flush=True)
     for attempt in range(1, 4):
         if not missing:
             break
         with tempfile.TemporaryDirectory(prefix="fetch-", dir=cache.parent) as t:
             conf = Path(t) / "curl.conf"
-            conf.write_text("".join(f'url = "{PUBLIC}{n[:-5]}.art"\noutput = "{t}/{n}"\n' for n in missing))
+            conf.write_text("".join(f'url = "{base}{n[:-5]}.art"\noutput = "{t}/{n}"\n' for n in missing))
             r = subprocess.run(["curl", "--disable", "--fail", "--silent", "--show-error", "--location",
-                                "--user-agent", "rh-buildq/1", "--retry", "5", "--retry-all-errors",
+                                "--user-agent", agent, "--retry", "5", "--retry-all-errors",
                                 "--connect-timeout", "30", "--max-time", "600",
                                 "--parallel", "--parallel-max", str(PARALLEL), "--config", str(conf)])
 

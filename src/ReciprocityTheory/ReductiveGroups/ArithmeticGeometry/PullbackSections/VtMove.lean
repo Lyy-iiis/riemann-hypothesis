@@ -161,20 +161,6 @@ theorem negT_push : (negT A T).left ≫ (psiO hp τ hτ).left = (psiO hp τ hτ)
     rw [reassoc_of% hA2, hG2]
     exact snd_inv_push hp τ hτ
 
-section Pmaps
-
-variable {X X' Y Y' : Scheme.{0}} {L : LB X} {L' : LB X'} {F : X' ⟶ X}
-
-theorem val_pmaps (w : LB.Iso L' (L.pull F)) {K : Type} [Fintype K] {φ' : K → (Y' ⟶ X')} {φ : K → (Y ⟶ X)}
-    {ε : K → ℤ} {a : LB.Gen (LB.LinComb L' φ' ε)} {t : LB.Gen (LB.LinComb L φ ε)} {h : Y' ⟶ Y}
-    (hc : ∀ k, φ' k ≫ F = h ≫ φ k) (hm : PMaps w φ' φ ε a t h) {Z : Scheme.{0}} (r : Z ⟶ Y') (z : Z)
-    (J₀ : (Z ⟶ X) → L.ι) (J : (Z ⟶ X') → L'.ι) (hJ₀ : Good L z J₀) (hJ : Good L' z J) :
-    val t (r ≫ h) z J₀ =
-      (∏ k, gw w (r ≫ φ' k) z (J₀ ((r ≫ φ' k) ≫ F)) (J (r ≫ φ' k)) ^ ε k) * val a r z J := by
-  exact ReciprocityTheory.ChartRestriction.G.PullbackSections.MixEnd.val_pmaps' w hc hm r z J₀ J hJ₀ hJ
-
-end Pmaps
-
 section Pts
 
 def Uτ : Over.mk (T.hom ≫ f) ⟶ T₀ := Over.homMk τ hτ
@@ -241,7 +227,7 @@ theorem twist_of_val {S₁ : Scheme.{0}} {A₁ : Over S₁} [GrpObj A₁] {M : L
           (fun k => I (𝟙 _ ≫ (![(snd T A₁).left, m.left] : Fin 2 → _) k)) *
         trF (L := M) (fun _ : Fin 1 => (snd T A₁).left) (fun _ => b) ψ.left y (fun _ => j 1)
           (fun _ => I (ψ.left ≫ (snd T A₁).left)) := by
-    simp only [trF, Fin.prod_univ_one, Fin.prod_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+    simp only [trF, Fin.prod_univ_one, Fin.prod_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one]
     rw [hψm]
     simp only [zpow_neg, _root_.mul_assoc]
     exact (_root_.mul_one _).symm.trans (congrArg (HMul.hMul _) (inv_mul_cancel _).symm)
@@ -287,7 +273,7 @@ theorem twist_move (hL₁ : L₁.IsLB) (w : LB.Iso L₁ (L₀.pull φ))
     intro U _ hh
     rw [Fintype.prod_sum_type]
     simp only [Sum.elim_inl, Sum.elim_inr, Fin.prod_univ_one, Fin.prod_univ_two, Matrix.cons_val_zero,
-      Matrix.cons_val_one, Matrix.head_cons, e2, zpow_neg]
+      Matrix.cons_val_one, e2, zpow_neg]
     rw [_root_.mul_left_comm, mul_inv_cancel, _root_.mul_one]
   obtain ⟨s', hs'⟩ := exists_sec hL₁ hfe (pullMulSec s ψA.left α₁ hα₁)
   have hval : ∀ (Z : Scheme.{0}) (r : Z ⟶ (T ⊗ A).left) (z : Z) (J : (Z ⟶ A.left) → L₁.ι), Good L₁ z J →
@@ -304,16 +290,16 @@ theorem twist_move (hL₁ : L₁.IsLB) (w : LB.Iso L₁ (L₀.pull φ))
   have e1 : (r ≫ (psiO hp τ hτ).left) ≫ ψG.left = (r ≫ ψA.left) ≫ (psiO hp τ hτ).left := by
     rw [Category.assoc, ← hψ, Category.assoc]
   have t1 := hs Z (r ≫ ψA.left) z J₀ J hJ₀ hJ
-  have t2 := val_pmaps w hc hαm r z J₀ J hJ₀ hJ
+  have t2 := _root_.ReciprocityTheory.ChartRestriction.G.PullbackSections.MixEnd.val_pmaps' w hc hαm r z J₀ J hJ₀ hJ
   have e3 : (r ≫ ψA.left) ≫ (snd T A).left = r ≫ mA.left := by rw [Category.assoc, e2]
   rw [e1, t1, e3] at t0
   rw [t2] at t0
   rw [t0, hval Z r z J hJ]
-  simp only [Fin.prod_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+  simp only [Fin.prod_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one]
   simp only [← _root_.mul_assoc, ← Units.val_mul]
   congr 2
   apply Additive.ofMul.injective
-  simp only [ofMul_mul, ofMul_zpow, ofMul_inv, smul_eq_mul, neg_mul, _root_.one_mul, neg_smul]
+  simp only [ofMul_mul, ofMul_zpow, neg_smul]
   abel
 
 end TwistMove
@@ -360,14 +346,13 @@ theorem mulGen_move {E : Type} [Field E] [NumberField E] [NumberField.IsCMField 
   have p1 := val_pmaps' w hc hm (eSec t'.G) y J₀ J hJ₀' hJ
   have p2 := val_pmaps' w hce hr (𝟙 _) y J₀ J hJ₀' hJ
   rw [show eSec t'.G ≫ m.φ = m.cm.e ≫ eSec t.G from m.cm.e_comm, c0] at p1
-  simp only [Fin.prod_univ_two, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
-    Category.comp_id, hmul] at p1
+  simp only [Fin.prod_univ_two, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one, Category.comp_id, hmul] at p1
   simp only [Finset.univ_unique, Finset.prod_singleton, Category.id_comp, zpow_one] at p2
   rw [val_pull hJ, val_mul hJ, val_rigPow, val_inv, Category.id_comp]
   rw [p2] at p1
   rw [eq_inv_mul_of_mul_eq p1.symm]
   apply ofMul_eq'
-  simp only [ofMul_mul, ofMul_inv, ofMul_zpow, smul_eq_mul, neg_mul, _root_.one_mul, neg_smul, mul_zpow, zsmul_eq_mul]
+  simp only [ofMul_mul, ofMul_inv, ofMul_zpow, neg_smul, mul_zpow]
   abel
 
 end MulMove

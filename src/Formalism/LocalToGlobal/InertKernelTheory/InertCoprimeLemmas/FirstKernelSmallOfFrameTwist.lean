@@ -907,14 +907,12 @@ theorem M_eq {ι : Type} [Fintype ι] (be : MvPowerSeries (Fin 2) (K0 l)) :
   congr 1
   funext j
   fin_cases j
-  · simp only [at1, Fin.zero_eta, Fin.isValue, Matrix.cons_val_zero, MvPowerSeries.map_X,
-      MvPowerSeries.subst_X hasSubst_single_var_log]
+  · simp only [at1, Fin.zero_eta, Fin.isValue, Matrix.cons_val_zero, MvPowerSeries.map_X]
     rw [subst_single_var (MvPowerSeries.hasSubst_of_constantCoeff_zero fun j => MvPowerSeries.constantCoeff_X _),
       subst_single_var hasSubst_renS]
     simp [sideVariable]
     exact MvPowerSeries.subst_X (hasSubst_single_var_log (l := l)) _
-  · simp only [at1, Fin.mk_one, Fin.isValue, Matrix.cons_val_one, Matrix.cons_val_fin_one, MvPowerSeries.map_X,
-      MvPowerSeries.subst_X hasSubst_single_var_log]
+  · simp only [at1, Fin.mk_one, Fin.isValue, Matrix.cons_val_one, Matrix.cons_val_fin_one, MvPowerSeries.map_X]
     rw [subst_single_var (MvPowerSeries.hasSubst_of_constantCoeff_zero fun j => MvPowerSeries.constantCoeff_X _),
       subst_single_var hasSubst_renS]
     simp [sideVariable]
@@ -949,7 +947,7 @@ theorem hyperbolic_pair_extend {ι n : Type} [DecidableEq ι] [Fintype n] {σ : 
   rw [h5 e.1 e'.1]
   by_cases h : e.1 = e'.1
   · have he : e = e' := Prod.ext h (Subsingleton.elim _ _)
-    simp [h, he]
+    simp [he]
   · have he : e ≠ e' := fun hh => h (hh ▸ rfl)
     simp [h, he]
 
@@ -1233,7 +1231,7 @@ theorem even3 (hp : p ≠ 2) {be : MvPowerSeries (Fin 2) (K0 p)} (hB : BeProp p 
   have hs := hasSubst_sgn (R := K0 p) (id : Fin 2 → Fin 2) ![-1, 1]
   rw [MvPowerSeries.subst_add hs, formalSum_subst hs _ _ _ (by simp) (by simp), subst_negX hs,
     MvPowerSeries.subst_X hs, subst_eq_formalSum] at h3
-  simp only [sgn, id, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Int.cast_one, Int.cast_neg,
+  simp only [sgn, id, Matrix.cons_val_zero, Matrix.cons_val_one, Int.cast_one, Int.cast_neg,
     map_one, map_neg, one_mul, neg_mul] at h3
   have h1 := z_neg (even1 hp hB)
   convert z_add h3 h1 using 1
@@ -1838,7 +1836,7 @@ theorem first_kernel_small_of_frame (D : D7) (h5 : 5 ≤ p) (X : Sys p) [IsFract
     Formalism.L2.KerInert.RepLt.frameHypLt_of_lat X E hfin D pos large₂ Lg' fd.frM g.lam ρ hOnb hTr hρ
       (Formalism.L2.KerInert.RepFrob.frobTw_of X E h5) hMI (twInt_all X E) hL Fr
   rw [hFam]
-  exact Formalism.L2.KerInert.RepLt.K1_representatives_LT_of_dictionary Formalism.L2.KerInert.Rep.curve_dictionary Formalism.L2.KerInert.kernels_integral_inert D h5 X E
+  exact Formalism.L2.KerInert.RepLt.K1_representatives_LT_of_dictionary _root_.Formalism.L2.KerInert.BeCob.rdictMain Formalism.L2.KerInert.kernels_integral_inert D h5 X E
     hfin hLT cc δ hAt hIn hM B hcc hδ χ hχ hIn hLam pos large₂ Lg' F Fr
     (fun j La La' => by simp only [Fr]; rw [ltC_eq]) S hB hComb hFH
 

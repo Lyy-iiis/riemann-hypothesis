@@ -901,7 +901,7 @@ theorem leftRep_prod (n : ℕ) (g : UG ι n) (f : ι → MvPolynomial (Fin n × 
     simp only [map_mul, hp]
     congr 1
     simp [Formalism.GradedWeylDivisibility.rowAct, Fintype.sum_prod_type, Matrix.kroneckerMap_apply, Matrix.one_apply, Matrix.transpose_apply,
-      mul_ite, ite_mul, apply_ite C, Finset.sum_ite_eq', Finset.sum_ite_eq]
+      mul_ite, ite_mul, apply_ite C, Finset.sum_ite_eq']
 
 theorem hwVec_eq (n : ℕ) (hn : 0 < n) (lam : ι → ℕ → ℤ) (μ : ι → DomWeight n) (h : ∀ τ (i : Fin n), (μ τ).w i = lam τ i) :
     hwVec n lam = ∏ τ, rename (Prod.mk τ) (extremal ℂ n (μ τ)) := by
@@ -929,10 +929,10 @@ theorem hwVec_eq (n : ℕ) (hn : 0 < n) (lam : ι → ℕ → ℤ) (μ : ι → 
   · congr 1
     have ha := hnat s
     have hb := hnat ⟨s.val + 1, hs⟩
-    simp only [Fin.val_mk] at hb
+    simp only at hb
     have hst := (μ τ).anti (show s ≤ ⟨s.val + 1, hs⟩ from Fin.le_iff_val_le_val.2 (by simp))
     rw [h, h] at hst
-    simp only [Fin.val_mk] at hst
+    simp only at hst
     have hc : (((lam τ s - lam τ (s + 1)).toNat : ℕ) : ℤ) = lam τ s - lam τ (s + 1) :=
       Int.toNat_of_nonneg (by omega)
     rw [Formalism.GradedWeylDivisibility.nuNext, dite_eq_left hs]
@@ -943,13 +943,8 @@ theorem hwVec_eq (n : ℕ) (hn : 0 < n) (lam : ι → ℕ → ℤ) (μ : ι → 
     have h0 : (μ τ).natW s = 0 := by omega
     rw [Formalism.GradedWeylDivisibility.nuNext, h0, Nat.zero_sub, pow_zero]
 
-private theorem domWeight_natW_antitone {n : ℕ} (μ : DomWeight n) : Antitone μ.natW := by
-  intro i k hik
-  have := μ.anti hik
-  exact Int.toNat_le_toNat (by linarith)
-
 private theorem extremal_mem_nablaSq (n : ℕ) (μ : DomWeight n) : extremal ℂ n μ ∈ nablaSq ℂ n μ :=
-  Formalism.GradedWeylDivisibility.hwMem ℂ n n le_rfl μ.natW (domWeight_natW_antitone μ)
+  Formalism.GradedWeylDivisibility.hwMem ℂ n n le_rfl μ.natW (_root_.Formalism.L2.Col.natW_anti μ)
 
 private theorem extremal_ne_zero_twisted_operators (n : ℕ) (μ : DomWeight n) : extremal ℂ n μ ≠ 0 :=
   Formalism.GradedWeylDivisibility.hwNe ℂ n n le_rfl μ.natW
@@ -962,7 +957,7 @@ private theorem coe_irr_apply_eq_detU_pow_smul_act (n : ℕ) (μ : DomWeight n) 
 
 private theorem span_irr_orbit_extremal_eq_univ (n : ℕ) (μ : DomWeight n) :
     Submodule.span ℂ (Set.range fun g : U n => irr n μ g ⟨extremal ℂ n μ, extremal_mem_nablaSq n μ⟩) = ⊤ := by
-  let a : GlobalTheory.GLDuality.Part n := ⟨μ.natW, domWeight_natW_antitone μ⟩
+  let a : GlobalTheory.GLDuality.Part n := ⟨μ.natW, _root_.Formalism.L2.Col.natW_anti μ⟩
   have hirr := (GlobalTheory.GLDuality.irreducibleDistinct_unitary (m := n) (n := n) le_rfl).1 a
   have h1 : ∀ k : Fin n, (GlobalTheory.GLDuality.pad n a).w k = μ.natW k := fun k => GlobalTheory.GLDuality.pad_w_of_lt a k k.2
   have hpad0 : (GlobalTheory.GLDuality.pad n a).detShift = 0 := by
@@ -1046,7 +1041,7 @@ theorem outer_irr_iso_weylRep (ι : Type) [Fintype ι] [DecidableEq ι] (n : ℕ
         (detChar n (fun τ => lam τ (n - 1)) g : ℂ) • leftRep n g (j (PiTensorProduct.tprod ℂ f)) := by
     intro g f
     rw [outer_apply, PiTensorProduct.map_tprod, hjt, hjt, leftRep_prod]
-    simp only [coe_irr_apply_eq_detU_pow_smul_act, hds, map_smul, MvPolynomial.smul_eq_C_mul, map_mul, MvPolynomial.rename_C,
+    simp only [coe_irr_apply_eq_detU_pow_smul_act, hds, MvPolynomial.smul_eq_C_mul, map_mul, MvPolynomial.rename_C,
       Finset.prod_mul_distrib]
     congr 1
     rw [← map_prod]

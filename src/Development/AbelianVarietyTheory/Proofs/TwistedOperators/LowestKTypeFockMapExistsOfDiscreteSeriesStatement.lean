@@ -298,7 +298,7 @@ theorem weights_parHol (i : Fin D.R.m) {P : D.what₂.Tau → SPar} (hP : P = pa
         (aPl D i ((Wc D i).sig (tauE D τ)).1 τ) (aMi D i ((Wc D i).sig (tauE D τ)).1 ((Wc D i).sig (tauE D τ)).2 τ)
         (x₃ τ) j = -(Bridge.lamLdef (D := D) (Vc D i).rank ((i : ℕ) + 1) τ).w j := by
   subst hP
-  exact GlobalTheory.T.lowestKType_coefficientWeight_eq_minorWeights D i _ rfl M h
+  exact _root_.GlobalTheory.JointHarm.weights_of_minors D i _ rfl M h
 
 theorem ioEx (D : D7) : IoEx D := by
   rintro i M M' ψ θ χS χT ω hθ hω hχ c hc ⟨pr, hpr⟩ BV f hf
@@ -320,7 +320,7 @@ theorem ioEx (D : D7) : IoEx D := by
     (fun τ => (GlobalTheory.T.thetaWeightArithmeticAtPlace_proof D i τ).aPlus_antitone) (fun τ => (GlobalTheory.T.thetaWeightArithmeticAtPlace_proof D i τ).aM_anti) (fun τ => (hx τ).2.2.2.1)
     (fun τ => (hx τ).2.2.2.2)
   have hth : IsThetaFunO ψ (Vc D i) (Wc D i) f := by
-    obtain ⟨τ⟩ : Nonempty D.what₂.Tau := ⟨D.eTau.symm ⟨1, by simp [Formalism.FrobeniusOrbits.Psi]⟩⟩
+    obtain ⟨τ⟩ : Nonempty D.what₂.Tau := ⟨D.eTau.symm ⟨1, by simp⟩⟩
     exact (hf τ).theta
   have hact := GlobalTheory.T.weil_maximalCompact_fock_substitution_character D ψ θ (Vc D i) (Wc D i) _ _ ω _ M' BV hω hθ
     (D.sp.V_sig _) (D.sp.W_sig _) hBS _ _ hpq hord _ _ (fun τ => (hχ τ).1)
@@ -398,7 +398,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.ArchRec
 
 theorem _root_.GlobalTheory.T.lowestKTypeFockMap_exists_of_discreteSeries : GlobalTheory.Published.DiscreteSeriesCover → GlobalTheory.Published.HarishChandraModules → ∀ D : D7, IoEx D := by
-  first | exact @GlobalTheory.ArchRec.IoMap.ioEx_of_discreteSeriesCover | exact GlobalTheory.ArchRec.IoMap.ioEx_of_discreteSeriesCover | (intros; apply GlobalTheory.ArchRec.IoMap.ioEx_of_discreteSeriesCover <;> assumption)
+  first | exact @GlobalTheory.ArchRec.IoMap.ioEx_of_discreteSeriesCover
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.LowestKTypeFockMapExistsOfDiscreteSeriesStatement =====

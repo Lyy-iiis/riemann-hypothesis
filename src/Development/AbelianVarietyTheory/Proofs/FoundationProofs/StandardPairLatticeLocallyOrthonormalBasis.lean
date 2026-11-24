@@ -203,17 +203,16 @@ private theorem exists_orthonormal_mem_span_of_diagonal_square_prod {K V : Type}
       linear_combination hqK - ((a 0 : K) * (q₁ : K) ^ 2 + (a 1 : K) * (q₂ : K) ^ 2) * hθ2
     have hww' : h w w' = 0 := by
       simp only [hw, hw', map_add (f := _), map_sub, map_smul, map_smulₛₗ, LinearMap.add_apply,
-        LinearMap.sub_apply, LinearMap.smul_apply, smul_eq_mul, hv00, hv11, hv01, hv10, map_mul,
+        LinearMap.smul_apply, smul_eq_mul, hv00, hv11, hv01, hv10, map_mul,
         map_ratCast, hθ]
       ring
     have hw'w : h w' w = 0 := by
-      simp only [hw, hw', map_add (f := _), map_sub, map_smul, map_smulₛₗ, LinearMap.add_apply,
-        LinearMap.sub_apply, LinearMap.smul_apply, smul_eq_mul, hv00, hv11, hv01, hv10, map_mul,
+      simp only [hw, hw', map_add (f := _), map_sub, map_smul, map_smulₛₗ, LinearMap.sub_apply, LinearMap.smul_apply, smul_eq_mul, hv00, hv11, hv01, hv10, map_mul,
         map_ratCast, hθ]
       ring
     have hw'w' : h w' w' = ((a 0 * a 1 : ℚ) : K) := by
       simp only [hw', map_sub, map_smul, map_smulₛₗ, LinearMap.sub_apply, LinearMap.smul_apply,
-        smul_eq_mul, hv00, hv11, hv01, hv10, map_mul, map_ratCast, hθ, map_neg]
+        smul_eq_mul, hv00, hv11, hv01, hv10, map_mul, map_ratCast, hθ]
       push_cast
       linear_combination (a 0 : K) * (a 1 : K) * hqK -
         (a 0 : K) * (a 1 : K) * ((a 0 : K) * (q₁ : K) ^ 2 + (a 1 : K) * (q₂ : K) ^ 2) * hθ2
@@ -530,8 +529,7 @@ theorem exists_lattice_norm_one_of_norm_one_mod (K V : Type) [Field K] [CharZero
       L.sub_mem (L.add_mem hyL (hL _ (O.mul_mem htO hpO) y hyL)) (hL _ htO _ hm),
       W.sub_mem (W.add_mem hyW (W.smul_mem _ hyW)) (W.smul_mem _ (W.smul_mem _ heW)), ?_⟩
     simp only [map_smul, map_smulₛₗ, map_add (f := _), map_sub, LinearMap.smul_apply, LinearMap.add_apply,
-      LinearMap.sub_apply, smul_eq_mul, hu, hee, map_mul, map_pow, map_ratCast, map_natCast,
-      RingHom.id_apply]
+      LinearMap.sub_apply, smul_eq_mul, hu, hee, map_mul, map_pow, map_ratCast, map_natCast]
     linear_combination (1 + (t : K) * (p : K) ^ m) * hs' -
       ((t : K) * (p : K) ^ m) * (1 + (t : K) * (p : K) ^ m) * hT
   obtain ⟨T, hT⟩ : ∃ T : ℚ, h e y + h y e = (T : K) := by
@@ -1031,9 +1029,9 @@ theorem hYY_single (D : D7) {N N' : ℕ} (x : Matrix (Fin N') (Fin N) D.host.E) 
   congr 1
   rw [Finset.sum_eq_single i, Finset.sum_eq_single j]
   · simp
-  · intro b _ hb; simp [Matrix.single_apply, hb.symm]
+  · intro b _ hb; simp [hb.symm]
   · simp
-  · intro b _ hb; simp [Matrix.single_apply, hb.symm]
+  · intro b _ hb; simp [hb.symm]
   · simp
 
 theorem exists_orthonormal (D : D7) (N N' : ℕ) (hev : Even (N * N')) :
@@ -1075,7 +1073,7 @@ theorem exists_orthonormal (D : D7) (N N' : ℕ) (hev : Even (N * N')) :
       simp only [Equiv.symm_apply_apply, Fintype.prod_prod_type, Finset.prod_const, Finset.card_univ,
         Fintype.card_fin, ← pow_mul, Finset.prod_pow]
       have hev' : Even (N' * N) := mul_comm N N' ▸ hev
-      first | exact hev.isSquare_pow _ | exact hev'.isSquare_pow _)
+      first | exact hev.isSquare_pow _)
   exact ⟨e, fun i j => by rw [← hh]; exact he i j⟩
 
 theorem natCast_mul_mem (D : D7) (t : ℕ) {x : D.host.E} (hx : x ∈ D.host.AA0) :

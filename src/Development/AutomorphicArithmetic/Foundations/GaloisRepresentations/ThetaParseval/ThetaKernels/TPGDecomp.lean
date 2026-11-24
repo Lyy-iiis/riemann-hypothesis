@@ -55,6 +55,7 @@ import Mathlib.RingTheory.Etale.Weakly
 import Mathlib.RingTheory.HopfAlgebra.Basic
 import Mathlib.RingTheory.TotallySplit
 import Mathlib.Tactic.ReduceModChar
+import Mathlib.RingTheory.PicardGroup
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.ThkTowStabCpt, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.ThkTowStab, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.TPGDecomp
@@ -133,7 +134,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.ThkTowStab =====
 
 -- ===== clump member: Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.TPGDecomp =====
--- clump-header: {"m": "Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.TPGDecomp", "h": "module\n\npublic import Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.GalTPDefs\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.AdeleEqZeroOfComp\npublic import Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.ThkBaseBadA\npublic import Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.ThkTowStab\nimport Development.WeilBound.ThetaLifts.LatticeBasics.CommuteTheta\nimport Development.WeilBound.ThetaLifts.LatticeBasics.EulerProd\npublic import Development.WeilBound.ThetaLifts.LocalTheory.ArchimedeanBumps.TracePiReal\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.LinearAlgebra.Matrix.FiniteDimensional\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.TPGDecomp", "h": "module\n\npublic import Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.GalTPDefs\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.AdeleEqZeroOfComp\npublic import Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.ThkBaseBadA\npublic import Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ThetaParseval.ThetaKernels.ThkTowStab\nimport Development.WeilBound.ThetaLifts.LatticeBasics.CommuteTheta\nimport Development.WeilBound.ThetaLifts.LatticeBasics.EulerProd\npublic import Development.WeilBound.ThetaLifts.LocalTheory.ArchimedeanBumps.TracePiReal\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.LinearAlgebra.Matrix.FiniteDimensional\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Mathlib.RingTheory.PicardGroup\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -155,7 +156,7 @@ private theorem cut_add_pk {a b : S} (ha : a * a = a) (hb : b * b = b) (hab : a 
   have h1 : (1 - b) * (1 - a) = 1 - (a + b) := by linear_combination hab
   have h2 : b * (1 - a) = b := by linear_combination -hab
   have h3 : (1 - b) * a = a := by linear_combination -hab
-  simp only [cut, add_mul, mul_add, Matrix.smul_mul, Matrix.mul_smul, smul_add, smul_smul, h0, h1, h2, h3, zero_smul, add_zero,
+  simp only [cut, add_mul, mul_add, Matrix.smul_mul, Matrix.mul_smul, smul_smul, h0, h1, h2, h3, zero_smul, add_zero,
     Matrix.one_mul, Matrix.mul_one, add_smul]
   abel
 private theorem cut_zero_pk (A : Matrix k k R) : cut (0 : S) A = 1 := by simp [cut]
@@ -212,12 +213,6 @@ private theorem sum_sq_pk (T : Finset (Pl F)) :
     (∑ v ∈ T, (Euler.idem v : AF F)) * ∑ v ∈ T, (Euler.idem v : AF F) = ∑ v ∈ T, (Euler.idem v : AF F) := by
   rw [Finset.sum_mul]
   exact Finset.sum_congr rfl fun v hv => idem_mul_sum_pk hv
-private theorem eps_sq_pk : realAd F 1 * realAd F 1 = realAd F 1 :=
-  Prod.ext (by
-    change (realAd F 1).1 * (realAd F 1).1 = (realAd F 1).1
-    rw [PositivityTheory.ThKG.Loc.Bump.eps_fst, one_mul]) (by
-    change (realAd F 1).2 * (realAd F 1).2 = (realAd F 1).2
-    rw [PositivityTheory.ThKG.Loc.Bump.eps_snd, zero_mul])
 private theorem eps_mul_sum_pk (T : Finset (Pl F)) : realAd F 1 * ∑ v ∈ T, (Euler.idem v : AF F) = 0 :=
   Prod.ext (by
     change (realAd F 1).1 * (∑ v ∈ T, (Euler.idem v : AF F)).1 = 0
@@ -242,7 +237,7 @@ private theorem pr_sum_mem_pk (H : Subgroup (UA σ X.J)) (g : UA σ X.J) (T : Fi
     exact mul_mem (h v (Finset.mem_insert_self _ _)) (ih fun u hu => h u (Finset.mem_insert_of_mem hu))
 private theorem mem_gInf_pk {g : UA σ X.J} : g ∈ gInf σ X ↔ realAd F 1 • (mat g - 1) = mat g - 1 := by
   refine ⟨fun h => ?_, fun h => Subgroup.subset_closure (PositivityTheory.ThKG.Loc.Bump.at_iff.2 h)⟩
-  have : gInf σ X ≤ (pr_pk (σ := σ) (X := X) (realAd F 1) eps_sq_pk).eqLocus (MonoidHom.id _) :=
+  have : gInf σ X ≤ (pr_pk (σ := σ) (X := X) (realAd F 1) _root_.PositivityTheory.ThKG.Loc.Cone.real_mul_self).eqLocus (MonoidHom.id _) :=
     (Subgroup.closure_le _).2 fun g hg => pr_eq_pk.2 (PositivityTheory.ThKG.Loc.Bump.at_iff.1 hg)
   exact pr_eq_pk.1 (this h)
 private theorem mem_gAt_pk {S : Finset (Pl F)} {g : UA σ X.J} :
@@ -282,7 +277,7 @@ private theorem mem_gOff_pk {S : Finset (Pl F)} {g : UA σ X.J} :
     g ∈ gOff σ X S ↔ (1 - realAd F 1 - ∑ v ∈ S, (Euler.idem v : AF F)) • (mat g - 1) = mat g - 1 := by
   set b := ∑ v ∈ S, (Euler.idem v : AF F) with hb
   have key : (1 - realAd F 1 - b) * (1 - realAd F 1 - b) = 1 - realAd F 1 - b := by
-    have h1 := eps_sq_pk (F := F)
+    have h1 := _root_.PositivityTheory.ThKG.Loc.Cone.real_mul_self (F := F)
     have h2 := sum_sq_pk S
     have h3 := eps_mul_sum_pk S
     rw [← hb] at h2 h3
@@ -300,7 +295,7 @@ private theorem mem_gOff_pk {S : Finset (Pl F)} {g : UA σ X.J} :
   · intro h
     refine Subgroup.subset_closure ⟨inf_of_eps_pk ?_, fun v hv => ?_⟩
     · have h3 := eps_mul_sum_pk (F := F) S
-      have h4 := eps_sq_pk (F := F)
+      have h4 := _root_.PositivityTheory.ThKG.Loc.Cone.real_mul_self (F := F)
       rw [← hb] at h3
       rw [← h, smul_smul, show realAd F 1 * (1 - realAd F 1 - b) = 0 by linear_combination -h3 - h4, zero_smul]
     · refine Euler.off_of (pr_one_pk (he := Euler.idem_sq v) ?_)
@@ -365,7 +360,7 @@ theorem UpperTheory.TP.decomp_k :
   have h00 : min n 0 = 0 := by simp
   obtain ⟨K, -, -, hK, hKc, -, -⟩ := _root_.PositivityTheory.ThKG.Tow.stabEx_k F E σ B n X n 0 hB hX
   have eK : (K : Set (UA σ X.J)) = {g | IntAll g} := Set.ext fun g => _root_.GlobalTheory.ThK.Dbl.Bad.stab_iff_k hB hX h00 hK
-  have h1 := eps_sq_pk (F := F)
+  have h1 := _root_.PositivityTheory.ThKG.Loc.Cone.real_mul_self (F := F)
   have h2 := sum_sq_pk (F := F) S
   have h3 := eps_mul_sum_pk (F := F) S
   have cI : IsClosed (gInf σ X : Set (UA σ X.J)) := by

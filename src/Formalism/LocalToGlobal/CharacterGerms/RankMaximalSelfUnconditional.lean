@@ -583,11 +583,7 @@ open PartialDerivEval FirstUnitSeriesIntegrality MulLFrob LiftedCoordinateEvalua
 
 variable {C : Type} [Field C] [CharZero C] {dd : ℕ}
 
-theorem aux_statement_9 : Z0 (![pt C dd 0, 0] : Fin 2 → Pt C 1 dd) := by
-  intro k i
-  fin_cases k
-  · simp [pt]
-  · simp
+alias aux_statement_9 := _root_.Formalism.L2.FormalSeriesBounds.MulLFrob.constant_zero_first_then_zero
 
 theorem zl_sub (v : Fin dd → C) (F G : PS C 2 dd) : zl v (F - G) = zl v F - zl v G := by
   have hS : MvPowerSeries.HasSubst (fun p : Fin 2 × Fin dd => (![pt C dd 0, 0] : Fin 2 → Pt C 1 dd) p.1 p.2) :=
@@ -597,7 +593,7 @@ theorem zl_sub (v : Fin dd → C) (F G : PS C 2 dd) : zl v (F - G) = zl v F - zl
 theorem zl_smul (v : Fin dd → C) (c : C) (F : PS C 2 dd) : zl v (c • F) = c • zl v F := by
   have hS : MvPowerSeries.HasSubst (fun p : Fin 2 × Fin dd => (![pt C dd 0, 0] : Fin 2 → Pt C 1 dd) p.1 p.2) :=
     MvPowerSeries.hasSubst_of_constantCoeff_zero (fun p => aux_statement_9 p.1 p.2)
-  simp only [zl, ev, Derivation.map_smul, LinearMap.map_smul, MvPowerSeries.subst_smul hS, Finset.smul_sum,
+  simp only [zl, ev, Derivation.map_smul, MvPowerSeries.subst_smul hS, Finset.smul_sum,
     mul_smul_comm]
 
 theorem zl_expS (v : Fin dd → C) {f : PS C 2 dd} (hf : constantCoeff f = 0)

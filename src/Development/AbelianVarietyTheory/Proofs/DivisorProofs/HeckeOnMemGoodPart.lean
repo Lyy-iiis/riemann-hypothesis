@@ -65,7 +65,7 @@ open scoped ComplexOrder
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.mul_comm_of_mem_GfC_of_mem_GinfC : ∀ {D : D7} (V : HSp D) (a b : GA D V), a ∈ GfC V → b ∈ GinfC V → a * b = b * a := by
-  first | exact @GlobalTheory.FinRealComm.finite_real_points_commute | exact GlobalTheory.FinRealComm.finite_real_points_commute | (intros; apply GlobalTheory.FinRealComm.finite_real_points_commute <;> assumption)
+  first | exact @GlobalTheory.FinRealComm.finite_real_points_commute
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.FiniteRealPointsCommuteStatement =====
@@ -79,8 +79,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 open scoped ComplexOrder
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.isSmoothAutomorphic_rightTranslate_finite : ∀ {D : D7} (θ : InfFam D) (V : HSp D) (κ : GA D V), κ ∈ GfC V → ∀ φ : GA D V → ℂ, IsAutFunSm θ V φ → IsAutFunSm θ V (rTr V κ φ) := by
-  first | exact @GlobalTheory.FinTranslate.isAutFunSm_rTr | exact GlobalTheory.FinTranslate.isAutFunSm_rTr | (intros; apply GlobalTheory.FinTranslate.isAutFunSm_rTr <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.IsSmoothAutomorphicRightTranslateFiniteStatement =====
@@ -108,7 +106,7 @@ theorem isMultMap_rightTranslate_finite : ∀ {D : D7} {V : HSp D} {S : D.what�
   refine ⟨(LinearMap.funLeft ℂ ℂ (fun g : GA D V => g * κ)).compMultilinearMap T,
     ⟨fun v => ?_, fun v => ?_, fun v k hk g => ?_, fun τ g hg v w hw => ?_, fun τ v x => ?_⟩, fun v => rfl⟩
   ·
-    exact GlobalTheory.T.isSmoothAutomorphic_rightTranslate_finite θ V κ hκ (T v) (hT.aut v)
+    exact _root_.GlobalTheory.FinTranslate.isAutFunSm_rTr θ V κ hκ (T v) (hT.aut v)
   ·
     intro r C hC μ 𝓕 hμ h𝓕 g
     have h := hT.cusp v r C hC μ 𝓕 hμ h𝓕 (g * κ)
@@ -119,7 +117,6 @@ theorem isMultMap_rightTranslate_finite : ∀ {D : D7} {V : HSp D} {S : D.what�
     have h := hT.lev v _ hk1 (g * κ)
     rw [hk2] at h
     rw [← h]
-    congr 1
     group
   ·
     rw [LinearMap.compMultilinearMap_apply, hT.equiv τ g hg v w hw]

@@ -142,18 +142,6 @@ open scoped Classical
 
 namespace UpperTheory.V.Z.GSp4Splitting
 
-section Sum
-
-variable {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [MeasurableSpace G] [BorelSpace G]
-
-private theorem exists_sum (μ : Measure G) [IsFiniteMeasureOnCompacts μ] (K : Subgroup G) (hKo : IsOpen (K : Set G))
-    (hKc : IsCompact (K : Set G)) {S : Set G} (hS : IsCompact S) :
-    ∃ (T : Finset (G ⧸ K)) (r : G ⧸ K → G) (c : G ⧸ K → ℂ), ∀ F : G → ℂ, (∀ g, ∀ k ∈ K, F (g * k) = F g) →
-      (∀ g, g ∉ S → F g = 0) → ∫ g, F g ∂μ = ∑ x ∈ T, c x * F (r x) :=
-  _root_.UpperTheory.Reformulated.B.Qg3.exists_sum μ K hKo hKc hS
-
-end Sum
-
 section Ops
 
 variable {E : Type} [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] {n : ℕ}
@@ -215,7 +203,7 @@ private theorem commute_rt_Eop {τ : E →+* ℂ} {w : InfinitePlace E} (h : Inf
   have c1 : ∀ p q, coord τ ((yAt w k).val p q) = (1 : Matrix (Fin n) (Fin n) ℂ) p q := coord_atW h k.1
   have c2 : ∀ p q, coord τ (((yAt w k)⁻¹ : GL (Fin n) (Cinf E)).val p q) = (1 : Matrix (Fin n) (Fin n) ℂ) p q :=
     coord_atW h (star k.1)
-  simp only [c1, c2, Matrix.one_apply, ite_mul, mul_ite, one_mul, mul_one, zero_mul, mul_zero, ite_smul, one_smul, zero_smul,
+  simp only [c1, c2, Matrix.one_apply, mul_ite, mul_one, mul_zero, ite_smul, one_smul, zero_smul,
     Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true] at e
   exact e.symm
 
@@ -241,7 +229,7 @@ private theorem exists_op [MeasurableSpace (GL (Fin n) (Af E))] [BorelSpace (GL 
     {h : GL (Fin n) (Af E) → ℂ} (hh : IsHeckeF K h) :
     ∃ A : Module.End ℂ (Sm E n), (∀ B : Module.End ℂ (Sm E n), (∀ g, Commute B (finRep E n g)) → Commute A B) ∧
       ∀ ψ : Sm E n, (∀ k ∈ K, finRep E n k ψ = ψ) → heckeOp μf h ψ.1 = (A ψ).1 := by
-  obtain ⟨T, r, c, H⟩ := exists_sum μf K hKo hKc hh.1
+  obtain ⟨T, r, c, H⟩ := _root_.UpperTheory.Reformulated.B.Qg3.exists_sum μf K hKo hKc hh.1
   refine ⟨∑ x ∈ T, (c x * h (r x)) • finRep E n (r x), fun B hB => ?_, fun ψ hψ => ?_⟩
   · exact Commute.sum_left _ _ _ fun x _ => ((hB _).symm).smul_left _
   · funext x

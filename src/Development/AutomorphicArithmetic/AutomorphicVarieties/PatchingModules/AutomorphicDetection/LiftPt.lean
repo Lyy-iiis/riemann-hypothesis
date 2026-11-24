@@ -728,12 +728,6 @@ section -- clump:auto
 open IsLocalRing Matrix Filter UpperTheory.V.Alg UpperTheory.V.W UpperTheory.V.AlgebraTools UpperTheory.V.Pa UpperTheory.V.Pa.Core
 open scoped TensorProduct
 
-private theorem UpperTheory.V.Pa.Core.freeN_quot {R S M : Type} [CommRing R] [CommRing S] [AddCommGroup M] [Module R M]
-    (s : S →+* R) (I K : Ideal S) (hIK : I ≤ K) (c : ℕ) (e : M ≃+ (Fin c → S ⧸ I))
-    (he : ∀ z x, e (s z • x) = z • e x) :
-    ∃ e' : (M ⧸ (K.map s • ⊤ : Submodule R M)) ≃+ (Fin c → S ⧸ K), ∀ a x, e' (s a • x) = a • e' x :=
-  _root_.UpperTheory.Reformulated.B.FreeModuleQuotient.freeN_quot s I K hIK c e he
-
 private theorem UpperTheory.V.Pa.Core.freeN_le (l : ℕ) (hl : l.Prime) (R : Type) [CommRing R] [IsLocalRing R]
     (hR : (l : R) ∈ maximalIdeal R) (q n : ℕ) (a : Fin q → ℕ) (k j : ℕ) (ha : ∀ i, j + k ≤ a i) :
     delIdeal l R n a ≤ kjIdeal R (Fin q × Fin n) k j := by
@@ -760,7 +754,7 @@ theorem UpperTheory.V.Pa.Core.freeN :
     rw [map_natCast, CharP.cast_eq_zero] at h1
     exact not_isUnit_zero h1
   refine Λ.U_le ((eventually_ge_atTop (j + k)).mono fun N hN => ⟨(A.A N).rk, ?_⟩)
-  refine freeN_quot (M := MN m N) m.s.toRingHom _ _
+  refine _root_.UpperTheory.Reformulated.B.FreeModuleQuotient.freeN_quot (M := MN m N) m.s.toRingHom _ _
     (freeN_le l hl.out _ hlm T.q n (A.A N).a k j fun i => hN.trans ((A.A N).le_a i)) _ (A.A N).e ?_
   intro z x
   have := (A.A N).e_smul z x
@@ -807,7 +801,7 @@ private theorem chi_rep {n : ℕ} {A G : Type} [CommRing A] [Group G] (ρ : G �
   rw [map_sub, MonoidAlgebra.mapRingHom_single, Matrix.charpoly, Matrix.charmatrix]
   congr 2
   · ext1 a b
-    by_cases hab : a = b <;> simp [GDet.repAlg, hab, Matrix.one_apply, Matrix.diagonal_apply]
+    by_cases hab : a = b <;> simp [GDet.repAlg, hab]
   · ext1 a b
     simp [GDet.repAlg]
 
@@ -1655,7 +1649,7 @@ private theorem gDet_chi_map_mapRingHom {n : ℕ} {R R' G : Type} [CommRing R] [
   let g : Polynomial R →ₐ[R] Polynomial R' :=
     { Polynomial.mapRingHom f with
       commutes' := fun c => by
-        simp [RingHom.algebraMap_toAlgebra, Polynomial.algebraMap_apply] }
+        simp [RingHom.algebraMap_toAlgebra] }
   have h := D.nat (Polynomial R) (Polynomial R') g
     (MonoidAlgebra.single 1 Polynomial.X - MonoidAlgebra.mapRingHom G Polynomial.C x)
   refine Eq.trans ?_ h
@@ -1882,7 +1876,7 @@ private theorem lift_pt (hA : Adapted T (r := r))
           rw [Matrix.charpoly]
           congr 1
           ext i j : 2
-          by_cases hij : i = j <;> simp [GDet.repAlg, Matrix.charmatrix_apply, hij, Matrix.one_apply, Matrix.diagonal_apply]
+          by_cases hij : i = j <;> simp [GDet.repAlg, hij]
         rw [e2, (x.eig p.1).2]
         exact Polynomial.Splits.prod fun i _ => Polynomial.Splits.X_sub_C _) P hP h
   refine ⟨{ x' with commutes' := fun a => ?_ }, fun b => DFunLike.congr_fun h1 b, h2⟩
@@ -1896,7 +1890,7 @@ theorem core : Core := by
   haveI : IsAdicComplete (maximalIdeal O) O := IsCoef.complete (l := l)
   haveI : Finite (ResidueField O) := IsCoef.finite (l := l)
   have hn : 1 ≤ n := (x 0).x.a_pos.trans (x 0).x.a_le
-  obtain ⟨Λ⟩ := s4 l L G0 T hP
+  obtain ⟨Λ⟩ := _root_.UpperTheory.V.Pa.selmer_cocycles_limit_and_descent_properties l L G0 T hP
   obtain ⟨W⟩ := rrEx l L G0 T Λ n O r B u J D A
   obtain ⟨m⟩ := rmapsEx l L G0 T Λ n O r B u J D A W hA
   obtain ⟨⟨hco, hfree, hfin, hadj⟩, -⟩ := spoCo l L G0 T Λ n O r B u J D A hA

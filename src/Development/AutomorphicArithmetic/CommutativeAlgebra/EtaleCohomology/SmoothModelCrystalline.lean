@@ -355,7 +355,7 @@ theorem PinP.pin_lev (r : Res l K) {N : ℕ} (hT : Pb.Mid.TeichmullerCongruence 
 theorem PinP.pin_fixed (r : Res l K) [FiniteDimensional ℚ_[l] K] (f : ℕ) (hf : 0 < f) :
     ∃ N : ℕ, f ∣ N ∧ Pb.Mid.TeichmullerCongruence r N ∧ ∃ F : Pb.Fac r N, ∀ M : Model l K, M.Sm → ∀ j, Pin F M j := by
   obtain ⟨N, hfN, hT⟩ := PinP.teich_dvd r f hf
-  obtain ⟨F, hF⟩ := Pb.fac_ex r hT (fun M n j x => Pb.Mid.mu_nu r N hT M n j x) (Pb.G3.w_phi r) (fun g w => Pb.G3.w_fix r g w)
+  obtain ⟨F, hF⟩ := Pb.fac_ex r hT (fun M n j x => _root_.CrystallineSemistableComparison.Pb.Mid.frobenius_mu_nu_iterate r N hT M n j x) (Pb.G3.w_phi r) (fun g w => Pb.G3.w_fix r g w)
   exact ⟨N, hfN, hT, F, fun M hM j => PinP.pin_of r hT F M j fun y n => PinP.pin_lev r hT F hF M hM j y n⟩
 
 theorem pinEx : PinEx := fun _ _ _ _ r f hf => PinP.pin_fixed r f hf
@@ -1076,10 +1076,22 @@ end
 local notation "hE" => (untilt_epsilon (p := l))
 local notation "hZ" => (untilt_frobeniusEquiv_symm_epsilon_ne_one (p := l))
 
+/-- The canonical map `ACris F p → BCris hε`, for a general perfectoid field `F`; `fB` is the case
+`F = ℂ_[l]`.
+
+`fB` is defined through this map so that its value contains no instance proof specialised to
+`ℂ_[l]`. Lean moves such proofs into auxiliary theorems in the value of a definition but leaves
+them in its type, and the kernel is slow to identify the two forms of the ring structure on
+`BCris hε`. -/
+private def aCrisToBCris {F : Type*} [NontriviallyNormedField F] [IsUltrametricDist F] {p : ℕ}
+    [Fact p.Prime] [IsPerfectoidField F p] {ε : PreTilt (normInteger F) p}
+    (hε : PreTilt.untilt ε = 1) : ACris.ACris F p →+* ACris.BCris hε :=
+  (algebraMap (ACris.BCrisPlus F p) (ACris.BCris hε)).comp
+    (algebraMap (ACris.ACris F p) (ACris.BCrisPlus F p))
+
 variable (l) in
 private def fB : Acris l →+* ACris.BCris (untilt_epsilon (p := l)) :=
-  (algebraMap (ACris.BCrisPlus ℂ_[l] l) (ACris.BCris (untilt_epsilon (p := l)))).comp
-    (algebraMap (Acris l) (ACris.BCrisPlus ℂ_[l] l))
+  aCrisToBCris (untilt_epsilon (p := l))
 
 private theorem fB_apply (a : Acris l) :
     fB l a = algebraMap (ACris.BCrisPlus ℂ_[l] l) (ACris.BCris hE)

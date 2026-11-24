@@ -151,7 +151,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Asc
 
 theorem _root_.GlobalTheory.T.besselPeriod_ascent_of_tower_rungs : TowerEx → Rung0 → RungB → RungJ → Ascent := by
-  first | exact @GlobalTheory.Asc.ascent_of_rungs | exact GlobalTheory.Asc.ascent_of_rungs | (intros; apply GlobalTheory.Asc.ascent_of_rungs <;> assumption)
+  first | exact @GlobalTheory.Asc.ascent_of_rungs
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.BesselPeriodAscentOfTowerRungsStatement =====
@@ -302,7 +302,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Asc
 
 theorem _root_.GlobalTheory.T.bessel_to_fourierJacobi_nonvanishing_tower : FockTot → PartFixed → RungJ := by
-  first | exact @GlobalTheory.Asc.RungJac.rungJ | exact GlobalTheory.Asc.RungJac.rungJ | (intros; apply GlobalTheory.Asc.RungJac.rungJ <;> assumption)
+  first | exact @GlobalTheory.Asc.RungJac.rungJ
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.BesselToFourierJacobiNonvanishingTowerStatement =====
@@ -669,20 +669,7 @@ theorem integral_tr' {D : D7} {S : HSp D} {N N' : Subgroup (GA D S)} (hN : N = N
   subst hN
   rfl
 
-theorem psi_frame {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (hψ : IsStdChar D ψ (-1)) {A B S₀ A' Lz : HSp D} {c ρ : ℕ}
-    (a : HermitianOrthogonalExtensionData A B c (-1)) (hc : c = 2 * ρ + 1) (d : HypDec B S₀ ρ) (o : OrthDec S₀ A' Lz) (ζ : Fin Lz.rank → D.host.E)
-    (hd : IsAuxiliaryVectorWittDec a d) (hz : (d.i₀ * o.iB) *ᵥ ζ = (-D.host.xi0) ^ (ρ + 1) • fun k => a.a k ⟨ρ, by omega⟩) :
-    ∀ n ∈ flagN d, psiBes ψ d 1 (vecB o ζ) n = star (besChar ψ (a.besDat (neg_ne_zero.2 one_ne_zero) ρ hc) n) :=
-  GlobalTheory.AscFin.EndsPf.Chr.psiBes_eq_star_besChar ψ hψ a hc d o ζ hd hz
-
-theorem per_scale {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (hψ : IsStdChar D ψ (-1)) {A B : HSp D} {c : ℕ} {ε : D.host.E}
-    (a : HermitianOrthogonalExtensionData A B c ε) (dd : BesDat A B a.ι) (hA : GlobalTheory.Unf.CoCpt A) (μ μ' : Measure (GA D A)) (𝓕 𝓕' : Set (GA D A))
-    (ν ν' : Measure (NFlag B dd.e)) (𝓝 𝓝' : Set (NFlag B dd.e)) (hμ : μ.IsHaarMeasure) (h𝓕 : IsFundamentalDomain (GQ A) 𝓕 μ)
-    (hμ' : μ'.IsHaarMeasure) (h𝓕' : IsFundamentalDomain (GQ A) 𝓕' μ') (hν : GlobalTheory.Per.IsUnitN B dd.e ν 𝓝)
-    (hν' : GlobalTheory.Per.IsUnitN B dd.e ν' 𝓝') (φ : GA D A → ℂ) (F : GA D B → ℂ) (hφ : ∀ γ ∈ GQ A, ∀ g, φ (γ * g) = φ g)
-    (hF : ∀ γ ∈ GQ B, ∀ g, F (γ * g) = F g) :
-    ∃ r : ℝ, 0 < r ∧ GlobalTheory.Per.besPer ψ dd μ 𝓕 ν 𝓝 (stabilizerEmbedding a) φ F = r * GlobalTheory.Per.besPer ψ dd μ' 𝓕' ν' 𝓝' (stabilizerEmbedding a) φ F :=
-  GlobalTheory.Per.besPer_haar_scale ψ hψ a dd hA μ μ' 𝓕 𝓕' ν ν' 𝓝 𝓝' hμ h𝓕 hμ' h𝓕' hν hν' φ F hφ hF
+alias per_scale := _root_.GlobalTheory.Per.besPer_haar_scale
 
 section Parts
 variable {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {G : GridData L sc}
@@ -708,7 +695,7 @@ theorem psi_eq (W : G.Weil) (h1 : 1 ≤ D.R.m) (h2 : D.R.m ≤ D.R.m) {V₀ Lz :
     (hd : IsAuxiliaryVectorWittDec (G.colDec D.R.m h1 h2) d)
     (hz : (d.i₀ * o.iB) *ᵥ ζ = (-D.host.xi0) ^ ((D.R.m - 2) / 2 + 1) • fun k => (G.colDec D.R.m h1 h2).a k ⟨(D.R.m - 2) / 2, by have := D.R.two_le_m; omega⟩) :
     ∀ n ∈ flagN d, psiBes W.ψ d 1 (vecB o ζ) n = star (besChar W.ψ G.besTop n) :=
-  psi_frame W.ψ W.ψ_std (G.colDec D.R.m h1 h2) (by have := D.R.two_le_m; obtain ⟨a, ha⟩ := D.R.m_even; omega) d o ζ hd hz
+  _root_.GlobalTheory.AscFin.EndsPf.Chr.psiBes_eq_star_besChar W.ψ W.ψ_std (G.colDec D.R.m h1 h2) (by have := D.R.two_le_m; obtain ⟨a, ha⟩ := D.R.m_even; omega) d o ζ hd hz
 
 end Parts
 
@@ -735,7 +722,7 @@ theorem per_conj (W : G.Weil) {V₀ Lz : HSp D} {ρ : ℕ} (d : HypDec (G.V (.gr
   · refine integral_congr_ae (ae_of_all _ fun n => ?_)
     show star (φ h) * star (F (n.1 * embA d o h)) * star (psiBes W.ψ d 1 (vecB o ζ) n.1) = _
     rw [hE, hψ n.1 n.2]
-    simp only [star_star, map_mul, Complex.star_def, Complex.conj_conj]
+    simp only [map_mul, Complex.star_def, Complex.conj_conj]
   · refine integral_congr_ae (ae_of_all _ fun n => ?_)
     show _ = starRingEnd ℂ (star (star (φ h)) * F (n.1 * embTop G h * (G.besTop.y : GA D (G.V (.grid D.R.m 0)))) *
       star (besChar W.ψ G.besTop n.1))
@@ -865,7 +852,7 @@ open scoped nonZeroDivisors ContDiff
 open GlobalTheory.AscFin
 
 theorem _root_.GlobalTheory.T.existsGoodGridFrames_of_depthFixed : GlobalTheory.SepRows.DepFixed → GlobalTheory.Asc.TowerEx := by
-  first | exact @GlobalTheory.AscFin.towerEx_of_depFixed | exact GlobalTheory.AscFin.towerEx_of_depFixed | (intros; apply GlobalTheory.AscFin.towerEx_of_depFixed <;> assumption)
+  first | exact @GlobalTheory.AscFin.towerEx_of_depFixed
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsGoodGridFramesOfDepthFixedStatement =====
@@ -895,9 +882,9 @@ theorem datumDep : GlobalTheory.SepRows.DatumDep := by
     GlobalTheory.Chain.InnerSteps.theta_pureTensorO W.ψ_std W.θ_is _ _ _ _ hth P
   refine ⟨hthP (ρ i), fun u hu => ?_, fun e he u hu hh => ?_⟩
   · exact GlobalTheory.Hk3.FiniteHeis.heisO_pureTensorO_of_finite W.ψ W.θ _ _ W.θ_is _ _ _ _ _ hthP (2 • u)
-      (GlobalTheory.VacGood.infPart_latO (AddSubgroup.nsmul_mem _ hu 2).1) (hlat.1 u hu) (ρ i)
+      (_root_.GlobalTheory.SplitScalar.latO_fin (AddSubgroup.nsmul_mem _ hu 2).1) (hlat.1 u hu) (ρ i)
   · exact GlobalTheory.Hk3.FiniteHeis.heisO_pureTensorO_of_finite W.ψ W.θ _ _ W.θ_is _ _ _ _ _ hthP u
-      (GlobalTheory.VacGood.infPart_latO hu.1) (hlat.2 e he u hu hh) (ρ i)
+      (_root_.GlobalTheory.SplitScalar.latO_fin hu.1) (hlat.2 e he u hu hh) (ρ i)
 
 end GlobalTheory.FirstRowDepth
 
@@ -920,7 +907,7 @@ open scoped nonZeroDivisors ContDiff
 open GlobalTheory.AscFin
 
 theorem _root_.GlobalTheory.T.firstRow_data_have_depth : GlobalTheory.SepRows.DatumDep := by
-  first | exact @GlobalTheory.FirstRowDepth.datumDep | exact GlobalTheory.FirstRowDepth.datumDep | (intros; apply GlobalTheory.FirstRowDepth.datumDep <;> assumption)
+  first | exact @GlobalTheory.FirstRowDepth.datumDep
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.FirstRowDataHaveDepthStatement =====
@@ -975,7 +962,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Asc
 
 theorem _root_.GlobalTheory.T.gridLiftsFixedByCongruenceDepth_of_depthData : DepFixed → DatumDep → PartFixed := by
-  first | exact @GlobalTheory.Asc.partFixed_of_depFixed | exact GlobalTheory.Asc.partFixed_of_depFixed | (intros; apply GlobalTheory.Asc.partFixed_of_depFixed <;> assumption)
+  first | exact @GlobalTheory.Asc.partFixed_of_depFixed
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.GridLiftsFixedByCongruenceDepthOfDepthDataStatement =====
@@ -1267,7 +1254,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Asc
 
 theorem _root_.GlobalTheory.T.lastSeesaw_periodNonvanishing : ∀ D : D7, UpLast D := by
-  first | exact @GlobalTheory.LastSeesaw.upLast | exact GlobalTheory.LastSeesaw.upLast | (intros; apply GlobalTheory.LastSeesaw.upLast <;> assumption)
+  first | exact @GlobalTheory.LastSeesaw.upLast
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.LastSeesawPeriodNonvanishingStatement =====
@@ -1389,7 +1376,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Asc
 
 theorem _root_.GlobalTheory.T.nonvanishing_thetaTower_bottom_rung : FockTot → Rung0 := by
-  first | exact @GlobalTheory.AscBottom.rung0 | exact GlobalTheory.AscBottom.rung0 | (intros; apply GlobalTheory.AscBottom.rung0 <;> assumption)
+  first | exact @GlobalTheory.AscBottom.rung0
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.NonvanishingThetaTowerBottomRungStatement =====
@@ -1430,7 +1417,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Asc
 
 theorem _root_.GlobalTheory.T.bessel_period_nonvanishing_ascent_of_depth_data : DepFixed → Ascent := by
-  first | exact @GlobalTheory.Asc.ascent_of_depFixed | exact GlobalTheory.Asc.ascent_of_depFixed | (intros; apply GlobalTheory.Asc.ascent_of_depFixed <;> assumption)
+  first | exact @GlobalTheory.Asc.ascent_of_depFixed
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.BesselPeriodNonvanishingAscentOfDepthDataStatement =====

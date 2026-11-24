@@ -233,9 +233,7 @@ variable [_root_.NumberField.IsTotallyComplex E]
 private theorem norm_pInf (x : Ad E) (w : InfinitePlace E) : ‖pInf E x w‖ = ‖x.1 w‖ :=
   (InfinitePlace.Completion.isometry_extensionEmbedding w).norm_map_of_map_zero (map_zero _) (x.1 w)
 
-private theorem cont_pInf : Continuous (pInf E) :=
-  continuous_pi fun w => (InfinitePlace.Completion.isometry_extensionEmbedding w).continuous.comp
-    ((continuous_apply w).comp continuous_fst)
+private alias cont_pInf := _root_.GlobalTheory.CuspRep.RankOne.continuous_pInf
 
 end
 
@@ -988,8 +986,7 @@ theorem UpperTheory.hermitian_chart_scalar_invariance :
     have hc := HasFDerivAt.comp (f := fun y : Lie E a => sc (Matrix.of y) • y) (oneL E a) hF1 hSd
     change fderiv ℝ (chart (gsum L (pg P)) g) (oneL E a) X = _
     rw [e.fderiv_eq, hc.fderiv]
-    simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
-      ContinuousLinearMap.id_apply, ContinuousLinearMap.smulRight_apply, h1', one_smul, hd, id]
+    simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.add_apply, ContinuousLinearMap.id_apply, ContinuousLinearMap.smulRight_apply, h1', one_smul, hd, id]
     rw [hF']
     refine tsum_congr fun v => ?_
     rw [← hT]

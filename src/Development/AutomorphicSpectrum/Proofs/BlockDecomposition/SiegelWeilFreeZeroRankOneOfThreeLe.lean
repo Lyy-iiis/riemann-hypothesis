@@ -534,7 +534,7 @@ theorem fourier_coefficient_any : ∀ (F : Type) [Field F] [NumberField F], ∀ 
         intro x
         rw [ph_neg, ph_mul, hz', add_neg_cancel, ph_zero]
       simp_rw [this]
-      simp [setIntegral_const, Measure.real])
+      simp [Measure.real])
     (by
       intro z hz
       by_cases hall : ∀ ω, s z ω = 0
@@ -839,13 +839,13 @@ theorem core_zero : ∀ (F : Type) [Field F] [NumberField F], IsTotallyReal F �
   obtain ⟨⟨D, hD⟩, -, -, hvol⟩ := _root_.GlobalTheory.CompanionTheory.SW.FD.main F hF ρ hρ _ hN
   obtain ⟨I, e1, j1, e2⟩ := fourier_coefficient_any F ι M B ρ P hQ Ω Pr gf gi hC a ha 0 _ hN hβN (fun y hy => by
     rw [Nat.cast_mul, mul_assoc]
-    refine PositivityTheory.PlacePermOperatorBicommutantSpan.oh_mul (PositivityTheory.PlacePermOperatorBicommutantSpan.oh_nat N₁) (n2 _ (Set.mem_insert_of_mem _ ⟨y, subset_tsupport _ ?_, rfl⟩))
+    refine _root_.GlobalTheory.CompanionTheory.SW.Core.Scale.mul_mem_Oh (PositivityTheory.PlacePermOperatorBicommutantSpan.oh_nat N₁) (n2 _ (Set.mem_insert_of_mem _ ⟨y, subset_tsupport _ ?_, rfl⟩))
     rw [Function.mem_support, indL, Set.indicator_of_mem (s := {x : ι → A F | ∀ i, (a : A F) * x i ∈ Oh F}) hy]
     exact one_ne_zero) D hD
   obtain ⟨j2, e3⟩ := fourier_coeff_eis_any F lf hlf h1 ψ hψ ι M B ρ P hQ hM _ hs (d4 a ha) i4 0 _ hN hβN
     (fun x hx y => by
       rw [Nat.cast_mul, mul_assoc]
-      exact (n1 _ (PositivityTheory.PlacePermOperatorBicommutantSpan.oh_mul (PositivityTheory.PlacePermOperatorBicommutantSpan.oh_nat N₂) hx)).2 y) D hD
+      exact (n1 _ (_root_.GlobalTheory.CompanionTheory.SW.Core.Scale.mul_mem_Oh (PositivityTheory.PlacePermOperatorBicommutantSpan.oh_nat N₂) hx)).2 y) D hD
   haveI : IsProbabilityMeasure Pr := hC.1
 
   have hsplit : ∀ ω, ∑' x : {x : ι → F // qf (1 / 2 : F) B x = 0},
@@ -911,7 +911,7 @@ theorem core_zero : ∀ (F : Type) [Field F] [NumberField F], IsTotallyReal F �
     have hz0 : algebraMap F (A F) 0 = 0 := map_zero _
     have hD1 : ∫ x in D, Complex.exp (-(2 * (Real.pi : ℂ) * Complex.I) * ((∑ w, ρ w (0 : F) * x w : ℝ) : ℂ)) = (v : ℂ) := by
       simp_rw [hph]
-      simp [setIntegral_const, hvD]
+      simp [hvD]
     rw [integral_sub j1 j2, e2, e3, hD1, hind, d5 a ha, i5, hvD, show (volume D).toReal = v from hvD, hi0, hz0] at h2
     have e4 : ((v : ℝ) : ℂ) * ((I : ℝ) : ℂ) - (1 * ((v : ℝ) : ℂ) + ((N₁ * N₂ : ℕ) : ℂ) ^ Module.finrank ℚ F *
         ((kap F ^ (2 * M - 2) * (Real.sqrt |((Algebra.norm ℚ B.det : ℚ) : ℝ)|)⁻¹ * Df a 0 : ℝ) : ℂ) *

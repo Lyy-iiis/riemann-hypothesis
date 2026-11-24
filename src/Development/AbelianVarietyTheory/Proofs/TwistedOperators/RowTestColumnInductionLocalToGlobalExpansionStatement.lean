@@ -109,7 +109,6 @@ theorem colAt_smul_of_mul_idem : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (
   unfold Big
   refine ⟨0, fun _ _ _ => ⟨0, ?_⟩⟩
   intros
-  beta_reduce
   intro t w eL e' hL he u
   have hw := (GlobalTheory.FunObj.Comparison₂.cpt_idemSum hL).2.1 w.1 (Finset.mem_singleton_self _)
 
@@ -142,7 +141,7 @@ open Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField borelKw borelSpaceKw
 
 theorem _root_.GlobalTheory.T.columnAt_reads_placePart_largeDepth : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (t : T) (w : locPl ch.G t) (eL e' : AE D), IsIdemSum eL {w.1} → e' * eL = eL → ∀ u : ∀ j : Fin D.R.m, WO (ch.G.V (.top j)) (ch.G.V (.top (j + 1))), ch.S.colAt t w.1 (fun j => e' • u j) = ch.S.colAt t w.1 u := by
-  first | exact @GlobalTheory.ColAtPart.colAt_smul_of_mul_idem | exact GlobalTheory.ColAtPart.colAt_smul_of_mul_idem | (intros; apply GlobalTheory.ColAtPart.colAt_smul_of_mul_idem <;> assumption)
+  first | exact @GlobalTheory.ColAtPart.colAt_smul_of_mul_idem
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ColumnAtReadsPlacePartLargeDepthStatement =====
@@ -198,7 +197,6 @@ open GlobalTheory.ColComb in
 theorem GlobalTheory.ColComb.main : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (c : Combs ch.G) (c' c'' : ∀ j : ℕ, WO (ch.G.V (.top j)) (ch.G.V (.top (j + 1))) →₀ ℂ), (∀ j, j < D.R.m → ∀ f, comb ch.W.ψ _ _ (c'' j) f = comb ch.W.ψ _ _ (c.1 j) (comb ch.W.ψ _ _ (c' j) f)) → ∀ (C : BiFam ch.G) (u : ColPt ch.G), evT (combC ch.W c (combC ch.W (c', 0) C)) 1 u 0 = evT (combC ch.W (c'', 0) C) 1 u 0 := by
   refine ⟨0, fun _ _ _ => ⟨0, ?_⟩⟩
   intro D _ _ _ _ _ _ _ T _ _ _ _ _ _ _ _ ch _ _
-  beta_reduce
   intro c c' c'' hc C u
   unfold evT
   congr 1
@@ -226,7 +224,7 @@ open Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField borelKw borelSpaceKw
 
 theorem _root_.GlobalTheory.T.columnCombinations_compose_largeDepth : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (c : Combs ch.G) (c' c'' : ∀ j : ℕ, WO (ch.G.V (.top j)) (ch.G.V (.top (j + 1))) →₀ ℂ), (∀ j, j < D.R.m → ∀ f, comb ch.W.ψ _ _ (c'' j) f = comb ch.W.ψ _ _ (c.1 j) (comb ch.W.ψ _ _ (c' j) f)) → ∀ (C : BiFam ch.G) (u : ColPt ch.G), evT (combC ch.W c (combC ch.W (c', 0) C)) 1 u 0 = evT (combC ch.W (c'', 0) C) 1 u 0 := by
-  first | exact @GlobalTheory.ColComb.main | exact GlobalTheory.ColComb.main | (intros; apply GlobalTheory.ColComb.main <;> assumption)
+  first | exact @GlobalTheory.ColComb.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ColumnCombinationsComposeLargeDepthStatement =====
@@ -375,7 +373,7 @@ open Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField borelKw borelSpaceKw
 
 theorem _root_.GlobalTheory.T.exists_combinationOperator_columnProduct : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ c : Combs ch.G, ∃ Tc : (ColPt ch.G → ℂ) →ₗ[ℂ] (ColPt ch.G → ℂ), ∀ C : BiFam ch.G, (fun u => evT (combC ch.W c C) 1 u 0) = Tc (fun u => evT C 1 u 0) := by
-  first | exact @GlobalTheory.LocAsm.exists_comb_op | exact GlobalTheory.LocAsm.exists_comb_op | (intros; apply GlobalTheory.LocAsm.exists_comb_op <;> assumption)
+  first | exact @GlobalTheory.LocAsm.exists_comb_op
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsCombinationOperatorColumnProductStatement =====
@@ -400,15 +398,6 @@ open GlobalTheory.FinTranslate GlobalTheory.FockCompare
 
 variable {D : D7}
 
-theorem finPart_eInf_smul (a : AE D) : finPart D (eInf D • a) = 0 := by
-  induction a using TensorProduct.induction_on with
-  | zero => simp only [smul_zero, map_zero]
-  | add a b ha hb => rw [smul_add, RingHom.map_add (f := _), ha, hb, add_zero]
-  | tmul a x =>
-    rw [TensorProduct.smul_tmul']
-    show (sndA D.host.F (eInf D • a)) ⊗ₜ[D.host.F] x = 0
-    rw [show sndA D.host.F (eInf D • a) = 0 from zero_mul _, TensorProduct.zero_tmul]
-
 theorem infPart_eInf_smul (a : AE D) : infPart D (eInf D • a) = infPart D a := by
   induction a using TensorProduct.induction_on with
   | zero => simp only [smul_zero]
@@ -421,7 +410,7 @@ theorem infPart_eInf_smul (a : AE D) : infPart D (eInf D • a) = infPart D a :=
 theorem infPart_eq_zero {θ : InfFam D} (hθ : IsInfFam θ) {a : AE D} (h : ∀ τ, θ τ (infPart D a) = 0) :
     infPart D a = 0 := by
   obtain ⟨σ, hσ⟩ := GlobalTheory.RealLineAt.exists_inverse_chart hθ
-  have := hσ.ext (eInf D • a) (finPart_eInf_smul a) fun τ => by rw [infPart_eInf_smul, h]
+  have := hσ.ext (eInf D • a) (_root_.GlobalTheory.ThetaClosed.finPart_eInf_smul a) fun τ => by rw [infPart_eInf_smul, h]
   rw [← infPart_eInf_smul, this, map_zero]
 
 variable {ψ : AddChar (AF D.host.F) ℂ} {θ : InfFam D} {S T : HSp D}
@@ -452,7 +441,7 @@ theorem exists_extension (hψ : IsStdChar D ψ (-1)) (F₀ : (WO S T → ℂ) �
   obtain ⟨L, hL⟩ := L₀.exists_extend
   have hL' : ∀ g, IsThetaFunO ψ S T g → L g = F₀ g := fun g hg => LinearMap.congr_fun hL ⟨g, hg⟩
   have hr : ∀ w : WO S T, (eInf D • w).map (finPart D) = 0 := fun w =>
-    Matrix.ext fun i j => finPart_eInf_smul (w i j)
+    Matrix.ext fun i j => _root_.GlobalTheory.ThetaClosed.finPart_eInf_smul (w i j)
   have hf : ∀ w : WO S T, (w - eInf D • w).map (infPart D) = 0 := fun w => Matrix.ext fun i j => by
     show infPart D (w i j - eInf D • w i j) = 0
     rw [RingHom.map_sub, infPart_eInf_smul, sub_self]
@@ -619,7 +608,7 @@ theorem main : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (t : T) (e : AE D) 
   refine ⟨0, fun _ _ _ => ⟨0, fun D _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ch _ _ t e v f P j φ hv h => ?_⟩⟩
   exact ⟨GlobalTheory.GalLift.Vec.theta_pureTensorO ch.W.ψ_std ch.W.θ_is _ _ _ _ hv (P j), h.1,
     isThetaAt_pureTensorO ch.W.ψ_std ch.W.θ_is (ch.W.cart_is (.grid D.R.m j) ⟨le_rfl, j.2.le⟩)
-      (ch.W.cart_is (.grid D.R.m (j + 1)) ⟨le_rfl, j.2⟩) _ _ (fun _ hu => GlobalTheory.VacGood.infPart_latO hu) hv h.1 h.2 (P j)⟩
+      (ch.W.cart_is (.grid D.R.m (j + 1)) ⟨le_rfl, j.2⟩) _ _ (fun _ hu => _root_.GlobalTheory.SplitScalar.latO_fin hu) hv h.1 h.2 (P j)⟩
 
 end GlobalTheory.FockPlace
 
@@ -640,7 +629,7 @@ open Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField borelKw borelSpaceKw
 
 theorem _root_.GlobalTheory.T.fockVectors_pass_placeModels_largeDepth : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (t : T) (e : AE D) (v f : SchDown ch.G t) (P : PolDown ch.G) (j : Fin D.R.m) (φ : WO (ch.G.pS (.mu t D.R.m j)) (ch.G.pT (.mu t D.R.m j)) → ℂ), IsThetaFunO ch.W.ψ _ _ (v j) → IsLocVec ch.W (.mu t D.R.m j) e (v j) φ (f j) → IsThetaFunO ch.W.ψ _ _ (fockD ch.W t v P j) ∧ IsLocVec ch.W (.mu t D.R.m j) e (fockD ch.W t v P j) φ (fockD ch.W t f P j) := by
-  first | exact @GlobalTheory.FockPlace.main | exact GlobalTheory.FockPlace.main | (intros; apply GlobalTheory.FockPlace.main <;> assumption)
+  first | exact @GlobalTheory.FockPlace.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.FockVectorsPassPlaceModelsLargeDepthStatement =====
@@ -733,7 +722,7 @@ open Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField borelKw borelSpaceKw
 
 theorem _root_.GlobalTheory.T.isIdemSum_eq_sum_singlePlaces : ∀ (D : D7) (e : AE D) (P : Finset (Pl D.host.E)), IsIdemSum e P → ∀ (eL : P → AE D), (∀ w, IsIdemSum (eL w) {w.1}) → e = ∑ w, eL w ∧ (∀ S : Finset P, IsIdemSum (∑ w ∈ S, eL w) (S.map (Function.Embedding.subtype _))) ∧ ∀ S S' : Finset P, (∑ w ∈ S, eL w) * (∑ w ∈ S', eL w) = ∑ w ∈ S ∩ S', eL w := by
-  first | exact @GlobalTheory.IdemSingleSum.sum_single | exact GlobalTheory.IdemSingleSum.sum_single | (intros; apply GlobalTheory.IdemSingleSum.sum_single <;> assumption)
+  first | exact @GlobalTheory.IdemSingleSum.sum_single
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.IsIdemSumEqSumSinglePlacesStatement =====
@@ -796,7 +785,7 @@ open Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField borelKw borelSpaceKw
 
 theorem _root_.GlobalTheory.T.isIdemSum_places_unique : ∀ (D : D7) (e : AE D) (P P' : Finset (Pl D.host.E)), IsIdemSum e P → IsIdemSum e P' → P = P' := by
-  first | exact @GlobalTheory.IdemSumSet.places_eq_of_isIdemSum | exact GlobalTheory.IdemSumSet.places_eq_of_isIdemSum | (intros; apply GlobalTheory.IdemSumSet.places_eq_of_isIdemSum <;> assumption)
+  first | exact @GlobalTheory.IdemSumSet.places_eq_of_isIdemSum
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.IsIdemSumPlacesUniqueStatement =====
@@ -1044,7 +1033,7 @@ open Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField borelKw borelSpaceKw
 
 theorem _root_.GlobalTheory.T.productFiniteDatum_largeDepth : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (t : T) (j : Fin D.R.m) (d₁ d₂ : FinDatum ch.G t (.top t j)) (c₁ c₂ : WO (ch.G.V (.top j)) (ch.G.V (.top (j + 1))) →₀ ℂ), IsIdemSum (d₁.e + d₂.e) (d₁.P ∪ d₂.P) → IsCombOf ch.W d₁ c₁ → IsCombOf ch.W d₂ c₂ → ∃ (d : FinDatum ch.G t (.top t j)) (c : WO (ch.G.V (.top j)) (ch.G.V (.top (j + 1))) →₀ ℂ), d.P = d₁.P ∪ d₂.P ∧ d.e = d₁.e + d₂.e ∧ IsCombOf ch.W d c ∧ (∀ y, IsHalf d.e y → d.fn y = d₁.fn (d₁.e • y) * d₂.fn (d₂.e • y)) ∧ ∀ f, comb ch.W.ψ _ _ c f = comb ch.W.ψ _ _ c₁ (comb ch.W.ψ _ _ c₂ f) := by
-  first | exact @GlobalTheory.ProdDatum.prod_datum | exact GlobalTheory.ProdDatum.prod_datum | (intros; apply GlobalTheory.ProdDatum.prod_datum <;> assumption)
+  first | exact @GlobalTheory.ProdDatum.prod_datum
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ProductFiniteDatumLargeDepthStatement =====
@@ -1221,7 +1210,7 @@ theorem subset_vectors : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (t : T) (
     have hb := GlobalTheory.FunObj.Good.badInt_notMem hL (GlobalTheory.FlipIntegrand.pde_ne_q_of_setting s) (hch.guard t) hw
     have h2q := fun h => hb (GlobalTheory.HalfCompare.mem_of_dvd h (Dvd.intro _ rfl))
     have hN := fun h => hb (GlobalTheory.HalfCompare.mem_of_dvd h (Dvd.intro_left _ rfl))
-    refine ⟨fun a ha => ?_, ⟨_, GlobalTheory.HostClear.absNorm_mem_AA D, ?_⟩⟩
+    refine ⟨fun a ha => ?_, ⟨_, _root_.Formalism.L2.Pj.normK_mem_AA D, ?_⟩⟩
     · rw [GlobalTheory.FunObj.Good.valued_alg]
       exact GlobalTheory.FunObj.Good.valuation_le_one_of_mem h2q (Or.inl ha)
     · rw [GlobalTheory.FunObj.Good.valued_alg]
@@ -1293,7 +1282,7 @@ open Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField borelKw borelSpaceKw
 
 theorem _root_.GlobalTheory.T.subset_place_vectors_and_steps : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (t : T) (e : AE D), IsIdemSum e (locPl ch.G t) → ∀ (φ : (∀ w : locPl ch.G t, ∀ b : GlobalTheory.SplitFlip.Edge, Matrix (Fin ((locGrid ch.G t w.1).rank b.tgt)) (Fin ((locGrid ch.G t w.1).rank b.src)) (Kw w.1) → ℂ)), (∀ w : locPl ch.G t, ∀ b ∈ GlobalTheory.SplitFlip.oppositePath D.R.m, GlobalTheory.SplitFlip.IsNatDatum (unifAt w.1) (depthAt ch.G w.1) (φ w b)) → ∀ (fd : SchDown ch.G t), (∀ j : Fin D.R.m, IsLocVec ch.W (.mu t D.R.m j) e (ch.rm.vT D.R.m j) (fun y => if IsHalf e y then ∏ w : locPl ch.G t, φ w (.theta D.R.m j) (ch.S.B.coord t w.1 (X := (D.R.m, j + 1)) (Y := (D.R.m, j)) ⟨le_rfl, j.2⟩ ⟨le_rfl, j.2.le⟩ (y.map fun a => cpt w.1 (toEAf D a))) else 0) (fd j)) → ∀ (eL : locPl ch.G t → AE D), (∀ w, IsIdemSum (eL w) {w.1}) → ∃ V : Finset (locPl ch.G t) → SchDown ch.G t, V ∅ = (fun j : Fin D.R.m => ch.rm.vT D.R.m j) ∧ V Finset.univ = fd ∧ (∀ S j, IsThetaFunO ch.W.ψ _ _ (V S j)) ∧ ∀ (S : Finset (locPl ch.G t)) (w : locPl ch.G t), w ∉ S → ∀ j : Fin D.R.m, IsLocVec ch.W (.mu t D.R.m j) (eL w) (V S j) (fun y => if IsHalf (eL w) y then φ w (.theta D.R.m j) (ch.S.B.coord t w.1 (X := (D.R.m, j + 1)) (Y := (D.R.m, j)) ⟨le_rfl, j.2⟩ ⟨le_rfl, j.2.le⟩ (y.map fun a => cpt w.1 (toEAf D a))) else 0) (V (insert w S) j) := by
-  first | exact @GlobalTheory.SubsetVecs.subset_vectors | exact GlobalTheory.SubsetVecs.subset_vectors | (intros; apply GlobalTheory.SubsetVecs.subset_vectors <;> assumption)
+  first | exact @GlobalTheory.SubsetVecs.subset_vectors
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SubsetPlaceVectorsAndStepsStatement =====
@@ -1321,17 +1310,6 @@ theorem eq_zero_of_isHalf_zero {m n : ℕ} {x : Mx D m n} (hx : IsHalf (0 : AE D
   simp at this
   simpa using this.symm
 
-theorem isHalf_zero_zero {m n : ℕ} (e : AE D) : IsHalf e (0 : Mx D m n) := by
-  intro i j
-  simp
-
-theorem heisenbergSymplecticForm_zero_right_eq_zero (S T : HSp D) (x : WO S T) : symplO S T x 0 = 0 := by
-  simp [symplO, hO]
-
-theorem heisO_zero_eq_self (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (f : WO S T → ℂ) : heisO ψ S T 0 f = f := by
-  funext w
-  simp [heisO, symplOH, heisenbergSymplecticForm_zero_right_eq_zero]
-
 theorem heisenbergTranslationCombination_single_one_eq_translate (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (w : WO S T) (f : WO S T → ℂ) :
     GlobalTheory.SeeSaw.comb ψ S T (Finsupp.single w 1) f = heisO ψ S T w f := by
   unfold GlobalTheory.SeeSaw.comb
@@ -1350,21 +1328,21 @@ theorem vacuum_isCombOf {T : Type} {L : LevCh D T} {sc : Consts} {G : GridData L
   · intro u hu
     rw [Finsupp.support_single_ne_zero _ one_ne_zero, Finset.mem_singleton] at hu
     subst hu
-    exact isHalf_zero_zero _
+    exact _root_.GlobalTheory.SplitScalar.isHalf_zero _
   · have he : (FinDatum.vacuum G t p).e = 0 := rfl
     intro f₀ _ _
     show AllSome _ _
-    rw [heisenbergTranslationCombination_single_one_eq_translate, heisO_zero_eq_self]
+    rw [heisenbergTranslationCombination_single_one_eq_translate, _root_.GlobalTheory.SplitScalar.heisO_zero]
     refine ⟨⟨(LinearMap.proj (R := ℂ) (φ := fun _ : WO (G.pS p) (G.pT p) => ℂ) 0).smulRight f₀, ?_, ?_, ?_⟩, ?_⟩
     · intro Φ _ x hx
       obtain rfl := eq_zero_of_isHalf_zero hx
-      simp [heisO_zero_eq_self]
+      simp [_root_.GlobalTheory.SplitScalar.heisO_zero]
     · intro Φ _ y hy
       have hy0 : IsHalf (0 : AE D) y := by rw [he, map_zero] at hy; exact hy
       obtain rfl := eq_zero_of_isHalf_zero hy0
-      simp [heisO_zero_eq_self, heisenbergSymplecticForm_zero_right_eq_zero]
+      simp [_root_.GlobalTheory.SplitScalar.heisO_zero, _root_.GlobalTheory.PlaceModel.symplO_zero_right]
     · have h0 : halfInd (0 : AE D) (latO (G.pS p) (G.pT p) ↑(G.latS p) ↑(G.latT p) fun _ => True) 0 = 1 := by
-        rw [halfInd, if_pos ⟨zero_mem _, isHalf_zero_zero _⟩]
+        rw [halfInd, if_pos ⟨zero_mem _, _root_.GlobalTheory.SplitScalar.isHalf_zero _⟩]
       rw [he]
       simp [h0]
     · intro Tm hT
@@ -1397,7 +1375,7 @@ open Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField borelKw borelSpaceKw
 
 theorem _root_.GlobalTheory.T.vacuumDatum_trivialCombination_largeDepth : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (t : T) (j : Fin D.R.m), IsCombOf ch.W (FinDatum.vacuum ch.G t (.top t j)) (Finsupp.single 0 1) := by
-  first | exact @GlobalTheory.VacComb.main | exact GlobalTheory.VacComb.main | (intros; apply GlobalTheory.VacComb.main <;> assumption)
+  first | exact @GlobalTheory.VacComb.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.VacuumDatumTrivialCombinationLargeDepthStatement =====
@@ -1618,7 +1596,7 @@ open Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField borelKw borelSpaceKw
 
 theorem _root_.GlobalTheory.T.rowTest_columnInduction_localToGlobalExpansion : Big fun {D} _ _ _ _ {T} _ _ _ _ _ _ ch => ∀ (s : ℤˣ) (t : T) (β : CosFam ch.G t) (ζ : locPl ch.G t → ℂ), (∀ w : locPl ch.G t, GlobalTheory.LocAsm.PlaceCl ch s t w (β w) (ζ w)) → ∀ (M : Vol ch.G) (hM : M.Is t) (b b₀ : Pts ch.G), IsRep t ch.S.B s β b → IsBase t ch.S.B b₀ → ∀ e : AE D, IsIdemSum e (locPl ch.G t) → ∀ (φ : (∀ w : locPl ch.G t, ∀ b : GlobalTheory.SplitFlip.Edge, Matrix (Fin ((locGrid ch.G t w.1).rank b.tgt)) (Fin ((locGrid ch.G t w.1).rank b.src)) (Kw w.1) → ℂ)), (∀ w : locPl ch.G t, ∀ b ∈ GlobalTheory.SplitFlip.oppositePath D.R.m, GlobalTheory.SplitFlip.IsNatDatum (unifAt w.1) (depthAt ch.G w.1) (φ w b)) → ∀ (fd : SchDown ch.G t), (∀ j : Fin D.R.m, IsLocVec ch.W (.mu t D.R.m j) e (ch.rm.vT D.R.m j) (fun y => if IsHalf e y then ∏ w : locPl ch.G t, φ w (.theta D.R.m j) (ch.S.B.coord t w.1 (X := (D.R.m, j + 1)) (Y := (D.R.m, j)) ⟨le_rfl, j.2⟩ ⟨le_rfl, j.2.le⟩ (y.map fun a => cpt w.1 (toEAf D a))) else 0) (fd j)) → ∀ (eL : locPl ch.G t → AE D), (∀ w, IsIdemSum (eL w) {w.1}) → ∀ (I : locPl ch.G t → Type) (S : ∀ w, Finset (I w)) (x : ∀ w, I w → ℂ) (d : ∀ w, I w → ∀ j : Fin D.R.m, FinDatum ch.G t (.top t j)) (c : ∀ w, I w → Combs ch.G), (∀ w, ∀ i ∈ S w, ∀ j : Fin D.R.m, (d w i j).e = eL w ∧ IsCombOf ch.W (d w i j) ((c w i).1 j)) → (∀ w (y : ∀ j : Fin D.R.m, WO (ch.G.V (.top j)) (ch.G.V (.top (j + 1)))), (∀ j, IsHalf (eL w) (y j)) → ∑ i ∈ S w, x w i * ∏ j, (d w i j).fn (y j) = flatTensor one_le_sLen (psiAt ch.W w.1) (unitVol w.1) (moved (locGrid ch.G t w.1) (keepAt ch.G w.1) ((repsAt ch.G t w.1).elt (β w)) ((locGrid ch.G t w.1).lines₂ (GlobalTheory.SplitFlip.oppositePath D.R.m) (GlobalTheory.LocAsm.exOne (φ w)))) (ch.S.colAt t w.1 y) 0) → ∃ (J : Type) (SJ : Finset J) (xJ : J → ℂ) (dJ : J → ∀ j : Fin D.R.m, FinDatum ch.G t (.top t j)) (cJ : J → ∀ j : ℕ, WO (ch.G.V (.top j)) (ch.G.V (.top (j + 1))) →₀ ℂ), (∀ a ∈ SJ, ∀ j : Fin D.R.m, (dJ a j).e = e ∧ IsCombOf ch.W (dJ a j) (cJ a j)) ∧ (∀ u : ∀ j : Fin D.R.m, WO (ch.G.V (.top j)) (ch.G.V (.top (j + 1))), (∀ j, IsHalf e (u j)) → ∑ a ∈ SJ, xJ a * ∏ j, (dJ a j).fn (u j) = ∏ w : locPl ch.G t, flatTensor one_le_sLen (psiAt ch.W w.1) (unitVol w.1) (moved (locGrid ch.G t w.1) (keepAt ch.G w.1) ((repsAt ch.G t w.1).elt (β w)) ((locGrid ch.G t w.1).lines₂ (GlobalTheory.SplitFlip.oppositePath D.R.m) (GlobalTheory.LocAsm.exOne (φ w)))) (ch.S.colAt t w.1 u) 0) ∧ ∀ (P : PolDown ch.G) (p : Pts ch.G), IsRealPt p → ∀ u : ColPt ch.G, evT (conAt ch.W hM (fockD ch.W t fd P) (p * b)) 1 u 0 = (∏ w, ζ w) * ∑ a ∈ SJ, xJ a * evT (combC ch.W (cJ a, 0) (conAt ch.W hM (fockD ch.W t (fun j => ch.rm.vT D.R.m j) P) (p * b₀))) 1 u 0 := by
-  first | exact @GlobalTheory.LocAsm.columnInduction | exact GlobalTheory.LocAsm.columnInduction | (intros; apply GlobalTheory.LocAsm.columnInduction <;> assumption)
+  first | exact @GlobalTheory.LocAsm.columnInduction
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.RowTestColumnInductionLocalToGlobalExpansionStatement =====

@@ -59,6 +59,7 @@ import Mathlib.Topology.Connected.Separation
 import Mathlib.Topology.MetricSpace.Ultra.TotallySeparated
 import Mathlib.Topology.Sheaves.Init
 import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.HostPins
+import Formalism.DoubleCosetMeasures.LowerUnipotentOrbits.LemmaU
 
 @[expose] public section
 
@@ -241,7 +242,6 @@ theorem isOpen_OP : IsOpen ((OP P : Subring (P.adicCompletion L)) : Set (P.adicC
 theorem mem_adicCompletionIntegers_iff₂ (x : P.adicCompletion L) : x ∈ OP P ↔ Valued.v x ≤ 1 := by
   first
   | exact Iff.rfl
-  | exact HeightOneSpectrum.mem_adicCompletionIntegers _ _ _
 
 theorem piP_mem : ((piP P : (P.adicCompletion L)ˣ) : P.adicCompletion L) ∈ OP P := by
   rw [mem_adicCompletionIntegers_iff₂]
@@ -279,8 +279,6 @@ theorem isUnitAt_det {r : ℕ} {k : GL (Fin r) (P.adicCompletion L)} (hk : k ∈
         Valued.v ((k⁻¹ : GL (Fin r) (P.adicCompletion L)) : Matrix (Fin r) (Fin r) (P.adicCompletion L)).det := by rw [← map_mul, hmul, map_one]
     _ ≤ Valued.v (k : Matrix (Fin r) (Fin r) (P.adicCompletion L)).det * 1 := by
       first
-      | exact mul_le_mul_left' b _
-      | exact mul_le_mul_of_nonneg_left b (zero_le _)
       | gcongr
     _ = _ := mul_one _
 
@@ -461,7 +459,7 @@ theorem stepAt_one : ∀ (L : Type) [Field L] [NumberField L] (P : HeightOneSpec
       | exact ((measurable_add_const c.1).comp measurable_fst).prod_mk ((measurable_add_const c.2).comp measurable_snd)⟩
   have hc : ∀ g, mcoef (OP P) μ (fun _ : GL (Fin r) (P.adicCompletion L) => (1 : ℂ)) g = 1 := by
     intro g
-    simp [mcoef, setIntegral_const, Measure.real, hμ1]
+    simp [mcoef, Measure.real, hμ1]
   show IsStep (OP P) _ nrm δ (fun _ => ν) r t 0 _
   unfold IsStep
   rw [Nat.zero_mul, Nat.zero_add, Nat.one_mul]
@@ -478,7 +476,7 @@ theorem stepAt_one : ∀ (L : Type) [Field L] [NumberField L] (P : HeightOneSpec
       intro g k; rw [hc, hc]; simp
     have hρ : ∀ k, ‖(((δ.comp (GeneralLinearGroup.det.comp (GLint (OP P) r).subtype))⁻¹ k : ℂˣ) : ℂ)‖ = 1 := by
       intro k; simp [hδ.unitary]
-    have key := Formalism.DoubleCosetMeasures.Final.lemmaUSplit (P.adicCompletion L) r t (OP P) (isOpen_OP P) _ (Units.ne_zero (piP P))
+    have key := _root_.Formalism.DoubleCosetMeasures.P.LemmaU.lemmaU (P.adicCompletion L) r t (OP P) (isOpen_OP P) _ (Units.ne_zero (piP P))
       (GLint (OP P) r) (isCompact_GLint P r) (fun k hk => hk.1)
       ((δ.comp (GeneralLinearGroup.det.comp (GLint (OP P) r).subtype))⁻¹) hρ (ν * δ) nrm 1
       hchar

@@ -404,7 +404,7 @@ theorem sHom_factor (hv : IsTrivOn K v) (jc j0 : Fin (N + 1)) (x : Fin N → Ω)
     apply MvPolynomial.ringHom_ext
     · intro c
       simp only [RingHom.coe_comp, Function.comp_apply, AlgHom.coe_toRingHom, sHom,
-        MvPolynomial.aeval_C, psiT, MvPolynomial.eval₂Hom_C, MvPolynomial.coe_eval₂Hom,
+        MvPolynomial.aeval_C, psiT, MvPolynomial.coe_eval₂Hom,
         MvPolynomial.eval₂_C]
       rw [IsScalarTower.algebraMap_apply K (MvPolynomial (SVar D N) Ω) (OmS Ω D N),
         IsScalarTower.algebraMap_apply Ω (MvPolynomial (SVar D N) Ω) (OmS Ω D N),
@@ -414,12 +414,12 @@ theorem sHom_factor (hv : IsTrivOn K v) (jc j0 : Fin (N + 1)) (x : Fin N → Ω)
       rcases Fin.eq_self_or_eq_succAbove j0 j with rfl | ⟨k, rfl⟩
       · by_cases hi : i = 0
         · subst hi
-          simp [sHom, psiT, imgR, eS, GaussValuationUniqueness.sac_same]
+          simp [sHom, psiT, imgR, eS]
         · have h := hrel i hi
           rw [Fin.sum_univ_succAbove _ j, ha0, map_one, mul_one] at h
-          simp [sHom, psiT, imgR, eS, GaussValuationUniqueness.sac_same, hi, GaussValuationUniqueness.sub_apply]
+          simp [sHom, psiT, imgR, eS, hi]
           linear_combination h
-      · simp [sHom, psiT, imgR, eS, GaussValuationUniqueness.sac_succAbove]
+      · simp [sHom, psiT, imgR, eS]
   exact RingHom.congr_fun key f
 
 end Fac
@@ -582,8 +582,7 @@ section -- clump:auto
 
 open NumberField
 
-theorem HtGaussUniq {K : Type} [Field K] [NumberField K] {ι : Type} [Fintype ι] {Ω : ι → Type} [∀ c, Field (Ω c)] [∀ c, Algebra K (Ω c)] {WT : Type} [AddCommGroup WT] {A : ι → Type} [∀ c, CommRing (A c)] [∀ c, Algebra (Ω c) (A c)] [∀ c, Algebra K (A c)] [∀ c, Algebra (𝓞 K) (A c)] (𝒜 : (c : ι) → WT → Submodule (Ω c) (A c)) (d : ReciprocityTheory.ChartRestriction.G.T0.Data K ι Ω WT A) : ReciprocityTheory.ChartRestriction.G.T0.LeafSt.AdmissibleValuationPrimeUnique 𝒜 d :=
-  GaussValuationUniqueness.admissibleValuation_prime_subsingleton 𝒜 d
+alias HtGaussUniq := _root_.GaussValuationUniqueness.admissibleValuation_prime_subsingleton
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.HeightTheory.GaussHeights.GaussUniqueness.GaussUniquenessStatements.GaussUniquenessTheorem.HtGaussUniq =====

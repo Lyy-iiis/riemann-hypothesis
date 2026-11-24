@@ -313,7 +313,7 @@ theorem idx_mul_map_bar_eq : ∀ (E : Type) [Field E] [NumberField E] (bar : �
     refine ⟨c, RingOfIntegers.ext ?_⟩
     change (b : E) * (c : E) = 1
     rw [hc]
-    simp only [Pi.smul_apply, smul_eq_mul, Algebra.smul_def]
+    simp only [Pi.smul_apply, Algebra.smul_def]
     change (b : E) * ((k : E) * ((b : E)⁻¹ / ((k : E) * d i) * d i)) = 1
     field_simp
   have hsm : ∀ (c : 𝓞 E) (x : E), barE (c • x) = (bar c : E) * barE x := by
@@ -955,23 +955,6 @@ theorem cut_linindep : ∀ {K : Type} [Field K] [NumberField K] {p m n : ℕ} (e
       ((ell.map ((M a).restrictScalars (𝓞 K)) : Submodule (𝓞 K) (Fin n → K)) : Set (Fin n → K))) →
     LinearIndependent K (fun a => M a v) := _root_.GlobalTheory.linearIndependent_images_of_rankOne_lattice
 
-theorem cut_cancel : ∀ {K : Type} [Field K] [NumberField K] (𝔟 : Submodule (𝓞 K) K), 𝔟.FG → 𝔟 ≠ ⊥ →
-    ∀ (p : ℕ) (A N : Submodule (𝓞 K) K),
-    (𝔟 ^ p * N).colon ((𝔟 ^ p * A : Submodule (𝓞 K) K) : Set K) = N.colon (A : Set K) := _root_.GlobalTheory.ColonPowCancel.colon_pow_mul_cancel
-
-theorem cut_extend : ∀ {E K : Type} [Field E] [NumberField E] [Field K] [NumberField K]
-    (τ : 𝓞 E →+* 𝓞 K) (τE : E →+* K), (∀ x : 𝓞 E, τE x = ((τ x : 𝓞 K) : K)) →
-    ∀ (A : Submodule (𝓞 E) E), A.FG → (1 : E) ∈ A →
-    (1 : Submodule (𝓞 K) K).colon (Submodule.span (𝓞 K) (τE '' A) : Set K) =
-      ((1 : Submodule (𝓞 E) E).colon (A : Set E)).map τ := _root_.GlobalTheory.colon_one_span_image_eq_map
-
-theorem cut_twistgens : ∀ {E K : Type} [Field E] [NumberField E] [Field K] [NumberField K]
-    (τ : 𝓞 E →+* 𝓞 K) (τE : E →+* K), (∀ x : 𝓞 E, τE x = ((τ x : 𝓞 K) : K)) → ∀ (p : ℕ)
-    (𝔟 : Submodule (𝓞 K) K) (Λ : Submodule (𝓞 E) (Fin p → E)),
-    Submodule.span (𝓞 K) {d | ∃ y : Fin p → Fin p → K,
-        (∀ i, y i ∈ {x : Fin p → K | ∃ β ∈ 𝔟, ∃ c ∈ Λ, x = β • fun a => τE (c a)}) ∧ d = (Matrix.of y).det} =
-      𝔟 ^ p * Submodule.span (𝓞 K) (τE '' GlobalTheory.IdxTensor.dets E p Λ) := _root_.GlobalTheory.span_twistDets_eq
-
 theorem span_image_one {E K : Type} [Field E] [NumberField E] [Field K] [NumberField K]
     (τ : 𝓞 E →+* 𝓞 K) (τE : E →+* K) (hτ : ∀ x : 𝓞 E, τE x = ((τ x : 𝓞 K) : K)) :
     Submodule.span (𝓞 K) (τE '' (1 : Submodule (𝓞 E) E)) = 1 := by
@@ -993,12 +976,12 @@ theorem one_mem_dets {F : Type} [Field F] [NumberField F] (p : ℕ) (L : Submodu
     ext i j
     by_cases hij : i = j
     · subst hij; simp
-    · simp [Pi.single_apply, Matrix.one_apply, hij, Ne.symm hij]
+    · simp [hij, Ne.symm hij]
   rw [hI, Matrix.det_one]
 
 theorem dets_std {F : Type} [Field F] [NumberField F] (p : ℕ) :
     dets F p (Submodule.span (𝓞 F) (Set.range fun a => (Pi.single a (1 : F) : Fin p → F))) = 1 := by
-  rw [cut_detsspan]
+  rw [_root_.GlobalTheory.IdxTensor.dets_span_eq]
   apply le_antisymm
   · rw [Submodule.span_le]
     rintro d ⟨y, hy, rfl⟩
@@ -1010,7 +993,7 @@ theorem dets_std {F : Type} [Field F] [NumberField F] (p : ℕ) :
       rw [← hf i]
       by_cases hij : j = f i
       · subst hij; simp
-      · simp [Pi.single_apply, hij]
+      · simp [hij]
     rw [hM]
     exact Submodule.mem_one.2 ⟨_, RingHom.map_det _ _⟩
   · rw [Submodule.one_le]
@@ -1020,7 +1003,7 @@ theorem dets_std {F : Type} [Field F] [NumberField F] (p : ℕ) :
       ext i j
       by_cases hij : i = j
       · subst hij; simp
-      · simp [Pi.single_apply, Matrix.one_apply, hij, Ne.symm hij]
+      · simp [hij, Ne.symm hij]
     rw [hI, Matrix.det_one]
 
 theorem big_eq_map {E K : Type} [Field E] [NumberField E] [Field K] [NumberField K] (τE : E →+* K) {p m n : ℕ}
@@ -1052,7 +1035,7 @@ private lemma sum_single_smul_eq_apply {E K : Type} [Field E] [Field K] (τE : E
   rw [Finset.sum_eq_single b]
   · simp
   · intro a _ hab
-    simp [Pi.single_apply, hab]
+    simp [hab]
   · simp
 
 theorem small_eq_big_std {E K : Type} [Field E] [NumberField E] [Field K] [NumberField K]
@@ -1090,7 +1073,7 @@ theorem small_eq_big_std {E K : Type} [Field E] [NumberField E] [Field K] [Numbe
 theorem dets_fg {F : Type} [Field F] [NumberField F] (p : ℕ) (L : Submodule (𝓞 F) (Fin p → F)) (h : L.FG) :
     (dets F p L).FG := by
   obtain ⟨S, rfl⟩ := h
-  rw [cut_detsspan]
+  rw [_root_.GlobalTheory.IdxTensor.dets_span_eq]
   apply Submodule.fg_span
   refine ((Set.Finite.pi (fun _ : Fin p => S.finite_toSet)).image
     (fun y : Fin p → Fin p → F => (Matrix.of y).det)).subset ?_
@@ -1102,8 +1085,8 @@ theorem dets_twist {E K : Type} [Field E] [NumberField E] [Field K] [NumberField
     (𝔟 : Submodule (𝓞 K) K) (Λ : Submodule (𝓞 E) (Fin p → E)) :
     dets K p (Submodule.span (𝓞 K) {x | ∃ β ∈ 𝔟, ∃ c ∈ Λ, x = β • fun a => τE (c a)}) =
       𝔟 ^ p * Submodule.span (𝓞 K) (τE '' dets E p Λ) := by
-  rw [cut_detsspan]
-  exact cut_twistgens τ τE hτ p 𝔟 Λ
+  rw [_root_.GlobalTheory.IdxTensor.dets_span_eq]
+  exact _root_.GlobalTheory.span_twistDets_eq τ τE hτ p 𝔟 Λ
 
 theorem idx_image_eq_map : ∀ (E K : Type) [Field E] [NumberField E] [Field K] [NumberField K] (τ : 𝓞 E →+* 𝓞 K) (τE : E →+* K),
     (∀ x : 𝓞 E, τE x = ((τ x : 𝓞 K) : K)) → ∀ (p m n : ℕ) (ell : Submodule (𝓞 K) (Fin m → K))
@@ -1115,9 +1098,9 @@ theorem idx_image_eq_map : ∀ (E K : Type) [Field E] [NumberField E] [Field K] 
                  (⨆ a, ell.map ((M a).restrictScalars (𝓞 K))) =
       (GlobalTheory.FlatCM.idx E p Λ (Submodule.span (𝓞 E) (Set.range fun a => (Pi.single a (1 : E) : Fin p → E)))).map τ := by
   intro E K _ _ _ _ τ τE hτ p m n ell M Λ hfg hrk hinj hind hΛfg hΛ
-  obtain ⟨v, hv, 𝔟, h𝔟fg, h𝔟, hell⟩ := cut_rankone ell hrk hfg
+  obtain ⟨v, hv, 𝔟, h𝔟fg, h𝔟, hell⟩ := _root_.GlobalTheory.latRank_one_eq_ideal_smul ell hrk hfg
   have hφ : Function.Injective (Fintype.linearCombination K (fun a => M a v)) :=
-    (cut_linindep ell M v hv 𝔟 h𝔟 hell hinj hind).fintypeLinearCombination_injective
+    (_root_.GlobalTheory.linearIndependent_images_of_rankOne_lattice ell M v hv 𝔟 h𝔟 hell hinj hind).fintypeLinearCombination_injective
   have hsing : ∀ a, (Pi.single a (1 : E) : Fin p → E) ∈ Λ := by
     intro a
     have h1 := hΛ (Pi.single a 1)
@@ -1125,10 +1108,10 @@ theorem idx_image_eq_map : ∀ (E K : Type) [Field E] [NumberField E] [Field K] 
     funext b
     by_cases hab : b = a
     · subst hab; simp
-    · simp [Pi.single_apply, hab]
+    · simp [hab]
   have hD1 : (1 : E) ∈ GlobalTheory.IdxTensor.dets E p Λ := one_mem_dets p Λ hsing
   have hDfg : (GlobalTheory.IdxTensor.dets E p Λ).FG := dets_fg p Λ hΛfg
-  have hR := cut_idxmap (V := Fin p → E) p (LinearMap.id) Function.injective_id Λ
+  have hR := _root_.GlobalTheory.IdxMap.idx_map_eq_colon_dets (V := Fin p → E) p (LinearMap.id) Function.injective_id Λ
     (Submodule.span (𝓞 E) (Set.range fun a => (Pi.single a (1 : E) : Fin p → E)))
   have hmapid : ∀ L : Submodule (𝓞 E) (Fin p → E),
       L.map ((LinearMap.id : (Fin p → E) →ₗ[E] (Fin p → E)).restrictScalars (𝓞 E)) = L := by
@@ -1137,9 +1120,9 @@ theorem idx_image_eq_map : ∀ (E K : Type) [Field E] [NumberField E] [Field K] 
     simp
   rw [hmapid, hmapid] at hR
   rw [hR, small_eq_big_std τ τE hτ ell M, big_eq_map τE ell M Λ v 𝔟 hell, big_eq_map τE ell M _ v 𝔟 hell,
-    cut_idxmap p _ hφ, dets_twist τ τE hτ, dets_twist τ τE hτ, dets_std, span_image_one τ τE hτ,
-    cut_cancel 𝔟 h𝔟fg h𝔟 p _ 1]
-  exact cut_extend τ τE hτ _ hDfg hD1
+    _root_.GlobalTheory.IdxMap.idx_map_eq_colon_dets p _ hφ, dets_twist τ τE hτ, dets_twist τ τE hτ, dets_std, span_image_one τ τE hτ,
+    _root_.GlobalTheory.ColonPowCancel.colon_pow_mul_cancel 𝔟 h𝔟fg h𝔟 p _ 1]
+  exact _root_.GlobalTheory.colon_one_span_image_eq_map τ τE hτ _ hDfg hD1
 
 end GlobalTheory.IdxTensor
 
@@ -1238,8 +1221,6 @@ theorem latRank_iSup {K V ι : Type} [Field K] [NumberField K] [AddCommGroup V] 
   have hinj : Function.Injective (DirectSum.coeLinearMap fun i => Submodule.span K (N i : Set V)) := by
     first
     | exact hi.dfinsupp_lsum_injective
-    | exact (iSupIndep_iff_dfinsupp_lsum_injective _).1 hi
-    | exact DirectSum.coeLinearMap_injective_of_iSupIndep hi
   rw [← DirectSum.range_coeLinearMap, LinearMap.finrank_range_of_inj hinj, Module.finrank_directSum]
 
 end GlobalTheory.FlatCore.CMDiff
@@ -1302,7 +1283,7 @@ theorem relIndex_iSup_map_eq_pow : ∀ (K : Type) [Field K] [NumberField K] (W V
       · intro b _
         by_cases h : b = a
         · subst h; simpa using hw
-        · simp [Pi.single_apply, h]
+        · simp [h]
       · rw [hΦ, Finset.sum_eq_single a (fun b _ hb => by simp [Pi.single_apply, hb]) (by simp)]
         simp
   let Lp : Submodule (𝓞 K) (Fin p → W) := Submodule.pi Set.univ (fun _ => ℓ)
@@ -1439,7 +1420,7 @@ theorem deg_iSup_map_of_gram : ∀ (K : Type) [Field K] [NumberField K] (W V : T
       rw [← Complex.abs_re_eq_norm.mpr him, abs_of_pos hre]
     rw [heq, hn, Real.log_mul (pow_pos (Complex.pos_iff.mp (hA1 s)).1 p).ne' hre.ne', Real.log_pow]
   have hlogW : ∀ s : K →+* ℂ, Real.log (hW.gram s ![c]).det.re = Real.log (hW.form s c c).re := by
-    intro s; simp [HermFam.gram, Matrix.det_fin_one]
+    intro s; simp [HermFam.gram]
   refine ⟨?_, ?_⟩
   · obtain ⟨s⟩ : Nonempty (K →+* ℂ) := inferInstance
     intro h; have := (hkey s).1; rw [h, map_zero] at this; simp at this
@@ -1722,7 +1703,7 @@ theorem cmDiff_definite : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E]
     rw [h0] at this
     exact H.d_prime.ne_zero (by simpa using this)
   have hτb' : τb H.rt = -ρ := by
-    simp [hτb, GlobalTheory.CM.EigDec.bar_rt, hτ]
+    simp [hτb, hτ]
   have hne : ¬ τb H.rt = ρ := by
     rw [hτb']
     intro e

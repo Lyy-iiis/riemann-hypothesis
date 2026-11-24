@@ -78,6 +78,8 @@ import Mathlib.Tactic.NormNum.Parity
 import Mathlib.Tactic.NormNum.Prime
 import Mathlib.Tactic.NormNum.RealSqrt
 import Std.Tactic.BVDecide.Normalize.Prop
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilOperatorForLeviMatrix
+import Development.AbelianVarietyTheory.Proofs.TwistedOperators.RegularisingTranslateCombination
 import Formalism.LocalRingCardinality.SpanPowerMembership.LocAtA
 import Mathlib.Analysis.Normed.Algebra.GelfandRadius
 import Mathlib.Analysis.SpecialFunctions.Bernstein
@@ -110,7 +112,7 @@ import Development.AbelianVarietyTheory.Proofs.DivisorProofs.StoneVonNeumannSchw
 -- Members: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SeesawDoublingIntegralIdentity, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLocalGeneratorOfNonzeroIdeal, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLocalGeneratorOfNonzeroIdealStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.IdealMapSmulIsLatticeOfNeBot, Development.AbelianVarietyTheory.Proofs.DivisorProofs.IdealMapSmulIsLatticeOfNeBotStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.MemLocalLatticeIdealMapSmulIffGenerator, Development.AbelianVarietyTheory.Proofs.DivisorProofs.MemLocalLatticeIdealMapSmulIffGeneratorStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceDualRingOfIntegersIffOfUnramifiedExtension, Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceDualRingOfIntegersIffOfUnramifiedExtensionStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.SkewHermitianLatticeSplitPlaceComponentsDual, Development.AbelianVarietyTheory.Proofs.DivisorProofs.SkewHermitianLatticeSplitPlaceComponentsDualStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsSupportedAdeleSplitPlaceMatrixCoordinateEq, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsSupportedAdeleSplitPlaceMatrixCoordinateEqStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsTensorLatticePointOfIntegralSplitPlaceCoorStatement, Development.AbelianVarietyTheory.Proofs.DivisorProofs.SplitBasisWittModelLocal, Development.AbelianVarietyTheory.Proofs.DivisorProofs.SplitPlaceTensorLatticeComponentIntegral, Development.AbelianVarietyTheory.Proofs.DivisorProofs.SplitPlaceTensorLatticeComponentIntegralStatement, Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ExistsLinearFunctionalAtSplitPlace, Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.LinearFunctionalSphericalVectorNeZero, Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ConjLinearFunctionalSphericalVectorIndicator, Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ExistsCombinationMemRegularSubspace
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SeesawDoublingIntegralIdentity =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.TwistedOperators.SeesawDoublingIntegralIdentity", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.ExistsNotRelZero\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.ThetaEqB\npublic import GroundTheory.LocalFields.PadicLogSeries\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.AdelicHeisenbergActsByLocalSchrodinger\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.EqOfComponentTensorAdelicFunctionEq\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsFactorPureTensorComponentAtPlace\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsGoodPlaceTranslateCombinationLatticeIndica\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsHomSuppSplit\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsNatMulIntegralOfIsCompact\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.GoodSplitPlaceTranslationActsThroughWeil\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsConstOfPolConst\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalWeilOperatorIsometrySchwartzBruhatStatement\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.SchrodingerPreservesSchwartzBruhat\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.SchroedingerOperatorHeisenbergLawApplyStatement\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilRepresentationLocalityUnitaryGroupVStatement\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilRepresentationPreservesSchwartz\nimport Formalism.LocalToGlobal.BesselHermitianTheta.LemmasWeil\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Std.Tactic.BVDecide.Normalize.Prop\npublic import Development.AbelianVarietyTheory.Definitions.Foundations.EqPlaceIdemOfIsPrimeIdem\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.TwistedOperators.SeesawDoublingIntegralIdentity", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.ExistsNotRelZero\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.ThetaEqB\npublic import GroundTheory.LocalFields.PadicLogSeries\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.AdelicHeisenbergActsByLocalSchrodinger\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.EqOfComponentTensorAdelicFunctionEq\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsFactorPureTensorComponentAtPlace\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsGoodPlaceTranslateCombinationLatticeIndica\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsHomSuppSplit\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsNatMulIntegralOfIsCompact\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.GoodSplitPlaceTranslationActsThroughWeil\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsConstOfPolConst\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalWeilOperatorIsometrySchwartzBruhatStatement\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.SchrodingerPreservesSchwartzBruhat\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.SchroedingerOperatorHeisenbergLawApplyStatement\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilRepresentationLocalityUnitaryGroupVStatement\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilRepresentationPreservesSchwartz\nimport Formalism.LocalToGlobal.BesselHermitianTheta.LemmasWeil\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Std.Tactic.BVDecide.Normalize.Prop\npublic import Development.AbelianVarietyTheory.Definitions.Foundations.EqPlaceIdemOfIsPrimeIdem\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilOperatorForLeviMatrix\nimport Development.AbelianVarietyTheory.Proofs.TwistedOperators.RegularisingTranslateCombination\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -131,36 +133,6 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 noncomputable section
 
 namespace GlobalTheory.RegSo
-
-theorem mem_range_emb_of_conjU_mem_UAt {D : D7} (V : HSp D) (Y : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Spc D.host.F D.host.E V.rank) (c : D.host.E)
-    (hc : Y.J = c • V.gram) (v : HeightOneSpectrum (𝓞 D.host.F)) (g : GA D V)
-    (hg : GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.conjU V c hc g ∈ GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.UAt D.sp.cm.sig Y (evFin D.host.F v)) :
-    g ∈ Set.range (emb D.sp.cm.sig V.gram v) := by
-  obtain ⟨α, hε, h1, h2⟩ := GlobalTheory.AdelicU.Supp.isPlaceIdem_placeIdem D v
-  set ε := GlobalTheory.AdelicU.Supp.placeIdem (F := D.host.F) v with hεdef
-  have e1 : evFin D.host.F v ε = 1 := by rw [hε]; exact h1
-  have e2 : ∀ u, u ≠ v → evFin D.host.F u ε = 0 := fun u hu => by rw [hε]; exact h2 u hu
-  have e0 : ∀ w, evInf D.host.F w ε = 0 := fun w => by rw [hε]; rfl
-  have hu : evFin D.host.F v (1 - ε) = 0 := by rw [map_sub, map_one, e1, sub_self]
-  have hz := hg (1 - ε) hu
-  have key := (GlobalTheory.AdelicU.Supp.mul_idem_iff_mem_range_emb D.sp.cm.sig V.gram v ε e0 e1 e2 g).1 (fun i j => ?_)
-  · exact key
-  set M : Matrix (Fin V.rank) (Fin V.rank) (AE D) := (GlobalTheory.AdelicU.matHom (AF D.host.F) D.sp.cm.sig V.gram g).val with hM
-  have hm : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.mat (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.conjU V c hc g) = M.map (Formalism.L2.Theta.cA D) := rfl
-  have hij := congrFun (congrFun hz i) j
-  rw [hm, Matrix.smul_apply, Matrix.sub_apply, Matrix.map_apply, Matrix.zero_apply] at hij
-  have h1' : (1 : Matrix (Fin V.rank) (Fin V.rank) (AE D)) i j = Formalism.L2.Theta.cA D ((1 : Matrix (Fin V.rank) (Fin V.rank) (AE D)) i j) := by
-    rw [Matrix.one_apply]; split_ifs <;> simp
-  have hsm : ∀ (a : AF D.host.F) (x : AE D), Formalism.L2.Theta.cA D (a • x) = a • Formalism.L2.Theta.cA D x :=
-    fun a x => map_smul (GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.cA D.sp.cm.sig) a x
-  rw [h1', ← map_sub, ← hsm] at hij
-  have hinj : (M - 1) i j - ε • (M - 1) i j = 0 := by
-    have := congrArg (Formalism.L2.Theta.cA D) hij
-    rw [Formalism.L2.Theta.cA_cA, map_zero, sub_smul, one_smul] at this
-    exact this
-  rw [sub_eq_zero] at hinj
-  rw [← Algebra.smul_def]
-  exact hinj.symm
 
 theorem mem_GfC_of_mem_range {D : D7} (V : HSp D) (v : HeightOneSpectrum (𝓞 D.host.F)) (g : GA D V)
     (hg : g ∈ Set.range (emb D.sp.cm.sig V.gram v)) : g ∈ GfC V := by
@@ -220,7 +192,7 @@ theorem homAt : ∀ {D : D7} (W₁ : HSp D) {a : ℕ} (Γ : GlobalTheory.Indefin
     erw [hmat]
     rw [hN₀, add_sub_cancel_left]
     exact at_liftMat hcm t _
-  have hR := mem_range_emb_of_conjU_mem_UAt W₁ Γ.V' (-1) hJW v _ hAt
+  have hR := _root_.GlobalTheory.RegAt.mem_range_emb_of_conjU_mem_UAt W₁ Γ.V' (-1) hJW v _ hAt
   refine ⟨?_, hR, hAt, ?_, ?_⟩
   · exact mem_GfC_of_mem_range W₁ v _ hR
   · erw [hmat]
@@ -409,9 +381,6 @@ def mulHomeo {k : Type} [Field k] [TopologicalSpace k] [IsTopologicalRing k] {n 
 theorem mulHomeo_apply {k : Type} [Field k] [TopologicalSpace k] [IsTopologicalRing k] {n d : ℕ} (A : GL (Fin n) k)
     (C : GL (Fin d) k) (Y : Matrix (Fin n) (Fin d) k) : mulHomeo A C Y = A.val * Y * C.val := rfl
 
-theorem comp_mem_SB {Z : Type} [TopologicalSpace Z] (T : Z ≃ₜ Z) {f : Z → ℂ} (hf : f ∈ GlobalTheory.WeilM.SB Z) :
-    f ∘ T ∈ GlobalTheory.WeilM.SB Z := ⟨hf.1.comp_continuous T.continuous, hf.2.comp_homeomorph T⟩
-
 theorem isLinBar_one {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
     {n d : ℕ} {Y : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Spc F E n} {Wd : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Spc F E d} (M : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Model σ Y Wd)
     (ψ : AddChar (AF F) ℂ) {v : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Pl (F := F)} (t : E →ₐ[F] Fv F v) (b bt : GL (Fin n) (Fv F v)) (hbt : bt.val = b.valᵀ)
@@ -429,7 +398,7 @@ theorem isLinBar_one {F E : Type} [Field F] [NumberField F] [Field E] [NumberFie
       simp only [mulHomeo_apply, Matrix.mul_add, Matrix.add_mul]
   have hb : Set.BijOn (LinearMap.funLeft ℂ ℂ (mulHomeo bt c)) (GlobalTheory.WeilM.SB (Matrix (Fin n) (Fin d) (Fv F v)) : Set _)
       (GlobalTheory.WeilM.SB (Matrix (Fin n) (Fin d) (Fv F v)) : Set _) := by
-    refine ⟨fun f hf => comp_mem_SB _ hf, fun f _ f' _ e => ?_, fun f hf => ⟨f ∘ (mulHomeo bt c).symm, comp_mem_SB _ hf, ?_⟩⟩
+    refine ⟨fun f hf => _root_.GlobalTheory.LeviOp.sb_comp _ hf, fun f _ f' _ e => ?_, fun f hf => ⟨f ∘ (mulHomeo bt c).symm, _root_.GlobalTheory.LeviOp.sb_comp _ hf, ?_⟩⟩
     · funext Z
       have := congrFun e ((mulHomeo bt c).symm Z)
       simpa [LinearMap.funLeft_apply] using this
@@ -568,7 +537,7 @@ open scoped Matrix TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.exists_local_generator_of_nonzero_ideal : ∀ (F : Type) [Field F] [NumberField F] (I : Ideal (𝓞 F)) (v : IsDedekindDomain.HeightOneSpectrum (𝓞 F)), I ≠ ⊥ → ∃ z : Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv F v, z ≠ 0 ∧ (¬ I ≤ v.asIdeal → z = 1) ∧ (∀ d ∈ I, Valued.v (algebraMap F (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv F v) (d : F)) ≤ Valued.v z) ∧ ∃ d ∈ I, Valued.v (algebraMap F (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv F v) (d : F)) = Valued.v z := by
-  first | exact @GlobalTheory.ideal_localGenerator | exact GlobalTheory.ideal_localGenerator | (intros; apply GlobalTheory.ideal_localGenerator <;> assumption)
+  first | exact @GlobalTheory.ideal_localGenerator
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLocalGeneratorOfNonzeroIdealStatement =====
@@ -623,7 +592,7 @@ open scoped Matrix TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.ideal_map_smul_isLattice_of_ne_bot : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (n : ℕ) (L : Submodule (𝓞 E) (Fin n → E)) (I : Ideal (𝓞 F)), I ≠ ⊥ → Submodule.IsLattice E L → Submodule.IsLattice E (I.map (algebraMap (𝓞 F) (𝓞 E)) • L) := by
-  first | exact @GlobalTheory.ideal_map_smul_isLattice | exact GlobalTheory.ideal_map_smul_isLattice | (intros; apply GlobalTheory.ideal_map_smul_isLattice <;> assumption)
+  first | exact @GlobalTheory.ideal_map_smul_isLattice
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IdealMapSmulIsLatticeOfNeBotStatement =====
@@ -760,7 +729,7 @@ open scoped Matrix TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.mem_localLattice_idealMap_smul_iff_generator : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (n : ℕ) (L : Submodule (𝓞 E) (Fin n → E)) (I : Ideal (𝓞 F)) (v : IsDedekindDomain.HeightOneSpectrum (𝓞 F)) (z : Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv F v), (∀ d ∈ I, Valued.v (algebraMap F (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv F v) (d : F)) ≤ Valued.v z) → (∃ d ∈ I, Valued.v (algebraMap F (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv F v) (d : F)) = Valued.v z) → ∀ y : Fin n → Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv F v ⊗[F] E, y ∈ GlobalTheory.AdelicU.latLoc F (I.map (algebraMap (𝓞 F) (𝓞 E)) • L) v ↔ ∃ x ∈ GlobalTheory.AdelicU.latLoc F L v, y = z • x := by
-  first | exact @GlobalTheory.LatLocIdealSmul.mem_latLoc_idealMap_smul_iff | exact GlobalTheory.LatLocIdealSmul.mem_latLoc_idealMap_smul_iff | (intros; apply GlobalTheory.LatLocIdealSmul.mem_latLoc_idealMap_smul_iff <;> assumption)
+  first | exact @GlobalTheory.LatLocIdealSmul.mem_latLoc_idealMap_smul_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.MemLocalLatticeIdealMapSmulIffGeneratorStatement =====
@@ -858,7 +827,7 @@ open scoped Matrix TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.traceDual_ringOfIntegers_iff_of_unramified_extension : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E], Algebra.Unramified (𝓞 F) (𝓞 E) → ∀ e : E, (∀ o : 𝓞 E, IsIntegral ℤ (Algebra.trace ℚ E (o * e))) ↔ ∀ d ∈ differentIdeal ℤ (𝓞 F), IsIntegral ℤ (algebraMap F E (d : F) * e) := by
-  first | exact @GlobalTheory.UnrTraceDual.traceDual_ringOfIntegers_iff_of_unramified | exact GlobalTheory.UnrTraceDual.traceDual_ringOfIntegers_iff_of_unramified | (intros; apply GlobalTheory.UnrTraceDual.traceDual_ringOfIntegers_iff_of_unramified <;> assumption)
+  first | exact @GlobalTheory.UnrTraceDual.traceDual_ringOfIntegers_iff_of_unramified
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceDualRingOfIntegersIffOfUnramifiedExtensionStatement =====
@@ -922,7 +891,7 @@ theorem eq_dualGlob {σ : E →ₐ[F] E} {n : ℕ} {J : Matrix (Fin n) (Fin n) E
         exact key d hd
       · simp
       · intro a b _ _ ha hb
-        simp only [Subalgebra.coe_add, map_add (f := _), add_mul]
+        simp only [map_add (f := _), add_mul]
         exact add_mem ha hb
       · intro c a _ ha
         have e2 : σ ((c • a : 𝓞 E) : E) * form σ J y x = σ (c : E) * (σ (a : E) * form σ J y x) := by
@@ -1066,7 +1035,7 @@ theorem _root_.GlobalTheory.T.skewHermitianLattice_splitPlace_components_dual : 
     ∀ (v : Pl (F := F)) (t : E →ₐ[F] Fv F v) (c : GL (Fin d) (Fv F v)), IsSplitBasis t W.L c →
     ∃ (z : (Fv F v)ˣ) (c₂ : GL (Fin d) (Fv F v)), (PsiUnr B.ψ v → z = 1) ∧
       (c₂⁻¹).1 = (z : Fv F v) • (c.1ᵀ * W.J.map t) ∧ IsSplitBasis (t.comp σ) W.L c₂ := by
-  first | exact @GlobalTheory.SkewSplitDual.skewSplitDual | exact GlobalTheory.SkewSplitDual.skewSplitDual | (intros; apply GlobalTheory.SkewSplitDual.skewSplitDual <;> assumption)
+  first | exact @GlobalTheory.SkewSplitDual.skewSplitDual
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.SkewHermitianLatticeSplitPlaceComponentsDualStatement =====
@@ -1135,7 +1104,7 @@ theorem _root_.GlobalTheory.T.exists_supportedAdele_splitPlace_matrix_coordinate
     IsCMExt F E σ → ∀ (v : Pl (F := F)) (t : E →ₐ[F] Fv F v) (b : GL (Fin n) (Fv F v)) (c : GL (Fin d) (Fv F v))
     (Y : Matrix (Fin n) (Fin d) (Fv F v)), ∃ x : Matrix (Fin n) (Fin d) (_root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.AE (F := F) (E := E)), At (evFin F v) x ∧
       x.map (piW (t.comp σ)) = 0 ∧ (b⁻¹).1 * x.map (piW t) * (c⁻¹).1ᵀ = Y := by
-  first | exact @GlobalTheory.VacLift.exists_lift | exact GlobalTheory.VacLift.exists_lift | (intros; apply GlobalTheory.VacLift.exists_lift <;> assumption)
+  first | exact @GlobalTheory.VacLift.exists_lift
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsSupportedAdeleSplitPlaceMatrixCoordinateEqStatement =====
@@ -1154,7 +1123,7 @@ theorem _root_.GlobalTheory.T.exists_tensorLattice_point_of_integral_splitPlace_
     (c : GL (Fin d) (Fv F v)), IsSplitBasis t X.L b → IsSplitBasis t W.L c →
     ∀ A : Matrix (Fin n) (Fin d) (Fv F v), (∀ i j, A i j ∈ v.adicCompletionIntegers F) →
       ∃ γ ∈ latAtV X W v, γ.map (piW (t.comp σ)) = 0 ∧ (b⁻¹).1 * γ.map (piW t) * (c⁻¹).1ᵀ = A := by
-  first | exact @GlobalTheory.LatFill.exists_latAtV_coord | exact GlobalTheory.LatFill.exists_latAtV_coord | (intros; apply GlobalTheory.LatFill.exists_latAtV_coord <;> assumption)
+  first | exact @GlobalTheory.LatFill.exists_latAtV_coord
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsTensorLatticePointOfIntegralSplitPlaceCoorStatement =====
@@ -1298,11 +1267,6 @@ open NumberField IsDedekindDomain Formalism.MainNotions.GlobalTheoryTheory.Genus
 open scoped Matrix
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
-theorem _root_.GlobalTheory.T.splitPlace_tensorLattice_component_integral : ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {n d : ℕ}
-    (X : Spc F E n) (W : Spc F E d) (v : Pl (F := F)) (t : E →ₐ[F] Fv F v) (b : GL (Fin n) (Fv F v)) (c : GL (Fin d) (Fv F v)),
-    IsSplitBasis t X.L b → IsSplitBasis t W.L c → ∀ γ ∈ latAtV X W v, ∀ i j,
-      ((b⁻¹).1 * γ.map (piW t) * (c⁻¹).1ᵀ) i j ∈ v.adicCompletionIntegers F := by
-  first | exact @GlobalTheory.LatInt.latAtV_comp_integral | exact GlobalTheory.LatInt.latAtV_comp_integral | (intros; apply GlobalTheory.LatInt.latAtV_comp_integral <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.SplitPlaceTensorLatticeComponentIntegralStatement =====
@@ -1326,7 +1290,6 @@ open scoped GlobalTheory.VacAny
 open GlobalTheory.ThK GlobalTheory.KSplit
 noncomputable section
 namespace GlobalTheory.LinWSplit
-variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
 end GlobalTheory.LinWSplit
 namespace GlobalTheory.LinWSplit
 theorem exists_linearFunctional_at_split_place : _root_.GlobalTheory.FunPr.ThetaLocalInputs → ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ)
@@ -1477,15 +1440,6 @@ end GlobalTheory.LinWSplit
 end
 end
 
-section
-open NumberField IsDedekindDomain Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK GlobalTheory.KSplit
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
-
-theorem _root_.GlobalTheory.T.splitPlace_linearFunctional_exists : _root_.GlobalTheory.FunPr.ThetaLocalInputs → ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ)
-    (X : Spc F E n) (W : Spc F E d) (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), IsPair B M χX χW om r s r' s' →
-    ∀ (v : Pl F) (t : E →ₐ[F] Fv F v) (b : GL (Fin n) (Fv F v)) (c : GL (Fin d) (Fv F v)), ∃ ι, M.IsLinW B.ψ t b c ι := by
-  first | exact @_root_.GlobalTheory.LinWSplit.exists_linearFunctional_at_split_place | exact _root_.GlobalTheory.LinWSplit.exists_linearFunctional_at_split_place | (intros; apply _root_.GlobalTheory.LinWSplit.exists_linearFunctional_at_split_place <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ExistsLinearFunctionalAtSplitPlace =====
@@ -1507,7 +1461,7 @@ theorem linearFunctional_sphericalVector : _root_.GlobalTheory.FunPr.ThetaLocalI
     ∀ (v : Pl F) (t : E →ₐ[F] Fv F v) (b : GL (Fin n) (Fv F v)) (c : GL (Fin d) (Fv F v)), IsSplitBasis t X.L b → IsSplitBasis t W.L c →
     ∃ ι, M.IsLinW B.ψ t b c ι ∧ ι (M.vac v) = Set.indicator {Y | ∀ i j, Y i j ∈ v.adicCompletionIntegers F} 1 := by
   intro hP F E _ _ _ _ _ σ B n d X W M χX χW om r s r' s' hPair v t b c hb hc
-  obtain ⟨ι, hι⟩ := _root_.GlobalTheory.T.splitPlace_linearFunctional_exists hP F E σ B n d X W M χX χW om r s r' s' hPair v t b c
+  obtain ⟨ι, hι⟩ := _root_.GlobalTheory.LinWSplit.exists_linearFunctional_at_split_place hP F E σ B n d X W M χX χW om r s r' s' hPair v t b c
   have hcm : IsCMExt F E σ := hPair.base.cm
   obtain ⟨hSB, hne, θ, -, hfix⟩ := hPair.good.vac v
   have hat := (GlobalTheory.LatVac.latAtV_at_stable X W v).1
@@ -1544,7 +1498,7 @@ theorem linearFunctional_sphericalVector : _root_.GlobalTheory.FunPr.ThetaLocalI
       obtain ⟨γ₁, hγ₁, γ₂, hγ₂, rfl, h₁, h₂⟩ := GlobalTheory.T.tensorLatticeAtFinitePlace_eq_sum_splitPlace_parts hcm X W v t γ hγ
       rw [symp_add_right, symp_eq_zero_of_comp hcm t hx hx0 h₁, zero_add]
       exact hψ γ₂ hγ₂ h₂
-    exact GlobalTheory.T.splitPlace_tensorLattice_component_integral X W v t b c hb hc x hmem
+    exact _root_.GlobalTheory.LatInt.latAtV_comp_integral X W v t b c hb hc x hmem
   have hf0 : f ≠ 0 := by
     intro h
     apply hne
@@ -1568,16 +1522,6 @@ end GlobalTheory.VacLinW
 end
 end
 
-section
-open NumberField IsDedekindDomain Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK GlobalTheory.KSplit
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
-
-theorem _root_.GlobalTheory.T.linearFunctional_sphericalVector_ne_zero : _root_.GlobalTheory.FunPr.ThetaLocalInputs → ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ)
-    (X : Spc F E n) (W : Spc F E d) (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), IsPair B M χX χW om r s r' s' →
-    ∀ (v : Pl F) (t : E →ₐ[F] Fv F v) (b : GL (Fin n) (Fv F v)) (c : GL (Fin d) (Fv F v)), IsSplitBasis t X.L b → IsSplitBasis t W.L c →
-    ∃ ι, M.IsLinW B.ψ t b c ι ∧ ι (M.vac v) = Set.indicator {Y | ∀ i j, Y i j ∈ v.adicCompletionIntegers F} 1 := by
-  first | exact @_root_.GlobalTheory.VacLinW.linearFunctional_sphericalVector | exact _root_.GlobalTheory.VacLinW.linearFunctional_sphericalVector | (intros; apply _root_.GlobalTheory.VacLinW.linearFunctional_sphericalVector <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.LinearFunctionalSphericalVectorNeZero =====
@@ -1616,7 +1560,7 @@ theorem conjLinearFunctional_sphericalVector_indicator : _root_.GlobalTheory.Fun
     simpa [Units.val_neg, Matrix.neg_mulVec, Matrix.mulVec_neg] using this
   refine ⟨Units.map (Matrix.scalar (Fin n) : Fv F v →+* Matrix (Fin n) (Fin n) (Fv F v)).toMonoidHom z * b,
     fun hu => by simp [hz1 hu], ?_⟩
-  obtain ⟨ι, hι, hvac⟩ := _root_.GlobalTheory.T.linearFunctional_sphericalVector_ne_zero hP F E σ B n d X W M χX χW om r s r' s' hPair v (t.comp σ) _ _ hb2 hc3
+  obtain ⟨ι, hι, hvac⟩ := _root_.GlobalTheory.VacLinW.linearFunctional_sphericalVector hP F E σ B n d X W M χX χW om r s r' s' hPair v (t.comp σ) _ _ hb2 hc3
   refine ⟨ι, ?_, hvac⟩
   unfold Model.IsLinW at hι
   rw [htt] at hι
@@ -1628,28 +1572,15 @@ theorem conjLinearFunctional_sphericalVector_indicator : _root_.GlobalTheory.Fun
   have e2 : ((-c₂)⁻¹).1 = -((z : Fv F v) • (c.1ᵀ * W.J.map t)) := by
     first
     | (rw [← hc2v]; simp)
-    | (rw [← hc2v, Units.neg_inv]; rfl)
-    | (rw [← hc2v]; exact congrArg Units.val (neg_inv c₂))
   ext Y i j
   rw [e1, e2]
   simp only [Units.val_mul, Units.coe_map, MonoidHom.coe_coe, RingHom.toMonoidHom_eq_coe, Matrix.transpose_mul, Matrix.scalar_apply,
-    Matrix.transpose_neg, Matrix.transpose_smul, Matrix.mul_neg, Matrix.neg_mul, Matrix.mul_smul, Matrix.smul_mul,
-    Matrix.diagonal_transpose, Matrix.mul_assoc, neg_neg]
-  simp [Matrix.mul_assoc, ← Matrix.smul_eq_diagonal_mul, Matrix.mul_smul, Matrix.smul_mul]
+    Matrix.transpose_neg, Matrix.transpose_smul, Matrix.mul_neg, Matrix.mul_smul, Matrix.diagonal_transpose, Matrix.mul_assoc]
+  simp [← Matrix.smul_eq_diagonal_mul, Matrix.mul_smul]
 end GlobalTheory.SplitBarVac
 end
 end
 
-section
-open NumberField IsDedekindDomain Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK GlobalTheory.KSplit
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
-
-theorem _root_.GlobalTheory.T.splitPlace_sphericalVector_indicator_value : _root_.GlobalTheory.FunPr.ThetaLocalInputs → ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ)
-    (X : Spc F E n) (W : Spc F E d) (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), IsPair B M χX χW om r s r' s' →
-    ∀ (v : Pl F) (t : E →ₐ[F] Fv F v) (b : GL (Fin n) (Fv F v)) (c : GL (Fin d) (Fv F v)), IsSplitBasis t X.L b → IsSplitBasis t W.L c →
-    ∃ b₁ : GL (Fin n) (Fv F v), (PsiUnr B.ψ v → b₁ = b) ∧ ∃ ι, M.IsLinBar B.ψ t b₁ c ι ∧ ι (M.vac v) = Set.indicator {Y | ∀ i j, Y i j ∈ v.adicCompletionIntegers F} 1 := by
-  first | exact @_root_.GlobalTheory.SplitBarVac.conjLinearFunctional_sphericalVector_indicator | exact _root_.GlobalTheory.SplitBarVac.conjLinearFunctional_sphericalVector_indicator | (intros; apply _root_.GlobalTheory.SplitBarVac.conjLinearFunctional_sphericalVector_indicator <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ConjLinearFunctionalSphericalVectorIndicator =====
@@ -1687,7 +1618,7 @@ theorem regular_subspace_vacuum_at : _root_.GlobalTheory.FunPr.ThetaLocalInputs 
   obtain ⟨b', hb'⟩ := exists_isSplitBasis t G.V'.L hT.base.cm
   obtain ⟨c, hc⟩ := exists_isSplitBasis t G.W.L hT.base.cm
   obtain ⟨b₁, -, ι', hι', hvac'⟩ :=
-    _root_.GlobalTheory.T.splitPlace_sphericalVector_indicator_value hP F E σ B _ _ _ _ _ _ _ om' _ _ _ _ (GlobalTheory.ThKConst.isPair_small hT) v t b' c hb' hc
+    _root_.GlobalTheory.SplitBarVac.conjLinearFunctional_sphericalVector_indicator hP F E σ B _ _ _ _ _ _ _ om' _ _ _ _ (GlobalTheory.ThKConst.isPair_small hT) v t b' c hb' hc
   let Q : GL (Fin a') (Fv F v) := Matrix.GeneralLinearGroup.mkOfDetNeZero b₁.valᵀ (by
     rw [Matrix.det_transpose]; exact b₁.isUnit.map Matrix.detMonoidHom |>.ne_zero)
   let Λ : Submodule 𝒪[Fv F v] (Fin (a + a') → Fv F v) :=
@@ -1777,7 +1708,7 @@ theorem _root_.GlobalTheory.T.twisted_form_mem_regular_subspace : _root_.GlobalT
       ∃ z : GA D W₁ →₀ ℂ, (∀ k ∈ z.support, k ∈ GfC W₁ ∧ k ∈ Set.range (GlobalTheory.AdelicU.emb D.sp.cm.sig W₁.gram v)) ∧
         GlobalTheory.FunObj.zdeg z ≠ 0 ∧ ∀ i, ∃ Φ₀D, IsDatum Γ.M' ψ cB Φ₀D ((z.sum fun k c => c • ωB (k, 1)) (Ψ i)) ∧
           Φ₀D ∈ Γ.M'.So Bs.ψ t := by
-  first | exact @_root_.GlobalTheory.RegSo.exists_combination_mem_regular_subspace | exact _root_.GlobalTheory.RegSo.exists_combination_mem_regular_subspace | (intros; apply _root_.GlobalTheory.RegSo.exists_combination_mem_regular_subspace <;> assumption)
+  first | exact @_root_.GlobalTheory.RegSo.exists_combination_mem_regular_subspace
 end
 end -- clump:auto
 end -- clump:auto

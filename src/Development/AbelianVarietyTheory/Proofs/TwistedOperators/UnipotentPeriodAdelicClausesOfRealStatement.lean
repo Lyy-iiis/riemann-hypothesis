@@ -124,7 +124,7 @@ open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.adelicUnitaryHaar_eq_map_prod_real_finite : ∀ (D : D7) (Y : HSp D) (ν : Measure (GA D Y)), ν.IsHaarMeasure → ∃ (m : Measure (GinfC Y)) (μ : Measure (GfC Y)), m.IsHaarMeasure ∧ μ.IsHaarMeasure ∧ SigmaFinite m ∧ SigmaFinite μ ∧ MeasurableEmbedding (fun q : GinfC Y × GfC Y => (q.1 : GA D Y) * q.2) ∧ ν = (m.prod μ).map (fun q : GinfC Y × GfC Y => (q.1 : GA D Y) * q.2) := by
-  first | exact @GlobalTheory.HaarSplit.haar_eq_map_prod | exact GlobalTheory.HaarSplit.haar_eq_map_prod | (intros; apply GlobalTheory.HaarSplit.haar_eq_map_prod <;> assumption)
+  first | exact @GlobalTheory.HaarSplit.haar_eq_map_prod
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.AdelicUnitaryHaarEqMapProdRealFiniteStatement =====
@@ -248,7 +248,7 @@ open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.congruence_preimage_volume_finite : ∀ (D : D7) (Y V : HSp D) (d : HermitianOrthogonalExtensionData Y V 1 1) (Λ : Lat V) (𝔪 : Ideal (𝓞 D.host.E)), IsSelfDualC V Λ → 𝔪 ≠ ⊥ → ∀ μ : Measure (GfC Y), μ.IsHaarMeasure → MeasurableSet {b : GfC Y | Lev.finE V (stabilizerEmbedding d (b : GA D Y)) ∈ congLev D.sp.cm V.gram Λ 𝔪} ∧ 0 < μ {b : GfC Y | Lev.finE V (stabilizerEmbedding d (b : GA D Y)) ∈ congLev D.sp.cm V.gram Λ 𝔪} ∧ μ {b : GfC Y | Lev.finE V (stabilizerEmbedding d (b : GA D Y)) ∈ congLev D.sp.cm V.gram Λ 𝔪} < ⊤ := by
-  first | exact @GlobalTheory.UnitaryEmbeddingVolume.vol_pos_lt_top | exact GlobalTheory.UnitaryEmbeddingVolume.vol_pos_lt_top | (intros; apply GlobalTheory.UnitaryEmbeddingVolume.vol_pos_lt_top <;> assumption)
+  first | exact @GlobalTheory.UnitaryEmbeddingVolume.vol_pos_lt_top
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.CongruencePreimageVolumeFiniteStatement =====
@@ -410,8 +410,6 @@ open GlobalTheory.ChainFr GlobalTheory.SepRows GlobalTheory.SepPer Matrix
 open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.mem_ideal_smul_adelicPointRationalLattice : ∀ (D : D7) (V : HSp D) (Λ : Lat V) (𝔪 : Ideal (𝓞 D.host.E)), IsSelfDualC V Λ → ∀ (x : GA D V) (y : Fin V.rank → D.host.E), (Lev.finE V x⁻¹).1 *ᵥ (fun i => y i ⊗ₜ[D.host.F] (1 : Formalism.L2.Herm.Af D.host.F)) ∈ Formalism.L2.Herm.hatL (F := D.host.F) (𝔪 • Λ) → y ∈ 𝔪 • latAt Λ x := by
-  first | exact @GlobalTheory.SepLatIdeal.mem_smul_latAt | exact GlobalTheory.SepLatIdeal.mem_smul_latAt | (intros; apply GlobalTheory.SepLatIdeal.mem_smul_latAt <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.MemIdealSmulAdelicPointRationalLatticeStatement =====
@@ -435,7 +433,7 @@ variable {D : D7}
 theorem cmp_of_mem_GfC (θ : InfFam D) {V : HSp D} {b : GA D V} (hb : b ∈ GfC V) (τ : D.what₂.Tau) : cmp θ τ b = 1 := by
   have h1 : infHom V b = 1 := hb
   have h2 := congrArg Units.val h1
-  simp only [infHom, MonoidHom.comp_apply, Formalism.UG.bc, Units.coe_map, MonoidHom.coe_coe, RingHom.mapMatrix_apply, Units.val_one] at h2
+  simp only [infHom, MonoidHom.comp_apply, Formalism.UG.bc, Units.coe_map, Units.val_one] at h2
   have h4 : (matHom V b).1.map (Algebra.TensorProduct.map (fstA D.host.F) (AlgHom.id D.host.F D.host.E)) = 1 := h2
   have h3 : cmp θ τ b = ((matHom V b).1.map (Algebra.TensorProduct.map (fstA D.host.F) (AlgHom.id D.host.F D.host.E))).map (θ τ) := rfl
   rw [h3, h4]
@@ -515,16 +513,6 @@ theorem unitaryEmbedding_fixes_vectors {Y V : HSp D} {c : ℕ} {ε : D.host.E} (
   rw [GlobalTheory.UnitaryEmbeddingProperties.unitaryEmbedding_matrix_formula]
   simp only [GlobalTheory.UnitaryEmbeddingProperties.ex, Matrix.add_mulVec, Matrix.one_mulVec, ← Matrix.mulVec_mulVec, hQ, Matrix.mulVec_zero, add_zero]
 
-theorem summandEmbedding_mem_infiniteCompact {Y V : HSp D} {c : ℕ} {ε : D.host.E} (d : HermitianOrthogonalExtensionData Y V c ε) {a : GA D Y} (ha : a ∈ GinfC Y) :
-    stabilizerEmbedding d a ∈ GinfC V := by
-  show finHom V (stabilizerEmbedding d a) = 1
-  apply Units.ext
-  show ((matHom V (stabilizerEmbedding d a)).1).map (Algebra.TensorProduct.map (sndA D.host.F) (AlgHom.id D.host.F D.host.E)).toRingHom = 1
-  rw [GlobalTheory.UnitaryEmbeddingProperties.unitaryEmbedding_matrix_formula, GlobalTheory.UnitaryEmbeddingProperties.ex_map]
-  have h1 : ((matHom Y a).1).map (Algebra.TensorProduct.map (sndA D.host.F) (AlgHom.id D.host.F D.host.E)).toRingHom = 1 :=
-    congrArg Units.val ha
-  rw [h1, GlobalTheory.UnitaryEmbeddingProperties.ex_one]
-
 theorem summandEmbedding_mem_finiteCompact {Y V : HSp D} {c : ℕ} {ε : D.host.E} (d : HermitianOrthogonalExtensionData Y V c ε) {b : GA D Y} (hb : b ∈ GfC Y) :
     stabilizerEmbedding d b ∈ GfC V := by
   show infHom V (stabilizerEmbedding d b) = 1
@@ -573,7 +561,7 @@ theorem coef_split (θ : InfFam D) {Y V : HSp D} (d : HermitianOrthogonalExtensi
     (K : Subgroup (GL (Fin V.rank) (Lev.EAf D))) (u : ∀ τ, M.H τ) (g : GA D V) (a : GinfC Y) (b : GfC Y) :
     coef θ M K u u (g * stabilizerEmbedding d ((a : GA D Y) * b)) =
       coefR θ M u u (g * stabilizerEmbedding d a) * (if Lev.finE V (g * stabilizerEmbedding d b) ∈ K then (1 : ℂ) else 0) := by
-  have ha := summandEmbedding_mem_infiniteCompact d a.2
+  have ha := _root_.GlobalTheory.RealType.Emb_mem_inf d a.2
   have hb := summandEmbedding_mem_finiteCompact d b.2
   have e1 : g * stabilizerEmbedding d ((a : GA D Y) * b) = g * stabilizerEmbedding d a * stabilizerEmbedding d b := by
     rw [GlobalTheory.UnitaryEmbeddingProperties.unitaryEmbedding_mul, mul_assoc]
@@ -649,7 +637,7 @@ theorem vanish {Y V : HSp D} (d : HermitianOrthogonalExtensionData Y V 1 1) (Λ 
     funext i
     simp only [Pi.sub_apply, TensorProduct.sub_tmul]
   rw [e, summandEmbedding_inv] at h4
-  exact GlobalTheory.T.mem_ideal_smul_adelicPointRationalLattice D V Λ 𝔪 hΛ (stabilizerEmbedding d x) (z - zv d) h4
+  exact _root_.GlobalTheory.SepLatIdeal.mem_smul_latAt D V Λ 𝔪 hΛ (stabilizerEmbedding d x) (z - zv d) h4
 
 end GlobalTheory.SepPer.AdelicFromReal
 
@@ -705,13 +693,13 @@ theorem term_clause (θ : InfFam D) (hθ : IsInfFam θ) {Y V : HSp D} (d : Hermi
     rfl
   have hF := hfar g
   have hind : Integrable (Sg.indicator (fun _ => (1 : ℂ))) μ :=
-    (integrable_indicator_iff hS.1).2 (by first | exact integrableOn_const.2 (Or.inr hSfin) | exact integrableOn_const hSfin.ne)
+    (integrable_indicator_iff hS.1).2 (by first | exact integrableOn_const hSfin.ne)
   refine ⟨?_, ?_, ?_⟩
   · rw [hνe, hemb.integrable_map_iff]
     have e : ((fun h => coef θ M K u u (g * stabilizerEmbedding d h)) ∘ fun q : GinfC Y × GfC Y => (q.1 : GA D Y) * q.2) =
         fun q => coefR θ M u u (g * stabilizerEmbedding d q.1) * Sg.indicator (fun _ => (1 : ℂ)) q.2 := funext pw
     rw [e]
-    first | exact hF.1.mul_prod hind | exact hF.1.prod_mul hind
+    first | exact hF.1.mul_prod hind
   · have hnorm : ∫ h, ‖coef θ M K u u (g * stabilizerEmbedding d h)‖ ∂ν =
         (∫ a, ‖coefR θ M u u (g * stabilizerEmbedding d a)‖ ∂m) * (μ Sg).toReal := by
       rw [hνe, hemb.integral_map]
@@ -792,7 +780,7 @@ open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.unipotentPeriod_adelic_clauses_of_real : GlobalTheory.Published.CuspRapidDecay → ∀ (D : D7) (θ : InfFam D), IsInfFam θ → ∀ (Y V : HSp D) (d : HermitianOrthogonalExtensionData Y V 1 1) (S S' : D.what₂.Tau → SPar) (M₀ : DSModel Y S') (M : DSModel V S) (p : Pack M₀ M) (Q : ℝ), p.Is θ d Q → ∀ (Λ : Lat V) (𝔪 : Ideal (𝓞 D.host.E)), IsSelfDualC V Λ → 𝔪 ≠ ⊥ → zv d ∈ Λ → ∀ (J : Set (GA D Y)), (∀ k ∈ GfC Y, Lev.finE V (stabilizerEmbedding d k) ∈ congLev D.sp.cm V.gram Λ 𝔪 → k ∈ J) → ∀ t ∈ MultT θ M₀ J 1, ∀ ν : Measure (GA D Y), ν.IsHaarMeasure → ∃ c, p.AdelicAt θ d Q Λ 𝔪 ν (t (PiTensorProduct.tprod ℂ p.w)) c := by
-  first | exact @GlobalTheory.SepPer.AdelicFromReal.adelicAt_of_real | exact GlobalTheory.SepPer.AdelicFromReal.adelicAt_of_real | (intros; apply GlobalTheory.SepPer.AdelicFromReal.adelicAt_of_real <;> assumption)
+  first | exact @GlobalTheory.SepPer.AdelicFromReal.adelicAt_of_real
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnipotentPeriodAdelicClausesOfRealStatement =====

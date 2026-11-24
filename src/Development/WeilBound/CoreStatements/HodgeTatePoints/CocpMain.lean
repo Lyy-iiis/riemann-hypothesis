@@ -149,8 +149,6 @@ theorem dy_y_local (h : PS R 1 d) (i : Fin d) :
   · intro h
     exact absurd (Finset.mem_univ i) h
 
-theorem cc_zero {n : ℕ} (i : Fin d) : constantCoeff ((0 : Pt R n d) i) = 0 := by simp
-
 theorem cc_ptPow {n p : ℕ} (hp : p ≠ 0) (j : Fin n) (i : Fin d) :
     constantCoeff (ptPow R d p j i : PS R n d) = 0 := by
   simp [ptPow, hp]
@@ -223,10 +221,10 @@ theorem inj3 {p : ℕ} (hp : p ≠ 0) {f g : PS R 3 d}
   exact expand_injective' hp (by rw [← key, ← key, h])
 
 theorem no_constant_evaluation_triple : NoConst (![0, pt R d 0, pt R d 1] : Fin 3 → Pt R 2 d) :=
-  noConst_three cc_zero (cc_pt 0) (cc_pt 1)
+  noConst_three _root_.ReciprocityTheory.ChartRestriction.G.TB.LogPf.cc_zero (cc_pt 0) (cc_pt 1)
 
 theorem noConst_0x : NoConst (![0, pt R d 0] : Fin 2 → Pt R 1 d) :=
-  noConst_two cc_zero (cc_pt 0)
+  noConst_two _root_.ReciprocityTheory.ChartRestriction.G.TB.LogPf.cc_zero (cc_pt 0)
 
 theorem pd_pt_ne {n : ℕ} {j j' : Fin n} {i i' : Fin d} (h : (j', i') ≠ (j, i)) :
     pderiv (j, i) (pt R d j' i' : PS R n d) = 0 :=
@@ -296,8 +294,7 @@ theorem dz {p : ℕ} [CharP R p] (G : FGLaw R d) (f : PS R 1 d) (c : PS R 2 d) (
   have hF : addOf G.F (pt R (n := 2) d 0) (pt R d 1) = G.F := add_pt G
   have h := congrArg (fun g => ev (n := 1) ![pt R d 0, 0] (pderiv ((1 : Fin 2), j) g)) hadd
   rw [hF] at h
-  simp only [map_add (f := _), GlobalTheory.DerivEndo.ev_add germPointsNoConstantTerm_first_zero, pderiv_second_of_ev_first_point_local, dy_y_local, hc, germ_ev_restrict_axis_second_point, GlobalTheory.DerivEndo.ev_zero germPointsNoConstantTerm_first_zero,
-    zero_add, pderiv_ev_local (noConst_one G.const), Fin.sum_univ_one, Matrix.cons_val_zero,
+  simp only [map_add (f := _), pderiv_second_of_ev_first_point_local, dy_y_local, hc, germ_ev_restrict_axis_second_point, zero_add, pderiv_ev_local (noConst_one G.const), Fin.sum_univ_one, Matrix.cons_val_zero,
     GlobalTheory.DerivEndo.ev_sum germPointsNoConstantTerm_first_zero, GlobalTheory.DerivEndo.ev_mul germPointsNoConstantTerm_first_zero, germ_ev_restrict_axis_groupLaw, cc_pd] at h
   exact h.symm
 
@@ -516,7 +513,7 @@ theorem inter2 (B : FB R d O) (m : ℕ) :
     have n1 : NoConst (![pt R d 1, pt R d 2] : Fin 2 → Pt R 3 d) := noConst_two (cc_pt 1) (cc_pt 2)
     have e1 : ev (n := 3) ![(0 : Pt R 3 d), pt R d 1, pt R d 2] B.ph2 = 1 := by
       have := congrArg (ev (n := 3) ![pt R d 1, pt R d 2]) B.cocycleRight_zero_fst
-      rw [GlobalTheory.DerivEndo.ev_ev n1 (noConst_three cc_zero (cc_pt 0) (cc_pt 1)), ev_one] at this
+      rw [GlobalTheory.DerivEndo.ev_ev n1 (noConst_three _root_.ReciprocityTheory.ChartRestriction.G.TB.LogPf.cc_zero (cc_pt 0) (cc_pt 1)), ev_one] at this
       refine Eq.trans ?_ this
       congr 1
       funext j i
@@ -790,7 +787,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.alpha_kernel_derivative_vanishes : ∀ (R : Type) [CommRing R] (p : ℕ) [Fact p.Prime] [CharP R p] (d : ℕ) (O : Type) [CommRing O] [StarRing O] (B : Germ.FB R d O) (u : Fin d → R) (g : Germ.PS R 2 d), alpha B p u = 0 → pow1 B p = Germ.ev (n := 2) ![ptPow R d p 0, Germ.pt R d 1] g → ∀ j, MvPowerSeries.pderiv (R := R) ((0 : Fin 1), j) (∑ i, MvPowerSeries.C (u i) * Germ.ev (n := 1) ![0, Germ.pt R d 0] (MvPowerSeries.pderiv (R := R) ((0 : Fin 2), i) g)) = 0 := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Kill.germKill | exact GlobalTheory.CompanionTheory.Ar.Kill.germKill | (intros; apply GlobalTheory.CompanionTheory.Ar.Kill.germKill <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Kill.germKill
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.AlgebraProofs.AlphaKernelDerivativeVanishesStatement =====
@@ -953,7 +950,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.delta_expansion_restriction : ∀ (X0 : Scheme.{0}) (G : Over X0) [GrpObj G] (k : Type) [Field k] (x : Sp k ⟶ X0) (p : ℕ) (hp : 1 ≤ p) (B : Type) [CommRing B] [Algebra k B] (z : overAt x B ⟶ G) (W : (pullback G.hom x).Opens) (hW : ⊤ ≤ xkZ G x z ⁻¹ᵁ W) (c : Fin (p + 1) → Γ(pullback G.hom x, W)) (f : Γ(Ym G x p, prZ G x p ⁻¹ᵁ W)) (v : B), f = ∑ i, ((prZ G x p).app W).hom (c i) * dltOn G x p _ ^ (i : ℕ) → ∀ hr : ⊤ ≤ rQ G x p z ⁻¹ᵁ (prZ G x p ⁻¹ᵁ W), ((rQ G x p z).appLE _ ⊤ hr).hom f = toΓ _ (1 + dQ B p ^ p * algebraMap B _ v) → ((xkZ G x z).appLE W ⊤ hW).hom (c (Fin.last p)) = toΓ B v := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Coc.coef_pull | exact GlobalTheory.CompanionTheory.Ar.Coc.coef_pull | (intros; apply GlobalTheory.CompanionTheory.Ar.Coc.coef_pull <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Coc.coef_pull
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.DeltaExpansionRestrictionStatement =====
@@ -1050,7 +1047,7 @@ theorem pderiv_eq_zero_of_jet_pow_sub : ∀ (k : Type) [Field k] (p : ℕ) [Fact
       AddMonoidAlgebra.coeff (psTrunc (e.degree + 1) g) (e + Finsupp.single q 1) =
         MvPowerSeries.coeff (e + Finsupp.single q 1) g := by
     intro g
-    simp [psTrunc, MvPolynomial.coeff_sum, MvPolynomial.coeff_monomial, hin]
+    simp [psTrunc, MvPolynomial.coeff_monomial, hin]
   have hpow : MvPowerSeries.pderiv (R := k) q ((P ^ p : MvPolynomial (Fin 1 × Fin d) k) : MvPowerSeries (Fin 1 × Fin d) k) = 0 := by
     rw [MvPolynomial.coe_pow, Derivation.leibniz_pow, ← Nat.cast_smul_eq_nsmul k, CharP.cast_eq_zero, zero_smul]
   have hG : MvPowerSeries.pderiv (R := k) q F = MvPowerSeries.pderiv (R := k) q
@@ -1075,7 +1072,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.pderiv_zero_of_jet_pth_power_diff : ∀ (k : Type) [Field k] (p : ℕ) [Fact p.Prime] [CharP k p] (d : ℕ) (F f : MvPowerSeries (Fin 1 × Fin d) k), (∀ q, MvPowerSeries.pderiv (R := k) q f = 0) → (∀ m, ∃ v : Jet k (Fin 1 × Fin d) m, psJet m F = v ^ p - psJet m f) → ∀ q, MvPowerSeries.pderiv (R := k) q F = 0 := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Coc.pderiv_eq_zero_of_jet_pow_sub | exact GlobalTheory.CompanionTheory.Ar.Coc.pderiv_eq_zero_of_jet_pow_sub | (intros; apply GlobalTheory.CompanionTheory.Ar.Coc.pderiv_eq_zero_of_jet_pow_sub <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Coc.pderiv_eq_zero_of_jet_pow_sub
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.PderivZeroOfJetPthPowerDiffStatement =====

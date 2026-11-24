@@ -207,7 +207,7 @@ theorem expo : Expo := by
   have hn : (x.fst : ℝ) ≠ 0 := by exact_mod_cast hx.ne'
   constructor
   · intro s
-    have hc := PositivityTheory.RgUd.UOrder.hasCentralChar_nu_u x (hω₀ x).2.1 (s : ℂ)
+    have hc := _root_.GlobalTheory.LocGL.UnitaryOrder.hasCentralChar_nu x (hω₀ x).2.1 (s : ℂ)
     have heq := (hω₀ (x.nu (s : ℂ))).2.2 _ hc
     have hfst : (x.nu (s : ℂ)).fst = x.fst := by
       unfold IrrGL.nu
@@ -819,7 +819,7 @@ private theorem eta_eq_of_wild [Finite K] (h : IsPlaceOver A w) (n : ℕ) (f : R
     rw [hχa, hχa, div_pow, div_eq_div_iff_mul_eq_mul]
     have e2 := mul_inv_eq_iff_eq_mul.1 e'
     rw [e2]
-    simp [mul_comm, mul_left_comm, mul_assoc]
+    simp [mul_comm, mul_left_comm]
   have h2 : ∀ (k : ℕ) s, χ ((cj h)^[k] s) = χ s ^ normV w ^ k ∧
       π ((cj h)^[k] s) = ofAdd ((f ^ k) (toAdd (π s))) := fun k s => by
     induction k with
@@ -972,14 +972,6 @@ private theorem exists_frobAut (K : Type) [Field K] [Finite K] (q n : ℕ) (hq :
     have := Nat.le_of_dvd (by omega) hdv
     omega
 
-private theorem le_exp_neg_one {γ : WithZero (Multiplicative ℤ)} (h : γ < 1) : γ ≤ WithZero.exp (-1 : ℤ) := by
-  rcases eq_or_ne γ 0 with rfl | h0
-  · exact zero_le'
-  · rw [← WithZero.exp_log h0] at h ⊢
-    rw [← WithZero.exp_zero, WithZero.exp_lt_exp] at h
-    rw [WithZero.exp_le_exp]
-    omega
-
 private theorem exp_neg_one_le {γ : WithZero (Multiplicative ℤ)} (h : ¬ γ ≤ WithZero.exp (-2 : ℤ)) :
     WithZero.exp (-1 : ℤ) ≤ γ := by
   have h0 : γ ≠ 0 := by rintro rfl; exact h zero_le'
@@ -994,7 +986,7 @@ private theorem le_val_of_not_mem_sq {L : Type} [Field L] [NumberField L] (u : H
     (HeightOneSpectrum.valuedAdicCompletion_eq_valuation' (R := 𝓞 L) u (c : L)).trans
       (HeightOneSpectrum.valuation_of_algebraMap u c)
   rw [e]
-  refine (le_exp_neg_one hx).trans (exp_neg_one_le fun h2 => hc2 ?_)
+  refine (_root_.GlobalTheory.NormCompat.NormCont.le_exp_neg_one_of_lt_one hx).trans (exp_neg_one_le fun h2 => hc2 ?_)
   exact_mod_cast (u.intValuation_le_pow_iff_mem c 2).1 (by simpa using h2)
 
 private theorem junkData (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (A : ValuationSubring Ω)
@@ -1230,7 +1222,7 @@ private theorem exists_dual_map {G K Γ V W : Type} [Group G] [TopologicalSpace 
       rw [hψ, map_sum] at e
       rw [← e]
 
-      simp only [T, LinearMap.sum_apply, map_sum, LinearMap.zero_apply]
+      simp only [T, LinearMap.sum_apply, map_sum]
       refine Finset.sum_congr rfl fun γ _ => ?_
       have e2 := hinv (s γ) (ρ γ⁻¹ w) v0
       rw [hs γ, ← Module.End.mul_apply, ← map_mul, mul_inv_cancel, map_one, Module.End.one_apply] at e2

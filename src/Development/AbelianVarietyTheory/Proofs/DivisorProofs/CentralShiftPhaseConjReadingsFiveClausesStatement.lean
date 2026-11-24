@@ -82,11 +82,6 @@ def skw (st : S →+ S) (e : S) (h : R) (z : S) : S :=
 
 def ex (h : R) (x : S) : S := 1 + x + h • (x * x)
 
-theorem st_one' (hm : ∀ x y, st (x * y) = st y * st x) (hi : ∀ x, st (st x) = x) : st 1 = 1 := by
-  have := hm (st 1) 1
-  rw [mul_one, hi, mul_one] at this
-  exact this.symm
-
 theorem half_add (hh : h + h = 1) (x : S) : h • x + h • x = x := by rw [← add_smul, hh, one_smul]
 
 theorem st_smul (hh : h + h = 1) (x : S) : st (h • x) = h • st x := by
@@ -101,7 +96,7 @@ theorem ex_unitary (hm : ∀ x y, st (x * y) = st y * st x) (hi : ∀ x, st (st 
     (hs : st x = -x) (h3 : x * x * x = 0) : st (ex h x) * ex h x = 1 := by
   have h4 : x * x * (x * x) = 0 := by rw [← mul_assoc, h3, zero_mul]
   have h3' : x * (x * x) = 0 := by rw [← mul_assoc, h3]
-  simp only [ex, map_add (f := _), st_one' hm hi, st_smul hh, hm, hs, add_mul, mul_add, smul_mul_assoc, mul_smul_comm, neg_mul, mul_neg,
+  simp only [ex, map_add (f := _), _root_.GlobalTheory.TwoStepUnipotent.st_one hm hi, st_smul hh, hm, hs, add_mul, mul_add, smul_mul_assoc, mul_smul_comm, neg_mul, mul_neg,
     neg_neg, h3, h3', h4, one_mul, mul_one, smul_zero, add_zero, neg_zero]
   have := half_add hh (x * x)
   generalize h • (x * x) = y at this ⊢
@@ -111,7 +106,7 @@ theorem skw_spec (hm : ∀ x y, st (x * y) = st y * st x) (hi : ∀ x, st (st x)
     (h0 : st e * e = 0) (z : S) : st (ex h (skw st e h z)) * ex h (skw st e h z) = 1 := by
   have he' : st e * st e = st e := by rw [← hm, he]
   have e1 : st (e * z * (1 - e - h • st e)) = (1 - st e - h • e) * st z * st e := by
-    rw [hm, hm, map_sub, map_sub, st_one' hm hi, st_smul hh, hi, mul_assoc]
+    rw [hm, hm, map_sub, map_sub, _root_.GlobalTheory.TwoStepUnipotent.st_one hm hi, st_smul hh, hi, mul_assoc]
   refine ex_unitary hm hi hh (by rw [skw, map_sub, hi, neg_sub]) (cube_zero (e := e) (f := st e) ?_ ?_ ?_)
   · rw [skw, e1, sub_mul, mul_assoc, mul_assoc _ (st e), h0, sub_mul, sub_mul, smul_mul_assoc, h0, he]; simp
   · rw [skw, e1, mul_sub (1 - e), sub_mul, ← mul_assoc, ← mul_assoc, sub_mul 1 e e, he, mul_assoc (1 - e), mul_assoc _ (st e),
@@ -121,7 +116,7 @@ theorem skw_spec (hm : ∀ x y, st (x * y) = st y * st x) (hi : ∀ x, st (st x)
 
 theorem exists_log (hm : ∀ x y, st (x * y) = st y * st x) (hi : ∀ x, st (st x) = x) (hh : h + h = 1) {g : S}
     (hu : st g * g = 1) (h1 : (g - 1) * e = 0) (h2 : (1 - e) * (g - 1) * (1 - st e) = 0) : ∃ z, ex h (skw st e h z) = g := by
-  have s1 := st_one' hm hi
+  have s1 := _root_.GlobalTheory.TwoStepUnipotent.st_one hm hi
   have k1 : g * e = e := by rwa [sub_mul, one_mul, sub_eq_zero] at h1
   have k2 : st g * e = e := by conv_lhs => rw [← k1, ← mul_assoc, hu, one_mul]
   have k3 : st e * (g - 1) = 0 := by
@@ -140,7 +135,7 @@ theorem exists_log (hm : ∀ x y, st (x * y) = st y * st x) (hi : ∀ x, st (st 
     rw [map_add (f := _), s1] at this
     rw [← add_right_inj 1, this]; abel
   have sx : st (m - h • (m * m)) = -(m - h • (m * m)) := by
-    simp only [map_sub, st_smul hh, hm, sm, mul_sub, sub_mul, m3, m3', m4, sub_zero, zero_sub, neg_neg, sub_self]
+    simp only [map_sub, st_smul hh, hm, sm, mul_sub, sub_mul, m3, m3', m4, zero_sub, neg_neg, sub_self]
     have := half_add hh (m * m)
     generalize h • (m * m) = y at this ⊢
     rw [← this]; abel
@@ -157,8 +152,7 @@ theorem exists_log (hm : ∀ x y, st (x * y) = st y * st x) (hi : ∀ x, st (st 
     rw [skw, hm, hm, map_sub, map_sub, s1, st_smul hh, hi, sx]
     have x1' : e * x * e = 0 := by rw [mul_assoc, x1, mul_zero]
     have x3' : st e * (x * st e) = 0 := by rw [← mul_assoc, x3, zero_mul]
-    simp only [mul_sub, sub_mul, one_mul, mul_one, mul_smul_comm, smul_mul_assoc, mul_neg, neg_mul, x1', x3', smul_neg,
-      ← mul_assoc e] at x2 ⊢
+    simp only [mul_sub, sub_mul, one_mul, mul_one, mul_smul_comm, smul_mul_assoc, mul_neg, neg_mul, x1', x3', ← mul_assoc e] at x2 ⊢
     have := half_add hh (e * x * st e)
     generalize h • (e * x * st e) = y at this ⊢
     rw [← this] at x2
@@ -538,7 +532,6 @@ theorem levChi_flag (i : Fin D.R.m) (k : GA D (Wc D i)) : levChi _ (R.βW i) (fl
   simp [levChi, Formalism.L2.DIV.levFn, flagL, withP, LevCh.datWp, datY, LevelP.full]
   first
     | exact subgroupCharExtension_one_apply _ _
-    | (unfold Formalism.L2.DIV.ext1; exact dite_eq_right_iff.2 fun _ => rfl)
 
 private theorem wall_apply_mul_eq_levChi_mul_of_mem_levS {i : Fin D.R.m} {σ : D.what₂.LL →+* ℂ} {T : MMap (R.MW i σ)} (hT : T ∈ R.Wall i σ)
     (v : (R.MW i σ).Vec) {k : GA D (Wc D i)} (hk : k ∈ levS _ (R.βW i) (R.datWp i R.triv)) (g : GA D (Wc D i)) :
@@ -687,7 +680,7 @@ open GlobalTheory.GalLift
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.centralShift_phase_conjReadings_fiveClauses : (∀ {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T0 : Type} {A : FamIn D.what₂.LL G Pl0 T0 D.R.m} {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A), GlobalTheory.Core5 R F → ∀ (i : Fin D.R.m), ∀ (σ : D.what₂.LL →+* ℂ), ∀ z ∈ Subgroup.center G, ∃ ζ, IsCentralShift R i σ z ζ) ∧ (∀ {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T0 : Type} {A : FamIn D.what₂.LL G Pl0 T0 D.R.m} {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A), GlobalTheory.Core5 R F → ∀ (i : Fin D.R.m), ∀ (σ : D.what₂.LL →+* ℂ) (u : GA D (Wc D i) → ℂ), PhaseFun R i u → ∃ U, IsCompPhase R i σ u U) ∧ (∀ {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T0 : Type} {A : FamIn D.what₂.LL G Pl0 T0 D.R.m} (T : CoreJ D) [Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F) (F : Face D A) (κw : ∀ i : Fin D.R.m, WeightFamilies.Wt D ((i : ℕ) + 1)) (v₀ : ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ), (R.MW i σ).Vec), GlobalTheory.Core5 R F → ∀ (fw : FWTie T R κw v₀) (i : Fin D.R.m), JEvExists T R κw v₀ → JEvBar T R κw → BarTie fw → ∀ (σ : D.what₂.LL →+* ℂ), ¬ GoodEmb T.Q.c (res T σ) → ∀ y y', ⟪(R.FW i).j σ y, (R.FW i).j σ y'⟫_ℂ = starRingEnd ℂ ⟪(R.FW i).j ((starRingEnd ℂ).comp σ) y, (R.FW i).j ((starRingEnd ℂ).comp σ) y'⟫_ℂ) := by
-  first | exact @GlobalTheory.CoreFive.shift_phase_conj | exact GlobalTheory.CoreFive.shift_phase_conj | (intros; apply GlobalTheory.CoreFive.shift_phase_conj <;> assumption)
+  first | exact @GlobalTheory.CoreFive.shift_phase_conj
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.CentralShiftPhaseConjReadingsFiveClausesStatement =====

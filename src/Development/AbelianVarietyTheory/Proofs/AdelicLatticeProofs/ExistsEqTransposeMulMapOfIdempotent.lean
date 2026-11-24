@@ -122,7 +122,7 @@ theorem exists_shear (G : Matrix ι ι R) (p : ι) (τ : ι → R) (hτ : τ p =
     rw [mul_sub, mul_one, add_mul, one_mul, vecMulVec_mul_vecMulVec]
     simp [hτ]
   · simp only [Matrix.mul_apply, transpose_apply, map_apply, Matrix.add_apply, vecMulVec_apply,
-      Matrix.one_apply, Pi.single_apply, map_add, map_mul, apply_ite c, map_one, map_zero,
+      Matrix.one_apply, Pi.single_apply, map_add, apply_ite c, map_one, map_zero,
       add_mul, mul_add, ite_mul, mul_ite, one_mul, zero_mul, mul_one, mul_zero,
       Finset.sum_add_distrib, Finset.sum_ite_eq', Finset.mem_univ, if_true]
     ring
@@ -333,26 +333,9 @@ theorem exists_eq_transpose_mul_map [IsLocalRing R₀] (hc : ∀ x, c (c x) = x)
 
 end Base
 
-section Split
-
-variable {R₀ R : Type*} [CommRing R₀] [CommRing R] (c : R →+* R)
-  {ι : Type*} [Fintype ι] [DecidableEq ι]
-
-end Split
-
 section Norm
 
 open Polynomial
-
-theorem exists_binary_eq_of_finite {k : Type*} [Field k] [Finite k] {a n : k}
-    (hD : a ^ 2 - 4 * n ≠ 0) (u : k) : ∃ r s, r ^ 2 + a * r * s + n * s ^ 2 = u := by
-  first
-  | exact @_root_.GlobalTheory.BinaryFormUniversal.binary_form_universal
-  | exact _root_.GlobalTheory.BinaryFormUniversal.binary_form_universal
-  | (apply _root_.GlobalTheory.BinaryFormUniversal.binary_form_universal <;> assumption)
-  | (intros; apply _root_.GlobalTheory.BinaryFormUniversal.binary_form_universal <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.BinaryFormUniversal.binary_form_universal <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.BinaryFormUniversal.binary_form_universal ..)
 
 theorem exists_add_mul_sq_eq {R₀ : Type*} [CommRing R₀] (I : Ideal R₀) [HenselianRing R₀ I]
     (n : R₀) {e : R₀} (he : e ∈ I) : ∃ t, t + n * t ^ 2 = e := by
@@ -394,7 +377,7 @@ theorem exists_norm_eq_of_henselian (c : R →+* R) (hc : ∀ x, c (c x) = x)
     convert hω.pow 2 using 1
     simp only [map_sub, map_mul, map_pow, map_ofNat, ha, hn]
     ring
-  obtain ⟨r, s, hrs⟩ := exists_binary_eq_of_finite (a := residue R₀ a) (n := residue R₀ n)
+  obtain ⟨r, s, hrs⟩ := _root_.GlobalTheory.BinaryFormUniversal.binary_form_universal (a := residue R₀ a) (n := residue R₀ n)
     (by simpa only [map_sub, map_mul, map_pow, map_ofNat] using (hD.map (residue R₀)).ne_zero)
     (residue R₀ u)
   obtain ⟨r, rfl⟩ := residue_surjective r

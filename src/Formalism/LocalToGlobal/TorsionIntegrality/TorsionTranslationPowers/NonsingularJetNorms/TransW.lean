@@ -65,9 +65,6 @@ section -- clump:auto
 
 namespace Formalism.L2.Th1.E
 
-theorem shiftUnit : ShiftUnit := shift_unit'
-theorem shiftPtsInt : ShiftPtsInt := shifted_points_integral
-
 end Formalism.L2.Th1.E
 end -- clump:auto
 end -- clump:auto
@@ -168,16 +165,13 @@ theorem inW_const_mul (a : ℂ) (f : ℂ → ℂ) :
     inW l ι W (fun z => a * f z) = C (ι a) * inW l ι W f := by
   have ht : Formalism.L2.Th1.F.taylor0 (fun z => a * f z) = C a * Formalism.L2.Th1.F.taylor0 f := by
     ext n
-    simp [Formalism.L2.Th1.F.taylor0, iteratedDeriv_const_mul_fun, mul_div_assoc]
+    simp [Formalism.L2.Th1.F.taylor0, mul_div_assoc]
   have hs : PowerSeries.HasSubst (Formalism.L2.Th1.A.logSer W) :=
     PowerSeries.HasSubst.of_constantCoeff_zero (by
       have h0 : PowerSeries.coeff 0 (Formalism.L2.Th1.A.logSer W) = 0 := by
         simp [Formalism.L2.Th1.A.logSer, Formalism.L2.Th1.A.integ]
       first
-        | exact (PowerSeries.coeff_zero_eq_constantCoeff_apply _).symm.trans h0
-        | exact h0
-        | simpa using h0
-        | (rw [← PowerSeries.coeff_zero_eq_constantCoeff_apply]; exact h0))
+        | exact (PowerSeries.coeff_zero_eq_constantCoeff_apply _).symm.trans h0)
   unfold inW
   rw [ht, map_mul, PowerSeries.map_C, ← PowerSeries.smul_eq_C_mul, ← PowerSeries.smul_eq_C_mul,
     PowerSeries.subst_smul hs]
@@ -213,7 +207,7 @@ open Classical in
 theorem ptW_int (hA : PtWAdd) (hZ : PtWZero) (hU : Unif l L ι W) (hW : IntCurve W) (t : ℂ) (N : ℕ)
     (hlN : ¬ l ∣ N) (hNt : (N : ℂ) * t ∈ L.lattice) (ht : t ∉ L.lattice) :
     ‖px W (ptW l L ι W t)‖ ≤ 1 ∧ ‖py W (ptW l L ι W t)‖ ≤ 1 :=
-  torsionIntegral ℂ_[l] W hW _ N (Tor.norm_natCast l hlN)
+  _root_.Formalism.L2.Th1.E.torsion_integral ℂ_[l] W hW _ N (Tor.norm_natCast l hlN)
     (by rw [nsmul_ptW hA hU]; exact (hZ l L ι W hU _).2 hNt)
     (fun h => ht ((hZ l L ι W hU t).1 h))
 
@@ -556,7 +550,7 @@ theorem oddCase (hS : AnalyticSysW) (hA : PtWAdd) (hZ : PtWZero) (hU : Unif l L 
   refine (hW_sim l L ι W (ω₀ / 2) s (2 * N) (by omega) (two_mem hNs) (half_mem hω N) hω2).gaussOne ?_
   refine Tor.gaussOne_C_mul (by rw [norm_inv, hc1, inv_one]) ?_
   rw [eW_eq]
-  exact gaussMul ℂ_[l] _ _ (gaussOne_of_oneUnit hE') (gW_gauss hS hA hZ hU hW _ (2 * N) hN2 m3)
+  exact _root_.Formalism.L2.Th1.E.gauss_multiplicative ℂ_[l] _ _ (gaussOne_of_oneUnit hE') (gW_gauss hS hA hZ hU hW _ (2 * N) hN2 m3)
 
 
 open Classical in
@@ -600,7 +594,7 @@ theorem shiftCase (hS : AnalyticSysW) (hA : PtWAdd) (hZ : PtWZero) (hU : Unif l 
     exact hS0 h1
   have hy : ‖py W (ptW l L ι W (ω₀ / 2))‖ ≤ 1 :=
     Shift.py_int W ⟨hW.1, hW.2.1, hW.2.2.1, hW.2.2.2.1, hW.2.2.2.2.1⟩ _ hx
-  obtain ⟨hAint, hSint⟩ := shiftPtsInt ℂ_[l] W hW (AddSubgroup.zmultiples (ptW l L ι W s)) hcard
+  obtain ⟨hAint, hSint⟩ := _root_.Formalism.L2.Th1.E.shifted_points_integral ℂ_[l] W hW (AddSubgroup.zmultiples (ptW l L ι W s)) hcard
     (ptW l L ι W (ω₀ / 2)) hSA hSS hx hy
 
   let rep : W.toAffine.Point → ℂ := fun P =>
@@ -665,7 +659,7 @@ theorem shiftCase (hS : AnalyticSysW) (hA : PtWAdd) (hZ : PtWZero) (hU : Unif l 
       rw [hadd, (repS _ hP).2, (repS _ hQ).2] at hk
       rw [hk, map_mul]
       ring
-  obtain ⟨hn, ho⟩ := (shiftUnit ℂ_[l] W hW (AddSubgroup.zmultiples (ptW l L ι W s)) hcard
+  obtain ⟨hn, ho⟩ := (_root_.Formalism.L2.Th1.E.shift_unit' ℂ_[l] W hW (AddSubgroup.zmultiples (ptW l L ι W s)) hcard
     (ptW l L ι W (ω₀ / 2)) hSA hAint hSint _ _ hsys).2 (ptW l L ι W s)
     (AddSubgroup.mem_zmultiples _)
   have hs := repS _ (AddSubgroup.mem_zmultiples (ptW l L ι W s))

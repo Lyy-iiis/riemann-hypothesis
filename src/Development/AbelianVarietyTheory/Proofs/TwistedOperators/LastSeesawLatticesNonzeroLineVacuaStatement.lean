@@ -73,12 +73,6 @@ namespace GlobalTheory.FinPl.VLast.KernPf
 
 variable {D : D7}
 
-theorem wittDecomposition_rankZero_coreEmbed_proj {S S₀ : HSp D} (e : HypDec S S₀ 0) : e.j0 ⬝ e.p0 = 1 := by
-  have h := e.sum_eq_one
-  have h1 : e.jX ⬝ e.pX = 0 := by ext i k; simp [Matrix.mul_apply]
-  have h2 : e.jY ⬝ e.pY = 0 := by ext i k; simp [Matrix.mul_apply]
-  rwa [h1, h2, zero_add, add_zero] at h
-
 def wittCoreRestrictionHom {S S₀ : HSp D} {ρ : ℕ} (e : HypDec S S₀ ρ) (T : HSp D) : WO S T →+ WO S₀ T where
   toFun w := w ⬝ e.j0
   map_zero' := Matrix.zero_mul _
@@ -87,7 +81,7 @@ def wittCoreRestrictionHom {S S₀ : HSp D} {ρ : ℕ} (e : HypDec S S₀ ρ) (T
 theorem wittCoreRestrictionHom_apply {S S₀ : HSp D} {ρ : ℕ} (e : HypDec S S₀ ρ) (T : HSp D) (w : WO S T) : wittCoreRestrictionHom e T w = w ⬝ e.j0 := rfl
 
 theorem wittDecomposition_rankZero_ext_restriction {S S₀ : HSp D} (e : HypDec S S₀ 0) (T : HSp D) (w : WO S T) : e.ext0 T (wittCoreRestrictionHom e T w) = w := by
-  rw [HypDec.matrixExtendByZero_apply, wittCoreRestrictionHom_apply, Matrix.mul_assoc, wittDecomposition_rankZero_coreEmbed_proj, Matrix.mul_one]
+  rw [HypDec.matrixExtendByZero_apply, wittCoreRestrictionHom_apply, Matrix.mul_assoc, _root_.GlobalTheory.WeilSrc.Zero.witt_decomposition_zero_section_embed_eq_one, Matrix.mul_one]
 
 end GlobalTheory.FinPl.VLast.KernPf
 
@@ -114,7 +108,7 @@ open scoped nonZeroDivisors ContDiff
 open GlobalTheory.AscFin
 
 theorem _root_.GlobalTheory.T.depthLatticeGridCore_iff_firstRow_extByZero : OnStd fun {D} _ _ _ {G} _ F => ∀ (h : 2 * 0 + 2 ≤ D.R.m) (a : WO (G.V (.core 1)) (Yc D 0)), F.oz.jA ⬝ a ∈ latCore G 0 ↔ (F.dJ 0 h).ext0 (Yc D 0) a ∈ latRow G 0 := by
-  first | exact @GlobalTheory.CoreRowLat.jA_mem_latCore_iff | exact GlobalTheory.CoreRowLat.jA_mem_latCore_iff | (intros; apply GlobalTheory.CoreRowLat.jA_mem_latCore_iff <;> assumption)
+  first | exact @GlobalTheory.CoreRowLat.jA_mem_latCore_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.DepthLatticeGridCoreIffFirstRowExtByZeroStatement =====
@@ -249,7 +243,7 @@ open scoped nonZeroDivisors ContDiff
 open GlobalTheory.AscFin
 
 theorem _root_.GlobalTheory.T.exists_ne_zero_vacuum_besselLineLattice_rankZero : OnStd fun {D} _ _ _ {G} W F => ∃ Φ₀, VacG W.ψ _ _ (lineLat F 0) Φ₀ ∧ Φ₀ ≠ 0 := by
-  first | exact @GlobalTheory.AscFin.LineZero.exists_vacG_lineLat_zero | exact GlobalTheory.AscFin.LineZero.exists_vacG_lineLat_zero | (intros; apply GlobalTheory.AscFin.LineZero.exists_vacG_lineLat_zero <;> assumption)
+  first | exact @GlobalTheory.AscFin.LineZero.exists_vacG_lineLat_zero
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsNeZeroVacuumBesselLineLatticeRankZeroStatement =====
@@ -346,7 +340,7 @@ open scoped nonZeroDivisors ContDiff
 open GlobalTheory.AscFin
 
 theorem _root_.GlobalTheory.T.orthogonal_projection_preserves_depth_lattice : OnStd fun {D} _ _ _ {G} _ F => ∀ u ∈ latCore G 0, F.oz.jA ⬝ (F.oz.pA ⬝ u) ∈ latCore G 0 := by
-  first | exact @GlobalTheory.ProjCore.proj_mem_latCore | exact GlobalTheory.ProjCore.proj_mem_latCore | (intros; apply GlobalTheory.ProjCore.proj_mem_latCore <;> assumption)
+  first | exact @GlobalTheory.ProjCore.proj_mem_latCore
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.OrthogonalProjectionPreservesDepthLatticeStatement =====
@@ -487,7 +481,7 @@ theorem lastLat_std : OnStd fun {D} _ _ _ {G} W F => (∀ ρ, 2 * ρ + 2 ≤ D.R
       apply GlobalTheory.SeeSaw.Inh.vac_ne_zero (W.vac_is 0 hm)
       funext w
       have h1 := congrFun h0 w
-      simp only [GlobalTheory.IndefiniteRowSideFullHecke.ConjugateAdjointDagger.cj, id, Pi.zero_apply, map_eq_zero] at h1
+      simp only [GlobalTheory.IndefiniteRowSideFullHecke.ConjugateAdjointDagger.cj, id] at h1
       exact (map_eq_zero (starRingEnd ℂ)).1 h1
 
 end GlobalTheory.LastSeeSaw
@@ -511,7 +505,7 @@ open scoped nonZeroDivisors ContDiff
 open GlobalTheory.AscFin
 
 theorem _root_.GlobalTheory.T.last_seesaw_lattices_nonzero_line_vacua : OnStd fun {D} _ _ _ {G} W F => (∀ ρ, 2 * ρ + 2 ≤ D.R.m → ∃ Φ₀, VacG W.ψ _ _ (lineLat F ρ) Φ₀ ∧ Φ₀ ≠ 0) ∧ ∀ (v : CoreVol G) h, LastLat W.ψ (F.jac v 0 h) F.oz (latRow G 0) (lineLat F 0) (latCore G 0) := by
-  first | exact @GlobalTheory.LastSeeSaw.lastLat_std | exact GlobalTheory.LastSeeSaw.lastLat_std | (intros; apply GlobalTheory.LastSeeSaw.lastLat_std <;> assumption)
+  first | exact @GlobalTheory.LastSeeSaw.lastLat_std
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.LastSeesawLatticesNonzeroLineVacuaStatement =====

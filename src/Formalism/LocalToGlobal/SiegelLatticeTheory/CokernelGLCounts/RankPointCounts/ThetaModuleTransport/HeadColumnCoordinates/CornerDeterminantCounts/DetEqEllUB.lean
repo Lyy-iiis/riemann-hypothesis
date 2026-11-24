@@ -199,7 +199,7 @@ theorem headCols_le_ker_pi (hY : ∀ a b : Fin r, Y.Z a b = Z.Z a.castSucc b.cas
   rw [piRawU_apply, Submodule.Quotient.mk_eq_zero]
   refine ⟨Pi.single a 1, ?_⟩
   funext i
-  simp [Matrix.mulVecLin_apply, Matrix.mulVec, dotProduct, Pi.single_apply, hY]
+  simp [Matrix.mulVec, dotProduct, Pi.single_apply, hY]
 
 end Maps
 
@@ -235,7 +235,7 @@ theorem ellU_e : ellU hY hal (eCl Z.Z) = 1 := by
   rw [ellU_mk]
   have h0 : (fun i : Fin r => (Pi.single (Fin.last r) (1 : M.R) : Fin (r + 1) → M.R) i.castSucc) = 0 := by
     funext i
-    simp [Pi.single_apply, (Fin.castSucc_lt_last i).ne]
+    simp [(Fin.castSucc_lt_last i).ne]
   rw [h0, map_zero, sub_zero]
   simp
 
@@ -243,7 +243,7 @@ theorem piU_e : piU hY (eCl Z.Z) = 0 := by
   unfold eCl
   have h0 : (fun i : Fin r => (Pi.single (Fin.last r) (1 : M.R) : Fin (r + 1) → M.R) i.castSucc) = 0 := by
     funext i
-    simp [Pi.single_apply, (Fin.castSucc_lt_last i).ne]
+    simp [(Fin.castSucc_lt_last i).ne]
   rw [piU_mk, h0, Submodule.Quotient.mk_zero]
 
 theorem piU_surj : Function.Surjective (piU hY) := by
@@ -302,8 +302,6 @@ theorem mem_range_PhiU (p : M.Cok Y × E) :
     rw [PhiU_apply, piU_mk, ellU_mk]
     simp only [Fin.snoc_castSucc, Fin.snoc_last, hs']
     refine Prod.ext ?_ ?_ <;> simp
-
-theorem linQ_piU (m : MbMod Z.Z) : M.linQ Y al (piU hY m) = -M.Rsub.mkQ (ellU hY hal m) := linQ_piU_eq_neg_mkQ_ellU hY hal m
 
 def ePhiU : MbMod Z.Z ≃ₗ[M.R] LinearMap.range (PhiU hY hal) :=
   LinearEquiv.ofInjective (PhiU hY hal) (PhiU_inj hY hal)
@@ -485,7 +483,7 @@ def isoEquivU {be₁ be₂ : Fin r → M.R} (hbe₁ : ∀ a : Fin r, be₁ a = Z
   toFun γ := ⟨psiOfU hY₁ hal₁ hY₂ hal₂ γ.1 γ.2.2, by
       rw [← piU_b hY₁ hbe₁, psiOfU_piU, γ.2.1, piU_b hY₂ hbe₂], fun v => by
       obtain ⟨m, rfl⟩ := piU_surj hY₁ v
-      rw [psiOfU_piU, linQ_piU hY₂ hal₂, linQ_piU hY₁ hal₁, ellU_equiv hY₁ hal₁ hY₂ hal₂ γ.1 γ.2.2]⟩
+      rw [psiOfU_piU, _root_.Formalism.L2.SG.LocalCountModules.UnitaryGroupMassFormula.LocCntUL.linQ_piU_eq_neg_mkQ_ellU hY₂ hal₂, _root_.Formalism.L2.SG.LocalCountModules.UnitaryGroupMassFormula.LocCntUL.linQ_piU_eq_neg_mkQ_ellU hY₁ hal₁, ellU_equiv hY₁ hal₁ hY₂ hal₂ γ.1 γ.2.2]⟩
   invFun ψ := ⟨gamOfU hY₁ hal₁ hY₂ hal₂ ψ.1 ψ.2.2, by
       apply PhiU_inj hY₂ hal₂
       rw [PhiU_gamOfU, PhiU_apply, PhiU_apply, sigU_apply, piU_b hY₁ hbe₁, piU_b hY₂ hbe₂, ψ.2.1, hζ], by

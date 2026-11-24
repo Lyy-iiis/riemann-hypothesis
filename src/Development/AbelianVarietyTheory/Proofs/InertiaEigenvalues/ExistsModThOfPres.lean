@@ -94,8 +94,7 @@ theorem aeval_apply_comm {O : Type} [CommRing O] {k : Type} [Field k] [Algebra O
       Module.End.mul_apply, Module.End.mul_apply, Module.algebraMap_end_apply,
       Module.algebraMap_end_apply, hJ, pow_apply_comm J ν μ hνμ]
 
-theorem main : ∀ {O : Type} [inst : CommRing O] {k : Type} [inst_1 : Field k] [inst_2 : Algebra O k] {M V : Type} [inst_3 : AddCommGroup M] [inst_4 : Module O M] [inst_5 : AddCommGroup V] [inst_6 : Module k V] (J : M →+ V), (∀ (c : O) (y : M), (J : M → V) (c • y) = (Algebra.algebraMap O k : O → k) c • (J : M → V) y) → ∀ (ν : Module.End O M) (μ : Module.End k V), (∀ (y : M), (J : M → V) ((ν : M → M) y) = (μ : V → V) ((J : M → V) y)) → ∀ (f : Polynomial O) (y : M), (J : M → V) (((Polynomial.aeval ν : Polynomial O → Module.End O M) f : M → M) y) = ((Polynomial.aeval μ : Polynomial k → Module.End k V) (Polynomial.map (Algebra.algebraMap O k) f) : V → V) ((J : M → V) y) :=
-  fun J hJ ν μ hνμ f y => aeval_apply_comm J hJ ν μ hνμ f y
+alias main := _root_.GlobalTheory.AevalCommute.aeval_apply_comm
 
 end GlobalTheory.AevalCommute
 end -- clump:auto
@@ -215,18 +214,6 @@ theorem card_Del {l : ℕ} (hl : 2 ≤ l) (hk : (PD.p : k) = 0) (ι : k⸨X⸩ �
   simp [h6, hk] at h4
   linear_combination h4
 
-theorem aeval_red {M V : Type} [AddCommGroup M] [Module O M] [AddCommGroup V] [Module k V] (J : M →+ V)
-    (hs : ∀ (c : O) y, J (c • y) = algebraMap O k c • J y) (ν : Module.End O M) (μ : Module.End k V)
-    (hν : ∀ y, J (ν y) = μ (J y)) (f : Polynomial O) (y : M) :
-    J (Polynomial.aeval ν f y) = Polynomial.aeval μ (f.map (algebraMap O k)) (J y) := by
-  first
-  | exact @_root_.GlobalTheory.AevalCommute.main
-  | exact _root_.GlobalTheory.AevalCommute.main
-  | (apply _root_.GlobalTheory.AevalCommute.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.AevalCommute.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.AevalCommute.main <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.AevalCommute.main ..)
-
 variable {W} {l n : ℕ} {R : RingPG k l} {F : DFun R n G} {ι : k⸨X⸩ →ₐ[k] k⸨X⸩} {τ : ZMod n → ZMod n₀}
   {γ : W.Gam} (p : Pres W F ι τ γ) (T : LocLat G Qp LL O) (A : Ob k G) (q : ↥T.L.T →ₗ[O] (Fin A.m → k))
   (i : ZMod n)
@@ -245,7 +232,7 @@ theorem red_smul (hq : Onto T A q) (c : O) (y : ↥(W.NΔ T)) :
   · rw [algebraMap_smul] at this; exact this
   · have h1 : PowerSeries.map (algebraMap O k) (algebraMap O (LetA O n₀) c (τ i)) =
         algebraMap k k⟦X⟧ (algebraMap O k c) := by
-      simp [PowerSeries.algebraMap_apply]
+      simp
     rw [h1]
     exact ι.commutes _
 
@@ -319,7 +306,7 @@ theorem ePoly_gen [CharP k l] (hp : PD.p = l) (hl : 2 ≤ l) (hq : Onto T A q)
     intro y
     obtain ⟨z, hz, h⟩ := hmid (τ i) s y
     obtain ⟨z', hz'⟩ := red_div p i hq hk hc s _ z hz h
-    rw [aeval_red (red p T A q i) (red_smul p i hq) ν _ (red_ν p i hq ν hν), Polynomial.map_prod] at hz'
+    rw [_root_.GlobalTheory.AevalCommute.aeval_apply_comm (red p T A q i) (red_smul p i hq) ν _ (red_ν p i hq ν hν), Polynomial.map_prod] at hz'
     simp only [Polynomial.map_sub, Polynomial.map_X, Polynomial.map_C, hc2, map_neg, sub_neg_eq_add] at hz'
     exact mem_sh_iff_exists.2 ⟨_, (hN _).2 ⟨⟨z', z'.2.2⟩, z'.2.1, rfl⟩, hz'.symm⟩
   refine ⟨∏ m ∈ I.erase 0, (Polynomial.X + Polynomial.C (m : k)), ?_, fun x hx => ?_⟩
@@ -436,18 +423,6 @@ variable {G : Type} [Group G] [TopologicalSpace G] {Qp K₀ K : Type} [Field Qp]
     [CommRing O] [Algebra O LL] [TopologicalSpace LL] {v : AddValuation LL (WithTop ℚ)} {n₀ : ℕ}
     (W : LocWach PD LL O v n₀)
 
-theorem sum_shift {M : Type} [AddCommMonoid M] (f : W.Gam → M) {δ : W.Gam} (hδ : δ ∈ W.DelF) :
-    ∑ g ∈ W.DelF, f (δ * g) = ∑ g ∈ W.DelF, f g := by
-  have key : ∀ g, g ∈ W.DelF ↔ IsOfFinOrder g := fun g => by rw [W.DelF_def, isOfFinOrder_iff_pow_eq_one]
-  refine Finset.sum_nbij' (fun g => δ * g) (fun g => δ⁻¹ * g) ?_ ?_ ?_ ?_ ?_
-  · intro g hg
-    exact (key _).2 (((key _).1 hδ).mul ((key _).1 hg))
-  · intro g hg
-    exact (key _).2 (((key _).1 hδ).inv.mul ((key _).1 hg))
-  · intro g _; simp
-  · intro g _; simp
-  · intro g _; rfl
-
 def tr₀ (b : O⟦X⟧) : O⟦X⟧ := ∑ δ ∈ W.DelF, W.γ₀ δ b
 
 def trA (a : LetA O n₀) : LetA O n₀ := fun t => tr₀ W (a t)
@@ -456,7 +431,7 @@ def trD (T : LocLat G Qp LL O) : W.DD T →+ ↥(DΔ W T) :=
   AddMonoidHom.codRestrict (∑ δ ∈ W.DelF, W.γD T δ).toAddMonoidHom (DΔ W T) (fun z δ hδ => by
 
     simp only [LinearMap.toAddMonoidHom_coe, LinearMap.sum_apply, map_sum, ← W.γD_mul]
-    exact sum_shift W (fun g => W.γD T g z) hδ)
+    exact _root_.GlobalTheory.Present.RedLat.sum_del W (fun g => W.γD T g z) hδ)
 
 theorem trD_coe (T : LocLat G Qp LL O) (z : W.DD T) : (trD W T z : W.DD T) = ∑ δ ∈ W.DelF, W.γD T δ z := by
   exact LinearMap.sum_apply _ _ _
@@ -464,19 +439,7 @@ theorem trD_coe (T : LocLat G Qp LL O) (z : W.DD T) : (trD W T z : W.DD T) = ∑
 theorem tr₀_inv (b : O⟦X⟧) {δ : W.Gam} (hδ : δ ∈ W.DelF) : W.γ₀ δ (tr₀ W b) = tr₀ W b := by
 
   simp only [tr₀, map_sum, ← AlgHom.mul_apply, ← map_mul]
-  exact sum_shift W (fun g => W.γ₀ g b) hδ
-
-theorem γD_smulA (T : LocLat G Qp LL O) (g : W.Gam) (a : LetA O n₀) (x : W.DD T) :
-    W.γD T g (a • x) = W.γA g a • W.γD T g x := by
-  have := W.γD_smul T g (algebraMap (LetA O n₀) W.EE a) x
-  rw [algebraMap_smul, W.γE_ext, algebraMap_smul] at this
-  exact this
-
-theorem φD_smulA (T : LocLat G Qp LL O) (a : LetA O n₀) (x : W.DD T) :
-    W.φD T (a • x) = W.φA a • W.φD T x := by
-  have := W.φD_smul T (algebraMap (LetA O n₀) W.EE a) x
-  rw [algebraMap_smul, W.φE_ext, algebraMap_smul] at this
-  exact this
+  exact _root_.GlobalTheory.Present.RedLat.sum_del W (fun g => W.γ₀ g b) hδ
 
 theorem trD_smul (T : LocLat G Qp LL O) (a : LetA O n₀) (x : ↥(DΔ W T)) :
     (trD W T (a • (x : W.DD T)) : W.DD T) = trA W a • (x : W.DD T) := by
@@ -486,7 +449,7 @@ theorem trD_smul (T : LocLat G Qp LL O) (a : LetA O n₀) (x : ↥(DΔ W T)) :
     rfl
   rw [trD_coe, h, Finset.sum_smul]
   refine Finset.sum_congr rfl fun δ hδ => ?_
-  rw [γD_smulA, x.2 δ hδ]
+  rw [_root_.GlobalTheory.WachTie.MatF.γD_smulA, x.2 δ hδ]
 
 theorem trD_mem (T : LocLat G Qp LL O) {z : W.DD T} (hz : z ∈ W.N T) : (trD W T z : W.DD T) ∈ W.N T := by
   rw [trD_coe]
@@ -623,7 +586,7 @@ theorem condB (hι : GlobalTheory.IndefiniteRowSideFullHecke.OnePlusPowerCharact
     | mem s hs => exact Submodule.subset_span ⟨s, hs, rfl⟩
     | zero => rw [map_zero]; exact Submodule.zero_mem _
     | add a b _ _ ha hb => rw [map_add (f := _)]; exact Submodule.add_mem _ ha hb
-    | smul a b _ hb => rw [φD_smulA]; exact Submodule.smul_mem _ _ hb
+    | smul a b _ hb => rw [_root_.GlobalTheory.WachTie.MatF.φD_smulA]; exact Submodule.smul_mem _ _ hb
   refine span_ind ((p.j T A q i).comp (trD W T)) (pull ((F.D A).φ i) (N (i - 1))).toAddSubgroup _ _ ?_
     (hsp (h x hx))
   rintro _ ⟨s, hs, rfl⟩ a
@@ -709,7 +672,7 @@ open GlobalTheory.PhiGam GlobalTheory.AdmLoc GlobalTheory.Models GlobalTheory.To
 open scoped LaurentSeries PowerSeries
 
 theorem _root_.GlobalTheory.T.phiGamma_reduction_base_lattice_bounds : ∀ {l : ℕ} [Fact l.Prime] {P : LocPrime l} (H : LocHW l P) (S : TopSit P) (k : Type) [Field k] [Algebra S.O k] [CharP k l], S.IsRes k → ∀ {R : RingPG k l} (ι : k⸨X⸩ →ₐ[k] k⸨X⸩) (F : DFun R S.n S.G) (τ : ZMod S.n → ZMod (Module.finrank ℚ_[l] ↥(K0 S.K))) (γ : (S.W H).Gam) (p : Pres (S.W H) F ι τ γ), GlobalTheory.IndefiniteRowSideFullHecke.OnePlusPowerCharacters.IsCyclotomic R ι → (∀ i, (S.W H).emb (τ i) = S.emb i) → ((S.W H).χΓ γ : S.O) = 1 + (l : S.O) → GlobalTheory.WachUse.QN (S.W H) → ∀ (T : LocLat S.G ℚ_[l] ↥S.LL.1 S.O) (A : Ob k S.G) q (U : ZMod S.n → Multiset ℤ), Onto T A q → KerIs S.Γ.lam q → CrysWith (P.PD S.K) S.emb T.ρ U → ∀ N : Lats k S.n A.m, (∀ i y, y ∈ N i ↔ ∃ x : ↥(DΔ (S.W H) T), (x : (S.W H).DD T) ∈ (S.W H).N T ∧ p.j T A q i x = y) → ∀ w w' : ZMod S.n → ℕ, (∀ i, ∀ u ∈ U i, -(w i : ℤ) ≤ u ∧ u ≤ w' i) → ABC (F.D A) (fun i => w i) (fun i => w' i) N := by
-  first | exact @GlobalTheory.BaseABC.base_abc | exact GlobalTheory.BaseABC.base_abc | (intros; apply GlobalTheory.BaseABC.base_abc <;> assumption)
+  first | exact @GlobalTheory.BaseABC.base_abc
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PhiGammaReductionBaseLatticeBoundsStatement =====
@@ -1062,7 +1025,7 @@ open GlobalTheory.PhiGam GlobalTheory.AdmLoc GlobalTheory.Models GlobalTheory.To
 open scoped LaurentSeries PowerSeries
 
 theorem _root_.GlobalTheory.T.rankOne_reduction_frobeniusPullback_eq_shift : ∀ {l : ℕ} [Fact l.Prime] {P : LocPrime l} (H : LocHW l P) (S : TopSit P) (k : Type) [Field k] [Algebra S.O k] [CharP k l], S.IsRes k → ∀ {R : RingPG k l} (ι : k⸨X⸩ →ₐ[k] k⸨X⸩) (F : DFun R S.n S.G) (τ : ZMod S.n → ZMod (Module.finrank ℚ_[l] ↥(K0 S.K))) (γ : (S.W H).Gam) (p : Pres (S.W H) F ι τ γ), GlobalTheory.IndefiniteRowSideFullHecke.OnePlusPowerCharacters.IsCyclotomic R ι → (∀ i, (S.W H).emb (τ i) = S.emb i) → ((S.W H).χΓ γ : S.O) = 1 + (l : S.O) → GlobalTheory.WachUse.QN (S.W H) → ∀ (T : LocLat S.G ℚ_[l] ↥S.LL.1 S.O) (A : Ob k S.G) q (U : ZMod S.n → Multiset ℤ), Onto T A q → KerIs S.Γ.lam q → CrysWith (P.PD S.K) S.emb T.ρ U → ∀ N : Lats k S.n A.m, (∀ i y, y ∈ N i ↔ ∃ x : ↥(DΔ (S.W H) T), (x : (S.W H).DD T) ∈ (S.W H).N T ∧ p.j T A q i x = y) → ∀ a : ZMod S.n → ℤ, A.m = 1 → (∀ i, U i = {a i}) → ∀ i, pull ((F.D A).φ i) (N (i - 1)) = sh (a i) (N i) := by
-  first | exact @GlobalTheory.RankOneReduction.pull_eq_sh | exact GlobalTheory.RankOneReduction.pull_eq_sh | (intros; apply GlobalTheory.RankOneReduction.pull_eq_sh <;> assumption)
+  first | exact @GlobalTheory.RankOneReduction.pull_eq_sh
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.RankOneReductionFrobeniusPullbackEqShiftStatement =====
@@ -1341,10 +1304,6 @@ variable {G : Type} [Group G] [TopologicalSpace G] {Qp K₀ K : Type} [Field Qp]
     [CommRing O] [Algebra O LL] [TopologicalSpace LL] {v : AddValuation LL (WithTop ℚ)} {n₀ : ℕ}
     (W : LocWach PD LL O v n₀) {k : Type} [Field k] [Algebra O k]
 
-theorem γD_smulA (T : LocLat G Qp LL O) (g : W.Gam) (a : LetA O n₀) (x : W.DD T) :
-    W.γD T g (a • x) = W.γA g a • W.γD T g x := by
-  rw [← algebraMap_smul W.EE a x, W.γD_smul, W.γE_ext, algebraMap_smul]; rfl
-
 theorem γ₀_π₀ {δ : W.Gam} (hδ : δ ∈ W.DelF) : W.γ₀ δ W.π₀₁ = W.π₀₁ := by
   classical
   have hm : ∀ g, g ∈ W.DelF ↔ IsOfFinOrder g := fun g => by rw [W.DelF_def, isOfFinOrder_iff_pow_eq_one]
@@ -1358,7 +1317,7 @@ theorem γ₀_π₀ {δ : W.Gam} (hδ : δ ∈ W.DelF) : W.γ₀ δ W.π₀₁ =
   · rw [map_mul]; rfl
 
 theorem smul_mem (T : LocLat G Qp LL O) {a : LetA O n₀} (ha : ∀ δ ∈ W.DelF, W.γA δ a = a) {x : W.DD T}
-    (hx : x ∈ DΔ W T) : a • x ∈ DΔ W T := fun δ hδ => by rw [γD_smulA, ha δ hδ, hx δ hδ]
+    (hx : x ∈ DΔ W T) : a • x ∈ DΔ W T := fun δ hδ => by rw [_root_.GlobalTheory.WachTie.MatF.γD_smulA, ha δ hδ, hx δ hδ]
 
 theorem coord_inv (T : LocLat G Qp LL O) {m : ℕ} (b : Fin m → W.DD T) (hb : ∀ j, b j ∈ DΔ W T)
     (hli : LinearIndependent (LetA O n₀) b) (a : Fin m → LetA O n₀) (hx : ∑ j, a j • b j ∈ DΔ W T) (j : Fin m) :
@@ -1367,7 +1326,7 @@ theorem coord_inv (T : LocLat G Qp LL O) {m : ℕ} (b : Fin m → W.DD T) (hb : 
   have h := hx δ hδ
 
   rw [map_sum] at h
-  simp only [γD_smulA, hb _ δ hδ] at h
+  simp only [_root_.GlobalTheory.WachTie.MatF.γD_smulA, hb _ δ hδ] at h
   have := Fintype.linearIndependent_iff.1 hli (fun j => W.γA δ (a j) - a j) (by
     simp only [sub_smul, Finset.sum_sub_distrib, h, sub_self]) j
   exact sub_eq_zero.1 this
@@ -1554,7 +1513,7 @@ open GlobalTheory.PhiGam GlobalTheory.AdmLoc GlobalTheory.Models GlobalTheory.To
 open scoped LaurentSeries PowerSeries
 
 theorem _root_.GlobalTheory.T.senMultiset_base_lattice_eq_jumps_mod : ∀ {l : ℕ} [Fact l.Prime] {P : LocPrime l} (H : LocHW l P) (S : TopSit P) (k : Type) [Field k] [Algebra S.O k] [CharP k l], S.IsRes k → ∀ {R : RingPG k l} (ι : k⸨X⸩ →ₐ[k] k⸨X⸩) (F : DFun R S.n S.G) (τ : ZMod S.n → ZMod (Module.finrank ℚ_[l] ↥(K0 S.K))) (γ : (S.W H).Gam) (p : Pres (S.W H) F ι τ γ), GlobalTheory.IndefiniteRowSideFullHecke.OnePlusPowerCharacters.IsCyclotomic R ι → (∀ i, (S.W H).emb (τ i) = S.emb i) → ((S.W H).χΓ γ : S.O) = 1 + (l : S.O) → GlobalTheory.WachUse.QN (S.W H) → ∀ (T : LocLat S.G ℚ_[l] ↥S.LL.1 S.O) (A : Ob k S.G) q (U : ZMod S.n → Multiset ℤ), Onto T A q → KerIs S.Γ.lam q → CrysWith (P.PD S.K) S.emb T.ρ U → ∀ N : Lats k S.n A.m, (∀ i y, y ∈ N i ↔ ∃ x : ↥(DΔ (S.W H) T), (x : (S.W H).DD T) ∈ (S.W H).N T ∧ p.j T A q i x = y) → ∀ i x, sen ((F.D A).γ i) (N i) x = resCount (U i) 0 x := by
-  first | exact @GlobalTheory.BaseSen.sen_base | exact GlobalTheory.BaseSen.sen_base | (intros; apply GlobalTheory.BaseSen.sen_base <;> assumption)
+  first | exact @GlobalTheory.BaseSen.sen_base
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.SenMultisetBaseLatticeEqJumpsModStatement =====

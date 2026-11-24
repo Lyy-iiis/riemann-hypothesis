@@ -120,7 +120,7 @@ theorem fock_sph_tw : ∀ D : D7, ForStepQ D fun c _ k s s' p => (∀ φ, Global
         (GlobalTheory.AdelicU.frameLat s'.V : Set (Fin s'.V.rank → D.host.E)) (fun u => u = v),
         heisO c.ψ s.V s'.V u f₀ = f₀ → heisO c.ψ s.V s'.V u (p.pt φ) = p.pt φ := fun u hu h0 =>
       GlobalTheory.Hk3.FiniteHeis.heisO_pureTensorO_of_finite c.ψ c.θ s.V s'.V hc.inf _ _ _ _ p.f hp.theta u
-        (GlobalTheory.VacGood.infPart_latO (hle hu))
+        (_root_.GlobalTheory.SplitScalar.latO_fin (hle hu))
         (GlobalTheory.Hk3.heisO_fix_thetaAt_off c.ψ _ _ _ _ _ _ _ _ hth u
           (fun i j => GlobalTheory.FinZeta.VacOff.idemSum_mul_off he hoff hu i j) h0) φ
     refine ⟨hp.theta φ, fun u hu => ?_, fun e' he' u hu hh => ?_⟩
@@ -160,7 +160,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.VolumeFlatSection (Blocks parahoric
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.twistedChainStep_fockVectors_spherical_offS : ∀ D : D7, ForStepQ D fun c _ k s s' p => (∀ φ, GlobalTheory.IndefiniteRowSideFullHecke.SphericalVolumeLift.IsFockVec c.ψ c.θ s.V s'.V (cart s.M) (cart s'.M) (p.pt φ) ∧ GlobalTheory.IndefiniteRowSideFullHecke.SphericalVolumeLift.IsSphOff c.ψ s.V s'.V s.Λ s'.Λ c.S (p.pt φ) ∧ ∀ v ∉ c.S, GlobalTheory.FinZeta.VacFin c.ψ s.V s'.V v (p.pt φ)) ∧ GlobalTheory.LFun.UnrOff (c.chS (k + 1)) (c.S : Set (HeightOneSpectrum (𝓞 D.host.F))) ∧ GlobalTheory.LFun.UnrOff (c.chT (k + 1)) (c.S : Set (HeightOneSpectrum (𝓞 D.host.F))) := by
-  first | exact @GlobalTheory.ChainTw.fock_sph_tw | exact GlobalTheory.ChainTw.fock_sph_tw | (intros; apply GlobalTheory.ChainTw.fock_sph_tw <;> assumption)
+  first | exact @GlobalTheory.ChainTw.fock_sph_tw
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.TwistedChainStepFockVectorsSphericalOffSStatement =====

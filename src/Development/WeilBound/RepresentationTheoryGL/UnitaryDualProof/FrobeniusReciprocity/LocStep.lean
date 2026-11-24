@@ -715,7 +715,7 @@ private theorem mul_eq_mul_of_ratio_eq_one {n : ℕ} {R : Type} [CommRing R] [Al
 
   simp only [LinearMap.sum_apply, LinearMap.comp_apply, map_sum, Submodule.coe_subtype,
   LinearEquiv.coe_coe]
-  simp only [Submodule.coe_sum, inner]
+  simp only [inner]
   simp
 
   rw [← LinearMap.sum_apply, ← map_sum, hs, map_one]
@@ -749,7 +749,7 @@ theorem isoOfTrace : IsoOfTrace k := by
 
     rw [map_sum, map_one]
     funext x
-    simp [hE, Finset.sum_apply, Pi.single_apply]
+    simp [hE, Finset.sum_apply]
   have hm : ∀ m : MaximalSpectrum R, ∀ a ∈ m.asIdeal, a * e m = 0 := by
     intro m a ha
     apply E.injective
@@ -933,7 +933,7 @@ theorem isNilpotent_of_trace_pow [CharZero k] (A : Matrix (Fin n) (Fin n) k)
     rw [trace_aeval_eq_sum]
     refine Finset.sum_eq_zero fun i _ => ?_
     rcases i with _ | i
-    · simp [coeff_mul_X_pow']
+    · simp
     · rw [h (i + 1) (by omega), mul_zero]
   have hlin : IsIdempotentElem (Matrix.toLinAlgEquiv' (aeval A (a * X ^ (r + 1)))) :=
     hidem.map _
@@ -969,7 +969,7 @@ theorem trace_pow_eq {Z : Subalgebra k (Matrix (Fin n) (Fin n) k)} {x x₀ : Mat
     calc trace (y ^ i) = trace (((1 : Z) : Matrix (Fin n) (Fin n) k) * y ^ i) := by simp
       _ = _ := by
         rw [h1, Finset.sum_mul, Matrix.trace_sum]
-        simp [pZ, smul_mul_assoc, Matrix.trace_smul]
+        simp [pZ, Matrix.trace_smul]
   rw [key x, key x₀, h]
 
 theorem trace_aeval_eq {Z : Subalgebra k (Matrix (Fin n) (Fin n) k)} {x x₀ : Matrix (Fin n) (Fin n) k}
@@ -1027,7 +1027,7 @@ theorem jcPoly [CharZero k] : JCPoly (k := k) := by
     set T : k[X] := X - b * Q
     have hT : ∀ z : k[X], T.comp z = z + -(b.comp z * Q.comp z) := by
       intro z
-      simp [T, sub_comp, mul_comp, sub_eq_add_neg]
+      simp [T, mul_comp, sub_eq_add_neg]
     have e1 : ∀ p w : k[X], (p.map C).eval w = p.comp w := fun p w => by
       rw [eval_map]
       rfl
@@ -1533,23 +1533,18 @@ open PositivityTheory.RgUd.T
 
 variable (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
 
-theorem dich [CharZero k] : Dich (k := k) := PositivityTheory.RgUd.T.Alg.dich k
-theorem adjP [CharZero k] : Adj (k := k) := adjunction_char_zero k
 theorem locStep : LocStep (k := k) := LocStepPf.local_descent_holds
-theorem descA [CharZero k] : DescA (k := k) := PositivityTheory.RgUd.T.Desc.Final.descA k
-theorem nilpB [CharZero k] : NilpB (k := k) := PositivityTheory.RgUd.T.Nil.Final.nilpB k
-
 theorem van_all [CharZero k] : ∀ (m n : ℕ) (Z : Subalgebra k (Matrix (Fin n) (Fin n) k)),
     Module.finrank k (Subalgebra.centralizer k (Z : Set (Matrix (Fin n) (Fin n) k))) = m → CR Z → Van Z := by
   intro m
   induction m using Nat.strong_induction_on with
   | _ m ih =>
     intro n Z hm hZ
-    refine nilpB k n Z hZ fun ξ hs hi => locStep k n Z hZ ξ hs hi fun y => ?_
-    rcases dich k n Z hZ y with h | ⟨s, hs, hsZ, hss, hy⟩
+    refine _root_.PositivityTheory.RgUd.T.Nil.Final.nilpB k n Z hZ fun ξ hs hi => locStep k n Z hZ ξ hs hi fun y => ?_
+    rcases _root_.PositivityTheory.RgUd.T.Alg.dich k n Z hZ y with h | ⟨s, hs, hsZ, hss, hy⟩
     · exact Or.inl h
-    · obtain ⟨hC, hlt⟩ := adjP k n Z hZ s hs hsZ hss
-      exact Or.inr fun ξ' h1 h2 => descA k n Z hZ s hs hsZ hss (ih _ (hm ▸ hlt) n _ rfl hC) y hy ξ' h1 h2
+    · obtain ⟨hC, hlt⟩ := _root_.PositivityTheory.RgUd.T.adjunction_char_zero k n Z hZ s hs hsZ hss
+      exact Or.inr fun ξ' h1 h2 => _root_.PositivityTheory.RgUd.T.Desc.Final.descA k n Z hZ s hs hsZ hss (ih _ (hm ▸ hlt) n _ rfl hC) y hy ξ' h1 h2
 
 theorem thmT [CharZero k] : PositivityTheory.RgUd.ThmT k := by
   intro n Z hcomm hred ξ hsupp hinv f hf

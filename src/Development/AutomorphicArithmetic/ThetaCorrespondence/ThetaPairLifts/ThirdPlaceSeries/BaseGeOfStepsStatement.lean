@@ -280,11 +280,8 @@ open Formalism.L2.Theta Formalism.L2.DIV Formalism.IndefR.Lev Formalism.IndefR.L
 
 namespace GlobalTheory.AdIsomObj
 
-theorem adelicIsometries_obj (D : D7) : GlobalTheory.IndefiniteRowSideFullHecke.FlatSpaceComponents.AdelicIsometries D :=
-  GlobalTheory.AdIsom.adelicIsometries D
-
 theorem frames_exist (D : D7) (V : HSp D) (N : ℕ) : ∃ β Λ, IsSDFrame V β Λ N :=
-  (adelicIsometries_obj D).2.2.2.2.2.2.2.2.2.2.2.1 V N
+  (_root_.GlobalTheory.AdIsom.adelicIsometries D).2.2.2.2.2.2.2.2.2.2.2.1 V N
 
 end GlobalTheory.AdIsomObj
 
@@ -333,7 +330,7 @@ theorem inCoefLat_pow' (R : RealDat D A Ks) (i : Fin D.R.m) {β : GL (Fin (Vc D 
   have e2 := smul_mem_hLat hβ (k := k⁻¹) (by rw [inv_inv]; exact h₁ (m₁ + m₂) (Nat.le_add_right _ _)) (h * k)
   rw [mul_inv_cancel_right] at e2
   have e3 := Submodule.smul_mem _ ((p ^ d : ℕ) : 𝓞 D.what₂.LL)
-    (nabAtr_scale (labLL D) (Formalism.IndefR.FWT.lamV D i) _ (by first | exact GlobalTheory.RepsCompare.isLattice_hLat _ _ | exact hLat_full _ _) e1 e2 P hP)
+    (nabAtr_scale (labLL D) (Formalism.IndefR.FWT.lamV D i) _ (by first | exact hLat_full _ _) e1 e2 P hP)
   refine ⟨_, e3, ?_⟩
   rw [Nat.cast_smul_eq_nsmul, map_nsmul, map_smulₛₗ, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul]
   congr 1
@@ -771,7 +768,7 @@ section
 open GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.BigOn.Exp GlobalTheory.BigOn.Exp.SerBase
 
 theorem _root_.GlobalTheory.T.kerOfAt' : _root_.GlobalTheory.BigOn.Exp.SerBase.KerOfAtAlt := by
-  first | exact @_root_.GlobalTheory.BigOn.Exp.SerBase.kerOfAt_alt | exact _root_.GlobalTheory.BigOn.Exp.SerBase.kerOfAt_alt | (intros; apply _root_.GlobalTheory.BigOn.Exp.SerBase.kerOfAt_alt <;> assumption)
+  first | exact @_root_.GlobalTheory.BigOn.Exp.SerBase.kerOfAt_alt
 end
 end -- clump:auto
 end -- clump:auto
@@ -1013,7 +1010,7 @@ section
 open GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.BigOn.Exp GlobalTheory.BigOn.Exp.SerBase
 
 theorem _root_.GlobalTheory.T.readCmpAt_of_serBase : _root_.GlobalTheory.BigOn.Exp.SerBase.ReadComparisonAt := by
-  first | exact @_root_.GlobalTheory.BigOn.Exp.SerBase.readCmpAt_alt | exact _root_.GlobalTheory.BigOn.Exp.SerBase.readCmpAt_alt | (intros; apply _root_.GlobalTheory.BigOn.Exp.SerBase.readCmpAt_alt <;> assumption)
+  first | exact @_root_.GlobalTheory.BigOn.Exp.SerBase.readCmpAt_alt
 end
 end -- clump:auto
 end -- clump:auto
@@ -1030,7 +1027,7 @@ section
 open GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.BigOn.Exp
 
 theorem _root_.GlobalTheory.T.read_injective : _root_.GlobalTheory.BigOn.Exp.ReadInjAlt := by
-  first | exact @_root_.GlobalTheory.BigOn.Exp.readInj_alt | exact _root_.GlobalTheory.BigOn.Exp.readInj_alt | (intros; apply _root_.GlobalTheory.BigOn.Exp.readInj_alt <;> assumption)
+  first | exact @_root_.GlobalTheory.BigOn.Exp.readInj_alt
 end
 end -- clump:auto
 end -- clump:auto
@@ -1096,7 +1093,7 @@ section
 open GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.BigOn.Exp GlobalTheory.BigOn.Exp.SerBase
 
 theorem _root_.GlobalTheory.T.trace_rationality_at_place' : _root_.GlobalTheory.BigOn.Exp.SerBase.TraceAt' := by
-  first | exact @_root_.GlobalTheory.BigOn.Exp.SerBase.traceOfAt_alt | exact _root_.GlobalTheory.BigOn.Exp.SerBase.traceOfAt_alt | (intros; apply _root_.GlobalTheory.BigOn.Exp.SerBase.traceOfAt_alt <;> assumption)
+  first | exact @_root_.GlobalTheory.BigOn.Exp.SerBase.traceOfAt_alt
 end
 end -- clump:auto
 end -- clump:auto
@@ -1134,7 +1131,7 @@ theorem baseGe_of_serBase_facts_flatKer_centLat (hI : _root_.GlobalTheory.BigOn.
   refine ⟨x0, fun x hx hle i p hp hm w hw j ρ hρ ν rd hfit hcan => ?_⟩
   obtain ⟨⟨⟨⟨⟨⟨b1, b2⟩, b3⟩, b4⟩, b5⟩, b6⟩, b7⟩ := hx0 x hx hle i p hp
   exact baseLat_le_realBase p w j hfit (b1 hm w hw j ρ hρ ν hfit.norm.1) (b2 hm w hw j ρ hρ hfit.pin) fun h hh Q hQ g hg =>
-    tmul_mem_realBase p w j (_root_.GlobalTheory.T.links2_of_single_index_twisted _ _ _ _ _ _ _ _ _ _ p hp hm.1) (b3 hm w hw j) (b4 hm w hw j) (b5 hm w hw j)
+    tmul_mem_realBase p w j (_root_.GlobalTheory.BigOn.links2_of_rows_alt _ _ _ _ _ _ _ _ _ _ p hp hm.1) (b3 hm w hw j) (b4 hm w hw j) (b5 hm w hw j)
       (b6 hm w hw j) (b7 hm w hw j) hF hC hTr hO hfit hcan hh hQ hg
 end GlobalTheory.BigOn.Exp.SerBase
 namespace GlobalTheory.BigOn.Exp
@@ -1156,12 +1153,6 @@ section -- clump:auto
 
 
 
-section
-open GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.BigOn.Exp
-
-theorem _root_.GlobalTheory.T.baseGe_of_cuspRapidDecay_artin_rayClassField_seriesRat : GlobalTheory.Published.CuspRapidDecay → GlobalTheory.Published.GlobalArtinReciprocity → GlobalTheory.Published.RayClassFieldSt → GlobalTheory.SerStd.SeriesRatS → _root_.GlobalTheory.BigOn.Exp.BaseLowerBound₂ := by
-  first | exact @_root_.GlobalTheory.BigOn.Exp.baseGe_of_alt | exact _root_.GlobalTheory.BigOn.Exp.baseGe_of_alt | (intros; apply _root_.GlobalTheory.BigOn.Exp.baseGe_of_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.BaseGeOfStepsStatement =====

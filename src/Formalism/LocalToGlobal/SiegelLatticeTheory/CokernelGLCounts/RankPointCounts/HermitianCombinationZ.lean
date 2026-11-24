@@ -44,6 +44,7 @@ import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Tactic.ReduceModChar
 import Mathlib.Tactic.TypeStar
 import Mathlib.Topology.Sheaves.Init
+import Formalism.LocalToGlobal.SiegelLatticeTheory.HaarTransversals.UnitaryHaarProducts.InHHDef
 
 @[expose] public section
 
@@ -63,12 +64,6 @@ theorem hJ_add_right (x y y' : Fin n → ℂ) : hJ ε x (y + y') = hJ ε x y + h
 
 theorem hJ_add_left (x x' y : Fin n → ℂ) : hJ ε (x + x') y = hJ ε x y + hJ ε x' y := by
   unfold hJ; rw [star_add, add_dotProduct]
-
-theorem hJ_sub_right' (x y y' : Fin n → ℂ) : hJ ε x (y - y') = hJ ε x y - hJ ε x y' := by
-  unfold hJ; rw [Matrix.mulVec_sub, dotProduct_sub]
-
-theorem hJ_sub_left' (x x' y : Fin n → ℂ) : hJ ε (x - x') y = hJ ε x y - hJ ε x' y := by
-  unfold hJ; rw [star_sub, sub_dotProduct]
 
 theorem hJ_smul_right (c : ℂ) (x y : Fin n → ℂ) : hJ ε x (c • y) = c * hJ ε x y := by
   unfold hJ; rw [Matrix.mulVec_smul, dotProduct_smul, smul_eq_mul]
@@ -323,7 +318,7 @@ theorem Uw (H : Frame ε e f z w) (hU : (U : Matrix (Fin n) (Fin n) ℂ)ᴴ * Fo
     obtain ⟨x1, hx1, hx1e⟩ := U_X_surj U hS h0
     have e1 : z = (U : Matrix (Fin n) (Fin n) ℂ) *ᵥ (z - x1) := by
       rw [Matrix.mulVec_sub, hx1e, Matrix.sub_mulVec, Matrix.one_mulVec, sub_sub_cancel]
-    rw [e1, hJ_U U hU, hJ_sub_left', H.zw, hJ_X_left hx1 (fun c => H.ew c b), sub_zero]
+    rw [e1, hJ_U U hU, _root_.Formalism.L2.SG.PoincareInHH.Cut.hJ_sub_left, H.zw, hJ_X_left hx1 (fun c => H.ew c b), sub_zero]
   have := perp_e H _ hUe
   rw [hUz, zero_div, zero_smul, sub_zero] at this
   unfold uu Mm
@@ -365,7 +360,7 @@ theorem Vm_mulVec (w : Fin k → Fin n → ℂ) (y : Fin n → ℂ) :
   have hv : ∀ a b : Fin n → ℂ, vecMulVec a b *ᵥ y = (b ⬝ᵥ y) • a := by
     intro a b
     ext i
-    simp [Matrix.mulVec, dotProduct, Matrix.vecMulVec_apply, Finset.sum_mul, mul_comm, mul_left_comm]
+    simp [Matrix.mulVec, dotProduct, Matrix.vecMulVec_apply, mul_comm]
     rw [Finset.mul_sum]
     exact Finset.sum_congr rfl fun _ _ => by ring
   unfold Vm
@@ -394,7 +389,7 @@ theorem Vm_hJ (H : Frame ε e f z w) (hU : (U : Matrix (Fin n) (Fin n) ℂ)ᴴ *
   have huu := uu_on H hU hS
   have hperp : ∀ v : Fin n → ℂ, ∀ c, hJ ε (w c) (v - ∑ b, hJ ε (w b) v • w b) = 0 := by
     intro v c
-    rw [hJ_sub_right', hJ_sum_right]
+    rw [_root_.Formalism.L2.SG.PoincareInHH.Cut.hJ_sub_right, hJ_sum_right]
     simp [hJ_smul_right, hww]
   have hperp' : ∀ v : Fin n → ℂ, ∀ c, hJ ε (v - ∑ b, hJ ε (w b) v • w b) (w c) = 0 := fun v c => by
     rw [← hJ_conj_lemma, hperp, star_zero]
@@ -445,7 +440,6 @@ theorem levi_place (H : Frame ε e f z w) (U : (Matrix (Fin n) (Fin n) ℂ)ˣ)
   have hright : Vm (ε := ε) U w * (Formalism.REAL.Jm ε * (Vm (ε := ε) U w)ᴴ * Formalism.REAL.Jm ε) = 1 :=
     by first
       | exact mul_eq_one_comm.1 hleft
-      | exact (Matrix.mul_eq_one_comm_of_equiv (Equiv.refl _)).1 hleft
   have hfe : ∀ a, Vm (ε := ε) U w *ᵥ e a = e a := fun a =>
     Vm_fix _ (fun b => by rw [← hJ_conj_lemma, H.ew, star_zero])
   refine ⟨⟨Vm (ε := ε) U w, Formalism.REAL.Jm ε * (Vm (ε := ε) U w)ᴴ * Formalism.REAL.Jm ε, hright, hleft⟩,

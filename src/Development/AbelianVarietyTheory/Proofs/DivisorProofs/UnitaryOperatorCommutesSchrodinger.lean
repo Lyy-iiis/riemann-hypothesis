@@ -70,14 +70,14 @@ theorem mixed_eq_zero (u : mixedEmbedding.mixedSpace F)
       (∑ w, z.1 w) + ∑ w, 2 * (z.2 w).re := by
     intro z
     rw [Algebra.trace_prod_apply, GroundTheory.Global.SemiLocal.trace_pi, GroundTheory.Global.SemiLocal.trace_pi]
-    simp [Algebra.trace_self_apply, Algebra.trace_complex_apply]
+    simp [Algebra.trace_complex_apply]
   refine Prod.ext (funext fun w => ?_) (funext fun w => ?_)
   · have h1 := h (Pi.single w 1, 0)
     rw [htr] at h1
     simpa [Pi.single_apply] using h1
   · have h1 := h (0, Pi.single w (star (u.2 w)))
     rw [htr] at h1
-    simp [Pi.single_apply, Complex.star_def] at h1
+    simp [Pi.single_apply] at h1
     rw [Finset.sum_eq_single w (fun v _ hv => by simp [hv]) (by simp)] at h1
     simp at h1
     have ha : (u.2 w).re = 0 := by nlinarith [mul_self_nonneg (u.2 w).re, mul_self_nonneg (u.2 w).im]

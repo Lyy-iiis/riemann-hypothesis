@@ -475,18 +475,14 @@ section Ops
 
 variable (E1 E2 : Fin n → Fin n → Module.End ℂ V)
 
-theorem aa (i j : Lt n) : (annq i * annq j + annq j * annq i : Module.End ℂ (Cq n V)) = 0 := annq_annq i j
-theorem cc (i j : Lt n) : (creq i * creq j + creq j * creq i : Module.End ℂ (Cq n V)) = 0 := creq_creq i j
-theorem ac (i j : Lt n) : (annq i * creq j + creq j * annq i : Module.End ℂ (Cq n V)) = if i = j then 1 else 0 :=
-  annq_creq i j
-
+alias cc := _root_.GlobalTheory.CompanionTheory.PairMult.LeviQ.creq_creq
 theorem lFq_eq (s : Bool) (p q : Fin n) :
     lFq E1 E2 s p q = liftq n (Ts E1 E2 s p q) + Dm annq creq (Mt s p q) := by
   rw [lFq, adLq_eq]
 
 theorem br_L_ann (s : Bool) (p q : Fin n) (m : Lt n) :
     br (lFq E1 E2 s p q) (annq m) = -∑ i, Mt s p q i m • annq i := by
-  rw [lFq_eq, br_add_left, br_lift_annq, zero_add, dm_a aa ac]
+  rw [lFq_eq, br_add_left, br_lift_annq, zero_add, dm_a _root_.GlobalTheory.CompanionTheory.PairMult.LeviQ.annq_annq _root_.GlobalTheory.CompanionTheory.PairMult.LeviQ.annq_creq]
 
 theorem br_dm_lift (A : Lt n → Lt n → ℂ) (T : Module.End ℂ V) :
     br (Dm annq creq A) (liftq n T : Module.End ℂ (Cq n V)) = 0 := by
@@ -522,7 +518,7 @@ theorem bracket_levi_cubicBoundaryPart (s : Bool) (p q : Fin n) :
       smul_zero, Finset.sum_const_zero]
   rw [h0, zero_add]
   unfold cubicBoundaryPart
-  have hW := fun l1 l2 l3 => bracket_wedge_formula (R := Module.End ℂ (Cq n V)) (ι := Lt n) (a := annq) (c := creq) aa cc ac (Mt s p q) l1 l2 l3
+  have hW := fun l1 l2 l3 => bracket_wedge_formula (R := Module.End ℂ (Cq n V)) (ι := Lt n) (a := annq) (c := creq) _root_.GlobalTheory.CompanionTheory.PairMult.LeviQ.annq_annq cc _root_.GlobalTheory.CompanionTheory.PairMult.LeviQ.annq_creq (Mt s p q) l1 l2 l3
   simp only [br_sum_right, br_smul_right, hW]
   exact GlobalTheory.CompanionTheory.RealMult.TorC.reindex (R := Module.End ℂ (Cq n V)) (fun i j k => creq k * annq j * annq i) Sq (Mt s p q)
 
@@ -606,7 +602,7 @@ theorem ts_rel (h : PairRel E1 E2) (s t : Bool) (p q r v : Fin n) :
   have c2 : E1 r v * E2 p q = E2 p q * E1 r v := h3 r v p q
   have e : br (E1 p q + eps s • E2 p q) (E1 r v + eps t • E2 r v) =
       (E1 p q * E1 r v - E1 r v * E1 p q) + (eps s * eps t) • (E2 p q * E2 r v - E2 r v * E2 p q) := by
-    simp only [br, add_mul, mul_add, smul_mul_assoc, mul_smul_comm, smul_sub, smul_smul, c1, c2]
+    simp only [br, add_mul, mul_add, smul_mul_assoc, mul_smul_comm, smul_sub, c1, c2]
     module
   rw [Ts_eq, Ts_eq, e, g1, g2, eps_mul]
   simp only [Ts_eq]
@@ -708,14 +704,14 @@ theorem mt_id {lev : Fin n → ℕ} (hm : Monotone lev) {s t : Bool} {p q r v : 
 
 theorem dm_apply (A : Lt n → Lt n → ℂ) (x : Cq n V) :
     (Dm annq creq A : Module.End ℂ (Cq n V)) x = ∑ i, ∑ l, A i l • creq l (annq i x) := by
-  simp [Dm, LinearMap.sum_apply, Module.End.mul_apply]
+  simp [Dm, LinearMap.sum_apply]
 
 theorem dm_comm_apply {lev : Fin n → ℕ} (hm : Monotone lev) {x : Cq n V} (hx : SuppQ (inUL lev) x)
     {s t : Bool} {p q r v : Fin n} (hpq : lev p = lev q) (hrv : lev r = lev v) :
     br (Dm annq creq (Mt s p q)) (Dm annq creq (Mt t r v) : Module.End ℂ (Cq n V)) x =
       (if q = r then Dm annq creq (Mt (s == t) p v) x else 0) -
         (if v = p then (Dm annq creq (Mt (s == t) r q) : Module.End ℂ (Cq n V)) x else 0) := by
-  rw [br_dm_gen (R := Module.End ℂ (Cq n V)) aa cc ac]
+  rw [br_dm_gen (R := Module.End ℂ (Cq n V)) _root_.GlobalTheory.CompanionTheory.PairMult.LeviQ.annq_annq cc _root_.GlobalTheory.CompanionTheory.PairMult.LeviQ.annq_creq]
   have t1 : ∀ i l : Lt n,
       ((∑ m, Mt t r v i m * Mt s p q m l) - ∑ m, Mt s p q i m * Mt t r v m l) • creq l (annq i x) =
       ((if q = r then Mt (s == t) p v i l else 0) - (if v = p then Mt (s == t) r q i l else 0)) • creq l (annq i x) := by
@@ -827,8 +823,7 @@ theorem leviRel : LeviRel := by
     have tf := R true false
     have ft := R false true
     have ff := R false false
-    simp only [beq_self_eq_true, Bool.true_beq, Bool.false_beq, Bool.not_true, Bool.not_false,
-      beq_iff_eq] at tt tf ft ff
+    simp only [beq_self_eq_true, Bool.true_beq, Bool.false_beq, Bool.not_true] at tt tf ft ff
     simp only [c1, c2, LinearMap.smul_apply, LinearMap.add_apply, LinearMap.sub_apply, map_smul, map_add (f := _), map_sub]
     refine ⟨?_, ?_, ?_⟩
     · split_ifs at tt tf ft ff ⊢ <;>
@@ -1058,7 +1053,7 @@ theorem freeR (n : ℕ) : ∃ (W : Type) (_ : AddCommGroup W) (_ : Module ℂ W)
     have r1 := hr p q
     have l1 := hl p q
     cases s <;> cases t <;> simp only [aR, dR, Bool.false_eq_true, if_false, if_true, sub_mul, mul_sub, add_mul, mul_add,
-      r1, l1, c1, ← c2, Prod.mk.injEq, reduceCtorEq, false_and, true_and, and_true] <;> by_cases h : p = q <;> simp [h] <;> abel
+      r1, l1, c1, ← c2, Prod.mk.injEq, reduceCtorEq, false_and, true_and] <;> by_cases h : p = q <;> simp [h] <;> abel
   · rintro ⟨s, p⟩ k t ht
     cases s
     · exact lT_mem Fil (a p) 1 (fun l z hz => hF.a_mem p l z hz) k t ht
@@ -1386,7 +1381,7 @@ theorem coverQ (lev : Fin n → ℕ) {V : Type} [AddCommGroup V] [Module ℂ V] 
     have e2 := LinearMap.congr_fun (hP.2.2 a' b c e).eq w
     simp only [Module.End.mul_apply] at e1 e2
     simp only [F1, F2, Module.End.mul_apply, LinearMap.add_apply, LinearMap.rTensor_tmul, LinearMap.lTensor_tmul,
-      map_add, e1, e2, TensorProduct.add_tmul, TensorProduct.tmul_add]
+      map_add, e1, e2]
     abel
   let S : ℕ → Set (V ⊗[ℂ] W) := fun k => {t | ∃ v z, z ∈ Fil k ∧ t = v ⊗ₜ z}
   have hin : ∀ {k : ℕ} (v : V) {z : W}, z ∈ Fil k → v ⊗ₜ[ℂ] z ∈ Submodule.span ℂ (S k) :=
@@ -1478,7 +1473,7 @@ structure MorQ (T : V →ₗ[ℂ] W) (E1 E2 : Fin n → Fin n → Module.End ℂ
 theorem adLq_apply (s : Bool) (p q : Fin n) (x : Cq n V) :
     adLq s p q x = ∑ t : Bool, ∑ i : Pos n, ∑ k : Pos n,
       CompanionTheory.RgExh.U.adC p q i k • creq ((s == t), k) (annq (t, i) x) := by
-  simp [adLq, Module.End.mul_apply, LinearMap.sum_apply]
+  simp [adLq, LinearMap.sum_apply]
 
 theorem lift_adLq (T : V →ₗ[ℂ] W) (s : Bool) (p q : Fin n) (x : Cq n V) :
     liftq n T (adLq s p q x) = adLq s p q (liftq n T x) := by
@@ -1550,7 +1545,7 @@ theorem MorQ.ev (h : MorQ T E1 E2 F1 F2) (a : FreeAlgebra ℂ (Bool × Fin n × 
   · intro a b ha hb y
     simp only [map_mul, Module.End.mul_apply, ha, hb]
   · intro a b ha hb y
-    simp only [map_add (f := _), LinearMap.add_apply, map_add (f := _), ha, hb]
+    simp only [LinearMap.add_apply, map_add (f := _), ha, hb]
 
 theorem MorQ.lift_ev (h : MorQ T E1 E2 F1 F2) (a : FreeAlgebra ℂ (Bool × Fin n × Fin n)) (x : Cq n V) :
     liftq n T (liftq n (ev2 E1 E2 a) x) = liftq n (ev2 F1 F2 a) (liftq n T x) := by
@@ -1641,7 +1636,7 @@ theorem lift_single (T : V →ₗ[ℂ] W) (v : V) :
   by_cases h : A = ∅
   · subst h
     simp [lift_apply]
-  · simp [lift_apply, Pi.single_apply, h]
+  · simp [lift_apply, h]
 
 theorem lF_single (E1 E2 : Fin n → Fin n → Module.End ℂ V) (s : Bool) (p q : Fin n) (v : V) :
     lFq E1 E2 s p q (Pi.single ∅ v : Cq n V) = Pi.single ∅ (Ts E1 E2 s p q v) := by
@@ -1694,7 +1689,7 @@ theorem ann_single (k i : Lt n) (y : V) :
     rw [if_pos rfl, ann_apply]
     by_cases hA : k ∈ A
     · have : A ≠ ∅ := fun h0 => by simp [h0] at hA
-      simp [hA, Pi.single_apply, this]
+      simp [hA, this]
     · by_cases h0 : A = ∅
       · subst h0
         simp [sgL]
@@ -1704,7 +1699,7 @@ theorem ann_single (k i : Lt n) (y : V) :
           have := h ▸ mem_insert_of_mem hl
           rw [mem_singleton] at this
           exact hA (this ▸ hl)
-        simp [hA, Pi.single_apply, this, h0]
+        simp [hA, this, h0]
   · rw [if_neg hk, ann_apply]
     by_cases hA : k ∈ A
     · simp [hA]
@@ -1712,7 +1707,7 @@ theorem ann_single (k i : Lt n) (y : V) :
         intro h
         have := h ▸ mem_insert_self k A
         exact hk (mem_singleton.mp this)
-      simp [hA, Pi.single_apply, this]
+      simp [hA, this]
 
 theorem bd_single (E1 E2 : Fin n → Fin n → Module.End ℂ V) (i : Lt n) (y : V) :
     bdq E1 E2 (Pi.single {i} y : Cq n V) = Pi.single ∅ (Tl E1 E2 i y) := by

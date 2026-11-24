@@ -82,6 +82,7 @@ import Mathlib.Tactic.NormNum.RealSqrt
 import Mathlib.Topology.Sheaves.Init
 import ReciprocityTheory.AnalyticForms.RegularLocalRings.BaseChangeCB
 import ReciprocityTheory.AnalyticForms.RegularLocalRings.IntToRat
+import Lemmata.GeneralBFactTerForm.Imports
 import GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PConeAvoidsFinite
 import GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PFiniteProjHomInjective
 import Mathlib.RingTheory.WittVector.IsPoly
@@ -192,7 +193,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.MetricProofs.ConePtsSubsetMcPtsOfMinimal =====
 
 -- ===== clump member: Development.AutomorphicSpectrum.Proofs.MetricProofs.IsCxVarOfMemMinimalPrimesCxIdeal =====
--- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.MetricProofs.IsCxVarOfMemMinimalPrimesCxIdeal", "h": "module\n\npublic import Development.AutomorphicSpectrum.Proofs.MetricProofs.CxPosDens\npublic import GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PGenNearCover\npublic import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PConeComplexBaseChange\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\nimport ReciprocityTheory.AnalyticForms.RegularLocalRings.BaseChangeCB\nimport ReciprocityTheory.AnalyticForms.RegularLocalRings.IntToRat\n\n"}
+-- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.MetricProofs.IsCxVarOfMemMinimalPrimesCxIdeal", "h": "module\n\npublic import Development.AutomorphicSpectrum.Proofs.MetricProofs.CxPosDens\npublic import GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PGenNearCover\npublic import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PConeComplexBaseChange\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\nimport ReciprocityTheory.AnalyticForms.RegularLocalRings.BaseChangeCB\nimport ReciprocityTheory.AnalyticForms.RegularLocalRings.IntToRat\nimport Lemmata.GeneralBFactTerForm.Imports\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -240,7 +241,7 @@ theorem isCxVar_of_mem_minimalPrimes_cxIdeal :
   refine ⟨⟨hK, ⟨hQ.1.1, hQm, hQr⟩, ?_⟩, hc⟩
   rw [ReciprocityTheory.AnForm.R.BaseChangeC.ringKrullDim_of_mem_minimalPrimes_map _ Q hQ']
   rw [hdim, show d + 1 + Fintype.card K = (d + Fintype.card K) + 1 by omega] at hQdim
-  exact GroundTheory.Heights₂.Heights.Targets.ConeComplexBaseChange.dim_cancel_one hQdim
+  exact _root_.Bl.general_b_fact_ter_form.goal1 hQdim
 
 end GlobalTheory.CompanionTheory.Ar.Pub.CxComp
 end -- clump:auto
@@ -874,7 +875,7 @@ theorem exists_goodProj_coord (K : Type) [Fintype K] (ι : K → Type) [∀ k, F
       simp only [RingHom.coe_coe, evC_segC, GroundTheory.Heights₂.Heights.SegreCoordGoodProj.segre_scaleBlock,
         hzi, mul_zero, Polynomial.eval₂_at_zero, map_zero, RingHom.comp_apply] at this
       rw [← this]
-      simp only [AlgHom.coe_toRingHom, RingHom.coe_coe, evC_aeval]
+      simp only [evC_aeval]
       refine congrArg (fun v => aeval v c0) (funext fun j => ?_)
       rw [evC_forms]
       simp only [GroundTheory.Heights₂.Heights.SegreCoordGoodProj.segre_scaleBlock, hudef, hVdef, Finset.mul_sum]
@@ -1046,7 +1047,7 @@ theorem linForm_last : linForm (Pi.single (Fin.last n) (1 : ℂ)) =
   unfold linForm
   rw [Finset.sum_eq_single (Fin.last n)]
   · simp
-  · intro b _ hb; simp [Pi.single_apply, hb]
+  · intro b _ hb; simp [hb]
   · simp
 
 theorem linForm_last_not_mem {J : Ideal (MvPolynomial (Fin n) ℂ)} {f : MvPolynomial (Fin n) ℂ}
@@ -1114,7 +1115,7 @@ theorem slab_bound (d : ℕ) {J : Ideal (MvPolynomial (Fin n) ℂ)} (f : MvPolyn
     · show ‖∑ j, (Pi.single (Fin.last n) (1 : ℂ) : Fin (n + 1) → ℂ) j * _‖ ≤ ε
       rw [Finset.sum_eq_single (Fin.last n)]
       · simpa [addLast] using hzf'
-      · intro b _ hb; simp [Pi.single_apply, hb]
+      · intro b _ hb; simp [hb]
       · simp
   refine (measure_mono hsub).trans ?_
   have := lipschitz_dropLast.hausdorffMeasure_image_le (d := ((2 * d : ℕ) : ℝ)) (by positivity)

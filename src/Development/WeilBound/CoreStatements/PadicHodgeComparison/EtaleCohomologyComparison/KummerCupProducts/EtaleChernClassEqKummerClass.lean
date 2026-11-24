@@ -78,6 +78,7 @@ import Mathlib.AlgebraicGeometry.Modules.Sheaf
 import Mathlib.Data.Nat.Choose.Multinomial
 import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Order.CompletePartialOrder
+import Mathlib
 import Mathlib.Tactic.Linter.HaveILetI
 import Mathlib.Tactic.TypeStar
 import Mathlib.Tactic.Linter.Style
@@ -404,7 +405,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.KapOneEqTwGen =====
 
 -- ===== clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LcCover =====
--- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LcCover", "h": "module\n\npublic import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCohomologyComparison.KummerCupProducts.FirstChernCompatibleSystem\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.Order.CompletePartialOrder\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
+-- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LcCover", "h": "module\n\npublic import Development.WeilBound.CoreStatements.PadicHodgeComparison.EtaleCohomologyComparison.KummerCupProducts.FirstChernCompatibleSystem\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.Order.CompletePartialOrder\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1184,7 +1185,7 @@ theorem resSplit : CrystallineSemistableComparison.E.ResLoc → CrystallineSemis
           (Sec.map ((GlobalTheory.EtC.res R F).d (↑s) (↑(s + 1))) y)
         = Sec.map ((GlobalTheory.EtC.res R F).d (↑s) (↑(s + 1)) ≫ (GlobalTheory.EtC.res R F).d (↑(s + 1)) (↑(s + 1 + 1))) y := rfl
       _ = Sec.map 0 y := by rw [h]
-      _ = 0 := by first | rfl | simp [Sec.map]
+      _ = 0 := by first | rfl
 
 end GlobalTheory.CompanionTheory.ResSplitProof
 end -- clump:auto
@@ -1846,65 +1847,39 @@ namespace CrystallineSemistableComparison.E.Main
 
 theorem inSch : InSch := GlobalTheory.EtC.sch_cls_cocycle_sec
 
-theorem stAdd : StAdd := GlobalTheory.CompanionTheory.StairAdd.stAdd
+theorem stEx : StEx := GlobalTheory.CompanionTheory.EdgeStair.stEx_of_stCol _root_.GlobalTheory.CompanionTheory.EdgeStair.stCol
 
-theorem stCol : StCol := GlobalTheory.CompanionTheory.EdgeStair.stCol
+theorem stUniq : StUniq := GlobalTheory.CompanionTheory.EdgeStair.stUniq _root_.GlobalTheory.CompanionTheory.EdgeStair.stCol
 
-theorem stEx : StEx := GlobalTheory.CompanionTheory.EdgeStair.stEx_of_stCol stCol
+theorem stTop : StTop := GlobalTheory.CompanionTheory.EdgeMap.stTop_of_stCol _root_.GlobalTheory.CompanionTheory.EdgeStair.stCol
 
-theorem stUniq : StUniq := GlobalTheory.CompanionTheory.EdgeStair.stUniq stCol
-
-theorem stTop : StTop := GlobalTheory.CompanionTheory.EdgeMap.stTop_of_stCol stCol
-
-theorem edgeUniq : EdgeUniq := GlobalTheory.CompanionTheory.EdgeClass.edgeUniq_of stCol stAdd stUniq
-
-theorem edgeMap : EdgeMap := GlobalTheory.CompanionTheory.EdgeMapPull.edgeMap
+theorem edgeUniq : EdgeUniq := GlobalTheory.CompanionTheory.EdgeClass.edgeUniq_of _root_.GlobalTheory.CompanionTheory.EdgeStair.stCol _root_.GlobalTheory.CompanionTheory.StairAdd.stAdd stUniq
 
 theorem stCupA : StCupA := GlobalTheory.CompanionTheory.StairCupFirst.stCupA cupLeib
 
-theorem stCupB : StCupB := GlobalTheory.CompanionTheory.Staircase.stCupB cupLeib stCol
+theorem stCupB : StCupB := GlobalTheory.CompanionTheory.Staircase.stCupB cupLeib _root_.GlobalTheory.CompanionTheory.EdgeStair.stCol
 
 theorem edgeCup : EdgeCup := GlobalTheory.CompanionTheory.EdgeMap.edgeCup_of_steps cupCls stTop stCupA stCupB
 
-theorem lcCover : LcCover := GlobalTheory.CompanionTheory.LcCoverProof.lcCover
+theorem rootPow : RootPow := GlobalTheory.CompanionTheory.RootPowLC.rootPow _root_.GlobalTheory.CompanionTheory.PrimAlgProof.primAlg
 
-theorem locSplit : LocSplit := GlobalTheory.CompanionTheory.LocSplitProof.locSplit
+alias rootsEx := _root_.GlobalTheory.CompanionTheory.RootsC.rootsEx
 
-theorem primAlg : PrimAlg := GlobalTheory.CompanionTheory.PrimAlgProof.primAlg
+theorem lcSpec : LcSpec := GlobalTheory.CompanionTheory.LcSp.lcSpec_of_lcIdem _root_.GlobalTheory.CompanionTheory.TiltIdem.lcIdem
 
-theorem rootPow : RootPow := GlobalTheory.CompanionTheory.RootPowLC.rootPow primAlg
+theorem lcNat : LcNat := GlobalTheory.CompanionTheory.LcNatProof.lcNat _root_.GlobalTheory.CompanionTheory.TiltIdem.lcIdem lcSpec
 
-theorem rootsEx : RootsEx := GlobalTheory.CompanionTheory.RootsC.rootsEx
+theorem logMul : LogMul := GlobalTheory.CompanionTheory.LogMulPf.logMul _root_.GlobalTheory.CompanionTheory.LogAlgPf.logAlg _root_.GlobalTheory.CompanionTheory.CrisLog.logEx
 
-theorem lcIdem : LcIdem := GlobalTheory.CompanionTheory.TiltIdem.lcIdem
+theorem lcLog : LcLog := GlobalTheory.CompanionTheory.LcLogProof.lcLog _root_.GlobalTheory.CompanionTheory.TiltIdem.lcIdem lcSpec _root_.GlobalTheory.CompanionTheory.LcCoverProof.lcCover _root_.GlobalTheory.CompanionTheory.CrisLog.logEx logMul _root_.GlobalTheory.CompanionTheory.LogEpsP.logEps _root_.GlobalTheory.CompanionTheory.EpsRootProof.epsRoot
 
-theorem lcSpec : LcSpec := GlobalTheory.CompanionTheory.LcSp.lcSpec_of_lcIdem lcIdem
+alias lineBC := _root_.GlobalTheory.CompanionTheory.LineBase.lineBC
 
-theorem lcNat : LcNat := GlobalTheory.CompanionTheory.LcNatProof.lcNat lcIdem lcSpec
-
-theorem logEx : LogEx := GlobalTheory.CompanionTheory.CrisLog.logEx
-
-theorem logAlg : LogAlg := GlobalTheory.CompanionTheory.LogAlgPf.logAlg
-
-theorem logMul : LogMul := GlobalTheory.CompanionTheory.LogMulPf.logMul logAlg logEx
-
-theorem logEps : LogEps := GlobalTheory.CompanionTheory.LogEpsP.logEps
-
-theorem epsRoot : EpsRoot := GlobalTheory.CompanionTheory.EpsRootProof.epsRoot
-
-theorem lcLog : LcLog := GlobalTheory.CompanionTheory.LcLogProof.lcLog lcIdem lcSpec lcCover logEx logMul logEps epsRoot
-
-theorem lineBC : LineBC := GlobalTheory.CompanionTheory.LineBase.lineBC
-
-theorem twUg : TwUg := GlobalTheory.CompanionTheory.TwUg.twUg_prop
-
-theorem fPhi : FPhi := GlobalTheory.CompanionTheory.FrobLc.fPhi
+alias fPhi := _root_.GlobalTheory.CompanionTheory.FrobLc.fPhi
 
 theorem fKum : FKum := GlobalTheory.CompanionTheory.FKum.fKum rootPow lcLog
 
-theorem liftEx : LiftEx := GlobalTheory.CompanionTheory.LineLift.liftEx
-
-theorem firstChern_unique : FirstChernUniqueEtale := GlobalTheory.CompanionTheory.EtChern.chern_class_unique_of_lift_and_log liftEx logEx
+theorem firstChern_unique : FirstChernUniqueEtale := GlobalTheory.CompanionTheory.EtChern.chern_class_unique_of_lift_and_log _root_.GlobalTheory.CompanionTheory.LineLift.liftEx _root_.GlobalTheory.CompanionTheory.CrisLog.logEx
 
 theorem repBasic : RepBasic := GlobalTheory.CompanionTheory.EtEdge.repBasic evExt evNat inSch
 
@@ -1914,53 +1889,47 @@ theorem repCup : RepCup := GlobalTheory.CompanionTheory.EdgeRep.repCup evExt evN
 
 theorem repOp : RepOp := GlobalTheory.CompanionTheory.EdgeRep.repOp evNat repConc repBasic
 
-theorem resLoc : ResLoc := GlobalTheory.CompanionTheory.EdgeMap.resLoc
+theorem lineMap : LineMap := GlobalTheory.CompanionTheory.CechLine.lineMap_exists _root_.GlobalTheory.CompanionTheory.CechPts.cechPt_spec
 
-theorem resZero : ResZero := GlobalTheory.CompanionTheory.EtRes.resZero
+theorem chern_class_compatible_system : FirstChernCompatibleSystem := GlobalTheory.CompanionTheory.ChernSys.chern_class_compatible_system _root_.GlobalTheory.CompanionTheory.CechPts.cechPt_spec
 
-theorem cechPt : CechPt := GlobalTheory.CompanionTheory.CechPts.cechPt_spec
+theorem firstChern_primitive_kummer : FirstChernCoboundary := GlobalTheory.CompanionTheory.KummerPrimitive.main evExt evNat evDel repConc repBasic _root_.GlobalTheory.CompanionTheory.CechPts.cechPt_spec
 
-theorem lineMap : LineMap := GlobalTheory.CompanionTheory.CechLine.lineMap_exists cechPt
+theorem resSplit : ResSplit := GlobalTheory.CompanionTheory.ResSplitProof.resSplit _root_.GlobalTheory.CompanionTheory.EdgeMap.resLoc _root_.GlobalTheory.CompanionTheory.LocSplitProof.locSplit _root_.GlobalTheory.CompanionTheory.LcCoverProof.lcCover
 
-theorem chern_class_compatible_system : FirstChernCompatibleSystem := GlobalTheory.CompanionTheory.ChernSys.chern_class_compatible_system cechPt
-
-theorem firstChern_primitive_kummer : FirstChernCoboundary := GlobalTheory.CompanionTheory.KummerPrimitive.main evExt evNat evDel repConc repBasic cechPt
-
-theorem resSplit : ResSplit := GlobalTheory.CompanionTheory.ResSplitProof.resSplit resLoc locSplit lcCover
-
-theorem repRoot : RepRoot := GlobalTheory.CompanionTheory.EtRoot.repRoot repConc resZero
+theorem repRoot : RepRoot := GlobalTheory.CompanionTheory.EtRoot.repRoot repConc _root_.GlobalTheory.CompanionTheory.EtRes.resZero
 
 theorem redRoot : RedRoot := GlobalTheory.CompanionTheory.EdgeMap.redRoot_of_rep repRoot repOp repConc
 
-theorem twZero : TwZero := GlobalTheory.CompanionTheory.TwZeroGen.twZero rootPow lcCover repRoot
+theorem twZero : TwZero := GlobalTheory.CompanionTheory.TwZeroGen.twZero rootPow _root_.GlobalTheory.CompanionTheory.LcCoverProof.lcCover repRoot
 
-theorem kapSpec : KapSpec := GlobalTheory.CompanionTheory.KapSpecProof.kapSpec lcCover repRoot
+theorem kapSpec : KapSpec := GlobalTheory.CompanionTheory.KapSpecProof.kapSpec _root_.GlobalTheory.CompanionTheory.LcCoverProof.lcCover repRoot
 
-theorem kapBij : KapBij := GlobalTheory.CompanionTheory.KapBij.kapBij lcCover repRoot kapSpec
+theorem kapBij : KapBij := GlobalTheory.CompanionTheory.KapBij.kapBij _root_.GlobalTheory.CompanionTheory.LcCoverProof.lcCover repRoot kapSpec
 
-theorem kapMul : KapMul := GlobalTheory.CompanionTheory.KapMulE.kapMul_of lcCover repRoot kapSpec
+theorem kapMul : KapMul := GlobalTheory.CompanionTheory.KapMulE.kapMul_of _root_.GlobalTheory.CompanionTheory.LcCoverProof.lcCover repRoot kapSpec
 
-theorem kapRed : KapRed := GlobalTheory.CompanionTheory.CstE.KapRedP.kapRed lcCover repRoot kapSpec
+theorem kapRed : KapRed := GlobalTheory.CompanionTheory.CstE.KapRedP.kapRed _root_.GlobalTheory.CompanionTheory.LcCoverProof.lcCover repRoot kapSpec
 
-theorem kumPow : KumPow := GlobalTheory.CompanionTheory.KumPowProof.kumPow lcCover repRoot kapSpec primAlg
+theorem kumPow : KumPow := GlobalTheory.CompanionTheory.KumPowProof.kumPow _root_.GlobalTheory.CompanionTheory.LcCoverProof.lcCover repRoot kapSpec _root_.GlobalTheory.CompanionTheory.PrimAlgProof.primAlg
 
-theorem resGood : ResGood := GlobalTheory.CompanionTheory.EdgeRes.resGood kapSpec kapBij resZero resSplit
+theorem resGood : ResGood := GlobalTheory.CompanionTheory.EdgeRes.resGood kapSpec kapBij _root_.GlobalTheory.CompanionTheory.EtRes.resZero resSplit
 
-theorem etSpec : EtSpec := GlobalTheory.CompanionTheory.EtSpecProof.etSpec resGood stEx edgeUniq repBasic resZero
+theorem etSpec : EtSpec := GlobalTheory.CompanionTheory.EtSpecProof.etSpec resGood stEx edgeUniq repBasic _root_.GlobalTheory.CompanionTheory.EtRes.resZero
 
-theorem etNat : EtNat := GlobalTheory.CompanionTheory.EtNatProof.etNat etSpec edgeMap repBasic kapSpec twZero
+theorem etNat : EtNat := GlobalTheory.CompanionTheory.EtNatProof.etNat etSpec _root_.GlobalTheory.CompanionTheory.EdgeMapPull.edgeMap repBasic kapSpec twZero
 
-theorem etRed : EtRed := GlobalTheory.CompanionTheory.EdgeRed.etRed etSpec edgeMap repBasic repOp kapSpec kapRed
+theorem etRed : EtRed := GlobalTheory.CompanionTheory.EdgeRed.etRed etSpec _root_.GlobalTheory.CompanionTheory.EdgeMapPull.edgeMap repBasic repOp kapSpec kapRed
 
 theorem etCup : EtCup := GlobalTheory.CompanionTheory.EdgeProduct.etCup etSpec resGood edgeCup repBasic repCup kapMul
 
 theorem etRoot : EtRoot := GlobalTheory.CompanionTheory.EdgeRoot.etRoot_of_spec etSpec repRoot kapSpec
 
-theorem etale_chern_class_eq_kummer_class : EtaleFirstChernKummer := GlobalTheory.CompanionTheory.EtaleChernClass.etale_chern_class_eq_kummer_class etSpec resGood stCol firstChern_primitive_kummer kumPow
+theorem etale_chern_class_eq_kummer_class : EtaleFirstChernKummer := GlobalTheory.CompanionTheory.EtaleChernClass.etale_chern_class_eq_kummer_class etSpec resGood _root_.GlobalTheory.CompanionTheory.EdgeStair.stCol firstChern_primitive_kummer kumPow
 
 theorem fRed : FRed := GlobalTheory.CompanionTheory.EtReduction.fred_of_etRed etRed
 
-theorem fEqui : FEqui := GlobalTheory.CompanionTheory.FEquiProof.fEqui etNat twUg
+theorem fEqui : FEqui := GlobalTheory.CompanionTheory.FEquiProof.fEqui etNat _root_.GlobalTheory.CompanionTheory.TwUg.twUg_prop
 
 theorem fNat : FNat := GlobalTheory.CompanionTheory.FNatProof.fNat etNat
 

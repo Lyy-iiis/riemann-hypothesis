@@ -55,6 +55,7 @@ import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Tactic.ReduceModChar
 import Mathlib.Topology.Sheaves.Init
 import Std.Tactic.BVDecide.Normalize.Prop
+import Mathlib.RingTheory.PicardGroup
 
 @[expose] public section
 
@@ -193,7 +194,7 @@ theorem mem_spanLt {a : ℕ} (c : Fin r) (hc : c.1 < a) : e c ∈ spanLt e a :=
 
 theorem mulVec_mul_sub (g h : Matrix (Fin n) (Fin n) ℂ) (x : Fin n → ℂ) :
     (g * h - 1) *ᵥ x = g *ᵥ ((h - 1) *ᵥ x) + (g - 1) *ᵥ x := by
-  simp only [Matrix.sub_mulVec, Matrix.mulVec_sub, Matrix.mulVec_mulVec, Matrix.one_mulVec, Matrix.mul_one]
+  simp only [Matrix.sub_mulVec, Matrix.mulVec_sub, Matrix.mulVec_mulVec, Matrix.one_mulVec]
   abel
 
 variable {e z}
@@ -241,7 +242,7 @@ theorem inS_inv {g B : Matrix (Fin n) (Fin n) ℂ} (hg : InS e z g) (hBg : B * g
     InS e z B := by
   have key : ∀ x, (B - 1) *ᵥ x = -(B *ᵥ ((g - 1) *ᵥ x)) := by
     intro x
-    simp only [Matrix.sub_mulVec, Matrix.mulVec_sub, Matrix.mulVec_mulVec, hBg, Matrix.one_mulVec, Matrix.mul_one]
+    simp only [Matrix.sub_mulVec, Matrix.mulVec_sub, Matrix.mulVec_mulVec, hBg, Matrix.one_mulVec]
     abel
   refine ⟨fun a => ?_, ?_⟩
   · rw [key]; exact Submodule.neg_mem _ (inS_inv_maps hg hBg hgB a.1 _ (hg.1 a))
@@ -272,11 +273,9 @@ theorem mul_mem_Sloc (v : InfinitePlace X.B.I.F) {s t : Formalism.REAL.UJ (X.B.I
   show InS _ _ (uMat (s * t))
   rw [uMat_mul']; exact inS_mul hs ht
 
-theorem uMat_inv_mul {m : ℕ} {ε : Fin m → Bool} (s : Formalism.REAL.UJ ε) : uMat s⁻¹ * uMat s = 1 := by
-  rw [← uMat_mul', inv_mul_cancel]; rfl
+alias uMat_inv_mul := _root_.Formalism.L2.SG.PoincareInHH.Cut.uMat_inv_mul
 
-theorem uMat_mul_inv {m : ℕ} {ε : Fin m → Bool} (s : Formalism.REAL.UJ ε) : uMat s * uMat s⁻¹ = 1 := by
-  rw [← uMat_mul', mul_inv_cancel]; rfl
+alias uMat_mul_inv := _root_.PI.UnitaryGroupMassFormula.LCG.ap_uMat_mul_inv
 
 theorem inv_mem_Sloc (v : InfinitePlace X.B.I.F) {s : Formalism.REAL.UJ (X.B.I.ε v)} (hs : s ∈ Sloc X u v) :
     s⁻¹ ∈ Sloc X u v :=
@@ -359,20 +358,7 @@ theorem nuInf_le_prod (x : X.B.I.Ginf) : nuInf X u x ≤ ∏ v, nuLocX X u v (x 
   simp only [add_zero] at ht
   exact ge_of_tendsto ht (eventually_nhdsWithin_of_forall fun δ hδ => key δ hδ)
 
-theorem norm_psiR {m r : ℕ} (ε : Fin m → Bool) (gg : ℕ) (e f : Fin r → Fin m → ℂ) (z : Fin m → ℂ)
-    (g : Matrix (Fin m) (Fin m) ℂ) : ‖psiR ε gg e f z g‖ = 1 := by
-  unfold psiR
-  set c := rootCoord ε e f z g
-  have hq : (∑ a, (c a + star (c a))) / (gg : ℂ) = (((∑ a, 2 * (c a).re) / gg : ℝ) : ℂ) := by
-    push_cast
-    congr 1
-    refine Finset.sum_congr rfl fun a _ => ?_
-    rw [show star (c a) = (starRingEnd ℂ) (c a) from rfl, Complex.add_conj]
-    push_cast; ring
-  rw [hq]
-  have : 2 * (Real.pi : ℂ) * Complex.I * (((∑ a, 2 * (c a).re) / gg : ℝ) : ℂ) =
-      ((2 * Real.pi * ((∑ a, 2 * (c a).re) / gg) : ℝ) : ℂ) * Complex.I := by push_cast; ring
-  rw [this, Complex.norm_exp_ofReal_mul_I]
+alias norm_psiR := _root_.Formalism.L2.SG.Pf.psiR_norm
 
 theorem norm_psiInf (s : X.B.I.Ginf) : ‖X.psiInfU u s‖ = 1 := by
   simpa only [HidaSetting.psiInfU, psiInf, norm_prod] using Finset.prod_eq_one fun v _ => norm_psiR _ _ _ _ _ _
@@ -604,7 +590,7 @@ variable {D : D7} (X : HidaSetting D) (u : D.what₂.Word)
 def psiV (v : InfinitePlace X.B.I.F) (g : Matrix (Fin X.B.I.n) (Fin X.B.I.n) ℂ) : ℂ :=
   psiR (X.B.I.ε v) X.B.g (fun a => rv X.B.I v (X.eR a)) (fun a => rv X.B.I v (X.fR a)) (rv X.B.I v (X.zR u)) g
 
-theorem uMat_one' {m : ℕ} {ε : Fin m → Bool} : uMat (1 : Formalism.REAL.UJ ε) = 1 := rfl
+alias uMat_one' := _root_.Formalism.L2.SG.Pf.Tau.uMat_one
 
 theorem rootCoord_one (v : InfinitePlace X.B.I.F) (a : Fin D.R.rS) :
     rootCoord (X.B.I.ε v) (fun a => rv X.B.I v (X.eR a)) (fun a => rv X.B.I v (X.fR a)) (rv X.B.I v (X.zR u)) 1 a

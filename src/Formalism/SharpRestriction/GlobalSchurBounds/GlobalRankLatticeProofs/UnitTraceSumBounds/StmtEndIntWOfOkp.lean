@@ -114,7 +114,6 @@ theorem coefWf_iff {p : ℕ} [Fact p.Prime] (f : PowerSeries ℂ_[p]) :
     have hn : n = Finsupp.single () (n ()) := by
       first
         | exact Finsupp.unique_single n
-        | (ext; simp)
     rw [hn]
     exact h (n ())
 
@@ -316,8 +315,6 @@ private lemma inv_series_sub : PI.InvSerSub := by
   have hHS : PowerSeries.HasSubst ex := by
     first
     | exact PowerSeries.HasSubst.of_constantCoeff_zero hex0
-    | exact PowerSeries.HasSubst.of_constantCoeff_zero' hex0
-    | exact PowerSeries.HasSubst.of_constantCoeff_nilpotent (by rw [hex0]; exact IsNilpotent.zero)
   have key : ∀ m, PowerSeries.coeff m (PowerSeries.X : PowerSeries K) =
       ∑ d ∈ Finset.range (m + 1), PowerSeries.coeff d l * PowerSeries.coeff m (ex ^ d) := by
     intro m
@@ -408,8 +405,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-theorem witt_pairing : PI.PairW := PI.WfEndProof.pairW
-
 theorem witt_frobenius_end : PI.WfEnd := PI.WfEndProof.wfEnd_of_log witt_logarithm
 
 theorem wfEnd_of : PI.WfRing → PI.WfSubst → PI.WfLog → PI.WfEnd := PI.WfEndProof.wfEnd_of
@@ -432,7 +427,7 @@ theorem coefWfRing_holds : CoefWfRing := witt_ring_structure
 theorem endIntWG_holds : EndIntWG :=
   fun p _ g hOk hW α hα hI =>
     witt_frobenius_end p g.W g.wq g.ex hW.1 hW.2.1 hW.2.2.1 hW.2.2.2.1 hW.2.2.2.2 hOk.2.1 hOk.2.2.1 hOk.2.2.2 α.1
-      ⟨0, by simpa using witt_pairing p α hα⟩ hI
+      ⟨0, by simpa using _root_.PI.WfEndProof.pairW p α hα⟩ hI
 
 end Formalism.MainNotions.Ext
 end -- clump:auto

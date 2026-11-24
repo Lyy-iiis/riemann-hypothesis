@@ -252,7 +252,7 @@ theorem volume_adL {m : ℕ} {H H' A B : Matrix (Fin m) (Fin m) ℂ} (hH : Hᴴ 
   refine volume_image_eq (adL hAB h h') σ τ (fun x => Subtype.ext (cj_cj hH2 _))
     (fun x => Subtype.ext (cj_cj hH2' _)) (fun x y => ?_) s
   rw [Submodule.coe_inner, Submodule.coe_inner]
-  simp only [σ, τ, LinearMap.restrict_coe_apply, LinearEquiv.coe_coe, adL_coe]
+  simp only [σ, τ, LinearMap.restrict_coe_apply, adL_coe]
   simp only [cj_apply, unrealify_rl]
   rw [← rl_unrealify (y : EE m), inner_rl, inner_rl, unrealify_rl]
   congr 1
@@ -367,11 +367,7 @@ open scoped InnerProductSpace ENNReal
 
 namespace GlobalTheory.FdegDens
 
-theorem volUn_pos (j : ℕ) : 0 < volUn j := by
-  unfold volUn
-  refine Finset.prod_pos fun i _ => ?_
-  have h2π : (0 : ℝ) < 2 * Real.pi := by positivity
-  exact div_pos (pow_pos h2π _) (by exact_mod_cast Nat.factorial_pos i)
+alias volUn_pos := _root_.GlobalTheory.UnitaryVolume.volUn_pos
 
 theorem exists_sort {n : ℕ} (ε : Fin n → Bool) : ∃ (p q : ℕ) (e : Fin p ⊕ Fin q ≃ Fin n), p + q = n ∧
     (∀ i, ε (e (Sum.inl i)) = true) ∧ ∀ j, ε (e (Sum.inr j)) = false := by
@@ -468,8 +464,7 @@ theorem conj_emb {n : ℕ} (P : Matrix (Fin n) (Fin n) ℂ) (hP : IsUnit P) :
       invFun := fun y => Matrix.of.symm (P * Matrix.of y * P⁻¹)
       left_inv := fun x => by
         show Matrix.of.symm (P * (P⁻¹ * Matrix.of x * P) * P⁻¹) = x
-        simp [Matrix.mul_assoc, Matrix.mul_nonsing_inv _ hu, ← Matrix.mul_assoc P P⁻¹,
-          Matrix.mul_nonsing_inv_cancel_left _ _ hu]
+        simp [Matrix.mul_assoc, Matrix.mul_nonsing_inv _ hu, ← Matrix.mul_assoc P P⁻¹]
       right_inv := fun y => by
         show Matrix.of.symm (P⁻¹ * (P * Matrix.of y * P⁻¹) * P) = y
         simp [Matrix.mul_assoc, Matrix.nonsing_inv_mul _ hu, Matrix.nonsing_inv_mul_cancel_left _ _ hu] }

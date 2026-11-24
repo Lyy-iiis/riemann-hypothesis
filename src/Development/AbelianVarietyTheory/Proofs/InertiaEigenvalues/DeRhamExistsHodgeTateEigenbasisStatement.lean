@@ -115,8 +115,6 @@ section -- clump:auto
 
 open Formalism Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.WeaklyAdmissibleFiltrations Formalism.MainNotions.N GlobalTheory.HTBasis
 
-theorem _root_.GlobalTheory.T.hodgeTateSymbolMatrix_equivariant : ∀ {l : ℕ} [Fact l.Prime] {P : LocPrime l} {AI : LocAinf l P} (J : Formalism.MainNotions.LocalSituation.ThetaL P AI) {K LL : FinExt l} {m : ℕ} (r' : ↥(GK K) →* Matrix.GeneralLinearGroup (Fin m) ↥LL.1) (u : Fin m → Fin m → P.R.BdR) (k : Fin m → ℤ), (∀ i j, u i j ∈ (P.PD K).Fil (k i)) → ∀ g : ↥(GK K), (∀ i, ((r' g : Matrix (Fin m) (Fin m) ↥LL.1).map (embF P LL)).mulVec (fun j => P.actQdR (g : GQ l) (u i j)) = u i) → (r' g : Matrix (Fin m) (Fin m) ↥LL.1).map (fun x => (((x : ↥LL.1) : Om l) : ℂ_[l])) * (colHT J u k).map (Per.σC (g : GQ l)) = colHT J u k * Matrix.diagonal (fun i => ((((P.χQ (g : GQ l)) ^ (-k i) : ℚ_[l]ˣ) : ℚ_[l]) : ℂ_[l])) := by
-  first | (exact @GlobalTheory.HTBasis.colHT_equivariant) | (exact GlobalTheory.HTBasis.colHT_equivariant) | (intros; apply GlobalTheory.HTBasis.colHT_equivariant <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HodgeTateSymbolMatrixEquivariantStatement =====
@@ -195,8 +193,6 @@ section -- clump:auto
 
 open Formalism Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.WeaklyAdmissibleFiltrations Formalism.MainNotions.N GlobalTheory.HTBasis
 
-theorem _root_.GlobalTheory.T.hodgeTateSymbolMatrix_isUnit_det : ∀ {l : ℕ} [Fact l.Prime] {P : LocPrime l} {AI : LocAinf l P} (J : Formalism.MainNotions.LocalSituation.ThetaL P AI) {K : FinExt l} {m : ℕ} (u : Fin m → Fin m → P.R.BdR) (k : Fin m → ℤ), (∀ i j, u i j ∈ (P.PD K).Fil (k i)) → (∀ (n : ℤ) (y : Fin m → P.R.BdR), (∀ j, y j ∈ (P.PD K).Fil n) → ∃ f : Fin m → P.R.BdR, (∀ i, f i ∈ (P.PD K).Fil (n - k i)) ∧ y = ∑ i, f i • u i) → LinearIndependent P.R.BdR u → IsUnit (colHT J u k).det := by
-  first | (exact @GlobalTheory.HTBasis.colHT_isUnit_det) | (exact GlobalTheory.HTBasis.colHT_isUnit_det) | (intros; apply GlobalTheory.HTBasis.colHT_isUnit_det  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HodgeTateSymbolMatrixIsUnitDetStatement =====
@@ -285,7 +281,7 @@ theorem exists_dR_frame : ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l) (AI : Lo
     rw [Set.finrank, eq_top_iff.2 htop, finrank_top, Module.finrank_fin_fun, Fintype.card_fin] at h1
     exact h1
   have hle2 : m' ≤ m := by
-    have := GlobalTheory.Per.Components.card_le_of_idem_indep (GlobalTheory.DRFil.idem_mul_idem (F := P.R.BdR) τ')
+    have := _root_.GlobalTheory.Per.LetterDim.card_le_of_idem (GlobalTheory.DRFil.idem_mul_idem (F := P.R.BdR) τ')
       (GlobalTheory.DRFil.idem_ne_zero (F := P.R.BdR) τ')
       (fun i j => GlobalTheory.DRFil.ext ℚ_[l] P.R.BdR ((Pi.basisFun ↥LL.1 (Fin m)).coord j) (d i))
       (fun r hr => had.indep r (by
@@ -318,11 +314,11 @@ theorem GlobalTheory.HTBasis.htc_basis : ∀ (l : ℕ) [Fact l.Prime] (P : LocPr
   intro l _ P AI T K LL m r' ρ hdR τ' hτ K' _hK hL
   obtain ⟨u, k, hcount, hmem, heq, hspan, hind⟩ :=
     GlobalTheory.HTBasis.exists_dR_frame l P AI T K LL m r' hdR τ' hτ
-  have hU := GlobalTheory.T.hodgeTateSymbolMatrix_isUnit_det (GlobalTheory.HTBasis.thetaOf T) u k hmem hspan hind
+  have hU := _root_.GlobalTheory.HTBasis.colHT_isUnit_det (GlobalTheory.HTBasis.thetaOf T) u k hmem hspan hind
   refine ⟨((Matrix.isUnit_iff_isUnit_det _).2 hU).unit, k, hcount, fun g hg => ?_⟩
   have hfix : ∀ x ∈ LL.1, (g : GQ l) x = x := fun x hx =>
     (IntermediateField.mem_fixingSubgroup_iff _ _).1 hg x (hL hx)
-  exact GlobalTheory.T.hodgeTateSymbolMatrix_equivariant (GlobalTheory.HTBasis.thetaOf T) r' u k hmem g (heq g hfix)
+  exact _root_.GlobalTheory.HTBasis.colHT_equivariant (GlobalTheory.HTBasis.thetaOf T) r' u k hmem g (heq g hfix)
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -336,7 +332,7 @@ section -- clump:auto
 open Formalism Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.WeaklyAdmissibleFiltrations Formalism.MainNotions.N
 
 theorem _root_.GlobalTheory.T.deRham_exists_hodgeTate_eigenbasis : ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l) (AI : LocAinf l P), LocTied l P AI → ∀ (K LL : FinExt l) (m : ℕ) (r' : ↥(GK K) →* Matrix.GeneralLinearGroup (Fin m) ↥LL.1), let ρ : Representation ↥LL.1 ↥(GK K) (Fin m → ↥LL.1) := ((Matrix.toLinAlgEquiv' : Matrix (Fin m) (Fin m) ↥LL.1 ≃ₐ[↥LL.1] _) : _ →* _).comp ((Units.coeHom _).comp r'); Module.finrank ↥LL.1 ↥(DdR (P.PD K) ρ) = Module.finrank ℚ_[l] ↥K.1 * m → (∀ (σ : ↥K.1 →ₐ[ℚ_[l]] Om l) (x : ↥K.1), σ x ∈ LL.1) → ∀ τ' : ↥K.1 →ₐ[ℚ_[l]] ↥LL.1, (∀ x : ↥K.1, ((τ' x : ↥LL.1) : Om l) = (x : Om l)) → ∀ (K' : FinExt l), K.1 ≤ K'.1 → LL.1 ≤ K'.1 → ∃ (Pm : Matrix.GeneralLinearGroup (Fin m) ℂ_[l]) (k : Fin m → ℤ), (∀ a : ℤ, ((Multiset.map k Finset.univ.val).count a : ℤ) = multV (P.PD K) ρ τ' a) ∧ ∀ g : ↥(GK K), (g : GQ l) ∈ GK K' → (r' g : Matrix (Fin m) (Fin m) ↥LL.1).map (fun x => (((x : ↥LL.1) : Om l) : ℂ_[l])) * (Pm : Matrix (Fin m) (Fin m) ℂ_[l]).map (Per.σC (g : GQ l)) = (Pm : Matrix (Fin m) (Fin m) ℂ_[l]) * Matrix.diagonal (fun i => ((((P.χQ (g : GQ l)) ^ (-k i) : ℚ_[l]ˣ) : ℚ_[l]) : ℂ_[l])) := by
-  first | (exact @GlobalTheory.HTBasis.htc_basis) | (exact GlobalTheory.HTBasis.htc_basis) | (intros; apply GlobalTheory.HTBasis.htc_basis  <;> assumption)
+  first | (intros; apply GlobalTheory.HTBasis.htc_basis  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.DeRhamExistsHodgeTateEigenbasisStatement =====

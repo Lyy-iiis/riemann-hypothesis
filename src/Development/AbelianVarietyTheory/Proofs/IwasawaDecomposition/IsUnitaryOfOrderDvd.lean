@@ -58,7 +58,7 @@ open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_selfDual_adelic_frame_level_one : ∀ (D : D7) (V : HSp D) (Λ : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)), (Λ : Set (Fin V.rank → D.host.E)) = L0c D V → Formalism.L2.Herm.dualL D.sp.cm V Λ = Λ → ∃ β, IsSDFrame V β Λ 1 := by
-  first | exact @GlobalTheory.AdelicFrame.exists_isSDFrame | exact GlobalTheory.AdelicFrame.exists_isSDFrame | (intros; apply GlobalTheory.AdelicFrame.exists_isSDFrame <;> assumption)
+  first | exact @GlobalTheory.AdelicFrame.exists_isSDFrame
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsSelfDualAdelicFrameLevelOneStatement =====
@@ -119,15 +119,7 @@ theorem isSDFrame_of_one {V : HSp D} {β : GL (Fin V.rank) (Lev.EAf D)}
   rw [one_pow] at hc
   rwa [pow_zero]
 
-theorem isUnitary_of_orderDvd {L : Type} [Field L] [NumberField L] {χ : HChar L} {n : ℕ} (hn : 0 < n) (h : χ.OrderDvd n) :
-    χ.IsUnitary := by
-  intro x
-  have h1 : (χ.1 x) ^ n = 1 := by
-    have : (χ ^ n).1 x = 1 := by rw [h]; rfl
-    rw [← this]; rfl
-  have h2 : ‖((χ.1 x : ℂˣ) : ℂ)‖ ^ n = 1 := by
-    rw [← norm_pow, ← Units.val_pow_eq_pow_val, h1, Units.val_one, norm_one]
-  exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) hn.ne').1 h2
+alias isUnitary_of_orderDvd := _root_.Formalism.L2.Host.HChar.isUnitary_of_order
 
 theorem exists_levCh (D : D7) (C : CharFrame D) (T : Type) (μ0 : T) (ξ : T → HChar D.host.E)
     (Q : T → Finset (Pl D.host.E)) (hinj : Function.Injective ξ) (hbase : ξ μ0 = 1)

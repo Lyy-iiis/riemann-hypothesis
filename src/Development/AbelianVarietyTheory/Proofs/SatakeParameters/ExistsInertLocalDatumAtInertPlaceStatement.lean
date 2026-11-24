@@ -77,7 +77,7 @@ theorem exists_inertDatum_of_isInertAt (E : Type) [Field E] [NumberField E] [IsC
   have hunder : Pp.under (𝓞 (maximalRealSubfield E)) = v := rfl
   obtain ⟨c, hc, -⟩ := GlobalTheory.LFun.InertChart.existsUnique_isConjAt
     (IsCMField.complexConj E).toAlgHom hw hunder
-  obtain ⟨ϖ, hU⟩ := GlobalTheory.LFun.InertChart.exists_isUnramInv (GlobalTheory.InertDatumExist.isCMExt E) hw hc
+  obtain ⟨ϖ, hU⟩ := GlobalTheory.LFun.InertChart.exists_isUnramInv (_root_.GlobalTheory.AdelicU.isCMExt_of_isCMField E) hw hc
   obtain ⟨k, hk, hke⟩ := GlobalTheory.LFun.InertChart.exists_congr_antiJ (n := n) hU (B := 1) (one_mem _)
     (by simp [Formalism.UG.cT, Matrix.map_one])
   have hO : Formalism.UG.Ov E Pp = Formalism.UG.intL (Pp.adicCompletion E) := Subring.ext fun _ => Iff.rfl
@@ -125,7 +125,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 
 
 theorem _root_.GlobalTheory.T.exists_inertLocalDatum_at_inertPlace : ∀ (D : D7), D.host.F = maximalRealSubfield D.host.E → ∀ (Pp : HeightOneSpectrum (𝓞 D.host.E)), Formalism.UG.IsInertAt D.host.F D.host.E (Pp.under (𝓞 D.host.F)) Pp → ∃ (v : HeightOneSpectrum (𝓞 (maximalRealSubfield D.host.E))) (_ : InertDatum D.host.E D.R.nV v Pp), NG.OverPl Pp v := by
-  first | exact @GlobalTheory.InertDatumAtInert.main | exact GlobalTheory.InertDatumAtInert.main | (intros; apply GlobalTheory.InertDatumAtInert.main <;> assumption)
+  first | exact @GlobalTheory.InertDatumAtInert.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.ExistsInertLocalDatumAtInertPlaceStatement =====

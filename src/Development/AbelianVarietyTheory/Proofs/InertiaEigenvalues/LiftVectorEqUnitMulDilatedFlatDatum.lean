@@ -152,7 +152,7 @@ open GlobalTheory.ConjTwist GlobalTheory.GalTw ReciprocityTheory.ChartRestrictio
 open Classical
 
 theorem _root_.GlobalTheory.T.exists_half_uniformiser_frameMatrix_prescribed_reductions : ∀ (D : D7) (S T : HSp D) (βS : GL (Fin S.rank) (EAf D)) (βT : GL (Fin T.rank) (EAf D)) (Q : Finset (Pl D.host.E)) (e : AE D), IsIdemSum e Q → ∀ ϖ : 𝓞 D.host.E, ϖ ≠ 0 → ∀ y : ∀ PP : Pl D.host.E, Matrix (Fin T.rank) (Fin S.rank) (kP PP), ∃ u : WO S T, IsHalf e u ∧ IsIntM (frMapO S T βS βT (u.map fun w => incA D (ϖ : D.host.E) * w)) ∧ ∀ PP ∈ Q, redM PP (frMapO S T βS βT (u.map fun w => incA D (ϖ : D.host.E) * w)) = y PP := by
-  first | exact @GlobalTheory.HalfFrameLift.exists_half_redM_frMapO | exact GlobalTheory.HalfFrameLift.exists_half_redM_frMapO | (intros; apply GlobalTheory.HalfFrameLift.exists_half_redM_frMapO <;> assumption)
+  first | exact @GlobalTheory.HalfFrameLift.exists_half_redM_frMapO
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsHalfUniformiserFrameMatrixPrescribedReductStatement =====
@@ -216,7 +216,7 @@ open GlobalTheory.ConjTwist GlobalTheory.GalTw ReciprocityTheory.ChartRestrictio
 open Classical
 
 theorem _root_.GlobalTheory.T.exists_nat_integral_frame_of_uniformizer_mul : ∀ (D : D7) (S T : HSp D) (βS : GL (Fin S.rank) (EAf D)) (βT : GL (Fin T.rank) (EAf D)) (ϖ : 𝓞 D.host.E), ϖ ≠ 0 → ∃ k : ℕ, 0 < k ∧ ∀ u : WO S T, IsIntM (frMapO S T βS βT (u.map fun w => incA D (ϖ : D.host.E) * w)) → IsIntM (frMapO S T βS βT (k • u)) := by
-  first | exact @GlobalTheory.FlatLift.kmul_int | exact GlobalTheory.FlatLift.kmul_int | (intros; apply GlobalTheory.FlatLift.kmul_int <;> assumption)
+  first | exact @GlobalTheory.FlatLift.kmul_int
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsNatIntegralFrameOfUniformizerMulStatement =====
@@ -317,7 +317,7 @@ open GlobalTheory.ConjTwist GlobalTheory.GalTw ReciprocityTheory.ChartRestrictio
 open Classical
 
 theorem _root_.GlobalTheory.T.frameMatrix_integral_iff_uniformiser_multiple_on_half : ∀ (D : D7) (S T : HSp D) (βS : GL (Fin S.rank) (EAf D)) (βT : GL (Fin T.rank) (EAf D)) (Q : Finset (Pl D.host.E)) (e : AE D), IsIdemSum e Q → ∀ ϖ : 𝓞 D.host.E, ϖ ≠ 0 → (∀ PP ∈ Q, ϖ ∈ PP.asIdeal ∧ ϖ ∉ PP.asIdeal ^ 2) → ∀ x : WO S T, IsHalf e x → (IsIntM (frMapO S T βS βT x) ↔ IsIntM (frMapO S T βS βT (x.map fun w => incA D (ϖ : D.host.E) * w)) ∧ ∀ PP ∈ Q, redM PP (frMapO S T βS βT (x.map fun w => incA D (ϖ : D.host.E) * w)) = 0) := by
-  first | exact @GlobalTheory.HalfUniInt.half_int_iff | exact GlobalTheory.HalfUniInt.half_int_iff | (intros; apply GlobalTheory.HalfUniInt.half_int_iff <;> assumption)
+  first | exact @GlobalTheory.HalfUniInt.half_int_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.FrameMatrixIntegralIffUniformiserMultipleOnHalfStatement =====
@@ -334,7 +334,7 @@ open GlobalTheory.ConjTwist GlobalTheory.GalTw ReciprocityTheory.ChartRestrictio
 open Classical
 
 theorem _root_.GlobalTheory.T.residueTwistFactor_eq_unit_mul_flat_fourier : ∀ (D : D7) [∀ PP : Pl D.host.E, Fintype (kP PP)] (Q : Finset (Pl D.host.E)) (ξ : ∀ PP : Pl D.host.E, (kP PP)ˣ →* ℂˣ) (ψP : ∀ PP : Pl D.host.E, AddChar (kP PP) ℂ) (r n N : ℕ), 0 < N → (∀ PP ∈ Q, (ψP PP).IsPrimitive ∧ ξ PP ≠ 1 ∧ Nat.card (kP PP) ∣ N) → ∃ Gc : ℂ, UnitOff N Gc ∧ ∀ ub : ∀ PP : Pl D.host.E, Matrix (Fin n) (Fin r) (kP PP), omegaQ Q r ξ (-1) ub = Gc * ∑ y : (∀ PP : ↥Q, Matrix (Fin r) (Fin n) (kP PP.1)), omegaFlat Q r ξ (fun PP => if h : PP ∈ Q then -(y ⟨PP, h⟩) else 0) * ∏ PP : ↥Q, ψP PP.1 (Matrix.trace (y PP * ub PP.1)) := by
-  first | exact @GlobalTheory.FlatFourierQ.omegaQ_eq_unit_mul_flat_transform | exact GlobalTheory.FlatFourierQ.omegaQ_eq_unit_mul_flat_transform | (intros; apply GlobalTheory.FlatFourierQ.omegaQ_eq_unit_mul_flat_transform <;> assumption)
+  first | exact @GlobalTheory.FlatFourierQ.omegaQ_eq_unit_mul_flat_transform
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ResidueTwistFactorEqUnitMulFlatFourierStatement =====
@@ -528,7 +528,7 @@ open GlobalTheory.ConjTwist GlobalTheory.GalTw ReciprocityTheory.ChartRestrictio
 open Classical
 
 theorem _root_.GlobalTheory.T.adelicCharacter_factor_primitive_on_idempotentSum : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (Q : Finset (Pl D.host.E)) (e : AE D), IsIdemSum e Q → ∀ ϖ : 𝓞 D.host.E, ϖ ≠ 0 → (∀ PP ∈ Q, ϖ ∈ PP.asIdeal ∧ ϖ ∉ PP.asIdeal ^ 2) → (∀ Z : AE D, e * Z = Z → (toEAf D Z ∈ Formalism.L2.Herm.intAf D.host.F D.host.E ↔ ∀ Z' : AE D, e * Z' = Z' → toEAf D Z' ∈ Formalism.L2.Herm.intAf D.host.F D.host.E → ψ (Algebra.trace (AF D.host.F) (AE D) (incA D D.host.xi0 * (Z * Z'))) = 1)) → ∃ ψP : ∀ PP : Pl D.host.E, AddChar (kP PP) ℂ, (∀ PP ∈ Q, (ψP PP).IsPrimitive) ∧ ∀ Z : AE D, e * Z = Z → ∀ h : toEAf D (incA D (ϖ : D.host.E) * Z) ∈ Formalism.L2.Herm.intAf D.host.F D.host.E, ψ (Algebra.trace (AF D.host.F) (AE D) (incA D D.host.xi0 * Z)) = ∏ PP ∈ Q.attach, ψP PP.1 (resS D.host.F PP.1 ⟨toEAf D (incA D (ϖ : D.host.E) * Z), h⟩) := by
-  first | exact @GlobalTheory.IdemCharLift.factor_prim | exact GlobalTheory.IdemCharLift.factor_prim | (intros; apply GlobalTheory.IdemCharLift.factor_prim <;> assumption)
+  first | exact @GlobalTheory.IdemCharLift.factor_prim
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.AdelicCharacterFactorPrimitiveOnIdempotentSumStatement =====
@@ -548,12 +548,7 @@ open Classical
 
 namespace GlobalTheory.ScalarSelfDual
 
-theorem eq_of_parts {D : D7} {x y : AE D} (hx : infPart D x = 0) (hy : infPart D y = 0)
-    (h : toEAf D x = toEAf D y) : x = y := by
-  rw [← sub_eq_zero]
-  refine GlobalTheory.LatVac.eq_zero_of_parts _ (by rw [map_sub, hx, hy, sub_zero]) ?_
-  rw [map_sub, sub_eq_zero]
-  exact (Algebra.TensorProduct.comm D.host.F (Af D.host.F) D.host.E).injective h
+alias eq_of_parts := _root_.GlobalTheory.SplitDualElt.eq_of_toEAf
 
 theorem mul_hO_of_half {D : D7} {S T : HSp D} {e : AE D} {l : WO S T} (hl : IsHalf e l) (u : WO S T) :
     e * hO S T l u = hO S T l u := by
@@ -677,7 +672,7 @@ open GlobalTheory.ConjTwist GlobalTheory.GalTw ReciprocityTheory.ChartRestrictio
 open Classical
 
 theorem _root_.GlobalTheory.T.integral_iff_selfDual_traceCharacter_splitPlaces : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)) (ΛT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E)) (βS : GL (Fin S.rank) (EAf D)) (βT : GL (Fin T.rank) (EAf D)), IsStdChar D ψ (-1) → IsSelfDualC S ΛS → IsSelfDualC T ΛT → Formalism.L2.DIV.IsFrame βS ΛS → Formalism.L2.DIV.IsFrame βT ΛT → 0 < S.rank → 0 < T.rank → ∀ (Q : Finset (Pl D.host.E)) (e : AE D), IsIdemSum e Q → (∀ PP ∈ Q, ((D.host.QS * D.host.q * Ideal.absNorm D.host.ccK : ℕ) : 𝓞 D.host.E) ∉ PP.asIdeal) → ∀ Z : AE D, e * Z = Z → (toEAf D Z ∈ Formalism.L2.Herm.intAf D.host.F D.host.E ↔ ∀ Z' : AE D, e * Z' = Z' → toEAf D Z' ∈ Formalism.L2.Herm.intAf D.host.F D.host.E → ψ (Algebra.trace (AF D.host.F) (AE D) (incA D D.host.xi0 * (Z * Z'))) = 1) := by
-  first | exact @GlobalTheory.ScalarSelfDual.int_iff_dual | exact GlobalTheory.ScalarSelfDual.int_iff_dual | (intros; apply GlobalTheory.ScalarSelfDual.int_iff_dual <;> assumption)
+  first | exact @GlobalTheory.ScalarSelfDual.int_iff_dual
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IntegralIffSelfDualTraceCharacterSplitPlacesStatement =====
@@ -805,7 +800,7 @@ open GlobalTheory.ConjTwist GlobalTheory.GalTw ReciprocityTheory.ChartRestrictio
 open Classical
 
 theorem _root_.GlobalTheory.T.symplectic_pairing_half_lattices_eq_prod_primitive : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)) (ΛT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E)) (βS : GL (Fin S.rank) (EAf D)) (βT : GL (Fin T.rank) (EAf D)), IsStdChar D ψ (-1) → IsSelfDualC S ΛS → IsSelfDualC T ΛT → Formalism.L2.DIV.IsFrame βS ΛS → Formalism.L2.DIV.IsFrame βT ΛT → ∀ (Q : Finset (Pl D.host.E)) (e : AE D), IsIdemSum e Q → (∀ PP ∈ Q, ((D.host.QS * D.host.q * Ideal.absNorm D.host.ccK : ℕ) : 𝓞 D.host.E) ∉ PP.asIdeal) → ∀ ϖ : 𝓞 D.host.E, ϖ ≠ 0 → (∀ PP ∈ Q, ϖ ∈ PP.asIdeal ∧ ϖ ∉ PP.asIdeal ^ 2) → ∃ ψP : ∀ PP : Pl D.host.E, AddChar (kP PP) ℂ, (∀ PP ∈ Q, (ψP PP).IsPrimitive) ∧ ∀ x : WO S T, IsHalf (cA D e) x → IsIntM (frMapAdj S T βS βT x) → ∀ u : WO S T, IsHalf e u → IsIntM (frMapO S T βS βT (u.map fun w => incA D (ϖ : D.host.E) * w)) → ψ (symplO S T x u) = ∏ PP ∈ Q.attach, ψP PP.1 (Matrix.trace (redM PP.1 (frMapO S T βS βT (u.map fun w => incA D (ϖ : D.host.E) * w)) * redM PP.1 (frMapAdj S T βS βT x))) := by
-  first | exact @GlobalTheory.FlatPairing.pairing_eq_prod | exact GlobalTheory.FlatPairing.pairing_eq_prod | (intros; apply GlobalTheory.FlatPairing.pairing_eq_prod <;> assumption)
+  first | exact @GlobalTheory.FlatPairing.pairing_eq_prod
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.SymplecticPairingHalfLatticesEqProdPrimitiveStatement =====
@@ -825,13 +820,7 @@ namespace GlobalTheory.LiftFlatModel
 
 variable {D : D7}
 
-theorem cA_cA (z : AE D) : cA D (cA D z) = z := by
-  induction z using TensorProduct.induction_on with
-  | zero => rw [RingHom.map_zero, RingHom.map_zero]
-  | add x y hx hy => rw [RingHom.map_add (f := _), RingHom.map_add (f := _), hx, hy]
-  | tmul a x =>
-    change a ⊗ₜ[D.host.F] star (star x) = _
-    rw [star_star]
+alias cA_cA := _root_.Formalism.L2.Theta.cA_cA
 
 theorem isIntM_add {b a : ℕ} {N M : Matrix (Fin b) (Fin a) (EAf D)} (hN : IsIntM N) (hM : IsIntM M) :
     IsIntM (N + M) := fun i j => by rw [Matrix.add_apply]; exact add_mem (hN i j) (hM i j)
@@ -902,13 +891,6 @@ theorem isHalf_neg {e : AE D} {u : Mx D m n} (hu : IsHalf e u) : IsHalf e (-u) :
   intro i j
   simp only [Matrix.neg_apply, mul_neg, hu i j]
 
-theorem isHalf_nsmul {e : AE D} {u : Mx D m n} (hu : IsHalf e u) (k : ℕ) : IsHalf e (k • u) := by
-  induction k with
-  | zero => rw [zero_nsmul]; exact fun i j => mul_zero e
-  | succ k ih => rw [succ_nsmul]; exact (isHalf_add_iff hu).2 ih
-
-
-
 theorem isSBHalf_of_sum {e : AE D} {Λ : AddSubgroup (Mx D m n)} {Ψ : Mx D m n → ℂ} {Rs : Finset (Mx D m n)}
     {c : Mx D m n → ℂ} (hR : ∀ u ∈ Rs, IsHalf e u) (hΨ : ∀ x, Ψ x = ∑ u ∈ Rs, c u * halfInd e Λ (x + u))
     (hk : ∃ k : ℕ, 0 < k ∧ ∀ u ∈ Rs, k • u ∈ Λ) : IsSBHalf e Λ Ψ := by
@@ -927,7 +909,7 @@ theorem isSBHalf_of_sum {e : AE D} {Λ : AddSubgroup (Mx D m n)} {Ψ : Mx D m n 
   · rw [hΨ, hΨ]
     refine Finset.sum_congr rfl fun u hu => ?_
     have hkv : k • v ∈ Λ := AddSubgroup.nsmul_mem Λ hv k
-    have hkh : IsHalf e (k • v) := isHalf_nsmul hve k
+    have hkh : IsHalf e (k • v) := _root_.GlobalTheory.SplitScalar.isHalf_nsmul hve k
     have e1 : x + k • v + u = (x + u) + k • v := by abel
     have e2 : (x + u + k • v ∈ Λ ∧ IsHalf e (x + u + k • v)) ↔ (x + u ∈ Λ ∧ IsHalf e (x + u)) :=
       and_congr (Λ.add_mem_cancel_right hkv) (isHalf_add_iff hkh)
@@ -1005,7 +987,7 @@ theorem exists_reps_pairing : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0
     exact ⟨hg1 y, hg2 y⟩
   refine ⟨ψP, Finset.univ.image g, hprim, hmem, ⟨k, hk0, fun u hu => ?_⟩, fun y => ?_, fun x hx u hu => ?_,
     fun x hx => ⟨fun h => ?_, fun h => ?_⟩, fun x hx hi u hu => hpair x hx hi u (hmem u hu).1 (hmem u hu).2⟩
-  · exact (hfr _ (isHalf_nsmul (hmem u hu).1 k)).2 (hk u (hmem u hu).2)
+  · exact (hfr _ (_root_.GlobalTheory.SplitScalar.isHalf_nsmul (hmem u hu).1 k)).2 (hk u (hmem u hu).2)
   · refine ⟨g y, ⟨Finset.mem_image_of_mem g (Finset.mem_univ y), hg4 y⟩, ?_⟩
     rintro u ⟨hu, hred⟩
     obtain ⟨y', -, rfl⟩ := Finset.mem_image.1 hu

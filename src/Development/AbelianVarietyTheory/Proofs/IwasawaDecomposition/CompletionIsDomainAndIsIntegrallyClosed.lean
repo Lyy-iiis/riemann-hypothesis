@@ -461,8 +461,7 @@ theorem conductor_prod_fst (R S' S : Type) [CommRing R] [CommRing S'] [CommRing 
     have hcs := IsLocalization.mk'_spec (FractionRing R) a b
     rw [← hu.mul_left_inj, hs2]
     rw [hgx, hgx]
-    simp only [b', RingEquiv.apply_symm_apply, Prod.mk_mul_mk, map_zero, map_one, mul_one,
-      zero_mul]
+    simp only [b', RingEquiv.apply_symm_apply, Prod.mk_mul_mk, map_zero, map_one, mul_one]
     rw [hcs]
   have hf : Function.Surjective ((RingHom.fst R S').comp e.toRingHom) :=
     fun r => ⟨e.symm (r, 0), by simp⟩
@@ -756,7 +755,7 @@ theorem exists_primitive_of_aeval_eq_zero {S : Type*} [CommRing S] [IsDomain S] 
   let g₀ : MvPolynomial (Fin n) ℤ := ∑ v ∈ g.support, monomial v (b v)
   have hc : ∀ v, v ∈ g.support → g₀.coeff v = b v := by
     intro v hv
-    simp [g₀, MvPolynomial.coeff_sum, MvPolynomial.coeff_monomial, hv]
+    simp [g₀, MvPolynomial.coeff_monomial, hv]
   have hc' : ∀ v, v ∉ g.support → g₀.coeff v = 0 := by
     intro v hv
     simp only [g₀, MvPolynomial.coeff_sum, MvPolynomial.coeff_monomial]

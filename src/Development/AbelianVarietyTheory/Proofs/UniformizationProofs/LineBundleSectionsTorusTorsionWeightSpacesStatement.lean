@@ -696,7 +696,7 @@ theorem weight_structure (hL : Laws) (hL₂ : Laws2) : AllPre fun {V} _ _ _ {D} 
     have : CharZero (FractionRing V) := inferInstance
     exact Nat.cast_ne_zero.2 (by omega)
   obtain ⟨S, hS, hS₀⟩ := exists_expansion hL hL₂ V hV D A G U (Kbar V) N hN1
-  obtain ⟨m, minj, mact, madd⟩ := GlobalTheory.T.torusTorsion_to_abelianTorsion_theta_action hL hL₂ V hV D A G U N hN1
+  obtain ⟨m, minj, mact, madd⟩ := _root_.GlobalTheory.UU.Eqv.main hL hL₂ V hV D A G U N hN1
   obtain ⟨Ψ, fd, h⟩ := structure_of_acts hL hL₂ U (PreU.dim_eq V hV D A G U) (Kbar V) hN S hS hS₀ m minj mact madd
   exact ⟨S, Ψ, fd, hS, hS₀, h⟩
 
@@ -753,7 +753,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.UU
 
 theorem _root_.GlobalTheory.T.lineBundleSections_torusTorsion_weightSpaces : Laws → Laws2 → (AllPre fun {V} _ _ _ {D} {A} {_} _ _ U => ∀ N : ℕ, 1 ≤ N → (∀ (α : D.X) t s, U.ExpF (Kbar V) N t s → ∃ t' s', U.ExpF (Kbar V) N t' s' ∧ ∀ β, (∃ mu, β = α + N • mu) ∧ s' β = s β ∨ (¬ ∃ mu, β = α + N • mu) ∧ ∀ j, (s' β).f j = 0) ∧ (∀ α : D.X, ∃ mu, U.Supp (Kbar V) N (α + N • mu)) ∧ ∀ (α : D.X), U.Supp (Kbar V) N α → ∀ t s, U.ExpF (Kbar V) N t s → (∀ β, (¬ ∃ mu, β = α + N • mu) → ∀ j, (s β).f j = 0) → (∀ j, (s α).f j = 0) → ∀ j, t.f j = 0) := by
-  first | exact @GlobalTheory.UU.Weight.main | exact GlobalTheory.UU.Weight.main | (intros; apply GlobalTheory.UU.Weight.main <;> assumption)
+  first | exact @GlobalTheory.UU.Weight.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.UniformizationProofs.LineBundleSectionsTorusTorsionWeightSpacesStatement =====

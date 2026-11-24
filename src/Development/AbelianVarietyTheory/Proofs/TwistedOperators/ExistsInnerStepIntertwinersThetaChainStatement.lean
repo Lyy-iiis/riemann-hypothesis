@@ -63,7 +63,7 @@ theorem ex_ItY_holds : GlobalTheory.Published.DiscreteSeriesCover → GlobalTheo
     R.ex_ItY := by
   intro hDS hHC D G _ _ Pl0 T A Ks _ _ _ R hL _ hM hH hW
   have hθ : IsInfFam R.θ := hM.inf
-  exact GlobalTheory.Chain.innerIntertwiners_of_pair D G Pl0 T A Ks R (GlobalTheory.T.exists_uniformRealThetaIntertwiner_chainStep hDS hHC D)
+  exact GlobalTheory.Chain.innerIntertwiners_of_pair D G Pl0 T A Ks R (_root_.GlobalTheory.Chain.ItPairObj.itPair_holds hDS hHC D)
     (GlobalTheory.Chain.ParOfNodeGap.chainPar_of_nodeGap D hH.nodeGap) hθ
     (GlobalTheory.Chain.StepVac.stepsOK D G Pl0 T A Ks R hL hθ hW.ωY hW.ωX hW.vY hW.vX)
 
@@ -81,7 +81,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_innerStepIntertwiners_thetaChain : GlobalTheory.Published.DiscreteSeriesCover → GlobalTheory.Published.HarishChandraModules → ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 → R.IsFam → R.IsModels → HostHyp D → R.IsChainW → R.ex_ItY := by
-  first | exact @GlobalTheory.Chain.ExItY.ex_ItY_holds | exact GlobalTheory.Chain.ExItY.ex_ItY_holds | (intros; apply GlobalTheory.Chain.ExItY.ex_ItY_holds <;> assumption)
+  first | exact @GlobalTheory.Chain.ExItY.ex_ItY_holds
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsInnerStepIntertwinersThetaChainStatement =====

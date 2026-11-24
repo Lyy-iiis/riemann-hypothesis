@@ -44,6 +44,7 @@ import Mathlib.Tactic.NormNum.Ordinal
 import Mathlib.Tactic.NormNum.Parity
 import Mathlib.Tactic.NormNum.Prime
 import Mathlib.Tactic.NormNum.RealSqrt
+import Mathlib.CategoryTheory.Monoidal.Opposite.Mon
 import Development.AbelianVarietyTheory.Counterexamples.LevelGroupExamples.BetaAtClosedPoint
 import Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsPullbackDegPreStrictLineBundleIso
 import Development.AbelianVarietyTheory.Proofs.UniformizationProofs.AllSixAbelianSchemeLawsHold
@@ -55,7 +56,7 @@ import Mathlib.Tactic.Basify
 -- Members: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ImportsLastFurther, Development.AbelianVarietyTheory.Proofs.DivisorProofs.GensOfPsiUnitOn
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ImportsLastFurther =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.ImportsLastFurther", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.EvenDefect\nimport Development.AbelianVarietyTheory.Proofs.ThetaShiftProofs.IsScalarFormTraceForm\npublic import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.ExistsPsiCoordOfIsPsiCoord\nimport Development.AbelianVarietyTheory.Proofs.UnitaryExistence.PsiCoordExistsUniqueUpToUnitLocal\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\npublic import Development.AbelianVarietyTheory.BlockTheory.ExistenceTori.GeneratorValues\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.ImportsLastFurther", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.EvenDefect\nimport Development.AbelianVarietyTheory.Proofs.ThetaShiftProofs.IsScalarFormTraceForm\npublic import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.ExistsPsiCoordOfIsPsiCoord\nimport Development.AbelianVarietyTheory.Proofs.UnitaryExistence.PsiCoordExistsUniqueUpToUnitLocal\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\npublic import Development.AbelianVarietyTheory.BlockTheory.ExistenceTori.GeneratorValues\nimport Mathlib.CategoryTheory.Monoidal.Opposite.Mon\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -105,7 +106,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ImportsLastFurther =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.GensOfPsiUnitOn =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.GensOfPsiUnitOn", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.EvenDefect\npublic import Development.AbelianVarietyTheory.Proofs.ThetaShiftProofs.IsScalarFormTraceForm\npublic import Development.AbelianVarietyTheory.Proofs.UniformizationProofs.ValEqOfAppInjective\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.FromBaseAlt\nimport Development.AbelianVarietyTheory.Counterexamples.LevelGroupExamples.BetaAtClosedPoint\nimport Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsPullbackDegPreStrictLineBundleIso\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ImportsLastFurther\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PeriodsInCoordinatesFromBasePullDeg\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ToUnitTKLeft\nimport Development.AbelianVarietyTheory.Proofs.UniformizationProofs.AllSixAbelianSchemeLawsHold\nimport Development.AbelianVarietyTheory.Proofs.UniformizationProofs.TauBimultOfIsPullDeg\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Int\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.GensOfPsiUnitOn", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.EvenDefect\npublic import Development.AbelianVarietyTheory.Proofs.ThetaShiftProofs.IsScalarFormTraceForm\npublic import Development.AbelianVarietyTheory.Proofs.UniformizationProofs.ValEqOfAppInjective\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.FromBaseAlt\nimport Development.AbelianVarietyTheory.Counterexamples.LevelGroupExamples.BetaAtClosedPoint\nimport Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsPullbackDegPreStrictLineBundleIso\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ImportsLastFurther\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PeriodsInCoordinatesFromBasePullDeg\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ToUnitTKLeft\nimport Development.AbelianVarietyTheory.Proofs.UniformizationProofs.AllSixAbelianSchemeLawsHold\nimport Development.AbelianVarietyTheory.Proofs.UniformizationProofs.TauBimultOfIsPullDeg\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Int\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.CategoryTheory.Monoidal.Opposite.Mon\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -169,40 +170,6 @@ theorem diag_eq_two_mul {O : Type} [CommRing O] [StarRing O] {X : Type} [AddComm
   have h2 : β y (star w0 • y) = β y (w0 • y) := by
     rw [← hβ.2 w0 y y, hβ.1]
   rw [h1, h2]; ring
-
-theorem finite_sublevel {X : Type} [AddCommGroup X] [Module.Free ℤ X] [Module.Finite ℤ X]
-    (β : LinearMap.BilinForm ℤ X) (hs : ∀ y z, β y z = β z y) (hp : ∀ y, y ≠ 0 → 0 < β y y) (C : ℤ) :
-    {y | β y y ≤ C}.Finite := by
-  classical
-  let b := Module.Free.chooseBasis ℤ X
-  have hnn : ∀ y, 0 ≤ β y y := fun y => by
-    by_cases hy : y = 0
-    · simp [hy]
-    · exact (hp y hy).le
-  let F : X → Module.Free.ChooseBasisIndex ℤ X → ℤ := fun y j => β (b j) y
-  have hinj : Function.Injective F := by
-    intro x y hxy
-    by_contra hne
-    have hz : x - y ≠ 0 := sub_ne_zero.mpr hne
-    have h0 : ∀ j, β (b j) (x - y) = 0 := fun j => by
-      rw [map_sub, sub_eq_zero]; exact congrFun hxy j
-    have h1 : β (x - y) (x - y) = 0 := by
-      generalize x - y = z at h0
-      have e := congrArg (fun w => β w z) (b.sum_repr z)
-
-      simp only [map_sum, map_smul, LinearMap.sum_apply, LinearMap.smul_apply, h0, smul_zero,
-      Finset.sum_const_zero] at e
-      exact e.symm
-    exact (hp _ hz).ne' h1
-  refine Set.Finite.of_finite_image ?_ hinj.injOn
-  refine (Set.Finite.pi' fun j => Set.finite_Icc (-(β (b j) (b j) + C)) (β (b j) (b j) + C)).subset ?_
-  rintro _ ⟨x, hx, rfl⟩ j
-  have hx' : β x x ≤ C := hx
-  have e1 := hnn (b j + x)
-  have e2 := hnn (b j - x)
-  simp only [map_add (f := _), map_sub, LinearMap.add_apply, LinearMap.sub_apply, hs x (b j)] at e1 e2
-  simp only [Set.mem_Icc, F]
-  constructor <;> nlinarith [hnn x]
 
 end GlobalTheory.UTautData
 
@@ -294,7 +261,7 @@ theorem gens_fromBase {W R : Type} [CommRing W] [IsDomain W] [CommRing R] [IsDom
       gm (𝟙 (TK V).left) z ⊤ (unitOn (1 : (FractionRing V)ˣ)) = 1 := fun V _ _ z => by
     have e : unitOn (1 : (FractionRing V)ˣ) = 1 := Units.ext (map_one _)
     rw [e]
-    first | exact map_one _ | simp [gm]
+    first | exact map_one _
   obtain ⟨τ₁, hT, hF⟩ := GlobalTheory.USep.tauIn_fromBase_pull W R ρ hρ D₀ D' hD σ 0 Fin.elim0 Fin.elim0 Fin.elim0
     (fun k => k.elim0) (fun a b => ⟨(hσ a b).1, 1, by simp, fun z J hJ => by
       rw [h1, _root_.one_mul]; exact (hσ a b).2 z J hJ⟩) W (RingHom.id W) (fromBase_self D₀ σ fun a b => (hσ a b).1)
@@ -428,7 +395,7 @@ theorem main (W R : Type) [CommRing W] [IsDomain W] [CommRing R] [IsDomain R] [I
   have hfin : ∀ n : ℕ, {χ | ¬ (taut D' e w0 t ht u M δ ε).PsiIn χ (I ^ n)}.Finite := fun n => by
     let B : LinearMap.BilinForm ℤ D'.X := ∑ i, δ' i
     have hB : ∀ y z, B y z = ∑ i, δ' i y z := fun y z => by simp [B, LinearMap.sum_apply]
-    refine (finite_sublevel B (fun y z => by rw [hB, hB]; exact Finset.sum_congr rfl fun i _ => (hδ'b i).1 y z)
+    refine (_root_.GlobalTheory.ToricData.finite_form_le B (fun y z => by rw [hB, hB]; exact Finset.sum_congr rfl fun i _ => (hδ'b i).1 y z)
       (fun y hy => by rw [hB]; exact hpos' y hy) (2 * n)).subset ?_
     intro χ hχ
     obtain ⟨w, k, hk, hc⟩ := hmono χ

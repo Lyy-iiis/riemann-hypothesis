@@ -273,8 +273,8 @@ def splitE (a : ι) (T : Finset ι) (ha : a ∉ T) :
     refine Prod.ext (Subtype.ext ?_) ?_
     · ext w
       by_cases h : w = a
-      · subst h; simp [Finsupp.erase_apply, hpa]
-      · simp [Finsupp.update_apply, Finsupp.erase_apply, h]
+      · subst h; simp [hpa]
+      · simp [h]
     · simp [Finsupp.update_apply]
 
 theorem Φ_split (F : ι → L → ℂ) (h0 : ∀ w, F w 0 = 1) (a : ι) (T : Finset ι) (ha : a ∉ T)
@@ -284,7 +284,7 @@ theorem Φ_split (F : ι → L → ℂ) (h0 : ∀ w, F w 0 = 1) (a : ι) (T : Fi
   congr 1
   refine Finset.prod_congr rfl fun w hw => ?_
   have hwa : w ≠ a := fun e => ha (e ▸ hw)
-  simp [splitE, Finsupp.erase_apply, hwa]
+  simp [splitE, hwa]
 
 variable (F : ι → L → ℂ) (h0 : ∀ w, F w 0 = 1) (hs : ∀ w, Summable fun l => ‖F w l‖)
 include h0 hs
@@ -500,7 +500,7 @@ theorem evalAt_alternant_nat (z : Fin m → ℂˣ) (μ : Fin m → ℕ) :
   rw [evalAt_monomial_eq_prod_zpow, Fintype.prod_eq_single a]
   · simp
   · intro i hi
-    simp [Pi.single_apply, hi]
+    simp [hi]
 
 theorem staircase_eq : staircase m = fun i => ((stair m i : ℕ) : ℤ) := by
   funext i
@@ -546,9 +546,6 @@ namespace PositivityTheory.RgJS
 namespace BetaGeneratingBounds
 
 variable {m k : ℕ}
-
-theorem hZ_neg' (α : Fin m → ℂ) {z : ℤ} (hz : z < 0) : hZ z α = 0 := by
-  simp [hZ, hz]
 
 theorem hZ_nat (α : Fin m → ℂ) (p : ℕ) : hZ (p : ℤ) α = hN p α := by
   simp [hZ]
@@ -609,9 +606,9 @@ theorem detC (α : Fin m → ℂ) (X : ℂ) (l : Fin k → ℕ) :
       push_cast
       omega
     have h0 : ∏ x : Fin k, hZ ((l x : ℤ) - x + σ x) α = 0 :=
-      Finset.prod_eq_zero (Finset.mem_univ i) (hZ_neg' α hi)
+      Finset.prod_eq_zero (Finset.mem_univ i) (_root_.PositivityTheory.RgJS.SkewJacobiTrudiStaircase.hZ_neg α hi)
     have h0' : ∏ x : Fin k, hZ (((l x + stair k x : ℕ) : ℤ) - (stair k (σ x) : ℕ)) α * X ^ (l x + stair k x - stair k (σ x)) = 0 :=
-      Finset.prod_eq_zero (Finset.mem_univ i) (by rw [hz, hZ_neg' α hi, zero_mul])
+      Finset.prod_eq_zero (Finset.mem_univ i) (by rw [hz, _root_.PositivityTheory.RgJS.SkewJacobiTrudiStaircase.hZ_neg α hi, zero_mul])
     rw [h0', h0, zero_mul]
 
 theorem ML_eq (α : Fin m → ℂ) (b : Fin k → ℂ) (X : ℂ) (L : ℕ) :
@@ -734,7 +731,7 @@ theorem entry_lim (α : Fin m → ℂ) (b : Fin k → ℂ) (X : ℂ) (i c : Fin 
     have h0 : ∑ n ∈ range s, b i ^ n * cE α X k n c = 0 := by
       refine Finset.sum_eq_zero fun n hn => ?_
       have := Finset.mem_range.1 hn
-      rw [cE, hZ_neg' α (by rw [← hs]; omega), zero_mul, mul_zero]
+      rw [cE, _root_.PositivityTheory.RgJS.SkewJacobiTrudiStaircase.hZ_neg α (by rw [← hs]; omega), zero_mul, mul_zero]
     rw [h0, zero_add, Finset.sum_mul]
     refine Finset.sum_congr rfl fun p _ => ?_
     rw [cE, ← hs, show ((s + p : ℕ) : ℤ) - (s : ℕ) = (p : ℤ) by push_cast; ring, hZ_nat,
@@ -1696,7 +1693,7 @@ namespace PositivityTheory.AdelicQuotientData
 open PositivityTheory.RgJS
 
 theorem rsPole : RSPole :=
-  rsPole_of_inputs jumpWindows.automorphic_basic_setup_holds cauchyAll jumpWindows.compositionalInverseSymm JacquetShalikaLocal.l7 JacquetShalikaLocal.l12 jumpWindows.whittaker_functional_exists_holds jumpWindows.mirabolic_induction_step_holds jumpWindows.positive_matrix_block_product_holds jumpWindows.smooth_vectors_regular_holds jumpWindows.orthogonalSplitPolarizationVanishes jumpWindows.lattice_open_last_entry_holds jumpWindows.multiplicity_one_holds jumpWindows.almost_everywhere_spherical jumpWindows.hecke_operator_automorphic_holds jumpWindows.averaging_projection_linear_holds jumpWindows.local_uniqueness_auxiliary_holds jumpWindows.expCongruenceExtendsToSum jumpWindows.exists_logarithm_linear_holds (jumpWindows.finite_part_of_meet_holds JacquetShalikaLocal.l7 JacquetShalikaLocal.l12) (jumpWindows.smooth_multiplicity_normalized JacquetShalikaLocal.l7 JacquetShalikaLocal.l12) JacquetShalikaLocal.jacquetShalikaBound jumpWindows.adelic_character_condition_holds
+  rsPole_of_inputs _root_.PositivityTheory.jumpWindows.standard_stabiliser_bound cauchyAll _root_.PositivityTheory.jumpWindows.lie_algebra_action_exists _root_.GlobalTheory.CompanionTheory.SatakeBound.heckeEigenvector_whittaker _root_.GlobalTheory.CompanionTheory.SatakeTyping.l12 _root_.PositivityTheory.jumpWindows.local_group_averaging_tensor jumpWindows.mirabolic_induction_step_holds _root_.PositivityTheory.jumpWindows.positive_matrix_block_product jumpWindows.smooth_vectors_regular_holds _root_.PositivityTheory.jumpWindows.smooth_vectors_stable_intertwiner jumpWindows.lattice_open_last_entry_holds jumpWindows.multiplicity_one_holds jumpWindows.almost_everywhere_spherical jumpWindows.hecke_operator_automorphic_holds _root_.PositivityTheory.jumpWindows.averaging_projection_linear _root_.PositivityTheory.jumpWindows.induction_g11_holds _root_.PositivityTheory.jumpWindows.valuation_bound_of_three _root_.PositivityTheory.jumpWindows.exists_logarithm_linear (jumpWindows.finite_part_of_meet_holds _root_.GlobalTheory.CompanionTheory.SatakeBound.heckeEigenvector_whittaker _root_.GlobalTheory.CompanionTheory.SatakeTyping.l12) (jumpWindows.smooth_multiplicity_normalized _root_.GlobalTheory.CompanionTheory.SatakeBound.heckeEigenvector_whittaker _root_.GlobalTheory.CompanionTheory.SatakeTyping.l12) JacquetShalikaLocal.jacquetShalikaBound _root_.PositivityTheory.jumpWindows.adelic_character_holds
 
 theorem jacquetShalikaRigidity : GlobalTheory.Published.JacquetShalikaRigidity := rigid rsPole JacquetShalikaLocal.jacquetShalikaBound
 

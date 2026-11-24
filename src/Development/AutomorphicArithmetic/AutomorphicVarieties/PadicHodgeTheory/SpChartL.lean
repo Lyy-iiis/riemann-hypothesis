@@ -99,7 +99,7 @@ private theorem adj_adj' (X : M4 R) : adj (adj X) = X := by
 
 private theorem adj_one' : adj (1 : M4 R) = 1 := by
   ext i j
-  fin_cases i <;> fin_cases j <;> simp [adj_apply, sgn, Fin.rev, Matrix.one_apply]
+  fin_cases i <;> fin_cases j <;> simp [adj_apply, sgn, Fin.rev]
 
 private theorem adj_add' (X Y : M4 R) : adj (X + Y) = adj X + adj Y := by
   ext i j
@@ -274,10 +274,6 @@ section -- clump:auto
 
 open Formalism.BasicNotions Formalism.BasicNotions.Loc UpperTheory.V.Loc
 
-private theorem ul_exp_onto {A : Type} [CommRing A] [Algebra ℚ A] {n : A} (hn : IsNilpotent n) :
-    ∃ x, IsNilpotent x ∧ IsNilpotent.exp x = 1 + n :=
-  _root_.UpperTheory.Reformulated.B.UnipotentExponentialSurjective.ul_exp_onto hn
-
 private theorem t2Space_finite_padic_module {l : ℕ} [Fact l.Prime] {V : Type} [AddCommGroup V] [Module ℚ_[l] V]
     [Module.Finite ℚ_[l] V] [TopologicalSpace V] [IsModuleTopology ℚ_[l] V] : T2Space V := by
   haveI : IsTopologicalAddGroup V := IsModuleTopology.topologicalAddGroup ℚ_[l] V
@@ -300,7 +296,7 @@ theorem UpperTheory.lift_unramified_unipotent_character :
   haveI : ContinuousSMul ℚ_[l] B' := IsModuleTopology.toContinuousSMul ℚ_[l] B'
   haveI : T2Space B' := t2Space_finite_padic_module (l := l)
   obtain ⟨σ, hσ⟩ := (iqBasic v).2.2.2.1
-  obtain ⟨x', hx', he'⟩ := ul_exp_onto (hn' σ)
+  obtain ⟨x', hx', he'⟩ := _root_.UpperTheory.Reformulated.B.UnipotentExponentialSurjective.ul_exp_onto (hn' σ)
   obtain ⟨x, rfl⟩ := hp x'
   have hx : IsNilpotent x := by
     obtain ⟨k, hk⟩ := hx'
@@ -385,7 +381,7 @@ theorem UpperTheory.V.Loc.cocLift (hP : LocalPublishedTheorems) {v l : ℕ} [Fac
         rw [hJ] at ha ⊢
         simp [ha]
       map_one' := by ext a; simp
-      map_mul' := fun g h => by ext a; simp [mul_assoc] }
+      map_mul' := fun g h => by ext a; simp }
   have hρ : ∀ g (a : J), (ρ g a : B) = χ g * a := fun _ _ => rfl
   have hρc : ContAction ρ := by
     unfold ReciprocityTheory.Gal.ContAction
@@ -614,7 +610,7 @@ private theorem nonres {Ω : Type} [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω
       rw [← map_zpow, ← map_mul] at h
       exact congrArg Units.val h)
   have h4 : R (D.al (D.sg l)) = R (D.ξ (D.sg l)) := by
-    simp only [Raw.al, MonoidHom.mul_apply, MonoidHom.inv_apply, map_mul, map_inv, h1, h2, map_one, inv_one, one_mul]
+    simp only [Raw.al, MonoidHom.mul_apply, MonoidHom.inv_apply, map_mul, map_inv, h1, h2, inv_one, one_mul]
   refine ⟨⟨⟨_, hs⟩, fun h => h3 0 ?_⟩, ⟨⟨_, hs⟩, fun h => h3 (-1) ?_⟩, ⟨D.s0, fun h => hD.decompSigma_ord ?_⟩,
     ⟨_, hs⟩, fun h => h3 1 ?_⟩
   · rw [zpow_zero, mul_one, ← h4, h, h1, map_one]
@@ -643,10 +639,6 @@ section Alg
 
 variable {B : Type} [CommRing B]
 
-private theorem adj_mul (X Y : M4 B) : adj (X * Y) = adj Y * adj X := by
-  ext i j
-  fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_four, adj_apply, sgn, Fin.rev] <;> ring
-
 private theorem gsp_conj {ν : B} {h : (M4 B)ˣ} (hh : IsGSp 1 (h : M4 B)) {X : M4 B} (hX : IsGSp ν X) :
     IsGSp ν ((h⁻¹ : (M4 B)ˣ) * X * h) ∧ IsGSp ν (h * X * (h⁻¹ : (M4 B)ˣ)) := by
   have h1 : adj (h : M4 B) = (h⁻¹ : (M4 B)ˣ) := by
@@ -656,16 +648,16 @@ private theorem gsp_conj {ν : B} {h : (M4 B)ˣ} (hh : IsGSp 1 (h : M4 B)) {X : 
     ext i j
     fin_cases i <;> fin_cases j <;> simp [adj_apply, sgn, Fin.rev]
   have h2 : adj ((h⁻¹ : (M4 B)ˣ) : M4 B) = h := by
-    have := adj_mul (h : M4 B) (h⁻¹ : (M4 B)ˣ)
+    have := _root_.UpperTheory.V.Loc.SpFlag.adj_mul (h : M4 B) (h⁻¹ : (M4 B)ˣ)
     rw [Units.mul_inv, h0, h1] at this
     exact (Units.inv_eq_of_mul_eq_one_left this.symm).symm
   unfold IsGSp at hX ⊢
   constructor
-  · rw [adj_mul, adj_mul, h1, h2]
+  · rw [_root_.UpperTheory.V.Loc.SpFlag.adj_mul, _root_.UpperTheory.V.Loc.SpFlag.adj_mul, h1, h2]
     simp only [mul_assoc, Units.mul_inv_cancel_left]
     rw [← mul_assoc (adj X), hX]
     simp
-  · rw [adj_mul, adj_mul, h1, h2]
+  · rw [_root_.UpperTheory.V.Loc.SpFlag.adj_mul, _root_.UpperTheory.V.Loc.SpFlag.adj_mul, h1, h2]
     simp only [mul_assoc, Units.inv_mul_cancel_left]
     rw [← mul_assoc (adj X), hX]
     simp

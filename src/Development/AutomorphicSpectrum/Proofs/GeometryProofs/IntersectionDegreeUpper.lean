@@ -405,7 +405,7 @@ open GroundTheory.Heights₂.Heights.LowerBoundFree GlobalTheory.CompanionTheory
 open ReciprocityTheory.AnForm (levi)
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.coords_reindex_degree : PB.Inputs → ∀ (Ω Ω' : Type) [Field Ω] [Field Ω'] [CharZero Ω] (i : Ω →+* Ω') (K K' : Type) [Fintype K] [Fintype K'] (J : K → Type) (J' : K' → Type) [∀ k, Fintype (J k)] [∀ k, Fintype (J' k)] (y : (Σ k, J k) → Ω) (y' : (Σ k, J' k) → Ω') (bk : K → K') (bx : ∀ k, J k ≃ J' (bk k)) (a : K → ℤ) (a' : K' → ℤ), Function.Injective bk → (∀ k x, y' ⟨bk k, bx k x⟩ = i (y ⟨k, x⟩)) → (∀ k, ∃ x, y' ⟨k, x⟩ ≠ 0) → (∀ k, a' (bk k) = a k) → (∀ k', k' ∉ Set.range bk → a' k' = 0) → NefOnFibres (mCoordIdeal y') a' → NefOnFibres (mCoordIdeal y) a := by
-  first | exact @LevelTowerAlt.nef_fibres_block_embedding | exact LevelTowerAlt.nef_fibres_block_embedding
+  first | exact @LevelTowerAlt.nef_fibres_block_embedding
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.CoordsReindexDegree =====
@@ -574,24 +574,6 @@ section -- clump:auto
 @[expose] public section
 
 
-theorem _root_.GlobalTheory.T.finrank_adjoin_vars_field :
-    ∀ (Ω₀ Ω : Type) [Field Ω₀] [Field Ω] (fn : Ω₀ →+* Ω) (I : Type) (d : ℕ),
-      0 < d →
-      (letI : Algebra Ω₀ Ω := fn.toAlgebra
-       Module.finrank Ω₀ Ω = d) →
-      letI : Algebra Ω₀ (FractionRing (MvPolynomial I Ω)) :=
-        ((algebraMap Ω (FractionRing (MvPolynomial I Ω))).comp fn).toAlgebra
-      Module.finrank (IntermediateField.adjoin Ω₀ (Set.range fun q : I =>
-        algebraMap (MvPolynomial I Ω) (FractionRing (MvPolynomial I Ω)) (MvPolynomial.X q)))
-        (FractionRing (MvPolynomial I Ω)) = d := by
-  intro Ω₀ Ω _ _ fn I d hd hfin
-  let : Algebra Ω₀ Ω := fn.toAlgebra
-  have : FiniteDimensional Ω₀ Ω := Module.finite_of_finrank_pos (hfin ▸ hd)
-  let : Algebra Ω₀ (FractionRing (MvPolynomial I Ω)) :=
-    ((algebraMap Ω (FractionRing (MvPolynomial I Ω))).comp fn).toAlgebra
-  have hdegree :=
-    GlobalTheory.CompanionTheory.FieldDeg.finrank_fraction_over_adjoin_X_eq Ω₀ Ω I rfl
-  exact hdegree.trans hfin
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.FinrankAdjoinVarsFieldStatement =====
@@ -825,7 +807,7 @@ theorem exists_genericFlag : Out.WeilSt → ∀ (E : Type) [Field E] [NumberFiel
 
   obtain ⟨A', e, j₁, m, he, hf, hm, hcst, hR, hext, hpt, hHT', hV⟩ := _root_.GlobalTheory.CompanionTheory.Ar.HcptPull.hodgeCpt_pull E H D l Xo c _ _ Y S Ω Ω' i K Unit
     J (fun _ => κ₃) y y' A y₀ M₃.X M₃.ξ (f₃ ≫ f₂) hy hS (fun p hp => (hHT p hp).2) M₃.all
-    (by convert htie using 1 <;> first | exact Subsingleton.elim _ _ | skip) hnormal hdh
+    (by convert htie using 1 <;> first | exact Subsingleton.elim _ _) hnormal hdh
   have hd' : GlobalTheory.CompanionTheory.Ar.Dominates A'.ξ A.ξ (e.hom ≫ f₃ ≫ f₂) i := by
     show A'.ξ ≫ e.hom ≫ f₃ ≫ f₂ = _
     rw [← Category.assoc, he]
@@ -852,7 +834,7 @@ theorem exists_genericFlag : Out.WeilSt → ∀ (E : Type) [Field E] [NumberFiel
   obtain ⟨cst₀, y₁, h₁, h₂, h₃⟩ := _root_.GlobalTheory.CompanionTheory.Ar.GenPoint.exists_open_point E H D l Xo c Y S Ω' Unit (fun _ => κ₃) y' 𝔐 (spMap i ≫ y₀) hy'
   obtain ⟨Li₀, _, _, M₀, j, V₀, cb, hj, hsm, hV₀, hcb, hli, hspan⟩ := _root_.GlobalTheory.CompanionTheory.Ar.HcLie.exists_lie_eig E H D l Xo c Y S Ω' Unit
     (fun _ => κ₃) y' 𝔐 (spMap i ≫ y₀) cst₀ y₁ hy' h₁ h₂ h₃
-  have hfin := GlobalTheory.T.finrank_adjoin_vars_field 𝔐.Ω₀ Ω A.fn (GenIx (labelRk D)) d hcov.1 hcov.2
+  have hfin := _root_.GlobalTheory.CompanionTheory.FieldDeg.finrank_adjoin_vars 𝔐.Ω₀ Ω A.fn (GenIx (labelRk D)) d hcov.1 hcov.2
   obtain ⟨hsp, hgen⟩ := _root_.GlobalTheory.CompanionTheory.Ar.FlagBun.GenericColumns.isGenericFlag_columns 𝔐.Ω₀ Ω A.fn _ (labelRk D) d hcov.1 hfin Li₀ 𝔐.Li j V₀ cb hcb hsm hli
   refine ⟨Ω', inferInstance, inferInstance, i, Unit, inferInstance, fun _ => κ₃, inferInstance, y', 𝔐,
     e.hom ≫ f₃ ≫ f₂, _, Li₀, _, _, M₀, j, V₀, hd', hf', hR, fun p hp => ⟨?_, hHT' p hp⟩,
@@ -1240,7 +1222,7 @@ open GroundTheory.Heights₂.Heights.LowerBoundFree GlobalTheory.CompanionTheory
 open ReciprocityTheory.AnForm (levi)
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.hodge_comp_cover_primes : Out.WeilSt → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (Xo : ∀ l : Tor.Level H, Moduli D l) (l : Tor.Level H) (c : Coeff l) (Y : Model (Xo l) c (algebraMap (𝓞 c.F) c.F)) (S : Finset ℕ) (Ω : Type) [Field Ω] [CharZero Ω] (K : Type) [Fintype K] (J : K → Type) [∀ k, Fintype (J k)] (y : (Σ k, J k) → Ω) (𝔐 : HodgeCpt Y S y) (dg : ℕ) [Fintype (CMType H)], 𝔐.IsCover dg → (∀ p : ℕ, p.Prime → (p : ℤ) ∣ discr E → p ∈ S) → (∀ p ∈ S, HT.HTFree 𝔐 p) → ∃ (M : Top.RootModel (CMType H) (D.p + D.q)) (𝔐' : HodgeCpt Y S M.y) (Fl : 𝔐'.Flag) (e : CMType H × Fin (D.p + D.q) → M.Ω) (i : Ω →+* M.Ω) (g : 𝔐'.X ⟶ 𝔐.X) (bk : K → M.K) (bx : ∀ k, J k ≃ M.ι (bk k)) (j : 𝔐.Li →+ 𝔐'.Li), Function.Injective bk ∧ (∀ k x, M.y ⟨bk k, bx k x⟩ = i (y ⟨k, x⟩)) ∧ GlobalTheory.CompanionTheory.Ar.Dominates 𝔐'.ξ 𝔐.ξ g i ∧ (∀ p ∈ S, HT.HTFree 𝔐' p) ∧ Fl.RootLines M.xdeg e ∧ (∀ (a : Ω) v, j (a • v) = i a • j v) ∧ (∀ (n : ℕ) (v : Fin n → 𝔐.Li), LinearIndependent Ω v → LinearIndependent M.Ω fun k => j (v k)) ∧ ∀ s, 𝔐'.V s = (𝔐.V s).pull 𝔐'.ξ g j := by
-  first | exact @LevelTowerAlt.hodge_compact_cover_primes | exact LevelTowerAlt.hodge_compact_cover_primes
+  first | exact @LevelTowerAlt.hodge_compact_cover_primes
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.HodgeCompCoverPrimes =====

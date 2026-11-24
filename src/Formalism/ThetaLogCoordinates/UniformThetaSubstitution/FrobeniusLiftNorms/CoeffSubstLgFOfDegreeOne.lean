@@ -227,7 +227,7 @@ theorem lgF_funEq (p : ℕ) (hp : 2 ≤ p) (hpK : (p : K) ≠ 0) :
         rw [pow_succ, Nat.mul_div_cancel _ (by positivity)]
       have hne1 : (p ^ 2) ^ (j + 1) ≠ 1 := ne_of_gt (Nat.one_lt_pow (Nat.succ_ne_zero j) (by omega))
       rw [if_pos hd, hdiv, coeff_lgF_pow_sq_pow_eq_inv_pow p hp, coeff_lgF_pow_sq_pow_eq_inv_pow p hp, if_neg hne1]
-      simp [pow_succ, mul_inv, mul_comm]
+      simp [pow_succ, mul_comm]
   · push_neg at hn
     rw [coeff_lgF_eq_zero_of_ne_pow_sq_pow p n hn]
     have hn1 : n ≠ 1 := fun h => hn 0 (by simp [h])
@@ -358,6 +358,15 @@ theorem funEqType_lgF (p : ℕ) [hp : Fact p.Prime] :
   rw [PowerSeries.coeff_X]
   split_ifs <;> simp
 
+/-- Integrality of the addition law for the height-two logarithm
+`lgF(T) = ∑ n ≥ 0, T^(p^(2*n)) / p^n`.
+
+Over `ℚ_[p]`, the identity `lgF(T) - lgF(T^(p^2)) / p = T` gives `funEqType_lgF`, so
+`Formalism.LT.funEqGroup` applies with the identity Frobenius lift and `q = p^2`.
+Uniqueness identifies this integral law with the image of the rational law `FQ`.
+Its rational coefficients therefore have denominators prime to `p`; `norm_ratCast_le_one`
+transfers their integrality to `K`, and uniqueness identifies the resulting law with `F`.
+Only the `ℚ_[p]` step uses the identity endomorphism as a Frobenius lift. -/
 theorem law_integral {K : Type} [NormedField K] [IsUltrametricDist K] [CharZero K] (p : ℕ)
     (hp : p.Prime) (hnp : ‖(p : K)‖ = (p : ℝ)⁻¹) (F : MvPowerSeries (Fin 2) K)
     (hF0 : MvPowerSeries.constantCoeff F = 0) (hF : cob F (lgF K p) = 0) : Integral F := by
@@ -419,7 +428,6 @@ theorem formal_law_symmetric : LawSymm := by
     · simp [hF0]
     · rw [← subst_subst hb (PowerSeries.HasSubst.of_constantCoeff_zero hF0), hFlA,
         MvPowerSeries.subst_add hb, subst_single_var hb, subst_single_var hb]
-      beta_reduce
       rw [lgF_subst_C_mul hζ hp2 (MvPowerSeries.X (0 : Fin 2)) (by simp),
         lgF_subst_C_mul hζ hp2 (MvPowerSeries.X (1 : Fin 2)) (by simp),
         lgF_subst_C_mul hζ hp2 F hF0, hFl, mul_add]
@@ -455,7 +463,7 @@ theorem formal_law_symmetric : LawSymm := by
     · simp
     · rw [← subst_subst hb (PowerSeries.HasSubst.of_constantCoeff_zero hF0), hFlA,
         MvPowerSeries.subst_add hb, subst_single_var hb, subst_single_var hb]
-      simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+      simp only [Matrix.cons_val_zero, Matrix.cons_val_one]
       rw [hz, add_zero]
 
 end Formalism.InvariantFactorPaths.G7

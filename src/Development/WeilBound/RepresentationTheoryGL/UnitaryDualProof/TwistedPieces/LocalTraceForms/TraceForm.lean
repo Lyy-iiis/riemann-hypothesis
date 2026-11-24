@@ -940,7 +940,7 @@ theorem eI_mul (I : MaximalSpectrum R) {r : R} (hr : r ∈ I.asIdeal) : eI I * r
   funext J
   by_cases h : J = I
   · subst h
-    simp [equivPi_apply', Ideal.Quotient.eq_zero_iff_mem.2 hr]
+    simp [Ideal.Quotient.eq_zero_iff_mem.2 hr]
   · simp [Pi.single_eq_of_ne h]
 
 theorem sum_eI : ∑ I : MaximalSpectrum R, eI I = 1 := by
@@ -1184,7 +1184,7 @@ open PositivityTheory.RgUd.T PositivityTheory.RgUd.TP
 
 variable (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
 
-theorem traceForm : TraceForm k := PositivityTheory.RgUd.TP.Loc.Ptf.traceForm k
+alias traceForm := _root_.PositivityTheory.RgUd.TP.Loc.Ptf.traceForm
 theorem unimod : TraceForm k → PositivityTheory.RgUd.T.Desc.SLF.Unimod (k := k) := PositivityTheory.RgUd.TP.Loc.Uni.unimod k
 theorem locOff : LocOff k := PositivityTheory.RgUd.TP.Loc.Psplit.locOff_of k (PositivityTheory.RgUd.TP.Loc.Psplit.split k) (PositivityTheory.RgUd.TP.Loc.Psplit.locChi k)
 theorem locAll : LocAll k := PositivityTheory.RgUd.TP.Loc.Psplit.locAll_of k (PositivityTheory.RgUd.TP.Loc.Psplit.split k) (PositivityTheory.RgUd.TP.Loc.Psplit.locChi k)

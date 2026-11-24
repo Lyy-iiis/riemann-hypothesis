@@ -248,7 +248,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.AboveL
 
 theorem _root_.GlobalTheory.T.eventually_cofinite_under_of_eventually_cofinite_places : ∀ (K M : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Algebra K M] (P : HeightOneSpectrum (𝓞 K) → Prop), (∀ᶠ v in Filter.cofinite, P v) → ∀ᶠ w : HeightOneSpectrum (𝓞 M) in Filter.cofinite, P (w.under (𝓞 K)) := by
-  first | exact @GlobalTheory.eventually_cofinite_under_of_eventually_cofinite | exact GlobalTheory.eventually_cofinite_under_of_eventually_cofinite | (intros; apply GlobalTheory.eventually_cofinite_under_of_eventually_cofinite <;> assumption)
+  first | exact @GlobalTheory.eventually_cofinite_under_of_eventually_cofinite
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.EventuallyCofiniteUnderOfEventuallyCofinitePlaceStatement =====
@@ -264,7 +264,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.AboveL
 
 theorem _root_.GlobalTheory.T.exists_normV_eq_normV_under_pow : ∀ (K M : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Algebra K M] (w : HeightOneSpectrum (𝓞 M)), ∃ f : ℕ, normV w = normV (w.under (𝓞 K)) ^ f := by
-  first | exact @GlobalTheory.AboveL.ResDeg.normV_eq_under_pow | exact GlobalTheory.AboveL.ResDeg.normV_eq_under_pow | (intros; apply GlobalTheory.AboveL.ResDeg.normV_eq_under_pow <;> assumption)
+  first | exact @GlobalTheory.AboveL.ResDeg.normV_eq_under_pow
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.ExistsNormVEqNormVUnderPowStatement =====
@@ -394,7 +394,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.AboveL
 
 theorem _root_.GlobalTheory.T.hecke_char_norm_descent : ∀ (K M : Type) [Field K] [NumberField K] [IsCMField K] [Field M] [NumberField M] [IsCMField M] [Algebra K M] (a : ℕ) (χ : HChar (maximalRealSubfield K)), (∀ v : InfinitePlace (maximalRealSubfield K), χ.locInf v (-1) = (-1) ^ a) → ∃ χ' : HChar (maximalRealSubfield M), (∀ u : InfinitePlace (maximalRealSubfield M), χ'.locInf u (-1) = (-1) ^ a) ∧ ∀ x : Ideles M, (compNorm M χ').1 x = (compNorm K χ).1 (GroundTheory.Global.ideleNorm K M x) := by
-  first | exact @GlobalTheory.RealNormChar.main | exact GlobalTheory.RealNormChar.main | (intros; apply GlobalTheory.RealNormChar.main <;> assumption)
+  first | exact @GlobalTheory.RealNormChar.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.HeckeCharNormDescentStatement =====
@@ -455,7 +455,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.AboveL
 
 theorem _root_.GlobalTheory.T.under_conjugatePlace_eq_conjugatePlace_under : ∀ (K M : Type) [Field K] [NumberField K] [IsCMField K] [Field M] [NumberField M] [IsCMField M] [Algebra K M] (w : HeightOneSpectrum (𝓞 M)), (UpperTheory.V.Af.Bc.cPl w).under (𝓞 K) = UpperTheory.V.Af.Bc.cPl (w.under (𝓞 K)) := by
-  first | exact @GlobalTheory.ConjUnder.cPl_under | exact GlobalTheory.ConjUnder.cPl_under | (intros; apply GlobalTheory.ConjUnder.cPl_under <;> assumption)
+  first | exact @GlobalTheory.ConjUnder.cPl_under
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.UnderConjugatePlaceEqConjugatePlaceUnderStatement =====
@@ -471,7 +471,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.AboveL
 
 theorem _root_.GlobalTheory.T.unramifiedAt_value_heckeChar_comp_ideleNorm : ∀ (K M : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Algebra K M] (ψ : HChar K) (ψ' : HChar M), (∀ x : Ideles M, ψ'.1 x = ψ.1 (GroundTheory.Global.ideleNorm K M x)) → ∀ (w : HeightOneSpectrum (𝓞 M)) (f : ℕ), normV w = normV (w.under (𝓞 K)) ^ f → ψ.UnrAt (w.under (𝓞 K)) → ψ'.UnrAt w ∧ ψ'.val w = ψ.val (w.under (𝓞 K)) ^ f := by
-  first | exact @GlobalTheory.NormValGen.unrAt_val_of_comp_norm | exact GlobalTheory.NormValGen.unrAt_val_of_comp_norm | (intros; apply GlobalTheory.NormValGen.unrAt_val_of_comp_norm <;> assumption)
+  first | exact @GlobalTheory.NormValGen.unrAt_val_of_comp_norm
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.UnramifiedAtValueHeckeCharCompIdeleNormStatement =====
@@ -642,7 +642,7 @@ namespace UpperTheory.Gal.NearKilling
 theorem stepLift_holds : StepLift :=
   stepLift UpperTheory.ConvolutionTheory.cbcc noSelfTwist_holds
     (polBC PositivityTheory.AdelicQuotientData.jacquetShalikaRigidity
-      (PositivityTheory.JMult1.gelfandKazhdanDual_of_rigidity PositivityTheory.AdelicQuotientData.jacquetShalikaRigidity PositivityTheory.S2.CuspBdd.cuspFormsBoundedGL)) weakRes
+      (PositivityTheory.JMult1.gelfandKazhdanDual_of_rigidity PositivityTheory.AdelicQuotientData.jacquetShalikaRigidity _root_.GlobalTheory.CompanionTheory.CuspFinGL.cuspFormsBoundedGL)) weakRes
 
 theorem allLift_holds : AllLift := allLift stepLift_holds satSplit_holds
 
@@ -936,14 +936,6 @@ open UpperTheory.Gal.ToralGalois.R2
 
 namespace UpperTheory.Gal.ToralGalois.R2
 
-private theorem fixed_ne_bot {G V W : Type} [Group G] [AddCommGroup V] [Module ℂ V]
-    [AddCommGroup W] [Module ℂ W] {ρ : Representation ℂ G V} {σ : Representation ℂ G W}
-    (φ : ρ.Equiv σ) {H : Subgroup G} (h : fixed ρ H ≠ ⊥) : fixed σ H ≠ ⊥ := by
-  obtain ⟨v, hv, h0⟩ := (Submodule.ne_bot_iff _).1 h
-  refine (Submodule.ne_bot_iff _).2 ⟨φ.toIntertwiningMap v, GlobalTheory.Parabolic.mem_fixed.2 fun g hg => ?_, fun e => h0 ?_⟩
-  · rw [← φ.toIntertwiningMap.isIntertwining, GlobalTheory.Parabolic.mem_fixed.1 hv g hg]
-  · exact φ.toLinearEquiv.injective (e.trans (map_zero φ.toLinearEquiv).symm)
-
 private theorem pairwise_of_map {α β : Type*} (f : α → β) {r : β → β → Prop} (hr : Symmetric r) (t : Multiset α)
     (h : (t.map f).Pairwise r) : t.Pairwise fun a b => r (f a) (f b) := by
   induction t using Quot.inductionOn with
@@ -978,7 +970,7 @@ theorem UpperTheory.Gal.ToralGalois.R2.mixedOf :
     fun z s hz => (isGeneric_congr (IrrGL.twEquiv z _ _)).1 ((isGeneric_twist_iff _).2 hz)
   have hgτ : IsGeneric (algNorm σ).rep :=
     hnu _ _ ((isGeneric_congr (IrrGL.equivOf σ.ρ σ.smooth σ.irred)).1 hg)
-  obtain ⟨c, Δ, y, hd, hun, hL, ⟨e⟩⟩ := GlobalTheory.genericUnlinkedGL_outright (w.adicCompletion E) (algNorm σ).1 _
+  obtain ⟨c, Δ, y, hd, hun, hL, ⟨e⟩⟩ := _root_.GlobalTheory.RgGu.Holds.genericUnlinkedGL_holds (w.adicCompletion E) (algNorm σ).1 _
     (algNorm σ).rep (algNorm σ).2.rep.smooth (algNorm σ).2.rep.irr hgτ
   have hIsL : IsL ((List.ofFn Δ : List (Segment (w.adicCompletion E))) : Multiset (Segment (w.adicCompletion E)))
       (algNorm σ).rep :=
@@ -1012,7 +1004,7 @@ theorem UpperTheory.Gal.ToralGalois.R2.mixedOf :
     have : m = 0 := by have := hlen i; omega
     subst this
     exact ⟨i, by simpa using e'⟩
-  refine ⟨fixed_ne_bot (IrrGL.equivOf σ.ρ σ.smooth σ.irred) hfix, s, hs, ?_, apart_of_nu _ (hap _ hs')⟩
+  refine ⟨_root_.GlobalTheory.LocLanglands.fixed_ne_bot_of_equiv (IrrGL.equivOf σ.ρ σ.smooth σ.irred) hfix, s, hs, ?_, apart_of_nu _ (hap _ hs')⟩
   intro y1 hy1 z1 hz1 hyz
   obtain ⟨i, hi⟩ := mem y1 hy1
   obtain ⟨j, hj⟩ := mem z1 hz1

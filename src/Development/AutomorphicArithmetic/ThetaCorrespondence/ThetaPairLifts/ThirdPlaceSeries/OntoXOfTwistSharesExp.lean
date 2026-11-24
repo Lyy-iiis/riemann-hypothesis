@@ -115,6 +115,7 @@ import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.ExistsLatticeEmb
 import Development.AbelianVarietyTheory.Definitions.HeightFunctions.GrowthConstantBoundGcR
 import Mathlib.Analysis.Normed.Algebra.GelfandRadius
 import Mathlib.Analysis.SpecialFunctions.Bernstein
+import Mathlib.CategoryTheory.Monoidal.Opposite.Mon
 import Mathlib.Data.Nat.Choose.Multinomial
 import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.FramedModuliAlgebraicLawsChartWeightIntegrality
 import Mathlib.Tactic.Linter.HaveILetI
@@ -144,14 +145,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain
-open Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Pj Formalism.L2.DIV Formalism.L2.Indef Formalism.L2.Indef.Tree Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Cx Formalism.IndefR.FWT
-open GlobalTheory.BigTop GlobalTheory.BigOn
-
-theorem _root_.GlobalTheory.T.bigOn_comparison_at_twisted_places : (_root_.GlobalTheory.BigOn.ForallTwoRuns fun Fm x _ i p r h => ∀ v ∈ p.R.twPl, ∀ j, letI : Algebra (r.used v).full.J.Q.c.F (Fm.D x i).what₂.LL := p.alg; GlobalTheory.TraceClassRank.CompareOffOwn (T := (r.used v).full) (R := R2 p) (h.laws v).p (fw2 p) j (r.lev j) (F2 p).P0 (F2 p).ψ0⁻¹ 1 v (ownAt (Fm.D x i) v)) := by
-  first | exact @_root_.GlobalTheory.BigOn.compareOffOwn_atRuns_alt | exact _root_.GlobalTheory.BigOn.compareOffOwn_atRuns_alt | (intros; apply _root_.GlobalTheory.BigOn.compareOffOwn_atRuns_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.CompareOffOwnAtRunsStatement =====
@@ -210,15 +203,6 @@ theorem zeta_mul_mem (F : IntermediateField ℚ ℂ) {m n : ℕ} (hm : 0 < m) (h
     linear_combination (-1 : ℂ) * huv'
   rw [e]
   exact mul_mem (zpow_mem h1 u) (zpow_mem h2 v)
-
-theorem FO_le_coeff {D : D7} (Q : Par D) (h : Q.PinField) : FO D ≤ Q.c.F := by
-  rw [FO, IntermediateField.adjoin_le_iff]
-  rintro _ ⟨y, rfl⟩
-  have e := h (Q.eO.symm y)
-  rw [RingEquiv.apply_symm_apply] at e
-  have e' : D.what₂.phiO y = ((Q.eO.symm y : Q.c.F) : ℂ) := e
-  rw [e']
-  exact SetLike.coe_mem _
 
 theorem half_of_split (D : D7) {p : ℕ} (hp : SplitOK D p) (P : HeightOneSpectrum (𝓞 D.host.K))
     (hP : ((p : ℕ) : 𝓞 D.host.K) ∈ P.asIdeal) (I : Ideal (𝓞 D.host.E))
@@ -289,7 +273,7 @@ theorem exists_cover : ∀ (D : D7) (Q : Par D), Q.Pins → Q.Canon → ∀ p : 
       conj := Q.c.conj
       zeta_mem := by
         rw [Level.M', hA₂, hA, Nat.lcm_one_right, hM₂]
-        exact GlobalTheory.FinalJoin.Cover.zeta_mul_mem _ (by have := Q.l.three_le; omega) hp.pos hcop hz (GlobalTheory.FinalJoin.Cover.FO_le_coeff Q hP.2.2.1 hK.zetaP)
+        exact GlobalTheory.FinalJoin.Cover.zeta_mul_mem _ (by have := Q.l.three_le; omega) hp.pos hcop hz (_root_.GlobalTheory.FinalJoin.FieldAlg.recordField_le_of_pinField Q hP.2.2.1 hK.zetaP)
       le := by
         have := Q.c.le
         unfold KA at this ⊢
@@ -324,13 +308,13 @@ open scoped TensorProduct Matrix Topology
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_specialPrime_levelCover_of_fieldConditions : ∀ (D : D7) (Q : Par D), Q.Pins → Q.Canon → ∀ p : ℕ, FieldOK0 D p → ∀ (P : HeightOneSpectrum (𝓞 D.host.K)), ((p : ℕ) : 𝓞 D.host.K) ∈ P.asIdeal → p.Prime ∧ 5 ≤ p ∧ ∀ j, InR D j → ∃ d : DeltaDat (Q.Xo j) Q.c 0, CoverOK d p (P.asIdeal.map (algebraMap (𝓞 D.host.K) (𝓞 D.host.E))) ∧ FnAlgClosed (Xo := d.Xo₂) (c := d.c₂) := by
-  first | exact @GlobalTheory.FinalJoin2.Cover.exists_cover_of_fieldOK | exact GlobalTheory.FinalJoin2.Cover.exists_cover_of_fieldOK | (intros; apply GlobalTheory.FinalJoin2.Cover.exists_cover_of_fieldOK <;> assumption)
+  first | exact @GlobalTheory.FinalJoin2.Cover.exists_cover_of_fieldOK
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.ExistsSpecialPrimeLevelCoverOfFieldConditionsStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.CuspFormsLeSpanShortThetaSeriesStatement =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.CuspFormsLeSpanShortThetaSeriesStatement", "h": "module\n\npublic import Formalism.LocalToGlobal.ProjectiveLattices.CuspFree\npublic import Formalism.SharpRestriction.Divisibility.GeneratorPowers.ThExprUniqOfChartIndep2\npublic import Development.AbelianVarietyTheory.Definitions.SpanningFamilies.IsStabForm\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.CuspFormsLeSpanShortThetaSeries\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.CuspFormsLeSpanShortThetaSeriesStatement", "h": "module\n\npublic import Formalism.LocalToGlobal.ProjectiveLattices.CuspFree\npublic import Formalism.SharpRestriction.Divisibility.GeneratorPowers.ThExprUniqOfChartIndep2\npublic import Development.AbelianVarietyTheory.Definitions.SpanningFamilies.IsStabForm\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.CuspFormsLeSpanShortThetaSeries\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.CategoryTheory.Monoidal.Opposite.Mon\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -344,7 +328,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.Dict
 
 theorem _root_.GlobalTheory.T.cuspForms_le_span_shortThetaSeries : Formalism.MainNotions.ModuliIntegralCharts.H1.ChartIndepSt2 → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Geo.Tor.Level H) (Xo : Moduli Dw l) (c : Coeff l) (r : ℕ) (U : ∀ σ : c.F →+* ℂ, Formalism.L2.PjFree.Unf Xo c σ r) (σ : c.F →+* ℂ), Formalism.L2.PjFree.GoodEmb c σ → Formalism.L2.PjFree.IsUnf (U σ) → 1 ≤ r → l.A = 1 → (∀ k k', ((U σ).X k).Gm = ((U σ).X k').Gm ∧ ((U σ).X k).ξ0 = ((U σ).X k').ξ0) → (∀ k, HasPrinc ((U σ).X k) l.M) → (∀ a n, Dom a n → ∀ k, ChiOne ((U σ).X k) (Formalism.L2.PjFree.laU (U σ) a n k)) → ∀ (nab : NabV Xo c) (bad nV : ℕ) (dδ : ∀ n, DeltaDat Xo c n), 0 < bad → (∀ n, (dδ n).IsLev ∧ (∃ _ : StarRing (𝓞 E), IsNab (dδ n).Xo₂ (dδ n).c₂ (dδ n).nab₂) ∧ UnitC (dδ n) ∧ ¬ 3 ∣ (dδ n).pd ∧ (Dw.p + Dw.q ≤ n → ∃ ph ψ x₀, (dδ n).PhiPin ph ψ x₀) ∧ ∀ a, Dom a n → ShortValTot Xo c nab bad nV a n (dδ n)) → SpanningAtDominantWeight Xo c nab bad nV (Formalism.L2.PjFree.cusp Xo c U) dδ := by
-  first | exact @GlobalTheory.cusp_le_span_shortGen | exact GlobalTheory.cusp_le_span_shortGen | (intros; apply GlobalTheory.cusp_le_span_shortGen <;> assumption)
+  first | exact @GlobalTheory.cusp_le_span_shortGen
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.CuspFormsLeSpanShortThetaSeriesStatement =====
@@ -725,7 +709,7 @@ open scoped TensorProduct Matrix Topology
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.finiteIdeles_normOne_eq_div_conj_of_congOne : ∀ (D : D7), (∀ x : (AfE D)ˣ, NormOne x → ∃ y, x = y / cjFin D y) ∧ (∀ y : (AfE D)ˣ, cjFin D y = y → ∃ a : Af D.host.F, (y : AfE D) = a ⊗ₜ 1) ∧ ∀ (p N : ℕ) (x : (AfE D)ˣ), p.Prime → p ≠ 2 → p ∣ N → 0 < N → NormOne x → CongOne N x → ∃ y, IntUnit y ∧ CongOne p y ∧ x = y / cjFin D y := by
-  first | exact @GlobalTheory.IdeleNinety.finiteIdeles_normOne_eq_div_conj_with_congruence | exact GlobalTheory.IdeleNinety.finiteIdeles_normOne_eq_div_conj_with_congruence | (intros; apply GlobalTheory.IdeleNinety.finiteIdeles_normOne_eq_div_conj_with_congruence <;> assumption)
+  first | exact @GlobalTheory.IdeleNinety.finiteIdeles_normOne_eq_div_conj_with_congruence
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.Hilbert90FiniteIdelesCongruenceStatement =====
@@ -760,8 +744,6 @@ theorem congOne_iff {D : D7} (N : ℕ) (x : (AfE D)ˣ) :
   simp only [GlobalTheory.CharFin.integralFiniteAdeles_eq_adelicCompletion_integers, nsmul_eq_mul]
   exact Iff.rfl
 
-theorem cF_cF (D : D7) (y : D.host.E) : cF D (cF D y) = y := star_star y
-
 theorem exists_rat {D : D7} (x : (AfE D)ˣ) (a : D.host.E) (h : (x : AfE D) = 1 ⊗ₜ a) (hn : NormOne x) :
     ∃ (y : (AfE D)ˣ) (b : D.host.E), (y : AfE D) = 1 ⊗ₜ b ∧ x = y / cjFin D y := by
   have key : ∀ b : D.host.E, b ≠ 0 → (x : AfE D) * GlobalTheory.NormOneChar.diag D.host.F D.host.E (cF D b) =
@@ -781,7 +763,7 @@ theorem exists_rat {D : D7} (x : (AfE D)ˣ) (a : D.host.E) (h : (x : AfE D) = 1 
       push_neg at h0
       exact hc (AlgEquiv.ext h0)
     refine key (z - cF D z) (sub_ne_zero.2 hz.symm) ?_
-    rw [hx, ← map_mul, map_sub, cF_cF]
+    rw [hx, ← map_mul, map_sub, _root_.GlobalTheory.XiCounterexample.conj_conj]
     congr 1
     linear_combination (cF D z - z) * ha
   · refine key (1 + a) ha ?_
@@ -813,7 +795,7 @@ theorem cong_div {D : D7} (N : ℕ) (y : (AfE D)ˣ) (hu : IntUnit y) (hy : CongO
     mul_mem (sub_mem hw hw') hi', ?_⟩, ?_⟩
   · rw [hv]
     linear_combination (GlobalTheory.NormOneChar.bar (cF D) ((y⁻¹ : (AfE D)ˣ) : AfE D)) * (e - e') + h2
-  · rw [hv, map_mul, GlobalTheory.NormOneChar.bar_bar _ (cF_cF D)]
+  · rw [hv, map_mul, GlobalTheory.NormOneChar.bar_bar _ (_root_.GlobalTheory.XiCounterexample.conj_conj D)]
     linear_combination ((y : AfE D) * ((y⁻¹ : (AfE D)ˣ) : AfE D)) * h2 + h1
 
 theorem exists_xiOK_xiTilde : ∀ (D : D7) (p : ℕ) (de : (AfE D)ˣ →* ℂˣ), (p = D.host.pde ∨ p = D.host.pde') → XiRec D p de → ∃ xi, XiOK D p xi ∧ XiTilde xi de := by
@@ -863,7 +845,7 @@ open scoped TensorProduct Matrix Topology
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_shortSeriesTwistChar_of_twistingIdeleChar : ∀ (D : D7) (p : ℕ) (de : (AfE D)ˣ →* ℂˣ), (p = D.host.pde ∨ p = D.host.pde') → XiRec D p de → ∃ xi, XiOK D p xi ∧ XiTilde xi de := by
-  first | exact @GlobalTheory.FinalJoin2.ReadTwist.exists_xiOK_xiTilde | exact GlobalTheory.FinalJoin2.ReadTwist.exists_xiOK_xiTilde | (intros; apply GlobalTheory.FinalJoin2.ReadTwist.exists_xiOK_xiTilde <;> assumption)
+  first | exact @GlobalTheory.FinalJoin2.ReadTwist.exists_xiOK_xiTilde
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.ExistsShortSeriesTwistCharOfTwistingIdeleCharStatement =====
@@ -1044,7 +1026,7 @@ variable {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : Formalism.MainNotio
   {Y : DivX D} {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Y cX} {Csz : ℝ}
 theorem exists_runs_at_alt (p : PtAt ex Csz) (hR : p.PointConditions') (hM : More p) :
     ∃ r : TwoRuns p.T p.P.Gp, RunsOk (fw2 p) r ∧ OwnPin r := by
-  have hL : Links2 p := _root_.GlobalTheory.T.links2_of_single_index_twisted D L hT Gi Gl Kc Y cX ex Csz p hR hM.1
+  have hL : Links2 p := _root_.GlobalTheory.BigOn.links2_of_rows_alt D L hT Gi Gl Kc Y cX ex Csz p hR hM.1
   have hC : CoreTies L ex.errX p.T (R2 p) := hM.2.1
   obtain ⟨r₁, l₁, c₁, d₁, x₁, p₁⟩ :=
     _root_.GlobalTheory.RunOnto.exists_run_pins D L hT Gi Gl Kc Y cX ex Csz p hL hC D.host.pde (Or.inl rfl)
@@ -1052,7 +1034,7 @@ theorem exists_runs_at_alt (p : PtAt ex Csz) (hR : p.PointConditions') (hM : Mor
     _root_.GlobalTheory.RunOnto.exists_run_pins D L hT Gi Gl Kc Y cX ex Csz p hL hC D.host.pde' (Or.inr rfl)
   have hcore : GlobalTheory.Hk3.Core (R2 p) (F2 p) :=
     ⟨hL.1.lev, hL.1.grp, hL.1.fam, hL.1.models, hL.1.chain, hL.1.thP⟩
-  obtain ⟨ℓ, hℓ⟩ := GlobalTheory.T.finiteGroup_levelStructure_action_fixedRuns D _ _ _ _ p.T (R2 p) (F2 p) p.κ p.v₀ (fw2 p) (om2 p) hcore hL.2.2.2.2.2.2.1
+  obtain ⟨ℓ, hℓ⟩ := _root_.GlobalTheory.LevelActionOnto.levelPin_actionPin D _ _ _ _ p.T (R2 p) (F2 p) p.κ p.v₀ (fw2 p) (om2 p) hcore hL.2.2.2.2.2.2.1
     p.rhoGeo (fun i => (hR.oneMap i).1) hC.level
   let r : TwoRuns p.T p.P.Gp := ⟨r₁, r₂, ℓ⟩
   have hown : OwnPin r := ownPin_of d₁ d₂
@@ -1095,14 +1077,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain
-open Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Pj Formalism.L2.DIV Formalism.L2.Indef Formalism.L2.Indef.Tree Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Cx Formalism.IndefR.FWT
-open GlobalTheory.BigTop GlobalTheory.BigOn
-
-theorem _root_.GlobalTheory.T.runs_estimate_statement' : _root_.GlobalTheory.BigOn.TwoRunsStatement := by
-  first | exact @_root_.GlobalTheory.BigOn.bigOn_runsSt | exact _root_.GlobalTheory.BigOn.bigOn_runsSt | (intros; apply _root_.GlobalTheory.BigOn.bigOn_runsSt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.ExistsRunsAtStatement =====
@@ -1114,14 +1088,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain
-open Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Pj Formalism.L2.DIV Formalism.L2.Indef Formalism.L2.Indef.Tree Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Cx Formalism.IndefR.FWT
-open GlobalTheory.BigTop GlobalTheory.BigOn
-
-theorem _root_.GlobalTheory.T.geoSt_of_pageSt' : _root_.GlobalTheory.BigOn.PageStatement → _root_.GlobalTheory.BigOn.GeometricStatement' := by
-  first | exact @_root_.GlobalTheory.BigOn.geoSt_of_pageSt_alt | exact _root_.GlobalTheory.BigOn.geoSt_of_pageSt_alt | (intros; apply _root_.GlobalTheory.BigOn.geoSt_of_pageSt_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.GeoStOfPageStStatement =====
@@ -1133,14 +1099,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain
-open Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Pj Formalism.L2.DIV Formalism.L2.Indef Formalism.L2.Indef.Tree Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Cx Formalism.IndefR.FWT
-open GlobalTheory.BigTop GlobalTheory.BigOn
-
-theorem _root_.GlobalTheory.T.maximum_estimate_statement' : _root_.GlobalTheory.BigOn.MaximalityStatement := by
-  first | exact @_root_.GlobalTheory.BigOn.maxSt_alt | exact _root_.GlobalTheory.BigOn.maxSt_alt | (intros; apply _root_.GlobalTheory.BigOn.maxSt_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.MaxStStatement =====
@@ -1226,7 +1184,7 @@ theorem e_j_eOp (hU : R.LUnif) (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ) (y 
       one_smul]
 
   rw [GlobalTheory.LevelForms.eOp_eq_sum, map_sum, map_sum]
-  simp only [map_smulₛₗ, map_smul, htw]
+  simp only [map_smulₛₗ, htw]
   refine MultilinearMap.ext fun v => ?_
   simp only [RealDat.eWf, gaL, RealDat.eC, LinearMap.sum_apply, LinearMap.smul_apply, MultilinearMap.sum_apply,
     MultilinearMap.smul_apply, postOn_apply, RingHom.id_apply]
@@ -1570,7 +1528,7 @@ open GlobalTheory.OntoChain GlobalTheory.RealIndexBound GlobalTheory.OnTies Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.twistedPlacesBoundChain_twoRunChain : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m) (J : CoreJ D) [Algebra J.Q.c.F D.what₂.LL] (R : RealDat D A J.Q.c.F) (F : Face D A) (κ : ∀ i : Fin D.R.m, WeightFamilies.Wt D ((i : ℕ) + 1)) (v₀ : ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ), (R.MW i σ).Vec) (fw : FWTie J R κ v₀) (L : SizeData₂ D) (Pm : ParameterChoice' D L) (Tp : ParamsT D L Pm) (hK : DV.KapDef D) (EX : ErrX D) (r : TwoRuns J G) (c : OnConst) (O : OnObj ((R.toCx F).data F.cr false) (Mir R) c), IsRec Tp hK EX F fw r O → ∀ (s : ℕ) (N : IndefNum A.fam.base) (C : ℝ), A.fam.Ok s → R.grp_levels F → R.grp_chiW → R.IsModels → R.tup_mu_conj → R.thP_thG → R.LUnif → BaseLinks R F → TwistedRational R F (fun _ => 1) → RankRows ((R.toCx F).data F.cr false) → LeafLevelSq O (Res R) D.R.f → LeafYBound O → LeafSup O → LeafSpan O → LeafLemmaS O → HasIndexBound O → LeafData O → GlobalTheory.TraceClassRank.RankAtPlaces O → LeafIdentity O → LeafTW2 O → HasTwistBound O → LeafShareI O → LeafBadShare O → LeafDepthGood N O → LeafDepthRam N O → LeafDepth2 N O → LeafDepthLevel N O → LeafPage O → LeafSizes O → LeafX O → LeafBad O → HasExpBound N O → c.CE ≤ C → ErrorConstantMatchesDefinition N O C → ∃ err, ONwith ((R.toCx F).data F.cr false) N err := by
-  first | exact @GlobalTheory.OnAtPlacesBase.on_base_atPlaces | exact GlobalTheory.OnAtPlacesBase.on_base_atPlaces | (intros; apply GlobalTheory.OnAtPlacesBase.on_base_atPlaces <;> assumption)
+  first | exact @GlobalTheory.OnAtPlacesBase.on_base_atPlaces
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TwistedPlacesBoundChainTwoRunChainStatement =====
@@ -1636,7 +1594,7 @@ theorem onto_path_alt : _root_.GlobalTheory.BigOn.TwoRunsStatement → _root_.Gl
   have eExp := h6 x hx (le_trans (le_trans (le_max_right _ _) (le_max_left _ _)) d0) i p hp hm r O hrec
   obtain ⟨pPage, pSizes, pX, pBad, pLev, pY, -, pE1u, pTie⟩ :=
     h7 x hx (le_trans (le_max_right _ _) d0) i p hp hm r O hrec
-  have hL : Links2 p := _root_.GlobalTheory.T.links2_of_single_index_twisted _ _ _ _ _ _ _ _ _ _ p hp hm.1
+  have hL : Links2 p := _root_.GlobalTheory.BigOn.links2_of_rows_alt _ _ _ _ _ _ _ _ _ _ p hp hm.1
   obtain ⟨hC, hOk, hU, hBL, hRR, -⟩ := hL
   have hI := GlobalTheory.ClassSumIdentity.leafIdentity_of_isRec _ _ _ _ _ _ (R2 p) (F2 p) _ _ (fw2 p) _ _ _ _ _ r c O hO 1 hOk hC hU hrat
   have hT2 := GlobalTheory.BaseTwistIncl.leafTW2_of_isRec _ _ _ _ _ _ (R2 p) (F2 p) _ _ (fw2 p) _ _ _ _ _ r c O hO 1 hOk hC hU hBL hrat
@@ -1664,14 +1622,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain
-open Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Pj Formalism.L2.DIV Formalism.L2.Indef Formalism.L2.Indef.Tree Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Cx Formalism.IndefR.FWT
-open GlobalTheory.BigTop GlobalTheory.BigOn
-
-theorem _root_.GlobalTheory.T.onto_x_of_all_estimates : _root_.GlobalTheory.BigOn.TwoRunsStatement → _root_.GlobalTheory.BigOn.RationalityStatement' → _root_.GlobalTheory.BigOn.GeometricStatement' → (_root_.GlobalTheory.BigOn.ForallRecordObjects fun _ _ _ _ _ _ O => GlobalTheory.TraceClassRank.RankAtPlaces O) → _root_.GlobalTheory.BigOn.TwistStatement' → _root_.GlobalTheory.BigOn.ShareStatement → _root_.GlobalTheory.BigOn.BadPlacesStatement → _root_.GlobalTheory.BigOn.ExponentStatement → _root_.GlobalTheory.BigOn.PageStatement → _root_.GlobalTheory.BigOn.SurjectiveOntoX := by
-  first | exact @_root_.GlobalTheory.BigOn.OntoPath.onto_path_alt | exact _root_.GlobalTheory.BigOn.OntoPath.onto_path_alt | (intros; apply _root_.GlobalTheory.BigOn.OntoPath.onto_path_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.OntoPathStatement =====
@@ -1683,14 +1633,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain
-open Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Pj Formalism.L2.DIV Formalism.L2.Indef Formalism.L2.Indef.Tree Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Cx Formalism.IndefR.FWT
-open GlobalTheory.BigTop GlobalTheory.BigOn
-
-theorem _root_.GlobalTheory.T.page_estimate_statement' : _root_.GlobalTheory.BigOn.PageStatement := by
-  first | exact @_root_.GlobalTheory.BigOn.pageSt_alt | exact _root_.GlobalTheory.BigOn.pageSt_alt | (intros; apply _root_.GlobalTheory.BigOn.pageSt_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.PageStStatement =====
@@ -1702,14 +1644,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain
-open Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Pj Formalism.L2.DIV Formalism.L2.Indef Formalism.L2.Indef.Tree Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Cx Formalism.IndefR.FWT
-open GlobalTheory.BigTop GlobalTheory.BigOn
-
-theorem _root_.GlobalTheory.T.rank_at_twisted_places_of_max_geo : _root_.GlobalTheory.BigOn.MaximalityStatement → _root_.GlobalTheory.BigOn.GeometricStatement' → (_root_.GlobalTheory.BigOn.ForallTwoRuns fun Fm x _ i p r h => ∀ v ∈ p.R.twPl, ∀ j, letI : Algebra (r.used v).full.J.Q.c.F (Fm.D x i).what₂.LL := p.alg; GlobalTheory.TraceClassRank.CompareOffOwn (T := (r.used v).full) (R := R2 p) (h.laws v).p (fw2 p) j (r.lev j) (F2 p).P0 (F2 p).ψ0⁻¹ 1 v (ownAt (Fm.D x i) v)) → (_root_.GlobalTheory.BigOn.ForallRecordObjects fun _ _ _ _ _ _ O => GlobalTheory.TraceClassRank.RankAtPlaces O) := by
-  first | exact @_root_.GlobalTheory.BigOn.rankLocSt_of_max_geo_runs | exact _root_.GlobalTheory.BigOn.rankLocSt_of_max_geo_runs | (intros; apply _root_.GlobalTheory.BigOn.rankLocSt_of_max_geo_runs <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.RankAtPlacesRecStatement =====
@@ -1729,9 +1663,9 @@ open GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.OntoChain GlobalTheory.
 namespace GlobalTheory.BigOn
 theorem ontoX_of_twist_shares_exp_alt : _root_.GlobalTheory.BigOn.ExportedStatement → _root_.GlobalTheory.BigOn.TwistStatement' → _root_.GlobalTheory.BigOn.ShareStatement → _root_.GlobalTheory.BigOn.BadPlacesStatement → _root_.GlobalTheory.BigOn.ExponentStatement → _root_.GlobalTheory.BigOn.SurjectiveOntoX := by
   intro _ hT hS hB hE
-  have hP : _root_.GlobalTheory.BigOn.PageStatement := _root_.GlobalTheory.T.page_estimate_statement'
-  have hG : _root_.GlobalTheory.BigOn.GeometricStatement' := _root_.GlobalTheory.T.geoSt_of_pageSt' hP
-  exact _root_.GlobalTheory.T.onto_x_of_all_estimates _root_.GlobalTheory.T.runs_estimate_statement' _root_.GlobalTheory.T.rational_estimate_statement' hG (_root_.GlobalTheory.T.rank_at_twisted_places_of_max_geo _root_.GlobalTheory.T.maximum_estimate_statement' hG _root_.GlobalTheory.T.bigOn_comparison_at_twisted_places) hT hS hB hE hP
+  have hP : _root_.GlobalTheory.BigOn.PageStatement := _root_.GlobalTheory.BigOn.pageSt_alt
+  have hG : _root_.GlobalTheory.BigOn.GeometricStatement' := _root_.GlobalTheory.BigOn.geoSt_of_pageSt_alt hP
+  exact _root_.GlobalTheory.BigOn.OntoPath.onto_path_alt _root_.GlobalTheory.BigOn.bigOn_runsSt _root_.GlobalTheory.BigOn.bigOn_ratSt hG (_root_.GlobalTheory.BigOn.rankLocSt_of_max_geo_runs _root_.GlobalTheory.BigOn.maxSt_alt hG _root_.GlobalTheory.BigOn.compareOffOwn_atRuns_alt) hT hS hB hE hP
 end GlobalTheory.BigOn
 end
 end -- clump:auto

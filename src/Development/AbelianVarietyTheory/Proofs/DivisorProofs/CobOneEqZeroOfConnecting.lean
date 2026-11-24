@@ -78,7 +78,7 @@ theorem cobOne_baseChange :
     intro c
     induction c with
     | add x y hx hy => simp only [tmul_add, map_add (f := _), hx, hy]
-    | tmul x y => simp [Bialgebra.comul_one, Algebra.TensorProduct.one_def]
+    | tmul x y => simp
   simp only [cobOne_apply, LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
     LinearMap.baseChange_tmul, tmul_sub, map_sub, TensorProduct.comul_tmul, h,
     AlgebraTensorModule.distribBaseChange_tmul, Algebra.TensorProduct.one_def]
@@ -474,8 +474,6 @@ section -- clump:auto
 
 open TensorProduct Coalgebra Bialgebra CategoryTheory WithConv GlobalTheory GlobalTheory.PDiv GlobalTheory.PDivGroup
 
-theorem _root_.GlobalTheory.T.mem_symmetricCocycles_of_pullback_mulP : ∀ {p : ℕ} {R : Type} [CommRing R] (G : PDivGroup p R) (n : ℕ) (c : G.A n ⊗[R] G.A n), pullbackTwo (G.mulP n) c ∈ symCocycles R (G.A (n + 1)) → c ∈ symCocycles R (G.A n) := by
-  first | exact @GlobalTheory.PDivGroup.mem_symCocycles_of_pullTwo_mulP | exact GlobalTheory.PDivGroup.mem_symCocycles_of_pullTwo_mulP | (intros; apply GlobalTheory.PDivGroup.mem_symCocycles_of_pullTwo_mulP <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.MemSymmetricCocyclesOfPullbackMulPStatement =====
@@ -508,7 +506,7 @@ theorem counit_comp_cartierBaseChange :
   induction x with
   | add x y hx hy => simp only [map_add (f := _), hx, hy]
   | tmul r φ =>
-    simp [Algebra.TensorProduct.one_def, Algebra.smul_def, mul_comm]
+    simp [Algebra.smul_def, mul_comm]
 
 def cotBaseChange :
     Cot R' (CartierDual R' (R' ⊗[R] A)) ≃ₗ[R'] R' ⊗[R] Cot R (CartierDual R A) :=
@@ -715,7 +713,7 @@ theorem exists_of_cobOne_eq_zero {b : G.A 1} (hb : cobOne R _ b = 0) :
   choose c hc using fun n => _root_.GlobalTheory.PDivGroup.exists_tensorSquare_mulP_eq G n _ (_root_.GlobalTheory.PDivGroup.cobOne_transl_invariant G n _ b (hB' n)).1 (_root_.GlobalTheory.PDivGroup.cobOne_transl_invariant G n _ b (hB' n)).2
   have h1 : ∀ n, pullbackTwo (G.res n) (c (n + 1)) = c n := fun n => G.pullbackTwo_mulP_injective n (by
     rw [← pullTwo_comp, mulP_comp_res, ← res_comp_mulP, pullTwo_comp, hc, hc, pullTwo_cobOne, B.2])
-  let c' : G.cocycles := ⟨c, fun n => ⟨T.mem_symmetricCocycles_of_pullback_mulP G n _ (hc n ▸ cobOne_mem _), h1 n⟩⟩
+  let c' : G.cocycles := ⟨c, fun n => ⟨_root_.GlobalTheory.PDivGroup.mem_symCocycles_of_pullTwo_mulP G n _ (hc n ▸ cobOne_mem _), h1 n⟩⟩
   have h2 : ∀ n, (G.cob B).1 (n + 1) = (cocyclesMap ((p : ℤ_[p]) • 𝟙 G) c').1 (n + 1) := fun n => by
     rw [cocyclesMap_natCast_val, ← mulP_comp_res, pullTwo_comp]
     exact (hc n).symm.trans (congrArg _ (h1 n).symm)

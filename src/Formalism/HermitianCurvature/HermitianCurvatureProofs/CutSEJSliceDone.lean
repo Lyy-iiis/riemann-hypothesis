@@ -99,8 +99,8 @@ theorem glueMapS_continuous (l : Fin r) (c : Fin r → ℂ) : Continuous (glueMa
       exact (continuous_apply _).comp (continuous_snd.comp continuous_fst)
     · simp only [glue, h, dif_neg, not_false_eq_true, Function.update_apply]
       by_cases hm : m = l
-      · simp only [hm, eq_self_iff_true, if_true, ite_true] <;> fun_prop
-      · simp only [hm, if_false, ite_false] <;> fun_prop
+      · simp only [hm, if_true] <;> fun_prop
+      · simp only [hm, if_false] <;> fun_prop
   · exact continuous_matrix fun i j => by simp only [Matrix.of_apply]; fun_prop
 
 theorem measurableSet_glueMapS_DomR (l : Fin r) (c : Fin r → ℂ) :
@@ -146,22 +146,6 @@ noncomputable section
 namespace Formalism.FourierDecayAlt.P.CutSE.JSW
 
 open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.Q Formalism.FourierDecayAlt.P5
-
-theorem fderiv_apply_sm {g : ℂ → ℂ} {U : Set ℂ} (hU : IsOpen U) (hg : ContDiffOn ℝ ∞ g U) (v : ℂ) :
-    ContDiffOn ℝ ∞ (fun ζ => fderiv ℝ g ζ v) U :=
-  (hg.fderiv_of_isOpen hU (by simp)).clm_apply contDiffOn_const
-
-theorem dZ_sm {g : ℂ → ℂ} {U : Set ℂ} (hU : IsOpen U) (hg : ContDiffOn ℝ ∞ g U) :
-    ContDiffOn ℝ ∞ (NF.dZ g) U := by
-  unfold NF.dZ
-  exact contDiffOn_const.mul ((fderiv_apply_sm hU hg 1).sub
-    (contDiffOn_const.mul (fderiv_apply_sm hU hg Complex.I)))
-
-theorem dZb_sm {g : ℂ → ℂ} {U : Set ℂ} (hU : IsOpen U) (hg : ContDiffOn ℝ ∞ g U) :
-    ContDiffOn ℝ ∞ (NF.dZb g) U := by
-  unfold NF.dZb
-  exact contDiffOn_const.mul ((fderiv_apply_sm hU hg 1).add
-    (contDiffOn_const.mul (fderiv_apply_sm hU hg Complex.I)))
 
 theorem hasFDerivAt_exponential_character (s t : ℂ) :
     ∃ D : ℂ →L[ℝ] ℂ, HasFDerivAt (fsv s) D t ∧ D 1 = (s - conj s) * fsv s t ∧
@@ -265,7 +249,7 @@ theorem op_pt (X : ActualOps k r z z' π π') (l : Fin r) (i : Fin 6) (Ψ : RadS
 
 theorem wOp_cons (X : ActualOps k r z z' π π') (l : Fin r) (j : Fin 6) (js : List (Fin 6))
     (Ψ : RadSp k r z z' π π') : wOp X l (j :: js) Ψ = X.op l j (wOp X l js Ψ) := by
-  simp [wOp, List.map_cons, List.prod_cons, Module.End.mul_apply]
+  simp [wOp, List.map_cons, List.prod_cons]
 
 theorem wOp_nil (X : ActualOps k r z z' π π') (l : Fin r) (Ψ : RadSp k r z z' π π') : wOp X l [] Ψ = Ψ := by
   simp [wOp]
@@ -316,8 +300,8 @@ theorem nfp_der (b : Bool) (js : List (Fin 6)) (h : NFP X l s Wv js) :
     intro i
     cases b
     · exact (Complex.conjCLE.contDiff.contDiffOn).mul
-        ((dZb_sm isOpen_compl_singleton (hm i)).add (contDiffOn_const.mul (hm i)))
-    · exact contDiffOn_id.mul ((dZ_sm isOpen_compl_singleton (hm i)).add (contDiffOn_const.mul (hm i)))
+        ((_root_.Formalism.FourierDecayAlt.P.NFx4.NO.dZb_smooth isOpen_compl_singleton (hm i)).add (contDiffOn_const.mul (hm i)))
+    · exact contDiffOn_id.mul ((_root_.Formalism.FourierDecayAlt.P.NFx4.NO.dZ_smooth isOpen_compl_singleton (hm i)).add (contDiffOn_const.mul (hm i)))
   refine ⟨K + K, Fin.append mL m, Fin.append ab (fun i => (if b then (0 : Fin 6) else 3) :: ab i),
     ?_, ?_, ?_⟩
   · refine Fin.addCases (fun i => ?_) (fun i => ?_)
@@ -463,7 +447,7 @@ theorem hsVecR_dSl (U V : Wq →L[ℂ] Wp) :
   rw [hs]
   simp only [map_add (f := _), map_mul, Complex.conj_ofReal, Complex.conj_I, Complex.add_re, Complex.ofReal_re,
     Complex.mul_re, Complex.I_re, Complex.ofReal_im, Complex.I_im, Complex.add_im, Complex.mul_im]
-  simp only [mul_zero, mul_one, sub_zero, zero_add, add_zero, zero_sub]
+  simp only [mul_zero, mul_one, sub_zero, zero_add, add_zero]
   rw [← Complex.coe_smul, ← Complex.coe_smul]
   module
 
@@ -833,7 +817,7 @@ def wlist7 : Fin 7 → List (Fin 6) :=
 theorem seven_derivatives_of_word_operator (X : ActualOps k r z z' π π') (l : Fin r) (js : List (Fin 6)) (Ψ : RadSp k r z z' π π')
     (i : Fin 7) : wd7 X l (wOp X l js Ψ) i = wOp X l (wlist7 i ++ js) Ψ := by
   fin_cases i <;>
-    simp [wd7, wlist7, wOp, dT, dTb, List.map_cons, List.prod_cons, Module.End.mul_apply, mul_assoc]
+    simp [wd7, wlist7, wOp, dT, dTb, List.map_cons, List.prod_cons]
 
 theorem wOp_lcJ (X : ActualOps k r z z' π π') (l : Fin r) (js : List (Fin 6)) :
     ∀ Ψ ∈ lcSub k r z z' π π', wOp X l js Ψ ∈ lcSub k r z z' π π' := by
@@ -842,7 +826,7 @@ theorem wOp_lcJ (X : ActualOps k r z z' π π') (l : Fin r) (js : List (Fin 6)) 
   | cons j js ih =>
     intro Ψ h
     have e : wOp X l (j :: js) Ψ = X.op l j (wOp X l js Ψ) := by
-      simp [wOp, List.map_cons, List.prod_cons, Module.End.mul_apply]
+      simp [wOp, List.map_cons, List.prod_cons]
     rw [e]
     exact op_lc X l j _ (ih Ψ h)
 

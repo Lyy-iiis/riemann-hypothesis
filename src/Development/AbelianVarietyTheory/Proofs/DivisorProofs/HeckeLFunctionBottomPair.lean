@@ -256,11 +256,10 @@ open GlobalTheory.StdLoc (glVol blockIdx)
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.NormRatio
 
-
 theorem _root_.GlobalTheory.T.card_transversal_congruence_mul_norm_eq_localNorm : ∀ (D : D7) (𝔪 : Ideal (𝓞 D.host.E)), 𝔪 ≠ ⊥ → 𝔪 ⊔ D.host.conj • 𝔪 = ⊤ → ∀ (a a' : ℕ) (R : Finset (Formalism.MainNotions.StandardLatticesGL3.GA D a)),
   (∀ r ∈ R, r ∈ intG D a) → (∀ k ∈ intG D a, ∃! r, r ∈ R ∧ CongOne D 𝔪 (r⁻¹ * k)) →
     (R.card : ℝ) * ((Ideal.absNorm 𝔪 : ℝ) ^ (a * (a + a')))⁻¹ = locNorm D 𝔪 a a' := by
-  first | exact @GlobalTheory.NormRatio.card_transversal_mul | exact GlobalTheory.NormRatio.card_transversal_mul | (intros; apply GlobalTheory.NormRatio.card_transversal_mul <;> assumption)
+  first | exact @GlobalTheory.NormRatio.card_transversal_mul
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.CardTransversalCongruenceMulNormEqLocalNormStatement =====
@@ -353,101 +352,23 @@ open GlobalTheory.VacRead (cE)
 
 section Copy
 
-def posSig {D : D7} (S : HSp D) : HSp D := {S with sig := fun _ => (S.rank, 0)}
-
-theorem hasSignature_one (n : ℕ) : Formalism.UG.HasSignature (1 : Matrix (Fin n) (Fin n) ℂ) n 0 := by
-  refine ⟨(Equiv.sumEmpty (Fin n) (Fin 0)).symm, 1, ?_⟩
-  ext i j
-  rcases i with i | i
-  · rcases j with j | j
-    · simp [Formalism.UG.Jpq, Formalism.UG.cT, Matrix.one_apply]
-    · exact j.elim0
-  · exact i.elim0
-
-theorem sigOK_posSig {D : D7} (S : HSp D) (h : S.gram = 1) : (posSig S).SigOK := by
-  intro τ
-  show Formalism.UG.HasSignature (S.gram.map τ) S.rank 0
-  rw [h, Matrix.map_one _ (map_zero τ) (map_one τ)]
-  exact hasSignature_one _
-
 open scoped ComplexOrder in
-theorem isCartanInv_one {D : D7} (S : HSp D) (h : S.gram = 1) (τ : D.what₂.Tau) : IsCartanInv (gramAt D S τ) 1 := by
-  have : gramAt D S τ = 1 := by
-    show (HSpace.gram S).map (tauE D τ) = 1
-    rw [h, Matrix.map_one _ (map_zero _) (map_one _)]
-  rw [this]
-  exact ⟨by simp, by simp, by simpa using (Matrix.PosDef.one : Matrix.PosDef (1 : Matrix (Fin S.rank) (Fin S.rank) ℂ))⟩
-
 theorem vac_exists_gram_one {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (hψ : IsStdChar D ψ (-1))
     (hθ : IsInfFam θ) (S T : HSp D) (gS : S.gram = 1) (gT : T.gram = 1)
     (ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)) (ΛT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E))
     (hS : IsSelfDualC S ΛS) (hT : IsSelfDualC T ΛT) :
-    ∃ f : WO S T → ℂ, IsVacO ψ θ S T (fun _ => 1) (fun _ => 1) ΛS ΛT f := by
-  obtain ⟨f, hf⟩ := GlobalTheory.VacuumO.vacExists D ψ θ hψ hθ (posSig S) (posSig T) (fun _ => 1) (fun _ => 1)
-    (sigOK_posSig S gS) (sigOK_posSig T gT) (isCartanInv_one S gS) (isCartanInv_one T gT) ΛS ΛT hS hT
-  exact ⟨f, hf.1, ⟨hf.2.inf, ⟨hf.2.theta.quasi, hf.2.theta.level, hf.2.theta.cont, hf.2.theta.smooth⟩, hf.2.lat,
-    hf.2.fock, hf.2.norm⟩⟩
+    ∃ f : WO S T → ℂ, IsVacO ψ θ S T (fun _ => 1) (fun _ => 1) ΛS ΛT f :=
+  GlobalTheory.VacRead.vac_exists_gram_one ψ θ hψ hθ S T gS gT ΛS ΛT hS hT
 
 variable {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ : ℂ} {r : D.host.E}
-
-theorem Hf_div_scale (hc : Formalism.MainNotions.StandardLatticesGL3.Crv D cc δ) (h : IsScale D cc r) {a d : ℕ} (z x : VC D a d) :
-    Hf D (tor0 D D.host.ccK δ) (fun τ i j => z τ i j / embT D τ r) (fun τ i j => x τ i j / embT D τ r) =
-      Hf D (tor0 D cc δ) z x := by
-  have hr : r ≠ 0 := IsScale.ne_zero hc.1.1 h
-  have hA := area_pos hc
-  have hx := xiR_pos D
-  have key : ∀ τ, Complex.normSq (embT D τ r) * area (lamOf D D.host.ccK δ) = area (lamOf D cc δ) := by
-    intro τ
-    have h1 := normSq_scale hc.1.1 h δ τ
-    have h2 := normSq_scale D.host.ccK_ne_bot (isScale_one D) δ τ
-    rw [map_one, mul_one] at h2
-    rw [Complex.normSq_mul, h2] at h1
-    have h3 : (2 * Formalism.L2.Pj.xiR D) * (Complex.normSq (embT D τ r) * area (lamOf D D.host.ccK δ)) =
-        (2 * Formalism.L2.Pj.xiR D) * area (lamOf D cc δ) := by rw [← h1]; ring
-    exact mul_left_cancel₀ (by positivity) h3
-  have hL : ∀ c : Ideal (𝓞 D.host.K), (tor0 D c δ).abelian₂ = lamOf D c δ := fun _ => rfl
-  rw [Formalism.MainNotions.TaylorLogMetric.Hf, Formalism.MainNotions.TaylorLogMetric.Hf, hL, hL, Finset.sum_div, Finset.sum_div]
-  refine Finset.sum_congr rfl fun τ _ => ?_
-  rw [Finset.sum_div, Finset.sum_div]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [Finset.sum_div, Finset.sum_div]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  have ht : embT D τ r ≠ 0 := (map_ne_zero _).2 hr
-  have htc : starRingEnd ℂ (embT D τ r) ≠ 0 := (map_ne_zero _).2 ht
-  have hK : (area (lamOf D D.host.ccK δ) : ℂ) ≠ 0 := by
-    have : 0 < area (lamOf D D.host.ccK δ) := by
-      have := key τ
-      have h0 : 0 < Complex.normSq (embT D τ r) := Complex.normSq_pos.2 ht
-      nlinarith
-    exact_mod_cast this.ne'
-  rw [← key τ, map_div₀]
-  push_cast
-  rw [← Complex.mul_conj]
-  field_simp
 
 theorem th_div_scale (hc : Formalism.MainNotions.StandardLatticesGL3.Crv D cc δ) (h : IsScale D cc r) {a d : ℕ}
     {L Ls : GlobalTheory.InertSign.Lat D a} {L' Lt : GlobalTheory.InertSign.Lat D d}
     (hLa : ∀ x ∈ Formalism.MainNotions.TaylorLogMetric.La D (tor0 D cc δ) L L',
       (fun τ i j => x τ i j / embT D τ r) ∈ Formalism.MainNotions.TaylorLogMetric.La D (tor0 D D.host.ccK δ) Ls Lt)
     {Φ : VC D a d → ℂ} (hΦ : Φ ∈ Th D (tor0 D D.host.ccK δ) Ls Lt) :
-    (fun Y => Φ (fun τ i j => Y τ i j / embT D τ r)) ∈ Th D (tor0 D cc δ) L L' := by
-  refine ⟨?_, ?_⟩
-  · have hl : Differentiable ℂ (fun Y : VC D a d => (fun τ i j => Y τ i j / embT D τ r : VC D a d)) := by
-      fun_prop
-    exact hΦ.1.comp hl
-  · intro x hx z
-    have e1 := hΦ.2 _ (hLa x hx) (fun τ i j => z τ i j / embT D τ r)
-    have hal : Formalism.MainNotions.TaylorLogMetric.al D (tor0 D cc δ) x =
-        Formalism.MainNotions.TaylorLogMetric.al D (tor0 D D.host.ccK δ) (fun τ i j => x τ i j / embT D τ r) := by
-      simp only [Formalism.MainNotions.TaylorLogMetric.al, Hf_div_scale hc h]
-    have hadd : (fun τ i j => (z + x) τ i j / embT D τ r) =
-        (fun τ i j => z τ i j / embT D τ r) + (fun τ i j => x τ i j / embT D τ r) := by
-      funext τ i j
-      simp [add_div]
-    show _ = Φ fun τ i j => z τ i j / embT D τ r
-    rw [← e1, hal]
-    simp only [Formalism.MainNotions.TaylorLogMetric.U]
-    rw [Hf_div_scale hc h, Hf_div_scale hc h, hadd]
+    (fun Y => Φ (fun τ i j => Y τ i j / embT D τ r)) ∈ Th D (tor0 D cc δ) L L' :=
+  GlobalTheory.VacRead.th_div_scale hc h hLa hΦ
 
 end Copy
 
@@ -838,7 +759,6 @@ open GlobalTheory.StdLoc (glVol blockIdx)
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.NormRatio
 
-
 theorem _root_.GlobalTheory.T.exists_selfDualLattice_vacuumReading : ∀ {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) {a d : ℕ} (hS : S.rank = a) (hT : T.rank = d)
   (δ : ℂ) (r : D.host.E), Setup ψ θ S T ⊤ δ r →
   ∃ LT : Lat T, IsSelfDualC T LT ∧
@@ -846,7 +766,7 @@ theorem _root_.GlobalTheory.T.exists_selfDualLattice_vacuumReading : ∀ {D : D7
       finPt hS hT r z ∈ latO S T (stdLat S) LT fun _ => True) ∧
     ∀ e0 ∈ Formalism.MainNotions.TaylorLogMetric.Th D (Formalism.MainNotions.TaylorLogMetric.tor0 D ⊤ δ) (Formalism.MainNotions.StandardLatticesGL3.stdL D a) (Formalism.MainNotions.StandardLatticesGL3.stdL D d), ∀ f₀,
       Reads ψ θ hS hT ⊤ δ r e0 f₀ → IsSphOff ψ S T (stdLat S) LT ∅ f₀ := by
-  first | exact @GlobalTheory.NormRatio.vacLat_of_reads | exact GlobalTheory.NormRatio.vacLat_of_reads | (intros; apply GlobalTheory.NormRatio.vacLat_of_reads <;> assumption)
+  first | exact @GlobalTheory.NormRatio.vacLat_of_reads
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsSelfDualLatticeVacuumReadingStatement =====
@@ -888,11 +808,6 @@ theorem heisO_comm (x y : WO S T) (f : WO S T → ℂ) :
     linear_combination (-symplO S T x y) * h2
   rw [GlobalTheory.OrientedHeis.heisO_heisO, GlobalTheory.OrientedHeis.heisO_heisO, smul_smul, ← AddChar.map_add_eq_mul, e, add_comm]
 
-theorem heisO_smul (x : WO S T) (c : ℂ) (f : WO S T → ℂ) : heisO ψ S T x (c • f) = c • heisO ψ S T x f := by
-  funext w
-  simp only [heisO, Pi.smul_apply, smul_eq_mul]
-  ring
-
 theorem ip_heisO_eq_zero {ΛS : Lat S} {ΛT : Lat T} (hψ : IsStdChar D ψ (-1)) (hS : IsSelfDualC S ΛS) (hT : IsSelfDualC T ΛT)
     {f : WO S T → ℂ} (hf : IsThetaFunO ψ S T f) (hv : IsLatVac (heisO ψ S T) (latO S T ΛS ΛT fun _ => True) f)
     {μ : Measure (WO S T)} {𝓕 : Set (WO S T)} (hμ : IsCovolOne (ratL T S) μ 𝓕) {u u' : WO S T}
@@ -912,7 +827,7 @@ theorem ip_heisO_eq_zero {ΛS : Lat S} {ΛT : Lat T} (hψ : IsStdChar D ψ (-1))
   have t1 := GlobalTheory.FinTranslate.isThetaFunO_heisO hψ.1.1 hψ.1.2.1 hf hu
   have t2 := GlobalTheory.FinTranslate.isThetaFunO_heisO hψ.1.1 hψ.1.2.1 hf hu'
   have e := GlobalTheory.Size.ipO_heisO hψ hμ.1 hμ.2.1 t1 t2 l
-  rw [heisO_comm l u, heisO_comm l u', hεf f hv, heisO_smul, heisO_smul, GlobalTheory.Size.ipO_smul_left, GlobalTheory.Size.ipO_smul_left,
+  rw [heisO_comm l u, heisO_comm l u', hεf f hv, _root_.GlobalTheory.ThetaAllChar.heisO_smul, _root_.GlobalTheory.ThetaAllChar.heisO_smul, GlobalTheory.Size.ipO_smul_left, GlobalTheory.Size.ipO_smul_left,
     GlobalTheory.Size.ipO_smul_right, GlobalTheory.Size.ipO_smul_right] at e
   have hεε : ε * starRingEnd ℂ ε = 1 := by rcases hε with rfl | rfl <;> simp
   have n1 := GlobalTheory.HeisOrtho.mul_conj_of_norm_one (hψ.1.2.1 (symplO S T l u'))
@@ -956,15 +871,8 @@ theorem ip_sum (hψ : IsStdChar D ψ (-1)) {μ : Measure (WO S T)} {𝓕 : Set (
   refine Finset.sum_congr rfl fun i hi => ?_
   rw [Finset.sum_eq_single_of_mem i hi fun j _ hj => by rw [ho i j hj.symm, mul_zero], ha, hc, one_mul]
 
-theorem selfDual_stdLat (hS : S.gram = 1) : IsSelfDualC S (stdLat S) := by
-  convert GlobalTheory.Ker.Base.selfDualC_stdL hS using 1
-  ext x
-  rw [GlobalTheory.SW.Base.mem_stdL, stdLat, stdL, Submodule.mem_pi]
-  refine forall_congr' fun i => ⟨fun h => ?_, fun h _ => ?_⟩
-  · obtain ⟨b, hb⟩ := Submodule.mem_one.1 (h trivial)
-    rw [← hb]
-    exact b.2
-  · exact Submodule.mem_one.2 ⟨⟨x i, h⟩, rfl⟩
+theorem selfDual_stdLat (hS : S.gram = 1) : IsSelfDualC S (stdLat S) :=
+  GlobalTheory.CosetOrth.stdLat_selfDual hS
 
 theorem reads_sum {θ : InfFam D} {a d : ℕ} {hS : S.rank = a} {hT : T.rank = d} {cc : Ideal (𝓞 D.host.K)} {δ : ℂ} {r : D.host.E}
     {ι : Type} (s : Finset ι) {G : ι → VC D a d → ℂ} {f : ι → WO S T → ℂ} (h : ∀ i, Reads ψ θ hS hT cc δ r (G i) (f i)) :
@@ -988,8 +896,6 @@ theorem pt_sub_mem {a d : ℕ} (δ : ℂ) {z z' : Matrix (Fin d) (Fin a) D.host.
   funext τ i j
   simp only [pt, embV, tor0, Pi.sub_apply, Pi.smul_apply, Matrix.sub_apply, smul_eq_mul, map_sub]
   ring
-
-
 
 theorem ip_cosetVec : ∀ {D : D7} {δ t0 : ℂ} {Q : ℕ} (P : Pair D ⊤ δ t0 Q) (X : Data P) (r : D.host.E), IsExact P X r →
   ∀ (𝔪 : Ideal (𝓞 D.host.E)) (Sf : Finset (FinPl D)) (o : ℕ), GoodMod D 𝔪 Sf →
@@ -1087,7 +993,6 @@ open GlobalTheory.StdLoc (glVol blockIdx)
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.NormRatio
 
-
 theorem _root_.GlobalTheory.T.thetaCosetIndicatorReading_normSq_eq_absNorm_inv_mul_vacuum : ∀ {D : D7} {δ t0 : ℂ} {Q : ℕ} (P : Pair D ⊤ δ t0 Q) (X : Data P) (r : D.host.E), IsExact P X r →
   ∀ (𝔪 : Ideal (𝓞 D.host.E)) (Sf : Finset (FinPl D)) (o : ℕ), GoodMod D 𝔪 Sf →
   ∀ LB : Lat X.B, IsSelfDualC X.B LB →
@@ -1097,7 +1002,7 @@ theorem _root_.GlobalTheory.T.thetaCosetIndicatorReading_normSq_eq_absNorm_inv_m
     Reads X.ψ X.θ X.rkA X.rkB ⊤ δ r (cosetVec P 𝔪 o) φ →
   ∀ (ν : Measure (WO X.A X.B)) (𝓕 : Set (WO X.A X.B)), IsCovolOne (ratL X.B X.A) ν 𝓕 →
     ip X.A X.B ν 𝓕 φ φ = ((Ideal.absNorm 𝔪 : ℂ) ^ (P.a * P.d))⁻¹ * ip X.A X.B ν 𝓕 f₀ f₀ := by
-  first | exact @GlobalTheory.NormRatio.CosetNorm.ip_cosetVec | exact GlobalTheory.NormRatio.CosetNorm.ip_cosetVec | (intros; apply GlobalTheory.NormRatio.CosetNorm.ip_cosetVec <;> assumption)
+  first | exact @GlobalTheory.NormRatio.CosetNorm.ip_cosetVec
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaCosetIndicatorReadingNormSqEqVacuumStatement =====
@@ -1122,7 +1027,6 @@ open GlobalTheory.StdLoc (glVol blockIdx)
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.NormRatio
 
-
 theorem _root_.GlobalTheory.T.thetaCosetIndicatorReading_spherical_off_modulus : ∀ {D : D7} {δ t0 : ℂ} {Q : ℕ} (P : Pair D ⊤ δ t0 Q) (X : Data P) (r : D.host.E), IsExact P X r →
   ∀ (𝔪 : Ideal (𝓞 D.host.E)) (Sf : Finset (FinPl D)) (o : ℕ), GoodMod D 𝔪 Sf →
   ∀ LB : Lat X.B, IsSelfDualC X.B LB →
@@ -1130,8 +1034,8 @@ theorem _root_.GlobalTheory.T.thetaCosetIndicatorReading_spherical_off_modulus :
       finPt X.rkA X.rkB r z ∈ latO X.A X.B (stdLat X.A) LB fun _ => True) →
   ∀ f₀ φ, Reads X.ψ X.θ X.rkA X.rkB ⊤ δ r P.e0 f₀ → IsSphOff X.ψ X.A X.B (stdLat X.A) LB ∅ f₀ →
     Reads X.ψ X.θ X.rkA X.rkB ⊤ δ r (cosetVec P 𝔪 o) φ →
-    IsSphOff X.ψ X.A X.B (stdLat X.A) LB Sf φ := by
-  first | exact @GlobalTheory.NormRatio.SphCoset.sph | exact GlobalTheory.NormRatio.SphCoset.sph | (intros; apply GlobalTheory.NormRatio.SphCoset.sph <;> assumption)
+    IsSphOff X.ψ X.A X.B (stdLat X.A) LB Sf φ :=
+  @GlobalTheory.NormRatio.SphCoset.sph
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaCosetIndicatorReadingSphericalOffModulusStatement =====
@@ -1214,7 +1118,7 @@ theorem integral_eq_mean {G V : Type} [AddCommGroup G] [TopologicalSpace G] [IsT
     rw [hmA _ (measurable_const_add _ hA), hmA _ hA, ← measure_preimage_add ν p (Y ⁻¹' A ∩ _)]
     congr 1
     ext x
-    simp only [Set.mem_inter_iff, Set.mem_preimage, map_add (f := _), SetLike.mem_coe, Pi.add_apply, id]
+    simp only [Set.mem_inter_iff, Set.mem_preimage, map_add (f := _), SetLike.mem_coe]
     exact and_congr_right fun _ => (P.add_mem_cancel_left hp).symm
   haveI : m.IsAddLeftInvariant := (forall_measure_preimage_add_iff m).1 hinv
   have hm1 : m F0 = 1 := by rw [hmA _ hF0m, ← hone]; exact hfd.measure_eq h𝓕
@@ -1327,8 +1231,6 @@ theorem eq_of_inf_fin {θ : InfFam D} (hθ : IsInfFam θ) {S T : HSp D} {u v : W
     change θ τ (infPart D (u i j)) = 0
     rw [this, RingHom.map_zero]
   exact (GlobalTheory.StdUnn.exists_unique_of_comp_finPart D θ hθ _ _ (fun _ => 0) v).unique ⟨hz hu, h⟩ ⟨hz hv, rfl⟩
-
-
 
 theorem ip_eq_normSq : ∀ {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) {a d : ℕ} (hS : S.rank = a) (hT : T.rank = d)
   (δ : ℂ) (r : D.host.E), Setup ψ θ S T ⊤ δ r →
@@ -1464,7 +1366,6 @@ open GlobalTheory.StdLoc (glVol blockIdx)
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.NormRatio
 
-
 theorem _root_.GlobalTheory.T.thetaLineReading_adelicNorm_eq_torusMeanSquare : ∀ {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) {a d : ℕ} (hS : S.rank = a) (hT : T.rank = d)
   (δ : ℂ) (r : D.host.E), Setup ψ θ S T ⊤ δ r →
   ∀ LT : Lat T, IsSelfDualC T LT →
@@ -1474,7 +1375,7 @@ theorem _root_.GlobalTheory.T.thetaLineReading_adelicNorm_eq_torusMeanSquare : �
     Reads ψ θ hS hT ⊤ δ r e0 f₀ → IsSphOff ψ S T (stdLat S) LT ∅ f₀ →
   ∀ (ν : Measure (WO S T)) (𝓕 : Set (WO S T)), IsCovolOne (ratL T S) ν 𝓕 →
     ip S T ν 𝓕 f₀ f₀ = (Formalism.MainNotions.TaylorLogMetric.normSq D (Formalism.MainNotions.TaylorLogMetric.tor0 D ⊤ δ) (Formalism.MainNotions.StandardLatticesGL3.La0 D (Formalism.MainNotions.TaylorLogMetric.tor0 D ⊤ δ) a d) e0 : ℝ) := by
-  first | exact @GlobalTheory.VacNormMean.ip_eq_normSq | exact GlobalTheory.VacNormMean.ip_eq_normSq | (intros; apply GlobalTheory.VacNormMean.ip_eq_normSq <;> assumption)
+  first | exact @GlobalTheory.VacNormMean.ip_eq_normSq
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaLineReadingAdelicNormEqTorusMeanSquareStatement =====
@@ -1552,12 +1453,11 @@ open GlobalTheory.StdLoc (glVol blockIdx)
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.NormRatio
 
-
 theorem _root_.GlobalTheory.T.weilRep_keeps_spherical_of_lattice_stabilizer : ∀ {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (A B : HSp D) (χA χB : (AE D)ˣ →* Circle) (om : GlobalTheory.Core.Rk.IP.WRep A B),
   IsWeilDatumO ψ A B χA χB om → ∀ (LA : Lat A) (LB : Lat B), IsSelfDualC A LA → IsSelfDualC B LB →
   ∀ (Sf : Finset (FinPl D)) (g : GA D A), g ∈ openOff A LA Sf → ∀ f, IsThetaFunO ψ A B f → IsSphOff ψ A B LA LB Sf f →
     IsSphOff ψ A B LA LB Sf (om (g, 1) f) := by
-  first | exact @GlobalTheory.SphMove.isSphOff_om | exact GlobalTheory.SphMove.isSphOff_om | (intros; apply GlobalTheory.SphMove.isSphOff_om <;> assumption)
+  first | exact @GlobalTheory.SphMove.isSphOff_om
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilRepKeepsSphericalOfLatticeStabilizerStatement =====
@@ -1717,8 +1617,6 @@ section Exact
 
 variable {D : D7} {δ t0 : ℂ} {Q : ℕ} {P : Pair D ⊤ δ t0 Q} {X : Data P} {r : D.host.E}
 
-theorem congOne_one (𝔪 : Ideal (𝓞 D.host.E)) (N : ℕ) : CongOne D 𝔪 (1 : Formalism.MainNotions.StandardLatticesGL3.GA D N) := fun i j => by simp
-
 theorem vac_eq_of_reads (h : IsExact P X r) {G : Formalism.MainNotions.TaylorLogMetric.VC D P.a P.d → ℂ} {f : WO X.A X.B → ℂ} (hF : P.F = G)
     (h1 : Reads X.ψ X.θ X.rkA X.rkB ⊤ δ r G f) : X.vac = f := by
   subst hF
@@ -1753,7 +1651,7 @@ theorem norm_transl (h : IsExact P X r) {𝔪 : Ideal (𝓞 D.host.E)} {Sf : Fin
     ip X.A X.B ν 𝓕 (∑ y ∈ R, X.om (X.ιA y, 1) φ) (∑ y ∈ R, X.om (X.ιA y, 1) φ) = (R.card : ℂ) * ip X.A X.B ν 𝓕 φ φ := by
   refine norm_sum X.ιA h.weil hν hφ R fun y hy y' hy' hne =>
     horth _ (mem_openOff h (mul_mem (inv_mem (hR y' hy')) (hR y hy)) Sf) fun hc => hne ?_
-  have h1 : CongOne D 𝔪 (y⁻¹ * y) := by rw [inv_mul_cancel]; exact congOne_one 𝔪 _
+  have h1 : CongOne D 𝔪 (y⁻¹ * y) := by rw [inv_mul_cancel]; exact _root_.GlobalTheory.FunObj.StdDatum.congOne_one 𝔪 _
   exact (hRu y (hR y hy)).unique ⟨hy', hc.2⟩ ⟨hy, h1⟩
 
 theorem supp_transl (h : IsExact P X r) {𝔪 : Ideal (𝓞 D.host.E)} {Sf : Finset (FinPl D)}

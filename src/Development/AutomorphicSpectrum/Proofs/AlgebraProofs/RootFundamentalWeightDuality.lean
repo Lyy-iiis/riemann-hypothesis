@@ -82,7 +82,7 @@ private theorem sum_shift_mul_neg_indicator_eq_ite (N : ℕ) (m n : Fin N) :
       split_ifs <;> omega
     · intro b _ hb
       have hb' : (b:ℕ) ≠ m := fun h => hb (Fin.ext h)
-      have : ¬ ((b:ℕ) + 1 = ((⟨m + 1, hm⟩ : Fin N) : ℕ)) := by simp only [Fin.val_mk]; omega
+      have : ¬ ((b:ℕ) + 1 = ((⟨m + 1, hm⟩ : Fin N) : ℕ)) := by simp only; omega
       rw [if_neg this]
     · simp
 
@@ -121,8 +121,7 @@ open ReciprocityTheory.ChartRestriction.G.AI.I4 (IsPullHerm imageZ blockFnField)
 
 namespace GlobalTheory.CompanionTheory.Ar.Cmp
 
-theorem rootOnFund_mul_fundOnRoot_inverse : ∀ (Ψ : Type) [Fintype Ψ] [DecidableEq Ψ] (N : ℕ) (r r' : Ψ × Fin N), (∑ a, rootOnFund r a * fundOnRoot a r' = if r = r' then 1 else 0) ∧ (∀ π : Ψ ≃ Ψ, rootOnFund (π r.1, r.2) (π r'.1, r'.2) = rootOnFund r r' ∧ fundOnRoot (π r.1, r.2) (π r'.1, r'.2) = fundOnRoot r r') :=
-  @PositivityTheory.UnitarySelfGeneration.h_fundinv
+alias rootOnFund_mul_fundOnRoot_inverse := _root_.PositivityTheory.UnitarySelfGeneration.h_fundinv
 
 end GlobalTheory.CompanionTheory.Ar.Cmp
 end -- clump:auto

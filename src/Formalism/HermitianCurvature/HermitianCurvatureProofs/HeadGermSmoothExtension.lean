@@ -103,7 +103,6 @@ theorem zxH_rfl (h : C.LPt) (v : XH h) : zxH h (D.ptSize h) rfl v = LeftFubiniLe
     U.hMat (D.ptPerm h) (D.ptDiag h) := by
   first
   | rfl
-  | simp [zxH]
 
 theorem supp_of (hW : PartialBesselProperness.PbWords) (hP : ProperDomP) : Supp := by
   intro Wp Wq _ _ _ _ _ _ P p F j hj w h hh γ hF hw hγ hΩ K _ hK0
@@ -639,7 +638,7 @@ theorem hpk_last {ρ : ℕ} (hρ : 1 ≤ ρ) (v : Fin (2 * ρ + k + 1)) :
     Hpk k ρ ⟨2 * ρ + k, by omega⟩ v = if v.val = 0 then 1 else 0 := by
   unfold Hpk
   have hv := v.isLt
-  simp only [Fin.ext_iff, Fin.val_mk]
+  simp only [Fin.ext_iff]
   split_ifs <;> first | rfl | (exfalso; omega)
 
 theorem cL_last {j ρ : ℕ} (a : Fin j → ℂ) (v : Fin (2 * ρ + k + 1)) (α : Fin j) :
@@ -741,7 +740,7 @@ theorem nL_castM {r j : ℕ} (hj : j + 1 ≤ r) (a : Fin j → ℂ) :
 
 theorem nL_mem {r j : ℕ} (hj : j + 1 ≤ r) (a : Fin j → ℂ) : LevelPointCoordinates.nL k r j hj a ∈ Nset k r := by
   rw [nL_castM hj a]
-  exact PBH.castM_N _ (LeftFubiniLemmas.rn_nset _)
+  exact PBH.castM_N _ (_root_.Formalism.FourierDecayAlt.P.Ux3.rn_nset _)
 
 theorem psi_castM {j ρ r : ℕ} (e : j + ρ = r) (zj : Fin (2 * ρ + k + 1) → ℂ) (z : Fin (2 * r + k + 1) → ℂ)
     (hz : D.castV e (liftVec k j ρ zj) = z) (c : ℂ) (M : B.Mat k (j + ρ)) :

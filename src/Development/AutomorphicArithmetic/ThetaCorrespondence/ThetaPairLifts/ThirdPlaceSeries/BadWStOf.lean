@@ -1313,8 +1313,8 @@ theorem eU_coeff_one_ne (g N : ℕ) [NeZero g] (ψ₀ : AddChar (ZMod g) ℂ) :
   have h1 : (1 : GL (Fin N) (ZMod g)) ∈ J := by
     rw [hJ, Finset.mem_filter]
     refine ⟨Finset.mem_univ _, fun a b => ⟨fun h => ?_, fun h => ?_⟩⟩
-    · simp [Matrix.one_apply, (ne_of_gt h)]
-    · simp [Matrix.one_apply, h]
+    · simp [(ne_of_gt h)]
+    · simp [h]
   have h0 : (∑ i ∈ Finset.range (N - 1), Formalism.MainNotions.ArithmeticCylinders.entN ((1 : GL (Fin N) (ZMod g)) :
       Matrix (Fin N) (Fin N) (ZMod g)) i (i + 1)) = 0 := by
     refine Finset.sum_eq_zero fun i _ => ?_
@@ -1353,7 +1353,7 @@ theorem mass_not_hasPrimeFactor_le_five (g : ℕ) [Fact g.Prime] (N : ℕ) (hN :
       UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hh, hS _ hp⟩
   have h2 := _root_.GlobalTheory.BadShare.mass_degType_le_cycleType g N (fun s => ∀ p ∈ S, p ∉ s)
   have h3 := GlobalTheory.BadShare.card_perm_no_long_cycle N S fun p hp => (hS p hp).2.1
-  have h4 := sum_inv_primes_between_ge N hN
+  have h4 := _root_.GlobalTheory.PrimeRecip.inv_five_log_le_sum_inv_primes N hN
   have hf : (0 : ℝ) < N.factorial := by exact_mod_cast N.factorial_pos
   have h5 : ∀ p ∈ S, ((Finset.univ.filter fun σ : Equiv.Perm (Fin N) => p ∈ σ.partition.parts).card : ℝ) =
       N.factorial * ((1 : ℝ) / p) := by

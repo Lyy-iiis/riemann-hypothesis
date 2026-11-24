@@ -276,10 +276,6 @@ section -- clump:auto
 open GlobalTheory.KZ GlobalTheory.CyclotomicQExpansion GlobalTheory.Glue
 open scoped MatrixGroups
 
-theorem _root_.GlobalTheory.T.logDerivQExpansion_mul_primePow_congr : ∀ {Ω : Type} [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] {ε : Ω →+* ℂ} (X : Tower Ω ε) (A : ValuationSubring Ω) (l : ℕ) [Fact l.Prime], (l : Ω) ∈ A.nonunits → ∀ (n : ℕ) (f u : X.K), f ≠ 0 → u ≠ 0 → X.sl (ofSL ModularGroup.T) u = u → ∀ φ φ' : HahnSeries ℚ Ω, IsDl X A l n 1 f φ → IsDl X A l n 1 (f * u ^ (l ^ n)) φ' → ∀ r, CgA A l n (φ.coeff r) (φ'.coeff r) := by
-  intro Ω _ _ _
-  haveI : IsAlgClosed Ω := IsAlgClosure.isAlgClosed ℚ
-  exact @GlobalTheory.Glue.DlPow.isDl_mul_lpow_cong Ω _ _ _
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FoundationProofs.LogDerivQExpansionMulPrimePowCongrStatement =====
@@ -294,12 +290,6 @@ open scoped MatrixGroups Matrix
 
 noncomputable section
 namespace GlobalTheory.HeckeTh
-
-theorem toGQ_coe (γ : SL(2, ℤ)) : toGQ (γ : Matrix (Fin 2) (Fin 2) ℤ) = ofSL γ := by
-  have h : (0:ℤ) < (γ : Matrix (Fin 2) (Fin 2) ℤ).det := by rw [γ.det_coe]; exact one_pos
-  unfold toGQ; rw [dite_eq_left h]
-  apply Subtype.ext; apply Units.ext
-  simp [ofSL, Matrix.SpecialLinearGroup.toGLPos]
 
 theorem ent_toGQ (m : Matrix (Fin 2) (Fin 2) ℤ) (h : 0 < m.det) (i j : Fin 2) : ent (toGQ m) i j = (m i j : ℚ) := by
   unfold ent toGQ; rw [dite_eq_left h]; simp [Matrix.GeneralLinearGroup.mkOfDetNeZero]
@@ -555,8 +545,8 @@ theorem hn_comm (X : Tower Ω ε) {M q : ℕ} {τ : SL(2, ℤ)} (hq : q.Prime) (
   have step : ∀ o, X.sl (ofSL δ) (X.sl (toGQ (repT q τ o)) u) = X.sl (toGQ (repT q τ (π o))) (X.sl (ofSL δ) u) := by
     intro o
     obtain ⟨g, hg, e⟩ := hπ o
-    rw [← X.sl_mul, ← toGQ_coe δ, ← toGQ_mul_of_pos _ _ (hr o) (sl_pos _), e, toGQ_mul_of_pos _ _ (sl_pos _) (hr _),
-      X.sl_mul, toGQ_coe, toGQ_coe, map_mul, X.sl_mul, inv_sl X hδ hu g (Subgroup.mem_inf.1 hg).1]
+    rw [← X.sl_mul, ← _root_.GlobalTheory.KZ.Betti.toGQ_sl δ, ← toGQ_mul_of_pos _ _ (hr o) (sl_pos _), e, toGQ_mul_of_pos _ _ (sl_pos _) (hr _),
+      X.sl_mul, _root_.GlobalTheory.KZ.Betti.toGQ_sl, _root_.GlobalTheory.KZ.Betti.toGQ_sl, map_mul, X.sl_mul, inv_sl X hδ hu g (Subgroup.mem_inf.1 hg).1]
   simp only [hn, MonoidHom.coe_mk, OneHom.coe_mk]
   rw [map_prod, Finset.prod_congr rfl fun o _ => step o,
     Equiv.prod_comp π fun o => X.sl (toGQ (repT q τ o)) (X.sl (ofSL δ) u)]
@@ -572,7 +562,7 @@ theorem hn_eq (X : Tower Ω ε) {q : ℕ} (hq : 0 < q) (τ : SL(2, ℤ)) (u : X.
   have hD : (0 : ℤ) < (!![(q : ℤ), 0; 0, 1] : Matrix (Fin 2) (Fin 2) ℤ).det := by
     simp [Matrix.det_fin_two, hq]
   simp only [hn, MonoidHom.coe_mk, OneHom.coe_mk]
-  rw [Fintype.prod_option, mul_comm, Finset.prod_range, ← X.sl_mul, ← toGQ_coe, ← toGQ_mul_of_pos _ _ (sl_pos _) hD]
+  rw [Fintype.prod_option, mul_comm, Finset.prod_range, ← X.sl_mul, ← _root_.GlobalTheory.KZ.Betti.toGQ_sl, ← toGQ_mul_of_pos _ _ (sl_pos _) hD]
   rfl
 
 theorem eval_kmap (X : Tower Ω ε) (l : ℕ) [Fact l.Prime] (n : ℕ) (φ : X.K ≃+* X.K) (z : X.Khat l) (f : X.Kˣ)
@@ -680,7 +670,7 @@ theorem dl_cong [IsAlgClosed Ω] (X : Tower Ω ε) (A : ValuationSubring Ω) {N 
       refine ⟨g' / g ^ k, fun γ hγ => by rw [map_div₀, map_pow, hgI γ hγ, hg'I γ hγ], ?_⟩
       rw [mul_pow, ← map_pow, hL, map_div₀, div_mul_div_comm, hg', map_pow, ← mul_pow, hg, div_pow, ← pow_mul,
         ← pow_mul, mul_comm k])
-  exact GlobalTheory.T.logDerivQExpansion_mul_primePow_congr X A l hlA n _ _ hy0 u.ne_zero hT _ _ (GlobalTheory.ThAdd.isDl_pow hψ k) (hu ▸ hφ) r
+  exact _root_.GlobalTheory.Glue.DlPow.isDl_mul_lpow_cong X A l hlA n _ _ hy0 u.ne_zero hT _ _ (GlobalTheory.ThAdd.isDl_pow hψ k) (hu ▸ hφ) r
 
 theorem isDl_hq [IsAlgClosed Ω] (X : Tower Ω ε) (A : ValuationSubring Ω) (l : ℕ) [Fact l.Prime] (n : ℕ) {q : ℕ}
     (hq0 : 0 < q) (hqA : (q : Ω)⁻¹ ∈ A) {f : X.K} {φ : HahnSeries ℚ Ω} (h : IsDl X A l n 1 f φ) :
@@ -745,7 +735,7 @@ theorem isThB_heckeT : ∀ (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosed 
     obtain ⟨s, hs⟩ := (Nat.modEq_iff_dvd' (Nat.one_le_pow _ _ h3)).1 h2
     exact ⟨s, by rw [← hs, ← mul_pow]; have := Nat.one_le_pow w _ h3; omega⟩
 
-  have hy : ((su X τ f₀ : X.Kˣ) : X.K) = X.sl (ofSL τ) f₀ := by rw [coe_su, toGQ_coe]
+  have hy : ((su X τ f₀ : X.Kˣ) : X.K) = X.sl (ofSL τ) f₀ := by rw [coe_su, _root_.GlobalTheory.KZ.Betti.toGQ_sl]
   have hyI : Inv X (CongruenceSubgroup.Gamma1 (N * l ^ n)) ((su X τ f₀ : X.Kˣ) : X.K) := hy ▸ inv_sl X hGM hf₀I
   have hyδ : Dlt X N l n ((su X τ f₀ : X.Kˣ) : X.K) := hy ▸ dlt_sl X hGM hGN hf₀δ
   have hcl : X.cls l n (su X τ f₀ ^ a ^ w) = X.cls l n f' := by
@@ -812,7 +802,7 @@ theorem _root_.GlobalTheory.T.thetaOperator_heckeT_q_eq_U_add_V_twist : ∀ (Ω 
   IsThB X A N l n (X.act l (sgD N l d : Matrix (Fin 2) (Fin 2) ℤ) b) φ →
   IsThB X A N l n (X.act l (sgD N l (d * q) : Matrix (Fin 2) (Fin 2) ℤ) b) φ' →
     IsThB X A N l n (X.act l (sgD N l d : Matrix (Fin 2) (Fin 2) ℤ) (X.heckeT N l q b)) (hq ε q φ + ((q : Ω) ^ (w + 1)) • vq q φ') := by
-  first | exact @GlobalTheory.HeckeTh.isThB_heckeT | exact GlobalTheory.HeckeTh.isThB_heckeT | (intros; apply GlobalTheory.HeckeTh.isThB_heckeT <;> assumption)
+  first | (intros; apply GlobalTheory.HeckeTh.isThB_heckeT <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FoundationProofs.ThetaOperatorHeckeTQEqUAddVTwistStatement =====
@@ -857,7 +847,7 @@ private lemma toGQ_mul_ofSL_eq_ofSL_mul_toGQ (γ γ' : SL(2, ℤ)) (l : ℕ) (hl
   have h10 := congrFun (congrFun hγ' 1) 0
   have h11 := congrFun (congrFun hγ' 1) 1
   simp only [Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_cons] at h00 h01 h10 h11
+    Matrix.empty_val', Matrix.cons_val_fin_one] at h00 h01 h10 h11
   have hBq : ((l : ℚ) * B = γ 0 1 + j * γ 1 1 - k * (γ 0 0 + j * γ 1 0)) := by exact_mod_cast hB
   fin_cases i <;> fin_cases i' <;>
     simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.SpecialLinearGroup.toGLPos,
@@ -918,7 +908,7 @@ theorem _root_.GlobalTheory.NormDelta.norm_delta (Ω : Type) [Field Ω] [Algebra
       Matrix.SpecialLinearGroup.coe_inv, Matrix.adjugate_fin_two]
     simp only [_root_.GlobalTheory.NormDelta.conjM, Matrix.mul_apply, Fin.sum_univ_two, Matrix.of_apply,
       Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
-      Matrix.cons_val_fin_one, Matrix.head_cons]
+      Matrix.cons_val_fin_one]
     push_cast
     rw [hcM]
     refine ⟨?_, ?_, ?_⟩ <;> first | ring1 | linear_combination hdetM
@@ -958,7 +948,7 @@ theorem _root_.GlobalTheory.T.heckeNorm_preserves_delta_powerCondition : ∀ (Ω
       ∃ g : X.K, Inv X (CongruenceSubgroup.Gamma1 (N * l ^ n)) g ∧
         (∏ j ∈ Finset.range l, X.sl (toGQ !![1, (j : ℤ); 0, (l : ℤ)]) f) *
           X.sl (ofSL δ) (∏ j ∈ Finset.range l, X.sl (toGQ !![1, (j : ℤ); 0, (l : ℤ)]) f) = g ^ (l ^ n)) := by
-  first | exact @GlobalTheory.NormDelta.norm_delta | exact GlobalTheory.NormDelta.norm_delta | (intros; apply GlobalTheory.NormDelta.norm_delta <;> assumption)
+  first | exact @GlobalTheory.NormDelta.norm_delta
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FoundationProofs.HeckeNormPreservesDeltaPowerConditionStatement =====
@@ -1004,7 +994,7 @@ theorem sub_coeff (ε : Ω →+* ℂ) (q : ℕ) (hq : 0 < q) (j : ℚ) (φ : Hah
   unfold sub scale
   rw [dite_eq_left h]
   have e : (OrderIso.mulLeft₀ (1 / (q : ℚ)) h).toOrderEmbedding ((q : ℚ) * s) = s := by
-    simp only [RelIso.coe_toRelEmbedding, OrderIso.coe_toOrderEmbedding, OrderIso.mulLeft₀_apply]
+    simp only [OrderIso.coe_toOrderEmbedding, OrderIso.mulLeft₀_apply]
     field_simp
   have key := HahnSeries.embDomain_coeff (f := (OrderIso.mulLeft₀ (1 / (q : ℚ)) h).toOrderEmbedding)
     (x := cm (fun r => eOm ε (r * j / (q : ℚ))) φ) (a := (q : ℚ) * s)
@@ -1748,8 +1738,8 @@ private theorem diam_cg {Ω : Type} [Field Ω] [Algebra ℚ Ω] [IsAlgClosure �
   have hu := GlobalTheory.T.cuspFunctionalValueModPrimePow_unique_oddWeight Ω ε X A N l X.j_hol hl2 hlN hN5 hl n w hw _ hmem _ _ hθ hlin r
   have h1 := cg_j hj hu
   rw [appr_zero'] at h1
-  simp only [HahnSeries.coeff_add, HahnSeries.coeff_smul, Nat.cast_zero, zero_smul, add_zero,
-    smul_eq_mul, nsmul_eq_mul, map_mul, map_natCast] at h1
+  simp only [HahnSeries.coeff_smul, Nat.cast_zero, zero_smul, add_zero,
+    smul_eq_mul, map_mul, map_natCast] at h1
   exact cg_trans h1 (cg_appr n (χ a) _ (hj _ (hD r)))
 
 end UpperTheory.V.Z.Kato.Joint.ThetaOperator
@@ -1791,7 +1781,7 @@ theorem UpperTheory.V.Z.Kato.Joint.thOp :
     have h1' := cg_j hj h1
     simp only [HahnSeries.coeff_add, HahnSeries.coeff_smul, GlobalTheory.CyclotomicQExpansion.Api.coeff_uq hqp.pos,
       GlobalTheory.CyclotomicQExpansion.Api.coeff_vq hqp.pos, map_add, Nat.cast_one, div_one, Rat.den_natCast, if_true,
-      one_mul, smul_eq_mul, nsmul_eq_mul, map_mul, map_pow, map_natCast] at h1'
+      one_mul, smul_eq_mul, map_mul, map_pow, map_natCast] at h1'
     have hx : Cg n (j ((thN X A N l n q b).coeff ((i : ℚ) / q)))
         (((χ q : ℤ_[l]) : Qbar l) *
           (if q ∣ i then j ((thN X A N l n 1 b).coeff (((i / q : ℕ) : ℚ) / ((1 : ℕ) : ℚ))) else 0)) := by
@@ -1814,7 +1804,7 @@ theorem UpperTheory.V.Z.Kato.Joint.thOp :
     have h2 := cg_j hj (hrel.2.1 ((i : ℚ) / (1 : ℕ)))
     simp only [GlobalTheory.CyclotomicQExpansion.Api.coeff_uq (Fact.out : l.Prime).pos, Nat.cast_one, div_one, Rat.den_natCast,
       if_true] at h2
-    have h3 := cg_j hj (GlobalTheory.T.cgA_coeff_of_isThB_succ Ω ε X A N l hl2 hlN (by omega) hl n _ _ _ (hψ (n + 1)).1 (hψ n).1
+    have h3 := cg_j hj (_root_.GlobalTheory.ThBCompat.isThB_succ_coeff_cong Ω ε X A N l hl2 hlN (by omega) hl n _ _ _ (hψ (n + 1)).1 (hψ n).1
       ((l : ℚ) * i))
     simp only [Nat.cast_one, div_one, Nat.cast_mul]
     exact cg_trans h2 h3

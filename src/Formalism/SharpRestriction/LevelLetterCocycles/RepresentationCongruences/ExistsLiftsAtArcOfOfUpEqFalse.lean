@@ -142,7 +142,7 @@ theorem EL_lE (K : ℕ) (F : PowerSeries O) :
 theorem EL_letE (F : PowerSeries O) :
     algebraMap (LetA O n) W.EE (letE a) * EL Br a F = EL Br a F := by
   simp only [EL]
-  rw [← map_mul, ← mul_assoc, letE_mul_self]
+  rw [← map_mul, ← mul_assoc, _root_.Formalism.MainNotions.LiftingTheory.letter_idempotent_sq]
 
 theorem EL_inj {F G : PowerSeries O} (h : EL Br a F = EL Br a G) : F = G := by
   have h1 : letE a * Br.cst F = letE a * Br.cst G := W.EE_inj (by simpa only [EL] using h)
@@ -339,7 +339,7 @@ theorem lift2a [NeZero n] [Fintype (K →ₐ[Qp] LL)] [IsDomain O] [IsDiscreteVa
     simp only [lE, pow_zero, one_mul, Fin.sum_univ_one, hf₂]
     by_cases hk : k = k₀
     · simp [hk]
-    · simp [hk, Pi.single_apply]
+    · simp [hk]
   obtain ⟨n₂, hn₂N, hn₂R⟩ := hnl2 f₂ ⟨hf₂Fr, 0, hSec₂⟩
 
   obtain ⟨y, hyΔ, hylet, hn₂y⟩ := hn₂N
@@ -356,7 +356,7 @@ theorem lift2a [NeZero n] [Fintype (K →ₐ[Qp] LL)] [IsDomain O] [IsDiscreteVa
   simp only [LinearMap.restrictScalars_apply, LinearMap.smul_apply, LinearMap.id_apply] at hzmap
   have hzN : (letE a : LetA O n) • z₀ ∈ W.N T₁ := (W.N T₁).smul_mem _ hz₀
   have hzlet : (letE a : LetA O n) • ((letE a : LetA O n) • z₀) = (letE a : LetA O n) • z₀ := by
-    rw [smul_smul, letE_mul_self]
+    rw [smul_smul, _root_.Formalism.MainNotions.LiftingTheory.letter_idempotent_sq]
   set zb : W.DD T₁ := ∑ δ ∈ W.DelF, W.γD T₁ δ ((letE a : LetA O n) • z₀) with hzb
   obtain ⟨hzbΔ, hzblet⟩ := avg_props W a hzN hzlet
   have hmapzb : W.map F zb = (W.DelF.card : ℕ) • (W.π₀ ^ AA • y) := by

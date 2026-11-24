@@ -172,7 +172,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.CuspMult
 
 theorem _root_.GlobalTheory.T.exists_finiteAdelic_isometry_matching_frames : ∀ {D : D7} (V V' : HSp D) (β : GL (Fin V.rank) (EAf D)) (Λ : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (N : ℕ) (β' : GL (Fin V'.rank) (EAf D)) (Λ' : Submodule (𝓞 D.host.E) (Fin V'.rank → D.host.E)) (N' : ℕ) (Pg : Finset (Pl D.host.E)), V.rank = V'.rank → IsBaseFrame V β Λ N → IsBaseFrame V' β' Λ' N' → (∀ PP ∈ Pg, ∀ PP' ∈ Pg, ¬ IsConjPl PP PP') → ∃ j Φ, IsFinIso V V' β β' Pg j Φ := by
-  first | exact @GlobalTheory.FinIsoExists.exists_isFinIso | exact GlobalTheory.FinIsoExists.exists_isFinIso | (intros; apply GlobalTheory.FinIsoExists.exists_isFinIso <;> assumption)
+  first | exact @GlobalTheory.FinIsoExists.exists_isFinIso
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsFiniteAdelicIsometryMatchingFramesStatement =====
@@ -263,7 +263,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.CuspMult
 
 theorem _root_.GlobalTheory.T.irreducibleAdmissibleDecomposable_comp_equiv : ∀ (H H' : Type) [Group H] [TopologicalSpace H] [Group H'] [TopologicalSpace H'] (X : Type) [AddCommGroup X] [Module ℂ X] (ρ : Representation ℂ H' X) (C : Submodule ℂ X) (Φ : H ≃ₜ* H'), IsDecomp ρ C → IsDecomp (ρ.comp Φ.toMulEquiv.toMonoidHom : Representation ℂ H X) C := by
-  first | exact @GlobalTheory.CuspMult.isDecomp_comp_equiv | exact GlobalTheory.CuspMult.isDecomp_comp_equiv | (intros; apply GlobalTheory.CuspMult.isDecomp_comp_equiv <;> assumption)
+  first | exact @GlobalTheory.CuspMult.isDecomp_comp_equiv
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IrreducibleAdmissibleDecomposableCompEquivStatement =====
@@ -281,7 +281,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Hk3 (Core Good IsSF SchurAll TwoSided FixAll EEc Wcc eH IsLab HoweUnram)
 
 theorem _root_.GlobalTheory.T.isometry_matching_lattices_matches_spherical_ops : ∀ {D : D7} (V V' : HSp D) (β : GL (Fin V.rank) (Lev.EAf D)) (β' : GL (Fin V'.rank) (Lev.EAf D)) (Pg : Finset (Pl D.host.E)) (j : Matrix (Fin V'.rank) (Fin V.rank) (Lev.EAf D)) (Φ : GfC V ≃ₜ* GfC V') (Λ : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (Λ' : Submodule (𝓞 D.host.E) (Fin V'.rank → D.host.E)) (N N' : ℕ), IsBaseFrame V β Λ N → IsBaseFrame V' β' Λ' N' → GlobalTheory.CuspMult.IsFinIso V V' β β' Pg j Φ → ∀ (P : Pl D.host.E), ((N : ℕ) : 𝓞 D.host.E) ∉ P.asIdeal → ((N' : ℕ) : 𝓞 D.host.E) ∉ P.asIdeal → ∀ (d : List ℤ) (B : Finset (GfC V)), GlobalTheory.Hk3.SphOp V P d (B.map ⟨Subtype.val, Subtype.val_injective⟩) ↔ GlobalTheory.Hk3.SphOp V' P d ((B.map Φ.toEquiv.toEmbedding).map ⟨Subtype.val, Subtype.val_injective⟩) := by
-  first | exact @GlobalTheory.SphTrans.sphOp_iff | exact GlobalTheory.SphTrans.sphOp_iff | (intros; apply GlobalTheory.SphTrans.sphOp_iff <;> assumption)
+  first | exact @GlobalTheory.SphTrans.sphOp_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsometryMatchingLatticesMatchesSphericalOpsStatement =====
@@ -303,9 +303,6 @@ open GlobalTheory.Hk3 (Core Good IsSF SchurAll TwoSided FixAll EEc Wcc eH IsLab 
 namespace GlobalTheory.DimFull
 
 open GlobalTheory.CuspMult GlobalTheory.PartDims
-
-theorem dualLab_twice (d : List ℤ) : dualLab (dualLab d) = d := by
-  simp [dualLab, List.map_reverse, Function.comp_def]
 
 variable {D : D7}
 
@@ -361,7 +358,7 @@ theorem rel_of_E (h : Core R F) (hS : SchurAll R) {SF} (hSF : IsSF R SF) (i : Fi
   have h1 := hev c Q hQ (Finsupp.single d 1) x hx
   have h2 := hev c Q hQ (Finsupp.single (dualLab d) 1) x hx
   rw [evC_single _ _ _ hd] at h1
-  rw [evC_single _ _ _ hdd, dualLab_twice] at h2
+  rw [evC_single _ _ _ hdd, _root_.GlobalTheory.SphLabelOps.dualLab_dualLab] at h2
   exact star_eq_of_normal hN hQ d h0 h1 h2
 
 theorem unitary_relation_labels_of_W_eigenvector (h : Core R F) (hS : SchurAll R) (hI : ∀ χ ∈ A.X, IsAbsIrrChar χ) {SF} (hSF : IsSF R SF) (i : Fin D.R.m)
@@ -375,7 +372,7 @@ theorem unitary_relation_labels_of_W_eigenvector (h : Core R F) (hS : SchurAll R
   rw [evC_single _ _ _ hwd] at h1
   rw [evC_single _ _ _ hw] at h2
   refine star_eq_of_normal hN hQ (dualLab d) h0 h1 ?_
-  rw [dualLab_twice]
+  rw [_root_.GlobalTheory.SphLabelOps.dualLab_dualLab]
   exact h2
 
 theorem good_Y (h : Core R F) {Q : Pl D.host.E} (hQ : Good R A.μ0 Q) (c : ℕ) :
@@ -462,7 +459,7 @@ theorem killed_union_comp {H H' X ι κ : Type} [Group H] [Group H'] [AddCommGro
   · rintro hk x ⟨Q, d, B', hB', rfl⟩
     have hm : (B'.map Φ.symm.toEquiv.toEmbedding).map Φ.toEquiv.toEmbedding = B' := by
       ext y
-      simp [Finset.mem_map]
+      simp
     have := hk _ ⟨Q, d, B'.map Φ.symm.toEquiv.toEmbedding, (hI _ _ _).2 (by rw [hm]; exact hB'), rfl⟩
     rw [alg_comp, hm] at this
     exact this

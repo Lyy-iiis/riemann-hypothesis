@@ -131,7 +131,7 @@ theorem esymm_inv_mul_prod (s : Multiset ℂ) (hs : ∀ x ∈ s, x ≠ 0) :
     have hi : i = 0 := by simp at h; exact h.1
     have hj : j = 0 := by simp at h; exact h.2
     subst hi hj
-    simp [esymm_deg_zero]
+    simp
   | cons x s ih =>
     intro i j h
     have hx : x ≠ 0 := hs x (Multiset.mem_cons_self x s)
@@ -234,7 +234,7 @@ theorem exists_intPoly_psum_eq : ∀ a n : ℕ, 1 ≤ n → ∃ P : MvPolynomial
   rw [psum, map_sum]
   simp only [map_pow, aeval_X]
   conv_rhs => rw [← hsf]
-  simp [Multiset.map_map, Finset.sum_eq_multiset_sum]
+  simp [Finset.sum_eq_multiset_sum]
   rfl
 
 end GlobalTheory.PowerSumPoly
@@ -363,18 +363,6 @@ theorem inv_center_act {E : Type} [Field E] [NumberField E] {w : HeightOneSpectr
   conv_rhs => rw [h2]
   rw [smul_smul, inv_mul_cancel₀ h0, one_smul]
 
-theorem esymm_inv_algSat {q : ℕ} (hq : q ≠ 0) {a : ℕ} {B : Multiset ℂˣ} (hB : B.card = a) {j : ℕ} (hj : j ≤ a)
-    (hne : satEig q a B a ≠ 0) :
-    ((UpperTheory.V.Af.algSat a q B).map (·⁻¹)).esymm j =
-      (UpperTheory.V.Af.algSat a q B).esymm (a - j) * (((q : ℂ) ^ a.choose 2)⁻¹ * (satEig q a B a)⁻¹) := by
-  first
-  | exact @_root_.GlobalTheory.ElementarySymmetricInverse.esymm_inv_algSat
-  | exact _root_.GlobalTheory.ElementarySymmetricInverse.esymm_inv_algSat
-  | (apply _root_.GlobalTheory.ElementarySymmetricInverse.esymm_inv_algSat <;> assumption)
-  | (intros; apply _root_.GlobalTheory.ElementarySymmetricInverse.esymm_inv_algSat <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.ElementarySymmetricInverse.esymm_inv_algSat <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.ElementarySymmetricInverse.esymm_inv_algSat ..)
-
 theorem sphOps : SphOps := by
   intro E _ _ w a
   refine ⟨fun σ h => GlobalTheory.SatInd.exists_hasSatGL_of_isIrreducible σ.smooth σ.irred h, fun n => ?_⟩
@@ -413,7 +401,7 @@ theorem sphOps : SphOps := by
     · subst h0; rw [opOf_zero_vec, smul_zero]
     obtain ⟨hne, hinv⟩ := inv_center_act σ.ρ ϖ hp (hB.2 v hv h0)
     rw [opOf_conv, actP σ B hB v hv _ (Nat.sub_le _ _), opOf_smul, opOf_single, hinv, smul_smul, smul_smul,
-      esymm_inv_algSat hq hB.card (Nat.lt_succ_iff.1 j.2) hne, mul_assoc]
+      _root_.GlobalTheory.ElementarySymmetricInverse.esymm_inv_algSat hq hB.card (Nat.lt_succ_iff.1 j.2) hne, mul_assoc]
   have hcard : ∀ B : Multiset ℂˣ, B.card = a → (UpperTheory.V.Af.algSat a (qV E w) B).card = a := fun B h => by
     simp [UpperTheory.V.Af.algSat, h]
   have hfin : ∀ F : GL (Fin a) (w.adicCompletion E) →₀ ℂ, (∀ g, F g ∈ S) →

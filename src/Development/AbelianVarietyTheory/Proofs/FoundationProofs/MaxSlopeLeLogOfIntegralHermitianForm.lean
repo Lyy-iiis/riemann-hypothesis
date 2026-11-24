@@ -483,14 +483,7 @@ theorem fcoord_std {d : ℕ} (X : InfinitePlace K → Matrix (Fin d) (Fin d) ℂ
   unfold Formalism.HermitianLatticesTheory.fcoord
   congr 1
 
-theorem gram_eq {d j : ℕ} (X : InfinitePlace K → Matrix (Fin d) (Fin d) ℂ) (v : InfinitePlace K)
-    (e : Fin j → Fin d → K) :
-    gram X v e = ((X v)⁻¹ * ((Matrix.of e)ᵀ.map v.embedding))ᴴ *
-      ((X v)⁻¹ * ((Matrix.of e)ᵀ.map v.embedding)) := by
-  ext a b
-  simp only [gram, Formalism.HN.gramPl, Formalism.HermitianLatticesTheory.majAt, fcoord_std, Matrix.of_apply, Matrix.mul_apply,
-    Matrix.conjTranspose_apply, Matrix.mulVec, dotProduct, Matrix.map_apply,
-    Matrix.transpose_apply]
+alias gram_eq := _root_.GlobalTheory.TestLat.gram_eq_conjTranspose_mul
 
 theorem gram_single {d : ℕ} (X : InfinitePlace K → Matrix (Fin d) (Fin d) ℂ)
     (v : InfinitePlace K) :
@@ -498,8 +491,8 @@ theorem gram_single {d : ℕ} (X : InfinitePlace K → Matrix (Fin d) (Fin d) �
   have h : (Matrix.of (fun i => (Pi.single i 1 : Fin d → K)))ᵀ.map v.embedding = 1 := by
     ext a b
     by_cases hab : a = b
-    · subst hab; simp [Function.swap, Pi.single_apply]
-    · simp [hab, Matrix.one_apply]
+    · subst hab; simp [Function.swap]
+    · simp [hab]
   rw [gram_eq, h, Matrix.mul_one]
 
 end GlobalTheory.LcvSub
@@ -556,7 +549,7 @@ theorem GlobalTheory.neg_rank_mul_log_le_lcv : ∀ (K : Type) [Field K] [NumberF
   have hlcv : lcv X L = lcv X' L' := by
     unfold lcv; rw [hht]
   rw [hlcv]
-  refine GlobalTheory.TestLat.neg_log_le_lcv_of_integral_form K j X' hX' (Matrix.of fun a c => star (e a) ⬝ᵥ H *ᵥ (e c)) s hs hne ?_ L' (by first | exact hlat | exact hlat.toIsLattice) ?_
+  refine GlobalTheory.TestLat.neg_log_le_lcv_of_integral_form K j X' hX' (Matrix.of fun a c => star (e a) ⬝ᵥ H *ᵥ (e c)) s hs hne ?_ L' (by first | exact hlat) ?_
   · have h := GlobalTheory.GramMean.prod_norm_gramR_le K d j H X hH e
     simp only [gram_single, hX'g]
     exact h

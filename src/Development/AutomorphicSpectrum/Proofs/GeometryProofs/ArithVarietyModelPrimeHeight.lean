@@ -707,7 +707,7 @@ theorem UpperTheory.Reformulated.B.DualIntegralLattice.main :
 
   simp only [W, Matrix.of_apply, map_sum, map_mul, hw, Finset.mul_sum]
   refine Finset.sum_congr rfl fun k _ => ?_
-  simp only [map_natCast, map_mul, map_intCast]
+  simp only [map_natCast, map_intCast]
   ring
 end -- clump:auto
 end -- clump:auto
@@ -751,10 +751,6 @@ variable {o Ω : Type} [CommRing o] [Field Ω] [Algebra o Ω]
 
 theorem mem_stdLat_iff (R : Subalgebra o Ω) {Ix : Type} (x : Ix → Ω) : x ∈ stdLat R Ix ↔ ∀ i, x i ∈ R := by
   simp [stdLat, AddSubgroup.mem_pi]
-
-theorem mem_dotDual_iff (R : Subalgebra o Ω) {m : ℕ} (L : AddSubgroup (Fin m → Ω)) (x : Fin m → Ω) :
-    x ∈ dotDual R L ↔ ∀ l ∈ L, l ⬝ᵥ x ∈ R := by
-  simp [dotDual, AddSubgroup.mem_iInf]
 
 theorem exists_uniform {Ix : Type} [Fintype Ix] (Rt : Subalgebra o Ω) {f : Ω} (hf : f ∈ Rt) (z : Ix → Ω)
     (h : ∀ j, ∃ m : ℕ, f ^ m * z j ∈ Rt) : ∃ m : ℕ, ∀ j, f ^ m * z j ∈ Rt := by
@@ -808,7 +804,7 @@ theorem gam_key {V : Type} [AddCommGroup V] [Module Ω V] {r N : ℕ} (Rs Rt : S
       have := congrArg (fun g : Module.Dual Ω V => g A) (huE j)
       simpa only [LinearMap.sub_apply, LinearMap.smul_apply, smul_eq_mul] using this
     rw [hA2] at e2
-    simp only [map_smul, LinearMap.smul_apply, Pi.smul_apply, smul_eq_mul] at e1 e2
+    simp only [map_smul, Pi.smul_apply, smul_eq_mul] at e1 e2
     have e1' : w * ∑ l, is a l * G l j = Hs j A + w * P * zs j := by
       rw [← e1, Finset.mul_sum]
       exact Finset.sum_congr rfl fun _ _ => by ring
@@ -860,7 +856,7 @@ theorem del_key {V : Type} [AddCommGroup V] [Module Ω V] {s N : ℕ} (Rs Rt : S
   obtain ⟨m', hΔ'⟩ := hΔ
   choose u hu huE using hΔ'
   refine ⟨m₁ + m', ?_⟩
-  rw [mem_dotDual_iff]
+  rw [_root_.PositivityTheory.Xgn.DualLatticeFamily.mem_dotDual]
   intro l hl
   have e : l ⬝ᵥ (f ^ (m₁ + m') • (Fintype.linearCombination Ω (fun (i : Fin N) (k : Fin s) => Hs i (v k)) a -
       Fintype.linearCombination Ω (fun (i : Fin N) (k : Fin s) => Ht i (v k)) a)) =

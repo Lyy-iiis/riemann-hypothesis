@@ -61,6 +61,7 @@ import Mathlib.Topology.Sheaves.Presheaf
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.CocycleRightZeroThd
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.SemiabelianSchemes.CubicalStructures.CubeSymmetricSwapFirst
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.SymplecticGenerators.StTransl
+import Development.AbelianVarietyTheory.Proofs.ToricGeometry.ExistsThetaSeriesApplyNeZeroOfLargeForm
 import Development.AbelianVarietyTheory.Proofs.ToricGeometry.TopLePreimageOfValAtNeZero
 import Mathlib.RingTheory.WittVector.IsPoly
 import Mathlib.Tactic.Basify
@@ -105,7 +106,7 @@ theorem _root_.GlobalTheory.T.appellHumbert_exists_lineBundle_posDef_hermitian :
     (∀ z : Fin g → ℂ, z ≠ 0 → 0 < (z ⬝ᵥ Hm.mulVec (star z)).re) →
     (∀ l ∈ u₀.Λ, ∀ l' ∈ u₀.Λ, ∃ n : ℤ, (l ⬝ᵥ Hm.mulVec (star l')).im = n) →
     ∃ (M : LB A.left) (u : HolUnif A M g) (χ : u.Λ → ℂ), M.IsLB ∧ u.ex = u₀.ex ∧ u.IsAH Hm χ := by
-  first | exact @GlobalTheory.AHPos.exists_lb_of_posDef | exact GlobalTheory.AHPos.exists_lb_of_posDef | (intros; apply GlobalTheory.AHPos.exists_lb_of_posDef <;> assumption)
+  first | exact @GlobalTheory.AHPos.exists_lb_of_posDef
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -132,14 +133,14 @@ attribute [local instance] Over.cartesianMonoidalCategory
 theorem _root_.GlobalTheory.T.appellHumbertFactor_imForm_integral_on_lattice : ∀ (g : ℕ) (A : Over (Sp ℂ)) [GrpObj A] (L : LB A.left) (u : HolUnif A L g)
     (Hm : Matrix (Fin g) (Fin g) ℂ) (χ : u.Λ → ℂ), L.IsLB → IsFactorAH u Hm χ →
     ∀ l ∈ u.Λ, ∀ l' ∈ u.Λ, ∃ n : ℤ, (l ⬝ᵥ Hm.mulVec (star l')).im = n := by
-  first | exact @GlobalTheory.TorusRM.ahFactor_im_int | exact GlobalTheory.TorusRM.ahFactor_im_int | (intros; apply GlobalTheory.TorusRM.ahFactor_im_int <;> assumption)
+  first | exact @GlobalTheory.TorusRM.ahFactor_im_int
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AppellHumbertFactorImFormIntegralOnLatticeStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsNatPosDefAddNsmulPosDefHermitian =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsNatPosDefAddNsmulPosDefHermitian", "h": "module\n\npublic import Mathlib.Analysis.CStarAlgebra.Classes\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Real\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\npublic import Mathlib.CategoryTheory.Monoidal.Cartesian.Over\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsAHOfIsFactorAH\nimport Development.AbelianVarietyTheory.PublishedTheorems.Divisors₂.IsHolFormConst\nimport Mathlib.Topology.Sheaves.Presheaf\nimport ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.CocycleRightZeroThd\nimport ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.SemiabelianSchemes.CubicalStructures.CubeSymmetricSwapFirst\nimport ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.SymplecticGenerators.StTransl\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsNatPosDefAddNsmulPosDefHermitian", "h": "module\n\npublic import Mathlib.Analysis.CStarAlgebra.Classes\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Real\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\npublic import Mathlib.CategoryTheory.Monoidal.Cartesian.Over\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsAHOfIsFactorAH\nimport Development.AbelianVarietyTheory.PublishedTheorems.Divisors₂.IsHolFormConst\nimport Mathlib.Topology.Sheaves.Presheaf\nimport ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.CocycleRightZeroThd\nimport ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.SemiabelianSchemes.CubicalStructures.CubeSymmetricSwapFirst\nimport ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.SymplecticGenerators.StTransl\nimport Development.AbelianVarietyTheory.Proofs.ToricGeometry.ExistsThetaSeriesApplyNeZeroOfLargeForm\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -168,13 +169,9 @@ theorem posn_quad_add {g : ℕ} (H₀ Hm : Matrix (Fin g) (Fin g) ℂ) (n : ℕ)
     (z ⬝ᵥ (Hm + n • H₀).mulVec (star z)).re
       = (z ⬝ᵥ Hm.mulVec (star z)).re + n * (z ⬝ᵥ H₀.mulVec (star z)).re := by
   have h1 : (n • H₀).mulVec (star z) = n • H₀.mulVec (star z) := by
-    ext i; simp [Matrix.mulVec, dotProduct, Finset.mul_sum, Finset.smul_sum, smul_mul_assoc, _root_.mul_assoc]
+    ext i; simp [Matrix.mulVec, dotProduct, Finset.smul_sum, _root_.mul_assoc]
   rw [Matrix.add_mulVec, dotProduct_add, h1, dotProduct_smul, Complex.add_re, nsmul_eq_mul,
     ← Complex.ofReal_natCast, Complex.re_ofReal_mul]
-
-theorem posn_cont {g : ℕ} (H : Matrix (Fin g) (Fin g) ℂ) :
-    Continuous fun z : Fin g → ℂ => (z ⬝ᵥ H.mulVec (star z)).re := by
-  fun_prop
 
 theorem posn_main : ∀ (g : ℕ) (H₀ Hm : Matrix (Fin g) (Fin g) ℂ),
     (∀ z : Fin g → ℂ, z ≠ 0 → 0 < (z ⬝ᵥ H₀.mulVec (star z)).re) →
@@ -197,8 +194,8 @@ theorem posn_main : ∀ (g : ℕ) (H₀ Hm : Matrix (Fin g) (Fin g) ℂ),
     exact pos_of_mul_pos_right h (sq_nonneg _)
   by_cases hne : (Metric.sphere (0 : Fin g → ℂ) 1).Nonempty
   · have hK : IsCompact (Metric.sphere (0 : Fin g → ℂ) 1) := isCompact_sphere 0 1
-    obtain ⟨w₀, hw₀, hmin⟩ := hK.exists_isMinOn hne (posn_cont H₀).continuousOn
-    obtain ⟨C, hC⟩ := hK.exists_bound_of_continuousOn (posn_cont Hm).continuousOn
+    obtain ⟨w₀, hw₀, hmin⟩ := hK.exists_isMinOn hne (_root_.GlobalTheory.ThetaLarge.continuous_form H₀).continuousOn
+    obtain ⟨C, hC⟩ := hK.exists_bound_of_continuousOn (_root_.GlobalTheory.ThetaLarge.continuous_form Hm).continuousOn
     have hw₀ne : w₀ ≠ 0 := by
       intro h; rw [h, mem_sphere_zero_iff_norm, norm_zero] at hw₀; exact zero_ne_one hw₀
     set m := (w₀ ⬝ᵥ H₀.mulVec (star w₀)).re with hm
@@ -244,7 +241,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 theorem _root_.GlobalTheory.T.exists_nat_posDef_add_nsmul_posDef_hermitian : ∀ (g : ℕ) (H₀ Hm : Matrix (Fin g) (Fin g) ℂ),
     (∀ z : Fin g → ℂ, z ≠ 0 → 0 < (z ⬝ᵥ H₀.mulVec (star z)).re) →
     ∃ n : ℕ, ∀ z : Fin g → ℂ, z ≠ 0 → 0 < (z ⬝ᵥ (Hm + n • H₀).mulVec (star z)).re := by
-  first | exact @GlobalTheory.posn_main | exact GlobalTheory.posn_main | (intros; apply GlobalTheory.posn_main <;> assumption)
+  first | exact @GlobalTheory.posn_main
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -564,7 +561,7 @@ theorem factor_eq_lamExp : ∀ (g : ℕ) (Hm : Matrix (Fin (g + g)) (Fin (g + g)
   have hB0 : ∀ x : Fin g → ℂ, LamAdd.B (Hm.submatrix (Fin.castAdd g) (Fin.natAdd g)) x 0 = 0 := fun x => by simp [LamAdd.B]
   have hd : ∀ x y : Fin (g + g) → ℂ, x ⬝ᵥ Hm.mulVec (star y) = LamAdd.B Hm x y := fun _ _ => rfl
   rw [hB, hB, halfL_append, halfR_append, halfL_append, halfR_append] at hc
-  simp only [hB0, LamAdd.B_zero_left, add_zero, zero_add] at hc
+  simp only [hB0, add_zero, zero_add] at hc
   rw [hd, hd, hB, hB]
   unfold LamAdd.Q
   rw [sum_finset_fin_two_four_terms]
@@ -577,7 +574,7 @@ theorem factor_eq_lamExp : ∀ (g : ℕ) (Hm : Matrix (Fin (g + g)) (Fin (g + g)
   have e2 : LamAdd.ε ⟨{1}⟩ = -1 := by decide
   have e3 : LamAdd.ε ⟨{0, 1}⟩ = 1 := by decide
   rw [c0, c0, c1, c1, c2, c2, c3, c3, e0, e1, e2, e3]
-  simp only [LamAdd.B_add_left, LamAdd.B_add_right, LamAdd.B_zero_left, hB0]
+  simp only [LamAdd.B_add_left, LamAdd.B_add_right, hB0]
   have key : (Real.pi : ℂ) * (LamAdd.B (Hm.submatrix (Fin.castAdd g) (Fin.natAdd g)) (halfL g z) (halfR g l) + LamAdd.B (Hm.submatrix (Fin.castAdd g) (Fin.natAdd g)) (halfR g z) (halfL g l)) +
       Real.pi / 2 * (LamAdd.B (Hm.submatrix (Fin.castAdd g) (Fin.natAdd g)) (halfL g l) (halfR g l) + LamAdd.B (Hm.submatrix (Fin.castAdd g) (Fin.natAdd g)) (halfR g l) (halfL g l)) =
       Real.pi / 2 * (LamAdd.B (Hm.submatrix (Fin.castAdd g) (Fin.natAdd g)) (halfL g l) (halfR g l) + LamAdd.B (Hm.submatrix (Fin.castAdd g) (Fin.natAdd g)) (halfR g l) (halfL g l)) +
@@ -613,12 +610,11 @@ def inl (g : ℕ) : (Fin g → ℂ) →ₗ[ℂ] (Fin (g + g) → ℂ) where
   map_add' x y := by
     funext q
     refine Fin.addCases (fun k => ?_) (fun k => ?_) q <;>
-      simp only [Fin.append_left, Fin.append_right, Pi.add_apply, Pi.zero_apply, add_zero, Pi.smul_apply,
-        smul_eq_mul, mul_zero, RingHom.id_apply]
+      simp only [Fin.append_left, Fin.append_right, Pi.add_apply, Pi.zero_apply, add_zero]
   map_smul' c x := by
     funext q
     refine Fin.addCases (fun k => ?_) (fun k => ?_) q <;>
-      simp only [Fin.append_left, Fin.append_right, Pi.add_apply, Pi.zero_apply, add_zero, Pi.smul_apply,
+      simp only [Fin.append_left, Fin.append_right, Pi.zero_apply, Pi.smul_apply,
         smul_eq_mul, mul_zero, RingHom.id_apply]
 
 def inr (g : ℕ) : (Fin g → ℂ) →ₗ[ℂ] (Fin (g + g) → ℂ) where
@@ -626,12 +622,11 @@ def inr (g : ℕ) : (Fin g → ℂ) →ₗ[ℂ] (Fin (g + g) → ℂ) where
   map_add' x y := by
     funext q
     refine Fin.addCases (fun k => ?_) (fun k => ?_) q <;>
-      simp only [Fin.append_left, Fin.append_right, Pi.add_apply, Pi.zero_apply, add_zero, Pi.smul_apply,
-        smul_eq_mul, mul_zero, RingHom.id_apply]
+      simp only [Fin.append_left, Fin.append_right, Pi.add_apply, Pi.zero_apply, add_zero]
   map_smul' c x := by
     funext q
     refine Fin.addCases (fun k => ?_) (fun k => ?_) q <;>
-      simp only [Fin.append_left, Fin.append_right, Pi.add_apply, Pi.zero_apply, add_zero, Pi.smul_apply,
+      simp only [Fin.append_left, Fin.append_right, Pi.zero_apply, Pi.smul_apply,
         smul_eq_mul, mul_zero, RingHom.id_apply]
 
 def swapE (g : ℕ) : Fin (g + g) ≃ Fin (g + g) :=

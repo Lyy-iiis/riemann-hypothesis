@@ -199,8 +199,8 @@ theorem exists_den {n : ℕ} (Λ : Submodule (𝓞 E) (Fin n → E))
     funext i
     rw [Finset.sum_apply, Pi.smul_apply]
     simp only [Pi.smul_apply, Pi.single_apply, smul_ite, smul_zero, Finset.sum_ite_eq,
-      Finset.sum_ite_eq', Finset.mem_univ, if_true]
-    simp only [Algebra.smul_def, map_intCast, hmk]
+      Finset.mem_univ, if_true]
+    simp only [Algebra.smul_def, map_intCast]
     push_cast
     show (m : E) * (m' : E) * x i = ((m' : E) * x i) * (m : E)
     ring
@@ -836,7 +836,7 @@ theorem GlobalTheory.Mass.classMass_lattice_eq_genus_mass {F E : Type} [Field F]
     rw [h] at this
     exact this.symm
   have hfix := fixed_mem σ hσ.2.2.1 hne
-  haveI := Formalism.UG.Final.ClassSetFiniteL F E _ σ J hτ hH hJ.2.isUnit hd Λ hΛ hsp
+  haveI := _root_.Formalism.UG.P.lattice_class_set_finite_local_holds F E _ σ J hτ hH hJ.2.isUnit hd Λ hΛ hsp
   have hgen := globLat_mem_genus hs hfix hne hH hJ.2 hΛ hsp
   have hsur := exists_globLat_eq (J := J) hs hfix hΛ hsp
   have hmk := mk_eq_iff (J := J) hs hΛ hsp

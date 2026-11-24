@@ -138,10 +138,7 @@ theorem eigenvectors_sum_zero_eq_zero {ι κ A : Type} [DecidableEq ι] [AddComm
       exact ih _ hts v (fun i hi k' => hv i (Finset.filter_subset _ _ hi) k') hsum_t a
         (Finset.mem_filter.mpr ⟨ha, rfl⟩)
 
-theorem GlobalTheory.CompanionTheory.PresRho.eq_zero_of_sum_weightVec :
-    ∀ {ι κ A : Type} [DecidableEq ι] [inst : AddCommGroup A] [inst_1 : _root_.Module ℂ A] (T : κ → Module.End ℂ A) (f : ι → κ → ℂ), Function.Injective f → ∀ (s : Finset ι) (v : ι → A), (∀ i ∈ s, ∀ (k : κ), DFunLike.coe (T k) (v i) = f i k • v i) → ∑ i ∈ s, v i = OfNat.ofNat (nat_lit 0) → ∀ i ∈ s, v i = OfNat.ofNat (nat_lit 0) := by
-  intro ι κ A _ _ _ T f hf s v hv hsum
-  exact eigenvectors_sum_zero_eq_zero T f hf s v hv hsum
+alias GlobalTheory.CompanionTheory.PresRho.eq_zero_of_sum_weightVec := _root_.UpperTheory.Reformulated.B.P6.r14a.eigenvectors_sum_zero_eq_zero
 
 end UpperTheory.Reformulated.B.P6.r14a
 end -- clump:auto
@@ -191,7 +188,7 @@ theorem mem_span_isAdW_of_kills {n : ℕ} {A : Type} [AddCommGroup A] [Module �
     funext k
     have := congrFun h k
     simpa using this
-  have hz := eq_zero_of_sum_weightVec (fun k : Fin n => φ (e (k, k)))
+  have hz := _root_.UpperTheory.Reformulated.B.P6.r14a.eigenvectors_sum_zero_eq_zero (fun k : Fin n => φ (e (k, k)))
     (fun (w : Fin n → ℤ) k => rhoVec n k + (w k : ℂ)) hinj ((pbw.repr x).support.image wt)
     (fun w => φ (wtPart x w) t)
     (fun w _ k => by
@@ -334,7 +331,7 @@ section -- clump:auto
 open GroundTheory.Automorphic.HarishChandra GlobalTheory.CompanionTheory.PresRho
 
 theorem _root_.GlobalTheory.T.casimir_eq_of_singular_weight_vector : ∀ {n : ℕ} (μ : Fin n → ℤ) (x : U n), IsAdW μ x → (∀ a : Fin n × Fin n, IsUpper a → e a * x ∈ Jp n) → x ∉ Jp n → casC (fun k => rhoVec n k + (μ k : ℂ)) = casC (rhoVec n) := by
-  first | exact @GlobalTheory.CompanionTheory.PresRho.casC_rho_add_eq | exact GlobalTheory.CompanionTheory.PresRho.casC_rho_add_eq | (intros; apply GlobalTheory.CompanionTheory.PresRho.casC_rho_add_eq <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.PresRho.casC_rho_add_eq
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CasimirEqOfSingularWeightVectorStatement =====
@@ -410,7 +407,7 @@ theorem sum_wt_mul (m : Fin n × Fin n →₀ ℕ) (f : Fin n → ℤ) :
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun a _ => ?_
   simp only [rootAt, mul_sub, sub_mul, mul_ite, ite_mul, mul_one, mul_zero, zero_mul,
-    Finset.sum_sub_distrib, Finset.sum_ite_eq', Finset.sum_ite_eq, Finset.mem_univ, if_true]
+    Finset.sum_sub_distrib, Finset.sum_ite_eq', Finset.mem_univ, if_true]
 
 theorem lt_of_step {f : Fin n → ℤ} (h : ∀ i j : Fin n, (j : ℕ) = i + 1 → f j < f i) :
     ∀ (d : ℕ) (i j : Fin n), (j : ℕ) = i + d + 1 → f j < f i := by
@@ -757,12 +754,12 @@ theorem adL_iter_e {i j : Fin n} (hij : i ≠ j) (a : Fin n × Fin n) :
   have hji : j ≠ i := hij.symm
   by_cases h1 : i = c <;> by_cases h2 : d = j
   · subst h1; subst h2
-    simp [adL_e, adL_sub, adL_neg, adL_zero, hij, hji]
+    simp [adL_e, adL_sub, adL_neg, hij]
   · subst h1
-    simp [adL_e, adL_sub, adL_neg, adL_zero, hij, hji, h2]
+    simp [adL_e, adL_zero, hij, h2]
   · subst h2
-    simp [adL_e, adL_sub, adL_neg, adL_zero, hij, hji, h1]
-  · simp [adL_e, adL_sub, adL_neg, adL_zero, h1, h2]
+    simp [adL_e, adL_neg, adL_zero, hij, h1]
+  · simp [adL_e, adL_zero, h1, h2]
 
 theorem pow_mul_mem_Jp_of_le {F w : U n} {N N' : ℕ} (h : N ≤ N') (hw : F ^ N * w ∈ Jp n) :
     F ^ N' * w ∈ Jp n := by

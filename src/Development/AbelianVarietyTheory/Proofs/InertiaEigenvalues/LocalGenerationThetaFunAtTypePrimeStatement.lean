@@ -264,7 +264,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.RestrictedTensorSplitting (FinPl id
 open GlobalTheory.DownLift.GenSplit
 
 theorem _root_.GlobalTheory.T.cmPlaceOperator_preserves_type_averages_shape : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.thP_ωP → ∀ (i : Fin D.R.m) (t : T) (Sb : Finset (FinPl D)) (v : FinPl D), v ∈ Sb → ∀ (h : GA D (Wc D i)), (∀ a b, idem D (.inl v) * (Formalism.L2.Theta.mt (Wc D i) h - 1) a b = (Formalism.L2.Theta.mt (Wc D i) h - 1) a b) → ∀ (c : WO (Vc D i) (Wc D i) →₀ ℂ), (∀ y ∈ c.support, IsHalf (idem D (.inl v)) y) → ∀ (f : WO (Vc D i) (Wc D i) → ℂ), TypeIn R i t Sb f → CleanIn R i t Sb f → LikeOff R i t Sb f → TypeIn R i t (dropPl Sb v) (comb R.ψ (Vc D i) (Wc D i) c (R.ωP i t (1, h) f)) ∧ CleanIn R i t (dropPl Sb v) (comb R.ψ (Vc D i) (Wc D i) c (R.ωP i t (1, h) f)) ∧ LikeOff R i t Sb (comb R.ψ (Vc D i) (Wc D i) c (R.ωP i t (1, h) f)) := by
-  first | exact @GlobalTheory.DownLift.GenSplit.placeOp_keep | exact GlobalTheory.DownLift.GenSplit.placeOp_keep | (intros; apply GlobalTheory.DownLift.GenSplit.placeOp_keep <;> assumption)
+  first | exact @GlobalTheory.DownLift.GenSplit.placeOp_keep
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.CmPlaceOperatorPreservesTypeAveragesShapeStatement =====
@@ -425,7 +425,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.RestrictedTensorSplitting (FinPl id
 open GlobalTheory.DownLift.GenSplit
 
 theorem _root_.GlobalTheory.T.exists_separating_character_conjugate_half_split : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S T : HSp D) (ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)) (ΛT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E)) (βS : GL (Fin S.rank) (Formalism.IndefR.Lev.EAf D)) (βT : GL (Fin T.rank) (Formalism.IndefR.Lev.EAf D)), IsSelfDualC S ΛS → IsSelfDualC T ΛT → Formalism.L2.DIV.IsFrame βS ΛS → Formalism.L2.DIV.IsFrame βT ΛT → ∀ (v : FinPl D) (φ : SplitProj D v) (e : Formalism.L2.Theta.AE D), IsIdemOf φ e → ∀ (ϖ : OI v), Irreducible ϖ → ∀ (N : ℕ) (x : WO S T), IsHalf (cA D e) x → ¬ InPow ϖ N (adjCo φ S T (frCo φ βS) (frCo φ βT) x) → ∃ y, IsHalf e y ∧ (∀ z ∈ halfPow φ S T (frCo φ βS) (frCo φ βT) e ϖ N, ψ (symplO S T z y) = 1) ∧ ψ (symplO S T x y) ≠ 1 := by
-  first | exact @GlobalTheory.DownLift.GenSplit.exists_sep_char | exact GlobalTheory.DownLift.GenSplit.exists_sep_char | (intros; apply GlobalTheory.DownLift.GenSplit.exists_sep_char <;> assumption)
+  first | exact @GlobalTheory.DownLift.GenSplit.exists_sep_char
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsSeparatingCharacterConjugateHalfSplitStatement =====
@@ -446,7 +446,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.RestrictedTensorSplitting (FinPl id
 open GlobalTheory.DownLift.GenSplit
 
 theorem _root_.GlobalTheory.T.exists_supportedAtSplitPlace_unitary_matrix_eq : ∀ (D : D7) (V : HSp D) (v : FinPl D) (φ : SplitProj D v) (e : Formalism.L2.Theta.AE D), IsIdemOf φ e → ∀ (B g : GL (Fin V.rank) (Fv D.host.F v)), ∃ h : GA D V, Formalism.L2.Theta.SuppAt e V h ∧ grpCo φ V B h = g := by
-  first | exact @GlobalTheory.DownLift.GenSplit.exists_suppAt_grpCo_eq | exact GlobalTheory.DownLift.GenSplit.exists_suppAt_grpCo_eq | (intros; apply GlobalTheory.DownLift.GenSplit.exists_suppAt_grpCo_eq <;> assumption)
+  first | exact @GlobalTheory.DownLift.GenSplit.exists_suppAt_grpCo_eq
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsSupportedAtSplitPlaceUnitaryMatrixEqStatement =====
@@ -687,7 +687,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.RestrictedTensorSplitting (FinPl id
 open GlobalTheory.DownLift.GenSplit
 
 theorem _root_.GlobalTheory.T.heisenbergRelations_extend_to_place_commonEigen : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (Sb : Finset (FinPl D)) (v : FinPl D), v ∈ Sb → ∀ (p f : WO S T → ℂ), (∀ u, IsHalf (idem D (.inl v)) u → CoEig ψ S T p f u ∨ ∃ l, IsHalf (idem D (.inl v)) l ∧ CoEig ψ S T p f l ∧ ψ (symplO S T l u) ≠ 1) → RelOff ψ S T Sb p f → RelOff ψ S T (dropPl Sb v) p f := by
-  first | exact @GlobalTheory.DownLift.GenSplit.relOff_dropPl_of_coEig | exact GlobalTheory.DownLift.GenSplit.relOff_dropPl_of_coEig | (intros; apply GlobalTheory.DownLift.GenSplit.relOff_dropPl_of_coEig <;> assumption)
+  first | exact @GlobalTheory.DownLift.GenSplit.relOff_dropPl_of_coEig
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HeisenbergRelationsExtendToPlaceCommonEigenStatement =====
@@ -824,7 +824,7 @@ theorem schrodinger_type_inv : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl
   have hh' : ∀ a b, (h' : Matrix (Fin (Vc D i).rank) (Fin (Vc D i).rank) (OI v)) (e' a) (e' b) =
       (h : Matrix (Fin D.R.r ⊕ Fin D.R.t) (Fin D.R.r ⊕ Fin D.R.t) (OI v)) a b := by
     intro a b
-    simp [h', Matrix.reindexAlgEquiv_apply]
+    simp [h']
   obtain ⟨κ, hsupp, hGf, hSt, hgrp, hred', hoth, hact⟩ := hAct h'
   have hϖ0 : red ϖ = 0 := by
     haveI : PP.asIdeal.IsMaximal := PP.isMaximal
@@ -887,7 +887,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.RestrictedTensorSplitting (FinPl id
 open GlobalTheory.DownLift.GenSplit
 
 theorem _root_.GlobalTheory.T.schrodingerFunction_invariant_typePrime : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 → R.thP_ωP → ∀ (i : Fin D.R.m) (t : T) (PP : Pl D.host.E), PP ∈ R.Pg → ∀ (v : FinPl D) (φ : SplitProj D v) (e : Formalism.L2.Theta.AE D), IsProjAt φ PP → IsIdemOf φ e → ∀ (red : OI v →+* kP PP), Function.Surjective red → (∀ a : OI v, red a = 0 ↔ Valued.v (a : Fv D.host.F v) < 1) → ActAt R i t PP φ e red → ∀ (Sb : Finset (FinPl D)), v ∈ Sb → ∀ (σ : Matrix (Fin D.R.r ⊕ Fin D.R.t) (Fin D.R.r) (Fv D.host.F v) → WO (Vc D i) (Wc D i)), (∀ X, IsHalf (cA D e) (σ X) ∧ coR R i φ (σ X) = X) → ∀ (ℓ : (WO (Vc D i) (Wc D i) → ℂ) →ₗ[ℂ] ℂ), InvForm R.ψ (Vc D i) (Wc D i) e ℓ → ∀ (f : WO (Vc D i) (Wc D i) → ℂ), TypeIn R i t Sb f → ∀ (ϖ : OI v), Irreducible ϖ → ∀ h : GL (Fin D.R.r ⊕ Fin D.R.t) (OI v), (∀ a b, (h : Matrix (Fin D.R.r ⊕ Fin D.R.t) (Fin D.R.r ⊕ Fin D.R.t) (OI v)) (Sum.inl a) (Sum.inl b) - (1 : Matrix (Fin D.R.r) (Fin D.R.r) (OI v)) a b ∈ Ideal.span {ϖ}) → (∀ a b, (h : Matrix (Fin D.R.r ⊕ Fin D.R.t) (Fin D.R.r ⊕ Fin D.R.t) (OI v)) (Sum.inr a) (Sum.inl b) ∈ Ideal.span {ϖ}) → ∀ X : Matrix (Fin D.R.r ⊕ Fin D.R.t) (Fin D.R.r) (Fv D.host.F v), ℓ (heisO R.ψ (Vc D i) (Wc D i) (σ ((h : Matrix (Fin D.R.r ⊕ Fin D.R.t) (Fin D.R.r ⊕ Fin D.R.t) (OI v)).map (algebraMap (OI v) (Fv D.host.F v)) * X)) f) = ℓ (heisO R.ψ (Vc D i) (Wc D i) (σ X) f) := by
-  first | exact @GlobalTheory.DownLift.GenSplit.schrodinger_type_inv | exact GlobalTheory.DownLift.GenSplit.schrodinger_type_inv | (intros; apply GlobalTheory.DownLift.GenSplit.schrodinger_type_inv <;> assumption)
+  first | exact @GlobalTheory.DownLift.GenSplit.schrodinger_type_inv
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.SchrodingerFunctionInvariantTypePrimeStatement =====
@@ -908,7 +908,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.RestrictedTensorSplitting (FinPl id
 open GlobalTheory.DownLift.GenSplit
 
 theorem _root_.GlobalTheory.T.splitPlaceUnitary_integralMatrix_keeps_lattice : ∀ (D : D7) (V : HSp D) (β : GL (Fin V.rank) (Formalism.IndefR.Lev.EAf D)) (Λ : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (N : ℕ), IsBaseFrame V β Λ N → ∀ (PP : Pl D.host.E) (v : FinPl D) (φ : SplitProj D v) (e : Formalism.L2.Theta.AE D), IsProjAt φ PP → IsIdemOf φ e → ∀ (red : OI v →+* kP PP), (∀ (a : Formalism.IndefR.Lev.EAf D) (ha : a ∈ Formalism.L2.Herm.intAf D.host.F D.host.E), ∃ h : GlobalTheory.IndefiniteRowSideFullHecke.RestrictedTensorSplitting.rdE φ a ∈ v.adicCompletionIntegers D.host.F, red ⟨GlobalTheory.IndefiniteRowSideFullHecke.RestrictedTensorSplitting.rdE φ a, h⟩ = resS D.host.F PP ⟨a, ha⟩) → ∀ (h : GL (Fin V.rank) (OI v)) (κ : GA D V), Formalism.L2.Theta.SuppAt e V κ → grpCo φ V (frCo φ β) κ = Matrix.GeneralLinearGroup.map (algebraMap (OI v) (Fv D.host.F v)) h → κ ∈ GfC V ∧ finE V κ ∈ Formalism.L2.DIV.St β ∧ redFn β PP (finE V κ) = Matrix.GeneralLinearGroup.map red h ∧ ∀ PP', PP' ≠ PP → ¬ Formalism.IndefR.Lev.IsConjPl PP PP' → redFn β PP' (finE V κ) = 1 := by
-  first | exact @GlobalTheory.DownLift.SplitIntLift.lift_of_integral | exact GlobalTheory.DownLift.SplitIntLift.lift_of_integral | (intros; apply GlobalTheory.DownLift.SplitIntLift.lift_of_integral <;> assumption)
+  first | exact @GlobalTheory.DownLift.SplitIntLift.lift_of_integral
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.SplitPlaceUnitaryIntegralMatrixKeepsLatticeStatement =====
@@ -1040,7 +1040,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.RestrictedTensorSplitting (FinPl id
 open GlobalTheory.DownLift.GenSplit
 
 theorem _root_.GlobalTheory.T.thetaFunction_level_and_schrodinger_bounded_support : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S T : HSp D) (ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)) (ΛT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E)) (βS : GL (Fin S.rank) (Formalism.IndefR.Lev.EAf D)) (βT : GL (Fin T.rank) (Formalism.IndefR.Lev.EAf D)), IsSelfDualC S ΛS → IsSelfDualC T ΛT → Formalism.L2.DIV.IsFrame βS ΛS → Formalism.L2.DIV.IsFrame βT ΛT → ∀ (v : FinPl D) (φ : SplitProj D v) (e : Formalism.L2.Theta.AE D), IsIdemOf φ e → ∀ (ϖ : OI v), Irreducible ϖ → ∀ f, IsThetaFunO ψ S T f → ∃ N : ℕ, (∀ z ∈ halfPow φ S T (frCo φ βS) (frCo φ βT) e ϖ N, heisO ψ S T z f = f) ∧ ∀ ℓ, InvForm ψ S T e ℓ → ∀ x, IsHalf (cA D e) x → ℓ (heisO ψ S T x f) ≠ 0 → Bdd ϖ N (adjCo φ S T (frCo φ βS) (frCo φ βT) x) := by
-  first | exact @GlobalTheory.DownLift.GenSplit.SupportBound.level_and_support | exact GlobalTheory.DownLift.GenSplit.SupportBound.level_and_support | (intros; apply GlobalTheory.DownLift.GenSplit.SupportBound.level_and_support <;> assumption)
+  first | exact @GlobalTheory.DownLift.GenSplit.SupportBound.level_and_support
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ThetaFunctionLevelAndSchrodingerBoundedSupportStatement =====
@@ -1282,7 +1282,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.RestrictedTensorSplitting (FinPl id
 open GlobalTheory.DownLift.GenSplit
 
 theorem _root_.GlobalTheory.T.typePrime_fixedThetaVector_schrodinger_indicator : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) (sS : D.what₂.Tau → Matrix (Fin S.rank) (Fin S.rank) ℂ) (sT : D.what₂.Tau → Matrix (Fin T.rank) (Fin T.rank) ℂ) (ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)) (ΛT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E)) (βS : GL (Fin S.rank) (Formalism.IndefR.Lev.EAf D)) (βT : GL (Fin T.rank) (Formalism.IndefR.Lev.EAf D)) (Pg Q : Finset (Pl D.host.E)) (ξ : ∀ PP : Pl D.host.E, (kP PP)ˣ →* ℂˣ) (f₀ p : WO S T → ℂ), IsSelfDualC S ΛS → IsSelfDualC T ΛT → Formalism.L2.DIV.IsFrame βS ΛS → Formalism.L2.DIV.IsFrame βT ΛT → IsThPVecOf ψ θ S T sS sT ΛS ΛT βS βT Pg Q ξ f₀ p → ∀ (PP : Pl D.host.E), PP ∈ Pg → ∀ (v : FinPl D) (φ : SplitProj D v) (e : Formalism.L2.Theta.AE D), IsProjAt φ PP → IsIdemOf φ e → ∀ (ϖ : OI v), Irreducible ϖ → ∀ x₀ : WO S T, IsHalf (cA D e) x₀ → (∀ a b, adjCo φ S T (frCo φ βS) (frCo φ βT) x₀ a b = if a.val = b.val then 1 else 0) → Shape ψ S T e (halfPow φ S T (frCo φ βS) (frCo φ βT) e ϖ 1) x₀ p := by
-  first | exact @GlobalTheory.ThPShape.thPVec_shape | exact GlobalTheory.ThPShape.thPVec_shape | (intros; apply GlobalTheory.ThPShape.thPVec_shape <;> assumption)
+  first | exact @GlobalTheory.ThPShape.thPVec_shape
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.TypePrimeFixedThetaVectorSchrodingerIndicatorStatement =====
@@ -1355,10 +1355,6 @@ theorem exists_finset_trSet (O K : Type) [CommRing O] [IsDomain O] [IsDiscreteVa
 
 variable {D : D7}
 
-theorem suppAt_conj' {e : Formalism.L2.Theta.AE D} {V : HSp D} {g : GA D V} (hg : Formalism.L2.Theta.SuppAt e V g) :
-    Formalism.L2.Theta.SuppAt (cA D e) V g := fun i j => by
-  rw [GlobalTheory.DualPairCheck.cA_cA, add_comm]; exact hg i j
-
 theorem suppAt_one' (e : Formalism.L2.Theta.AE D) (V : HSp D) : Formalism.L2.Theta.SuppAt e V 1 := fun i j => by
   rw [GlobalTheory.AdelicLatMove.mt_one, sub_self, Matrix.zero_apply, mul_zero]
 
@@ -1371,7 +1367,7 @@ theorem exists_scalar (hW : IsWeilDatumO ψ S T χS χT om) {e : Formalism.L2.Th
     {h : GA D T} (hg : Formalism.L2.Theta.SuppAt e S g) (hh : Formalism.L2.Theta.SuppAt e T h) :
     ∃ s : ℂ, s ≠ 0 ∧ ∀ ℓ, InvForm ψ S T e ℓ → ∀ f, IsThetaFunO ψ S T f → ℓ (om (g, h) f) = s * ℓ f := by
   have he' := isSplitIdem_conj he
-  obtain ⟨r, hr, H⟩ := hW.om_split (cA D e) he' g h (suppAt_conj' hg) (suppAt_conj' hh) _ _
+  obtain ⟨r, hr, H⟩ := hW.om_split (cA D e) he' g h (_root_.GlobalTheory.SplitPlace.suppAt_conj hg) (_root_.GlobalTheory.SplitPlace.suppAt_conj hh) _ _
     (GlobalTheory.VecInv.isDetAt_detAt _ he'.1 S g) (GlobalTheory.VecInv.isDetAt_detAt _ he'.1 T h)
   refine ⟨_, mul_ne_zero (Complex.ofReal_ne_zero.2 hr.ne') (Circle.coe_ne_zero _), fun ℓ hℓ => H ℓ fun u hu => hℓ u ?_⟩
   rw [GlobalTheory.DualPairCheck.cA_cA] at hu
@@ -1701,7 +1697,7 @@ theorem piece (R : RealDat D A Ks) (hL : R.toLevCh.Is A.μ0) (hω : R.thP_ωP) (
     simp only [Matrix.smul_apply, smul_eq_mul] at this
     rw [Matrix.sub_apply]
     linear_combination -this
-  obtain ⟨s, hs0, hs⟩ := exists_scalar hW he.1 (suppAt_one' e (Vc D i)) hh'
+  obtain ⟨s, hs0, hs⟩ := exists_scalar hW he.1 (_root_.GlobalTheory.WeilUniq.suppAt_one e (Vc D i)) hh'
   set E : Matrix (Fin D.R.r ⊕ Fin D.R.t) (Fin D.R.r) (OI v) := Matrix.fromRows 1 0 with hE
   set x₀ := σ (E.map (algebraMap (OI v) (Fv D.host.F v))) with hx₀
   set A₁ := halfPow φ (Vc D i) (Wc D i) (frCo φ (R.βV i)) (frCo φ (R.βW i)) e ϖ 1 with hA₁
@@ -1877,7 +1873,7 @@ open GlobalTheory.DownLift
 open GlobalTheory.DownLift.GenFinite
 
 theorem _root_.GlobalTheory.T.local_generation_thetaFun_at_type_prime : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A), GlobalTheory.LiftRows.Given R F → R.FullP → ∀ (i : Fin D.R.m) (t : T) (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F))) (v : HeightOneSpectrum (𝓞 D.host.F)), v ∈ Sb → (∃ PP ∈ R.Pg, GlobalTheory.DownLift.GenFinite.Over PP v) → ∀ (f : WO (Vc D i) (Wc D i) → ℂ), GlobalTheory.DownLift.GenFinite.TypeIn R i t Sb f → GlobalTheory.DownLift.GenFinite.CleanIn R i t Sb f → GlobalTheory.DownLift.GenFinite.LikeOff R i t Sb f → f ∈ Submodule.span ℂ (GlobalTheory.DownLift.GenFinite.StepGen R i t (GlobalTheory.DownLift.GenFinite.dropPl Sb v)) := by
-  first | exact @GlobalTheory.DownLift.GenSplit.gen_at_type_prime | exact GlobalTheory.DownLift.GenSplit.gen_at_type_prime | (intros; apply GlobalTheory.DownLift.GenSplit.gen_at_type_prime <;> assumption)
+  first | exact @GlobalTheory.DownLift.GenSplit.gen_at_type_prime
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LocalGenerationThetaFunAtTypePrimeStatement =====

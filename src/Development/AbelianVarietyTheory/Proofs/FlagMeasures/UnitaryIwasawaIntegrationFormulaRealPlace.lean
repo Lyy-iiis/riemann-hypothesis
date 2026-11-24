@@ -125,7 +125,7 @@ theorem finrank_le_card_of_isotropic {n : ℕ} (ε : Fin n → Bool) (V : Submod
       · simp [hx0 a ha]
       · have hb : ε a = !b := by cases h1 : ε a <;> cases b <;> simp_all
         rw [Complex.normSq_eq_conj_mul_self, hb]
-        cases b <;> simp [Complex.star_def] <;> ring
+        cases b <;> simp
     have h0 := hV x x.2
     simp only [Formalism.REAL.Jm, Matrix.mulVec_diagonal, dotProduct, Pi.star_apply, hterm,
       ← Finset.mul_sum] at h0
@@ -149,7 +149,7 @@ private theorem finrank_last_eq_sum_of_finrank_succ {n : ℕ} : ∀ (a : ℕ) (j
   induction a with
   | zero =>
     intro j W h0 _
-    simp [show Fin.last 0 = (0 : Fin 1) from rfl, h0]
+    simp [h0]
   | succ a ih =>
     intro j W h0 hstep
     have hprev := ih (fun i => j i.castSucc) (fun i => W i.castSucc) (by simpa using h0)
@@ -602,15 +602,8 @@ namespace GlobalTheory.IwConst.LiePos
 
 variable {n : ℕ} {ε : Fin n → Bool}
 
-theorem J_mul_J : Formalism.REAL.Jm ε * Formalism.REAL.Jm ε = 1 := by
-  unfold Formalism.REAL.Jm
-  rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-  congr 1
-  funext a
-  split_ifs <;> norm_num
-
 theorem inG_conjTranspose {X : Matrix (Fin n) (Fin n) ℂ} (h : Formalism.REAL.inG ε X) : Formalism.REAL.inG ε Xᴴ := by
-  have hJ : Formalism.REAL.Jm ε * Formalism.REAL.Jm ε = 1 := J_mul_J
+  have hJ : Formalism.REAL.Jm ε * Formalism.REAL.Jm ε = 1 := _root_.GlobalTheory.IwConst.FlagMem.Jm_mul_self
   have hJ' : ∀ Y : Matrix (Fin n) (Fin n) ℂ, Formalism.REAL.Jm ε * (Formalism.REAL.Jm ε * Y) = Y := fun Y => by
     rw [← mul_assoc, hJ, one_mul]
   unfold Formalism.REAL.inG at *
@@ -619,13 +612,6 @@ theorem inG_conjTranspose {X : Matrix (Fin n) (Fin n) ℂ} (h : Formalism.REAL.i
   simp only [mul_add, add_mul, mul_assoc, hJ, hJ', mul_one, mul_zero, zero_mul] at e
   rw [add_comm]
   exact e
-
-theorem inG_sub {X Y : Matrix (Fin n) (Fin n) ℂ} (h : Formalism.REAL.inG ε X) (k : Formalism.REAL.inG ε Y) :
-    Formalism.REAL.inG ε (X - Y) := by
-  unfold Formalism.REAL.inG at *
-  rw [conjTranspose_sub, sub_mul, mul_sub]
-  rw [show Xᴴ * Formalism.REAL.Jm ε - Yᴴ * Formalism.REAL.Jm ε + (Formalism.REAL.Jm ε * X - Formalism.REAL.Jm ε * Y) =
-      (Xᴴ * Formalism.REAL.Jm ε + Formalism.REAL.Jm ε * X) - (Yᴴ * Formalism.REAL.Jm ε + Formalism.REAL.Jm ε * Y) by abel, h, k, sub_zero]
 
 theorem comm_of_maxK {g : Formalism.REAL.UJ ε} (hg : g ∈ maxK ε) :
     uMat g * Formalism.REAL.Jm ε = Formalism.REAL.Jm ε * uMat g := by
@@ -637,7 +623,7 @@ theorem comm_of_maxK {g : Formalism.REAL.UJ ε} (hg : g ∈ maxK ε) :
 
 theorem skew_of_comm {X : Matrix (Fin n) (Fin n) ℂ} (h : Formalism.REAL.inG ε X)
     (hc : X * Formalism.REAL.Jm ε = Formalism.REAL.Jm ε * X) : Xᴴ = -X := by
-  have hJ : Formalism.REAL.Jm ε * Formalism.REAL.Jm ε = 1 := J_mul_J
+  have hJ : Formalism.REAL.Jm ε * Formalism.REAL.Jm ε = 1 := _root_.GlobalTheory.IwConst.FlagMem.Jm_mul_self
   have h' : Xᴴ * Formalism.REAL.Jm ε = -(X * Formalism.REAL.Jm ε) := by
     rw [hc]; exact eq_neg_of_add_eq_zero_left h
   calc Xᴴ = Xᴴ * Formalism.REAL.Jm ε * Formalism.REAL.Jm ε := by rw [mul_assoc, hJ, mul_one]
@@ -705,7 +691,7 @@ theorem lieRel : ∀ (n : ℕ) (ε : Fin n → Bool) (a : ℕ) (j : Fin a → �
     fun i k => htr _ (hENlow i) _ (hle (hENlow k)), mem_span_of_subset hL hM Set.inter_subset_right, hELK,
     fun i => skew_of_comm (hK.inG (hELK i)) (hspan (hELK i)), fun i => ?_⟩
   have hG : Formalism.REAL.inG ε (EN i) := hN.inG (Submodule.subset_span ⟨i, rfl⟩)
-  have hY : Formalism.REAL.inG ε (EN i - (EN i)ᴴ) := inG_sub hG (inG_conjTranspose hG)
+  have hY : Formalism.REAL.inG ε (EN i - (EN i)ᴴ) := _root_.Formalism.REAL.lie_algebra_sub_mem hG (inG_conjTranspose hG)
   have hskew : (EN i - (EN i)ᴴ)ᴴ = -(EN i - (EN i)ᴴ) := by
     rw [conjTranspose_sub, conjTranspose_conjTranspose, neg_sub]
   refine (_root_.GlobalTheory.IwTangent.lie_algebra_of_isCut n ε _ dK EK hK).2.2 _ hY (fun t g hg => ?_)
@@ -862,17 +848,10 @@ namespace GlobalTheory.IwConstMin
 
 variable {n : ℕ}
 
-private lemma hs_eq_re_trace' (X : Matrix (Fin n) (Fin n) ℂ) :
-    Formalism.REAL.hs X = ((X * Xᴴ).trace).re := by
-  simp only [Formalism.REAL.hs, Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.conjTranspose_apply,
-    Complex.re_sum]
-  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-  rw [Complex.star_def, Complex.mul_conj, Complex.ofReal_re, Complex.normSq_eq_norm_sq]
-
 theorem hs_unitary_sub_one {u : Matrix (Fin n) (Fin n) ℂ} (hu : uᴴ * u = 1) :
     Formalism.REAL.hs (u - 1) = 2 * ((1 : Matrix (Fin n) (Fin n) ℂ).trace).re - 2 * (u.trace).re := by
   have h2 : u * uᴴ = 1 := mul_eq_one_comm.mp hu
-  rw [hs_eq_re_trace', conjTranspose_sub, conjTranspose_one]
+  rw [_root_.GlobalTheory.GaugeRightInv.hs_eq_re_trace, conjTranspose_sub, conjTranspose_one]
   have e : (u - 1) * (uᴴ - 1) = 1 - u - uᴴ + 1 := by
     rw [sub_mul, mul_sub, mul_sub, h2, Matrix.one_mul, Matrix.mul_one, Matrix.one_mul]
     abel
@@ -901,13 +880,11 @@ theorem re_trace_eq_zero_of_max (X u : Matrix (Fin n) (Fin n) ℂ)
   have h0 := hmax.hasDerivAt_eq_zero hf
   simpa [hφ, NormedSpace.exp_zero] using h0
 
-theorem uMat_mul' {ε : Fin n → Bool} (g h : Formalism.REAL.UJ ε) : uMat (g * h) = uMat g * uMat h := rfl
-
 theorem maxK_mul {ε : Fin n → Bool} {g h : Formalism.REAL.UJ ε} (hg : g ∈ maxK ε) (hh : h ∈ maxK ε) : g * h ∈ maxK ε := by
   have hg' : (uMat g)ᴴ * uMat g = 1 := hg
   have hh' : (uMat h)ᴴ * uMat h = 1 := hh
   show (uMat (g * h))ᴴ * uMat (g * h) = 1
-  rw [uMat_mul', conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc (uMat g)ᴴ, hg',
+  rw [_root_.GlobalTheory.FlagLeviGroup.uMat_mul, conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc (uMat g)ᴴ, hg',
     Matrix.one_mul, hh']
 
 theorem exists_nearest : ∀ (n : ℕ) (ε : Fin n → Bool) (S : Set (Formalism.REAL.UJ ε)) (d : ℕ) (E : Fin d → Matrix (Fin n) (Fin n) ℂ), IsCut ε S E → S ⊆ maxK ε → (∀ i, (E i)ᴴ = -E i) → ∀ k ∈ maxK ε, ∃ l ∈ S, crd E (uMat (l * k) - 1) = 0 ∧ ∀ l' ∈ S, nrm (uMat (l * k) - 1) ≤ nrm (uMat (l' * k) - 1) := by
@@ -931,7 +908,7 @@ theorem exists_nearest : ∀ (n : ℕ) (ε : Fin n → Bool) (S : Set (Formalism
     obtain ⟨g, hgS, hg⟩ := hflow t
     have hgl : g * l ∈ S := (hmemS _).2 (H.mul_mem ((hmemS _).1 hgS) ((hmemS _).1 hlS))
     have hv : uMat (g * l * k) = NormedSpace.exp ((t : ℂ) • E i) * w := by
-      rw [mul_assoc, uMat_mul', hg]
+      rw [mul_assoc, _root_.GlobalTheory.FlagLeviGroup.uMat_mul, hg]
     have hvK : (uMat (g * l * k))ᴴ * uMat (g * l * k) = 1 := maxK_mul (hSK hgl) hk
     have hn : nrm (w - 1) ≤ nrm (uMat (g * l * k) - 1) := hmin hgl
     have hsq : Formalism.REAL.hs (w - 1) ≤ Formalism.REAL.hs (uMat (g * l * k) - 1) := by
@@ -1275,7 +1252,7 @@ section -- clump:auto
 open MeasureTheory NumberField Matrix Finset Formalism.MainNotions.S GlobalTheory.Count GlobalTheory.FlagMeas GlobalTheory.IwConst
 
 theorem _root_.GlobalTheory.T.slab_measure_squeeze' : ∀ (n : ℕ) (ε : Fin n → Bool) (a : ℕ) (j : Fin a → ℕ) (W : Fin (a + 1) → Submodule ℂ (Fin n → ℂ)), IsIsoFlag ε j W → ∀ (d : ℕ) (E : Fin d → Matrix (Fin n) (Fin n) ℂ), IsCut ε (maxK ε ∩ flagM ε W) E → (∀ i, (E i)ᴴ = -E i) → ∀ ν : Measure (Formalism.REAL.UJ ε), ν (maxK ε ∩ flagM ε W)ᶜ = 0 → (∀ l ∈ maxK ε ∩ flagM ε W, ν.map (fun g => g * l) = ν) → ∀ ρ η : ℝ, 0 < ρ → ρ ≤ 1 / 8 → 0 < η → ∀ᶠ r in (nhdsWithin (0 : ℝ) (Set.Ioi 0)), ∀ u ∈ flagN ε W, ∀ m ∈ flagM ε W, ∀ k ∈ maxK ε, u * m * k ∈ hsBall ε r → ν (hsBall ε (r / (1 + η))) ≤ ν {l | l * k ∈ slab ε E ρ r} ∧ ν {l | l * k ∈ slab ε E ρ r} ≤ ν (hsBall ε ((1 + η) * r)) := by
-  first | exact @GlobalTheory.IwConst.slab_measure_squeeze | exact GlobalTheory.IwConst.slab_measure_squeeze | (intros; apply GlobalTheory.IwConst.slab_measure_squeeze <;> assumption)
+  first | exact @GlobalTheory.IwConst.slab_measure_squeeze
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.SlabMeasureSqueezeStatement =====
@@ -1323,11 +1300,6 @@ theorem ballVol_ne_zero (d : ℕ) : ballVol d ≠ 0 := by
 theorem ballVol_ne_top (d : ℕ) : ballVol d ≠ ⊤ := by
   unfold ballVol
   exact measure_ball_lt_top.ne
-
-theorem volU_pos' (i : ℕ) : 0 < volU i := by
-  unfold volU sphV
-  refine mul_pos (Finset.prod_pos fun l _ => ?_) (by positivity)
-  positivity
 
 theorem tendsto_mul_balls {f g : ℝ → ENNReal} {d e : ℕ} {V : ENNReal} (hV : V ≠ ⊤)
     (hf : Tendsto (fun r : ℝ => f r / ENNReal.ofReal (r ^ d)) (𝓝[>] 0) (𝓝 (ballVol d)))
@@ -1467,7 +1439,7 @@ theorem iwasawa_constant : ∀ (n : ℕ) (ε : Fin n → Bool) (p q : ℕ), (uni
   have hμ0eq := _root_.GlobalTheory.IwConst.right_inv_eq_smul_left_inv (Formalism.REAL.UJ ε) (maxK ε) μK μ0 hK0 hμ0'.1 hK1 hKinv rK
   rw [hVK] at hμ0eq
 
-  have hvpos : ∀ i, 0 < volU i := volU_pos'
+  have hvpos : ∀ i, 0 < volU i := _root_.GlobalTheory.UnitaryVolume.volU_pos
   have hVtop : ENNReal.ofReal (volU p * volU q) ≠ ⊤ := ENNReal.ofReal_ne_top
   have hδ := _root_.GlobalTheory.IwDelta.dlt_props n ε a j W
   have hΓtop : volume {v | gau EN EM EK EL v ≤ 1} ≠ ⊤ := by

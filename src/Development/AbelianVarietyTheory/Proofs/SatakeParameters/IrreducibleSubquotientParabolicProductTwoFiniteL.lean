@@ -173,7 +173,7 @@ open GlobalTheory.PRep GlobalTheory.SmGL GlobalTheory.SplitWeil
 
 
 theorem _root_.GlobalTheory.T.isSubquotient_of_exact_middle_irreducible : ∀ (G : Type) [Group G] (U V A Q : Type) [AddCommGroup U] [Module ℂ U] [AddCommGroup V] [Module ℂ V] [AddCommGroup A] [Module ℂ A] [AddCommGroup Q] [Module ℂ Q] (τ : Representation ℂ G U) (ρ : Representation ℂ G V) (α : Representation ℂ G A) (κ : Representation ℂ G Q) (i : α.IntertwiningMap ρ) (q : ρ.IntertwiningMap κ), τ.IsIrreducible → (∀ v, q v = 0 → ∃ a, i a = v) → IsSubquotient τ ρ → IsSubquotient τ α ∨ IsSubquotient τ κ := by
-  first | exact @GlobalTheory.isSubquotient_of_exact_middle | exact GlobalTheory.isSubquotient_of_exact_middle | (intros; apply GlobalTheory.isSubquotient_of_exact_middle <;> assumption)
+  first | exact @GlobalTheory.isSubquotient_of_exact_middle
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.IsSubquotientOfExactMiddleIrreducibleStatement =====
@@ -255,7 +255,7 @@ open GlobalTheory.PRep GlobalTheory.SmGL GlobalTheory.SplitWeil
 
 
 theorem _root_.GlobalTheory.T.parabolicInduction_preserves_injective_and_exactness : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (α n : Type) (m : α → Type) [Fintype α] [LinearOrder α] [∀ a, Fintype (m a)] [∀ a, DecidableEq (m a)] [Fintype n] [DecidableEq n] (e : (Σ a, m a) ≃ n) (X Y : Type) [AddCommGroup X] [Module ℂ X] [AddCommGroup Y] [Module ℂ Y] (ξ : Representation ℂ (Levi k m) X) (η : Representation ℂ (Levi k m) Y) (i : ξ.IntertwiningMap η), Function.Injective i → Function.Injective (parIndMap e i) ∧ ∀ (Z : Type) [AddCommGroup Z] [Module ℂ Z] (ζ : Representation ℂ (Levi k m) Z) (q : η.IntertwiningMap ζ), (∀ y, q y = 0 → ∃ x, i x = y) → ∀ φ, parIndMap e q φ = 0 → ∃ ψ, parIndMap e i ψ = φ := by
-  first | exact @GlobalTheory.ParIndExact.parInd_exact | exact GlobalTheory.ParIndExact.parInd_exact | (intros; apply GlobalTheory.ParIndExact.parInd_exact <;> assumption)
+  first | exact @GlobalTheory.ParIndExact.parInd_exact
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.ParabolicInductionPreservesInjectiveAndExactnessStatement =====
@@ -308,7 +308,7 @@ open GlobalTheory.PRep GlobalTheory.SmGL GlobalTheory.SplitWeil
 
 
 theorem _root_.GlobalTheory.T.property_descends_finiteLength_to_irreducible_subquotient : ∀ (H : Type) [Group H] (V : Type) [AddCommGroup V] [Module ℂ V] (ρ : Representation ℂ H V) (P : ∀ (Y : Type) [AddCommGroup Y] [Module ℂ Y], Representation ℂ H Y → Prop), HasFiniteLength ρ → (∀ (Y Y' : Type) [AddCommGroup Y] [Module ℂ Y] [AddCommGroup Y'] [Module ℂ Y'] (σ : Representation ℂ H Y) (σ' : Representation ℂ H Y') (f : σ.IntertwiningMap σ'), Function.Injective f → P Y σ → P Y' σ') → (∀ (Y : Type) [AddCommGroup Y] [Module ℂ Y] (σ : Representation ℂ H Y), P Y σ → Nontrivial Y) → (∀ A B : Subrepresentation ρ, B ≤ A → P _ A.toRepresentation → P _ B.toRepresentation ∨ P _ (subQuot A B)) → P V ρ → ∃ (Y : Type) (_ : AddCommGroup Y) (_ : Module ℂ Y) (σ : Representation ℂ H Y), σ.IsIrreducible ∧ IsSubquotient σ ρ ∧ P Y σ := by
-  first | exact @GlobalTheory.ExactIrr.main | exact GlobalTheory.ExactIrr.main | (intros; apply GlobalTheory.ExactIrr.main <;> assumption)
+  first | exact @GlobalTheory.ExactIrr.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.PropertyDescendsFiniteLengthToIrreducibleSubquotStatement =====
@@ -352,7 +352,7 @@ theorem prod₂_exact_left : ∀ (k : Type) [Field k] [ValuativeRel k] [Topologi
   let s := (leviTwo k (Fin r) (Fin t)).symm.toMonoidHom
   have hi' : Function.Injective (compMap (extMapLeft i ρ₂) s) :=
     Module.Flat.rTensor_preserves_injective_linearMap _ hi
-  obtain ⟨hI, hex⟩ := parIndMap_exact k Bool (Fin (r + t)) (Two (Fin r) (Fin t)) (two (stdSum rfl)) _ _
+  obtain ⟨hI, hex⟩ := _root_.GlobalTheory.ParIndExact.parInd_exact k Bool (Fin (r + t)) (Two (Fin r) (Fin t)) (two (stdSum rfl)) _ _
     _ _ (compMap (extMapLeft i ρ₂) s) hi'
   refine ⟨parIndMap _ (compMap (extMapLeft i ρ₂) s), hI, fun C _ _ γ q hq hqi hiq => ?_⟩
   refine ⟨parIndMap _ (compMap (extMapLeft q ρ₂) s), hex _ _ (compMap (extMapLeft q ρ₂) s) ?_⟩
@@ -370,7 +370,7 @@ theorem prod₂_exact_right : ∀ (k : Type) [Field k] [ValuativeRel k] [Topolog
   let s := (leviTwo k (Fin r) (Fin t)).symm.toMonoidHom
   have hi' : Function.Injective (compMap (extMapRight ρ₁ i) s) :=
     Module.Flat.lTensor_preserves_injective_linearMap _ hi
-  obtain ⟨hI, hex⟩ := parIndMap_exact k Bool (Fin (r + t)) (Two (Fin r) (Fin t)) (two (stdSum rfl)) _ _
+  obtain ⟨hI, hex⟩ := _root_.GlobalTheory.ParIndExact.parInd_exact k Bool (Fin (r + t)) (Two (Fin r) (Fin t)) (two (stdSum rfl)) _ _
     _ _ (compMap (extMapRight ρ₁ i) s) hi'
   refine ⟨parIndMap _ (compMap (extMapRight ρ₁ i) s), hI, fun C _ _ γ q hq hqi hiq => ?_⟩
   refine ⟨parIndMap _ (compMap (extMapRight ρ₁ q) s), hex _ _ (compMap (extMapRight ρ₁ q) s) ?_⟩
@@ -407,7 +407,7 @@ theorem step_left {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [Is
     (hf₁ : HasFiniteLength ρ₁) (hπ : IsSubquotient π.π (prod₂ ρ₁ ρ₂)) :
     ∃ (Y : Type) (_ : AddCommGroup Y) (_ : Module ℂ Y) (σ : Representation ℂ (GL (Fin r) k) Y),
       σ.IsIrreducible ∧ IsSubquotient σ ρ₁ ∧ IsSubquotient π.π (prod₂ σ ρ₂) := by
-  refine exists_irreducible_of_pred (GL (Fin r) k) V ρ₁
+  refine _root_.GlobalTheory.ExactIrr.main (GL (Fin r) k) V ρ₁
     (fun Y _ _ σ => IsSubquotient π.π (prod₂ σ ρ₂)) hf₁ ?_ ?_ ?_ hπ
   · intro Y Y' _ _ _ _ σ σ' f hf h
     obtain ⟨I, hI, -⟩ := prod₂_exact_left k r t Y Y' W σ σ' ρ₂ f hf
@@ -425,14 +425,14 @@ theorem step_left {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [Is
       intro b hb
       exact ⟨⟨b.1, (Submodule.Quotient.mk_eq_zero (B.toSubmodule.comap A.toSubmodule.subtype)).1 hb⟩,
         Subtype.ext rfl⟩)
-    exact subquot_dichotomy _ _ _ _ _ π.π _ _ _ I Q π.irr hQ' h
+    exact _root_.GlobalTheory.isSubquotient_of_exact_middle _ _ _ _ _ π.π _ _ _ I Q π.irr hQ' h
 
 theorem step_right {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] {r t : ℕ} (π : Irr k (r + t)) {V W : Type} [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module ℂ W]
     (ρ₁ : Representation ℂ (GL (Fin r) k) V) (ρ₂ : Representation ℂ (GL (Fin t) k) W)
     (hf₂ : HasFiniteLength ρ₂) (hπ : IsSubquotient π.π (prod₂ ρ₁ ρ₂)) :
     ∃ (Y : Type) (_ : AddCommGroup Y) (_ : Module ℂ Y) (σ : Representation ℂ (GL (Fin t) k) Y),
       σ.IsIrreducible ∧ IsSubquotient σ ρ₂ ∧ IsSubquotient π.π (prod₂ ρ₁ σ) := by
-  refine exists_irreducible_of_pred (GL (Fin t) k) W ρ₂
+  refine _root_.GlobalTheory.ExactIrr.main (GL (Fin t) k) W ρ₂
     (fun Y _ _ σ => IsSubquotient π.π (prod₂ ρ₁ σ)) hf₂ ?_ ?_ ?_ hπ
   · intro Y Y' _ _ _ _ σ σ' f hf h
     obtain ⟨I, hI, -⟩ := prod₂_exact_right k r t V Y Y' ρ₁ σ σ' f hf
@@ -450,7 +450,7 @@ theorem step_right {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [I
       intro b hb
       exact ⟨⟨b.1, (Submodule.Quotient.mk_eq_zero (B.toSubmodule.comap A.toSubmodule.subtype)).1 hb⟩,
         Subtype.ext rfl⟩)
-    exact subquot_dichotomy _ _ _ _ _ π.π _ _ _ I Q π.irr hQ' h
+    exact _root_.GlobalTheory.isSubquotient_of_exact_middle _ _ _ _ _ π.π _ _ _ I Q π.irr hQ' h
 
 theorem irreducible_subquotient_prod₂ : GlobalTheory.Published.BernsteinZelevinskyFiniteness → ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (r t : ℕ) (V W : Type) [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module ℂ W] (ρ₁ : Representation ℂ (GL (Fin r) k) V) (ρ₂ : Representation ℂ (GL (Fin t) k) W) (π : Irr k (r + t)), IsSmooth ρ₁ → IsSmooth ρ₂ → HasFiniteLength ρ₁ → HasFiniteLength ρ₂ → IsSubquotient π.π (prod₂ ρ₁ ρ₂) → ∃ (π₁ : Irr k r) (π₂ : Irr k t), IsSubquotient π₁.π ρ₁ ∧ IsSubquotient π₂.π ρ₂ ∧ IsSubquotient π.π (prod₂ π₁.π π₂.π) := by
   intro _hBZ k _ _ _ _ r t V W _ _ _ _ ρ₁ ρ₂ π h₁ h₂ hf₁ hf₂ hπ

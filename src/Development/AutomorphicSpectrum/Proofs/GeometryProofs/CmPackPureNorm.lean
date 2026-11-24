@@ -76,6 +76,7 @@ import Mathlib.Tactic.Linter.Style
 import Mathlib.Tactic.Polynomial.Basic
 import Std.Tactic.BVDecide.Normalize.Prop
 import Development.AutomorphicSpectrum.Proofs.GeometryProofs.LieModelEigenvectorsAction
+import Development.AbelianVarietyTheory.Proofs.CubicalLineBundles.CmHostRootNegDiscriminantNeNegSelf
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.Rt0ConjNegNeZero, Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.ExistsCoordinate, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.DualBasisTraceLogNorm, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.EigenLocalBasisLogNorm, Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ExistsLocalBasisCmOrder, Development.WeilBound.CoreStatements.SesquilinearFractions.SpMapMonoOfFraction, Development.WeilBound.CoreStatements.SesquilinearFractions.GIntFrame, Development.AutomorphicSpectrum.Proofs.GeometryProofs.LieModelExtendsOverDvr, Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmPackPureNorm
@@ -202,12 +203,8 @@ theorem two_weight_eq_one_add_root (H : Host E) : 2 * (H.w0 : E) = 1 + (H.rt : E
 
 theorem rt_integral (H : Host E) : IsIntegral ℚ (H.rt : E) := Algebra.IsIntegral.isIntegral _
 
-theorem exists_coord' (H : Host E) {y : E} (hy : y ∈ Algebra.adjoin ℚ {(H.rt : E)}) :
-    ∃ u v : ℚ, y = u + v * (H.rt : E) :=
-  _root_.UpperTheory.Reformulated.B.ExistsCoordinate.exists_coord H hy
-
 theorem exists_coord (H : Host E) (x : Kf H) : ∃ u v : ℚ, (x : E) = u + v * (H.rt : E) := by
-  refine exists_coord' H ?_
+  refine _root_.UpperTheory.Reformulated.B.ExistsCoordinate.exists_coord H ?_
   rw [← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (rt_integral H).isAlgebraic]
   exact x.2
 
@@ -240,7 +237,7 @@ theorem trace_rtL (H : Host E) : Algebra.trace ℚ (Kf H) (rtL H) = 0 := by
   refine h.trans ?_
   rw [Polynomial.nextCoeff_of_natDegree_pos (by rw [Polynomial.natDegree_X_pow_add_C]; norm_num),
     Polynomial.natDegree_X_pow_add_C]
-  simp [Polynomial.coeff_X, Polynomial.coeff_C]
+  simp
 
 theorem trace_coord (H : Host E) (x : Kf H) (u v : ℚ) (hx : (x : E) = u + v * (H.rt : E)) :
     Algebra.trace ℚ (Kf H) x = 2 * u := by
@@ -258,7 +255,7 @@ theorem trace_div_rt (H : Host E) (x : Kf H) (u v : ℚ) (hx : (x : E) = u + v *
   have h0 := rt_ne H
   have h2 := rt_sq H
   push_cast
-  simp only [IntermediateField.coe_mul, IntermediateField.coe_inv, coe_rtL, hx]
+  simp only [coe_rtL, hx]
   field_simp
   linear_combination (u : E) * h2
 
@@ -947,7 +944,7 @@ open Matrix GlobalTheory GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionT
 open scoped ComplexOrder
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.exists_local_basis_cm_order : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (ℓ : ℕ), ℓ.Prime → ∃ (f : ℕ) (b : Fin f → 𝓞 E), 2 * f = Module.finrank ℚ E ∧ IsLocBasis (Algebra.adjoin ℤ {H.w0}) ℓ b := by
-  first | exact @PositivityTheory.Xgf.exists_local_basis_cm_order | exact PositivityTheory.Xgf.exists_local_basis_cm_order
+  first | exact @PositivityTheory.Xgf.exists_local_basis_cm_order
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ExistsLocalBasisCmOrder =====
@@ -1249,7 +1246,7 @@ private theorem isTanAt_iff_epsScale_zero_comp_eq_one {R : Type} [CommRing R] {S
   have hid : (TrivSqZeroExt.fstHom R R R).toRingHom.comp (algebraMap R (DualNumber R)) = RingHom.id R := by
     apply RingHom.ext
     intro a
-    simp [TrivSqZeroExt.algebraMap_eq_inl]
+    simp
   have hsec : Spec.map (CommRingCat.ofHom (TrivSqZeroExt.fstHom R R R).toRingHom) ≫
       Spec.map (CommRingCat.ofHom (algebraMap R (DualNumber R))) = 𝟙 _ := by
     rw [← Spec.map_comp, ← CommRingCat.ofHom_comp, hid, CommRingCat.ofHom_id, Spec.map_id]
@@ -1482,13 +1479,13 @@ open Matrix GlobalTheory GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionT
 open scoped ComplexOrder
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.lie_model_extends_over_dvr : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (K : Type) [Field K] (V : Subring K) [IsDomain V] [IsDiscreteValuationRing V] [IsFractionRing V K] (y : Sp K ⟶ Xo.XF c) (T : SAB H (Sp V)) (tK : SAB H (Sp K)) (m : SABMap tK Xo.univ.t (under y)) (m' : SABMap tK T (spMap (algebraMap V K))) (U : Type) [AddCommGroup U] [Module K U] (M : LieModel Xo.univ.t.G (under y) U) (ρ : 𝓞 E →+* Module.End K U) (σ : E →+* K) (I : Type) [Fintype I] (n r : ℕ) (e : Fin n ≃ I) (uV : Fin n → (epsAt (𝟙 (Sp V)) ⟶ T.G)) (u : I → U) (v : Fin r → U), M.IsActOf Xo.univ.t.act.act ρ → (∀ a : 𝓞 E, σ (a : E) ∈ V) → (∀ k, IsTanAt T.G _ (uV k)) → (∀ w, IsTanAt T.G _ w → ∃! cc : Fin n → V, IsComb cc uV w) → (∀ k, ∃ s : Sp (DualNumber K) ⟶ tK.G.left, s ≫ m.φ = (M.pt (u (e k))).left ∧ s ≫ m'.φ = spMap (dualMap (algebraMap V K)) ≫ (uV k).left) → LinearIndependent K v → Submodule.span V (Set.range u) ⊓ (HT.eigSp ρ σ).restrictScalars V = Submodule.span V (Set.range v) → LinearIndependent K u ∧ IsIntFrame m m' (σ.comp (algebraMap (𝓞 E) E)) (fun a => M.pt (v a)) := by
-  first | exact @PositivityTheory.Xgf.lie_model_extends_over_dvr | exact PositivityTheory.Xgf.lie_model_extends_over_dvr
+  first | exact @PositivityTheory.Xgf.lie_model_extends_over_dvr
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.LieModelExtendsOverDvr =====
 
 -- ===== clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmPackPureNorm =====
--- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmPackPureNorm", "h": "module\n\npublic import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.IsCMFrame\npublic import Mathlib.Algebra.AffineMonoid.Basic\npublic import Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.Rt0ConjNegNeZero\npublic import Development.AutomorphicSpectrum.Definitions.AdelicLattices.FactPrimes\npublic import Mathlib.RingTheory.DiscreteValuationRing.Basic\npublic import Development.AutomorphicSpectrum.Proofs.AdelicProofs.PadicEmbeddingDiscreteValuationRing\npublic import Mathlib.RingTheory.DedekindDomain.Different\npublic import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.TwoWeightEqOneAddRoot\npublic import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.DifferentTwistedGeneratorExists\npublic import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.IsTransition\npublic import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.EigenLocalBasisLogNorm\npublic import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ExistsLocalBasisCmOrder\npublic import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.PureFamilyDecomposition\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmLieModelAction\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmPackProductFrame\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmPackPureFrame\npublic import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.IsConstMul\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.LieModelExtendsOverDvr\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.PeriodsSpanPureDecomposition\nimport Development.AutomorphicSpectrum.Definitions.GlobalGeometry.IsHodgeGram\nimport Development.AutomorphicSpectrum.Proofs.GeometryProofs.LieModelEigenvectorsAction\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Henselian\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.RegularLocalRing.Defs\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\n\n"}
+-- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmPackPureNorm", "h": "module\n\npublic import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.IsCMFrame\npublic import Mathlib.Algebra.AffineMonoid.Basic\npublic import Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.Rt0ConjNegNeZero\npublic import Development.AutomorphicSpectrum.Definitions.AdelicLattices.FactPrimes\npublic import Mathlib.RingTheory.DiscreteValuationRing.Basic\npublic import Development.AutomorphicSpectrum.Proofs.AdelicProofs.PadicEmbeddingDiscreteValuationRing\npublic import Mathlib.RingTheory.DedekindDomain.Different\npublic import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.TwoWeightEqOneAddRoot\npublic import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.DifferentTwistedGeneratorExists\npublic import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.IsTransition\npublic import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.EigenLocalBasisLogNorm\npublic import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.ExistsLocalBasisCmOrder\npublic import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.PureFamilyDecomposition\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmLieModelAction\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmPackProductFrame\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.CmPackPureFrame\npublic import Development.AutomorphicSpectrum.Definitions.GlobalGeometry.IsConstMul\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.LieModelExtendsOverDvr\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.PeriodsSpanPureDecomposition\nimport Development.AutomorphicSpectrum.Definitions.GlobalGeometry.IsHodgeGram\nimport Development.AutomorphicSpectrum.Proofs.GeometryProofs.LieModelEigenvectorsAction\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Henselian\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.RegularLocalRing.Defs\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Development.AbelianVarietyTheory.Proofs.CubicalLineBundles.CmHostRootNegDiscriminantNeNegSelf\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1502,9 +1499,6 @@ open Matrix GlobalTheory GlobalTheory.CM GlobalTheory.CompanionTheory.Ar GlobalT
 open scoped ComplexOrder
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E}
-
-theorem rt0_conj_neg_ne_zero (H : Host E) : starRingEnd ℂ H.rt0 = -H.rt0 :=
-  _root_.UpperTheory.Reformulated.B.Ga10.rt0_conj_neg_ne_zero H
 
 theorem card_emb {l : Level H} (c : Coeff l) (K : IntermediateField ℚ ℂ) (hc : c.F ≤ K) :
     Nat.card (E →+* K) = Module.finrank ℚ E := by
@@ -1654,7 +1648,7 @@ theorem intFrames_fin : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (
     ComplexEmbedding.conjugate_coe_eq τ a
   have hrt1 : ((σ (H.rt : E) : X.K) : ℂ) = H.rt0 := (hσc _).trans hτ
   have hrt2 : ((σ' (H.rt : E) : X.K) : ℂ) = -H.rt0 := by
-    rw [hσc', hτ, rt0_conj_neg_ne_zero]
+    rw [hσc', hτ, _root_.GlobalTheory.LamF.cmHost_conj_sqrtNegDisc]
   let u : Fin D.p → Fin g → X.K := fun a => lam true ⟨x (.inl a), hx.1 a⟩
   let u' : Fin D.q → Fin g → X.K := fun a => lam false ⟨x (.inr a), hx.2 a⟩
   have hu1 : ∀ a, ρ H.rt (u a) = σ (H.rt : E) • u a := fun a =>

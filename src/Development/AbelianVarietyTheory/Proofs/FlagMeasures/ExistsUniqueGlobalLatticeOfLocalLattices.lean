@@ -382,16 +382,7 @@ theorem smul_mem_of_mem' (Λ : Submodule O (Fin n → R)) {c : R} (hc : c ∈ O)
   have := Λ.smul_mem (⟨c, hc⟩ : O) hx
   simpa [Subring.smul_def] using this
 
-theorem exists_nat_smul_mem (Λ : Submodule O (Fin n → R))
-    (hd : ∀ y : R, ∃ m : ℕ, m ≠ 0 ∧ (m : R) * y ∈ O) {x : Fin n → R}
-    (hx : x ∈ Submodule.span R (Λ : Set (Fin n → R))) : ∃ m : ℕ, m ≠ 0 ∧ (m : R) • x ∈ Λ := by
-  first
-  | exact @_root_.GlobalTheory.NatSmulMem.exists_nat_smul_mem
-  | exact _root_.GlobalTheory.NatSmulMem.exists_nat_smul_mem
-  | (apply _root_.GlobalTheory.NatSmulMem.exists_nat_smul_mem <;> assumption)
-  | (intros; apply _root_.GlobalTheory.NatSmulMem.exists_nat_smul_mem <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.NatSmulMem.exists_nat_smul_mem <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.NatSmulMem.exists_nat_smul_mem ..)
+alias exists_nat_smul_mem := _root_.GlobalTheory.NatSmulMem.exists_nat_smul_mem
 
 theorem exists_nat_between (Λ : Submodule O (Fin n → R)) (hfg : Λ.FG)
     (hsp : Submodule.span R (Λ : Set (Fin n → R)) = ⊤)
@@ -474,8 +465,6 @@ section -- clump:auto
 open ValuativeRel Formalism.MainNotions.S.Loc GlobalTheory.HL NumberField IsDedekindDomain
 open scoped Pointwise ENNReal Classical
 
-theorem _root_.GlobalTheory.T.local_lattice_between_scaled_standard_lattices : ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {sig : E →ₐ[F] E} (A : Places F E sig), ∀ (p : HeightOneSpectrum (𝓞 F)) (n : ℕ) (Λ : Submodule (A.L p).O (Fin n → (A.loc p).Ep)), IsLat (A.L p) Λ → (∀ y : (A.loc p).Ep, ∃ m : ℕ, m ≠ 0 ∧ (m : (A.loc p).Ep) * y ∈ (A.L p).O) → ∃ m : ℕ, m ≠ 0 ∧ (∀ v : Fin n → (A.loc p).Ep, (∀ i, v i ∈ (A.L p).O) → (m : (A.loc p).Ep) • v ∈ Λ) ∧ ∀ v ∈ Λ, ∀ i, (m : (A.loc p).Ep) * v i ∈ (A.L p).O := by
-  first | exact @GlobalTheory.HL.Glue.lat_between | exact GlobalTheory.HL.Glue.lat_between | (intros; apply GlobalTheory.HL.Glue.lat_between <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.LocalLatticeBetweenScaledStandardLatticesStatement =====
@@ -509,13 +498,13 @@ theorem local_le_lat_of_approx {F E : Type} [Field F] [NumberField F] [Field E] 
       simp only [Places.bc, Pi.smul_apply, smul_eq_mul, map_mul, map_natCast]
       by_cases h : j = i
       · subst h; simp
-      · simp [Pi.single_apply, h]
+      · simp [h]
     rw [h1]
     apply hN
     intro j
     by_cases h : j = i
-    · subst h; simp [Subring.one_mem]
-    · simp [Pi.single_apply, h, Subring.zero_mem]
+    · subst h; simp
+    · simp [h]
   have hint : ∀ w : Fin n → (A.loc p).Ep, (∀ i, w i ∈ (A.L p).O) →
       (N : (A.loc p).Ep) • w ∈ A.lat p Γ := by
     intro w hw
@@ -523,7 +512,7 @@ theorem local_le_lat_of_approx {F E : Type} [Field F] [NumberField F] [Field E] 
         ∑ i, (⟨w i, hw i⟩ : (A.L p).O) • A.bc p ((N : E) • (Pi.single i 1 : Fin n → E)) := by
       funext j
       simp [Places.bc, Subring.smul_def, Pi.single_apply, Finset.sum_apply, mul_comm]
-      simp [apply_ite (A.loc p).ιE, mul_ite, Finset.sum_ite_eq, mul_comm]
+      simp [apply_ite (A.loc p).ιE, mul_ite, Finset.sum_ite_eq]
     rw [hw']
     exact Submodule.sum_mem _ fun i _ => Submodule.smul_mem _ _ (Submodule.subset_span ⟨_, hsingle i, rfl⟩)
   have hfin : ∀ i, {q | (Pi.single p (v i) : ∀ q, (A.loc q).Ep) q ∉ (A.L q).O}.Finite := by
@@ -635,7 +624,7 @@ theorem glue : ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField
       _root_.GlobalTheory.HL.Glue.exists_nat_mul_mem A (fun y hy => by
         obtain ⟨x, hx⟩ := happ1 y hy
         exact ⟨x, fun p => by simpa using hx p⟩)
-    obtain ⟨N, hN, hb⟩ := _root_.GlobalTheory.HL.Glue.exists_uniform_bound A n Λ hfin fun p => GlobalTheory.T.local_lattice_between_scaled_standard_lattices A p n (Λ p) (hlat p) (h3 p)
+    obtain ⟨N, hN, hb⟩ := _root_.GlobalTheory.HL.Glue.exists_uniform_bound A n Λ hfin fun p => _root_.GlobalTheory.HL.Glue.lat_between A p n (Λ p) (hlat p) (h3 p)
     let Γ : Submodule (𝓞 E) (Fin n → E) :=
       { carrier := {x | ∀ p, A.bc p x ∈ Λ p}
         add_mem' := by
@@ -650,7 +639,7 @@ theorem glue : ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField
           intro a x hx p
           have ha : (A.loc p).ιE (a : E) ∈ (A.L p).O := ιE_mem A p _ a.isIntegral_coe
           have : A.bc p (a • x) = (⟨_, ha⟩ : (A.L p).O) • A.bc p x := by
-            funext i; simp [Places.bc, Subring.smul_def, Algebra.smul_def]; rfl
+            funext i; simp [Places.bc, Algebra.smul_def]; rfl
           rw [this]; exact (Λ p).smul_mem _ (hx p) }
     have hΓ : ∀ x, x ∈ Γ ↔ ∀ p, A.bc p x ∈ Λ p := fun x => Iff.rfl
     have hL : Submodule.IsLattice E Γ := by

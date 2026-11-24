@@ -99,7 +99,7 @@ theorem nonempty_tateIso_of_intChart : ∀ (E : Type) [Field E] [NumberField E] 
   obtain ⟨β, hβ⟩ := GlobalTheory.LevelFibre.exists_spMap ((jFK (R := T.V) F ≫ y.1.x) ≫ Xo.s)
   obtain ⟨-, I₀, -⟩ := Xo.univ.geom F (jFK (R := T.V) F ≫ y.1.x) β hβ
   obtain ⟨I₁⟩ := nonempty_tateIso_pull C.I.m1 (jFK (R := T.V) F) I₀
-  obtain ⟨I₂, -⟩ := GlobalTheory.LevelFibre.exists_tate_push_comm C.I.m2 (jFK (R := T.V) F) _ rfl
+  obtain ⟨I₂, -⟩ := _root_.GlobalTheory.LevelFibre.exists_tate_push C.I.m2 (jFK (R := T.V) F) _ rfl
     (ObjPull.pushEquiv C.I.m2.cart (Over.mk (jFK (R := T.V) F))) (fun _ => rfl) I₁
   obtain ⟨I₃, -⟩ := ReciprocityTheory.ChartRestriction.G.H1.tateTransport_holds GlobalTheory.firstFiveLaws.1.weil E H T.V _ C.I.G P F Dw I₂
   exact ⟨I₃⟩
@@ -126,7 +126,7 @@ open IsDedekindDomain
 theorem _root_.GlobalTheory.T.nonempty_tateIsometry_integralFramedPoint_chart : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l),
  letI := H.starRing
  ∀ (T : CDVR) (io : c.F →+* T.Fr) (y : IntFr Xo c T io) (C : IntegralChartA3 Xo c T io y) (P : PELUnif (maximalIdeal T.V) C.I.G) (F : Type) [Field F] [IsAlgClosed F] [CharZero F] [Algebra T.Fr F] [Algebra T.V F] [IsScalarTower T.V T.Fr F], Nonempty (TateIso Dw F (TFK (R := T.V) F ⟶ P.A.A) (fun a x => x ≫ P.oA.act a) (fun k x x' z => WeilIs P.A.A P.A.L k x x' (unitOn z))) := by
-  first | exact @GlobalTheory.IntegralTate.nonempty_tateIso_of_intChart | exact GlobalTheory.IntegralTate.nonempty_tateIso_of_intChart | (intros; apply GlobalTheory.IntegralTate.nonempty_tateIso_of_intChart <;> assumption)
+  first | exact @GlobalTheory.IntegralTate.nonempty_tateIso_of_intChart
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.JetHarmonics.NonemptyTateIsometryIntegralFramedPointChartStatement =====

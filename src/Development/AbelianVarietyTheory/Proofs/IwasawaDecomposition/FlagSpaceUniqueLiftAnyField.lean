@@ -45,6 +45,7 @@ import Mathlib.Tactic.NormNum.RealSqrt
 import Std.Tactic.BVDecide.Normalize.Prop
 import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsIsLieBase
 import Development.AbelianVarietyTheory.PublishedTheorems.AutomorphicForms₂.InterPolyProdSum
+import Mathlib.Algebra.Azumaya.Basic
 
 @[expose] public section
 
@@ -60,10 +61,6 @@ namespace GlobalTheory.FieldPts
 theorem comp_closedPoint {K L : Type} [Field K] [Field L] (ι : K →+* L) {X : Scheme.{0}} (p : Sp K ⟶ X) :
     (spMap ι ≫ p) (IsLocalRing.closedPoint L) = p (IsLocalRing.closedPoint K) := by
   exact congrArg p (Subsingleton.elim (α := PrimeSpectrum K) _ _)
-
-theorem spMap_comp' {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B) (g : B →+* C) :
-    spMap g ≫ spMap f = spMap (g.comp f) :=
-  (Spec.map_comp (CommRingCat.ofHom f) (CommRingCat.ofHom g)).symm
 
 theorem spMap_comp_ofField {L L' : Type} [Field L] [Field L'] (g : L →+* L') {X : Scheme.{0}} (y : X)
     (ψ : X.residueField y ⟶ CommRingCat.of L) :
@@ -275,7 +272,7 @@ theorem lifts_closed (hj : j ≫ genStr Z ≫ spMap e.toRingHom = B.str) (hπ : 
     spMap_stalkClosedPointTo x
   obtain ⟨χ, hχ⟩ : ∃ χ : c.F →+* K, x ≫ j ≫ genStr Z = spMap χ := ⟨_, (Spec.map_preimage _).symm⟩
   have hχ' : χ = (Scheme.stalkClosedPointTo (R := .of K) x).hom.comp φA := by
-    apply spMap_inj'
+    apply _root_.GlobalTheory.ZM.DenseFib.spMap_inj
     rw [← hχ]
     conv_lhs => rw [← hx'']
     simp only [Category.assoc]
@@ -327,7 +324,7 @@ theorem lifts_of_closed : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E]
     have hσι : (σ : AlgebraicClosure K →+* AlgebraicClosure K).comp (algebraMap K (AlgebraicClosure K)) =
         algebraMap K (AlgebraicClosure K) := RingHom.ext fun a => σ.commutes a
     refine hqu _ ⟨?_, ?_⟩
-    · rw [Category.assoc, hq1, ← Category.assoc, GlobalTheory.FieldPts.spMap_comp', hσι]
+    · rw [Category.assoc, hq1, ← Category.assoc, _root_.GlobalTheory.spMap_comp_ring, hσι]
     · have e1 : (h.map (algebraMap K (AlgebraicClosure K))).map (σ : AlgebraicClosure K →+* AlgebraicClosure K) =
           h.map (algebraMap K (AlgebraicClosure K)) := by
         funext τ

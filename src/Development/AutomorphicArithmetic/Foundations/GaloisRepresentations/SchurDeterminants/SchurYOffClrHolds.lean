@@ -459,7 +459,7 @@ theorem fibre_of : SchurY → SchurHomog → SchurDet → Fibre := by
     intro i
     rw [← mul_prod_erase univ _ (mem_univ t₀), ← mul_prod_erase (univ.erase t₀) _ h1mem,
       ← mul_prod_erase (univ.erase t₀) (fun t => sch (lam t) (g t)) h1mem, hrest i]
-    simp only [twist, eq_self_iff_true, ↓reduceIte, h10]
+    simp only [twist, ↓reduceIte, h10]
     rw [hconst, hconst, prod_scaleOff, mul_pow, ← pow_mul, pow_add]
     ring
   calc ∑ i, (∏ t, sch (lam t) (twist t₀ t₁ ε y i g t)) *
@@ -587,15 +587,10 @@ open Finset MvPolynomial
 
 namespace UpperTheory.Gal.Schur
 
-private theorem aeval_mul_of_isHomogeneous {σ R : Type} [Fintype σ] [CommRing R] [Algebra ℚ R]
-    {P : MvPolynomial σ ℚ} {d : ℕ} (hP : P.IsHomogeneous d) (y : R) (g : σ → R) :
-    aeval (fun k => y * g k) P = y ^ d * aeval g P :=
-  _root_.UpperTheory.Reformulated.B.Qh65.aeval_mul_of_isHomogeneous hP y g
-
 theorem schurHomog : SchurHomog := by
   intro R _ _ n lam g y
   unfold sch
-  exact aeval_mul_of_isHomogeneous
+  exact _root_.UpperTheory.Reformulated.B.Qh65.aeval_mul_of_isHomogeneous
     (GroundTheory.Heights₂.Heights.RestTerms.SchSchurHomogeneous.proof (Fin n) n lam) y g
 
 end UpperTheory.Gal.Schur
@@ -1006,8 +1001,7 @@ theorem UpperTheory.Gal.Schur.spanProd_of :
   rw [Fintype.prod_sum]
   refine Fintype.sum_equiv (Equiv.curry ι (Fin k) (Fin (n + 1))).symm _ _ fun M => ?_
   rw [Fintype.prod_prod_type]
-  simp only [Equiv.curry_symm_apply, Function.uncurry_apply_pair, Algebra.smul_def, map_prod,
-    prod_mul_distrib]
+  simp only [Equiv.curry_symm_apply, Function.uncurry_apply_pair, Algebra.smul_def, prod_mul_distrib]
   rw [← map_prod, prod_mul_distrib]
 end -- clump:auto
 end -- clump:auto
@@ -1429,7 +1423,6 @@ theorem SchurY_holds : SchurY := schurY_of SchurYClr_holds VdmSplit_holds
 theorem SchurYOff_holds : SchurYOff :=
   schurYOff_of (offClrRed_of (offClrPow_of SchurYOffClr_holds VdmSplit_holds (pairCount_of pairSplit)))
     VdmSplit_holds
-theorem SchurHomog_holds : SchurHomog := schurHomog
 theorem SchurDet_holds : SchurDet := schurDet_of tie
 theorem WeylTie_holds : WeylTie := weylTie_of tie
 theorem SpanE_holds : SpanE := spanE_of eSpanMul

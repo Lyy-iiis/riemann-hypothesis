@@ -85,8 +85,8 @@ theorem exists_nat_mem_mul_integral {E : Type} [Field E] [NumberField E]
   have hj0 : j ≠ 0 := by
     intro h; rw [h] at hj'; simp at hj'
     rcases hj' with h1 | h1
-    · first | exact ha0 h1 | exact ha0 h1.symm | exact haE h1 | exact haE h1.symm
-    · first | exact hx0 h1 | exact hx0 h1.symm
+    · first | exact ha0 h1
+    · first | exact hx0 h1
   set Nd := Ideal.absNorm (Ideal.span {a}) with hNd
   set Nj := Ideal.absNorm (Ideal.span {j}) with hNj
   have hNd0 : Nd ≠ 0 := by
@@ -657,9 +657,7 @@ theorem indicatorIdempotent_eq_single (x : Pl D) : cP (D := D) (· = x) = pairA 
   · subst h; rw [ev_same]
   · rw [ev_ne h]
 
-theorem finPart_incA (o : D.host.E) : finPart D (incA D o) = (1 : Af D.host.F) ⊗ₜ[D.host.F] o := by
-  change finPart D ((1 : AF D.host.F) ⊗ₜ[D.host.F] o) = _
-  simp [finPart]
+alias finPart_incA := _root_.GlobalTheory.LatVac.finPart_incA
 
 theorem assoc4 {R : Type*} [CommRing R] (p q s o : R) (h : p * q = 1) : s * o = p * (q * s * o) := by
   rw [← mul_assoc p, ← mul_assoc p, h, one_mul]

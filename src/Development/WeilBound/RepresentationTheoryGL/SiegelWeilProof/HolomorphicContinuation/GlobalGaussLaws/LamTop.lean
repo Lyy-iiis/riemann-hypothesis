@@ -59,6 +59,7 @@ import Mathlib.Tactic.Linter.HaveILetI
 import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Tactic.ReduceModChar
 import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ContinuousHalfTr
+import Formalism.LocalToGlobal.IndefiniteReal.LevelTypeEquivalence.NumFieldHosCountable
 import Formalism.LocalToGlobal.ProjectiveLattices.HalfOneAddSqrtNegIsIntegral
 import Development.AbelianVarietyTheory.Definitions.LatticeFrames.HeckeFormNSOfHeckeForm
 import Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.MixSDblDecZero
@@ -148,7 +149,7 @@ end -- clump:auto
 -- ===== end clump member: Development.WeilBound.RepresentationTheoryGL.SiegelWeilProof.HolomorphicContinuation.GlobalGaussLaws.HermCocompact =====
 
 -- ===== clump member: Development.WeilBound.RepresentationTheoryGL.SiegelWeilProof.HolomorphicContinuation.GlobalGaussLaws.LamSing =====
--- clump-header: {"m": "Development.WeilBound.RepresentationTheoryGL.SiegelWeilProof.HolomorphicContinuation.GlobalGaussLaws.LamSing", "h": "module\n\npublic import Development.WeilBound.RepresentationTheoryGL.SiegelWeilProof.HolomorphicContinuation.GlobalGaussLaws.HermCocompact\npublic import Development.AutomorphicSpectrum.Proofs.GlobalProofs.EqZeroOfFourierCoefficientsVanish\nimport Formalism.LocalToGlobal.IndefiniteReal.SobolevIteration.FdSetIntegralCharEqZero\nimport Formalism.PeriodIntegrals.UnitaryGroupMassFormula.AdelicLocalCompactness.T2SpaceTensorProductFiniteExtension\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.PiTensorProduct\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ContinuousHalfTr\n\n"}
+-- clump-header: {"m": "Development.WeilBound.RepresentationTheoryGL.SiegelWeilProof.HolomorphicContinuation.GlobalGaussLaws.LamSing", "h": "module\n\npublic import Development.WeilBound.RepresentationTheoryGL.SiegelWeilProof.HolomorphicContinuation.GlobalGaussLaws.HermCocompact\npublic import Development.AutomorphicSpectrum.Proofs.GlobalProofs.EqZeroOfFourierCoefficientsVanish\nimport Formalism.LocalToGlobal.IndefiniteReal.SobolevIteration.FdSetIntegralCharEqZero\nimport Formalism.PeriodIntegrals.UnitaryGroupMassFormula.AdelicLocalCompactness.T2SpaceTensorProductFiniteExtension\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.PiTensorProduct\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ContinuousHalfTr\nimport Formalism.LocalToGlobal.IndefiniteReal.LevelTypeEquivalence.NumFieldHosCountable\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -189,8 +190,7 @@ namespace LamSingH
 
 theorem JJ_sq : JJ n * JJ n = -1 := by
   rw [JJ, Matrix.fromBlocks_multiply]
-  simp only [Matrix.mul_zero, Matrix.zero_mul, add_zero, zero_add, Matrix.mul_one, Matrix.mul_neg, Matrix.neg_mul,
-    Matrix.one_mul]
+  simp only [Matrix.mul_zero, add_zero, zero_add, Matrix.mul_one, Matrix.mul_neg]
   rw [← Matrix.fromBlocks_one, Matrix.fromBlocks_neg, neg_zero]
 
 def toGR (M : M2 n) (hM : InG M) : GR n :=
@@ -202,8 +202,7 @@ def toGR (M : M2 n) (hM : InG M) : GR n :=
         intro hJ0
         have h1 : JJ n * JJ n = -1 := by
           rw [JJ, Matrix.fromBlocks_multiply]
-          simp only [Matrix.mul_zero, Matrix.zero_mul, add_zero, zero_add, Matrix.mul_one, Matrix.mul_neg, Matrix.neg_mul,
-            Matrix.one_mul]
+          simp only [Matrix.mul_zero, add_zero, zero_add, Matrix.mul_one, Matrix.mul_neg]
           rw [← Matrix.fromBlocks_one, Matrix.fromBlocks_neg, neg_zero]
         have := congrArg Matrix.det h1
         rw [Matrix.det_mul, hJ0, zero_mul] at this
@@ -243,7 +242,7 @@ theorem gLsing_core (hFZ : FourierZeroN) (hTS : TwoSided) (hD : DenseTau) (hCD :
   haveI : SecondCountableTopology (hermA D n) := Topology.IsInducing.subtypeVal.secondCountableTopology
   haveI : T2Space (hermA D n) := Topology.IsEmbedding.subtypeVal.t2Space
   haveI : BorelSpace (Mx D n n) := ⟨rfl⟩
-  haveI : Countable D.host.E := GlobalTheory.CompanionTheory.FourierComplete.countable_numberField D.host.E
+  haveI : Countable D.host.E := _root_.Formalism.IndefR.Eqv.G5.numField_countable D.host.E
   haveI : Countable (Matrix (Fin n) (Fin n) D.host.E) :=
     inferInstanceAs (Countable (Fin n → Fin n → D.host.E))
   have hmem : ∀ q : ratHerm D n, q.1.1 ∈ ratMx D n n := fun q => AddSubgroup.mem_comap.1 q.2
@@ -268,13 +267,13 @@ theorem gLsing_core (hFZ : FourierZeroN) (hTS : TwoSided) (hD : DenseTau) (hCD :
       change mR (nb' x) * nU (-herm x) = 1
       rw [hnb' x, nU, nU, Matrix.fromBlocks_multiply]
       simp only [Matrix.mul_one, Matrix.mul_zero, add_zero, Matrix.one_mul, Matrix.zero_mul, zero_add, Matrix.mul_neg,
-        add_neg_cancel, neg_add_cancel, neg_zero]
+        neg_add_cancel, neg_zero]
       exact (Matrix.fromBlocks_one : Matrix.fromBlocks (1 : Matrix (Fin n) (Fin n) ℂ) 0 0 1 = (1 : M2 n))
     have hi : Continuous fun x => (((nb' x : GL (Fin n ⊕ Fin n) ℂ)⁻¹ : GL (Fin n ⊕ Fin n) ℂ) : M2 n) := by
       rw [funext hinv]
       refine Continuous.matrix_fromBlocks continuous_const ?_ continuous_const continuous_const
       refine continuous_pi fun i => continuous_pi fun j => ?_
-      simp only [herm, Pi.neg_apply, Matrix.neg_apply]
+      simp only [herm, Matrix.neg_apply]
       fun_prop
     exact Continuous.subtype_mk (Units.continuous_iff.2 ⟨hv, hi⟩) _
   have hcomm : ∀ x c, ι (nb' x) * nb c = nb c * ι (nb' x) := by
@@ -312,7 +311,7 @@ theorem gLsing_core (hFZ : FourierZeroN) (hTS : TwoSided) (hD : DenseTau) (hCD :
           fun z : G D n × (Fin n → Fin n → ℝ) => (g0, z.2))).tendsto (g0, x)).eventually
             (Metric.ball_mem_nhds _ (half_pos hδ))
         filter_upwards [h1, h2] with z hz1 hz2
-        simp only [Metric.mem_ball, dist_eq_norm, Function.comp] at hz1 hz2
+        simp only [dist_eq_norm, Function.comp] at hz1 hz2
         calc ‖F (ι (nb' z.2) * z.1) - F (ι (nb' z.2) * g0)‖
             ≤ ‖F (ι (nb' z.2) * z.1) - F (ι (nb' x) * g0)‖ + ‖F (ι (nb' x) * g0) - F (ι (nb' z.2) * g0)‖ :=
               norm_sub_le_norm_sub_add_norm_sub _ _ _
@@ -349,7 +348,7 @@ theorem gLsing_core (hFZ : FourierZeroN) (hTS : TwoSided) (hD : DenseTau) (hCD :
         with hχ
       have hχadd : ∀ u v, χ (u + v) = χ u * χ v := by
         intro u v
-        simp only [hχ, AddSubgroup.coe_add, Matrix.mul_add, Matrix.trace_add, halfTr, map_add (f := _), mul_add, neg_add]
+        simp only [hχ, AddSubgroup.coe_add, Matrix.trace_add, halfTr, map_add (f := _), mul_add, neg_add]
         exact AddChar.map_add_eq_mul ψ _ _
       have hχper : ∀ l ∈ ratHerm D n, ∀ b, χ (l + b) = χ b := by
         intro l hl b
@@ -358,7 +357,7 @@ theorem gLsing_core (hFZ : FourierZeroN) (hTS : TwoSided) (hD : DenseTau) (hCD :
       have hχneg : ∀ x, χ (-(bx x)) = eTr β'' x := by
         intro x
         rw [← hβchar x (bx x) (hbx x)]
-        simp only [hχ, AddSubgroup.coe_neg, Matrix.mul_neg, Matrix.trace_neg, halfTr, map_neg, mul_neg, neg_neg]
+        simp only [hχ, AddSubgroup.coe_neg, Matrix.trace_neg, halfTr, map_neg, mul_neg, neg_neg]
       obtain ⟨M, hM⟩ : ∃ M, ∀ c : hermA D n, ‖F (nb c * g')‖ ≤ M := by
         obtain ⟨M, hM⟩ := (hK.image (hcont.mul continuous_const : Continuous fun c => nb c * g')).exists_bound_of_continuousOn
           hFc.continuousOn
@@ -574,7 +573,7 @@ open GlobalTheory.AutomorphicL2Unitary GlobalTheory.AdelicU GlobalTheory.Doublin
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.hermitian_character_continuous_unit : ∀ (D : D7) (n : ℕ) (ψ : AddChar (AF D.host.F) ℂ), IsCharAF D.host.F ψ → ∀ β : PositivityTheory.GramSchwartzFunctions.HermE D n, Continuous (fun b : PositivityTheory.GramSchwartzFunctions.BC.hermA D n => ψ (-GlobalTheory.StdUnn.halfTr (Matrix.trace (HMul.hMul (β.1.map (incA D)) b.1 : Mx D n n)))) ∧ ∀ b : PositivityTheory.GramSchwartzFunctions.BC.hermA D n, ‖ψ (-GlobalTheory.StdUnn.halfTr (Matrix.trace (HMul.hMul (β.1.map (incA D)) b.1 : Mx D n n)))‖ = 1 := by
-  first | exact @GlobalTheory.CompanionTheory.CoefWeight.continuous_norm_coefChar | exact GlobalTheory.CompanionTheory.CoefWeight.continuous_norm_coefChar | (intros; apply GlobalTheory.CompanionTheory.CoefWeight.continuous_norm_coefChar <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.CoefWeight.continuous_norm_coefChar
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -669,7 +668,7 @@ open GlobalTheory.AutomorphicL2Unitary GlobalTheory.AdelicU GlobalTheory.Doublin
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.unipotent_map_continuous_additive : ∀ (D : D7) (n : ℕ) (nb : PositivityTheory.GramSchwartzFunctions.BC.hermA D n → GlobalTheory.StdUnn.G D n), PositivityTheory.PfSWUS.IsNMap nb → Continuous nb ∧ (∀ b c, nb (b + c) = nb b * nb c) ∧ ∀ γ ∈ PositivityTheory.GramSchwartzFunctions.BC.ratHerm D n, nb γ ∈ GlobalTheory.StdUnn.GF D n := by
-  first | exact @GlobalTheory.CompanionTheory.SiegelUnip.nb_facts | exact GlobalTheory.CompanionTheory.SiegelUnip.nb_facts | (intros; apply GlobalTheory.CompanionTheory.SiegelUnip.nb_facts <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.SiegelUnip.nb_facts
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto

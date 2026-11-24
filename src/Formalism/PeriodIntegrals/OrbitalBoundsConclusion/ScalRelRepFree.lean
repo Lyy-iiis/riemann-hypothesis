@@ -190,8 +190,6 @@ theorem xplus_map {T₀ T₁ : E} {A : LFlag S r T₀} {B : LFlag S r T₁} (φ 
     unfold Xplus Xsp
     first
     | rfl
-    | exact le_antisymm (sInf_le ⟨le_sup_left, le_sup_right⟩)
-        (le_sInf fun x hx => sup_le hx.1 hx.2)
   rw [hXp] at hv ⊢
   obtain ⟨x, hx, w, hw, rfl⟩ := Submodule.mem_sup.mp hv
   obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.mp hw
@@ -510,7 +508,7 @@ theorem sg_move (h : DC Λ F y y' n m) (a b : S.V) (al al' : E) :
     · exact add_mem ((mem_X' h).mp hU') (Submodule.smul_mem _ _ (mem_XLam.mp (mz_sub h)).2)
     · have e2 : n.symm a - n.symm b = n.symm (a - b) := by simp
       rw [e2, e, h.hzt]
-      simp only [map_add (f := _), map_sub, map_smul, LinearEquiv.symm_apply_apply, smul_sub]
+      simp only [map_add (f := _), map_smul, LinearEquiv.symm_apply_apply, smul_sub]
       abel
 
 end Move

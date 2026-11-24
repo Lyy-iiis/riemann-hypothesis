@@ -133,7 +133,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
 theorem _root_.GlobalTheory.T.exists_completeDVR_extension_torsion_rational : Laws → ∀ (W : Type) [CommRing W] [IsDomain W] [IsLocalRing W], GlobalTheory.LN.CDvr W → ∀ (C : Type) [NormedField C] [IsUltrametricDist C] [IsAlgClosed C] [Algebra (FractionRing W) C], CExt W (IsLocalRing.maximalIdeal W) C → ∀ n : ℕ, 1 ≤ n → ∀ (S₁ S₂ : Scheme.{0}) (s₁ : Sp W ⟶ S₁) (s₂ : Sp W ⟶ S₂) (B₁ : PolAV S₁) (B₂ : PolAV S₂), ∃ (W' : Type) (_ : CommRing W') (_ : IsDomain W') (_ : IsLocalRing W') (_ : Algebra (FractionRing W') C) (io : W →+* W'), GlobalTheory.LN.CDvr W' ∧ Function.Injective io ∧ io.Finite ∧ IsLocalHom io ∧ Along io C ∧ CExt W' (IsLocalRing.maximalIdeal W') C ∧ (∀ (B : PolAV (Sp W')) (ψ : B.A.left ⟶ B₁.A.left), IsGrpPullback B.A B₁.A (spMap io ≫ s₁) ψ → RatTors B C n) ∧ ∀ (B : PolAV (Sp W')) (ψ : B.A.left ⟶ B₂.A.left), IsGrpPullback B.A B₂.A (spMap io ≫ s₂) ψ → RatTors B C n := by
-  first | exact @GlobalTheory.Ex.TorsionField.exists_cDvr_ratTors | exact GlobalTheory.Ex.TorsionField.exists_cDvr_ratTors | (intros; apply GlobalTheory.Ex.TorsionField.exists_cDvr_ratTors <;> assumption)
+  first | exact @GlobalTheory.Ex.TorsionField.exists_cDvr_ratTors
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsCompleteDVRExtensionTorsionRationalStatement =====
@@ -177,7 +177,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
 theorem _root_.GlobalTheory.T.exists_linearUniformisation_baseChange_admissible : Laws → Laws3 → Laws4 → Laws5 → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (R R' : Type) [CommRing R] [IsDomain R] [CommRing R'] [IsDomain R'] (I : Ideal R) (I' : Ideal R'), AdmBase R I → AdmBase R' I' → ∀ g : R →+* R', Function.Injective g → I.map g ≤ I' → ∀ (t : SAB H (Sp R)) (P : PELUnif I t), ∃ (t' : SAB H (Sp R')) (_ : SABMap t' t (spMap g)) (P' : PELUnif I' t') (ψ : P'.D.toPre.P.A.left ⟶ P.D.toPre.P.A.left), IsGrpPullback P'.D.toPre.P.A P.D.toPre.P.A (spMap g) ψ := by
-  first | exact @GlobalTheory.Ex.Trait.exists_pelUnif_baseChange | exact GlobalTheory.Ex.Trait.exists_pelUnif_baseChange | (intros; apply GlobalTheory.Ex.Trait.exists_pelUnif_baseChange <;> assumption)
+  first | exact @GlobalTheory.Ex.Trait.exists_pelUnif_baseChange
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsLinearUniformisationBaseChangeAdmissibleStatement =====
@@ -193,8 +193,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
-theorem _root_.GlobalTheory.T.family_fibre_eq_uniformised_pullback_generic_fibre : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Geo.Tor.Level H) (Xo : Moduli D l) (c : Coeff l) (O : Type) [CommRing O] (β : O →+* c.F) (Y : Model Xo c β) (R : Type) [CommRing R] [IsDomain R] (I : Ideal R) (t : SAB H (Sp R)) (χ : Sp R ⟶ Y.X) (m : SABMap t Y.t χ) (P : PELUnif I t) (F : Type) [Field F] [Algebra (FractionRing R) F] (y : Sp F ⟶ Xo.XF c), y ≫ Y.j = jFK (R := R) F ≫ jK R ≫ χ → ∀ (o : Full D F) (φ₀ : o.P.A.left ⟶ Y.oF.t.G.left), IsGrpPullback o.P.A Y.oF.t.G y φ₀ → LBIso o.P.L (Y.oF.t.PP.L.pull φ₀) → (letI := H.starRing; ∀ x, (o.oa.act x).left ≫ φ₀ = φ₀ ≫ (Y.oF.t.act.act x).left) → ∃ φ : o.P.A.left ⟶ P.A.A.left, IsGrpPullback o.P.A P.A.A (jFK (R := R) F) φ ∧ LBIso o.P.L (P.A.L.pull φ) ∧ (letI := H.starRing; ∀ x, (o.oa.act x).left ≫ φ = φ ≫ (P.oA.act x).left) ∧ φ ≫ P.U.gen.inv.left ≫ pullback.fst t.G.hom (jK R) ≫ m.φ = φ₀ ≫ Y.m.φ := by
-  first | exact @GlobalTheory.Ex.GenericFibre.fibre_eq_generic_fibre | exact GlobalTheory.Ex.GenericFibre.fibre_eq_generic_fibre | (intros; apply GlobalTheory.Ex.GenericFibre.fibre_eq_generic_fibre <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.FamilyFibreEqUniformisedPullbackGenericFibreStatement =====
@@ -308,7 +306,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
 theorem _root_.GlobalTheory.T.isomorphismValues_cocycle_eq_bundleIso_value : Laws → Laws2 → ∀ (R O' : Type) [CommRing R] [IsDomain R] [IsNoetherianRing R] [CommRing O'] [IsDomain O'] [IsNoetherianRing O'] (f : O' →+* R) (P : DegPre R) (D₀ : DegPre O') (C : Type) [Field C] [IsAlgClosed C] [CharZero C] [Algebra (FractionRing R) C] [Algebra (FractionRing O') C], Along f C → ∀ (N' N : NumD C) (ν' : NumOf P C N') (ν : NumOf D₀ C N) (ψ : P.P.A.left ⟶ D₀.P.A.left) (w : LB.Iso P.P.L (D₀.P.L.pull ψ)) (I : NumB.Iso N.toNumB N'.toNumB), IsGrpPullback P.P.A D₀.P.A (spMap f) ψ → w.IsGen → (∀ x : N.A, (ν'.eA (I.φ x)).left ≫ ψ = (ν.eA x).left) → (∀ x, wVal ν' ν w x ≠ 0) ∧ ∀ x : N.A, (I.h x : C) * wVal ν' ν w (I.φ x) = wVal ν' ν w 1 := by
-  first | exact @GlobalTheory.IsoValCocycle.cocycle_eq_val | exact GlobalTheory.IsoValCocycle.cocycle_eq_val | (intros; apply GlobalTheory.IsoValCocycle.cocycle_eq_val <;> assumption)
+  first | exact @GlobalTheory.IsoValCocycle.cocycle_eq_val
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.IsomorphismValuesCocycleEqBundleIsoValueStatement =====
@@ -324,8 +322,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
-theorem _root_.GlobalTheory.T.levelCondition_of_one_algClosed_field : GlobalTheory.UT.LL → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (R O' : Type) [CommRing R] [IsDomain R] [CharZero R] [CommRing O'] [IsDomain O'] (I : Ideal R), AdmBase R I → ∀ (t : SAB H (Sp R)) (P : PELUnif I t) (D₀ : DegPre O'), D₀.TauBimult → ∀ (f : O' →+* R) (ψ : P.D.toPre.P.A.left ⟶ D₀.P.A.left) (w : LB.Iso P.D.toPre.P.L (D₀.P.L.pull ψ)) (e : D₀.X ≃+ P.D.toPre.X), IsGrpPullback P.D.toPre.P.A D₀.P.A (spMap f) ψ → w.IsGen → ∀ k : ℕ, 1 ≤ k → ∀ (p₀ : QkPt D₀ (FractionRing O') k) (s : D₀.X → FractionRing R) (x₀ : Sp (FractionRing R) ⟶ P.A.A.left) (C : Type) [Field C] [IsAlgClosed C] [Algebra (FractionRing R) C] [Algebra (FractionRing O') C], Along f C → ∀ (q₀ : QkPt D₀ C k) (q : QkPt P.D.toPre C k) (x : TFK (R := R) C ⟶ P.A.A), QkExt (algebraMap _ C) p₀ q₀ → q.y = e q₀.y → (∀ χ, GenRel w (q.g.s (e χ)) (q₀.g.s χ) (algebraMap _ C (s χ))) → x.left = jFK (R := R) C ≫ x₀ → P.ToA C k q x → ∀ (F : Type) [Field F] [IsAlgClosed F] [Algebra (FractionRing R) F] [Algebra (FractionRing O') F], Along f F → ∀ (q₀' : QkPt D₀ F k) (q' : QkPt P.D.toPre F k) (x' : TFK (R := R) F ⟶ P.A.A), QkExt (algebraMap _ F) p₀ q₀' → q'.y = e q₀'.y → (∀ χ, GenRel w (q'.g.s (e χ)) (q₀'.g.s χ) (algebraMap _ F (s χ))) → x'.left = jFK (R := R) F ≫ x₀ → P.ToA F k q' x' := by
-  first | exact @GlobalTheory.LevelField.toA_of_toA | exact GlobalTheory.LevelField.toA_of_toA | (intros; apply GlobalTheory.LevelField.toA_of_toA <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.LevelConditionOfOneAlgClosedFieldStatement =====
@@ -531,8 +527,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
-theorem _root_.GlobalTheory.T.levelCondition_valuedField_twistedUniformisation : GlobalTheory.UT.LL → BrGtSt → AllS fun {_} _ _ _ {_} {D} {l} {_} {_} _ {_} {O'} _ _ {_} a {C} _ _ A u r {o} M f {_} ν' J => M.P.TorsionIso → ∀ ψ w e, Fit A u M f ν' J ψ w e → ∀ k : ℕ, 0 < k → k ∣ l.M' → Labels A u r M ν' J k → ∀ (p₀ : QkPt a.D₀ (FractionRing O') k) (v : D.La), (∀ p, QkExt (algebraMap _ C) p₀ p → QkPt.Equiv a.D₀ C p (A.I.ev k v)) → ∀ z : TFK (R := M.W) C ⟶ M.P.A.A, z.left = (o.I.ev k v).left ≫ M.φ → ∃ (q₀ : QkPt a.D₀ C k) (q : QkPt M.P.D.toPre C k), QkExt (algebraMap _ C) p₀ q₀ ∧ q.y = e q₀.y ∧ (∀ χ, GenRel w (q.g.s (e χ)) (q₀.g.s χ) ((u : C) ^ (a.be q₀.y χ / k))) ∧ M.P.ToA C k q z := by
-  first | exact @GlobalTheory.Ex.Trait.LevelClause.level_clause | exact GlobalTheory.Ex.Trait.LevelClause.level_clause | (intros; apply GlobalTheory.Ex.Trait.LevelClause.level_clause <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.LevelConditionValuedFieldTwistedUniformisationStatement =====
@@ -713,7 +707,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
 theorem _root_.GlobalTheory.T.modelIso_of_valued_agreement_over_field : GlobalTheory.UT.LL → AllS fun {_} _ _ _ {H} {_} {_} {_} {_} _ {_} {_} _ _ {_} a {C} _ _ A u _ {_} M f {_} ν' J => ∀ u₀ : M.W, (u : C) = algebraMap (FractionRing M.W) C (algebraMap _ _ u₀) → ∀ ψ (he : eSec M.P.D.toPre.P.A ≫ ψ = spMap f ≫ eSec a.D₀.P.A) w e, Fit A u M f ν' J ψ w e → LB.Gen.Maps (LB.linCombIso w (K := PUnit) (fun _ => eSec M.P.D.toPre.P.A) (fun _ => 1)) M.P.D.toPre.rig (rigPullOf ψ (spMap f) he a.D₀.P.L a.D₀.rig) → (letI := H.starRing; ∀ x, (M.P.oD.onB.act x).left ≫ ψ = ψ ≫ (a.oa.onB.act x).left) → GlobalTheory.LN.Match a f u₀ M.P.D.toPre M.P.oD ψ he w e := by
-  first | exact @GlobalTheory.FitMatch.match_of_fit | exact GlobalTheory.FitMatch.match_of_fit | (intros; apply GlobalTheory.FitMatch.match_of_fit <;> assumption)
+  first | exact @GlobalTheory.FitMatch.match_of_fit
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ModelIsoOfValuedAgreementOverFieldStatement =====
@@ -729,8 +723,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
-theorem _root_.GlobalTheory.T.polarisedAVIso_descends_of_rational_threeTorsion : Laws → Laws2 → GlobalTheory.LN.HomExtSt → ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R], GlobalTheory.LN.CDvr R → ∀ (C : Type) [Field C] [IsAlgClosed C] [Algebra (FractionRing R) C] (B B' : PolAV (Sp R)), RatTors B C 3 → RatTors B' C 3 → ∀ (φ : TF (R := R) C ⊗ B.A ≅ TF (R := R) C ⊗ B'.A) (g : (TF (R := R) C ⟶ B.A) ≃* (TF (R := R) C ⟶ B'.A)), φ.hom ≫ fst _ _ = fst _ _ → (∀ x, lift (𝟙 _) x ≫ φ.hom = lift (𝟙 _) (g x)) → LBIso (B.L.pull (snd (TF (R := R) C) B.A).left) (B'.L.pull (φ.hom ≫ snd (TF (R := R) C) B'.A).left) → ∃ Ψ : B'.A ≅ B.A, IsMonHom Ψ.hom ∧ LBIso B'.L (B.L.pull Ψ.hom.left) ∧ ∀ x, g x ≫ Ψ.hom = x := by
-  first | exact @GlobalTheory.polAV_iso_descends_of_ratTors | exact GlobalTheory.polAV_iso_descends_of_ratTors | (intros; apply GlobalTheory.polAV_iso_descends_of_ratTors <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.PolarisedAVIsoDescendsOfRationalThreeTorsionStatement =====
@@ -835,8 +827,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
-theorem _root_.GlobalTheory.T.polarized_abelian_pullback_line_bundle : Laws → EndDeterminedOnTorsionSt → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (R : Type) [CommRing R] [IsDomain R] [IsNoetherianRing R] (S : Scheme.{0}) (s : Sp R ⟶ S) (B : PolAV (Sp R)) (B₀ : PolAV S) (ρ : letI := H.starRing; B.OAct (𝓞 E)) (ρ₀ : letI := H.starRing; B₀.OAct (𝓞 E)) (ψ : B.A.left ⟶ B₀.A.left), IsGrpPullback B.A B₀.A s ψ → LBIso B.L (B₀.L.pull ψ) → ∀ (C : Type) [Field C] [IsAlgClosed C] [CharZero C] [Algebra (FractionRing R) C] (n : ℕ), 2 ≤ n → ∀ x : 𝓞 E, (letI := H.starRing; (∀ (j : ℕ) (y : TF (R := R) C ⟶ B.A), y ^ n ^ j = 1 → (y ≫ ρ.act x).left ≫ ψ = y.left ≫ ψ ≫ (ρ₀.act x).left) → (ρ.act x).left ≫ ψ = ψ ≫ (ρ₀.act x).left) := by
-  first | exact @GlobalTheory.Ex.Trait.act_comm_of_torsion | exact GlobalTheory.Ex.Trait.act_comm_of_torsion | (intros; apply GlobalTheory.Ex.Trait.act_comm_of_torsion <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.PolarizedAbelianPullbackLineBundleStatement =====
@@ -1055,7 +1045,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
 theorem _root_.GlobalTheory.T.twistedLabels_all_levels_of_four_le : GlobalTheory.UT.LL → BrGtSt → AllS fun {_} _ _ _ {_} {_} {_} {_} {_} _ {_} {_} _ _ {_} _ {_} _ _ A u r {_} M _ {_} ν' J => M.P.TorsionIso → (∀ k, 4 ≤ k → Labels A u r M ν' J k) → ∀ k, 0 < k → Labels A u r M ν' J k := by
-  first | exact @GlobalTheory.Ex.LabelsAllLevels.labels_of_four_le | exact GlobalTheory.Ex.LabelsAllLevels.labels_of_four_le | (intros; apply GlobalTheory.Ex.LabelsAllLevels.labels_of_four_le <;> assumption)
+  first | exact @GlobalTheory.Ex.LabelsAllLevels.labels_of_four_le
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.TwistedLabelsAllLevelsOfFourLeStatement =====
@@ -1145,7 +1135,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
 theorem _root_.GlobalTheory.T.twistedLabels_match_of_level_ge_four : GlobalTheory.UT.LL → EVSt → BrGtSt → AllS fun {_} _ _ _ {_} {_} {_} {_} {_} _ {_} {_} _ _ {_} _ {_} _ _ A u r {o} M _ {_} ν' J => M.P.TorsionIso → Realises o A.arc A.be u r → ∀ n : ℕ, Odd n → 3 ≤ n → Labels A u r M ν' J (n ^ 2) → ∀ k, 4 ≤ k → Labels A u r M ν' J k := by
-  first | exact @GlobalTheory.Ex.Trait.LevelFour.labels_of_four_le | exact GlobalTheory.Ex.Trait.LevelFour.labels_of_four_le | (intros; apply GlobalTheory.Ex.Trait.LevelFour.labels_of_four_le <;> assumption)
+  first | exact @GlobalTheory.Ex.Trait.LevelFour.labels_of_four_le
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.TwistedLabelsMatchOfLevelGeFourStatement =====
@@ -1281,8 +1271,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Ex.Trait
 
-theorem _root_.GlobalTheory.T.valuesIso_comm_action_abelianPart_torsion : GlobalTheory.UT.LL → BrGtSt → AllS fun {E} _ _ _ {H} {_} {_} {_} {_} _ {_} {_} _ _ {_} a {_} _ _ A u r {_} M _ {_} ν' J => M.P.TorsionIso → ∀ k : ℕ, 0 < k → Labels A u r M ν' J k → (∀ (x : 𝓞 E) y, ν'.eX (J.e (A.arc.act x y)) = x • ν'.eX (J.e y)) → ∀ (x : 𝓞 E) (y y' : A.N.A), y ^ k = 1 → (letI := H.starRing; A.ν.eA y' = A.ν.eA y ≫ a.oa.onB.act x → ν'.eA (J.φ y') = ν'.eA (J.φ y) ≫ M.P.oD.onB.act x) := by
-  first | exact @GlobalTheory.Ex.ActPt.main | exact GlobalTheory.Ex.ActPt.main | (intros; apply GlobalTheory.Ex.ActPt.main <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ValuesIsoCommActionAbelianPartTorsionStatement =====
@@ -1362,9 +1350,9 @@ theorem hasArcData_of_model (hV : HV) (h6 : Laws6) (hU : GlobalTheory.LN.UDvrSt)
   have tors := GlobalTheory.T.torsionIso_of_linear_uniformisation_triple hV.1 hV.2.1 hV.2.2.1 hV.2.2.2.1 hV.2.2.2.2 E H M.W _ (admissible_base_of_complete_dvr M.cdv) M.t M.P
   obtain ⟨n, hn, hno, hn3, hn1⟩ := exists_odd_prime C
   obtain ⟨N', ν', J, hlin, hlab, DW, _, oW, φ, he, w₀, e₀, νW, hm, -, hpt, Φ, wΦ, -, hΦ, hwΦ, hΦpt, -⟩ :=
-    GlobalTheory.T.lift_valuation_integral_norm hV h6 hU hH hT hE hTU E H D l Xo c W₀ Y O' b ϖ a hB C A u r o M f u₀ hI hR.1 hu₁ hu hf n hn hno hn1
+    _root_.GlobalTheory.ModelData.data_of_model hV h6 hU hH hT hE hTU E H D l Xo c W₀ Y O' b ϖ a hB C A u r o M f u₀ hI hR.1 hu₁ hu hf n hn hno hn1
       fun j => ⟨hR.2.2.1 _ (pow_pos hn.pos j), fun p hp => (hR.2.2.2 _ hno.pow p hp).2.1⟩
-  obtain ⟨Ψ, hΨ, lΨ, pΨ⟩ := GlobalTheory.T.polarisedAVIso_descends_of_rational_threeTorsion hL hL2 hH M.W M.cdv C DW.P M.P.D.toPre.P (t₂ _ _ hm.1) t₁ Φ
+  obtain ⟨Ψ, hΨ, lΨ, pΨ⟩ := _root_.GlobalTheory.polAV_iso_descends_of_ratTors hL hL2 hH M.W M.cdv C DW.P M.P.D.toPre.P (t₂ _ _ hm.1) t₁ Φ
     (νW.eA.symm.trans (J.φ.trans ν'.eA))  hΦ
     (fun x => by obtain ⟨x, rfl⟩ := νW.eA.surjective x; simpa using hΦpt x) ⟨wΦ, hwΦ⟩
   set ψ := Ψ.hom.left ≫ φ with hψ
@@ -1392,10 +1380,10 @@ theorem hasArcData_of_model (hV : HV) (h6 : Laws6) (hU : GlobalTheory.LN.UDvrSt)
     ⟨gψ, hw, pψ, fun y => congrArg (fun z => ν'.eX (J.e z)) (A.ν.eX.symm_apply_apply y),
       GlobalTheory.T.isomorphismValues_cocycle_eq_bundleIso_value hL hL2 M.W O' f _ _ C hf N' A.N ν' A.ν ψ w J.toIso gψ hw pψ⟩
   have act : ∀ x, (M.P.oD.onB.act x).left ≫ ψ = ψ ≫ (a.oa.onB.act x).left := fun x => by
-    refine GlobalTheory.T.polarized_abelian_pullback_line_bundle hL hE E H M.W _ _ _ _ M.P.oD.onB a.oa.onB ψ gψ lψ C n hn.two_le x fun j z hz => ?_
+    refine _root_.GlobalTheory.Ex.Trait.act_comm_of_torsion hL hE E H M.W _ _ _ _ M.P.oD.onB a.oa.onB ψ gψ lψ C n hn.two_le x fun j z hz => ?_
     obtain ⟨z, rfl⟩ := (J.φ.trans ν'.eA).surjective z
     have hz' : (z : A.N.A) ^ n ^ j = 1 := (J.φ.trans ν'.eA).injective (by rw [map_pow, map_one]; exact hz)
-    have e₁ := GlobalTheory.T.valuesIso_comm_action_abelianPart_torsion hLL hGt E H D l c _ _ O' b a C A u r o M f N' ν' J hR.1 hf tors _ (pow_pos hn.pos j) (hlab j) hlin x z
+    have e₁ := _root_.GlobalTheory.Ex.ActPt.main hLL hGt E H D l c _ _ O' b a C A u r o M f N' ν' J hR.1 hf tors _ (pow_pos hn.pos j) (hlab j) hlin x z
       (A.ν.eA.symm (A.ν.eA z ≫ a.oa.onB.act x)) hz' (A.ν.eA.apply_symm_apply _)
     refine (congrArg (fun z => CommaMorphism.left z ≫ ψ) e₁.symm).trans ((pψ _).trans ?_)
     rw [MulEquiv.apply_symm_apply, Over.comp_left]
@@ -1433,9 +1421,9 @@ theorem hasArcData_of_model (hV : HV) (h6 : Laws6) (hU : GlobalTheory.LN.UDvrSt)
   have hzw : ((o.I.ev k v).left ≫ M.φ) ≫ M.P.A.A.hom = jFK (R := M.W) C := by
     have e₁ : (o.I.ev k v).left ≫ o.P.A.hom = 𝟙 _ := Over.w _
     rw [Category.assoc, M.cart.1.w, reassoc_of% e₁]
-  obtain ⟨q₁, q₂, a₁, a₂, a₃, a₄⟩ := GlobalTheory.T.levelCondition_valuedField_twistedUniformisation hLL hGt E H D l c _ _ O' b a C A u r o M f N' ν' J hR.1 hf tors ψ w e fit k hk hkM
+  obtain ⟨q₁, q₂, a₁, a₂, a₃, a₄⟩ := _root_.GlobalTheory.Ex.Trait.LevelClause.level_clause hLL hGt E H D l c _ _ O' b a C A u r o M f N' ν' J hR.1 hf tors ψ w e fit k hk hkM
     (lab k hk) p₀ v hv (Over.homMk ((o.I.ev k v).left ≫ M.φ) hzw) rfl
-  refine GlobalTheory.T.levelCondition_of_one_algClosed_field hLL E H M.W O' _ (admissible_base_of_complete_dvr M.cdv) M.t M.P a.D₀ a.bimult f ψ w e.toAddEquiv s₁ s₂ k hk p₀
+  refine _root_.GlobalTheory.LevelField.toA_of_toA hLL E H M.W O' _ (admissible_base_of_complete_dvr M.cdv) M.t M.P a.D₀ a.bimult f ψ w e.toAddEquiv s₁ s₂ k hk p₀
     (fun z => algebraMap M.W _ u₀ ^ (a.be p₀.y z / k)) x₀ C hf q₁ q₂ _ a₁ a₂ (fun z => ?_) ?_ a₄ F (fun x => (hF x).symm) q₀ q x
     h₀ hq (fun z => ?_) (hx₀ F _ (Over.w x) hx)
   · rw [map_zpow₀, ← hu, ← a₁.1]; exact a₃ z
@@ -1481,7 +1469,7 @@ theorem hasArcData_at_trait : HV → Laws6 → GlobalTheory.LN.UDvrSt → Global
   rw [spMap_comp, Category.assoc] at hF
   have sq : spMap gam ≫ jK R₁ = jK W ≫ spMap φ :=
     (spMap_comp _ gam).symm.trans ((congrArg spMap (RingHom.ext hgam)).trans (spMap_comp φ _))
-  obtain ⟨M, f₁, χ₁, m₁, fin₁, al₁, hχ₁, -⟩ := GlobalTheory.T.moduli_model_ultrametric_points hV h6 hU hH hT hE hTU E H D l Xo c W₀ Y C W hW hext
+  obtain ⟨M, f₁, χ₁, m₁, fin₁, al₁, hχ₁, -⟩ := _root_.GlobalTheory.Ex.UnifModel.exists_mdl hV h6 hU hH hT hE hTU E H D l Xo c W₀ Y C W hW hext
     (FractionRing W) (algebraMap _ C) (fun _ => rfl) (spMap gam ≫ y₁) (f₀.comp b) (by
       have e : spMap (algebraMap (FractionRing W) (FractionRing W)) = 𝟙 _ := Spec.map_id _
       rw [e, Category.id_comp, Category.assoc, hs, reassoc_of% sq, hf₀, spMap_comp, spMap_comp, spMap_comp]
@@ -1517,7 +1505,7 @@ theorem hasArcData_at_trait : HV → Laws6 → GlobalTheory.LN.UDvrSt → Global
     rw [reassoc_of% jδ]
   rw [ey] at g₀ hA hM
   rw [← eχ] at hy
-  obtain ⟨φ₂, g₂, l₂, a₂, e₂⟩ := GlobalTheory.T.family_fibre_eq_uniformised_pullback_generic_fibre E H D l Xo c _ _ Y W₂ _ t _ m P C _ (by rw [Category.assoc, hy]) o φ₀ g₀ l₀ a₀
+  obtain ⟨φ₂, g₂, l₂, a₂, e₂⟩ := _root_.GlobalTheory.Ex.GenericFibre.fibre_eq_generic_fibre E H D l Xo c _ _ Y W₂ _ t _ m P C _ (by rw [Category.assoc, hy]) o φ₀ g₀ l₀ a₀
   let M₂ : Mdl o := ⟨W₂, hW₂, ext₂, t, P, φ₂, g₂, l₂, a₂⟩
   refine ⟨W₂, _, _, _, io.comp f₁, hW₂, inj₂.comp inj₁, fin₂.comp fin₁, ?_⟩
   rw [← eχ]
@@ -1543,7 +1531,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex
 
 theorem _root_.GlobalTheory.T.exists_single_polarisation_generator_all_traits : HV → Laws6 → GlobalTheory.LN.UDvrSt → GlobalTheory.LN.HomExtSt → ThetaPtDeterminesSt → EndDeterminedOnTorsionSt → ThetaUnifAV → AllA fun {E} _ _ _ {H} {D} {l} {Xo} {c} {W₀} Y {O'} _ _ {b} a => ∀ (R₁ : Type) [CommRing R₁] [IsDomain R₁] (g : PowerSeries O' →+* R₁) (y₁ : Sp (FractionRing R₁) ⟶ Xo.XF c), Function.Injective g → g.Finite → IsIntegrallyClosed R₁ → GlobalTheory.LN.TraitData Y a g y₁ → ThetaInt Y g y₁ → ∃ (R₂ : Type) (_ : CommRing R₂) (_ : IsDomain R₂) (h : R₁ →+* R₂) (h' : FractionRing R₁ →+* FractionRing R₂), Function.Injective h ∧ h.Finite ∧ IsIntegrallyClosed R₂ ∧ (∀ r, h' (algebraMap R₁ _ r) = algebraMap R₂ _ (h r)) ∧ ∃ θ, GlobalTheory.LN.IsFrame Y.t.G Y.t.PP.L 1 ((spMap h' ≫ y₁) ≫ Y.j) (fun _ : Fin 1 => θ) := by
-  first | exact @GlobalTheory.Ex.OneGen.main | exact GlobalTheory.Ex.OneGen.main | (intros; apply GlobalTheory.Ex.OneGen.main <;> assumption)
+  first | exact @GlobalTheory.Ex.OneGen.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsSinglePolarisationGeneratorAllTraitsStatement =====
@@ -1686,9 +1674,7 @@ open GlobalTheory GlobalTheory.Ex
 noncomputable section
 namespace GlobalTheory.Ex.Mono
 
-theorem sp_comp {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B) (g : B →+* C) :
-    spMap (g.comp f) = spMap g ≫ spMap f := by
-  rw [← Spec.map_comp]; rfl
+alias sp_comp := _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp
 
 theorem exists_pull {X Y Y' : Scheme.{0}} {L : LB X} {K : Type} [Fintype K] {φ : K → (Y ⟶ X)} {φ' : K → (Y' ⟶ X)}
     {ε : K → ℤ} (s : LB.Sec (LB.LinComb L φ ε)) (h : Y' ⟶ Y) (e : ∀ k, h ≫ φ k = φ' k) :
@@ -1792,7 +1778,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex
 
 theorem _root_.GlobalTheory.T.exists_arc_family_point_with_frames_of_laws : HV → Laws6 → GlobalTheory.LN.UDvrSt → GlobalTheory.LN.HomExtSt → ThetaPtDeterminesSt → EndDeterminedOnTorsionSt → ThetaUnifAV → GlobalTheory.LN.ArcFamSt := by
-  first | exact @GlobalTheory.Ex.arcFam | exact GlobalTheory.Ex.arcFam | (intros; apply GlobalTheory.Ex.arcFam <;> assumption)
+  first | exact @GlobalTheory.Ex.arcFam
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsArcFamilyPointWithFramesOfLawsStatement =====

@@ -127,7 +127,7 @@ theorem _root_.GlobalTheory.T.local_langlands_galois_compat : ∀ (E Ω : Type) 
     ∀ g : G E Ω, IsFrob (F := E) B (normV w) g →
       (r (g ^ (-1 : ℤ))).val.charpoly = (S.map fun z : ℂˣ =>
         Polynomial.X - Polynomial.C (ι.symm ((z : ℂ) * ((Ideal.absNorm w.asIdeal : ℕ) : ℂ) ^ ((-t : ℝ) : ℂ)))).prod := by
-  first | exact @GlobalTheory.GeomFrobChar.charpoly_geomFrob | exact GlobalTheory.GeomFrobChar.charpoly_geomFrob | (intros; apply GlobalTheory.GeomFrobChar.charpoly_geomFrob <;> assumption)
+  first | exact @GlobalTheory.GeomFrobChar.charpoly_geomFrob
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalLanglandsGaloisCompatStatement =====
@@ -263,7 +263,7 @@ theorem exists_galRep_csd_twist : GlobalTheory.Published.GaloisRepOfPolarizedCus
   · have hw : ((l : ℕ) : 𝓞 E) ∈ w.asIdeal := hj.mem_placesOver h
     obtain ⟨σ, hσ, hsp⟩ := hsph w hw
     have HA := H.above PP AI T w A h O Bw hj
-    refine ⟨HA.crys _ (hσ.twist _) (GlobalTheory.T.isSpherical_twist_absDetPow_GL E a w σ s hsp), fun τ LL' τ' hτ' => ?_⟩
+    refine ⟨HA.crys _ (hσ.twist _) (_root_.GlobalTheory.TwistSph.isSpherical_twist_absPow E a w σ s hsp), fun τ LL' τ' hτ' => ?_⟩
     rw [← hHT]
     exact HA.jumps τ LL' τ' hτ'
   · intro w _ hl σ hσ S hS B g hB hg

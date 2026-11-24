@@ -240,7 +240,7 @@ theorem isSobForm_slice {ψ : AddChar (AF D.host.F) ℂ} {θ : InfFam D} (hθ : 
     let U' : AddSubgroup (WO A T) := U.comap (extA o T)
     have hU' : IsOpen (U' : Set (WO A T)) :=
       hU.preimage ((o.continuous_resS_symm T).comp (continuous_id.prodMk continuous_const))
-    obtain ⟨e, d, hK⟩ := GlobalTheory.KernelSeminorm.thetaGrowth_onObjects D A.rank T.rank
+    obtain ⟨e, d, hK⟩ := _root_.GlobalTheory.KernelSeminorm.thetaGrowth D A.rank T.rank
     obtain ⟨C, hC⟩ := hK A T rfl rfl ψ θ hθ U' hU'
     obtain ⟨μ, 𝓕, hμ⟩ := exists_isCovolOne A T
     obtain ⟨K, hKs⟩ := sobO_slice_le (T := T) hψ hθ o d
@@ -292,7 +292,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Unf
 
 theorem _root_.GlobalTheory.T.weil_operator_orth_summand_slices_sobolev_bounded : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D), IsInfFam θ → ∀ (S A B T : HSp D) (o : OrthDec S A B), (∀ (χ χ' : (AE D)ˣ →* Circle) (om : Om A T), IsWeilDatumO ψ A T χ χ' om → ∀ p, IsSobForm ψ θ S T fun f => om p (fun u => f ((o.resS T).symm (u, 0))) 0) ∧ ∀ (χ χ' : (AE D)ˣ →* Circle) (om : Om B T), IsWeilDatumO ψ B T χ χ' om → ∀ p, IsSobForm ψ θ S T fun f => om p (fun v => f ((o.resS T).symm (0, v))) 0 := by
-  first | exact @GlobalTheory.SliceForm.weil_slice_isSobForm | exact GlobalTheory.SliceForm.weil_slice_isSobForm | (intros; apply GlobalTheory.SliceForm.weil_slice_isSobForm <;> assumption)
+  first | exact @GlobalTheory.SliceForm.weil_slice_isSobForm
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.WeilOperatorOrthSummandSlicesSobolevBoundedStatement =====
@@ -313,12 +313,6 @@ noncomputable section
 namespace GlobalTheory.WeilSlice
 
 variable {D : D7}
-
-theorem symplOH_zero_right' (S T : HSp D) (x : WO S T) : symplOH S T x 0 = 0 := by
-  simp [symplOH, symplO, hO]
-
-theorem symplOH_zero_left' (S T : HSp D) (x : WO S T) : symplOH S T 0 x = 0 := by
-  simp [symplOH, symplO, hO]
 
 def shiftA {S A B : HSp D} (o : OrthDec S A B) (T : HSp D) (g : GA D A) (h : GA D T) : WO S T →+ WO S T where
   toFun w := (o.resS T).symm (actO A T g⁻¹ h⁻¹ (o.resS T w).1, (o.resS T w).2)
@@ -407,7 +401,7 @@ theorem half (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (S A B T : HSp D) (o : Or
       have e : (o.resS T).symm (u, (o.resS T (ratW T S γ)).2) = ratW T S δ + (o.resS T).symm (u, 0) := by
         rw [hδ', ← map_add (f := _), Prod.mk_add_mk, zero_add, add_zero]
       rw [e, hF.quasi δ, hδ', o.symplOH_resS]
-      simp only [AddEquiv.apply_symm_apply, symplOH_zero_left', symplOH_zero_right', add_zero, neg_zero,
+      simp only [AddEquiv.apply_symm_apply, _root_.GlobalTheory.MixModel.symplOH_zero_left, _root_.GlobalTheory.MixModel.symplOH_zero_right, add_zero, neg_zero,
         AddChar.map_zero_eq_one, one_mul]
     show om (g, h) (fun u => F ((o.resS T).symm (u, (o.resS T (ratW T S γ)).2))) (o.resS T (ratW T S γ)).1 =
       om (g, h) (fun u => F ((o.resS T).symm (u, (o.resS T 0).2))) (o.resS T 0).1
@@ -415,7 +409,7 @@ theorem half (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (S A B T : HSp D) (o : Or
     rw [hsl]
     obtain ⟨γa, hγa⟩ := ha
     have ea : (o.resS T (ratW T S γ)).1 = ratW T A γa + 0 := by rw [add_zero]; exact hγa.symm
-    rw [ea, (hom.om_pres (g, h) _ ((hslice F hF).1 0)).quasi γa 0, symplOH_zero_right', neg_zero,
+    rw [ea, (hom.om_pres (g, h) _ ((hslice F hF).1 0)).quasi γa 0, _root_.GlobalTheory.MixModel.symplOH_zero_right, neg_zero,
       AddChar.map_zero_eq_one, one_mul]
 
 theorem resS_symm_swap {S A B : HSp D} (o : OrthDec S A B) (T : HSp D) (u : WO B T) (v : WO A T) :
@@ -451,7 +445,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Unf
 
 theorem _root_.GlobalTheory.T.weilOperator_oneVariable_keeps_thetaFunctions : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (S A B T : HSp D) (o : OrthDec S A B) (f : WO S T → ℂ), IsThetaFunO ψ S T f → (∀ (χ χ' : (AE D)ˣ →* Circle) (om : Om A T), IsWeilDatumO ψ A T χ χ' om → ∀ p, IsThetaFunO ψ S T fun x => om p (fun u => f ((o.resS T).symm (u, (o.resS T x).2))) (o.resS T x).1) ∧ ∀ (χ χ' : (AE D)ˣ →* Circle) (om : Om B T), IsWeilDatumO ψ B T χ χ' om → ∀ p, IsThetaFunO ψ S T fun x => om p (fun v => f ((o.resS T).symm ((o.resS T x).1, v))) (o.resS T x).2 := by
-  first | exact @GlobalTheory.WeilSlice.weilSlice_theta | exact GlobalTheory.WeilSlice.weilSlice_theta | (intros; apply GlobalTheory.WeilSlice.weilSlice_theta <;> assumption)
+  first | exact @GlobalTheory.WeilSlice.weilSlice_theta
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.WeilOperatorOneVariableKeepsThetaFunctionsStatement =====

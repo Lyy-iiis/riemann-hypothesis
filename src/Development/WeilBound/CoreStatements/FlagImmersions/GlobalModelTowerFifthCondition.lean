@@ -228,7 +228,7 @@ end Rings
 theorem map_aeval_int {σ A B : Type*} [CommRing A] [CommRing B] [Algebra ℤ A] [Algebra ℤ B] (π : A →+* B) (w : σ → A)
     (f : MvPolynomial σ ℤ) : π (aeval w f) = aeval (fun p => π (w p)) f := by
   induction f using MvPolynomial.induction_on with
-  | C a => simp only [aeval_C, eq_intCast, map_intCast]
+  | C a => simp only [eq_intCast, map_intCast]
   | add p q hp hq => simp [hp, hq]
   | mul_X p i hp => simp [hp]
 
@@ -1198,7 +1198,7 @@ theorem arInt_map (e : ∀ k, ι k ≃ Fin (n k + 1)) {P : Ideal (MRing ι)} (hP
 theorem mConeMap_ren {Ω : Type} [Field Ω] (e : ∀ k, ι k ≃ Fin (n k + 1)) (y : Coord n → Ω) (f : MRing ι) :
     mConeMap (ι := blockIdx n) y (ren e f) = mConeMap (y ∘ sig e) f := by
   induction f using MvPolynomial.induction_on with
-  | C a => simp [mConeMap, ren_C]
+  | C a => simp [mConeMap]
   | add p q hp hq => simp only [map_add (f := _), hp, hq]
   | mul_X p q hp =>
     rw [map_mul, map_mul, map_mul, hp]
@@ -1289,7 +1289,7 @@ theorem height_eq_lineHt (e : ∀ k, ι k ≃ Fin (n k + 1)) (A : GroundTheory.H
     obtain ⟨i, hi⟩ := hw k
     refine ⟨i, fun h => hi ?_⟩
     rw [← hw', h, map_zero]
-  have hext := lineHt_map_scale K ι B (coordField x) L e0 w' (fun _ => 1) hnz fun _ => one_ne_zero
+  have hext := _root_.CoverDenseAlt.lineHt_invariant_base_change_scaling K ι B (coordField x) L e0 w' (fun _ => 1) hnz fun _ => one_ne_zero
   simp only [one_mul, hw'] at hext
   have hfun : (fun p => w p) = w := rfl
   rw [hfun] at hext

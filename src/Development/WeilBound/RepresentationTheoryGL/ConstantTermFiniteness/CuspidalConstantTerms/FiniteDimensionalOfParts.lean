@@ -173,7 +173,7 @@ theorem prX_ind_le {A : Type} [CommRing A] (s : A →+* A) {n r : ℕ} (J : Matr
   ext a b
   rw [Matrix.mul_apply, Matrix.mul_apply]
   simp only [Matrix.mul_diagonal, Matrix.submatrix_apply, id, Formalism.UG.cT, Matrix.transpose_apply,
-    Matrix.map_apply, Matrix.of_apply]
+    Matrix.map_apply]
   have e : (Finset.univ : Finset (Fin (k.val + 1))).image (Fin.castLE k.2) = Finset.univ.filter (· ≤ k) := by
     ext c
     simp only [Finset.mem_image, Finset.mem_univ, true_and, Finset.mem_filter]
@@ -591,7 +591,7 @@ open GlobalTheory.Published GlobalTheory.Published.AutFin GlobalTheory.StdPar Gl
 open GlobalTheory.UAut GlobalTheory.AdelicU GlobalTheory.SiegelSet
 
 theorem _root_.GlobalTheory.T.levi_eq_iSup_parts : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E), IsCMExt F E σ → ∀ (n : ℕ) (J : Matrix (Fin n) (Fin n) E), IsHermND σ J → ∀ (r : ℕ) (X Y : Matrix (Fin n) (Fin r) E), GlobalTheory.SiegelSet.IsWittFrame σ J X Y → ∀ T : Finset (Fin r), levi σ J X Y T = ⨆ i, part σ J X Y T i := by
-  first | exact @GlobalTheory.CompanionTheory.LeviGen.levi_eq_iSup_part | exact GlobalTheory.CompanionTheory.LeviGen.levi_eq_iSup_part | (intros; apply GlobalTheory.CompanionTheory.LeviGen.levi_eq_iSup_part <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.LeviGen.levi_eq_iSup_part
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GlobalProofs.AdelicHaarFiniteInfiniteProductStatement =====
@@ -608,7 +608,7 @@ open GlobalTheory.Published GlobalTheory.Published.AutFin GlobalTheory.StdPar Gl
 open GlobalTheory.UAut GlobalTheory.AdelicU GlobalTheory.SiegelSet
 
 theorem _root_.GlobalTheory.T.levi_parts_commute : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E), IsCMExt F E σ → ∀ (n : ℕ) (J : Matrix (Fin n) (Fin n) E), IsHermND σ J → ∀ (r : ℕ) (X Y : Matrix (Fin n) (Fin r) E), GlobalTheory.SiegelSet.IsWittFrame σ J X Y → ∀ T : Finset (Fin r), Pairwise fun i j : Option {k // k ∈ T} => ∀ x y : GAd σ J, x ∈ part σ J X Y T i → y ∈ part σ J X Y T j → Commute x y := by
-  first | exact @GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.Comm.part_commute | exact GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.Comm.part_commute | (intros; apply GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.Comm.part_commute <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.Comm.part_commute
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GlobalProofs.LeviEqISupPartsStatement =====
@@ -900,7 +900,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Published GlobalTheory.Published.AutFin
 
 theorem _root_.GlobalTheory.T.archimedean_iwasawa_minimal_parabolic : ∀ (D : D7) (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)), IsInfFam θ → ∀ (V : HSp D) (ε : D.what₂.Tau → Fin V.rank → Bool) (fr : D.what₂.Tau → Matrix (Fin V.rank) (Fin V.rank) ℂ), IsFrameFam V ε fr → ∀ (m : ℕ) (X Y : Matrix (Fin V.rank) (Fin m) D.host.E), GlobalTheory.SiegelSet.IsWittFrame D.sp.cm.sig V.gram X Y → ∀ g ∈ GinfC V, ∃ p ∈ PositivityTheory.ThKR.minPar D.sp.cm.sig V.gram X, ∃ κ : (∀ τ, Formalism.REAL.KG (ε τ)), g = p * GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.KInf.kInf θ V ε fr κ := by
-  first | exact @GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.ArchIwasawa.exists_archIwasawa | exact GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.ArchIwasawa.exists_archIwasawa | (intros; apply GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.ArchIwasawa.exists_archIwasawa <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.ArchIwasawa.exists_archIwasawa
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GlobalProofs.MinimalParabolicUnipotentLeviDecompStatement =====
@@ -1009,14 +1009,6 @@ theorem kInf_mem_GinfC {D : D7} {θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.hos
   obtain ⟨τ, -, rfl⟩ := List.mem_map.1 hx
   exact (isAtTau_kAt θ V hθ τ (hfr τ).1 (hfr τ).2 (κ τ)).1
 
-theorem mul_mem_minPar {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E} {n r : ℕ}
-    {J : Matrix (Fin n) (Fin n) E} {X : Matrix (Fin n) (Fin r) E} {p q : GlobalTheory.AdelicU.GAd σ J}
-    (hp : p ∈ PositivityTheory.ThKR.minPar σ J X) (hq : q ∈ PositivityTheory.ThKR.minPar σ J X) : p * q ∈ PositivityTheory.ThKR.minPar σ J X := by
-  obtain ⟨B, hB, eB⟩ := hp
-  obtain ⟨B', hB', eB'⟩ := hq
-  refine ⟨B * B', hB.mul hB', ?_⟩
-  rw [map_mul, Units.val_mul, Matrix.mul_assoc, eB', ← Matrix.mul_assoc, eB, Matrix.mul_assoc]
-
 theorem exists_iwasawa : ∀ (D : D7) (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)), IsInfFam θ → ∀ (V : HSp D) (ε : D.what₂.Tau → Fin V.rank → Bool) (fr : D.what₂.Tau → Matrix (Fin V.rank) (Fin V.rank) ℂ), IsFrameFam V ε fr → ∀ (m : ℕ) (X Y : Matrix (Fin V.rank) (Fin m) D.host.E), GlobalTheory.SiegelSet.IsWittFrame D.sp.cm.sig V.gram X Y → ∃ K : Subgroup (GA D V), IsCompact (K : Set (GA D V)) ∧ K ≤ GfC V ∧ ∀ g : GA D V, ∃ p ∈ PositivityTheory.ThKR.minPar D.sp.cm.sig V.gram X, ∃ κ : (∀ τ, Formalism.REAL.KG (ε τ)), ∃ k ∈ K, g = p * GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.KInf.kInf θ V ε fr κ * k := by
   intro D θ hθ V ε fr hfr m X Y hW
   have hh := GlobalTheory.Mem.Vol.cmData_isCMExt_and_gram_isHermND D.host.F D.host.E D.sp.cm
@@ -1024,7 +1016,7 @@ theorem exists_iwasawa : ∀ (D : D7) (θ : D.what₂.Tau → (Ainf D.host.F ⊗
   refine ⟨K, hK, hKf, fun g => ?_⟩
   obtain ⟨p, hp, κ, e1⟩ := GlobalTheory.T.archimedean_iwasawa_minimal_parabolic D θ hθ V ε fr hfr m X Y hW _ (GlobalTheory.AutMult.toInf V g).2
   obtain ⟨q, hq, hqf, k, hk, e2⟩ := hiw _ (GlobalTheory.AutMult.toFin V g).2
-  refine ⟨p * q, mul_mem_minPar hp hq, κ, k, hk, ?_⟩
+  refine ⟨p * q, _root_.PositivityTheory.ThKR.mul_mem_minimal_parabolic hp hq, κ, k, hk, ?_⟩
   have hcomm := GlobalTheory.AutMult.commute_inf_fin (⟨_, kInf_mem_GinfC hθ hfr κ⟩ : GinfC V) ⟨q, hqf⟩
   rw [← GlobalTheory.AutMult.toInf_mul_toFin g, e1, e2, mul_assoc p, ← mul_assoc _ q k, hcomm.eq]
   simp only [mul_assoc]
@@ -1116,7 +1108,7 @@ open GlobalTheory.Published GlobalTheory.Published.AutFin GlobalTheory.StdPar Gl
 open GlobalTheory.UAut GlobalTheory.AdelicU GlobalTheory.SiegelSet
 
 theorem _root_.GlobalTheory.T.archimedean_frame_K_type_decomposition : ∀ (D : D7) (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)), IsInfFam θ → ∀ (V : HSp D) (U : Subgroup (GA D V)), IsOpen (U : Set (GA D V)) → ∀ (ε : D.what₂.Tau → Fin V.rank → Bool) (fr : D.what₂.Tau → Matrix (Fin V.rank) (Fin V.rank) ℂ), IsFrameFam V ε fr → ∀ (W : D.what₂.Tau → Type) [∀ τ, AddCommGroup (W τ)] [∀ τ, Module ℂ (W τ)] [∀ τ, FiniteDimensional ℂ (W τ)] (ρ : ∀ τ, Representation ℂ (Formalism.REAL.KG (ε τ)) (W τ)), (∀ τ, IsContRep (ρ τ)) → ∀ (c : D.what₂.Tau → ℕ → ℂ) (m : ℕ) (X Y : Matrix (Fin V.rank) (Fin m) D.host.E), GlobalTheory.SiegelSet.IsWittFrame D.sp.cm.sig V.gram X Y → ∀ T : Finset (Fin m), T.Nonempty → ∃ B : Finset (GA D V), ∀ φ ∈ formsOn θ V X Y T U ε fr ρ c, (∀ b ∈ B, ∀ g ∈ levi D.sp.cm.sig V.gram X Y T, φ (g * b) = 0) → φ = 0 := by
-  first | exact @GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.Sep.exists_finset_sep_levi | exact GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.Sep.exists_finset_sep_levi | (intros; apply GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.Sep.exists_finset_sep_levi <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Hypotheses₂.LeviPart.Sep.exists_finset_sep_levi
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GlobalProofs.LeviPartsCommuteStatement =====

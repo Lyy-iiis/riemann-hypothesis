@@ -138,7 +138,7 @@ variable [DecidableEq σ]
 theorem linForm_single (p : σ) : linForm (Pi.single p (1 : F)) = (X p : MvPolynomial σ F) := by
   rw [linForm_apply, Finset.sum_eq_single p]
   · simp
-  · intro b _ hb; simp [Pi.single_apply, hb]
+  · intro b _ hb; simp [hb]
   · simp
 
 theorem eq_sum_single (c : σ → F) : c = ∑ p, c p • (Pi.single p (1 : F) : σ → F) := by
@@ -255,7 +255,7 @@ def quotEquiv :
       change toY U (linForm (sec U t)) = X t
       have h : (qb U).equivFun (qb U t) = Pi.single t 1 := by
         ext j
-        simp [Module.Basis.equivFun_apply, Finsupp.single_apply, Pi.single_apply, eq_comm]
+        simp [Pi.single_apply, eq_comm]
       rw [toY_linForm, mkQ_sec, h, linForm_single])
     (by
       apply Ideal.Quotient.algHom_ext
@@ -985,7 +985,7 @@ theorem degree_prod_monic {σ ι : Type*} (m : MonomialOrder σ) (s : Finset ι)
     m.degree (∏ i ∈ s, P i) = ∑ i ∈ s, d i ∧ m.leadingCoeff (∏ i ∈ s, P i) = 1 := by
   classical
   induction s using Finset.induction_on with
-  | empty => simp [m.degree_one, m.leadingCoeff_one]
+  | empty => simp [m.degree_one]
   | insert a s has ih =>
     obtain ⟨ih1, ih2⟩ := ih fun i hi => h i (Finset.mem_insert_of_mem hi)
     obtain ⟨ha1, ha2⟩ := h a (Finset.mem_insert_self a s)
@@ -1640,13 +1640,13 @@ theorem alg_const (Ψ : Type) [Fintype Ψ] [DecidableEq Ψ] (N : ℕ) (D : ℕ)
     (h : PB.toWt (PB.formPoly D a) = C c * GroundTheory.Heights₂.Heights.antisymDelta Ψ N) :
     c * ∏ _τ : Ψ, ∏ i : Fin N, ∏ k : Fin N, (if i < k then ((k : ℝ) - (i : ℝ)) else 1) = (D.factorial : ℝ) := by
   have hG : PB.formPoly D a = C c * gapDelta Ψ N := by
-    apply toWt_injective Ψ N
-    rw [h, map_mul, toWt_gapDelta]
+    apply _root_.GlobalTheory.CompanionTheory.Ar.Top.FlDeg.toWt_leftInverse_injective Ψ N
+    rw [h, map_mul, _root_.GlobalTheory.CompanionTheory.Ar.Top.FlDeg.toWt_gapDelta_eq_antisymDelta]
     simp [PB.toWt]
   have h2 := coeff_formPoly_sym D a hsym w₀ (rhoM Ψ N) (fun p => by
     rw [hcnt p]
     rfl)
-  rw [hG, coeff_C_mul, coeff_gapDelta, h1, prod_rhoM] at h2
+  rw [hG, coeff_C_mul, _root_.GlobalTheory.CompanionTheory.Ar.Top.FlDeg.coeff_rhoM_gapDelta, h1, _root_.GlobalTheory.CompanionTheory.Ar.Top.FlDeg.prod_rhoM_factorial] at h2
   simpa using h2
 
 open GlobalTheory.CompanionTheory.Ar.PB GroundTheory.Heights₂.Heights in
@@ -1793,8 +1793,7 @@ section -- clump:auto
 
 open MvPolynomial ReciprocityTheory.ChartRestriction.G.Geo Filter Topology GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.Top
 
-theorem _root_.GlobalTheory.CompanionTheory.Relay.flag_degree_polynomial_eval : PB.Inputs → ∀ II : IntersectionSystem, IsFullIntersectionSystem II → ∀ (Ψ : Type) [Fintype Ψ] [DecidableEq Ψ] (N : ℕ) [Nonempty Ψ] (lam : Wt Ψ N), 2 ≤ N → eval (fun x => lam x.1 x.2) (PB.degFlPoly Ψ N) = flagDeg lam := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.IndefiniteRowSideFullHecke.degFlPoly_eval' | exact GlobalTheory.CompanionTheory.Ar.IndefiniteRowSideFullHecke.degFlPoly_eval'
+alias _root_.GlobalTheory.CompanionTheory.Relay.flag_degree_polynomial_eval := _root_.GlobalTheory.CompanionTheory.Ar.IndefiniteRowSideFullHecke.degFlPoly_eval'
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.DivisibilityProofs.FlagDegreePolynomialEval =====

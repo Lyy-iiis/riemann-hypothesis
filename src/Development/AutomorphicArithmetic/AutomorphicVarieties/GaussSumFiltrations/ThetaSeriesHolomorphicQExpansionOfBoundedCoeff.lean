@@ -88,7 +88,7 @@ theorem norm_lin_le (ξ : F) (h : ∀ v, 0 ≤ reAt v ξ) : ‖lin ξ‖ ≤ sm 
 theorem re_lin (ξ : F) (z : InfinitePlace F → ℂ) :
     (2 * Real.pi * Complex.I * lin ξ z).re = -(2 * Real.pi * ∑ v, reAt v ξ * (z v).im) := by
   rw [lin_apply]
-  simp [Complex.mul_re, Complex.mul_im, Complex.im_sum, Finset.mul_sum]
+  simp [Complex.mul_re, Complex.mul_im, Finset.mul_sum]
 
 theorem ez_ofComplex (ξ : F) (z : InfinitePlace F → ℂ) (hz : ∀ v, 0 < (z v).im) :
     ez ξ (fun v => ofComplex (z v)) = Complex.exp (2 * Real.pi * Complex.I * lin ξ z) := by
@@ -184,7 +184,7 @@ theorem hol : ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F] (f : Hn
       nlinarith [hr v]
     simp only [g', u, norm_smul, Complex.norm_exp, re_lin]
     have hc : ‖(2 * (Real.pi : ℂ) * Complex.I)‖ = 2 * Real.pi := by
-      simp [Real.pi_pos.le]
+      simp
     rw [hc]
     have hL := norm_lin_le ξ hr
     have hexp : Real.exp (-(2 * Real.pi * ∑ v, reAt v ξ * (z v).im)) ≤ Real.exp (-(2 * Real.pi * m * sm ξ)) := by
@@ -332,15 +332,11 @@ theorem prod_bound {T : Type} [Fintype T] {s : ℝ} (hs : 0 < s) (S : Finset (T 
 section
 variable {F : Type} [Field F] [NumberField F] [IsTotallyReal F]
 
-theorem reAt_eq (v : InfinitePlace F) (x : F) :
-    reAt v x = InfinitePlace.embedding_of_isReal (IsTotallyReal.isReal v) x := by
-  rw [reAt, ← InfinitePlace.embedding_of_isReal_apply (IsTotallyReal.isReal v), Complex.ofReal_re]
-
 theorem norm_ez (ξ : F) (z : Hn F) :
     ‖ez ξ z‖ = Real.exp (-(2 * Real.pi) * ∑ v, reAt v ξ * (z v).im) := by
   rw [ez, Complex.norm_exp]
   congr 1
-  simp [Complex.mul_re, Complex.mul_im, Complex.im_sum, Complex.re_sum, Finset.mul_sum]
+  simp [Complex.mul_re, Complex.mul_im, Complex.re_sum, Finset.mul_sum]
 
 theorem one_le_fac (w : UpperHalfPlane) : 1 ≤ (1 + ‖(w : ℂ)‖ ^ 2) / w.im := by
   have hy := w.im_pos
@@ -373,7 +369,7 @@ theorem normsq_mE_le (x : F) : ‖mixedEmbedding F x‖ ^ 2 ≤ ∑ v, reAt v x 
     refine norm_prod_le_iff.mpr ⟨?_, ?_⟩
     · refine (pi_norm_le_iff_of_nonneg (Real.sqrt_nonneg _)).mpr fun w => ?_
       rw [mixedEmbedding.mixedEmbedding_apply_isReal, Real.norm_eq_abs]
-      have : InfinitePlace.embedding_of_isReal w.2 x = reAt w.1 x := by rw [reAt_eq]
+      have : InfinitePlace.embedding_of_isReal w.2 x = reAt w.1 x := by rw [_root_.GlobalTheory.TPos.reAt_eq]
       rw [this]
       exact Real.abs_le_sqrt (Finset.single_le_sum (f := fun v => reAt v x ^ 2) (fun _ _ => sq_nonneg _) (Finset.mem_univ w.1))
     · haveI : IsEmpty {w : InfinitePlace F // w.IsComplex} :=
@@ -482,7 +478,7 @@ theorem lower_bound (G : Matrix κ κ ℤ) (hG : EvenPos G) (a : F) (ha : a ≠ 
   obtain ⟨-, ⟨c, hc, hcq⟩, -⟩ := GlobalTheory.HilbertThetaSeries.qf_totPos_proper F κ G hG
   obtain ⟨μ, hμ, hμb⟩ := coord_bound F
   obtain ⟨α, hα, hαb⟩ := exists_pos_le (fun v : InfinitePlace F => reAt v a ^ 2) fun v => by
-    have : reAt v a ≠ 0 := by rw [reAt_eq]; exact (map_ne_zero _).mpr ha
+    have : reAt v a ≠ 0 := by rw [_root_.GlobalTheory.TPos.reAt_eq]; exact (map_ne_zero _).mpr ha
     positivity
   refine ⟨c * α * μ, by positivity, fun m => ?_⟩
   refine le_trans ?_ (Finset.sum_le_sum fun v _ => hcq _ v)
@@ -493,7 +489,7 @@ theorem lower_bound (G : Matrix κ κ ℤ) (hG : EvenPos G) (a : F) (ha : a ≠ 
   refine (mul_le_mul_of_nonneg_left (hμb fun j => m (i, j)) hα.le).trans ?_
   rw [Finset.mul_sum]
   refine Finset.sum_le_sum fun v _ => ?_
-  have h1 : ∀ y : F, reAt v (a * y) = reAt v a * reAt v y := fun y => by simp only [reAt_eq, map_mul]
+  have h1 : ∀ y : F, reAt v (a * y) = reAt v a * reAt v y := fun y => by simp only [_root_.GlobalTheory.TPos.reAt_eq, map_mul]
   rw [h1, mul_pow]
   exact mul_le_mul_of_nonneg_right (hαb v) (sq_nonneg _)
 
@@ -653,8 +649,6 @@ theorem GlobalTheory.HilbertThetaSeries.th_expansion : ∀ (F : Type) [Field F] 
 open NumberField IsDedekindDomain Neutral.B1 Formalism.L2.Host Formalism.ConjugateSelfDual GlobalTheory.CuspRep UpperTheory.V UpperTheory.V.Af UpperTheory.V.Sd GlobalTheory.HilbertThetaSeries
 open scoped Matrix
 
-theorem _root_.GlobalTheory.T.thetaSeries_holomorphic_qExpansion_of_bounded_coeff : ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F] (κ : Type) [Fintype κ] [DecidableEq κ] (G : Matrix κ κ ℤ), EvenPos G → ∀ (a : F) (Φ : (κ → F) → ℂ) (B : ℝ), (∀ x, Φ x ≠ 0 → x ∈ aL κ a) → (∀ x, ‖Φ x‖ ≤ B) → (∀ z, Summable fun x => Φ x * ez (QF G x) z) ∧ Hol (th G Φ) ∧ Gr (th G Φ) ∧ HasQ (th G Φ) (fun ξ => ∑ᶠ x ∈ {x : κ → F | x ∈ aL κ a ∧ QF G x = ξ}, Φ x) := by
-  first | exact @GlobalTheory.HilbertThetaSeries.th_expansion | exact GlobalTheory.HilbertThetaSeries.th_expansion | (intros; apply GlobalTheory.HilbertThetaSeries.th_expansion <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.GaussSumFiltrations.ThetaSeriesHolomorphicQExpansionOfBoundedCoeff =====

@@ -439,7 +439,7 @@ theorem acris0_le_sa : ∀ (l : ℕ) [Fact l.Prime] (ϖ : Per.Fl l), ϖ.untilt =
   intro x hx n y hn
   have hx2 : x ∈ Ideal.span {((l : ℕ) : Per.Ainf l) - Per.tm ϖ} := hk ▸ RingHom.mem_ker.2 hx
   obtain ⟨c, rfl⟩ := Ideal.mem_span_singleton'.1 hx2
-  obtain ⟨c', hc⟩ := GlobalTheory.RingBasics.exists_pow_div_factorial l n
+  obtain ⟨c', hc⟩ := _root_.Reformulated.AutPerF.exists_factorial_mul_eq_pow l n
   have hc' : ((n.factorial : ℕ) : Per.AinfP l) * algebraMap (Per.Ainf l) (Per.AinfP l) (Per.zA l c') =
       ((l : ℕ) : Per.AinfP l) ^ n := by
     have h := congrArg ((algebraMap (Per.Ainf l) (Per.AinfP l)).comp (Per.zA l)) hc
@@ -637,16 +637,6 @@ noncomputable section
 
 namespace GlobalTheory.Pst.StLat
 
-theorem exists_mul_eq_pow_pred {l : ℕ} [Fact l.Prime] {j m : ℕ} (hj : j ≠ 0) (hm : ¬ l ^ m ∣ j) :
-    ∃ c : ℤ_[l], ((j : ℕ) : ℤ_[l]) * c = (l : ℤ_[l]) ^ (m - 1) := by
-  first
-  | exact @_root_.GlobalTheory.PolynomialNormBound.main
-  | exact _root_.GlobalTheory.PolynomialNormBound.main
-  | (apply _root_.GlobalTheory.PolynomialNormBound.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.PolynomialNormBound.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.PolynomialNormBound.main <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.PolynomialNormBound.main ..)
-
 theorem not_pow_dvd {l m j : ℕ} (h1 : j ≠ 0) (h2 : j < 2 * l ^ m) (h3 : j ≠ l ^ m) : ¬ l ^ m ∣ j := by
   rintro ⟨t, rfl⟩
   rcases t with _ | _ | t
@@ -672,7 +662,7 @@ theorem log_trunc_pow : ∀ (l : ℕ) [Fact l.Prime] (ϖ : Per.Fl l), Per.kerP l
   have hc : ∀ j : ℕ, ∃ c : ℤ_[l], (j ≠ 0 ∧ j < n ∧ j ≠ M) → ((j : ℕ) : ℤ_[l]) * c = (l : ℤ_[l]) ^ m := by
     intro j
     by_cases h : j ≠ 0 ∧ j < n ∧ j ≠ M
-    · obtain ⟨c, hc⟩ := exists_mul_eq_pow_pred (l := l) (m := m + 1) h.1 (not_pow_dvd h.1 h.2.1 h.2.2)
+    · obtain ⟨c, hc⟩ := _root_.GlobalTheory.PolynomialNormBound.main (l := l) (m := m + 1) h.1 (not_pow_dvd h.1 h.2.1 h.2.2)
       exact ⟨c, fun _ => by simpa using hc⟩
     · exact ⟨0, fun h' => (h h').elim⟩
   choose c hc using hc
@@ -688,7 +678,6 @@ theorem log_trunc_pow : ∀ (l : ℕ) [Fact l.Prime] (ϖ : Per.Fl l), Per.kerP l
     · exact Subalgebra.neg_mem _ (Subalgebra.one_mem _)
     · first
       | exact Subalgebra.algebraMap_mem _ _
-      | (rw [GlobalTheory.RingIface.padicIntMap_eq_algebraMap_comp]; exact Subalgebra.algebraMap_mem _ _)
     · exact Algebra.subset_adjoin (Set.mem_singleton _)
 
   have hterm : ∀ k ∈ Finset.range n, ((l : ℕ) : Per.AinfP l) ^ (m + 1) *

@@ -313,7 +313,7 @@ private theorem hi_perm (N l p : ℕ) (hl : l.Prime) (hN : 0 < N) (hp : p.Prime)
     show σ * σ'⁻¹ ∈ CongruenceSubgroup.Gamma1 N
     rw [CongruenceSubgroup.Gamma1_mem]
     simp only [Matrix.SpecialLinearGroup.coe_mul, Matrix.SpecialLinearGroup.coe_inv, Matrix.adjugate_fin_two, Matrix.mul_apply, Fin.sum_univ_two,
-      Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_cons]
+      Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one]
     push_cast
     rw [h0, h1, h0', h1']
     refine ⟨?_, ?_, ?_⟩
@@ -418,7 +418,7 @@ private theorem hi_B [IsAlgClosure ℚ Ω] (N w p : ℕ) (hN : 0 < N) (hp : p.Pr
     rintro x ⟨hxP, hxI⟩
     refine ⟨?_, fun γ hγ => ?_⟩
     · rw [hi_sum X l N p x]
-      exact hi_pol_sum X l w Finset.univ _ (fun i => GlobalTheory.T.intMatrixAction_mem_homogeneousPolyFunctions X l w _ (fun a ha => hA _ a ha) x hxP)
+      exact hi_pol_sum X l w Finset.univ _ (fun i => _root_.GlobalTheory.KZ.PolAct.act_mem_pol X l w _ (fun a ha => hA _ a ha) x hxP)
     · obtain ⟨π, g, hg, he⟩ := hi_act X l N p hN hp hc γ hγ
       rw [he x, hi_sum X l N p x]
       calc _ = ∑ i, X.act l (GlobalTheory.HeckeFamilyMatrices.tqFam p (sgD N l p) (π i)) x :=

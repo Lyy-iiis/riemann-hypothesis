@@ -431,11 +431,6 @@ open GroundTheory.Arith.SchemeCoh GroundTheory.Arith.SchemeCoh.ProjSpace MvPolyn
 
 attribute [local instance] MvPolynomial.gradedAlgebra
 
-private lemma eval₂_scale {A S : Type*} [CommRing A] [CommRing S] {n : ℕ} (g : A →+* S)
-    (x : Fin n → S) (w : S) {m : ℕ} {a : MvPolynomial (Fin n) A} (ha : a.IsHomogeneous m) :
-    eval₂ g (fun l => w * x l) a = w ^ m * eval₂ g x a :=
-  _root_.UpperTheory.Reformulated.B.Qk57.eval₂_scale g x w ha
-
 set_option backward.isDefEq.respectTransparency false in
 private lemma homOfLE_appTop_topIso {W : Scheme.{0}} {U U' : W.Opens} (e : U' ≤ U) (x : Γ(W, U)) :
     (W.homOfLE e).appTop (U.topIso.inv x) = U'.topIso.inv (W.presheaf.map (homOfLE e).op x) := by
@@ -523,7 +518,7 @@ private lemma loc_agree {U U' : W.Opens} (x : Fin (M + 1) → Γ(W, U)) (x' : Fi
   calc ψ a = eval₂ (ψ'.comp C) (fun l => ψ (X m') * ψ' (X l)) a := by
         conv_lhs => rw [e1]
         rfl
-    _ = ψ (X m') ^ d * eval₂ (ψ'.comp C) (fun l => ψ' (X l)) a := eval₂_scale _ _ _ ha
+    _ = ψ (X m') ^ d * eval₂ (ψ'.comp C) (fun l => ψ' (X l)) a := _root_.UpperTheory.Reformulated.B.Qk57.eval₂_scale _ _ _ ha
     _ = ψ (X m') ^ d * ψ' a := by
         congr 1
         conv_rhs => rw [e2]
@@ -674,7 +669,7 @@ private theorem exists_mul_pow_eq (I : Ideal R) (c : ↥I)
       Polynomial.monomial n ((c : R) ^ n) := by
     rw [SubmonoidClass.coe_pow, reesGenerator_coe, Polynomial.monomial_pow, one_mul]
   push_cast [reesDegreeZeroEquiv_coe_coe, hxr, hpow]
-  simp [Polynomial.C_mul_monomial, Polynomial.monomial_mul_C, mul_comm]
+  simp [Polynomial.C_mul_monomial, mul_comm]
   rw [← Polynomial.C_pow, Polynomial.monomial_mul_C]
 
 end UpperTheory.ChartGen
@@ -1507,7 +1502,7 @@ private theorem exists_apply_eq {X Y : Scheme.{0}} (f : X ⟶ Y) {U : Y.Opens} (
   obtain ⟨q, rfl⟩ := hs p
   refine ⟨hV.fromSpec q, ?_⟩
   have h := congr($(IsAffineOpen.SpecMap_appLE_fromSpec f hU hV e) q)
-  simp only [Scheme.Hom.comp_apply] at h
+  simp only at h
   exact h.symm
 
 private theorem isProper_snd {X Y S : Scheme.{0}} (f : X ⟶ S) (g : Y ⟶ S) (hf : IsProper f) :
@@ -1612,11 +1607,11 @@ theorem UpperTheory.Gal.KunnethLefschetz.G.oKDvr :
     constructor
     · intro hx
       have h1 : ‖(x : PadicAlgCl l)‖ ≤ 1 := hx
-      have h2 : IsIntegral ℤ_[l] (x : PadicAlgCl l) := UpperTheory.V.Lib.Small.isIntegral_of_norm_le h1
+      have h2 : IsIntegral ℤ_[l] (x : PadicAlgCl l) := _root_.UpperTheory.Reformulated.B.S4.isIntegral_of_norm_le h1
       exact (isIntegral_algHom_iff (K.val.restrictScalars ℤ_[l]) Subtype.val_injective).1 h2
     · intro hx
       have h2 : IsIntegral ℤ_[l] (x : PadicAlgCl l) := IsIntegral.map (K.val.restrictScalars ℤ_[l]) hx
-      exact UpperTheory.V.Lib.Small.norm_le_one_of_isIntegral l _ h2
+      exact _root_.UpperTheory.Reformulated.B.S6.norm_le_one_of_isIntegral l _ h2
   rw [hK]
   exact (IsIntegralClosure.isNoetherianRing ℤ_[l] ℚ_[l] K (integralClosure ℤ_[l] K))
 end -- clump:auto

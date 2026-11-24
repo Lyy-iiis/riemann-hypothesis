@@ -235,7 +235,7 @@ theorem leviEmb_scalar {s N : ℕ} (d : Fin s → ℕ) (hd : ∑ a, d a = N) (t 
     have : (stdBlocks d hd) ⟨a, i⟩ ≠ (stdBlocks d hd) ⟨b, j⟩ := fun h => by
       have := (stdBlocks d hd).injective h
       exact hab (congrArg Sigma.fst this)
-    simp [Matrix.scalar_apply, Matrix.diagonal_apply, this]
+    simp [Matrix.scalar_apply, this]
 
 theorem nabs_det_scalar (n : ℕ) (t : kˣ) :
     nabs k (Matrix.GeneralLinearGroup.det (Matrix.GeneralLinearGroup.scalar (Fin n) t)) =
@@ -524,7 +524,7 @@ theorem centredSegSqInt : ∀ (k : Type) [Field k] [ValuativeRel k] [Topological
       have hj0 : j = 0 := Fin.ext (by omega)
       subst hj0
       have hp : (∏ i ∈ Finset.univ.filter (fun i : Fin 2 => i ≤ 0), ‖c i‖) = ‖c 0‖ := by
-        simp [Finset.prod_filter, Fin.prod_univ_two]
+        simp [Finset.prod_filter]
       rw [hp, hn0]
       exact _root_.GlobalTheory.CompanionTheory.Segment.top_piece_exponent_lt_one _ _ _ _ _ hα0 hα1 hr Δ.d_pos (Γ 0).len_pos (Γ 1).len_pos hy1
     · rw [Fin.prod_univ_two, ← norm_mul, hprod, hcy1]
@@ -771,16 +771,13 @@ open Filter Topology MeasureTheory GlobalTheory.PRep GlobalTheory.SplitWeil Glob
 
 namespace Zls.FreeSingleHomotopyEquivDiscreteChains
 
-theorem sspectral : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (N : ℕ) (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ (GL (Fin N) k) V), IsSmooth π → π.IsIrreducible → GlobalTheory.Published.IrreducibleAdmissibleGL → GlobalTheory.Published.StandardFunctorsFiniteLength → Zls.MaxExpStrict π → Zls.HeckeSpectral π := by
-  exact _root_.GlobalTheory.CompanionTheory.HeckeBound.heckeSpectral_of_maxExpStrict
-
 theorem ssqint : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (N : ℕ) (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ (GL (Fin N) k) V), IsSmooth π → π.IsIrreducible → IsAdmissible π → Zls.UnitaryCentral π → Zls.HeckeSpectral π → IsSqIntCoeff π := by
   exact _root_.GlobalTheory.CompanionTheory.SqIntHecke.isSqIntCoeff_of_heckeSpectral
 
 theorem casselmanSuffSq (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
     (hA : GlobalTheory.Published.IrreducibleAdmissibleGL) (hF : GlobalTheory.Published.StandardFunctorsFiniteLength) : Zls.CasselmanSuffSq k := by
   intro N V _ _ π _ hs hi hu he
-  exact ssqint k N V π hs hi (hA k N V π hs hi) hu (sspectral k N V π hs hi hA hF he)
+  exact _root_.GlobalTheory.CompanionTheory.SqIntHecke.isSqIntCoeff_of_heckeSpectral k N V π hs hi (hA k N V π hs hi) hu (_root_.GlobalTheory.CompanionTheory.HeckeBound.heckeSpectral_of_maxExpStrict k N V π hs hi hA hF he)
 
 theorem sseglink : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k], Zls.CasselmanSuffSq k → GlobalTheory.Published.IrreducibleAdmissibleGL → Zc.LSegJacquet k → Zz.CentredSegSqInt k := by
   exact _root_.GlobalTheory.CompanionTheory.SegLink.centredSegSqInt
@@ -788,7 +785,7 @@ theorem sseglink : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k
 theorem centredSegSqInt (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
     (hA : GlobalTheory.Published.IrreducibleAdmissibleGL) (hF : GlobalTheory.Published.StandardFunctorsFiniteLength) (hJ : Zc.LSegJacquet k) :
     Zz.CentredSegSqInt k :=
-  sseglink k (casselmanSuffSq k hA hF) hA hJ
+  _root_.GlobalTheory.CompanionTheory.SegLink.centredSegSqInt k (casselmanSuffSq k hA hF) hA hJ
 
 end Zls.FreeSingleHomotopyEquivDiscreteChains
 

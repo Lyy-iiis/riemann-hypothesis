@@ -163,13 +163,6 @@ theorem open_compact_hat :
   rw [RestrictedProduct.range_structureMap] at h1 h2
   exact ⟨h1, h2⟩
 
-theorem t2Space_adeleRing_numberField : T2Space (AdeleRing (𝓞 F) F) := by
-  have h1 : T2Space (InfiniteAdeleRing F) := (inferInstance : T2Space ((v : InfinitePlace F) → v.Completion))
-  have h2 : T2Space (FiniteAdeleRing (𝓞 F) F) :=
-    T2Space.of_injective_continuous (f := fun (a : FiniteAdeleRing (𝓞 F) F) v => a v)
-      (fun a b h => DFunLike.coe_injective h) (continuous_pi (cont_eval F))
-  exact (inferInstance : T2Space (InfiniteAdeleRing F × FiniteAdeleRing (𝓞 F) F))
-
 end Local
 
 section Grp
@@ -246,7 +239,7 @@ def cut (e : S) (M : Matrix n n S) : Matrix n n S := 1 + e • (M - 1)
 
 theorem cut_mul_cut (e f : S) (M N : Matrix n n S) :
     cut e M * cut f N = 1 + e • (M - 1) + f • (N - 1) + (e * f) • ((M - 1) * (N - 1)) := by
-  simp only [cut, add_mul, mul_add, one_mul, mul_one, Matrix.smul_mul, Matrix.mul_smul, smul_smul, smul_add, mul_comm f e]
+  simp only [cut, add_mul, mul_add, one_mul, mul_one, Matrix.smul_mul, Matrix.mul_smul, smul_smul, mul_comm f e]
   abel
 
 theorem cut_mul {e : S} (he : e * e = e) (M N : Matrix n n S) : cut e (M * N) = cut e M * cut e N := by
@@ -766,7 +759,7 @@ theorem exists_level (D : D7) (V : HSp D) (N : Lat V) (A B : Finset (Pl D)) (JA 
     ∃ K ≤ GfC V, IsCompact (K : Set (GA D V)) ∧ IsOpen (K.subgroupOf (GfC V) : Set (GfC V)) ∧
       ∀ k, k ∈ K ↔ ∃ κ x y, InK V N (fun p => p ∉ A ∧ p ∉ B) κ ∧ x ∈ JA ∧ y ∈ JB ∧ k = b⁻¹ * (κ * x * y) * b := by
   have i1 : IsModuleTopology (AF D.host.F) (AE D) := ⟨rfl⟩
-  have i2 : T2Space (AF D.host.F) := t2Space_adeleRing_numberField _
+  have i2 : T2Space (AF D.host.F) := _root_.GlobalTheory.AdelicUnitaryTop.t2Space_adeleRing_numberField _
   have i3 : T2Space (AE D) := t2_tensor_product
   have i4 : IsTopologicalRing (AE D) := IsModuleTopology.isTopologicalRing (AF D.host.F) (AE D)
   have hσ : Continuous (sigR (AF D.host.F) D.sp.cm.sig) :=
@@ -830,23 +823,11 @@ theorem vac_mono {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D} {LS : Lat S} {LT
     {f : WO S T → ℂ} (hf : Vac ψ S T LS LT P f) (h : ∀ v, Q v → P v) : Vac ψ S T LS LT Q f :=
   ⟨hf.1, fun u hu => hf.2.1 u (latO_mono' S T _ _ h hu), fun e he u hu hh => hf.2.2 e he u (latO_mono' S T _ _ h hu) hh⟩
 
-theorem theta_smul' {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D} (c : ℂ) {f : WO S T → ℂ} (hf : IsThetaFunO ψ S T f) :
-    IsThetaFunO ψ S T (c • f) := {
-  quasi γ w := by simp only [Pi.smul_apply, smul_eq_mul]; rw [hf.quasi γ w]; ring
-  level := by
-    obtain ⟨U, hUo, hU⟩ := hf.level
-    refine ⟨U, hUo, fun u hu hi => ?_⟩
-    have e : heisO ψ S T u (c • f) = c • heisO ψ S T u f := by
-      funext w; simp only [heisO, Pi.smul_apply, smul_eq_mul]; ring
-    rw [e, hU u hu hi]
-  cont := continuous_const.mul hf.cont
-  smooth k L hL hfin w := (contDiff_const.mul (hf.smooth k L hL hfin w)) }
-
 theorem vac_smul {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D} {LS : Lat S} {LT : Lat T} {P : Pl D → Prop}
     (c : ℂ) {f : WO S T → ℂ} (hf : Vac ψ S T LS LT P f) : Vac ψ S T LS LT P (c • f) := by
   have e : ∀ u, heisO ψ S T u (c • f) = c • heisO ψ S T u f := by
     intro u; funext w; simp only [heisO, Pi.smul_apply, smul_eq_mul]; ring
-  exact ⟨theta_smul' c hf.1, fun u hu => by rw [e, hf.2.1 u hu], fun e' he u hu hh => by rw [e, hf.2.2 e' he u hu hh]⟩
+  exact ⟨_root_.GlobalTheory.OrientedHeis.theta_smul c hf.1, fun u hu => by rw [e, hf.2.1 u hu], fun e' he u hu hh => by rw [e, hf.2.2 e' he u hu hh]⟩
 
 theorem comb_smul' {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D} (c : WO S T →₀ ℂ) (a : ℂ) (f : WO S T → ℂ) :
     comb ψ S T c (a • f) = a • comb ψ S T c f := by
@@ -899,22 +880,6 @@ theorem grpOff_inf_le (V : HSp D) (P P' : Pl D → Prop) :
   · exact a1 ⟨w, hw⟩
   · exact a2 ⟨w, hw⟩
 
-theorem exists_level (D : D7) (V : HSp D) (N : Lat V) (A B : Finset (Pl D)) (JA JB : Subgroup (GA D V)) (b : GA D V)
-    (hAB : Disjoint B A) (hN : IsSelfDualC V N) (hb : b ∈ GfC V) (hA : JA ≤ grpAt V (· ∈ A)) (hAc : IsCompact (JA : Set (GA D V)))
-    (hAo : IsOpen ((JA.subgroupOf (grpAt V (· ∈ A)) : Subgroup _) : Set (grpAt V (· ∈ A)))) (hB : JB ≤ grpAt V (· ∈ B))
-    (hBc : IsCompact (JB : Set (GA D V)))
-    (hBo : IsOpen ((JB.subgroupOf (grpAt V (· ∈ B)) : Subgroup _) : Set (grpAt V (· ∈ B)))) :
-    ∃ K : Subgroup (GA D V), K ≤ GfC V ∧ IsCompact (K : Set (GA D V)) ∧
-      IsOpen ((K.subgroupOf (GfC V) : Subgroup (GfC V)) : Set (GfC V)) ∧
-      ∀ k, k ∈ K ↔ ∃ κ x y, InK V N (fun p => p ∉ A ∧ p ∉ B) κ ∧ x ∈ JA ∧ y ∈ JB ∧ k = b⁻¹ * (κ * x * y) * b := by
-  first
-  | exact @_root_.GlobalTheory.CompactOpenIntegers.exists_level
-  | exact _root_.GlobalTheory.CompactOpenIntegers.exists_level
-  | (apply _root_.GlobalTheory.CompactOpenIntegers.exists_level <;> assumption)
-  | (intros; apply _root_.GlobalTheory.CompactOpenIntegers.exists_level <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.CompactOpenIntegers.exists_level <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.CompactOpenIntegers.exists_level ..)
-
 theorem split_off (D : D7) (V : HSp D) (A B : Finset (Pl D)) (hAB : Disjoint B A) (z : GA D V)
     (hz : z ∈ grpOff V (fun p => p ∉ A ∧ p ∉ B)) :
     ∃ a ∈ GinfC V, ∃ x ∈ grpAt V (· ∈ A), ∃ y ∈ grpAt V (· ∈ B), z = a * y * x := by
@@ -963,7 +928,7 @@ theorem locFin : ∀ (D : D7) (c : Comm D) (v : VCom c) (t : Tup c) (w : VTup t)
   have hj2 : j + 1 + 1 < D.R.m := by omega
   obtain ⟨KQ, TQ, hKQ, hKQc, hKQo, hTQ, hKQlaw, hTQsupp⟩ := hQ j σ h
   obtain ⟨hJG, hJGc, hJGo⟩ := hv.JG (j + 1) hj1
-  obtain ⟨K, hKf, hKc, hKo, hKmem⟩ := exists_level D (c.V (j + 1)) (v.N (j + 1)) v.gP w.Q (v.JG (j + 1)) KQ
+  obtain ⟨K, hKf, hKc, hKo, hKmem⟩ := _root_.GlobalTheory.CompactOpenIntegers.exists_level D (c.V (j + 1)) (v.N (j + 1)) v.gP w.Q (v.JG (j + 1)) KQ
     (v.b (j + 1)) hF.disjG (hv.sd (j + 1) hj1) (hv.b (j + 1)) hJG hJGc hJGo hKQ hKQc hKQo
   have hone : InK (c.V (j + 1)) (v.N (j + 1)) (offP v w) 1 := ⟨one_mem _, fun y _ => by simp [Formalism.L2.Theta.mt]⟩
 
@@ -1154,7 +1119,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.locally_finite_of_tuple_conditions : ∀ (D : D7) (c : Comm D) (v : VCom c) (t : Tup c) (w : VTup t), c.Is → v.Is → t.Is → VForm v w → OffLaw v w → GSupp (t := t) v → QFin v w → t.LocFin := by
-  first | exact @GlobalTheory.FirstCells.locFin | exact GlobalTheory.FirstCells.locFin | (intros; apply GlobalTheory.FirstCells.locFin <;> assumption)
+  first | exact @GlobalTheory.FirstCells.locFin
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.LocallyFiniteOfTupleConditionsStatement =====
@@ -1170,7 +1135,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.seeSawLastTwoSteps_doubleLiftPeriod_value : ∀ (D : D7) (c : Comm D) (v : VCom c) (𝒯 : Type) (t : 𝒯 → Tup c) (w : ∀ s, VTup (t s)), c.Is → c.VolLast → v.Is → (∀ s, (t s).Is) → (∀ s, PlaceLaws v (w s)) → LastLaw D → SeeLast D → FlatLaw D → BiAct D → ValLastX t := by
-  first | exact @GlobalTheory.SeeSawLastValue.valLast | exact GlobalTheory.SeeSawLastValue.valLast | (intros; apply GlobalTheory.SeeSawLastValue.valLast <;> assumption)
+  first | exact @GlobalTheory.SeeSawLastValue.valLast
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.SeeSawLastTwoStepsDoubleLiftPeriodValueStatement =====
@@ -1213,7 +1178,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.seesaw_place_laws_give_finite_integral_laws : ∀ (D : D7) (c : Comm D) (v : VCom c) (𝒯 : Type) (t : 𝒯 → Tup c) (w : ∀ s, VTup (t s)), c.Is → c.VolLast → v.Is → (∀ s, (t s).Is) → (∀ s, PlaceLaws v (w s)) → (∀ s, (t s).LocFin) ∧ ValX t ∧ ValLastX t := by
-  first | exact @GlobalTheory.SeeSaw.placeLaws_finiteIntegrals | exact GlobalTheory.SeeSaw.placeLaws_finiteIntegrals | (intros; apply GlobalTheory.SeeSaw.placeLaws_finiteIntegrals <;> assumption)
+  first | exact @GlobalTheory.SeeSaw.placeLaws_finiteIntegrals
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.SeesawPlaceLawsGiveFiniteIntegralLawsStatement =====

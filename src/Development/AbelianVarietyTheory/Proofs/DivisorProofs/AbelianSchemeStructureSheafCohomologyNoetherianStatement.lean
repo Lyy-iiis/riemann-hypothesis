@@ -185,7 +185,7 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.G
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.abelian_scheme_no_primitive_O2 : ∀ (R : Type) [CommRing R] [IsNoetherianRing R] (A : Over (Sp R)) [GrpObj A] (g : ℕ), IsAbelianScheme A → SmoothOfRelativeDimension g A.hom → NoPrimitiveStructureSheafH2 A := by
-  first | exact @GlobalTheory.AbCoh.NoPrimNoeth.noPrimO2_of_isNoetherianRing | exact GlobalTheory.AbCoh.NoPrimNoeth.noPrimO2_of_isNoetherianRing | (intros; apply GlobalTheory.AbCoh.NoPrimNoeth.noPrimO2_of_isNoetherianRing <;> assumption)
+  first | exact @GlobalTheory.AbCoh.NoPrimNoeth.noPrimO2_of_isNoetherianRing
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AbelianSchemeNoPrimitiveO2Statement =====
@@ -275,7 +275,7 @@ theorem fp_bc1 (R : Type) [CommRing R] [IsNoetherianRing R] (A : Over (Sp R)) [G
       have he2 : e.hom ≫ s' = B.hom := IsPullback.isoIsPullback_hom_snd A.left (Sp R') hpb hφ
       have he : e.inv ≫ B.hom = s' ≫ spMap (RingHom.id R') := by
         rw [← he2, Iso.inv_hom_id_assoc]
-        first | (rw [spMap_id, Category.comp_id]) | (simp [spMap, CommRingCat.ofHom_id]) | (rw [spMap, CommRingCat.ofHom_id, Spec.map_id, Category.comp_id])
+        first | (rw [spMap_id, Category.comp_id])
       have w' : IsPullback (ψ ≫ e.inv) s₀ B.hom (spMap (α : R' →+* k)) := by
         refine IsPullback.of_iso w (Iso.refl _) e.symm (Iso.refl _) (Iso.refl _) ?_ ?_ ?_ ?_ <;> simp [← he2]
       obtain ⟨s1, s2⟩ := GlobalTheory.T.abelianSchemeSpecialFibre_cohomology_lift_artinian R' B g hB hBg k α hα X₀ s₀ (ψ ≫ e.inv) w'
@@ -396,7 +396,7 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.G
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.axes_vanishing_noetherian_abelian : ∀ (R : Type) [CommRing R] [IsNoetherianRing R] (A : Over (Sp R)) [GrpObj A] (g : ℕ), IsAbelianScheme A → SmoothOfRelativeDimension g A.hom → AxesVanishingStructureSheafDegOne A := by
-  first | exact @GlobalTheory.AbCoh.AxesSq.axesO1_of_isAbelianScheme | exact GlobalTheory.AbCoh.AxesSq.axesO1_of_isAbelianScheme | (intros; apply GlobalTheory.AbCoh.AxesSq.axesO1_of_isAbelianScheme <;> assumption)
+  first | exact @GlobalTheory.AbCoh.AxesSq.axesO1_of_isAbelianScheme
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AxesVanishingNoetherianAbelianStatement =====
@@ -422,24 +422,19 @@ theorem pO1_comp {R : Type} [CommRing R] {Z Y A : Over (Sp R)} (i : Z ⟶ Y) (f 
 theorem pO1_id {R : Type} [CommRing R] {A : Over (Sp R)} (x : HO1 A.hom) : pO1 (𝟙 A) x = x :=
   ((GlobalTheory.T.structureSheafCohomology_pullback_comp_cup_id).2.2 R A).1 x
 
-theorem pO1_unit_eq_zero {R : Type} [CommRing R] (x : HO1 (𝟙_ (Over (Sp R))).hom) : x = 0 := by
-  have : IsAffine (𝟙_ (Over (Sp R))).left := by
-    change IsAffine (Sp R); infer_instance
-  exact (GlobalTheory.Obs.sq_abelian_and_affine_H1 R).2 _ _ x
-
 theorem pO1_toUnit_comp {R : Type} [CommRing R] {Y A : Over (Sp R)} (f : 𝟙_ (Over (Sp R)) ⟶ A) (x : HO1 A.hom) :
     pO1 (toUnit Y ≫ f) x = 0 := by
-  rw [← pO1_comp, pO1_unit_eq_zero (pO1 f x), map_zero]
+  rw [← pO1_comp, _root_.GlobalTheory.AbCoh.PrimLift.pO1_unit_eq_zero (pO1 f x), map_zero]
 
 theorem primO1_of_axesO1 {R : Type} [CommRing R] (A : Over (Sp R)) [GrpObj A] (h : AxesVanishingStructureSheafDegOne A) : StructureSheafH1Primitive A := by
   intro x
   rw [← sub_eq_zero, sub_add_eq_sub_sub]
   apply h
   · rw [map_sub, map_sub, pO1_comp, pO1_comp, pO1_comp, lift_comp_one_right, lift_fst, lift_snd,
-      pO1_toUnit_comp, pO1_id]
+      pO1_toUnit_comp, _root_.GlobalTheory.AbCoh.PrimLift.pO1_id]
     simp
   · rw [map_sub, map_sub, pO1_comp, pO1_comp, pO1_comp, lift_comp_one_left, lift_fst, lift_snd,
-      pO1_toUnit_comp, pO1_id]
+      pO1_toUnit_comp, _root_.GlobalTheory.AbCoh.PrimLift.pO1_id]
     simp
 
 theorem cup_add_cup_swap {R : Type} [CommRing R] {C : Type*} [Category C] (F : C ⥤ CommAlgCat.{0} R)
@@ -483,7 +478,7 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.G
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.cup_self_zero_abelian_h1 : ∀ (R : Type) [CommRing R] [IsNoetherianRing R] (A : Over (Sp R)) [GrpObj A] (g : ℕ), IsAbelianScheme A → SmoothOfRelativeDimension g A.hom → ∀ x : HO1 A.hom, cup _ x x = 0 := by
-  first | exact @GlobalTheory.AbCoh.cup_self_eq_zero_of_isAbelianScheme | exact GlobalTheory.AbCoh.cup_self_eq_zero_of_isAbelianScheme | (intros; apply GlobalTheory.AbCoh.cup_self_eq_zero_of_isAbelianScheme <;> assumption)
+  first | exact @GlobalTheory.AbCoh.cup_self_eq_zero_of_isAbelianScheme
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.CupSelfZeroAbelianH1Statement =====
@@ -636,7 +631,7 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.G
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.wedge_property_from_fibres : ∀ (R : Type) [CommRing R] (X : Scheme.{0}) (s : X ⟶ Sp R), Module.Finite R (HO1 s) → Module.Projective R (HO1 s) → Module.Finite R (HO2 s) → Module.Projective R (HO2 s) → StructureSheafH1BaseChange s → StructureSheafH2BaseChange s → (∀ x : HO1 s, cup _ x x = 0) → (∀ (k : Type) [Field k] [Algebra R k] (X' : Scheme.{0}) (s' : X' ⟶ Sp k) (φ : X' ⟶ X) (h : IsPullback φ s' s (spMap (algebraMap R k))), WedgeO (OAff s')) → WedgeO (OAff s) := by
-  first | exact @GlobalTheory.AbCoh.Wedge.wedgeO_of_fibres | exact GlobalTheory.AbCoh.Wedge.wedgeO_of_fibres | (intros; apply GlobalTheory.AbCoh.Wedge.wedgeO_of_fibres <;> assumption)
+  first | exact @GlobalTheory.AbCoh.Wedge.wedgeO_of_fibres
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.WedgePropertyFromFibresStatement =====
@@ -736,7 +731,7 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.G
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.abelianScheme_structureSheafCohomology_noetherian : ∀ (R : Type) [CommRing R] [IsNoetherianRing R] (A : Over (Sp R)) [GrpObj A] (g : ℕ), IsAbelianScheme A → SmoothOfRelativeDimension g A.hom → FP R (HO1 A.hom) g ∧ WedgeO (OAff A.hom) ∧ StructureSheafH1BaseChange A.hom ∧ StructureSheafH2BaseChange A.hom := by
-  first | exact @GlobalTheory.AbCohRing.oStr_noetherian | exact GlobalTheory.AbCohRing.oStr_noetherian | (intros; apply GlobalTheory.AbCohRing.oStr_noetherian <;> assumption)
+  first | exact @GlobalTheory.AbCohRing.oStr_noetherian
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AbelianSchemeStructureSheafCohomologyNoetherianStatement =====

@@ -205,7 +205,7 @@ theorem map_aeval_commute_of_commute {K R : Type} [Field K] [CommRing R] [Algebr
       have h2 : ((algebraMap K R).mapMatrix (m := Fin n)) (algebraMap K (Matrix (Fin n) (Fin n) K) a)
           = (algebraMap K R a) • (1 : Matrix (Fin n) (Fin n) R) := by
         ext i j
-        simp [Matrix.algebraMap_matrix_apply, Matrix.one_apply, Algebra.algebraMap_eq_smul_one]
+        simp [Matrix.one_apply, Algebra.algebraMap_eq_smul_one]
       rw [h2]
       exact (Commute.one_right X).smul_right _
   exact key h
@@ -565,10 +565,6 @@ section Alg
 
 variable {K : Type} [Field K] {n r : ℕ}
 
-theorem exists_factor (e : Matrix (Fin n) (Fin n) K) (he : e * e = e) :
-    ∃ (r : ℕ) (M : Matrix (Fin n) (Fin r) K) (N : Matrix (Fin r) (Fin n) K), N * M = 1 ∧ M * N = e :=
-  _root_.UpperTheory.Reformulated.B.ExistsFactor.exists_factor e he
-
 variable {R : Type*} [CommRing R] [Algebra K R] {R' : Type*} [CommRing R'] [Algebra K R']
 
 theorem comm_aeval (γ : Matrix (Fin n) (Fin n) K) (X : Matrix (Fin n) (Fin n) R)
@@ -655,7 +651,7 @@ theorem vecMul_map_single (hs : ∀ j, (Pi.single j 1 : Fin n → K) = v ᵥ* ae
   rw [← this, ← hs j]
   by_cases hij : i = j
   · subst hij; simp
-  · simp [Pi.single_apply, hij]
+  · simp [hij]
 
 theorem vecMul_Ph (hs : ∀ j, (Pi.single j 1 : Fin n → K) = v ᵥ* aeval γ (h j)) (z : Fin n → R) :
     (algebraMap K R ∘ v) ᵥ* Ph h γ z = z := by
@@ -794,7 +790,7 @@ theorem exists_pos_le_height :
     ∀ (K : Type) [Field K] [NumberField K] (n : ℕ) (γ : Matrix (Fin n) (Fin n) K) (v : Fin n → K), (∀ y : Fin n → K, ∃ h : K[X], y = v ᵥ* aeval γ h) → ∀ e : Matrix (Fin n) (Fin n) K, IsPrim γ e → ∀ c : ℝ, 0 < c → ∃ ε : ℝ, 0 < ε ∧ ∀ g : GroundTheory.Automorphic.AdelicGLn.AdelicGL K n, g.val * γ.map (algebraMap K (AdeleRing (𝓞 K) K)) = γ.map (algebraMap K (AdeleRing (𝓞 K) K)) * g.val → ∀ s : (AdeleRing (𝓞 K) K)ˣ, (s : AdeleRing (𝓞 K) K) = (1 + e.map (algebraMap K (AdeleRing (𝓞 K) K)) * (g.val - 1)).det → c ≤ (GroundTheory.Global.IdeleGroup.ideleModule K s : ℝ) → ∀ x : Fin n → K, x ᵥ* e ≠ 0 → ε ≤ GroundTheory.Automorphic.Reduction.height g x := by
   intro K _ _ n γ v hcyc e he c hc
   choose h hs using fun j : Fin n => hcyc (Pi.single j 1)
-  obtain ⟨r, M, N, hNM, hMN⟩ := exists_factor e he.idem
+  obtain ⟨r, M, N, hNM, hMN⟩ := _root_.UpperTheory.Reformulated.B.ExistsFactor.exists_factor e he.idem
   have hr : 0 < r := by
     refine Nat.pos_of_ne_zero fun h0 => ?_
     subst h0
@@ -1587,7 +1583,7 @@ theorem iso_range_iff_sg_mul (E : Type) [Field E] [NumberField E] [IsCMField E] 
       funext k
       by_cases hk : k = i
       · subst hk; simp
-      · simp [Pi.single_apply, hk]
+      · simp [hk]
     rw [hc, single_one_dotProduct, Matrix.mulVec_single_one] at h3
     simpa using h3
   · rintro h _ ⟨b, rfl⟩
@@ -1815,12 +1811,12 @@ theorem torusChar : DegAdelic → TorusChar := by
         by_cases hij : i = j
         · subst hij
           by_cases hx : x = 0
-          · simp [sMeet, Pi.single_apply, hjk, hx]
-          · simp [sMeet, Pi.single_apply, hjk, hx]
+          · simp [sMeet, hjk, hx]
+          · simp [sMeet, hjk, hx]
         · by_cases hik : i = k
           · subst hik
-            simp [sMeet, Pi.single_apply, hij]
-          · simp [sMeet, Pi.single_apply, hij, hik]
+            simp [sMeet, hij]
+          · simp [sMeet, hij, hik]
       rw [h1, hπ0]
     rw [hsum' e, lam_sum Finset.univ _ (fun j _ => hπi _) (fun j _ k _ hjk => horth j k _ _ hjk) t
       (fun j _ => hcm t ht _), sdot]

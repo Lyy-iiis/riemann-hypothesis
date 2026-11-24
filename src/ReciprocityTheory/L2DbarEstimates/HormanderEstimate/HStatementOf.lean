@@ -18,10 +18,10 @@ public import Mathlib.Analysis.Calculus.ContDiff.Operations
 public import Mathlib.Analysis.Calculus.FDeriv.Mul
 public import ReciprocityTheory.L2DbarEstimates.Localization.LocalizeA
 public import ReciprocityTheory.L2DbarEstimates.ChartDerivatives.ExistsChartPartition
+public import ReciprocityTheory.L2DbarEstimates.ChartDerivatives.IntegralFderivApplyEqZero
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 public import Mathlib.Analysis.Calculus.Deriv.MeanValue
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-public import ReciprocityTheory.L2DbarEstimates.ChartDerivatives.IntegralFderivApplyEqZero
 public import Mathlib.Analysis.Calculus.FDeriv.Symmetric
 public import Mathlib.Analysis.Calculus.ContDiff.Comp
 public import ReciprocityTheory.L2DbarEstimates.BasicIdentity.BasicIdentityStatement
@@ -777,8 +777,8 @@ theorem leviZ_wd_coord (n : ℕ) (j l : Fin n) (y : V n) :
   rw [hL]
   by_cases h : j = l
   · subst h
-    simp [bas, PiLp.single_apply, Complex.I_mul_I]
-  · simp [bas, PiLp.single_apply, h, Ne.symm h]
+    simp [bas, Complex.I_mul_I]
+  · simp [bas, h, Ne.symm h]
 
 theorem leviZ_d_coord {M : Type*} [TopologicalSpace M] (n : ℕ) (z : M → V n)
     (hz : IsLocalHomeomorph z) (j l : Fin n) (x : M) :
@@ -948,7 +948,7 @@ end -- clump:auto
 -- ===== end clump member: ReciprocityTheory.L2DbarEstimates.Localization.Locality =====
 
 -- ===== clump member: ReciprocityTheory.L2DbarEstimates.Localization.Localize =====
--- clump-header: {"m": "ReciprocityTheory.L2DbarEstimates.Localization.Localize", "h": "module\n\npublic import ReciprocityTheory.L2DbarEstimates.Localization.LocalizeA\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\npublic import ReciprocityTheory.L2DbarEstimates.ChartDerivatives.ChartSymmEventuallyEq\npublic import ReciprocityTheory.L2DbarEstimates.ChartDerivatives.ExistsChartPartition\nimport ReciprocityTheory.L2DbarEstimates.ChartDerivatives.TsupportDbSubset\n\n"}
+-- clump-header: {"m": "ReciprocityTheory.L2DbarEstimates.Localization.Localize", "h": "module\n\npublic import ReciprocityTheory.L2DbarEstimates.Localization.LocalizeA\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\npublic import ReciprocityTheory.L2DbarEstimates.ChartDerivatives.ChartSymmEventuallyEq\npublic import ReciprocityTheory.L2DbarEstimates.ChartDerivatives.ExistsChartPartition\nimport ReciprocityTheory.L2DbarEstimates.ChartDerivatives.TsupportDbSubset\nimport ReciprocityTheory.L2DbarEstimates.ChartDerivatives.IntegralFderivApplyEqZero\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -980,9 +980,9 @@ theorem localize (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
     filter_upwards [isOpen_interior.mem_nhds (hKK' hx)] with y hy
     rw [← Complex.ofReal_sum, hχK y (interior_subset hy), Complex.ofReal_one]
   have hdz : ∀ x ∈ K, ∀ j, ∑ i, d n z j (fun y => (χ i y : ℂ)) x = 0 := fun x hx j => by
-    rw [← loc_d_sum n z Finset.univ _ hck j x, loc_d_congr n z hz j _ _ x (hev x hx), d_const]
+    rw [← _root_.ReciprocityTheory.L2DbarEstimates.d_finset_sum n z Finset.univ _ hck j x, loc_d_congr n z hz j _ _ x (hev x hx), d_const]
   have hdbz : ∀ x ∈ K, ∀ j, ∑ i, db n z j (fun y => (χ i y : ℂ)) x = 0 := fun x hx j => by
-    rw [← loc_db_sum n z Finset.univ _ hck j x, loc_db_congr n z hz j _ _ x (hev x hx), db_const]
+    rw [← _root_.ReciprocityTheory.L2DbarEstimates.db_finset_sum n z Finset.univ _ hck j x, loc_db_congr n z hz j _ _ x (hev x hx), db_const]
   have sG : ∀ x, G x = ∑ i, locG (χ i) G x := fun x => by
     by_cases hx : x ∈ K
     · simp only [locG]; rw [← Finset.sum_smul, hone x hx, one_smul]
@@ -1031,12 +1031,12 @@ theorem localize (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
     simp only [divF]
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl fun j _ => ?_
-    rw [hfun j, loc_d_sum n z Finset.univ (fun i y => g i y j) (fun i => hgc1 i j) j x]
+    rw [hfun j, _root_.ReciprocityTheory.L2DbarEstimates.d_finset_sum n z Finset.univ (fun i y => g i y j) (fun i => hgc1 i j) j x]
   have hsb : ∀ x j k, sbar n z (fun x => ∑ i, g i x) x j k = ∑ i, sbar n z (g i) x j k :=
     fun x j k => by
     simp only [sbar]
-    rw [hfun k, hfun j, loc_db_sum n z _ (fun i y => g i y k) (fun i => hgc1 i k) j x,
-      loc_db_sum n z _ (fun i y => g i y j) (fun i => hgc1 i j) k x, Finset.sum_sub_distrib]
+    rw [hfun k, hfun j, _root_.ReciprocityTheory.L2DbarEstimates.db_finset_sum n z _ (fun i y => g i y k) (fun i => hgc1 i k) j x,
+      _root_.ReciprocityTheory.L2DbarEstimates.db_finset_sum n z _ (fun i y => g i y j) (fun i => hgc1 i j) k x, Finset.sum_sub_distrib]
   refine ⟨fun x => ∑ i, g i x, fun j => ⟨?_, ?_⟩, hvan, ?_, ?_, ?_⟩
   · rw [hfun j]; exact loc_ck_sum n z 2 _ _ fun i => hgc i j
   · refine HasCompactSupport.intro (isCompact_iUnion hK0) fun x hx => ?_
@@ -1557,7 +1557,6 @@ theorem sbarDbar (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
     intro v w
     first
       | exact hcd.isSymmSndFDerivAt (by simp) v w
-      | exact hcd.isSymmSndFDerivAt (by simp [minSmoothness_of_isRCLikeNormedField]) v w
   have hloc : ∀ k : Fin n,
       ((fun y => db n z k g y) ∘ e0.symm) =ᶠ[𝓝 (z x)] wdb n k (g ∘ e0.symm) := by
     intro k
@@ -1845,9 +1844,7 @@ private theorem ck_one_db_of_smooth {M : Type*} [TopologicalSpace M] {n : ℕ} {
     (hF : Smooth n z F) (j : Fin n) : Ck n z 1 (fun x => db n z j F x) := by
   intro e he
   have hG : ContDiffOn ℝ 2 (F ∘ e.symm) e.target := (hF e he).of_le (by first
-      | exact_mod_cast (le_top : ((2 : ℕ) : ℕ∞) ≤ ⊤)
-      | exact WithTop.coe_le_coe.mpr le_top
-      | simp)
+      | exact WithTop.coe_le_coe.mpr le_top)
   have hD : ContDiffOn ℝ 1 (fun y => fderiv ℝ (F ∘ e.symm) y) e.target :=
     hG.fderiv_of_isOpen e.open_target (by norm_num)
   have hW : ContDiffOn ℝ 1 (fun y => wdb n j (F ∘ e.symm) y) e.target := by
@@ -1875,9 +1872,7 @@ theorem testIneq (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
   apply ti_le_of_forall_pos
   intro ε hε
   have hck2 : Ck n X.z 2 F0 := fun e he => (hF0 e he).of_le (by first
-      | exact_mod_cast (le_top : ((2 : ℕ) : ℕ∞) ≤ ⊤)
-      | exact WithTop.coe_le_coe.mpr le_top
-      | simp)
+      | exact WithTop.coe_le_coe.mpr le_top)
   have hcj : ∀ j, Continuous fun x => db n X.z j F0 x := by
     intro j
     rw [continuous_iff_continuousAt]
@@ -1894,8 +1889,6 @@ theorem testIneq (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
     show Continuous fun x => WithLp.toLp 2 (fun j => db n X.z j F0 x)
     first
       | exact (PiLp.continuous_toLp 2 (fun _ : Fin n => ℂ)).comp (continuous_pi hcj)
-      | exact (PiLp.continuous_toLp (p := 2) (β := fun _ : Fin n => ℂ)).comp (continuous_pi hcj)
-      | fun_prop
   obtain ⟨ph', ψ, e', U, hph', hψ, he', hcut, hU, hCU, hUeq, hle, hlevi, hL2⟩ :=
     hCh X ph (dbarF n X.z F0) (tsupport f) ε hph hcont (ti_hasCompactSupport n X.z f hf) hε
   have hprim := hP X.z hz ph ph' ψ F0 h ε hph hlev hph' hψ hF0 hh hdom hε hle hlevi hI

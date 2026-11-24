@@ -288,7 +288,7 @@ theorem eq_of_const_nonzero : ∀ (k : Type) [Field k] [IsAlgClosed k] (Y : Sche
       (PrimeSpectrum.basicOpen _).isOpen.isLocallyClosed ?_ ?_ ?_
     · refine IsOpen.dense (X := PrimeSpectrum (Polynomial k)) (PrimeSpectrum.basicOpen _).isOpen
         ⟨⟨⊥, Ideal.isPrime_bot⟩, ?_⟩
-      simp [PrimeSpectrum.mem_basicOpen, Polynomial.X_ne_zero]
+      simp [Polynomial.X_ne_zero]
     · intro x hx hcl
       have hp := pointOfClosedPoint_comp (f ≫ q) x hcl
       have hpx := pointOfClosedPoint_apply (f ≫ q) x hcl (IsLocalRing.closedPoint k)
@@ -345,7 +345,7 @@ open GlobalTheory.HTLat GlobalTheory.Published GlobalTheory.Published.AbVarRed I
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.affineLine_morphism_constant_of_const_on_nonzero : ∀ (k : Type) [Field k] [IsAlgClosed k] (Y : Scheme.{0}) (q : Y ⟶ Sp k) [IsSeparated q] [LocallyOfFiniteType q] (f : Sp (Polynomial k) ⟶ Y), f ≫ q = spMap (algebraMap k (Polynomial k)) → (∀ c : k, c ≠ 0 → spMap (Polynomial.evalRingHom c) ≫ f = spMap (Polynomial.evalRingHom 1) ≫ f) → ∀ a b : Polynomial k →ₐ[k] k, spMap a.toRingHom ≫ f = spMap b.toRingHom ≫ f := by
-  first | exact @GlobalTheory.ConstAffineLine.eq_of_const_nonzero | exact GlobalTheory.ConstAffineLine.eq_of_const_nonzero | (intros; apply GlobalTheory.ConstAffineLine.eq_of_const_nonzero <;> assumption)
+  first | exact @GlobalTheory.ConstAffineLine.eq_of_const_nonzero
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AffineLineMorphismConstantOfConstOnNonzeroStatement =====
@@ -445,7 +445,7 @@ open GlobalTheory.HTLat GlobalTheory.Published GlobalTheory.Published.AbVarRed I
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.eq_spMap_comp_eval_zero_of_chart_comp_eq : ∀ (K : Type) [CommRing K] (Y : Scheme.{0}) (W : Y.Opens), IsAffineOpen W → ∀ (g₀ g₁ : Sp (Polynomial K) ⟶ Y), (∀ x, g₀ x ∈ W) → (∀ x, g₁ x ∈ W) → spMap (algebraMap (Polynomial K) (Localization.Away (Polynomial.X : Polynomial K))) ≫ g₀ = spMap (Polynomial.aeval (IsLocalization.Away.invSelf (Polynomial.X : Polynomial K) : Localization.Away (Polynomial.X : Polynomial K))).toRingHom ≫ g₁ → g₀ = spMap (algebraMap K (Polynomial K)) ≫ spMap (Polynomial.evalRingHom 0) ≫ g₀ := by
-  first | exact @GlobalTheory.chart_map_into_affine_const | exact GlobalTheory.chart_map_into_affine_const | (intros; apply GlobalTheory.chart_map_into_affine_const <;> assumption)
+  first | exact @GlobalTheory.chart_map_into_affine_const
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ChartMapIntoAffineConstStatement =====
@@ -502,7 +502,7 @@ open GlobalTheory.HTLat GlobalTheory.Published GlobalTheory.Published.AbVarRed I
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.mem_range_spMap_mapRingHom_of_fibre_closedPoint : ∀ (R K : Type) [CommRing R] [Field K] (χ : R →+* K), Function.Surjective χ → ∀ (x : Sp (Polynomial R)), spMap (algebraMap R (Polynomial R)) x = spMap χ (IsLocalRing.closedPoint K) → x ∈ Set.range (spMap (Polynomial.mapRingHom χ)) := by
-  first | exact @GlobalTheory.fibre_line_over_surjection | exact GlobalTheory.fibre_line_over_surjection | (intros; apply GlobalTheory.fibre_line_over_surjection <;> assumption)
+  first | exact @GlobalTheory.fibre_line_over_surjection
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FibreLineOverSurjectionStatement =====
@@ -719,8 +719,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 open GlobalTheory.HTLat GlobalTheory.Published GlobalTheory.Published.AbVarRed IsLocalRing
 attribute [local instance] Over.cartesianMonoidalCategory
 
-theorem _root_.GlobalTheory.T.isOpen_setOf_fibre_charts_mem : ∀ (R : Type) [CommRing R] (Y : Scheme.{0}) (g₀ g₁ : Sp (Polynomial R) ⟶ Y), spMap (algebraMap (Polynomial R) (Localization.Away (Polynomial.X : Polynomial R))) ≫ g₀ = spMap (Polynomial.aeval (IsLocalization.Away.invSelf (Polynomial.X : Polynomial R) : Localization.Away (Polynomial.X : Polynomial R))).toRingHom ≫ g₁ → ∀ (W : Y.Opens), IsOpen {τ : Sp R | ∀ x : Sp (Polynomial R), spMap (algebraMap R (Polynomial R)) x = τ → g₀ x ∈ W ∧ g₁ x ∈ W} := by
-  first | exact @GlobalTheory.isOpen_setOf_charts_mem | exact GlobalTheory.isOpen_setOf_charts_mem | (intros; apply GlobalTheory.isOpen_setOf_charts_mem <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsOpenSetOfChartsMemStatement =====
@@ -876,7 +874,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.LineConst
 
 theorem _root_.GlobalTheory.T.projectiveLine_chart_families_agree_on_overlap : ∀ {k : Type} [Field k] (B : Over (Sp k)) [GrpObj B] (f₀ f₁ : Sp (Polynomial k) ⟶ B.left) (h0 : f₀ ≫ B.hom = spMap (algebraMap k (Polynomial k))) (h1 : f₁ ≫ B.hom = spMap (algebraMap k (Polynomial k))), spMap (algebraMap (Polynomial k) (Localization.Away (Polynomial.X : Polynomial k))) ≫ f₀ = spMap (Polynomial.aeval (IsLocalization.Away.invSelf (Polynomial.X : Polynomial k) : Localization.Away (Polynomial.X : Polynomial k))).toRingHom ≫ f₁ → ∀ (R : Type) [CommRing R] [Algebra k R] (u v : R), u * v = 1 → spMap (algebraMap (Polynomial R) (Localization.Away (Polynomial.X : Polynomial R))) ≫ famMap B f₀ h0 R u = spMap (Polynomial.aeval (IsLocalization.Away.invSelf (Polynomial.X : Polynomial R) : Localization.Away (Polynomial.X : Polynomial R))).toRingHom ≫ famMap B f₁ h1 R v := by
-  first | exact @GlobalTheory.LineConst.famMap_loc_eq | exact GlobalTheory.LineConst.famMap_loc_eq | (intros; apply GlobalTheory.LineConst.famMap_loc_eq <;> assumption)
+  first | exact @GlobalTheory.LineConst.famMap_loc_eq
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ProjectiveLineChartFamiliesAgreeOnOverlapStatement =====
@@ -971,7 +969,7 @@ open GlobalTheory.HTLat GlobalTheory.Published GlobalTheory.Published.AbVarRed I
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.finite_compl_punctured_line_open : ∀ (k : Type) [Field k] (V : Set (Sp (Localization.Away (Polynomial.X : Polynomial k)))), IsOpen V → ∀ (χ₁ : Localization.Away (Polynomial.X : Polynomial k) →ₐ[k] k), spMap χ₁.toRingHom (IsLocalRing.closedPoint k) ∈ V → Set.Finite {c : k | c ≠ 0 ∧ ∀ χ : Localization.Away (Polynomial.X : Polynomial k) →ₐ[k] k, χ (algebraMap (Polynomial k) _ Polynomial.X) = c → spMap χ.toRingHom (IsLocalRing.closedPoint k) ∉ V} := by
-  first | exact @GlobalTheory.punctured_line_open_cofinite | exact GlobalTheory.punctured_line_open_cofinite | (intros; apply GlobalTheory.punctured_line_open_cofinite <;> assumption)
+  first | exact @GlobalTheory.punctured_line_open_cofinite
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.PuncturedLineOpenCofiniteStatement =====
@@ -1006,7 +1004,7 @@ theorem projLine_map_const : ∀ (k : Type) [Field k] [IsAlgClosed k] (B : Over 
   let g₁ := famMap B f₁ h1 L ti
   have hc := GlobalTheory.T.projectiveLine_chart_families_agree_on_overlap B f₀ f₁ h0 h1 h01 L t ti hti
   let V : Set (Sp L) := {τ | ∀ x : Sp (Polynomial L), spMap (algebraMap L (Polynomial L)) x = τ → g₀ x ∈ W ∧ g₁ x ∈ W}
-  have hV : IsOpen V := GlobalTheory.T.isOpen_setOf_fibre_charts_mem L _ g₀ g₁ hc W
+  have hV : IsOpen V := _root_.GlobalTheory.isOpen_setOf_charts_mem L _ g₀ g₁ hc W
 
   have hfib : ∀ (χ : L →ₐ[k] k) (x' : Sp (Polynomial k)),
       spMap (algebraMap L (Polynomial L)) (spMap (Polynomial.mapRingHom (χ : L →+* k)) x') = spMap χ.toRingHom pt := by
@@ -1014,7 +1012,7 @@ theorem projLine_map_const : ∀ (k : Type) [Field k] [IsAlgClosed k] (B : Over 
     rw [← Scheme.Hom.comp_apply, ← Spec.map_comp, ← CommRingCat.ofHom_comp]
     have : (Polynomial.mapRingHom (χ : L →+* k)).comp (algebraMap L (Polynomial L)) =
         (algebraMap k (Polynomial k)).comp (χ : L →+* k) := by
-      ext z; simp [Polynomial.algebraMap_apply]
+      ext z; simp
     rw [this, CommRingCat.ofHom_comp, Spec.map_comp, Scheme.Hom.comp_apply]
     congr 1
     exact hsub.elim _ _
@@ -1108,7 +1106,7 @@ open GlobalTheory.HTLat GlobalTheory.Published GlobalTheory.Published.AbVarRed I
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.projectiveLine_to_abelianVariety_const : ∀ (k : Type) [Field k] [IsAlgClosed k] (B : Over (Sp k)) [GrpObj B], IsAbelianScheme B → ∀ (f₀ f₁ : Sp (Polynomial k) ⟶ B.left), f₀ ≫ B.hom = spMap (algebraMap k (Polynomial k)) → f₁ ≫ B.hom = spMap (algebraMap k (Polynomial k)) → spMap (algebraMap (Polynomial k) (Localization.Away (Polynomial.X : Polynomial k))) ≫ f₀ = spMap (Polynomial.aeval (IsLocalization.Away.invSelf (Polynomial.X : Polynomial k) : Localization.Away (Polynomial.X : Polynomial k))).toRingHom ≫ f₁ → ∀ a b : Polynomial k →ₐ[k] k, spMap a.toRingHom ≫ f₀ = spMap b.toRingHom ≫ f₀ := by
-  first | exact @GlobalTheory.LineConst.projLine_map_const | exact GlobalTheory.LineConst.projLine_map_const | (intros; apply GlobalTheory.LineConst.projLine_map_const <;> assumption)
+  first | exact @GlobalTheory.LineConst.projLine_map_const
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ProjectiveLineToAbelianVarietyConstStatement =====
@@ -1211,12 +1209,12 @@ theorem extend_to_line : ∀ (k : Type) [Field k] [IsAlgClosed k] (B : Over (Sp 
       IsLocalization.ringHom_ext (Submonoid.powers (Polynomial.C a)) (RingHom.ext fun x => by
         simp [φ, IsLocalization.Away.lift, IsLocalization.lift_eq])
     refine ⟨spMap φ ≫ u, ?_, ?_⟩
-    · rw [Category.assoc, hu, ← spMap_comp']
+    · rw [Category.assoc, hu, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
       congr 1
       refine RingHom.ext fun x => ?_
       rw [RingHom.comp_apply, IsScalarTower.algebraMap_apply k (Polynomial k) (Localization.Away (Polynomial.C a))]
       simp [φ, IsLocalization.Away.lift, IsLocalization.lift_eq]
-    · rw [← Category.assoc, ← spMap_comp', hφ]
+    · rw [← Category.assoc, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, hφ]
       show Spec.map (CommRingCat.ofHom (RingHom.id _)) ≫ u = u
       rw [CommRingCat.ofHom_id, Spec.map_id, Category.id_comp]
   | succ n ih =>
@@ -1231,7 +1229,7 @@ theorem extend_to_line : ∀ (k : Type) [Field k] [IsAlgClosed k] (B : Over (Sp 
     obtain ⟨v', hv', ev'⟩ := _root_.GlobalTheory.AffineLineExt.extend k B P' c hP' u hu
     obtain ⟨v, hv, ev⟩ := ih P' hP' hn' v' hv'
     refine ⟨v, hv, ?_⟩
-    rw [← ev', ← ev, ← Category.assoc, ← spMap_comp']
+    rw [← ev', ← ev, ← Category.assoc, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
     congr 2
     exact RingHom.ext fun x => (IsLocalization.Away.awayToAwayRight_eq (S := Localization.Away P')
       (P := Localization.Away (P' * (Polynomial.X - Polynomial.C c))) P' (Polynomial.X - Polynomial.C c) x).symm
@@ -1243,7 +1241,7 @@ theorem maps_from_open_line_const : ∀ (k : Type) [Field k] [IsAlgClosed k] (B 
   obtain ⟨Q, hQ, σ, τ, h1, h2⟩ := _root_.GlobalTheory.localizationAway_inv_coordinate k P hP
   obtain ⟨f₀, hf₀, e₀⟩ := extend_to_line k B P hP u hu
   have hu' : (spMap σ.toRingHom ≫ u) ≫ B.hom = spMap (algebraMap k (Localization.Away Q)) := by
-    rw [Category.assoc, hu, ← spMap_comp']
+    rw [Category.assoc, hu, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
     congr 1
     ext x
     exact σ.commutes x
@@ -1258,27 +1256,27 @@ theorem maps_from_open_line_const : ∀ (k : Type) [Field k] [IsAlgClosed k] (B 
       spMap (Polynomial.aeval (IsLocalization.Away.invSelf (Polynomial.X : Polynomial k) :
         Localization.Away (Polynomial.X : Polynomial k))).toRingHom ≫ f₁ := by
     refine ext_of_isDominant_of_isSeparated B.hom ?_ (spMap (rhoMap k P)) ?_
-    · rw [Category.assoc, Category.assoc, hf₀, hf₁, ← spMap_comp', ← spMap_comp']
+    · rw [Category.assoc, Category.assoc, hf₀, hf₁, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
       congr 1
       refine RingHom.ext fun x => ?_
       simp only [RingHom.comp_apply, AlgHom.toRingHom_eq_coe, RingHom.coe_coe, AlgHom.commutes]
       exact (IsScalarTower.algebraMap_apply _ _ _ _).symm
     · calc spMap (rhoMap k P) ≫ spMap (algebraMap (Polynomial k) (Localization.Away (Polynomial.X : Polynomial k))) ≫ f₀
           = spMap ((rhoMap k P).comp (algebraMap (Polynomial k) (Localization.Away (Polynomial.X : Polynomial k)))) ≫ f₀ := by
-            rw [spMap_comp' (algebraMap (Polynomial k) (Localization.Away (Polynomial.X : Polynomial k))) (rhoMap k P),
+            rw [_root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp (algebraMap (Polynomial k) (Localization.Away (Polynomial.X : Polynomial k))) (rhoMap k P),
               Category.assoc]
         _ = spMap τ.toRingHom ≫ spMap σ.toRingHom ≫ u := by
-            rw [rhoMap_comp_algebraMap, ← h1, spMap_comp', Category.assoc, e₀]
+            rw [rhoMap_comp_algebraMap, ← h1, _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, Category.assoc, e₀]
             show spMap (τ.toRingHom.comp σ.toRingHom) ≫ u = _
-            rw [spMap_comp', Category.assoc]
+            rw [_root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, Category.assoc]
         _ = spMap (τ.toRingHom.comp (algebraMap (Polynomial k) (Localization.Away Q))) ≫ f₁ := by
-            rw [spMap_comp', Category.assoc, e₁]
+            rw [_root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, Category.assoc, e₁]
         _ = _ := by
             rw [h2, ← rhoMap_comp_aeval, spMap_comp', Category.assoc]
   have key := GlobalTheory.T.projectiveLine_to_abelianVariety_const k B hB f₀ f₁ hf₀ hf₁ hc
     (a.comp (IsScalarTower.toAlgHom k (Polynomial k) (Localization.Away P)))
     (b.comp (IsScalarTower.toAlgHom k (Polynomial k) (Localization.Away P)))
-  rw [← e₀, ← Category.assoc, ← Category.assoc, ← spMap_comp', ← spMap_comp']
+  rw [← e₀, ← Category.assoc, ← Category.assoc, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
   exact key
 
 end GlobalTheory.NoRatCurve
@@ -1299,7 +1297,7 @@ open GlobalTheory.HTLat GlobalTheory.Published GlobalTheory.Published.AbVarRed I
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.morphism_open_affine_line_abelianScheme_const : ∀ (k : Type) [Field k] [IsAlgClosed k] (B : Over (Sp k)) [GrpObj B], IsAbelianScheme B → ∀ (P : Polynomial k), P ≠ 0 → ∀ (u : Sp (Localization.Away P) ⟶ B.left) (a b : Localization.Away P →ₐ[k] k), u ≫ B.hom = spMap (algebraMap k (Localization.Away P)) → spMap a.toRingHom ≫ u = spMap b.toRingHom ≫ u := by
-  first | exact @GlobalTheory.NoRatCurve.maps_from_open_line_const | exact GlobalTheory.NoRatCurve.maps_from_open_line_const | (intros; apply GlobalTheory.NoRatCurve.maps_from_open_line_const <;> assumption)
+  first | exact @GlobalTheory.NoRatCurve.maps_from_open_line_const
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.MorphismOpenAffineLineAbelianSchemeConstStatement =====

@@ -285,20 +285,9 @@ open TensorProduct IsLocalRing Polynomial
 
 namespace Formalism.L2.FormalSeriesBounds.UpFBr.Pl
 
-section Complete
-
-variable {Z : Type} [CommRing Z] (π : Z) {A : Type} [CommRing A] [Algebra Z A] {N : ℕ}
-  (β : Module.Basis (Fin N) Z A)
-
-
-end Complete
-
 section Lift
 
 variable {A : Type} [CommRing A] (I : Ideal A)
-
-theorem lift_idem [IsAdicComplete I A] (ε : A) (h : ε * ε - ε ∈ I) : ∃ e : A, e * e = e ∧ e - ε ∈ I := by
-  first | exact Bl.SecondBlockLemmaI.goal1 .. | (apply Bl.SecondBlockLemmaI.goal1 <;> assumption) | (intros; apply Bl.SecondBlockLemmaI.goal1 <;> assumption)
 
 theorem idem_zero [IsHausdorff I A] {f : A} (h : f * f = f) (hf : f ∈ I) : f = 0 := by
   refine IsHausdorff.haus (I := I) ‹_› f fun n => ?_
@@ -398,7 +387,6 @@ theorem det_ne_zero_of_chars [DecidableEq ι] (χ : ι → A →+* L) (hχ : Fun
     _ = 0 := by
         first
         | exact h
-        | simpa [Matrix.mulVec, dotProduct] using h
 
 end Chars
 
@@ -439,7 +427,7 @@ theorem exists_e [Module.Free ℤ OE] [Module.Finite ℤ OE] (ε : OE) (hε1 : �
     refine ⟨(1 : ℤ_[l]) ⊗ₜ[ℤ] y, ?_⟩
     rw [Algebra.TensorProduct.tmul_mul_tmul, one_mul, ← TensorProduct.tmul_sub, hy, mul_comm, natCast_mul_tmul,
       mul_one, natCast_tmul]
-  obtain ⟨e, he, he'⟩ := lift_idem _ _ h
+  obtain ⟨e, he, he'⟩ := _root_.Bl.SecondBlockLemmaI.goal1 _ _ h
   rw [Ideal.mem_span_singleton'] at he'
   obtain ⟨z, hz⟩ := he'
   exact ⟨e, z, he, by rw [← hz, mul_comm]⟩
@@ -752,7 +740,6 @@ theorem placeX_of [Module.Free ℤ OE] [Module.Finite ℤ OE] (hl : ((l : ℕ) :
   haveI : Module.Free ℤ_[l] (LinearMap.range (LinearMap.mulLeft ℤ_[l] e)) := by
     first
     | infer_instance
-    | exact Module.free_of_finite_type_torsion_free'
   set n := Module.finrank ℤ_[l] (LinearMap.range (LinearMap.mulLeft ℤ_[l] e)) with hn
   let b := Module.finBasis ℤ_[l] (LinearMap.range (LinearMap.mulLeft ℤ_[l] e))
 
@@ -1411,7 +1398,7 @@ theorem eig_atS {Y : FBChart C V OE dd} (p : SelfData Y d I0) (hinj : Function.I
       simp_rw [h2, Finset.sum_mul]
       rw [Finset.sum_comm]
       simp_rw [_root_.mul_assoc, ← Finset.mul_sum, hw2]
-      simp only [mul_ite, mul_one, mul_zero]
+      simp only [mul_ite, mul_zero]
       rw [Finset.sum_eq_single k]
       · simp
       · intro m _ hm

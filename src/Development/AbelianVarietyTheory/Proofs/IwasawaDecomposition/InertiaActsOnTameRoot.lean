@@ -208,16 +208,13 @@ def primeOf {L : Type} [Field L] [NumberField L] [Algebra L Ω] (A : ValuationSu
     exact Valuation.map_add_lt _ ha hb
   zero_mem' := by simp
   smul_mem' c b hb := by
-    simp only [Set.mem_setOf_eq, smul_eq_mul, map_mul, Valuation.map_mul] at hb ⊢
+    simp only [Set.mem_setOf_eq, smul_eq_mul, map_mul] at hb ⊢
     calc A.valuation (algebraMap L Ω (c : L)) * A.valuation (algebraMap L Ω (b : L))
         ≤ 1 * A.valuation (algebraMap L Ω (b : L)) := mul_le_mul_left (val_int_le A c) _
       _ < 1 := by rw [one_mul]; exact hb
 
 theorem mem_primeOf {L : Type} [Field L] [NumberField L] [Algebra L Ω] {A : ValuationSubring Ω} {x : 𝓞 L} :
     x ∈ primeOf (L := L) A ↔ A.valuation (algebraMap L Ω (x : L)) < 1 := Iff.rfl
-
-theorem den : ∀ {L Ω : Type} [Field L] [NumberField L] [Field Ω] [Algebra L Ω] (A : ValuationSubring Ω) (x : L), A.valuation (algebraMap L Ω x) ≤ 1 → ∃ s t : 𝓞 L, A.valuation (algebraMap L Ω (s : L)) = 1 ∧ (s : L) * x = t :=
-  _root_.GlobalTheory.DenominatorExists.exists_denominator
 
 instance isPrime_primeOf {L : Type} [Field L] [NumberField L] [Algebra L Ω] (A : ValuationSubring Ω) :
     (primeOf (L := L) A).IsPrime where
@@ -232,7 +229,7 @@ instance isPrime_primeOf {L : Type} [Field L] [NumberField L] [Algebra L Ω] (A 
     simp only [not_or, not_lt] at hn
     have ha := le_antisymm (val_int_le A a) hn.1
     have hb := le_antisymm (val_int_le A b) hn.2
-    simp only [map_mul, Valuation.map_mul, ha, hb, one_mul] at hab
+    simp only [map_mul, ha, hb, one_mul] at hab
     exact lt_irrefl _ hab
 
 open ReciprocityTheory.DiscreteGroups.GlobalClassField in
@@ -252,7 +249,7 @@ theorem inert_val_of_le {E L : Type} [Field E] [NumberField E] [Field L] [Number
     {A : ValuationSubring Ω} {τ : L ≃ₐ[E] L} (hτ : τ ∈ inertiaGroup E L (primeOf (L := L) A)) (x : L)
     (hx : A.valuation (algebraMap L Ω x) ≤ 1) :
     A.valuation (algebraMap L Ω (τ x) - algebraMap L Ω x) < 1 := by
-  obtain ⟨s, t, hs1, e⟩ := den A x hx
+  obtain ⟨s, t, hs1, e⟩ := _root_.GlobalTheory.DenominatorExists.exists_denominator A x hx
   have hs := inert_val hτ s
   have ht := inert_val hτ t
   have hτs : A.valuation (algebraMap L Ω (τ s)) = 1 := by

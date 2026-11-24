@@ -78,6 +78,7 @@ import Mathlib.Algebra.Order.Star.Int
 import Mathlib.Algebra.Ring.IsFormallyReal
 import Mathlib.RingTheory.Valuation.LocalSubring
 import Mathlib.Tactic.Polynomial.Basic
+import Development.AbelianVarietyTheory.Proofs.FoundationProofs.GammaLeOfDvd
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsNumberFieldExpansionCoeffs, Development.AbelianVarietyTheory.Proofs.FoundationProofs.MemClosureOfFixed, Development.AbelianVarietyTheory.Proofs.FoundationProofs.NatDegreeMinpolyLe, Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsPrimitiveQuotientLevelPrimeTo, Development.AbelianVarietyTheory.Proofs.FoundationProofs.HeckeTranslateNormProductEqOfDvd, Development.AbelianVarietyTheory.Proofs.FoundationProofs.KroneckerCongruenceFrobeniusDiag, Development.AbelianVarietyTheory.Proofs.FoundationProofs.NqSubGalSmall, Development.AbelianVarietyTheory.Proofs.FoundationProofs.KroneckerCongruenceModularFunctionTowerLevel
@@ -101,7 +102,7 @@ theorem gal_alg (X : Tower Ω ε) (s : Ω ≃ₐ[ℚ] Ω) (c : Ω) :
   apply exp_inj X
   ext r
   rw [X.gal_exp, AlgHom.commutes, AlgHom.commutes, HahnSeries.algebraMap_apply', HahnSeries.algebraMap_apply']
-  by_cases h : r = 0 <;> simp [h, HahnSeries.coeff_single]
+  by_cases h : r = 0 <;> simp [h]
 
 theorem gal_j (X : Tower Ω ε) (s : Ω ≃ₐ[ℚ] Ω) : X.gal s X.jK = X.jK := by
   apply exp_inj X
@@ -511,7 +512,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FoundationProofs.NatDegreeMinpolyLe =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsPrimitiveQuotientLevelPrimeTo =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsPrimitiveQuotientLevelPrimeTo", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.DiagMod\npublic import Mathlib.RingTheory.Flat.FaithfullyFlat.Basic\npublic import Mathlib.RingTheory.Flat.TorsionFree\npublic import Mathlib.RingTheory.Henselian\npublic import Mathlib.RingTheory.RegularLocalRing.Defs\npublic import Mathlib.RingTheory.SimpleRing.Principal\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsFinsetSpanPrincipalCongruenceLevelFunction\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsNumberFieldExpansionCoeffs\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.JTranslatesLevelAndScalarMod\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.MemClosureOfFixed\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.NatDegreeMinpolyLe\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Int\nimport Mathlib.Algebra.Ring.IsFormallyReal\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.Valuation.LocalSubring\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Lemma\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsPrimitiveQuotientLevelPrimeTo", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.DiagMod\npublic import Mathlib.RingTheory.Flat.FaithfullyFlat.Basic\npublic import Mathlib.RingTheory.Flat.TorsionFree\npublic import Mathlib.RingTheory.Henselian\npublic import Mathlib.RingTheory.RegularLocalRing.Defs\npublic import Mathlib.RingTheory.SimpleRing.Principal\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsFinsetSpanPrincipalCongruenceLevelFunction\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsNumberFieldExpansionCoeffs\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.JTranslatesLevelAndScalarMod\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.MemClosureOfFixed\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.NatDegreeMinpolyLe\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Int\nimport Mathlib.Algebra.Ring.IsFormallyReal\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.Valuation.LocalSubring\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Lemma\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Proofs.FoundationProofs.GammaLeOfDvd\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -612,22 +613,6 @@ def rho (X : Tower Ω ε) (H : Subgroup SL(2, ℤ)) : H →* RingAut X.K where
     ext f
     show X.sl (ofSL ((g * h : H) : SL(2, ℤ))⁻¹) f = X.sl (ofSL (g : SL(2, ℤ))⁻¹) (X.sl (ofSL (h : SL(2, ℤ))⁻¹) f)
     rw [← X.sl_mul, ← map_mul, Subgroup.coe_mul, _root_.mul_inv_rev]
-
-open scoped MatrixGroups TensorProduct in
-open Matrix in
-variable {Ω : Type} [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] {ε : Ω →+* ℂ} in
-private lemma gamma_le_gamma_of_dvd' {n m : ℕ} (h : n ∣ m) :
-    CongruenceSubgroup.Gamma m ≤ CongruenceSubgroup.Gamma n := by
-  intro γ hγ
-  rw [CongruenceSubgroup.Gamma_mem] at hγ ⊢
-  have hcast : ∀ a : ℤ, (ZMod.castHom h (ZMod n)) (a : ZMod m) = (a : ZMod n) :=
-    fun a => map_intCast _ a
-  obtain ⟨h1, h2, h3, h4⟩ := hγ
-  refine ⟨?_, ?_, ?_, ?_⟩
-  · rw [← hcast, h1, map_one]
-  · rw [← hcast, h2, map_zero]
-  · rw [← hcast, h3, map_zero]
-  · rw [← hcast, h4, map_one]
 
 open scoped MatrixGroups TensorProduct in
 open Matrix in
@@ -798,7 +783,7 @@ private lemma exists_finset_lev_mem_closure_bddRing (X : _root_.GlobalTheory.KZ.
       (pow_dvd_pow_of_dvd (dvd_mul_left l _) k)
   have hT : ∀ t ∈ T, t ∈ B := by
     intro t ht
-    refine ⟨fun γ hγ => hTlev t ht γ (gamma_le_gamma_of_dvd' hN₀m hγ), 1, one_ne_zero, fun r => ?_⟩
+    refine ⟨fun γ hγ => hTlev t ht γ (_root_.GlobalTheory.FN.gamma_le_of_dvd hN₀m hγ), 1, one_ne_zero, fun r => ?_⟩
     rw [map_one, one_mul]
     obtain ⟨e, he⟩ := hDint t r
     have hqD : ¬ q ∣ D t := fun h => hqS (Nat.mem_primeFactors.2
@@ -819,7 +804,7 @@ private lemma exists_finset_lev_mem_closure_bddRing (X : _root_.GlobalTheory.KZ.
     have hg' : 0 < g.det ∧ g 1 0 = 0 ∧ g 0 0 ≠ 0 ∧ g 1 1 ≠ 0 := by
       simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hg
       have hm'' : (0 : ℤ) < m := by exact_mod_cast hm0
-      rcases hg with rfl | rfl | rfl <;> simp [Matrix.det_fin_two, hm', hm'', hm0, hm0.ne']
+      rcases hg with rfl | rfl | rfl <;> simp [Matrix.det_fin_two, hm0, hm0.ne']
     obtain ⟨hd, h10, h00, h11⟩ := hg'
     have hE : ∀ i j, _root_.GlobalTheory.KZ.ent (_root_.GlobalTheory.KZ.toGQ g) i j = g i j := fun i j => by
       unfold _root_.GlobalTheory.KZ.ent _root_.GlobalTheory.KZ.toGQ
@@ -870,7 +855,7 @@ private lemma exists_finset_lev_mem_closure_bddRing (X : _root_.GlobalTheory.KZ.
       (inv_mem (Subgroup.mem_subgroupOf.1 hδ))
   · intro δ hδ
     change X.sl (_root_.GlobalTheory.KZ.ofSL (δ : SL(2, ℤ))⁻¹) f = f
-    exact hf _ (gamma_le_gamma_of_dvd' hdvd (inv_mem (Subgroup.mem_subgroupOf.1 hδ)))
+    exact hf _ (_root_.GlobalTheory.FN.gamma_le_of_dvd hdvd (inv_mem (Subgroup.mem_subgroupOf.1 hδ)))
   · rintro ⟨g, hg⟩ hgY
     change X.sl (_root_.GlobalTheory.KZ.ofSL g⁻¹) f = f
     obtain ⟨h01, h10, hdiag⟩ := (_root_.GlobalTheory.KZ.ES.Scal.lev_and_scalar ε X m hm0).2 g⁻¹
@@ -968,7 +953,7 @@ theorem toGQ_mul_pos' (m m' : Matrix (Fin 2) (Fin 2) ℤ) (h : 0 < m.det) (h' : 
   rw [dite_eq_left hmm, dite_eq_left h, dite_eq_left h']
   apply Subtype.ext
   apply Units.ext
-  simp only [Matrix.GeneralLinearGroup.mkOfDetNeZero, Units.val_mul] at *
+  simp only [Matrix.GeneralLinearGroup.mkOfDetNeZero] at *
   exact Matrix.map_mul (f := Int.castRingHom ℚ)
 
 theorem sl_trans_of_lev {Ω : Type} [Field Ω] [Algebra ℚ Ω] {ε : Ω →+* ℂ} (X : Tower Ω ε) (M : ℕ) (f : X.K)
@@ -1132,7 +1117,7 @@ theorem nq_sub_gal_small : ∀ {Ω : Type} [Field Ω] [Algebra ℚ Ω] [IsAlgClo
     have h := X.exp_upper (toGQ !![1, ((j : ℤ) * M : ℤ); 0, (q : ℤ)]) (by rw [ent_toGQ _ (hdet j)]; simp) f (t * q)
     rw [ent_toGQ _ (hdet j), ent_toGQ _ (hdet j), ent_toGQ _ (hdet j)] at h
     simp at h
-    convert h using 2 <;> first | field_simp | (congr 1; field_simp)
+    convert h using 2 <;> first | field_simp
   have hw : ∀ (j : ℕ) (t : ℚ), c.coeff (t * q) ≠ 0 → ∃ h : eOm ε (t * j * M) ∈ V, ρ ⟨_, h⟩ = 1 := by
     intro j t ht
     have h1 : eOm ε (t * j * M) ^ q = 1 := by
@@ -1239,21 +1224,6 @@ theorem kc_Nq_ne_zero (X : Tower Ω ε) (M q : ℕ) {f : X.K} (hf : f ≠ 0) : N
   simp only [Nq]
   exact Finset.prod_ne_zero_iff.2 fun j _ => by simpa using hf
 
-theorem kc_gal_const (X : Tower Ω ε) (s : Ω ≃ₐ[ℚ] Ω) (c : Ω) :
-    X.gal s (algebraMap Ω X.K c) = algebraMap Ω X.K (s c) := by
-  apply (X.exp : X.K →+* HahnSeries ℚ Ω).injective
-  ext r
-  show (X.exp (X.gal s (algebraMap Ω X.K c))).coeff r = (X.exp (algebraMap Ω X.K (s c))).coeff r
-  rw [X.gal_exp, AlgHom.commutes, AlgHom.commutes]
-  have e : ∀ x : Ω, (algebraMap Ω (HahnSeries ℚ Ω) x).coeff r = if r = 0 then x else 0 := by
-    intro x
-    rw [HahnSeries.algebraMap_apply']
-    have : algebraMap Ω (PowerSeries Ω) x = PowerSeries.C x := rfl
-    rw [this, HahnSeries.ofPowerSeries_C, HahnSeries.C_apply, HahnSeries.coeff_single]
-    simp
-  rw [e, e]
-  split_ifs <;> simp
-
 theorem kc_div_sub_one {L : Type} [Field L] (W : ValuationSubring L) {x y : L} (hy : W.valuation y = 1)
     (h : W.valuation (x - y) < 1) : W.valuation (x / y - 1) < 1 := by
   have hy0 : y ≠ 0 := by rintro rfl; simp at hy
@@ -1282,7 +1252,7 @@ theorem kron_cong_level : ∀ {Ω : Type} [Field Ω] [Algebra ℚ Ω] [IsAlgClos
   have hC : algebraMap Ω X.K c ≠ 0 := (_root_.map_ne_zero _).2 hc
   have hgal : ∀ (t : Ω ≃ₐ[ℚ] Ω) (g : X.K), g ≠ 0 → X.gal t g ≠ 0 := fun t g hg => by simpa using hg
   have hE : ∀ t : Ω ≃ₐ[ℚ] Ω, X.gal t f = algebraMap Ω X.K (t c) * X.gal t a / X.gal t b := fun t => by
-    rw [eq_div_iff (hgal t b hb0), ← map_mul, hfb, map_mul, kc_gal_const]
+    rw [eq_div_iff (hgal t b hb0), ← map_mul, hfb, map_mul, _root_.GlobalTheory.KZ.ES.NF.gal_alg]
   have hC' : ∀ t : Ω ≃ₐ[ℚ] Ω, algebraMap Ω X.K (t c) ≠ 0 := fun t => (_root_.map_ne_zero _).2 (by simpa using hc)
   constructor
   · refine ⟨s c / c ^ q, ?_⟩

@@ -604,7 +604,7 @@ theorem ld_left (hD : IsDom k r z z' (Fin.last r) D) (hπ : IsCRepOn (UWset k r 
       ((B.comp (dOp π X)).comp (J g)) 0 := by
     have h2 := L.hasFDerivAt.comp_hasDerivAt (0 : ℝ) hd
     convert h2 using 1
-    all_goals first | rfl | (ext; rfl)
+    all_goals first | rfl
   exact key.deriv
 
 theorem lz_left (hD : IsDom k r z z' (Fin.last r) D) (hπ : IsCRepOn (UWset k r z) π)
@@ -1575,7 +1575,7 @@ theorem actual_operators_exist : Formalism.FourierDecayAlt.Q.ActualOpsExist :=
   actual_operators_from_parts operator_preserves_fusion_forms transfer_linear_local transfer_joint_smooth radial_operators
 
 theorem actual_adjointness : Formalism.FourierDecayAlt.Q.ActualAdjoint :=
-  actual_adjointness_from_hermitian hermitian_haar_invariance
+  actual_adjointness_from_hermitian _root_.qnHermHaar
 
 theorem actual_start : Formalism.FourierDecayAlt.Q.ActualStart :=
   actual_start_from_level_starts right_transfer_all_levels JacquetIntegral.detCore transfer_linear_local

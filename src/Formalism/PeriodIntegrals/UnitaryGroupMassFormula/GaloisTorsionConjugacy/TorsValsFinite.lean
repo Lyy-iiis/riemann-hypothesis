@@ -99,8 +99,7 @@ lemma ev_two (L : PeriodPair) {z : ℂ} (h2 : 2 * z ∉ L.lattice) :
     L.isClosed_lattice.isOpen_compl.preimage (continuous_const.mul continuous_id)
   exact ho.mem_nhds h2
 
-lemma ev_self (L : PeriodPair) {z : ℂ} (hz : z ∉ L.lattice) : ∀ᶠ z' in 𝓝 z, z' ∉ L.lattice :=
-  L.isClosed_lattice.isOpen_compl.mem_nhds hz
+alias ev_self := _root_.Formalism.L2.Th1.F.PDeriv.eventually_notMem
 
 lemma derivWeierstrassP_ne_zero (L : PeriodPair) {z : ℂ} (hz : z ∉ L.lattice) (h2 : 2 * z ∉ L.lattice) :
     L.derivWeierstrassP z ≠ 0 := by
@@ -282,19 +281,19 @@ variable {K K' : Type*} [Field K] [Field K']
 
 theorem addX_map (φ : K →+* K') (x y x₂ y₂ : K) :
     φ (addX x y x₂ y₂) = addX (φ x) (φ y) (φ x₂) (φ y₂) := by
-  simp only [addX, addY, dblX, dblY, map_div₀, map_sub, map_pow, map_mul, map_add (f := _), map_neg, map_ofNat]
+  simp only [addX, map_div₀, map_sub, map_pow, map_ofNat]
 
 theorem addY_map (φ : K →+* K') (x y x₂ y₂ : K) :
     φ (addY x y x₂ y₂) = addY (φ x) (φ y) (φ x₂) (φ y₂) := by
-  simp only [addX, addY, dblX, dblY, map_div₀, map_sub, map_pow, map_mul, map_add (f := _), map_neg, map_ofNat]
+  simp only [addX, addY, map_div₀, map_sub, map_pow, map_mul, map_ofNat]
 
 theorem dblX_map (φ : K →+* K') (x y g : K) :
     φ (dblX x y g) = dblX (φ x) (φ y) (φ g) := by
-  simp only [addX, addY, dblX, dblY, map_div₀, map_sub, map_pow, map_mul, map_add (f := _), map_neg, map_ofNat]
+  simp only [dblX, map_div₀, map_sub, map_pow, map_mul, map_ofNat]
 
 theorem dblY_map (φ : K →+* K') (x y g : K) :
     φ (dblY x y g) = dblY (φ x) (φ y) (φ g) := by
-  simp only [addX, addY, dblX, dblY, map_div₀, map_sub, map_pow, map_mul, map_add (f := _), map_neg, map_ofNat]
+  simp only [dblX, dblY, map_div₀, map_sub, map_pow, map_mul, map_ofNat]
 
 end maps
 

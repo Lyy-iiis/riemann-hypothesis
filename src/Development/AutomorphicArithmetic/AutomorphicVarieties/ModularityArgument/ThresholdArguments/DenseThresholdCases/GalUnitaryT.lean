@@ -137,7 +137,7 @@ private theorem tw_diag (X : ExtraV) {rc : IrrGL (k := w.adicCompletion E) → W
       (IsSubquotient.of_surjective φ.toIntertwiningMap φ.toLinearEquiv.surjective).trans hα.2.2⟩
   rw [cl, e, WD.lpTw_mk]
   refine WD.sound ⟨.refl _ _, fun g v => funext fun i => ?_, fun v => rfl⟩
-  simp [mul_zpow, mul_comm, mul_left_comm, mul_assoc]
+  simp [mul_zpow, mul_comm, mul_left_comm]
 
 private theorem val_tw (t : ℝ) (x : ℂˣ) :
     (((x⁻¹ * qPow w t : ℂˣ) : ℂ)) ^ (-1 : ℤ) = (x : ℂ) * ((normV w : ℕ) : ℂ) ^ (-(t : ℂ)) := by
@@ -555,7 +555,7 @@ private theorem rec_tw_diag {rc : IrrGL (k := w.adicCompletion E) → WD h} (H :
     rec_eq_diagV H (σ := ParLaws.toRep σ) hα
   rw [e, WD.lpTw_mk]
   refine WD.sound ⟨.refl _ _, fun g v => funext fun i => ?_, fun v => rfl⟩
-  simp [mul_zpow, mul_comm, mul_left_comm, mul_assoc]
+  simp [mul_zpow, mul_comm, mul_left_comm]
 private theorem val_inv_eq (n d k : ℕ) (a : ℂˣ) :
     (((a⁻¹ * qPow w ((ex n d k : ℝ) / 2) : ℂˣ) : ℂ)) ^ (-1 : ℤ) =
       ((((normV w : ℕ) : ℝ) ^ (((n : ℝ) - 1) / 2) : ℝ) : ℂ) *
@@ -881,7 +881,7 @@ theorem UpperTheory.V.Z.Win.Gu.spehT_alt :
   intro H _ E Ω _ _ _ _ _ _ a d P w ρ σ _ _ hP hu hS A h rc hrc
   have L := H.litN.loc
   have hd : ∑ _ : Fin d, a = d * a := by simp
-  exact rec_spehQuotT hrc (_root_.PositivityTheory.Gud.generic_unitary_dual_GL trivial L.sq L.gen L.multi L.cos) L.cos a d _ hd ρ σ hu
+  exact rec_spehQuotT hrc _root_.PositivityTheory.Gud.Fin.genericUnitaryDualGL_holds L.cos a d _ hd ρ σ hu
     (GlobalTheory.CuspRep.Generic.isGeneric_of_isLocComp E a P w ρ hP)
     (GlobalTheory.DiscreteSpectrumCM.isSpehQuot_of_isSpeh hd ρ σ hS)
 end
@@ -1026,7 +1026,7 @@ theorem UpperTheory.V.Z.Win.Gu.sumTwoG_of_printsH_gdLaws_sumAway_sumHTAt :
         rfl
       have p3 := isPstAt_sum Bw T p1 p2
       rw [e]
-      exact ⟨p3, by rw [GlobalTheory.T.weilDeligneParamAboveL_directSum_potSemistable l _ _ ⟨T⟩ ι E Ω A w O Bw h hj a b _ _ p1 p2 p3, e1, e2]⟩
+      exact ⟨p3, by rw [_root_.GlobalTheory.Pst.SumParam.wdAt_sumRep l _ _ ⟨T⟩ ι E Ω A w O Bw h hj a b _ _ p1 p2 p3, e1, e2]⟩
 end
 end -- clump:auto
 end -- clump:auto

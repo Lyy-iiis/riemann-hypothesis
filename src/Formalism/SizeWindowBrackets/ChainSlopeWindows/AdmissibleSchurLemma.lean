@@ -280,14 +280,9 @@ lemma pm_sum_cover (f : ℕ → ℝ) (hf : ∀ l, 0 ≤ f l) (M N : ℕ) (hM : 2
     sum_le_sum_of_subset_of_nonneg hsub (fun i _ _ => hf i)
   linarith
 
-private theorem log_le_log_of_pos_of_le {a b : ℝ} (ha : 0 < a) (h : a ≤ b) : Real.log a ≤ Real.log b :=
-  Real.log_le_log ha h
-
 private theorem div_le_div_of_mul_le_mul_of_pos' {a b c d : ℝ} (hb : 0 < b) (hd : 0 < d)
     (h : a * d ≤ c * b) : a / b ≤ c / d := by
   first
-  | exact (div_le_div_iff_of_pos hb hd).mpr h
-  | exact (div_le_div_iff hb hd).mpr h
   | exact (div_le_div_iff₀ hb hd).mpr h
 
 lemma pm_key_Y (m x y Y : ℝ) (hx : 1 ≤ x) (hy : 1 ≤ y) (h1 : x * y / 2 ≤ m) (hmY : m ≤ Y)
@@ -296,7 +291,7 @@ lemma pm_key_Y (m x y Y : ℝ) (hx : 1 ≤ x) (hy : 1 ≤ y) (h1 : x * y / 2 ≤
   have hy0 : 0 < y := by linarith
   have hm0 : 0 < m := by linarith
   have hlm : 0 ≤ Real.log m := Real.log_nonneg hm1
-  have hlmY : Real.log m ≤ Real.log Y := log_le_log_of_pos_of_le hm0 hmY
+  have hlmY : Real.log m ≤ Real.log Y := _root_.Real.log_le_log hm0 hmY
   have hlY : 0 ≤ Real.log Y := le_trans hlm hlmY
   rw [show Real.log Y * (2 / y) * (1 / x) = 2 * Real.log Y / (x * y) by ring]
   apply div_le_div_of_mul_le_mul_of_pos' hm0 (mul_pos hx0 hy0)
@@ -341,8 +336,6 @@ lemma pm_resid (hI : OrdersIff) (e J l : ℕ) (hl : Nat.Coprime l (4 * 2 ^ e)) (
   rw [hoi]
   exact pow_dvd_pow 2 hij
 
-private theorem log_natCast_nonneg_real (n : ℕ) : 0 ≤ Real.log n := Real.log_natCast_nonneg n
-
 private theorem sum_range_inv_succ_le_one_add_log (N : ℕ) :
     ∑ k ∈ range N, 1 / ((k : ℝ) + 1) ≤ 1 + Real.log N := by
   induction N with
@@ -374,7 +367,7 @@ lemma pm_y_sum (M N : ℕ) (hM : 2 ≤ M) (Y : ℝ) (hY : 1 ≤ Y) (hNY : (N : �
     intro l
     simp only [hfdef]
     split_ifs
-    · exact div_nonneg (log_natCast_nonneg_real l) (Nat.cast_nonneg l)
+    · exact div_nonneg (_root_.Real.log_natCast_nonneg l) (Nat.cast_nonneg l)
     · exact le_rfl
   have hsf : ∑ l ∈ s, Real.log l / (l : ℝ) = ∑ l ∈ s, f l := by
     apply sum_congr rfl
@@ -401,7 +394,7 @@ lemma pm_y_sum (M N : ℕ) (hM : 2 ≤ M) (Y : ℝ) (hY : 1 ≤ Y) (hNY : (N : �
       rcases Nat.eq_zero_or_pos N with h0 | h0
       · rw [h0, Nat.cast_zero, Real.log_zero]; linarith
       · have : (0 : ℝ) < N := by exact_mod_cast h0
-        have := log_le_log_of_pos_of_le this hNY
+        have := _root_.Real.log_le_log this hNY
         linarith
     calc Real.log Y * (2 / M) * ∑ k ∈ range N, 1 / ((k : ℝ) + 1)
         ≤ Real.log Y * (2 / M) * (1 + Real.log Y) :=
@@ -885,6 +878,9 @@ theorem band_total : BandTotal := by
   have := Finset.sum_le_card_nsmul (Finset.range I) _ _ hterm
   rwa [Finset.card_range, nsmul_eq_mul] at this
 
+/-- Bound the contribution from bases above `X''`. Only first powers in
+`(X'', X'' * (1 + th))` contribute, each at most `w'' * th` before the logarithmic
+weight. The interval count `X'' * th + 1` gives the two terms in the bound. -/
 theorem high_bucket_bound : HighBucket := by
   intro a at_ w'' X'' th s I w hw'' hth0 hth1 hX ha hat0 hat hs hI hw
   simp only [askAt]
@@ -902,6 +898,22 @@ theorem high_bucket_bound : HighBucket := by
       rw [hbp]; split_ifs
       · positivity
       · exact le_rfl
+    have higher_power_vanishes : ∀ i ∈ I p, 2 ≤ i →
+        max (at_ / (p : ℝ) ^ i - w p i) 0 = 0 := by
+      intro i hiI hi2
+      apply le_antisymm
+      · apply max_le _ le_rfl
+        have hpow : (p : ℝ) ^ 2 ≤ (p : ℝ) ^ i := pow_le_pow_right₀ (by linarith) hi2
+        have hp2 : 2 * X'' ≤ (p : ℝ) ^ 2 := by nlinarith
+        have hpi0 : (0 : ℝ) < (p : ℝ) ^ i := by positivity
+        have h2 : at_ / (p : ℝ) ^ i ≤ w'' := by
+          rw [div_le_iff₀ hpi0]; rw [← ha] at hat
+          have : at_ ≤ w'' * (2 * X'') := by nlinarith
+          have h5 : w'' * (2 * X'') ≤ w'' * (p : ℝ) ^ i :=
+            mul_le_mul_of_nonneg_left (hp2.trans hpow) hw''.le
+          linarith
+        linarith [hw p hp i hiI]
+      · exact le_max_right _ _
     have hi : ∀ i ∈ I p, max (at_ / (p : ℝ) ^ i - w p i) 0 ≤ if i = 1 then bp else 0 := by
       intro i hiI
       have hi1 := hI p hp i hiI
@@ -920,19 +932,7 @@ theorem high_bucket_bound : HighBucket := by
             rw [div_le_iff₀ hp0]; rw [← ha] at hat
             nlinarith
           linarith [hw p hp 1 hiI]
-      · rw [if_neg h1]
-        apply max_le _ le_rfl
-        have hi2 : 2 ≤ i := by omega
-        have hpow : (p : ℝ) ^ 2 ≤ (p : ℝ) ^ i := pow_le_pow_right₀ (by linarith) hi2
-        have hp2 : 2 * X'' ≤ (p : ℝ) ^ 2 := by nlinarith
-        have hpi0 : (0 : ℝ) < (p : ℝ) ^ i := by positivity
-        have h2 : at_ / (p : ℝ) ^ i ≤ w'' := by
-          rw [div_le_iff₀ hpi0]; rw [← ha] at hat
-          have : at_ ≤ w'' * (2 * X'') := by nlinarith
-          have h5 : w'' * (2 * X'') ≤ w'' * (p : ℝ) ^ i :=
-            mul_le_mul_of_nonneg_left (hp2.trans hpow) hw''.le
-          linarith
-        linarith [hw p hp i hiI]
+      · rw [if_neg h1, higher_power_vanishes i hiI (by omega)]
     have hinner : ∑ i ∈ I p, max (at_ / (p : ℝ) ^ i - w p i) 0 ≤ bp := by
       refine (Finset.sum_le_sum hi).trans ?_
       rw [Finset.sum_ite_eq']
@@ -950,6 +950,7 @@ theorem high_bucket_bound : HighBucket := by
     · simp
   refine (Finset.sum_le_sum hper).trans ?_
   rw [← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul]
+  -- Even an interval of length less than one can contain an integer.
   have hcard := interval_count X'' (X'' * (1 + th))
     (s.filter (fun p : ℕ => (p : ℝ) < X'' * (1 + th))) (by nlinarith) (by
       intro n hn

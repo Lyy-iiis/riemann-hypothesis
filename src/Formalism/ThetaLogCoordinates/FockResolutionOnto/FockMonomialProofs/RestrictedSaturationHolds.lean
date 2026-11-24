@@ -74,6 +74,7 @@ import Mathlib.RingTheory.Etale.Weakly
 import Mathlib.RingTheory.Finiteness.Lattice
 import Mathlib.RingTheory.TotallySplit
 import Mathlib.Tactic.Linter.HaveILetI
+import Formalism.ThetaLogCoordinates.TraceIsometryWeights.SchurTraceProofs.LatticeBasisPolynomial
 import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.FiltrationBotHolds
 import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.FirstWeightLeOfSupport
 import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.ResInto
@@ -276,11 +277,11 @@ theorem eulL_X (i : Fin (K + 1)) (d : Fin r) :
     rw [Finset.sum_eq_single d]
     · simp [pderiv_X]
     · intro b _ hb
-      simp [pderiv_X, Pi.single_apply, Ne.symm hb]
+      simp [pderiv_X, Ne.symm hb]
     · simp
   · apply Finset.sum_eq_zero
     intro c _
-    simp [pderiv_X, Pi.single_apply, h]
+    simp [pderiv_X, h]
 
 private theorem glAct_X_eq_ite (b : Fin r) (i : Fin (K + 1)) (d : Fin r) :
     glAct p LL K a b (X (i, d)) =
@@ -289,9 +290,9 @@ private theorem glAct_X_eq_ite (b : Fin r) (i : Fin (K + 1)) (d : Fin r) :
       else 0 := by
   unfold glAct
   rw [LinearMap.sum_apply, Finset.sum_eq_single i]
-  · split_ifs <;> simp_all [pderiv_X, Pi.single_apply]
+  · split_ifs <;> simp_all [pderiv_X]
   · intro j _ hj
-    split_ifs <;> simp [pderiv_X, Pi.single_apply, Ne.symm hj]
+    split_ifs <;> simp [pderiv_X, Ne.symm hj]
   · simp
 
 theorem DDop_last (d : Fin r) :
@@ -307,15 +308,15 @@ theorem DDop_vec (i : Fin (K + 1)) (hi : i ≠ Fin.last K) (hv : LL.vec i = true
     DDop p LL Cs a (X (i, d)) = if d ∈ Cs then X (Fin.last K, d) * X (i, a) else 0 := by
   rw [DDop_apply, eulL_X, if_neg hi, mul_zero, zero_add]
   simp only [glAct_X_eq_ite, if_pos (Fin.val_lt_last hi), hv, if_true]
-  simp [mul_ite, Finset.sum_ite_eq, Finset.sum_ite_eq']
+  simp [mul_ite, Finset.sum_ite_eq']
 
 theorem DDop_cov (i : Fin (K + 1)) (hi : i ≠ Fin.last K) (hv : LL.vec i = false) (d : Fin r) :
     DDop p LL Cs a (X (i, d)) = if a = d then -∑ b ∈ Cs, X (Fin.last K, b) * X (i, b) else 0 := by
   rw [DDop_apply, eulL_X, if_neg hi, mul_zero, zero_add]
   simp only [glAct_X_eq_ite, if_pos (Fin.val_lt_last hi), hv, Bool.false_eq_true, if_false]
   split_ifs with h
-  · simp [h, Finset.sum_neg_distrib]
-  · simp [h]
+  · simp [Finset.sum_neg_distrib]
+  · simp
 
 theorem DDop_pair (ha : a ∈ Cs) (i : Fin (K + 1)) (hi : i ≠ Fin.last K) (hv : LL.vec i = false) :
     DDop p LL Cs a (∑ b ∈ Cs, X (Fin.last K, b) * X (i, b)) = 0 := by
@@ -434,7 +435,6 @@ theorem udiv_map (ha : a ∈ Cs) (P : MvPolynomial (Fin (K + 1) × Fin r) ℤ_[p
     ((k.factorial : ℚ_[p]))⁻¹ • ((Uop p LL c Cs a) ^ k) (map (algebraMap ℤ_[p] ℚ_[p]) P) ∈
       IntPol p (Fin (K + 1) × Fin r)) P ?_ ?_ ?_
   · intro z c k
-    beta_reduce
     rw [map_C]
     have hC : (C (algebraMap ℤ_[p] ℚ_[p] z) : MvPolynomial (Fin (K + 1) × Fin r) ℚ_[p]) =
         (algebraMap ℤ_[p] ℚ_[p] z) • (1 : MvPolynomial (Fin (K + 1) × Fin r) ℚ_[p]) := by
@@ -449,11 +449,9 @@ theorem udiv_map (ha : a ∈ Cs) (P : MvPolynomial (Fin (K + 1) × Fin r) ℤ_[p
     rw [hC, map_smul, smul_comm, hT, algebraMap_smul, Int.cast_smul_eq_zsmul]
     exact Submodule.smul_mem _ z (zsmul_mem (FrozenVariableLemmas.intPol_pow p (hX _) k) _)
   · intro P Q hP hQ c k
-    beta_reduce
     rw [map_add (f := _), map_add (f := _), smul_add]
     exact add_mem (hP c k) (hQ c k)
   · intro P n hP c k
-    beta_reduce
     obtain ⟨j, d⟩ := n
     rw [map_mul, map_X, mul_comm]
     have hF0 : map (algebraMap ℤ_[p] ℚ_[p]) P ∈ IntPol p (Fin (K + 1) × Fin r) := by
@@ -521,7 +519,7 @@ end -- clump:auto
 -- ===== end clump member: Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.DerivativeDividedIntegral =====
 
 -- ===== clump member: Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.DerivativeKillsDegreeZero =====
--- clump-header: {"m": "Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.DerivativeKillsDegreeZero", "h": "module\n\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.LatDefs\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.InitPartZeroXMul\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.StatementG\npublic import Formalism.ThetaLogCoordinates.TraceIsometryWeights.HasLatBasis\npublic import Formalism.PolynomialDimension.MultinomialDepth.MonoCount\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.DerivativeKeepsSpaceHolds\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.OmegaInjectiveHolds\nimport Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.RaisingKeepsEarlyLetters\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.Vanish\npublic import Formalism.ThetaLogCoordinates.TraceIsometryWeights.FinalP\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Int\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Finiteness.Lattice\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\npublic import Formalism.MahlerMeasure.MahlerMeasureProofs.RemoveS\npublic import Formalism.PolynomialDimension.MultinomialDepth.PartnerM\n\n"}
+-- clump-header: {"m": "Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.DerivativeKillsDegreeZero", "h": "module\n\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.LatDefs\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.InitPartZeroXMul\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.StatementG\npublic import Formalism.ThetaLogCoordinates.TraceIsometryWeights.HasLatBasis\npublic import Formalism.PolynomialDimension.MultinomialDepth.MonoCount\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.DerivativeKeepsSpaceHolds\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.OmegaInjectiveHolds\nimport Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.RaisingKeepsEarlyLetters\npublic import Formalism.ThetaLogCoordinates.FockResolutionOnto.FockMonomialProofs.Vanish\npublic import Formalism.ThetaLogCoordinates.TraceIsometryWeights.FinalP\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Int\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Finiteness.Lattice\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\npublic import Formalism.MahlerMeasure.MahlerMeasureProofs.RemoveS\npublic import Formalism.PolynomialDimension.MultinomialDepth.PartnerM\nimport Formalism.ThetaLogCoordinates.TraceIsometryWeights.SchurTraceProofs.LatticeBasisPolynomial\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -634,7 +632,6 @@ theorem derivative_kills_degree_zero (a : Fin (s + 1)) : ∀ x ∈ XSp p (setLas
     exact (Finsupp.mem_support_iff.1 hda) (Finset.sum_eq_zero_iff.1 h2 a (Finset.mem_univ _))
   first
   | exact MvPolynomial.pderiv_eq_zero_of_notMem_vars hnv
-  | exact MvPolynomial.pderiv_eq_zero_of_not_mem_vars hnv
 
 theorem euler_last_letter_eigen (o : ℕ) : ∀ x ∈ XSp p (setLast LL o) J M (Fin.last s), eulW p K (s + 1) x = ((o : ℕ) : ℚ_[p]) • x := by
   intro x hx
@@ -888,7 +885,7 @@ theorem latData (hU : UDivInt) (hD : DWDivInt) (hs : 1 ≤ s) (hv : LL.vec (Fin.
       · rw [EX_succ_zero]
         exact hU p K (s + 1) LL c _ (Fin.castSucc i) k (castSucc_mem_erase i) x hx'
       · rw [EX_succ_succ]
-        refine Formalism.InvariantFactorPaths.PW.Top.divInt p (K + 1) (s + 1) LL (K + 1) _ _ (fun h => hab ?_) k x hx'
+        refine _root_.Formalism.InvariantFactorPaths.PW.divided_integral_holds p (K + 1) (s + 1) LL (K + 1) _ _ (fun h => hab ?_) k x hx'
         rw [Fin.castSucc_injective s h]
   ·
     intro μ x hx
@@ -903,7 +900,7 @@ theorem latData (hU : UDivInt) (hD : DWDivInt) (hs : 1 ≤ s) (hv : LL.vec (Fin.
   ·
     intro U hUW
     have := wtot_fd (p := p) LL J M c hs hv k0 hk0 hc
-    exact Formalism.InvariantFactorPaths.PW.Top.latBasisPol p _ U (Submodule.finiteDimensional_of_le hUW)
+    exact _root_.Formalism.InvariantFactorPaths.PW.lattice_basis_polynomial p _ U (Submodule.finiteDimensional_of_le hUW)
 
 theorem wtot_le_iso (hs : 1 ≤ s) (hv : LL.vec (Fin.last K) = true) (k0 : Fin q)
     (hk0 : K + 1 ≤ J k0) (hc : M k0 = ((c : ℤ) : WithTop ℤ)) (hmin : ∀ k, K + 1 ≤ J k → M k0 ≤ M k)
@@ -1219,7 +1216,7 @@ private theorem pderiv_last_eq_zero_of_mem_pol_setLast_zero (LL : Letters (K + 1
         (fun _ _ => Nat.zero_le _) (Finset.mem_univ d)
     rw [hm] at hle
     simp [setLast] at hle
-  simp [h0, AddMonoidAlgebra.coeff]
+  simp [h0]
 
 private theorem mem_yCond_succ_of_mem_pol_setLast_zero (LL : Letters (K + 1)) (hv : LL.vec (Fin.last K) = true) (Mt : WithTop ℤ)
     (y : MvPolynomial (Fin (K + 1) × Fin r) ℚ_[p]) (hy : y ∈ YCond p LL K Mt)
@@ -1929,7 +1926,7 @@ theorem sat_main {s : ℕ} (LL : Letters (K + 1)) {q : ℕ} (J : Fin q → ℕ) 
           Finsupp.notMem_support_iff.mp hla]
     have h1 := hQ3 x hxi hxW
     rw [hQx, hD] at h1
-    have h2 := Formalism.InvariantFactorPaths.PW.Top.weylInt p _ (s + 1) G _ _ (4 * LL.total) L la _
+    have h2 := _root_.Formalism.InvariantFactorPaths.PW.weyl_integral_holds p _ (s + 1) G _ _ (4 * LL.total) L la _
       (Submodule.smul_mem _ _ (hf la)) h1
     rw [hD] at h2
     refine span_le_restrictedLattice raising_divided_integral derivative_divided_integral LL hv J M c k0 hk0 hc hmin G hE _ ?_ h2

@@ -272,7 +272,7 @@ theorem main : Formalism.FG.CoeffBoundV.{u, v, w} := by
 
 end Formalism.FG.CoefficientBoundsFormalGroupWitt
 
-theorem Formalism.FG.coeff_bound_vector : Formalism.FG.CoeffBoundV.{u, v, w} := Formalism.FG.CoefficientBoundsFormalGroupWitt.main.{u, v, w}
+alias Formalism.FG.coeff_bound_vector := _root_.Formalism.FG.CoefficientBoundsFormalGroupWitt.main
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -296,11 +296,7 @@ variable {K : Type u} [NormedField K] [IsUltrametricDist K]
 def Bd {τ : Type w} (C : ℝ) (F : MvPowerSeries τ K) : Prop :=
   ∀ d, ‖MvPowerSeries.coeff d F‖ ≤ C
 
-lemma norm_add_le_of {a b : K} {C : ℝ} (ha : ‖a‖ ≤ C) (hb : ‖b‖ ≤ C) : ‖a + b‖ ≤ C :=
-  (IsUltrametricDist.norm_add_le_max a b).trans (max_le ha hb)
-
-lemma norm_sub_le_of {a b : K} {C : ℝ} (ha : ‖a‖ ≤ C) (hb : ‖b‖ ≤ C) : ‖a - b‖ ≤ C := by
-  rw [sub_eq_add_neg]; exact norm_add_le_of ha (by simpa using hb)
+alias norm_sub_le_of := _root_.Formalism.LT.InverseIntegralClassesKeyFacts.norm_sub_le_of
 
 lemma norm_finsum_le {α : Type v} {g : α → K} {C : ℝ} (hC : 0 ≤ C) (hg : ∀ n, ‖g n‖ ≤ C) :
     ‖∑ᶠ n, g n‖ ≤ C := by
@@ -315,7 +311,7 @@ lemma bd_prod_sub {τ : Type w} {ι : Type v} {C : ℝ} (hC : 0 ≤ C) (X Y : ι
     (s : Finset ι) (hX : ∀ i ∈ s, IntegralMv (X i)) (hY : ∀ i ∈ s, IntegralMv (Y i))
     (hXY : ∀ i ∈ s, Bd C (X i - Y i)) :
     Bd C (∏ i ∈ s, X i - ∏ i ∈ s, Y i) := by
-  first | exact Bl.ProductIntegralBounds.goal1 .. | (apply Bl.ProductIntegralBounds.goal1 <;> assumption) | (intros; apply Bl.ProductIntegralBounds.goal1 <;> assumption) | (apply @Bl.ProductIntegralBounds.goal1 <;> assumption) | (intros; apply @Bl.ProductIntegralBounds.goal1 <;> assumption) | (apply @Bl.ProductIntegralBounds.goal1 <;> first | assumption | infer_instance) | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X Y s hX hY hXY | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X Y s hX hY | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X Y s hX | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X Y s | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X Y | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› | exact @Bl.ProductIntegralBounds.goal1 K ‹_› | exact @Bl.ProductIntegralBounds.goal1 K
+  first | (apply Bl.ProductIntegralBounds.goal1 <;> assumption) | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X Y s hX hY hXY | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X Y s hX hY | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X Y s hX | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X Y s | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X Y | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC X | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C hC | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι C | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ ι | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› τ | exact @Bl.ProductIntegralBounds.goal1 K ‹_› ‹_› | exact @Bl.ProductIntegralBounds.goal1 K ‹_› | exact @Bl.ProductIntegralBounds.goal1 K
 
 lemma bd_subst_sub {ι : Type v} {τ : Type w} (φ : MvPowerSeries ι K)
     (A B : ι → MvPowerSeries τ K) (hA : MvPowerSeries.HasSubst A) (hB : MvPowerSeries.HasSubst B)
@@ -448,7 +444,7 @@ theorem main (hC : Formalism.FG.CoeffBoundV.{u, v, v}) : Formalism.FG.FunEqSubst
   intro d
 
   rw [map_add (f := _), MvPowerSeries.coeff_smul, map_sum]
-  refine norm_add_le_of (hgI d) ?_
+  refine _root_.Formalism.LT.InverseIntegralClassesKeyFacts.norm_add_le_of (hgI d) ?_
   rw [norm_mul, norm_inv]
   have hsum : ‖∑ k, MvPowerSeries.coeff d (M j k • (MvPowerSeries.subst αq
       (MvPowerSeries.map σ (f k)) - MvPowerSeries.subst β (MvPowerSeries.map σ (f k))))‖ ≤
@@ -463,12 +459,8 @@ theorem main (hC : Formalism.FG.CoeffBoundV.{u, v, v}) : Formalism.FG.FunEqSubst
 
 end Formalism.FG.KeyVAux
 
-theorem Formalism.FG.FunEqSubstV_of (hC : Formalism.FG.CoeffBoundV.{u, v, v}) :
-    Formalism.FG.FunEqSubstV.{u, v, w} :=
-  Formalism.FG.KeyVAux.main hC
-
 theorem Formalism.FG.functional_equation_subst_vector : Formalism.FG.FunEqSubstV.{u, v, w} :=
-  Formalism.FG.FunEqSubstV_of Formalism.FG.coeff_bound_vector.{u, v, v}
+  _root_.Formalism.FG.KeyVAux.main Formalism.FG.coeff_bound_vector.{u, v, v}
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -528,13 +520,8 @@ end Formalism.FG.FunctionalEquationHom
 
 namespace Formalism.FG
 
-theorem FunEqHomV_of (hSol : Formalism.FG.SolveExistsV.{u, v, w}) (hInv : Formalism.FG.InvIntegralV.{u, v, w})
-    (hLow : Formalism.FG.LowCoeffV.{u, v, w}) (hKey : Formalism.FG.FunEqSubstV.{u, v, w}) :
-    Formalism.FG.FunEqHomV.{u, v, w} :=
-  FunctionalEquationHom.main hSol hInv hLow hKey
-
 theorem functional_equation_hom_vector : Formalism.FG.FunEqHomV.{u, v, w} :=
-  FunEqHomV_of solve_exists_vector inverse_integral_vector low_coeff_vector functional_equation_subst_vector
+  _root_.Formalism.FG.FunctionalEquationHom.main solve_exists_vector inverse_integral_vector low_coeff_vector functional_equation_subst_vector
 
 end Formalism.FG
 end -- clump:auto
@@ -548,10 +535,6 @@ section -- clump:auto
 @[expose] public section
 
 namespace Formalism.FG
-
-universe u v w
-
-theorem funEqHomV : FunEqHomV.{u, v, w} := functional_equation_hom_vector
 
 end Formalism.FG
 end -- clump:auto

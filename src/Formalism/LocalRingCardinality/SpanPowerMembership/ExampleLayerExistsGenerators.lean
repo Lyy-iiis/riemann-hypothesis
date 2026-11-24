@@ -1336,7 +1336,6 @@ def sqq : (hostRaw φ hinj hH he h).E := aE ζ a b
 
 theorem sqq_sq : sqq φ hinj hH he h ^ 2 = -(q : (hostRaw φ hinj hH he h).E) := by
   apply Subtype.ext
-  push_cast
   exact h.2.1
 
 include hH h in
@@ -1506,7 +1505,7 @@ instance instFinitePsi (φ : Formalism.HC.Frame) : Finite ↥(φ.Psi) := inferIn
 
 instance instFintypePsi (φ : Formalism.HC.Frame) : Fintype ↥(φ.Psi) := Fintype.ofFinite _
 
-theorem natCard_Psi (φ : Formalism.HC.Frame) : Nat.card ↥(φ.Psi) = 2 * φ.ord := φ.natCard_Psi
+alias natCard_Psi := _root_.Formalism.HC.Frame.natCard_Psi
 
 theorem card_Psi (φ : Formalism.HC.Frame) : Fintype.card ↥(φ.Psi) = 2 * φ.ord := by
   rw [← Nat.card_eq_fintype_card]

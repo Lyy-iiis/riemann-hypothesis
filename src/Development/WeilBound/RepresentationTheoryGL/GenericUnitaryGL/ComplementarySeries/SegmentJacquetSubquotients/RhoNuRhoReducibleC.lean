@@ -362,9 +362,9 @@ theorem modulus_scalar_block (d : ℕ) (t : kˣ) :
   have c3 : (Finset.univ.filter (fun b : Fin 2 => b < 0)).card = 0 := by decide
   have c4 : (Finset.univ.filter (fun b : Fin 2 => b < 1)).card = 1 := by decide
   have e0 : modExp (fun _ : Fin 2 => Fin d) 0 = d := by
-    simp [modExp, c0, c3]
+    simp [modExp, c0]
   have e1 : modExp (fun _ : Fin 2 => Fin d) 1 = -d := by
-    simp [modExp, c1, c2, c4]
+    simp [modExp, c1, c2]
   have hn1 : nabs k 1 = 1 := (nabs_eq_one_iff (1 : kˣ)).2 (by simp)
   have hpow : ∀ n : ℕ, nabs k (t ^ n) = nabs k t ^ n := by
     intro n
@@ -378,7 +378,7 @@ theorem modulus_scalar_block (d : ℕ) (t : kˣ) :
     rw [this, hpow]
   have h1 : nabs k (Matrix.GeneralLinearGroup.det (1 : GL (Fin d) k)) = 1 := by
     rw [map_one]; exact hn1
-  simp only [modulus, Fin.prod_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, e0, e1, hdet, h1]
+  simp only [modulus, Fin.prod_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, e0, e1, hdet, h1]
   rw [_root_.one_zpow, mul_one, zpow_natCast, ← pow_mul]
 
 
@@ -1667,10 +1667,7 @@ theorem nontriv {G V : Type} [Group G] [AddCommGroup V] [Module ℂ V] (ρ : Rep
   have hne : (⊥ : Subrepresentation ρ) ≠ ⊤ := bot_ne_top
   exact hne (Subrepresentation.toSubmodule_injective (Subsingleton.elim _ _))
 
-theorem congrProd {h N : ℕ} {x y : Fin h → IrrGL (k := k)} (e : x = y) (hx : ∑ a, (x a).1 = N) (hy : ∑ a, (y a).1 = N) :
-    Nonempty ((prodIrr x hx).Equiv (prodIrr y hy)) := by
-  subst e
-  exact ⟨Representation.Equiv.refl _⟩
+alias congrProd := _root_.GlobalTheory.CompanionTheory.LSocle.prodIrr_congr
 
 def yy (x : IrrGL (k := k)) (s : ℝ) : Fin 2 → IrrGL (k := k) := ![x.nu (-(s : ℂ)), x.nu (s : ℂ)]
 

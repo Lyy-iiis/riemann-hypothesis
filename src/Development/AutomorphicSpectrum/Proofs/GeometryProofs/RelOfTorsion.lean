@@ -207,8 +207,7 @@ noncomputable section
 namespace GlobalTheory.CompanionTheory.Ar.BT.Tan
 open CategoryTheory Limits AlgebraicGeometry MonoidalCategory CartesianMonoidalCategory MonObj GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.LieEx
 
-theorem one_left_eq {B : Scheme.{0}} {X M : Over B} [GrpObj M] : (1 : X ⟶ M).left = X.hom ≫ η[M].left := by
-  rw [Hom.one_def, Over.comp_left, Over.toUnit_left]
+alias one_left_eq := _root_.ReciprocityTheory.ChartRestriction.G.Chart.one_left'
 
 section Rel
 variable {R : Type} [CommRing R] [IsDomain R] {T : Type} [CommGroup T] (Γ : QFGroup R T)
@@ -540,7 +539,7 @@ theorem omega_canon : ∀ (R : Type) [CommRing R] [IsDomain R] [IsIntegrallyClos
       let W : Submodule R (Module.Dual R L) := LinearMap.range ((N : R) • (LinearMap.id : Module.Dual R L →ₗ[R] Module.Dual R L))
       have h0 : N • W.mkQ = 0 := by
         ext w'
-        simp only [LinearMap.smul_apply, LinearMap.zero_apply, LinearMap.comp_apply]
+        simp only [LinearMap.smul_apply, LinearMap.zero_apply]
         exact (map_nsmul W.mkQ N w').symm.trans ((Submodule.Quotient.mk_eq_zero W).2 ⟨w', by simp [Nat.cast_smul_eq_nsmul]⟩)
       obtain ⟨ψ, hψ, -⟩ := hlift _ W.mkQ h0
       have h1 : W.mkQ w = 0 := by

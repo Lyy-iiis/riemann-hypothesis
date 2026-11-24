@@ -139,7 +139,7 @@ theorem exists_siegelSet_diag_normOne : ∀ (K : Type) [Field K] [NumberField K]
     · rw [hu_apply, ← hdUv i]
       calc (e i : 𝔸[K]) * (dU i : 𝔸[K]) * (((dU i)⁻¹ : IdeleGroup K) : 𝔸[K]) *
             (((e i)⁻¹ : IdeleGroup K) : 𝔸[K])
-          = ((e i * dU i * (dU i)⁻¹ * (e i)⁻¹ : IdeleGroup K) : 𝔸[K]) := by simp [Units.val_mul]
+          = ((e i * dU i * (dU i)⁻¹ * (e i)⁻¹ : IdeleGroup K) : 𝔸[K]) := by simp
         _ = 1 := by rw [mul_inv_cancel_right, mul_inv_cancel, Units.val_one]
   obtain ⟨ν, hν, hνD⟩ := exists_unitriangular_mul_mem hDmem n _ huu
   set νGL : GL (Fin n) K := GeneralLinearGroup.mkOfDetNeZero ν
@@ -216,10 +216,7 @@ namespace GlobalTheory.ShortVecDecay
 
 variable {E : Type} [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] {a : ℕ}
 
-theorem continuous_pInf : Continuous (pInf E) :=
-  continuous_pi fun w =>
-    ((InfinitePlace.Completion.isometryEquivComplexOfIsComplex (IsTotallyComplex.isComplex w)).continuous.comp
-      (continuous_apply w)).comp continuous_fst
+alias continuous_pInf := _root_.GlobalTheory.CuspRep.RankOne.continuous_pInf
 
 theorem exists_le_norm_pInf {T : Set (Af E)} (hT : IsCompact T) :
     ∃ ε : ℝ, 0 < ε ∧ ∀ x : E, x ≠ 0 → pFin E (algebraMap E (Ad E) x) ∈ T → ε ≤ ‖pInf E (algebraMap E (Ad E) x)‖ := by

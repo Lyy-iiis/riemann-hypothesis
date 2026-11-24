@@ -349,7 +349,7 @@ theorem exists_eq_div_of_cocycle [IsGalois K Ω] (f : (Ω ≃ₐ[K] Ω) → Ωˣ
       Additive.ofMul (f (v 0)) = (0 : Additive Ωˣ)
     rw [e]
     apply Additive.toMul.injective
-    simp [toMul_add, toMul_sub]
+    simp
   obtain ⟨x, hx⟩ := exists_cocycle_of_cochain A 1 c hcl hd
   have h0 : cohomologyπ A 1 x = 0 :=
     (subsingleton_cohomology_one_galUnits (K := K) (L := Ω)).elim _ _
@@ -364,7 +364,7 @@ theorem exists_eq_div_of_cocycle [IsGalois K Ω] (f : (Ω ≃ₐ[K] Ω) → Ωˣ
   have e' : (Additive.ofMul (galUnitsHom K Ω g (Additive.toMul (w Fin.elim0 : Additive Ωˣ))) +
       -(w Fin.elim0 : Additive Ωˣ) : Additive Ωˣ) = Additive.ofMul (f g) := e
   have e2 := congrArg (Additive.toMul (α := Ωˣ)) e'
-  simp only [toMul_add, toMul_neg, toMul_ofMul] at e2
+  simp only [toMul_ofMul] at e2
   rw [← e2, div_eq_mul_inv]
   rfl
 
@@ -805,7 +805,7 @@ theorem exists_cochain_cup (l : ℕ) [Fact l.Prime] (r : ℕ) (hr : 0 < r) {ζ :
     have := hlift (θ.symm σ) x
     rwa [MulEquiv.apply_symm_apply] at this
 
-  have hq : 1 < normV v := ReciprocityTheory.Gal.one_lt_normV v
+  have hq : 1 < normV v := _root_.GlobalTheory.WeilDeligne.one_lt_normV v
   obtain ⟨n, hn⟩ : ∃ n, n = normV v ^ l ^ r - 1 := ⟨_, rfl⟩
   have hn0 : n ≠ 0 := by
     have := one_lt_pow₀ hq hN.ne'

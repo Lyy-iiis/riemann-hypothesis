@@ -289,7 +289,7 @@ theorem lifted_minus {f : FrameData (Fin n) A} {f' : FrameData (Fin (n + 1)) A} 
     simp only [liftM_mul, liftM_zero, liftM_one, io_lift]
   · simp only [FrameData.minus]
     rw [← ins_succ, matrix_two_map_lift]
-    simp only [liftM_add, liftM_sub, liftM_mul, liftM_neg, liftM_smul, liftM_zero, liftM_one, hf.ee, hf.x, hf.xi,
+    simp only [liftM_add, liftM_sub, liftM_mul, liftM_neg, liftM_smul, liftM_zero, hf.ee, hf.x, hf.xi,
       hf.q, lifted_DD hf, tz_lift]
   · simp only [FrameData.minus]
     rw [hf.x, liftM_mul, ← ins_succ, matrix_two_map_lift]
@@ -594,7 +594,7 @@ theorem degree_top_of_parts : PBN.DegTopOfParts := by
     rw [lstN_succ]
     exact hpoly t'
   have hinj : ∀ a, Function.Injective (fun i => grid (Fin.rev a) i) := fun a => hgrid _
-  have hE := Formalism.FourierDecayAlt.P.extract_K_bound (Wq →L[ℂ] Wp) K (D.ptSize h) (fun _ => ((-1) ^ (s - 1) / t : ℂ)) W
+  have hE := _root_.Formalism.FourierDecayAlt.P.LagrangeExtraction.extractK (Wq →L[ℂ] Wp) K (D.ptSize h) (fun _ => ((-1) ^ (s - 1) / t : ℂ)) W
     (fun a => grid (Fin.rev a)) hPS hinj (fun _ => 0)
   rw [Finset.prod_const, Finset.card_univ, Fintype.card_fin] at hE
   have hW0 : W 0 (fun _ => 0) = p.V (p.Θ.Θ w e F) (h ++ [(s, t)]) := by

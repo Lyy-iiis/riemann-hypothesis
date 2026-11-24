@@ -283,7 +283,7 @@ theorem hermInf_holds : HermInf := by
   intro n lam
   refine ⟨Equiv.refl _, fun a => ?_⟩
   simp only [PositivityTheory.RgBcC.infOf, Equiv.refl_apply, Bool.false_eq_true, if_false, if_true, map_mul, map_add (f := _), map_sub,
-    map_div₀, map_one, map_neg, map_intCast, Complex.conj_natCast, map_ofNat]
+    map_div₀, map_one, map_intCast, Complex.conj_natCast, map_ofNat]
   ring
 
 end PositivityTheory.Rg.BcB.F.FBL
@@ -874,7 +874,7 @@ theorem _root_.UpperTheory.BaseChangeIdentities.FrameWordIdentity.psiword_pf :
           ((Sum.inr (F.β i), F.d.betaL (F₀.C.a i) ha) : BGen (F.B i) × LM F.d.kap (F₀.C.a i) (n - F₀.C.a i)) ++
         w.map fun p => (gl F i p, locL F.d (F₀.C.a i) ha (lt F p))).flatten
   have e1 : l.map Prod.fst = Sum.inr (F.t₁ i) :: (ws.map (bw F i)).flatten := by
-    simp only [l, bw, List.map_cons, List.map_flatten, List.map_map, Function.comp_def, List.map_append, List.map_replicate]
+    simp only [l, List.map_cons, List.map_flatten, List.map_map, Function.comp_def, List.map_append, List.map_replicate]
     rfl
   have e2 : (l.map Prod.snd).foldr LM.mul (F.d.eL (F₀.C.a i)) = prodL F.d (UpperTheory.BaseChangeIdentities.FrameWordIdentity.lw F ws) (F₀.C.a i) := by
     have : l.map Prod.snd = F.d.fixL (F₀.C.a i) :: (UpperTheory.BaseChangeIdentities.FrameWordIdentity.lw F ws).map (locL F.d (F₀.C.a i) ha) := by
@@ -1194,11 +1194,11 @@ theorem hM2 : M2 := @GlobalTheory.CongMatch.match_principal_congruence_inert
 
 theorem hM3 : M3 := @GlobalTheory.BCT.SplitCtMatch.match_ctMu_of_isSplitAt
 
-theorem matchLMB2₀ : MLM.MatchLMB2 := matchLMB2 hM2 hM3 hM4
+theorem matchLMB2₀ : MLM.MatchLMB2 := matchLMB2 hM2 hM3 _root_.PositivityTheory.Rg.Bc.ArchbcB.B.M4.m4
 
 theorem matchLMWordS₀ : MLM.MatchLMWordS := matchLMWordS hM3
 
-theorem matchLMUnit₀ : MLM.MatchLMUnit := matchLMUnit hM1 hM3
+theorem matchLMUnit₀ : MLM.MatchLMUnit := matchLMUnit _root_.PositivityTheory.Rg.Bc.ArchbcB.B.archimedean_base_change_first hM3
 
 end PositivityTheory.Rg.BcB.F.MatchAll
 end -- clump:auto
@@ -1414,7 +1414,7 @@ end -- clump:auto
 -- ===== end clump member: Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.HermitianConvolution.LpowMulPf =====
 
 -- ===== clump member: Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.WordFrameBounds.PLocMatch =====
--- clump-header: {"m": "Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.WordFrameBounds.PLocMatch", "h": "module\n\npublic import Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.WordFrameBounds.WordIdAt\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.RelIndexNeZeroOfSubsetCpt\nimport Development.AbelianVarietyTheory.Proofs.FoundationProofs.HasSatakeGLOfIsSatVecGL\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LevelExistsBis\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.MatchingTransferOf\npublic import Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.AdelicHeckeBlocks.DoubleSumFinprodFactor\npublic import Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.AdelicHeckeBlocks.Imports\npublic import Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.HermitianConvolution.LpowMulPf\npublic import Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.LeviMatchingWords.GeneratorPowSplitPlacesOfIdempotent\nimport GroundTheory.LocalFields.PadicLogSeries\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Std.Tactic.BVDecide.Normalize.BitVec\nimport Std.Tactic.BVDecide.Normalize.Prop\n\n"}
+-- clump-header: {"m": "Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.WordFrameBounds.PLocMatch", "h": "module\n\npublic import Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.WordFrameBounds.WordIdAt\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.RelIndexNeZeroOfSubsetCpt\nimport Development.AbelianVarietyTheory.Proofs.FoundationProofs.HasSatakeGLOfIsSatVecGL\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LevelExistsBis\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.MatchingTransferOf\npublic import Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.AdelicHeckeBlocks.DoubleSumFinprodFactor\npublic import Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.AdelicHeckeBlocks.Imports\npublic import Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.HermitianConvolution.LpowMulPf\npublic import Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.LeviMatchingWords.GeneratorPowSplitPlacesOfIdempotent\nimport GroundTheory.LocalFields.PadicLogSeries\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Std.Tactic.BVDecide.Normalize.BitVec\nimport Std.Tactic.BVDecide.Normalize.Prop\nimport Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.ArchimedeanBaseChangeProof.SatakeExponents.UniformizerValuations.LeviMatchingWords.GeneratorPowSplitPlacesOfIdempotent\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1566,7 +1566,7 @@ theorem locMatch (h : LocWord) (h1 : MLM.MatchLMB2) (h2 : MLM.MatchLMWordS) (h3 
   obtain ⟨w₀, hw₀⟩ := hTne
   refine ⟨fun w hw => lpow_hecke (hO w) (hKK w) (hg0 w hw) m, ⟨w₀, hBS _ (hTB _ hw₀), fun y hy => ?_⟩, fun a ha => ?_⟩
   · rw [hfamB w₀ (hTB _ hw₀)] at hy
-    exact MLM.sepPowT E hE n d hd hM N w₀ hw₀ y hy
+    exact _root_.GlobalTheory.CompanionTheory.SepPow.sepPowT E hE n d hd hM N w₀ hw₀ y hy
   obtain ⟨hlet, hBtr, hoff, hnil⟩ := h E n d hd a ha ls N (hcnt.trans hN)
   have hloc := BlockFiniteConvolution.locOk₀ E n d hd a ha
   have hne : ∀ w, Nonempty (d.kap w) := hloc.1
@@ -1600,7 +1600,7 @@ theorem locMatch (h : LocWord) (h1 : MLM.MatchLMB2) (h2 : MLM.MatchLMWordS) (h3 
           · exact (hM.T w hT).1 hs
           · exact hmu (Or.inl hS0)
           · exact hmu (Or.inr ⟨hBad, hs⟩)
-        exact (MLM.muInert E n a (n - a) w hns _ _ _ _).1 hb
+        exact (_root_.GlobalTheory.CompanionTheory.MuInertPlace.muInert E n a (n - a) w hns _ _ _ _).1 hb
     · have hf : U.fam d.B d.KU (d.gU m) k lU w = MLM.wordUS d w (atPlace d w ls) := by
         simp only [U.fam, if_neg hwB]; exact hlU w hwB
       have e1 : (prodL d ls a).tr d.P d.one w = (MLM.wordLS d a ha w (atPlace d w ls)).tr d.P d.one w := by
@@ -1612,9 +1612,9 @@ theorem locMatch (h : LocWord) (h1 : MLM.MatchLMB2) (h2 : MLM.MatchLMWordS) (h3 
       · rw [seen_inert hs, e1, hnil w fun hG => hs hG.1]
         have := h3 E hE n d hd a ha w hwB fun hs' => absurd hs' hs
         rw [if_neg hs] at this
-        exact (MLM.muInert E n a (n - a) w hs _ _ _ _).1 this
+        exact (_root_.GlobalTheory.CompanionTheory.MuInertPlace.muInert E n a (n - a) w hs _ _ _ _).1 this
   · rw [hBtr w₀ (hTB _ hw₀)]
-    exact MLM.regPowT E hE n d hd hM a ha N w₀ hw₀
+    exact _root_.GlobalTheory.CompanionTheory.RegPow.regPowT E hE n d hd hM a ha N w₀ hw₀
 
 end PositivityTheory.Rg.BcB.F.B3
 
@@ -1811,12 +1811,12 @@ theorem prodW (hd : d.Ok) {a : ℕ} (ha : a ≤ n) {w : Pl E} (hw : w ∈ d.B) :
       rw [hc]
       exact atW_trans d (atW_mul d (atW_refl d w (d.betaL a ha)) ih) (beta_cw d hd ha w _)
     · have hc : (Sum.inr (Sum.inl u) :: ls : List (LL d)).countP Sum.isLeft = ls.countP Sum.isLeft := by
-        simp [List.countP_cons]
+        simp
       rw [hc]
       exact nb _ (atW_refl d w _)
     · have hc : (Sum.inr (Sum.inr ⟨⟨w', hg⟩, k, intersection_update_fsHerm_neg_one, st⟩) :: ls : List (LL d)).countP Sum.isLeft =
           ls.countP Sum.isLeft := by
-        simp [List.countP_cons]
+        simp
       rw [hc]
       have hG : d.IsGen a ha (d.hL a ha w' k intersection_update_fsHerm_neg_one) := Or.inr ⟨w', k, intersection_update_fsHerm_neg_one, hg, rfl⟩
       cases st

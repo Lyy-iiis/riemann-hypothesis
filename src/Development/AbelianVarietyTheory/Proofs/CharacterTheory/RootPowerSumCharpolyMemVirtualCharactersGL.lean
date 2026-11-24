@@ -167,7 +167,7 @@ theorem finrank_eq_one_or_imprimitive : ∀ (k : Type) [Field k] (G : Type) [Gro
     exact (Submodule.nontrivial_iff k).1 ⟨_, _, h2⟩
   by_cases hc : ∀ a b : G, ρ a * ρ b = ρ b * ρ a
   · left
-    obtain ⟨v, hv0, hv⟩ := GlobalTheory.exists_common_eigenvector_of_commute (fun g : G => ρ g) hc
+    obtain ⟨v, hv0, hv⟩ := _root_.GlobalTheory.UnimodularLatticeLemma.main (fun g : G => ρ g) hc
     have htop := invariant_eq_top_of_irreducible ρ hirr (Submodule.span k {v}) (by
       intro g w hw
       obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.1 hw
@@ -184,7 +184,7 @@ theorem finrank_eq_one_or_imprimitive : ∀ (k : Type) [Field k] (G : Type) [Gro
       ∀ b ∈ B, ∀ g : G, ρ b * ρ g = ρ g * ρ b := fun H => hc (commute_all G _ ρ hG H)
   push Not at hB
   obtain ⟨B, hBn, hBc, b₀, hb₀, g₀, hne⟩ := hB
-  obtain ⟨v, hv0, hv⟩ := GlobalTheory.exists_common_eigenvector_of_commute (fun b : B => ρ b)
+  obtain ⟨v, hv0, hv⟩ := _root_.GlobalTheory.UnimodularLatticeLemma.main (fun b : B => ρ b)
     (fun a b => hBc a a.2 b b.2)
   choose μ hμ using hv
   let c : G →* MulAut B := MulAut.conjNormal
@@ -899,7 +899,7 @@ private theorem powerSum_roots_charpoly_mem_virt_of_abByP (k : Type) [Field k] [
   have h1 : Multiset.map (fun α => θ α ^ r) ((ρ g : Matrix (Fin n) (Fin n) k).charpoly.roots)
       = Multiset.map θ ((ρ (g ^ r) : Matrix (Fin n) (Fin n) k).charpoly.roots) := by
     rw [map_pow, Units.val_pow_eq_pow_val, _root_.GlobalTheory.CharpolyPow.roots_charpoly_pow, Multiset.map_map]
-    simp [Function.comp_def, map_pow]
+    simp [map_pow]
   have h2 := hC (g ^ r)
   rw [h1, h2, map_pow, Units.val_pow_eq_pow_val, Matrix.trace_eq_sum_roots_charpoly,
     _root_.GlobalTheory.CharpolyPow.roots_charpoly_pow]

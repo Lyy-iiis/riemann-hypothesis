@@ -488,7 +488,7 @@ theorem blk_mem {a b n : ℕ} (h : a + b = n) (w : Pl E) (m : ℕ) (y : GLw a w 
     have hone : ∀ p q, (1 : Matrix (Fin n) (Fin n) (w.adicCompletion E)) (CtLevel.blkEq h p) (CtLevel.blkEq h q) =
         (1 : Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) (w.adicCompletion E)) p q := by
       intro p q
-      simp [Matrix.one_apply, (CtLevel.blkEq h).injective.eq_iff]
+      simp [Matrix.one_apply]
     rw [hone]
     rcases i' with i' | i' <;> rcases j' with j' | j'
     · rw [(GlobalTheory.CompanionTheory.GL3BlockMatrixLocal.dgM_entries h w y).1]
@@ -620,7 +620,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-theorem PositivityTheory.HtPt.Bc.CongruenceInertMatching.matchCongInert : type_of% @GlobalTheory.CongMatch.match_principal_congruence_inert := @GlobalTheory.CongMatch.match_principal_congruence_inert
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.WeilBound.CoreStatements.HodgeTatePoints.CongruenceInertMatching =====
@@ -630,7 +629,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-theorem PositivityTheory.HtPt.Bc.SplitMuMatching.matchCtMuSplit : type_of% @GlobalTheory.BCT.SplitCtMatch.match_ctMu_of_isSplitAt := @GlobalTheory.BCT.SplitCtMatch.match_ctMu_of_isSplitAt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.WeilBound.CoreStatements.HodgeTatePoints.SplitMuMatching =====
@@ -1127,7 +1125,6 @@ theorem hecke_phi {w : Pl E} (hw : ¬ IsSplitAt w) (a b m : ℕ) (r c : ℂ) :
     have hb := GlobalTheory.LFun.SatCompare.isOpen_isCompact_KGL w b
     refine HasCompactSupport.intro' (ha.2.prod hb.2)
       ((Subgroup.isClosed_of_isOpen _ ha.1).prod (Subgroup.isClosed_of_isOpen _ hb.1)) fun y hy => ?_
-    beta_reduce
     rw [if_neg fun h => hy ⟨h.1, h.2.2.1⟩, mul_zero, mul_zero]
   · obtain ⟨h1, h2⟩ := Subgroup.mem_prod.1 hk
     obtain ⟨e1, f1⟩ := cnd_iff hw a m h1 x.1
@@ -1300,7 +1297,7 @@ theorem frameEx0_plug (h2 : PositivityTheory.Rg.Bc.ArchbcB.B.M2) (h3 : Positivit
   frameEx0_of Rig.weightEx Rig.unrAE_holds (_root_.GlobalTheory.CompanionTheory.MuOpen.muEx_of_exists Fok.Mu3.muExists) _root_.GlobalTheory.CompanionTheory.SecThrough.secEx _root_.GlobalTheory.CompanionTheory.UnifFix.unifEx _root_.GlobalTheory.CompanionTheory.LevelU.levelEx
     _root_.GlobalTheory.CompanionTheory.SplitLevel.splitEx (badEx2_of h2 h3) _root_.GlobalTheory.CompanionTheory.KExLevel.kEx PositivityTheory.Rg.BcB.G8.translation_existence_holds F0.chainEx_holds F0.archEx_holds F0.wEx_holds
 
-theorem frameEx0 : FrameEx0 := frameEx0_plug PositivityTheory.HtPt.Bc.CongruenceInertMatching.matchCongInert PositivityTheory.HtPt.Bc.SplitMuMatching.matchCtMuSplit
+theorem frameEx0 : FrameEx0 := frameEx0_plug _root_.GlobalTheory.CongMatch.match_principal_congruence_inert _root_.GlobalTheory.BCT.SplitCtMatch.match_ctMu_of_isSplitAt
 
 end PositivityTheory.Rg.BcB.F.Ex0
 end -- clump:auto

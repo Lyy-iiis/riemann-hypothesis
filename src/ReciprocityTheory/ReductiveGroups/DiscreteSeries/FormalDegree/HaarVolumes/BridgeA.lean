@@ -122,7 +122,7 @@ theorem skMat_conjTranspose_om (x : UCo N) : (skMat x)ᴴ = -skMat x := by
 theorem skMat_add_om (x y : UCo N) : skMat (x + y) = skMat x + skMat y := by
   ext a b
   simp only [skMat, Matrix.add_apply]
-  split_ifs <;> simp [mul_add, star_add, neg_add] <;> ring
+  split_ifs <;> simp [mul_add, star_add] <;> ring
 
 theorem skMat_smul_om (c : ℝ) (x : UCo N) : skMat (c • x) = (c : ℂ) • skMat x := by
   ext a b
@@ -712,11 +712,7 @@ lemma toM_preimage_exp_ball_eq_upqT_exp_ball (N : ℕ) (r : ℝ) :
       rw [Matrix.conjTranspose_reindex, lie_skew X]
       rfl
 
-lemma volU_pos (N : ℕ) : 0 < volU N := by
-  unfold volU
-  apply Finset.prod_pos
-  intro i _
-  positivity
+alias volU_pos := _root_.ReciprocityTheory.ChartRestriction.DS.volU_pos'
 
 lemma continuous_skMat (N : ℕ) : Continuous (skMat : UCo N → Matrix (Fin N) (Fin N) ℂ) := by
   refine continuous_pi fun a => continuous_pi fun b => ?_

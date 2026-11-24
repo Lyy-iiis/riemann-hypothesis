@@ -303,7 +303,7 @@ theorem eigChar {A M ι K E T : Type} [CommRing A] [AddCommGroup M] [Module A M]
       rw [hρ, AlgHom.commutes, Module.algebraMap_end_apply, map_smul, b.repr_self]
       by_cases h : i = k
       · subst h; simp
-      · simp [h, Finsupp.single_apply, Ne.symm h]
+      · simp [h]
     rw [this, smul_mulVec, one_mulVec]
   have hall : ∀ u : T, ∃ c : K, ρ u *ᵥ w = c • w := by
     intro u
@@ -344,10 +344,7 @@ theorem intIff {l : ℕ} [Fact l.Prime] (x : PadicAlgCl l) : IsIntegral ℤ_[l] 
     exact ⟨q, hqm, by rw [← Polynomial.aeval_def, ← Polynomial.aeval_map_algebraMap ℚ_[l], hq, minpoly.aeval]⟩
 
 open Polynomial in
-theorem normLt {l : ℕ} [Fact l.Prime] {O R : Type} [CommRing O] [Algebra ℤ_[l] O]
-    [Algebra O (PadicAlgCl l)] [IsScalarTower ℤ_[l] O (PadicAlgCl l)] [CommRing R] [IsLocalRing R] [Algebra O R]
-    (y : R →ₐ[O] PadicAlgCl l) (a : R) (ha : a ∈ maximalIdeal R) : ‖y a‖ < 1 :=
-  _root_.UpperTheory.Reformulated.B.NormLtOne.norm_lt_one y a ha
+alias normLt := _root_.UpperTheory.Reformulated.B.NormLtOne.norm_lt_one
 
 theorem eigPt {l : ℕ} [Fact l.Prime] {A M ι E : Type} [CommRing A] [IsCNL A] [AddCommGroup M] [Module A M]
     [AddCommGroup E] [Module ℂ E]

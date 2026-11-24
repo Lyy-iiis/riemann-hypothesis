@@ -379,14 +379,9 @@ namespace GlobalTheory.CompactAvgSchwartz
 
 variable {D : D7}
 
-theorem mt_mul_inv_self (V : HSp D) (g : GA D V) : Formalism.L2.Theta.mt V g * Formalism.L2.Theta.mt V g⁻¹ = 1 := by
-  unfold Formalism.L2.Theta.mt
-  rw [map_inv]
-  exact Units.mul_inv _
-
 theorem map_cancel {R : Type} [CommRing R] (φ : AE D →+* R) (V : HSp D) (g : GA D V) :
     (Formalism.L2.Theta.mt V g).map φ * (Formalism.L2.Theta.mt V g⁻¹).map φ = 1 := by
-  rw [← Matrix.map_mul, mt_mul_inv_self, Matrix.map_one _ (map_zero φ) (map_one φ)]
+  rw [← Matrix.map_mul, _root_.GlobalTheory.MixModel.mt_mul_inv, Matrix.map_one _ (map_zero φ) (map_one φ)]
 
 theorem map_mul_entry {R R' : Type} [CommRing R] [CommRing R'] (φ : R →+* R') {m n : ℕ} (M : Matrix (Fin m) (Fin m) R)
     (x : Matrix (Fin m) (Fin n) R) : (fun i j => φ ((M * x) i j)) = fun i j => ∑ c, φ (M i c) * φ (x c j) := by
@@ -481,7 +476,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.compactAverageSchwartzProjection_mem_adelicSchwartz : ∀ (D : D7), ∀ θ : InfFam D, IsInfFam θ → ∀ (T : HSp D) (n : ℕ) (K : Subgroup (GA D T)), IsCompact (K : Set (GA D T)) → ∀ ν : Measure K, IsProbabilityMeasure ν → ∀ Φ ∈ schwartzA θ T.rank n, projS ν Φ ∈ schwartzA θ T.rank n := by
-  first | exact @GlobalTheory.CompactAvgSchwartz.projS_mem | exact GlobalTheory.CompactAvgSchwartz.projS_mem | (intros; apply GlobalTheory.CompactAvgSchwartz.projS_mem <;> assumption)
+  first | exact @GlobalTheory.CompactAvgSchwartz.projS_mem
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.CompactAverageSchwartzProjectionMemAdelicSchwartStatement =====

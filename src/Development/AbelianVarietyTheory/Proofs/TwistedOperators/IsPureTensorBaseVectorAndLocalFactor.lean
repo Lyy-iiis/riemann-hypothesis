@@ -219,7 +219,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.heisenberg_compression_finite_place_lattice_vacua_scalar : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)) (ΛT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E)) (μ : Measure (WO S T)) (𝓕 : Set (WO S T)), IsStdChar D ψ (-1) → IsSelfDualC S ΛS → IsSelfDualC T ΛT → IsCovolOne (ratL T S) μ 𝓕 → ∀ (v : FinPl D) (w : WO S T), ∃ γ : ℂ, ∀ f g : WO S T → ℂ, IsThetaFunO ψ S T f → IsThetaFunO ψ S T g → IsLatVac (heisO ψ S T) (latO S T ΛS ΛT fun u => u = v) f → IsLatVac (heisO ψ S T) (latO S T ΛS ΛT fun u => u = v) g → ipO μ 𝓕 g (heisO ψ S T (wAt (.inl v) w) f) = γ * ipO μ 𝓕 g f := by
-  first | exact @GlobalTheory.PlaceCompress.compress_fin | exact GlobalTheory.PlaceCompress.compress_fin | (intros; apply GlobalTheory.PlaceCompress.compress_fin <;> assumption)
+  first | exact @GlobalTheory.PlaceCompress.compress_fin
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.HeisenbergCompressionFinitePlaceLatticeVacuaScalStatement =====
@@ -235,7 +235,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.heisenberg_compression_real_place_fock_vacua_scalar : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) (μ : Measure (WO S T)) (𝓕 : Set (WO S T)), IsStdChar D ψ (-1) → IsInfFam θ → IsCovolOne (ratL T S) μ 𝓕 → ∀ (τ : D.what₂.Tau) (sS : Matrix (Fin S.rank) (Fin S.rank) ℂ) (sT : Matrix (Fin T.rank) (Fin T.rank) ℂ), IsCartanInv (gramAt D S τ) sS → IsCartanInv (gramAt D T τ) sT → ∀ w : WO S T, ∃ γ : ℂ, ∀ f g : WO S T → ℂ, IsThetaFunO ψ S T f → IsThetaFunO ψ S T g → IsFockVacAt (heisO ψ S T) θ τ (cplxO sS sT) f → IsFockVacAt (heisO ψ S T) θ τ (cplxO sS sT) g → ipO μ 𝓕 g (heisO ψ S T (wAt (.inr τ) w) f) = γ * ipO μ 𝓕 g f := by
-  first | exact @GlobalTheory.VacCompress.compress | exact GlobalTheory.VacCompress.compress | (intros; apply GlobalTheory.VacCompress.compress <;> assumption)
+  first | exact @GlobalTheory.VacCompress.compress
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.HeisenbergCompressionRealPlaceFockVacuaScalarStatement =====
@@ -254,9 +254,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 namespace GlobalTheory.LocalPure
 
 variable {D : D7}
-
-theorem wAt_add {m n : ℕ} (p : Place D) (x y : Mx D m n) : wAt p (x + y) = wAt p x + wAt p y := by
-  rw [wAt_eq_smul, wAt_eq_smul, wAt_eq_smul, smul_add]
 
 theorem wAt_two {m n : ℕ} (p : Place D) (x : Mx D m n) : wAt p (2 • x) = 2 • wAt p x := by
   rw [wAt_eq_smul, wAt_eq_smul, smul_comm]
@@ -334,7 +331,7 @@ theorem ip_heis_sum (h : IsBase ψ θ S T sS sT ΛS ΛT f₀) (hμ : IsCovolOne 
     have hzP : ∀ p ∈ P, wAt p z = 0 := fun p hp => hz p (Finset.mem_insert_of_mem hp)
     have vyP : ∀ p ∈ P, VacAt ψ θ S T sS sT ΛS ΛT p y := fun p hp => vy p (Finset.mem_insert_of_mem hp)
     have hZ : wAt a (∑ p ∈ P, wAt p w + z) = 0 := by
-      rw [wAt_add, wAt_sum_of_notMem ha, hz a (Finset.mem_insert_self a P), add_zero]
+      rw [_root_.GlobalTheory.LatticeLocal.wAt_add, wAt_sum_of_notMem ha, hz a (Finset.mem_insert_self a P), add_zero]
     have hv : VacAt ψ θ S T sS sT ΛS ΛT a (heisO ψ S T (∑ p ∈ P, wAt p w + z) f₀) :=
       (GlobalTheory.T.fockVacua_localFactors_stable_heisenberg_away D ψ θ S T sS sT ΛS ΛT hψ (base_inf h) f₀ hb).1 a _ hZ (base_vacAt h a)
     rw [Finset.sum_insert ha, Finset.prod_insert ha, add_assoc,
@@ -373,7 +370,7 @@ theorem isPure_local (h : IsBase ψ θ S T sS sT ΛS ΛT f₀) (hμ : IsCovolOne
     have key : ∀ p ∈ P, wAt p (2 • u) = 0 := by
       intro p hp
       have e := congrArg (wAt p) hw
-      rw [wAt_add, wAt_sum_of_mem hp] at e
+      rw [_root_.GlobalTheory.LatticeLocal.wAt_add, wAt_sum_of_mem hp] at e
       calc wAt p (2 • u) = wAt p w + wAt p (2 • u) - wAt p w := by abel
         _ = wAt p w - wAt p w := by rw [← e]
         _ = 0 := sub_self _
@@ -392,7 +389,7 @@ theorem isPure_local (h : IsBase ψ θ S T sS sT ΛS ΛT f₀) (hμ : IsCovolOne
       have hpq : p ≠ q := fun e => hpP (e ▸ hqP)
       have ew : wAt p w = wAt p (2 • u) := by
         conv_lhs => rw [hw]
-        rw [wAt_add, wAt_sum_of_notMem hpP, zero_add]
+        rw [_root_.GlobalTheory.LatticeLocal.wAt_add, wAt_sum_of_notMem hpP, zero_add]
       show ipO μ 𝓕 (x p) (heisO ψ S T (wAt p w) f₀) = 1
       rw [hq p hpq, ew, wAt_two]
       have hh : heisO ψ S T (2 • wAt p u) f₀ = f₀ := by

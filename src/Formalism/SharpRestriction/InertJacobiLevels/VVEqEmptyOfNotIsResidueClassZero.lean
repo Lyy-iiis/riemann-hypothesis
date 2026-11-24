@@ -211,8 +211,7 @@ theorem bsA_val_le (h t : φ.A) (i : ℕ) : (bsA h t).val ≤ (t + i • h).val 
   unfold bsVA
   exact Nat.sInf_le ⟨i, rfl⟩
 
-theorem ord_nsmul_A (h : φ.A) : φ.ord • h = 0 := by
-  exact ord_nsmul_eq_zero h
+alias ord_nsmul_A := _root_.Formalism.MainNotions.Inhab.ord_nsmul_eq_zero
 
 end BaseA
 
@@ -238,7 +237,6 @@ theorem plGG_mem_Psi (z : Bool × G.HH D) : G.plGG D z ∈ D.R.Psi := by
   rw [MonoidHom.mem_ker]
   split <;> first
     | rfl
-    | simp [Formalism.HC.Frame.chD, Formalism.HC.Frame.tau1, Formalism.HC.Frame.tau2]
 
 def tauOf (z : Bool × G.HH D) : D.what₂.Tau := D.eTau.symm ⟨G.plGG D z, plGG_mem_Psi D z⟩
 

@@ -177,7 +177,7 @@ private theorem integral_mul_star_eq_of_lintegral_norm_sq_eq {α : Type*} [Measu
     refine integral_congr_ae ?_
     filter_upwards [ha.coeFn_toLp, hb.coeFn_toLp] with x hxa hxb
     rw [hxa, hxb]
-    simp [mul_comm]
+    simp
   rw [hi hu hv, hi hu' hv', inner_eq_sum_norm_sq_div_four, inner_eq_sum_norm_sq_div_four]
   have e1 := hn 1
   have e2 := hn (-1)
@@ -233,19 +233,10 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-noncomputable section
-
-open scoped TensorProduct NNReal Matrix Classical
-open NumberField IsDedekindDomain MeasureTheory Filter Topology Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes
-open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK.Dbl GlobalTheory.Cont PositivityTheory.Rg.Sw
-
 namespace PositivityTheory.SiegelWeilFormula.Ald
-
-theorem hgtPull : HgtPull := PositivityTheory.SiegelWeilFormula.Ldexb.hgtPull
 
 end PositivityTheory.SiegelWeilFormula.Ald
 
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.WeilBound.CoreStatements.AutomorphicKernels.SiegelWeilFormula.LagrangianDecomposition.HgtPull =====
@@ -418,7 +409,7 @@ open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.Inde
 
 namespace PositivityTheory.SiegelWeilFormula.Ald
 
-theorem ldEx_of : TAll → AuxiliaryPrimeFunction → LDEx := ldEx_of_leaves yFrame jEx kStd hgtPull modelEx
+theorem ldEx_of : TAll → AuxiliaryPrimeFunction → LDEx := ldEx_of_leaves yFrame jEx kStd _root_.PositivityTheory.SiegelWeilFormula.Ldexb.hgtPull modelEx
 
 end PositivityTheory.SiegelWeilFormula.Ald
 
@@ -669,31 +660,10 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-noncomputable section
-
-open scoped TensorProduct NNReal Matrix SchwartzMap Classical InnerProductSpace
-open NumberField IsDedekindDomain MeasureTheory Filter Topology Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes
-open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK.Dbl PositivityTheory.Rg.Sw
-
 namespace PositivityTheory.SiegelWeilFormula.KFP
-
-variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
-
-variable {d : SD σ}
-
-theorem hg_sch (R : RD d) {νf : Measure (Yf d)} (hνf : νf.IsAddHaarMeasure) {f : Mx F E d.m d.n → ℂ} (hf : f ∈ d.schM)
-    {g : Yf d → ℂ} (hg' : g ∈ SB (Yf d)) : ∃ h : 𝓢(Vw d, ℂ), ⇑h = hg R νf f g := by
-  exact OswGen.hg_sch R hνf hf hg'
-
-theorem mem_fock_of (R : RD d) {νf : Measure (Yf d)} (hνf : νf.IsAddHaarMeasure) {f : Mx F E d.m d.n → ℂ}
-    (hf : f ∈ d.schM) (H : ∀ g ∈ SB (Yf d), ∃ P : MvPolynomial (Iw d) ℂ,
-      ∀ u, hg R νf f g u = MvPolynomial.eval (fun i => ((u i : ℝ) : ℂ)) P * Real.exp (-(2 * Real.pi * ‖u‖ ^ 2))) :
-    f ∈ R.fock := by
-  exact OswGen.mem_fock_of R hνf hf H
 
 end PositivityTheory.SiegelWeilFormula.KFP
 
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.WeilBound.CoreStatements.AutomorphicKernels.SiegelWeilFormula.RealAdelicFockSpace.MemFockOf =====
@@ -732,7 +702,7 @@ theorem kFinPoly_of (hT : TAll) (hU : TUnit) (hH : THeis) (hA : AuxiliaryPrimeFu
     intro h; rw [h, norm_zero] at hω1; exact zero_ne_one hω1
   have hωi : ∀ j : ℕ, 0 < j → ω⁻¹ ^ j ≠ 1 := fun j hj h => hω j hj (by rw [inv_pow] at h; exact inv_eq_one.1 h)
   have hμ : (star χ)⁻¹ ≠ 0 := inv_ne_zero (star_ne_zero.2 hχ)
-  obtain ⟨N, hN⟩ := poly_of_rot q hq0 (star χ)⁻¹ ω⁻¹ hμ (inv_ne_zero hω0) hωi
+  obtain ⟨N, hN⟩ := _root_.PositivityTheory.SiegelWeilFormula.KFPB.poly_of_rot q hq0 (star χ)⁻¹ ω⁻¹ hμ (inv_ne_zero hω0) hωi
   have hinv : ∀ ξ z, actB (cA σ) k⁻¹ (vv ξ z) = vv ξ (ω⁻¹ * z) := fun ξ z => by
     have := congrArg (actB (cA σ) k⁻¹) (hrot ξ (ω⁻¹ * z))
     rwa [← actB_mul, inv_mul_cancel, actB_one, ← mul_assoc, mul_inv_cancel₀ hω0, one_mul, eq_comm] at this
@@ -742,15 +712,15 @@ theorem kFinPoly_of (hT : TAll) (hU : TUnit) (hH : THeis) (hA : AuxiliaryPrimeFu
     | zero => intro ξ z; simp [actB_one]
     | succ i ih => intro ξ z; rw [pow_succ, actB_mul, hinv, ih, pow_succ, mul_assoc]
   have hTΦ : d.T Φ ∈ d.schM := (hT.1 F E σ d).1 Φ hΦ
-  refine mem_fock_of R hνf hTΦ fun g hg' => ?_
+  refine _root_.PositivityTheory.SiegelWeilFormula.KFP.OswGen.mem_fock_of R hνf hTΦ fun g hg' => ?_
   obtain ⟨Ω, hΩ, hTΩ⟩ := exists_lift hT hF R hg'
-  obtain ⟨h, hh⟩ := hg_sch R hνf hTΦ hg'
+  obtain ⟨h, hh⟩ := _root_.PositivityTheory.SiegelWeilFormula.KFP.OswGen.hg_sch R hνf hTΦ hg'
   have hpi : (0 : ℝ) < 2 * Real.pi := by positivity
-  obtain ⟨P, -, hP⟩ := poly_gauss_of_lines (2 * Real.pi) hpi N h fun ξ => by
+  obtain ⟨P, -, hP⟩ := _root_.PositivityTheory.SiegelWeilFormula.KFPB.poly_gauss_of_lines (2 * Real.pi) hpi N h fun ξ => by
     set I : ℂ → ℂ := fun z => ∫ u, h u * Real.exp (-(2 * Real.pi * ‖u‖ ^ 2)) * Complex.exp (z * ⟪ξ, u⟫_ℝ) with hI
     set Eξ : ℂ → ℂ := fun z => Complex.exp (-(z ^ 2 * ‖ξ‖ ^ 2 / (16 * Real.pi))) * I z with hE
     have hdiff : Differentiable ℂ Eξ :=
-      (Differentiable.cexp (by fun_prop)).mul (entire_laplace (2 * Real.pi) hpi h ξ)
+      (Differentiable.cexp (by fun_prop)).mul (_root_.PositivityTheory.SiegelWeilFormula.KFPB.entire_laplace (2 * Real.pi) hpi h ξ)
     have hrel : ∀ z, ∑ i ∈ Finset.range (q.natDegree + 1), q.coeff i * (star χ)⁻¹ ^ i * Eξ (ω⁻¹ ^ i * z) = 0 := by
       intro z
       have e0 := B_rel hT hU hν hχ hΩ (heig g hg' Ω hΩ hTΩ) hΦ q hq (vv ξ z)
@@ -932,7 +902,7 @@ theorem var_span' (R : RD d) (w : InfinitePlace F) (k : Fin d.m × Fin d.n × Bo
   set e : ℂ := ((R.ε : ℤ) : ℂ)
   have he : e * e = 1 := by rcases Int.units_eq_one_or R.ε with h | h <;> simp [e, h]
   have hes : star e = e := by simp [e]
-  have hz : star R.ζ * R.ζ = 1 := by rcases R.hζ with ⟨-, h⟩ | ⟨-, h⟩ <;> rw [h] <;> simp [Complex.ext_iff]
+  have hz : star R.ζ * R.ζ = 1 := by rcases R.hζ with ⟨-, h⟩ | ⟨-, h⟩ <;> rw [h] <;> simp
   have hfi : fr * fi = 1 := by simp only [fr, fi]; rw [← Units.val_mul, mul_inv_cancel, Units.val_one]
   have hif : fi * fr = 1 := by simp only [fr, fi]; rw [← Units.val_mul, inv_mul_cancel, Units.val_one]
 
@@ -965,7 +935,7 @@ theorem var_span' (R : RD d) (w : InfinitePlace F) (k : Fin d.m × Fin d.n × Bo
     have hre : (e * trace ((d.cw w X)ᵀ * M)).re = e.re * (trace ((d.cw w X)ᵀ * M)).re := by
       rcases Int.units_eq_one_or R.ε with h | h <;> simp [e, h]
     rw [hre]
-    rcases Int.units_eq_one_or R.ε with h | h <;> simp [e, h] <;> ring
+    rcases Int.units_eq_one_or R.ε with h | h <;> simp [e, h]
 
   have hM : ∀ (c : ℂ) (x : Matrix (Fin d.m) (Fin d.n) ℂ),
       trace (xᵀ * Matrix.of fun b j => if j = k.2.1 then c * fi k.1 b else 0) = c * (fi * x) k.1 k.2.1 := fun c x => by
@@ -973,7 +943,7 @@ theorem var_span' (R : RD d) (w : InfinitePlace F) (k : Fin d.m × Fin d.n × Bo
       c * ∑ b, fi k.1 b * x b k.2.1
     simp only [mul_ite, mul_zero]
     rw [Finset.sum_eq_single k.2.1 (fun j _ hj => by simp only [if_neg hj, mul_zero, Finset.sum_const_zero]) (by simp)]
-    simp only [if_pos rfl, Finset.mul_sum]
+    simp only [Finset.mul_sum]
     exact Finset.sum_congr rfl fun b _ => by simp only [if_true]; ring
   obtain ⟨Z₁, h1, e1⟩ := key (Matrix.of fun b j => if j = k.2.1 then 1 * fi k.1 b else 0)
   obtain ⟨Z₂, h2, e2⟩ := key (Matrix.of fun b j => if j = k.2.1 then (-Complex.I) * fi k.1 b else 0)

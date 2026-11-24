@@ -92,11 +92,6 @@ theorem sigR_sc (c : Fv F v) : sigR (Fv F v) σ (sc (E := E) v c) = sc (E := E) 
   rw [Algebra.TensorProduct.map_tmul, map_one]
   rfl
 
-theorem sigR_incl (e : E) : sigR (Fv F v) σ (inclR (F := F) (Fv F v) e) = inclR (F := F) (Fv F v) (σ e) := by
-  show Algebra.TensorProduct.map (AlgHom.id F (Fv F v)) σ ((1 : Fv F v) ⊗ₜ e) = (1 : Fv F v) ⊗ₜ σ e
-  rw [Algebra.TensorProduct.map_tmul]
-  rfl
-
 def ThetaBas : Prop :=
   StdHyp σ J ψ → UnramAt (E := E) v → ∃ θ : 𝓞 E,
     (∀ x ∈ OEv (E := E) v, ∃ a0 a1 : v.adicCompletionIntegers F,
@@ -122,12 +117,12 @@ theorem resQ_of (hT : ThetaBas σ J ψ v) : ResQ σ J ψ v := by
       sc (E := E) v (iO v a) := fun a => inclR_alg' v (a : F)
   have hiθ2 : iθ * iθ = sc (E := E) v (iO v t) * iθ - sc (E := E) v (iO v m) := by
     have e1 := congrArg (fun y : 𝓞 E => inclR (F := F) (Fv F v) (y : E)) hθ2
-    simp only [MulMemClass.coe_mul, AddSubgroupClass.coe_sub, map_mul, map_sub, hinc] at e1
+    simp only [map_mul, map_sub, hinc] at e1
     exact e1
   have hsiθ : sigR (Fv F v) σ iθ = sc (E := E) v (iO v t) - iθ := by
     have e1 := congrArg (fun y : 𝓞 E => inclR (F := F) (Fv F v) (y : E)) hσθ
-    simp only [AddSubgroupClass.coe_sub, map_sub, hinc, sigO_coe] at e1
-    rw [hiθ, sigR_incl]
+    simp only [map_sub, hinc, sigO_coe] at e1
+    rw [hiθ, _root_.PI.OmLocU.Orb.sigR_inclR]
     exact e1
   let T0 : v.adicCompletionIntegers F := ⟨iO v t, mem_O_iO v t⟩
   let M0 : v.adicCompletionIntegers F := ⟨iO v m, mem_O_iO v m⟩
@@ -238,7 +233,7 @@ theorem resQ_of (hT : ThetaBas σ J ψ v) : ResQ σ J ψ v := by
       ring
     show ρf y = sigQ σ v (ρf x)
     rw [hρ y _ _ hy]
-    simp only [ρf, map_add (f := _), map_mul, map_neg, hgt, sigQ_alg]
+    simp only [ρf, map_add (f := _), map_mul, map_neg]
     have hsq : sigQ σ v θb = Ideal.Quotient.mk (IE (E := E) v) (algebraMap (𝓞 F) (𝓞 E) t) - θb := by
       simp only [θb]
       rw [sigQ_mk, hσθ, map_sub]

@@ -453,12 +453,12 @@ namespace PositivityTheory.HtPt.Htat
 open CategoryTheory Limits AlgebraicGeometry MonoidalCategory CartesianMonoidalCategory MonObj TensorProduct in
 open GlobalTheory.CompanionTheory.Ar.BT in
 theorem bt_sub_eq_top : ∀ (R : Type) [CommRing R] [IsDomain R] [IsIntegrallyClosed R] (T : Type) [CommGroup T] [Finite T] (Γ : QFGroup R T) (U : Γ.G.left.Opens), Γ.IsFinOpenSub U → Γ.btOrder U = Γ.btOrder ⊤ :=
-  @bt_sub_eq_top_of @hens_normal @PositivityTheory.UnitarySelfGeneration.bt_exists_bc @reg_pull
+  @_root_.PositivityTheory.HtPt.Htat.HopfOrderEqTop.btOrder_eq_top @hens_normal @PositivityTheory.UnitarySelfGeneration.bt_exists_bc @reg_pull
 
 open CategoryTheory Limits AlgebraicGeometry MonoidalCategory CartesianMonoidalCategory MonObj TensorProduct in
 open GlobalTheory.CompanionTheory.Ar.BT in
 theorem bt_hopf : ∀ (R : Type) [CommRing R] [IsDomain R] [IsIntegrallyClosed R] [IsNoetherianRing R] (T : Type) [CommGroup T] [Finite T] (Γ : QFGroup R T), IsHopfOrder (Γ.btOrder ⊤) :=
-  @bt_hopf_of @hens_normal @PositivityTheory.UnitarySelfGeneration.bt_exists_bc @reg_pull
+  @_root_.PositivityTheory.HtPt.Htat.HopfOrderTop.btOrder_top_isHopfOrder @hens_normal @PositivityTheory.UnitarySelfGeneration.bt_exists_bc @reg_pull
 
 end PositivityTheory.HtPt.Htat
 end -- clump:auto
@@ -582,7 +582,7 @@ theorem pb_mul_aff {Y : Over (Spec ZU.{0})} (g h : Y ⟶ splitTorusAff ZU X) (x 
       (congrArg (·.left) (lift_snd g h)))
   rw [e0, ← e1, ← e2, pb_spec, pb_spec, pb_spec, ← map_mul]
   congr 1
-  simp [A, AddMonoidAlgebra.comul_single]
+  simp [A]
 
 theorem chi_mul {Y : Over S} (g h : Y ⟶ splitTorus S X) (x : Multiplicative X) :
     chi (g * h).left x = chi g.left x * chi h.left x := by
@@ -635,7 +635,7 @@ variable (hE : type_of% @_root_.GlobalTheory.CompanionTheory.Ar.BT.QFGroup.exist
 include hE
 
 theorem sub_eq_top_of : ∀ (R : Type) [CommRing R] [IsDomain R] [IsIntegrallyClosed R] (T : Type) [CommGroup T] [Finite T] (Γ : QFGroup R T) (U : Γ.G.left.Opens), Γ.IsFinOpenSub U → Γ.btOrder U = Γ.btOrder ⊤ :=
-  Htat.bt_sub_eq_top_of @Htat.hens_normal hE @Htat.reg_pull
+  _root_.PositivityTheory.HtPt.Htat.HopfOrderEqTop.btOrder_eq_top @Htat.hens_normal hE @Htat.reg_pull
 
 
 omit hE in
@@ -806,11 +806,11 @@ theorem res_core {R : Type} [CommRing R] [IsDomain R] [IsIntegrallyClosed R] {T 
   haveI := Γ'.quasiCompact
   haveI := Γ'.finPres
   obtain ⟨U, hUfin, hUcl⟩ := Twhopf.finite_part R' Γ'.G.left Γ'.G.hom
-  have hU : Γ'.IsFinOpenSub U := Twhopf.finite_sub R' T Γ' U hUfin hUcl
+  have hU : Γ'.IsFinOpenSub U := _root_.GlobalTheory.CompanionTheory.Ar.BT.QFGroup.isFinOpenSub_of_closedFibre R' T Γ' U hUfin hUcl
   have hres := (res_fin_core hE Γ' Γ₁' a' hmul' α hα' hcl' U hU).2
   refine ⟨R', inferInstance, inferInstance, inferInstance, hflat, hP', ?_⟩
   have h1 := OrderApi.comp_mem_extOrder (algebraMap R R') hg
-  rw [← Htat.bt_flat_bc R H Γ₁ R' Γ₁' F₁ hF₁ hflat, ← hres, Htat.bt_flat_bc R T Γ R' Γ' F hF hflat] at h1
+  rw [← _root_.PositivityTheory.HtPt.Htat.ValuationInjectivePi.btOrder_flat_baseChange R H Γ₁ R' Γ₁' F₁ hF₁ hflat, ← hres, _root_.PositivityTheory.HtPt.Htat.ValuationInjectivePi.btOrder_flat_baseChange R T Γ R' Γ' F hF hflat] at h1
   obtain ⟨f', hf', e⟩ := h1
   rw [← e]
   have hf'' := (Htat.ext_span R T R' _ _ f').1 hf'
@@ -1461,7 +1461,7 @@ theorem exists_struct (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] [IsNo
   have := Γ.quasiCompact
   have := Γ.finPres
   obtain ⟨W, hWf, hWc⟩ := PositivityTheory.HtPt.Twhopf.finite_part R Γ.G.left Γ.G.hom
-  have hsub := PositivityTheory.HtPt.Twhopf.finite_sub R T Γ W hWf hWc
+  have hsub := _root_.GlobalTheory.CompanionTheory.Ar.BT.QFGroup.isFinOpenSub_of_closedFibre R T Γ W hWf hWc
   obtain ⟨H, Γf, u, hH, _, hop, hcl, hr, hfin, hu⟩ := sub_qf R T Γ W hsub
   obtain ⟨M, C, _, _, ΓM, ΓB, iM, iB, a, b, hM, hB, _, _, ha, hbf, hbs, hpb, -⟩ :=
     PositivityTheory.HtPt.Stight.D1.finitePart_extension R D A G U p hp1 T Γ i hi H Γf u hop hfin fun g hg => hr ▸ hWc g hg
@@ -1927,7 +1927,7 @@ open GlobalTheory.CompanionTheory.Ar.Num.FamEx GlobalTheory.CompanionTheory.Ar.B
 
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.arith_variety_model_hodge_relay : GlobalTheory.CompanionTheory.Ar.GR.HodgeTateDatumStatement → GlobalTheory.CompanionTheory.Ar.GR.OrdinaryCurveStatement → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (O₀ : Type) [CommRing O₀] (β : O₀ →+* c.F) (Y : Model Xo c β) (S : Finset ℕ) (Ω : Type) [Field Ω] (K : Type) [Fintype K] [DecidableEq K] (J : K → Type) [∀ k, Fintype (J k)] (y : (Σ k, J k) → Ω) (𝔐 : HodgeCpt Y S y) (d : ℕ), IsArithVar (mCoordIdeal y) (d + 1) → 0 < D.p + D.q → ∀ (p : ℕ) [Fact p.Prime], p ∈ S → HT.HTFree 𝔐 p → p ≠ 2 → ¬ (p : ℤ) ∣ NumberField.discr E → ∀ (b : ∀ t, Fin (labelRk D t) → 𝔐.Li), (∀ t, LinearIndependent Ω (b t) ∧ Submodule.span Ω (Set.range (b t)) = 𝔐.Vgen t) → ∀ φ : Equiv.Perm (CMType H ⊕ CMType H), IsFrobLabels c p φ → ∀ (A : Type) [CommRing A] [Algebra A Ω] [IsIntegralClosure A ℤ Ω] (m : Ideal A) [m.IsPrime], (p : A) ∈ m → ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Algebra A O] [IsLocalization.AtPrime O m] [Algebra O Ω] [IsScalarTower A O Ω], ∀ (t₀ : CMType H ⊕ CMType H) (Sg : Type) [Fintype Sg] (e : Sg → CMType H ⊕ CMType H) (φ' : Equiv.Perm Sg) (F : Type) [Field F] [Fintype F] [CharP F p] (pq : (𝓞 E ⧸ Ideal.span {(p : 𝓞 E)}) →+* F) (sc : F →+ (𝓞 E ⧸ Ideal.span {(p : 𝓞 E)})) (w : O) (σ : Sg → F →+* IsLocalRing.ResidueField O), IsOrbit O 𝔐 p φ t₀ e φ' pq w σ → IsSec pq sc → ∀ (G : GenTors 𝔐 p) (c' : ∀ k, J k), mseg y c' ≠ 0 → ∀ (P : ChartPack G O c') (i : ∀ τ, (Fin (labelRk D (e τ)) → Ω) →ₗ[Ω] (Fin (D.p + D.q) → Ω)), (∀ τ : Sg, SeqHyp (CR O y c') (algebraMap O Ω w) (coordLat O y (𝔐.HT p (e τ)) (b (e τ)) c') (dotDual (CR O y c') (coordLat O y (𝔐.HT p (e τ).swap) (b (e τ).swap) c')) (i τ) (qMap P (b (e τ).swap)) ∧ ∀ σE : E →+* Ω, (∀ a : 𝓞 E, σE (a : E) = 𝔐.emb (e τ) a) → DualSeq P σE (𝔐.R p - 2) (coordLat O y (𝔐.HT p (e τ)) (b (e τ)) c') (b (e τ)) (i τ)) → (chartD e b pq sc w P i).Base (CR O y c') p (algebraMap O Ω w) → ∀ (C : Type) [Field C] [Algebra O C] [Algebra Ω C] [IsScalarTower O Ω C] (RC : Subalgebra O C), IsTestPt p (CR O y c') RC → ∀ χ : Sg → F →*₀ C, (∀ τ a (o : O), IsLocalRing.residue O o = σ τ a → χ τ a - algebraMap O C o ∈ RC ∧ ∀ u ∈ RC, u * (χ τ a - algebraMap O C o) ≠ 1) → ∀ [DecidableEq F] [Fintype (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.NAdd E (D.p + D.q) p)] [DecidableEq (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.NAdd E (D.p + D.q) p)], ∀ (v : Valuation C NNReal), (∀ c, c ∈ RC ↔ v c ≤ 1) → v (p : C) < 1 → GlobalTheory.CompanionTheory.Ar.GR.IsAbFactor p (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.testOrd P RC) ∧ GlobalTheory.CompanionTheory.Ar.GR.IsTight v p (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.testOrd P RC) := by
-  first | exact @PositivityTheory.Xgn.tight_hopf_order_test | exact PositivityTheory.Xgn.tight_hopf_order_test
+  first | exact @PositivityTheory.Xgn.tight_hopf_order_test
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.ArithVarietyModelHodgeRelay =====

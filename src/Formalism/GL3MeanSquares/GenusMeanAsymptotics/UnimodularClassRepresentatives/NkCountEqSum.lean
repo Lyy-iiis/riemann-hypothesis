@@ -323,7 +323,7 @@ theorem nkCount_eq_sum (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF 
   obtain ⟨u, hu, hu'⟩ := OrbF.exists_on_orbit hs S hg hγ₀ hg' e hgy
   refine Set.mem_biUnion hM₀ ⟨u, hu, ?_⟩
   rw [hu', ← neg_sub]
-  exact neg_mem (pow_smul_anti 𝔭 _ (by omega) hclose)
+  exact neg_mem (_root_.Formalism.HermitianLattices.Ext.L3.D2.smul_anti 𝔭 _ (by omega) hclose)
 
 theorem sum_oM (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF : IsFixF K F) (hs : h.IsSymm) (hd : IsTotPosDef h)
     (S : VecSplit h h') {L : Submodule (𝓞 K) V}
@@ -353,8 +353,7 @@ theorem sum_oM (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF : IsFixF
         rw [Submodule.span_image, hL.span_eq_top, Submodule.map_top, LinearMap.range_eq_top]
         exact g.surjective
       first
-      | exact oM_ne_zero hs S hLat h𝔭 hxM
-      | exact oM_ne_zero hs S hLat.toIsLattice h𝔭 hxM) w
+      | exact oM_ne_zero hs S hLat h𝔭 hxM) w
   calc ∑ M ∈ R, (oM S M : ℝ) * w (S.cut M) = _ :=
         Finset.sum_congr rfl fun M _ => by rw [← OrbF.relIndex_stab hs]
     _ = _ := key

@@ -292,7 +292,7 @@ theorem integral_chg (T : CDVR) (io : c.F →+* T.Fr) : letI := io.toAlgebra
   have ep : pm = 𝟙 _ := by
     apply pullback.hom_ext
     · refine h2.trans ?_
-      simp only [spMap, CommRingCat.ofHom_id, Spec.map_id, Category.comp_id, Category.id_comp]
+      simp only [spMap, CommRingCat.ofHom_id, Spec.map_id, Category.id_comp]
       rfl
     · exact h1.trans (Category.id_comp _).symm
   subst ep
@@ -327,14 +327,6 @@ section Val
 variable {V K' : Type} [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] [Field K'] [Algebra V K']
   [IsFractionRing V K']
 
-theorem mem_of_vV_nonneg {x : K'} (h : 0 ≤ vV V x) : x ∈ Set.range (algebraMap V K') := by
-  by_cases hx : x = 0
-  · exact ⟨0, by simp [hx]⟩
-  have h1 : valV V x ≤ 1 := by
-    have := (WithZero.log_le_log (valV_ne_zero (V := V) hx) one_ne_zero).1 (by simp only [vV] at h; simp; omega)
-    exact this
-  exact IsDiscreteValuationRing.exists_lift_of_le_one h1
-
 theorem mem_of_nval_nonneg {e : ℕ} (he : 0 < e) {x : K'} (h : 0 ≤ nval V e x) : x ∈ Set.range (algebraMap V K') := by
   by_cases hx : x = 0
   · exact ⟨0, by simp [hx]⟩
@@ -343,7 +335,7 @@ theorem mem_of_nval_nonneg {e : ℕ} (he : 0 < e) {x : K'} (h : 0 ≤ nval V e x
   have : (0 : ℝ) ≤ vV V x := by
     by_contra hc
     exact absurd h (not_le.2 (div_neg_of_neg_of_pos (not_le.1 hc) he'))
-  exact mem_of_vV_nonneg (by exact_mod_cast this)
+  exact _root_.Formalism.L2.PjFree.mem_range_of_vV_nonneg (by exact_mod_cast this)
 
 theorem vV_unit (u : Vˣ) : vV V (algebraMap V K' u) = 0 := by
   have : valV V (algebraMap V K' u) = 1 := by
@@ -476,7 +468,6 @@ theorem recordAt_of_isArcFr : Out.Laws → Out.Laws2 → ∀ (E : Type) [Field E
     have key := (_root_.GlobalTheory.ArcQ.isArcFr_unique_baseChange hL hL2 E H Dw l Xo c O β Y Dv.Tv.V b aw χ W e th hth _ _ y₀ hy).2
     first
       | exact key hmono _ φ z₀ hz₀
-      | exact key _ φ z₀ hz₀
   have hI₀ : Integral T' io' z₀ := by
     have key := _root_.GlobalTheory.ArcQ.integral_of_isArcFr hL hL2 E H Dw l Xo c O β Y Dv.Tv.V b aw χ W ρ e th hB hth hP
     have h1 : Function.Injective (e₀.comp (PowerSeries.C (R := Dv.Tv.V))) := by

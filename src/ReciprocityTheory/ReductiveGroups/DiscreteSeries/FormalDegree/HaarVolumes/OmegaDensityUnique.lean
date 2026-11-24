@@ -235,8 +235,8 @@ theorem gMat_smul {ε : Fin n → Bool} (c : ℝ) (s : GCo ε) : gMat (c • s) 
   ext a b
   simp only [gMat, RingHom.id_apply, Matrix.add_apply, Matrix.smul_apply]
   simp only [kMat, pmat, Prod.smul_fst, Prod.smul_snd, Pi.smul_apply]
-  split_ifs <;> (try simp only [Complex.real_smul, Complex.ofReal_mul, star_mul', Complex.star_def,
-    Complex.conj_ofReal, smul_add, smul_zero, smul_neg, add_zero, mul_neg]) <;>
+  split_ifs <;> (try simp only [Complex.real_smul, star_mul', Complex.star_def,
+    Complex.conj_ofReal, smul_add, smul_zero, smul_neg, add_zero]) <;>
     (try simp only [smul_eq_mul, Complex.ofReal_mul]) <;> (try ring_nf)
 
 def gL (ε : Fin n → Bool) : GCo ε →ₗ[ℝ] Matrix (Fin n) (Fin n) ℂ where
@@ -460,7 +460,6 @@ theorem exp_strict :
         Matrix (Fin n) (Fin n) ℂ →L[ℝ] Matrix (Fin n) (Fin n) ℂ)) 0 := by
   first
   | exact hasStrictFDerivAt_exp_zero
-  | exact hasStrictFDerivAt_exp_zero.congr_fderiv (by ext; simp)
 
 
 variable (n) in
@@ -487,21 +486,15 @@ theorem logM_strict : HasStrictFDerivAt (logM n) (ContinuousLinearMap.id ℝ _) 
 
 end Log
 
-private theorem Jm_mul_self_eq_one' (ε : Fin n → Bool) : Jm ε * Jm ε = 1 := by
-  rw [Jm, Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-  congr 1
-  funext a
-  split_ifs <;> simp
-
 theorem Jm_inv (ε : Fin n → Bool) : (Jm ε)⁻¹ = Jm ε := by
-  exact Matrix.inv_eq_left_inv (Jm_mul_self_eq_one' ε)
+  exact Matrix.inv_eq_left_inv (_root_.ReciprocityTheory.ChartRestriction.DS.S7.Jm_mul_self ε)
 
 theorem Jm_isUnit (ε : Fin n → Bool) : IsUnit (Jm ε) := by
-  exact ⟨⟨Jm ε, Jm ε, Jm_mul_self_eq_one' ε, Jm_mul_self_eq_one' ε⟩, rfl⟩
+  exact ⟨⟨Jm ε, Jm ε, _root_.ReciprocityTheory.ChartRestriction.DS.S7.Jm_mul_self ε, _root_.ReciprocityTheory.ChartRestriction.DS.S7.Jm_mul_self ε⟩, rfl⟩
 
 theorem conjT_of_inG {ε : Fin n → Bool} {Y : Matrix (Fin n) (Fin n) ℂ} (h : inG ε Y) :
     Yᴴ = Jm ε * (-Y) * (Jm ε)⁻¹ := by
-  have hJ := Jm_mul_self_eq_one' ε
+  have hJ := _root_.ReciprocityTheory.ChartRestriction.DS.S7.Jm_mul_self ε
   have h' : Yᴴ * Jm ε + Jm ε * Y = 0 := h
   have h1 : Yᴴ * Jm ε = -(Jm ε * Y) := eq_neg_of_add_eq_zero_left h'
   rw [Jm_inv]
@@ -510,7 +503,7 @@ theorem conjT_of_inG {ε : Fin n → Bool} {Y : Matrix (Fin n) (Fin n) ℂ} (h :
 
 theorem exp_inUJ {ε : Fin n → Bool} {Y : Matrix (Fin n) (Fin n) ℂ} (h : inG ε Y) :
     inUJ ε (NormedSpace.exp Y) := by
-  have hJ := Jm_mul_self_eq_one' ε
+  have hJ := _root_.ReciprocityTheory.ChartRestriction.DS.S7.Jm_mul_self ε
   show (NormedSpace.exp Y)ᴴ * Jm ε * NormedSpace.exp Y = Jm ε
   rw [← Matrix.exp_conjTranspose, conjT_of_inG h, Matrix.exp_conj _ _ (Jm_isUnit ε), Jm_inv,
     Matrix.mul_assoc (Jm ε * NormedSpace.exp (-Y)) (Jm ε) (Jm ε), hJ, Matrix.mul_one, Matrix.mul_assoc,
@@ -520,7 +513,7 @@ theorem exp_inUJ {ε : Fin n → Bool} {Y : Matrix (Fin n) (Fin n) ℂ} (h : inG
 theorem inG_of_exp {ε : Fin n → Bool} {Y : Matrix (Fin n) (Fin n) ℂ} (ℓ : Matrix (Fin n) (Fin n) ℂ → Matrix (Fin n) (Fin n) ℂ)
     (hU : inUJ ε (NormedSpace.exp Y)) (h1 : ℓ (NormedSpace.exp Y) = Y)
     (h2 : ℓ (NormedSpace.exp (Jm ε * (-Yᴴ) * Jm ε)) = Jm ε * (-Yᴴ) * Jm ε) : inG ε Y := by
-  have hJ := Jm_mul_self_eq_one' ε
+  have hJ := _root_.ReciprocityTheory.ChartRestriction.DS.S7.Jm_mul_self ε
   have hU' : (NormedSpace.exp Y)ᴴ * Jm ε * NormedSpace.exp Y = Jm ε := hU
   have hEE : NormedSpace.exp Y * NormedSpace.exp (-Y) = 1 := by
     rw [← Matrix.exp_add_of_commute _ _ (Commute.neg_right (Commute.refl Y)), add_neg_cancel,
@@ -596,7 +589,7 @@ theorem gMat_cLin {ε : Fin n → Bool} {Y : Matrix (Fin n) (Fin n) ℂ} (h : in
     have h2 : ¬ b < a := not_lt_of_gt hab
     cases ha : ε a <;> cases hb : ε b <;>
       simp only [sg, ha, hb, ↓reduceIte, Bool.false_eq_true] at hE <;>
-      simp [ha, hb, h1, h2, hab] <;>
+      simp [h1, h2, hab] <;>
       (try simp only [Complex.star_def] at hE) <;>
       first | linear_combination hE | linear_combination -hE
   · have h0 : star (Y a a) + Y a a = 0 := by
@@ -609,7 +602,7 @@ theorem gMat_cLin {ε : Fin n → Bool} {Y : Matrix (Fin n) (Fin n) ℂ} (h : in
     apply Complex.ext <;> simp [hre]
   · have h1 : a ≠ b := ne_of_gt hab
     have h2 : ¬ a < b := not_lt_of_gt hab
-    cases ha : ε a <;> cases hb : ε b <;> simp [ha, hb, h1, h2, hab]
+    cases ha : ε a <;> cases hb : ε b <;> simp [h1, h2, hab]
 
 theorem sg_eq {ε : Fin n → Bool} {i j : Fin n} (h : ε i = ε j) : sg ε i = sg ε j := by
   simp [sg, h]
@@ -1003,9 +996,6 @@ def muCDtr {P Q : ℕ} (e : Fin P ⊕ Fin Q ≃ Fin n) (ε : Fin n → Bool) : M
     (fun g : Formalism.BasicNotions.UpqT P Q => Matrix.reindex e e (Formalism.BasicNotions.UpqT.mat g))
     (ENNReal.ofReal (cPQ ε) • muPolarMat ε)
 
-theorem tie_volU_pos (N : ℕ) : 0 < volU N :=
-  Finset.prod_pos fun i _ => by positivity
-
 theorem tie_tendsto {f : ℝ → ENNReal} {x : ℝ} (hx : 0 < x)
     (h : ∀ η : ℝ, 0 < η → ∀ᶠ r in 𝓝[>] (0 : ℝ),
       ENNReal.ofReal ((1 - η) * x) ≤ f r ∧ f r ≤ ENNReal.ofReal ((1 + η) * x)) :
@@ -1050,7 +1040,7 @@ theorem tie_d_eq (ε : Fin n → Bool) (d : ℝ) (hd0 : 0 < d)
   obtain ⟨hK, hP, hG⟩ := gco_haar ε
   have hpol := haar_pol_density (muPolar ε) d hd
   set x := volU (pOf ε) * volU (qOf ε) with hx
-  have hx0 : 0 < x := mul_pos (tie_volU_pos _) (tie_volU_pos _)
+  have hx0 : 0 < x := mul_pos (_root_.ReciprocityTheory.ChartRestriction.DS.volU_pos' _) (_root_.ReciprocityTheory.ChartRestriction.DS.volU_pos' _)
   set D := 1 / x with hD
   have hD0 : 0 < D := by positivity
   have key : ∀ η : ℝ, 0 < η → η < 1 → (1 - η) * d ≤ (1 + η) * D ∧ (1 - η) * D ≤ (1 + η) * d := by
@@ -1175,9 +1165,9 @@ theorem omegaDensity_muCDtr {P Q : ℕ} (e : Fin P ⊕ Fin Q ≃ Fin n) {ε : Fi
     rw [Measure.smul_apply, smul_eq_mul,
       Measure.map_apply (tie_gToLie_cont e he1 he2).measurable (tie_ball_open P Q r).measurableSet]
     rfl
-  have hvn := tie_volU_pos n
-  have hvp := tie_volU_pos (pOf ε)
-  have hvq := tie_volU_pos (qOf ε)
+  have hvn := _root_.ReciprocityTheory.ChartRestriction.DS.volU_pos' n
+  have hvp := _root_.ReciprocityTheory.ChartRestriction.DS.volU_pos' (pOf ε)
+  have hvq := _root_.ReciprocityTheory.ChartRestriction.DS.volU_pos' (qOf ε)
   have hc : cOmega n * κ = cPQ ε * d := by
     rw [hdD, cPQ_eq_volU, cOmega, ← hκ]
     field_simp
@@ -1347,20 +1337,13 @@ def psiM {P Q : ℕ} (e : Fin P ⊕ Fin Q ≃ Fin n) {ε : Fin n → Bool}
     Formalism.BasicNotions.UpqT P Q ≃ᵐ UJ ε :=
   (psiC e he1 he2).toHomeomorph.toMeasurableEquiv
 
-private theorem jm_sq_lemma (ε : Fin n → Bool) : Formalism.REAL.Jm ε * Formalism.REAL.Jm ε = 1 := by
-  unfold Formalism.REAL.Jm
-  rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-  congr 1
-  funext i
-  split_ifs <;> norm_num
-
 private theorem isClosedEmbedding_coe_of_mem_iff_conjTranspose_Jm_mul_eq (ε : Fin n → Bool) (H : Subgroup (Matrix (Fin n) (Fin n) ℂ)ˣ)
     (hH : ∀ g : (Matrix (Fin n) (Fin n) ℂ)ˣ, g ∈ H ↔
       (g : Matrix (Fin n) (Fin n) ℂ)ᴴ * Formalism.REAL.Jm ε * g = Formalism.REAL.Jm ε) :
     Topology.IsClosedEmbedding
       (fun g : H => ((g : (Matrix (Fin n) (Fin n) ℂ)ˣ) : Matrix (Fin n) (Fin n) ℂ)) := by
   set J := Formalism.REAL.Jm ε with hJdef
-  have hJJ : J * J = 1 := jm_sq_lemma ε
+  have hJJ : J * J = 1 := _root_.Formalism.REAL.Jm_mul_self ε
   have hleft : ∀ M : Matrix (Fin n) (Fin n) ℂ, Mᴴ * J * M = J → (J * Mᴴ * J) * M = 1 := by
     intro M hM
     calc J * Mᴴ * J * M = J * (Mᴴ * J * M) := by simp only [Matrix.mul_assoc]
@@ -1403,10 +1386,7 @@ private theorem isClosedEmbedding_coe_of_mem_iff_conjTranspose_Jm_mul_eq (ε : F
     exact (continuous_id.matrix_conjTranspose.matrix_mul continuous_const).matrix_mul continuous_id
   exact isClosed_eq hq continuous_const
 
-lemma toM_emb (ε : Fin n → Bool) :
-    MeasurableEmbedding (β := Fin n → Fin n → ℂ) (fun g : UJ ε => toM g) := by
-  have h := isClosedEmbedding_coe_of_mem_iff_conjTranspose_Jm_mul_eq ε (UJ ε) (fun g => Iff.rfl)
-  exact Topology.IsClosedEmbedding.measurableEmbedding (β := Fin n → Fin n → ℂ) h
+alias toM_emb := _root_.ReciprocityTheory.ChartRestriction.DS.measurableEmbedding_toM
 
 lemma umat_emb (ε : Fin n → Bool) :
     MeasurableEmbedding (β := Fin n → Fin n → ℂ) (fun g : Formalism.REAL.UJ ε => Formalism.MainNotions.S.umat g) := by

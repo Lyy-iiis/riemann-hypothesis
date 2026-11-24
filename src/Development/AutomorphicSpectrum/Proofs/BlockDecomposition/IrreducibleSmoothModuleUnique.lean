@@ -947,14 +947,14 @@ theorem packGL_mulSingle_val (w w' : ι) (g : GL n ℂ) (i j : n) :
     (packGL (Pi.mulSingle w g)).val i j w' = if w' = w then g.val i j else (1 : Matrix n n ℂ) i j := by
   by_cases h : w' = w
   · subst h; simp [packGL_val, packM]
-  · simp [packGL_val, packM, h, Pi.mulSingle_eq_of_ne h]
+  · simp [packGL_val, packM, h]
 
 theorem packGL_mulSingle_inv_val (w w' : ι) (g : GL n ℂ) (i j : n) :
     (packGL (Pi.mulSingle w g))⁻¹.val i j w' =
       if w' = w then g⁻¹.val i j else (1 : Matrix n n ℂ) i j := by
   by_cases h : w' = w
   · subst h; rw [packGL_inv_val]; simp [packM]
-  · rw [packGL_inv_val]; simp [packM, h, Pi.mulSingle_eq_of_ne h]
+  · rw [packGL_inv_val]; simp [packM, h]
 
 theorem mem_of_family {S : Subgroup (GL n (ι → ℂ))}
     (hS : ∀ (c : ℝ → GL n (ι → ℂ)) (X : n → n → ι → ℂ), Continuous c → c 0 = 1 →
@@ -1097,9 +1097,7 @@ open scoped InnerProductSpace
 variable {E : Type} [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] {a : ℕ}
   {μ : Measure (GA E a)} [μ.IsHaarMeasure] [μ.IsMulRightInvariant]
 
-theorem continuous_infGL' : Continuous (infGL E a) :=
-  Continuous.units_map _ (continuous_const.add (continuous_id.matrix_map
-    ((continuous_infEq E).prodMk continuous_const : Continuous fun x : Cinf E => ((infEq E x, 0) : InfiniteAdeleRing E × Af E))))
+alias continuous_infGL' := _root_.GlobalTheory.CompanionTheory.IsoTypes.continuous_infGL
 
 theorem map_closure_le {C S : Submodule ℂ (L2 (latticeGL E a) μ)} (hC : C = S.topologicalClosure)
     (T : L2 (latticeGL E a) μ →L[ℂ] L2 (latticeGL E a) μ) (h : ∀ F ∈ S, T F ∈ C) {v : L2 (latticeGL E a) μ}

@@ -82,10 +82,6 @@ open scoped nonZeroDivisors
 
 namespace GlobalTheory.SigBlockSum
 
-lemma cT_eq_conjTranspose {m p : Type} (M : Matrix m p ℂ) :
-    Formalism.UG.cT (starRingEnd ℂ) M = Mᴴ := by
-  ext i j; simp [Formalism.UG.cT, Matrix.conjTranspose]
-
 def sgn (p q : ℕ) : Fin p ⊕ Fin q → ℂ := Sum.elim (fun _ => 1) (fun _ => -1)
 
 lemma fromBlocks_one_neg_one (p q : ℕ) :
@@ -121,7 +117,7 @@ theorem hasSig_smul_blk : ∀ {a b d : ℕ} (e : Fin a ⊕ Fin b ≃ Fin d) (GA 
   intro a b d e GA GB pa qa pb qb κ hκ hA hB
   obtain ⟨eA, PA, hPA⟩ := hA
   obtain ⟨eB, PB, hPB⟩ := hB
-  rw [cT_eq_conjTranspose] at hPA hPB
+  rw [_root_.Formalism.UG.P.cT_conj_eq] at hPA hPB
   have hQA := rows_reindex GA eA _ hPA
   have hQB := rows_reindex GB eB _ hPB
   set QA := (PA : Matrix (Fin pa ⊕ Fin qa) (Fin pa ⊕ Fin qa) ℂ).submatrix eA id
@@ -182,7 +178,7 @@ open scoped nonZeroDivisors
 theorem _root_.GlobalTheory.T.hasHermitianSignature_pos_smul_blockDiagonalReindexed : ∀ {a b d : ℕ} (e : Fin a ⊕ Fin b ≃ Fin d) (GA : Matrix (Fin a) (Fin a) ℂ) (GB : Matrix (Fin b) (Fin b) ℂ) {pa qa pb qb : ℕ} {κ : ℝ},
     0 < κ → Formalism.UG.HasSignature GA pa qa → Formalism.UG.HasSignature GB pb qb →
     GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.HasSig ((κ : ℂ) • GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.blk e GA GB) (pa + pb) (qa + qb) := by
-  first | exact @GlobalTheory.SigBlockSum.hasSig_smul_blk | exact GlobalTheory.SigBlockSum.hasSig_smul_blk | (intros; apply GlobalTheory.SigBlockSum.hasSig_smul_blk <;> assumption)
+  first | exact @GlobalTheory.SigBlockSum.hasSig_smul_blk
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HasHermitianSignaturePosSmulBlockDiagonalReindexStatement =====
@@ -216,7 +212,7 @@ theorem posDef_fromBlocks_diag {m n : Type} [Fintype m] [Fintype n] [DecidableEq
   · rw [Matrix.IsHermitian, Matrix.fromBlocks_conjTranspose, hA.1.eq, hD.1.eq, Matrix.conjTranspose_zero, Matrix.conjTranspose_zero]
   · have key : star x ⬝ᵥ (Matrix.fromBlocks A 0 0 D *ᵥ x) =
         star (x ∘ Sum.inl) ⬝ᵥ (A *ᵥ (x ∘ Sum.inl)) + star (x ∘ Sum.inr) ⬝ᵥ (D *ᵥ (x ∘ Sum.inr)) := by
-      simp [dotProduct, Fintype.sum_sum_type, Matrix.fromBlocks_mulVec, Function.comp_def, Matrix.mulVec,
+      simp [dotProduct, Fintype.sum_sum_type, Function.comp_def, Matrix.mulVec,
         Pi.star_apply]
     rw [key]
     by_cases h1 : x ∘ Sum.inl = 0
@@ -235,7 +231,7 @@ theorem posDef_blk {p q d : ℕ} (e : Fin p ⊕ Fin q ≃ Fin d) {A : Matrix (Fi
 
 theorem blk_conjTranspose {p q d : ℕ} (e : Fin p ⊕ Fin q ≃ Fin d) (A : Matrix (Fin p) (Fin p) ℂ)
     (D : Matrix (Fin q) (Fin q) ℂ) : (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.blk e A D)ᴴ = GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.blk e Aᴴ Dᴴ := by
-  simp [GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.blk, Matrix.conjTranspose_reindex, Matrix.fromBlocks_conjTranspose]
+  simp [GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.blk, Matrix.fromBlocks_conjTranspose]
 
 theorem isCartan_blk : ∀ {a b d : ℕ} (e : Fin a ⊕ Fin b ≃ Fin d) (GA sA : Matrix (Fin a) (Fin a) ℂ) (GB sB : Matrix (Fin b) (Fin b) ℂ) {κ : ℝ},
     0 < κ → Formalism.IndefR.Datum.IsCartanInv GA sA → Formalism.IndefR.Datum.IsCartanInv GB sB →
@@ -305,7 +301,7 @@ open scoped nonZeroDivisors
 theorem _root_.GlobalTheory.T.isCartanInvolutionHermitian_smul_blockDiagonalReindexed : ∀ {a b d : ℕ} (e : Fin a ⊕ Fin b ≃ Fin d) (GA sA : Matrix (Fin a) (Fin a) ℂ) (GB sB : Matrix (Fin b) (Fin b) ℂ) {κ : ℝ},
     0 < κ → Formalism.IndefR.Datum.IsCartanInv GA sA → Formalism.IndefR.Datum.IsCartanInv GB sB →
     GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.IsCartan ((κ : ℂ) • GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.blk e GA GB) ((GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.blk e sA sB).map (starRingEnd ℂ)) := by
-  first | exact @GlobalTheory.CartanBlocks.isCartan_blk | exact GlobalTheory.CartanBlocks.isCartan_blk | (intros; apply GlobalTheory.CartanBlocks.isCartan_blk <;> assumption)
+  first | exact @GlobalTheory.CartanBlocks.isCartan_blk
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsCartanInvolutionHermitianSmulBlockDiagonalReinStatement =====
@@ -332,7 +328,7 @@ theorem _root_.GlobalTheory.T.isLattice_latticeBlockDirectSum_scaled : ∀ {E : 
     ∀ {ΛA : Submodule (𝓞 E) (Fin a → E)} {ΛB : Submodule (𝓞 E) (Fin b → E)}, Submodule.IsLattice E ΛA →
     Submodule.IsLattice E ΛB → ∀ (e : Fin a ⊕ Fin b ≃ Fin d),
     Submodule.IsLattice E (GlobalTheory.SkewLat.pairLat (GlobalTheory.SkewLat.scLat 𝔞 ΛA) (GlobalTheory.SkewLat.scLat 𝔞 ΛB) e) := by
-  first | exact @GlobalTheory.SkewLat.pairLat_scLat_isLattice | exact GlobalTheory.SkewLat.pairLat_scLat_isLattice | (intros; apply GlobalTheory.SkewLat.pairLat_scLat_isLattice <;> assumption)
+  first | exact @GlobalTheory.SkewLat.pairLat_scLat_isLattice
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsLatticeLatticeBlockDirectSumScaledStatement =====
@@ -361,7 +357,7 @@ theorem _root_.GlobalTheory.T.scaledBlockSum_selfDual_traceSkewForm : ∀ {D : D
     y ∈ GlobalTheory.SkewLat.pairLat (GlobalTheory.SkewLat.scLat D.host.AA ΛA) (GlobalTheory.SkewLat.scLat D.host.AA ΛB) e ↔
       ∀ x ∈ GlobalTheory.SkewLat.pairLat (GlobalTheory.SkewLat.scLat D.host.AA ΛA) (GlobalTheory.SkewLat.scLat D.host.AA ΛB) e,
       ∀ o : 𝓞 D.host.E, IsIntegral ℤ (Algebra.trace ℚ D.host.E (o * GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.form D.sp.cm.sig (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.skewGram A B e) y x)) := by
-  first | exact @GlobalTheory.SkewLat.pairLat_trace_selfDual | exact GlobalTheory.SkewLat.pairLat_trace_selfDual | (intros; apply GlobalTheory.SkewLat.pairLat_trace_selfDual <;> assumption)
+  first | exact @GlobalTheory.SkewLat.pairLat_trace_selfDual
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ScaledBlockSumSelfDualTraceSkewFormStatement =====
@@ -385,7 +381,7 @@ open scoped nonZeroDivisors
 
 
 theorem _root_.GlobalTheory.T.star_mem_polarizationIdeal_of_mem_conj : ∀ {D : D7} {c : D.host.E}, c ∈ D.host.AAbar → star c ∈ D.host.AA := by
-  first | exact @GlobalTheory.star_mem_AA_of_mem_AAbar | exact GlobalTheory.star_mem_AA_of_mem_AAbar | (intros; apply GlobalTheory.star_mem_AA_of_mem_AAbar <;> assumption)
+  first | exact @GlobalTheory.star_mem_AA_of_mem_AAbar
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.StarMemPolarizationIdealOfMemConjStatement =====
@@ -538,7 +534,7 @@ theorem bigSpace_isSkew : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} 
     exact zero_ne_one this
   set Λ := pairLat (scLat D.host.AA (G.Λ (.grid (i : ℕ) ((j : ℕ) + 1)))) (scLat D.host.AA (G.Λ (.grid ((i : ℕ) + 1) (j : ℕ)))) e
     with hΛ
-  have hlat : Submodule.IsLattice D.host.E Λ := isLattice_pairLat hAA hV.sd.1 hV₁.sd.1 e
+  have hlat : Submodule.IsLattice D.host.E Λ := _root_.GlobalTheory.SkewLat.pairLat_scLat_isLattice hAA hV.sd.1 hV₁.sd.1 e
   have hfull : Submodule.IsFullLattice D.host.E Λ :=
     pairLat_isFull (scLat_isFull hAA (GlobalTheory.ProjXCols.selfDual_isFullLattice _ _ hV.sd))
       (scLat_isFull hAA (GlobalTheory.ProjXCols.selfDual_isFullLattice _ _ hV₁.sd)) e
@@ -567,7 +563,7 @@ theorem bigSpace_isSkew : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} 
     have hA₁ := hV₁.sigOK (tauE D (τf w))
     rw [hV.sig] at hA
     rw [hV₁.sig] at hA₁
-    have h := hasSig_blk e (gramAt D (spV G i j) (τf w)) (gramAt D (spV₁ G i j) (τf w)) (Formalism.L2.Theta.xi_zero_im_pos D (τf w)) hA hA₁
+    have h := _root_.GlobalTheory.SigBlockSum.hasSig_smul_blk e (gramAt D (spV G i j) (τf w)) (gramAt D (spV₁ G i j) (τf w)) (Formalism.L2.Theta.xi_zero_im_pos D (τf w)) hA hA₁
     have hsum := h.1
     have hd : Fintype.card (Fin (spV G i j).rank ⊕ Fin (spV₁ G i j).rank) =
         Fintype.card (Fin ((spW G i j).rank + (spW₁ G i j).rank)) := Fintype.card_congr e
@@ -576,12 +572,12 @@ theorem bigSpace_isSkew : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} 
     have h2 := hV₁.rank
     simp only [Node.rank, Node.neg] at h1 h2 h hsum
     convert h using 2 <;> omega
-  case dual => exact fun y => dual_pairLat (fun c hc => star_mem_AA hc) _ _ hV.sd hV₁.sd e y
+  case dual => exact fun y => _root_.GlobalTheory.SkewLat.pairLat_trace_selfDual (fun c hc => _root_.GlobalTheory.star_mem_AA_of_mem_AAbar hc) _ _ hV.sd hV₁.sd e y
   case cartan =>
     intro w
     show GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.IsCartan (Complex.I • (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.skewGram (spV G i j) (spV₁ G i j) e).map (B.emb w).1) _
     rw [I_smul_skewGram_map _ _ e (τf w) (B.emb w).1 (hB w)]
-    exact isCartan_blk e _ _ _ _ (Formalism.L2.Theta.xi_zero_im_pos D (τf w)) (W.cart_is _ hrV (τf w)) (W.cart_is _ hrV₁ (τf w))
+    exact _root_.GlobalTheory.CartanBlocks.isCartan_blk e _ _ _ _ (Formalism.L2.Theta.xi_zero_im_pos D (τf w)) (W.cart_is _ hrV (τf w)) (W.cart_is _ hrV₁ (τf w))
   case bas =>
     intro v
     show GlobalTheory.AdelicU.IsSplitBasis (B.τ v) Λ (if h : (v : HeightOneSpectrum (𝓞 D.host.F)) ∈ B.P then (hex ⟨v, h⟩).choose else 1)

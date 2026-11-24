@@ -1122,7 +1122,7 @@ theorem expU_two_pi (a : Fin n) (hX : (Matrix.single a a Complex.I)ᴴ = -(Matri
       by_cases hc : i = a
       · subst hc
         simp
-      · simp [Matrix.single_apply, hc, Ne.symm hc]
+      · simp [hc, Ne.symm hc]
     · rw [Matrix.diagonal_apply_ne _ hij, Matrix.smul_apply, Matrix.single_apply,
         if_neg (fun hh => hij (hh.1.symm.trans hh.2)), smul_zero]
   rw [e, Matrix.exp_diagonal, ← Matrix.diagonal_one]
@@ -1219,18 +1219,6 @@ theorem weight_int (h : IsDerivK σ Kf) (a : Fin n) (r : ℝ) {v : V} (hv : v �
     have := (mul_eq_zero.1 h6).resolve_left h7
     linear_combination this
   exact_mod_cast h5
-
-theorem kF_gl {E1 E2 : Fin n → Fin n → Module.End ℂ V} (h : IsPair E1 E2) : Formalism.REAL.GlRel (kF E1 E2) := by
-  intro a b c d
-  have h1 := h.gl1 a b c d
-  have h2 := h.gl2 a b c d
-  have e : kF E1 E2 a b * kF E1 E2 c d - kF E1 E2 c d * kF E1 E2 a b =
-      (E1 a b * E1 c d - E1 c d * E1 a b) + (E2 a b * E2 c d - E2 c d * E2 a b) := by
-    simp only [kF, add_mul, mul_add]
-    rw [h.comm a b c d, h.comm c d a b]
-    abel
-  rw [e, h1, h2]
-  split_ifs <;> simp [kF] <;> abel
 
 end GlobalTheory.CompanionTheory.RealMult.DiracProof
 
@@ -1426,7 +1414,6 @@ theorem dirac_ineq0 : ∀ {n : ℕ} (lam : Fin n → ℤ) (V : Type) [NormedAddC
       rw [Finset.mul_sum]
       exact Finset.sum_congr rfl fun i _ => by
         rw [Pi.smul_apply, inner_smul_right, inner_self_eq_norm_sq_to_K]
-        push_cast
         rfl
     rw [← e1, hsk, e2]
   have hEq' : (∑ i, ‖D x i‖ ^ 2) = -((4 * (S - R) + 3 * R - T) * ∑ i, ‖x i‖ ^ 2) := by
@@ -1450,7 +1437,7 @@ theorem dirac_inequality_k_types : DiracInequalityWithoutSplitComponent := by
   intro n lam _ V _ _ E1 E2 σ hc ν hν
   obtain ⟨x, hxh, hx⟩ := (Submodule.ne_bot_iff _).1 hν
   obtain ⟨S, hfd, hvS, -, hKS, -⟩ := hc.der.2 x
-  have hGl : Formalism.REAL.GlRel (kF E1 E2) := GlobalTheory.CompanionTheory.RealMult.DiracProof.kF_gl hc.pair
+  have hGl : Formalism.REAL.GlRel (kF E1 E2) := _root_.GlobalTheory.CompanionTheory.RealCount.InjHw.gl_kF hc.pair
   have hK : Formalism.REAL.KHighest (fun _ => true) (kF E1 E2) ν x := hxh
   have hint : ∀ a, ∃ m : ℤ, ν a = m := fun a =>
     GlobalTheory.CompanionTheory.RealMult.DiracProof.weight_int hc.der a (ν a) hx (hK.1 a)
@@ -1490,7 +1477,7 @@ section -- clump:auto
 
 namespace PositivityTheory.RgBcC.RealD
 
-theorem countG_holds : CountG := GlobalTheory.CompanionTheory.RealCountG.countG
+alias countG_holds := _root_.GlobalTheory.CompanionTheory.RealCountG.countG
 
 theorem dirac_inequality_k_types : DiracInequalityWithoutSplitComponent := GlobalTheory.CompanionTheory.DiracKType0.dirac_inequality_k_types
 

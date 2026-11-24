@@ -187,10 +187,8 @@ theorem wordFusion_list (L : List ((R → Matrix (Fin 2) (Fin 2) B) × (R → R)
     refine ⟨?_, ?_⟩
     · first
       | exact e1
-      | simpa using e1
     · first
       | exact e2
-      | simpa using e2
 
 end Words
 

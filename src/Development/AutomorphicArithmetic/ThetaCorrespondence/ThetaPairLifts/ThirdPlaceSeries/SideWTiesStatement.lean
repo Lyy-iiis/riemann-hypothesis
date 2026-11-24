@@ -36,7 +36,6 @@ public import Development.AbelianVarietyTheory.Definitions.GlobalTwisting.LFunct
 public import Development.AbelianVarietyTheory.Proofs.HeightProofs.NcardEqIffStabilizer
 public import Mathlib.Data.Nat.Prime.Defs
 public import Mathlib.RingTheory.Ideal.Prime
-public import Mathlib
 public import Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.ClassNumberLeAbsDiscrOfFinrankEqTwo
 public import Development.AbelianVarietyTheory.Proofs.HeightProofs.HeckeIdealEqOfRay
 public import Development.AbelianVarietyTheory.Proofs.HeightProofs.LogRootDiscrLeOfNatCastMemDifferentIdeal
@@ -118,6 +117,7 @@ import Mathlib.Algebra.Order.Star.Int
 import Mathlib.Analysis.SpecialFunctions.Bernstein
 import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
 import Mathlib.RingTheory.WittVector.IsPoly
+import Mathlib.Tactic
 import Mathlib.Analysis.Complex.ExponentialBounds
 import Mathlib.NumberTheory.NumberField.Discriminant.Different
 import Mathlib.Algebra.Ring.IsFormallyReal
@@ -233,7 +233,7 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.conjGenerators_mem_framePrimes_trueColumns : ∀ (B : Base) (f : Fr B.toPre) (T : TwDat B) (w : Bl.ColW B f T) (Z : w.Lt) (t : Bl.ColT w Z), HalfAt (Formalism.L2.Herm.toErrXS t.full.1) (Fr.at (w.st Z) f) := by
-  first | exact @GlobalTheory.AtMember.conj_gen_mem_frame | exact GlobalTheory.AtMember.conj_gen_mem_frame | (intros; apply GlobalTheory.AtMember.conj_gen_mem_frame <;> assumption)
+  first | exact @GlobalTheory.AtMember.conj_gen_mem_frame
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ConjGeneratorsMemFramePrimesTrueColumnsStatement =====
@@ -1087,7 +1087,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsPrimeDvdNatCastMem =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.FieldDatumSizeLogDiscriminant =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.FieldDatumSizeLogDiscriminant", "h": "module\n\npublic import Mathlib\npublic import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.FixedCoefficientFieldInComplex\npublic import Development.AbelianVarietyTheory.Definitions.HeightFunctions.FiniteDimensionalOfSz\npublic import Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.ClassNumberLeAbsDiscrOfFinrankEqTwo\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.AbelianUnramIn\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.ExistsImagQuadraticHost\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.ExistsIsRayIntermediateField\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.HeckeIdealEqOfRay\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.LogRootDiscrLeOfNatCastMemDifferentIdeal\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.NatCastMulFinrankMemDifferentIdeal\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.WeberSetSubsetRayField\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.DiscFieldEqTorsionField\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.DvdDiscrTorsionField\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsPrimeDvdNatCastMem\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsTorsionParamLattice\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.UnramInIffDifferentIdealEqTop\nimport Formalism.LocalRingCardinality.ConjSqrtMinusD\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.ExponentialBounds\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.NumberField.Discriminant.Different\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.FieldDatumSizeLogDiscriminant", "h": "module\n\nimport Mathlib.Tactic\npublic import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.FixedCoefficientFieldInComplex\npublic import Development.AbelianVarietyTheory.Definitions.HeightFunctions.FiniteDimensionalOfSz\npublic import Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.ClassNumberLeAbsDiscrOfFinrankEqTwo\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.AbelianUnramIn\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.ExistsImagQuadraticHost\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.ExistsIsRayIntermediateField\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.HeckeIdealEqOfRay\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.LogRootDiscrLeOfNatCastMemDifferentIdeal\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.NatCastMulFinrankMemDifferentIdeal\npublic import Development.AbelianVarietyTheory.Proofs.HeightProofs.WeberSetSubsetRayField\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.DiscFieldEqTorsionField\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.DvdDiscrTorsionField\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsPrimeDvdNatCastMem\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsTorsionParamLattice\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.UnramInIffDifferentIdealEqTop\nimport Formalism.LocalRingCardinality.ConjSqrtMinusD\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.ExponentialBounds\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.NumberField.Discriminant.Different\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1095,16 +1095,6 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.L2.Host Globa
 open scoped IntermediateField
 
 namespace GlobalTheory.Mem.Fld.TorsionSize
-
-theorem exists_prime_dvd_mem {O : Type} [CommRing O] (P : Ideal O) [hP : P.IsPrime] (m : ℕ) :
-    m ≠ 0 → (m : O) ∈ P → ∃ p : ℕ, p.Prime ∧ p ∣ m ∧ (p : O) ∈ P := by
-  first
-  | exact @_root_.GlobalTheory.PrimeDvdNatCastMem.exists_prime_dvd_natCast_mem
-  | exact _root_.GlobalTheory.PrimeDvdNatCastMem.exists_prime_dvd_natCast_mem
-  | (apply _root_.GlobalTheory.PrimeDvdNatCastMem.exists_prime_dvd_natCast_mem <;> assumption)
-  | (intros; apply _root_.GlobalTheory.PrimeDvdNatCastMem.exists_prime_dvd_natCast_mem <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.PrimeDvdNatCastMem.exists_prime_dvd_natCast_mem <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.PrimeDvdNatCastMem.exists_prime_dvd_natCast_mem ..)
 
 theorem unramIn_of_discr (H M : Type) [Field H] [NumberField H] [Field M] [NumberField M]
     [Algebra H M] [IsGalois H M] (n : ℕ)
@@ -1117,7 +1107,7 @@ theorem unramIn_of_discr (H M : Type) [Field H] [NumberField H] [Field M] [Numbe
     have h1 : Ideal.absNorm P ∣ (discr M).natAbs := by
       rw [natAbs_discr_eq_absNorm_differentIdeal_mul_natAbs_discr_pow H (𝓞 H) M (𝓞 M)]
       exact (map_dvd Ideal.absNorm hd).mul_right _
-    obtain ⟨p, hp, hpd, hpP⟩ := exists_prime_dvd_mem P (Ideal.absNorm P)
+    obtain ⟨p, hp, hpd, hpP⟩ := _root_.GlobalTheory.PrimeDvdNatCastMem.exists_prime_dvd_natCast_mem P (Ideal.absNorm P)
       (by rwa [Ne, Ideal.absNorm_eq_zero_iff]) (Ideal.absNorm_mem P)
     obtain ⟨k, hk⟩ := h p hp (hpd.trans h1)
     apply hn
@@ -1562,7 +1552,7 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.fieldTies_of_rayField_of_ksExact : GlobalTheory.NT.RayField → ∀ (X : Stages) (f : Fr X.B.toPre) (δ : Fld.FieldDat X.B.toPre), X.B.KsExact δ f → FieldTies X.toD7 (Fr.at X f) := by
-  first | exact @GlobalTheory.AtMember.fieldTies_of_ksExact | exact GlobalTheory.AtMember.fieldTies_of_ksExact | (intros; apply GlobalTheory.AtMember.fieldTies_of_ksExact <;> assumption)
+  first | exact @GlobalTheory.AtMember.fieldTies_of_ksExact
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.IndexBoundCoefficientFieldOfExactSmallFieldStatement =====
@@ -1601,7 +1591,7 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.coreFrameCompatible_constructed_point : GlobalTheory.NT.RayField → ∀ (𝒮 : Slots), CoreSlot 𝒮 → ∀ (K : Ctx) (p : WPt 𝒮 K), Tied p.O.ex.errX (cfOf p).J (cfOf p).C := by
-  first | exact @GlobalTheory.Plug.tied_cfOf | exact GlobalTheory.Plug.tied_cfOf | (intros; apply GlobalTheory.Plug.tied_cfOf <;> assumption)
+  first | exact @GlobalTheory.Plug.tied_cfOf
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.CoreFrameCompatibleConstructedPointStatement =====
@@ -1645,7 +1635,7 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.side_weight_psi_choice_tame_tie : ∀ (hL : _root_.UpperTheory.Zero.LLC.RecTExists) (𝒮 : Slots) (ν : _root_.GlobalTheory.PlugPt.ExtensionReading hL 𝒮) (K : Ctx) (p : WPt 𝒮 K), Formalism.L2.Host.PsiChoiceCompatible (p.w.D p.Z) (_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).cf p.O.ex.nch (_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).tp ∧ (∀ v, (p.w.D p.Z).what₂.muAt v ≠ (p.w.D p.Z).what₂.mu0 → ((_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).tp.psi v).ValuesIn 0 (p.w.D p.Z).what₂.embLL) ∧ GlobalTheory.DimPartsCompare.TameTie (p.w.D p.Z) (_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).cf.W.om := by
-  first | exact @_root_.GlobalTheory.PlugPt.side_weight_psi_values_tame_tie | exact _root_.GlobalTheory.PlugPt.side_weight_psi_values_tame_tie | (intros; apply _root_.GlobalTheory.PlugPt.side_weight_psi_values_tame_tie <;> assumption)
+  first | exact @_root_.GlobalTheory.PlugPt.side_weight_psi_values_tame_tie
 end
 end -- clump:auto
 end -- clump:auto
@@ -1851,7 +1841,7 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.small_frame_at_column : GlobalTheory.NT.RayField → ∀ (B : Base) (f : Fr B.toPre) (T : TwDat B) (w : ColW B f T) (Z : w.Lt), SmallHas (w.D Z) (Fr.at (w.st Z) f) := by
-  first | exact @GlobalTheory.SmallExact.smallHas_of_rayField | exact GlobalTheory.SmallExact.smallHas_of_rayField | (intros; apply GlobalTheory.SmallExact.smallHas_of_rayField <;> assumption)
+  first | exact @GlobalTheory.SmallExact.smallHas_of_rayField
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.SmallFrameAtColumnStatement =====
@@ -1887,13 +1877,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Pj Formalism.L2.DIV Formalism.IndefR Formalism.IndefR.Links GlobalTheory.FinalJoin2 GlobalTheory.AtMember GlobalTheory.EX GlobalTheory.EX.OB GlobalTheory.Mem GlobalTheory.Mem.Top GlobalTheory.Mem.Top.Bl GlobalTheory.Fc GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.Plug GlobalTheory.PlugPt
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
-theorem _root_.GlobalTheory.T.side_weight_export_all_data_small_has : GlobalTheory.NT.RayField → ∀ (hL : _root_.UpperTheory.Zero.LLC.RecTExists) (𝒮 : Slots) (ν : _root_.GlobalTheory.PlugPt.ExtensionReading hL 𝒮) (K : Ctx) (p : WPt 𝒮 K), Nonempty (GlobalTheory.SeriesTie.ExportTie (_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).YS (_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).v₀) ∧ LevelIs (p.w.D p.Z).nexp ((_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).R.eG.trans (_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).cG) (_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).P0 (_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).ψ0⁻¹ ∧ AllData (p.w.D p.Z).nexp p.O.ex.xd.xd0 ∧ SmallHas (p.w.D p.Z) (_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).cf := by
-  first | exact @_root_.GlobalTheory.sideW_export_small_alt | exact _root_.GlobalTheory.sideW_export_small_alt | (intros; apply _root_.GlobalTheory.sideW_export_small_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.SideWExportSmallStatement =====
@@ -1913,7 +1896,7 @@ theorem GlobalTheory.PlugPt.side_weight_ties_of_ray_field : GlobalTheory.NT.RayF
   obtain ⟨hRC, hTC, -⟩ := GlobalTheory.Plug.wPt_frame 𝒮 K p
   have ht := GlobalTheory.T.coreFrameCompatible_constructed_point hR 𝒮 hC K p
   obtain ⟨hpsi, hval, htame⟩ := _root_.GlobalTheory.T.side_weight_psi_choice_tame_tie hL 𝒮 ν K p
-  obtain ⟨hser, hlev, hdat, hsmall⟩ := _root_.GlobalTheory.T.side_weight_export_all_data_small_has hR hL 𝒮 ν K p
+  obtain ⟨hser, hlev, hdat, hsmall⟩ := _root_.GlobalTheory.sideW_export_small_alt hR hL 𝒮 ν K p
   refine ⟨?_, ?_, hser, hlev, hdat, hpsi, hval, hsmall, htame⟩
   · show p.x.what₂.r.z.R.C = GlobalTheory.Mem.Col2.TC.cf p.w.I p.w.l p.Z
     rw [hRC, hTC]
@@ -1932,13 +1915,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions Formalism.L2.Pj Formalism.L2.DIV Formalism.IndefR Formalism.IndefR.Links GlobalTheory.FinalJoin2 GlobalTheory.AtMember GlobalTheory.EX GlobalTheory.EX.OB GlobalTheory.Mem GlobalTheory.Mem.Top GlobalTheory.Mem.Top.Bl GlobalTheory.Fc GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.Plug GlobalTheory.PlugPt
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
-theorem _root_.GlobalTheory.T.side_weight_ties_err_of_ray_field_core_slot : GlobalTheory.NT.RayField → ∀ (hL : _root_.UpperTheory.Zero.LLC.RecTExists) (𝒮 : Slots) (ν : _root_.GlobalTheory.PlugPt.ExtensionReading hL 𝒮), CoreSlot 𝒮 → ∀ (K : Ctx) (p : WPt 𝒮 K), (_root_.GlobalTheory.PlugPt.sideOfWeightedPoint ν p).Ties p.O.ex.errX p.O.ex.xd := by
-  first | exact @_root_.GlobalTheory.PlugPt.side_weight_ties_of_ray_field | exact _root_.GlobalTheory.PlugPt.side_weight_ties_of_ray_field | (intros; apply _root_.GlobalTheory.PlugPt.side_weight_ties_of_ray_field <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.SideWTiesStatement =====

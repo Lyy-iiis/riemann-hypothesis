@@ -84,7 +84,7 @@ theorem posSemidef_sub_smul_one {n : Type} [Fintype n] [DecidableEq n] {A : Matr
       (diagonal (fun i => ((hH.eigenvalues i - δ' : ℝ) : ℂ))) := by
     have d : diagonal (fun i => ((hH.eigenvalues i - δ' : ℝ) : ℂ)) =
         diagonal (RCLike.ofReal ∘ hH.eigenvalues) - (δ' : ℂ) • (1 : Matrix n n ℂ) := by
-      ext i j; by_cases h : i = j <;> simp [diagonal, one_apply, h]
+      ext i j; by_cases h : i = j <;> simp [diagonal, h]
     conv_lhs => rw [hH.spectral_theorem]
     rw [d, map_sub, map_smul, map_one]
   rw [e, conjStarAlgAut_apply, isUnit_coe.posSemidef_star_right_conjugate_iff]
@@ -100,9 +100,7 @@ theorem exists_pos_mem_HnGe {N : ℕ} {E : Type} [Field E] (Ψ : Finset (E →+*
   · obtain ⟨τ0, -, hτ0⟩ := Finset.exists_min_image Finset.univ d Finset.univ_nonempty
     exact ⟨d τ0, hd τ0, fun τ => h τ _ (hτ0 τ (Finset.mem_univ τ))⟩
 
-theorem main : ∀ {N : ℕ} {E : Type} [inst : Field E] (Ψ : Finset (E →+* ℂ)) {Z : GlobalTheory.SW.CM Ψ N N},
-    Z ∈ GlobalTheory.SW.Hn Ψ N → ∃ (δ : ℝ), (0 : ℝ) < δ ∧ Z ∈ GlobalTheory.SW.HnGe Ψ N δ :=
-  fun Ψ _ hZ => exists_pos_mem_HnGe Ψ hZ
+alias main := _root_.GlobalTheory.PosSemidefShiftByScalar.exists_pos_mem_HnGe
 
 end GlobalTheory.PosSemidefShiftByScalar
 end -- clump:auto
@@ -123,15 +121,7 @@ namespace GlobalTheory.SW.EisTrans
 variable {N : ℕ}
 
 
-theorem exists_mem_HnGe {E : Type} [Field E] (Ψ : Finset (E →+* ℂ)) {Z : CM Ψ N N}
-    (hZ : Z ∈ Hn Ψ N) : ∃ δ : ℝ, 0 < δ ∧ Z ∈ HnGe Ψ N δ := by
-  first
-  | exact @_root_.GlobalTheory.PosSemidefShiftByScalar.main
-  | exact _root_.GlobalTheory.PosSemidefShiftByScalar.main
-  | (apply _root_.GlobalTheory.PosSemidefShiftByScalar.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.PosSemidefShiftByScalar.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.PosSemidefShiftByScalar.main <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.PosSemidefShiftByScalar.main ..)
+alias exists_mem_HnGe := _root_.GlobalTheory.PosSemidefShiftByScalar.exists_pos_mem_HnGe
 
 theorem entry_bound {C D Z : Matrix (Fin N) (Fin N) ℂ} {δ : ℝ} (hδ : 0 < δ)
     (h : D * Cᴴ = C * Dᴴ) (hQ : (C * Z + D).det ≠ 0)

@@ -532,14 +532,6 @@ namespace GlobalTheory.HSNef
 
 variable {X : Scheme.{0}} [IsIntegral X]
 
-theorem unitAt_ne_zero {x : X} {h : X.functionField} (hh : UnitAt x h) : h ≠ 0 := by
-  obtain ⟨b, hb, rfl⟩ := hh
-  intro e
-  have h1 : algebraMap (X.presheaf.stalk x) X.functionField (b * ↑hb.unit⁻¹) = 1 := by
-    rw [IsUnit.mul_val_inv, map_one]
-  rw [map_mul, e, zero_mul] at h1
-  exact zero_ne_one h1
-
 theorem regAt_div_unitAt {x : X} {g h : X.functionField} (hg : RegAt x g) (hh : UnitAt x h) :
     RegAt x (g / h) := by
   obtain ⟨a, ha⟩ := hg
@@ -564,7 +556,7 @@ theorem le_shift_of_isFS_sub : ∀ (k : Type) [CommRing k] (X : Scheme.{0}) [IsI
       (ρ c : X.functionField) / (ρ' d : X.functionField) =
         f (ι j') * (ρ c : X.functionField) / (f (ι j') * (ρ' d : X.functionField)) := by
     intro x c d j' hu
-    have hf : f (ι j') ≠ 0 := left_ne_zero_of_mul (unitAt_ne_zero hu)
+    have hf : f (ι j') ≠ 0 := left_ne_zero_of_mul (_root_.GlobalTheory.Cartier.UnitAt.ne_zero hu)
     rw [mul_div_mul_left _ _ hf]
   have hτ : ∀ (x : X) c d, x ∈ M.B.U c → x ∈ M'.B.U d →
       RegAt x ((ρ c : X.functionField) / (ρ' d : X.functionField)) := by
@@ -1320,10 +1312,7 @@ namespace GlobalTheory.HSNef.FsTop
 
 variable {X : Scheme.{0}} [IsIntegral X]
 
-theorem regAt_mul' {x : X} {a b : X.functionField} (ha : RegAt x a) (hb : RegAt x b) : RegAt x (a * b) := by
-  obtain ⟨u, rfl⟩ := ha
-  obtain ⟨v, rfl⟩ := hb
-  exact ⟨u * v, map_mul _ u v⟩
+alias regAt_mul' := _root_.GlobalTheory.Cartier.RegAt.mul
 
 theorem regAt_inv_of_unitAt {x : X} {a : X.functionField} (ha : UnitAt x a) : RegAt x a⁻¹ := by
   obtain ⟨u, hu, rfl⟩ := ha
@@ -1532,7 +1521,7 @@ theorem smallFam_pull : ∀ (k : Type) [CommRing k] (X Y : Scheme.{0}) [IsIntegr
     have eg : ((B.B.pull π).g i j).val = resG Y (fun _ hy => ⟨LB.wchart_le B.B (fun _ : PUnit => π) i PUnit.unit hy.1, LB.wchart_le B.B (fun _ : PUnit => π) j PUnit.unit hy.2⟩ : (B.B.pull π).U i ⊓ (B.B.pull π).U j ≤ π ⁻¹ᵁ (B.B.U (i PUnit.unit) ⊓ B.B.U (j PUnit.unit)))
         (π.app _ (B.B.g (i PUnit.unit) (j PUnit.unit)).val) := by
       dsimp only [LB.pull, LB.LinComb]
-      simp only [Fintype.prod_unique, zpow_one, LB.val_res, pullU, Units.coe_map]
+      simp only [Fintype.prod_unique, zpow_one, pullU]
       rfl
     show φ (β (i PUnit.unit)) = fnOf _ h ((B.B.pull π).g i j).val * φ (β (j PUnit.unit))
     rw [hβ (i PUnit.unit) (j PUnit.unit) hX, map_mul, hF _ hX ⟨hi, hj⟩, eg]

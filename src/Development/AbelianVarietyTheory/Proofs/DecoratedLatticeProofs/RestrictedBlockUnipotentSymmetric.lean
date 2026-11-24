@@ -429,7 +429,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_diagonal_frame_change_unweighting_symEdges : ∀ {D : D7} {n : ℕ} (ρ k : ℕ) (Pg : Finset (Pl D.host.E)) (Λ : Submodule (𝓞 D.host.E) (Fin n → D.host.E)) (β₀ : GL (Fin n) (Formalism.IndefR.Lev.EAf D)), Formalism.L2.DIV.IsFrame β₀ Λ → ∀ a : ∀ PP : Pl D.host.E, Fin n → Fin n → kP PP, (∀ PP ∈ Pg, ∀ i j, Formalism.L2.DIV.symEdge ρ k i j → a PP i j ≠ 0) → ∃ β₃ : GL (Fin n) (Formalism.IndefR.Lev.EAf D), Formalism.L2.DIV.IsFrame β₃ Λ ∧ Formalism.L2.DIV.St β₃ = Formalism.L2.DIV.St β₀ ∧ ∀ PP ∈ Pg, ∀ y ∈ Formalism.L2.DIV.St β₀, (Formalism.L2.DIV.redFn β₃ PP y ∈ Formalism.L2.DIV.unipSym (kP PP) n ρ k ↔ Formalism.L2.DIV.redFn β₀ PP y ∈ Formalism.L2.DIV.unipSym (kP PP) n ρ k) ∧ (∑ i, ∑ j, if Formalism.L2.DIV.symEdge ρ k i j then a PP i j * ((Formalism.L2.DIV.redFn β₀ PP y : GL (Fin n) (kP PP)) : Matrix (Fin n) (Fin n) (kP PP)) i j else 0) = Formalism.L2.DIV.edgeSum (Formalism.L2.DIV.symEdge ρ k) (Formalism.L2.DIV.redFn β₃ PP y) := by
-  first | exact @GlobalTheory.DiagFrameWeights.exists_diag_frame | exact GlobalTheory.DiagFrameWeights.exists_diag_frame | (intros; apply GlobalTheory.DiagFrameWeights.exists_diag_frame <;> assumption)
+  first | exact @GlobalTheory.DiagFrameWeights.exists_diag_frame
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.ExistsDiagonalFrameChangeUnweightingSymEdgesStatement =====
@@ -1198,7 +1198,7 @@ theorem mul_flagGram_apply {K : Type} [CommRing K] {ρ k : ℕ}
     (A * flagGram K (2 * ρ + k + 1) ρ k) i j =
       A i ⟨dualIdx ρ k j.val, dualIdx_lt' j.2⟩ * (if dualIdx ρ k j.val = ρ + k then -1 else 1) := by
   rw [Matrix.mul_apply, Finset.sum_eq_single ⟨dualIdx ρ k j.val, dualIdx_lt' j.2⟩]
-  · simp only [flagGram, Fin.val_mk]
+  · simp only [flagGram]
     rw [if_pos ((dualIdx_iff' j.2 (dualIdx_lt' j.2)).mpr rfl)]
   · intro l _ hl
     simp only [flagGram]
@@ -1212,7 +1212,7 @@ theorem flagGram_mul_apply {K : Type} [CommRing K] {ρ k : ℕ}
     (flagGram K (2 * ρ + k + 1) ρ k * A) i j =
       (if i.val = ρ + k then -1 else 1) * A ⟨dualIdx ρ k i.val, dualIdx_lt' i.2⟩ j := by
   rw [Matrix.mul_apply, Finset.sum_eq_single ⟨dualIdx ρ k i.val, dualIdx_lt' i.2⟩]
-  · simp only [flagGram, Fin.val_mk, if_true]
+  · simp only [flagGram, if_true]
   · intro l _ hl
     simp only [flagGram]
     rw [if_neg, zero_mul]
@@ -1244,7 +1244,7 @@ theorem flagCond_dual_unipSym : ∀ (K : Type) [CommRing K] (n ρ k : ℕ), n = 
       Fin.ext ((dualIdx_iff' p.2 (dualIdx_lt' p.2)).mpr rfl).symm
     have hs : (if dualIdx ρ k p.val = ρ + k then (-1 : K) else 1) = 1 :=
       if_neg (by unfold dualIdx; split_ifs <;> omega)
-    simp only [Fin.val_mk] at h1
+    simp only at h1
     rw [e1, hs, one_mul] at h1
     have hc := hM'.1 ⟨dualIdx ρ k q.val, dualIdx_lt' q.2⟩ ⟨dualIdx ρ k p.val, dualIdx_lt' p.2⟩
       (by simp only [Fin.val_mk]; unfold dualIdx; split_ifs <;> omega)
@@ -1258,7 +1258,7 @@ theorem flagCond_dual_unipSym : ∀ (K : Type) [CommRing K] (n ρ k : ℕ), n = 
         intro h
         apply hpq
         have h' := congrArg Fin.val h
-        simp only [Fin.val_mk] at h'
+        simp only at h'
         apply Fin.ext
         unfold dualIdx at h'
         split_ifs at h' <;> omega
@@ -1643,9 +1643,9 @@ theorem GlobalTheory.FlagBasis.read_inst (D : D7) (e0 f0 : Fin D.R.rS → VA (in
         (congrArg _ e).trans (Formalism.L2.SG.Pf.unitaryCongruence.divN_gmul _ _ hg t)
       show star (psiEf (divN (instOf D) (D.host.g 0 * D.host.g 1) s.1)) = 1
       rw [this, hint t ht, star_one])
-    (GlobalTheory.T.exists_integralAdele_prescribed_residues_and_conj D Pg hnc)
+    (_root_.GlobalTheory.ConjResidueSurj.exists_res_and_conj D Pg hnc)
     (GlobalTheory.T.residueSupport_single_place_to_conjugatePair_position D Pg hPg.1 hnc (fun s => star (psiEf (divN (instOf D) (D.host.g 0 * D.host.g 1) s.1)) ≠ 1) fun Q hQ => by
-      obtain ⟨s, h1, h2⟩ := GlobalTheory.T.exists_finiteAdditiveChar_ne_one_at_each_prime D psiEf hadd hint hrat Q hQ
+      obtain ⟨s, h1, h2⟩ := _root_.GlobalTheory.FiniteCharNontrivial.exists_psi_ne_one D psiEf hadd hint hrat Q hQ
       exact ⟨s, h1, fun h => h2 (by simpa using congrArg star h)⟩)
   obtain ⟨a, ha1, hK⟩ := read_in_frame (instOf D) _ hg e0 f0 z0 bw bwd ew hF hn' β₀ hβ₀ Pg hPg.1 hN psiEf hadd hint ψ0 a₁ a₂ ha hχ
   have hL : (instOf D).L = Formalism.L2.Herm.crdLat (D.sp.Y 0) (D.sp.Y 0).L0 := Lv_eq_map D

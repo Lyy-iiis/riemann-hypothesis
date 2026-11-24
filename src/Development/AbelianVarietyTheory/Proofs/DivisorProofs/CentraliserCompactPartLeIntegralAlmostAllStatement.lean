@@ -120,7 +120,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 theorem _root_.GlobalTheory.T.bounded_entries_of_isCompact_closure_zpowers_unitary : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (w : Pl E) (t : UL n w),
     IsCompact (closure (Subgroup.zpowers t : Set (UL n w))) →
     ∃ a : w.adicCompletion E, a ≠ 0 ∧ ∀ k : ℤ, ∀ i j, a * (t ^ k).1.1 i j ∈ Ov E w := by
-  first | exact @GlobalTheory.BddCpt.bdd_entries_of_isCompact_closure_zpowers | exact GlobalTheory.BddCpt.bdd_entries_of_isCompact_closure_zpowers | (intros; apply GlobalTheory.BddCpt.bdd_entries_of_isCompact_closure_zpowers <;> assumption)
+  first | exact @GlobalTheory.BddCpt.bdd_entries_of_isCompact_closure_zpowers
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.BoundedEntriesOfIsCompactClosureZpowersUnitaryStatement =====
@@ -190,9 +190,6 @@ open NumberField IsDedekindDomain Matrix Polynomial Filter GlobalTheory.CuspRep 
 open scoped Classical TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
-theorem _root_.GlobalTheory.T.det_trace_pow_matrix_ne_zero_of_separable : ∀ {K : Type} [Field K] {n : ℕ} (g : Matrix (Fin n) (Fin n) K), g.charpoly.Separable →
-    (Matrix.of fun i j : Fin n => (g ^ ((i : ℕ) + j)).trace).det ≠ 0 := by
-  first | exact @GlobalTheory.TraceGram.det_trace_pow_gram_ne_zero | exact GlobalTheory.TraceGram.det_trace_pow_gram_ne_zero | (intros; apply GlobalTheory.TraceGram.det_trace_pow_gram_ne_zero <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DetTracePowGramNeZeroStatement =====
@@ -280,7 +277,7 @@ theorem _root_.GlobalTheory.T.entry_mem_subring_of_trace_gram_unit : ∀ {K : Ty
     x = ∑ i, c i • g ^ (i : ℕ) → (∀ i j, g i j ∈ O) → (∀ j : Fin n, (x * g ^ (j : ℕ)).trace ∈ O) →
     (Matrix.of fun i j : Fin n => (g ^ ((i : ℕ) + j)).trace).det ≠ 0 →
     ((Matrix.of fun i j : Fin n => (g ^ ((i : ℕ) + j)).trace).det)⁻¹ ∈ O → ∀ i j, x i j ∈ O := by
-  first | exact @GlobalTheory.TraceGram.entry_mem_of_trace_gram | exact GlobalTheory.TraceGram.entry_mem_of_trace_gram | (intros; apply GlobalTheory.TraceGram.entry_mem_of_trace_gram <;> assumption)
+  first | exact @GlobalTheory.TraceGram.entry_mem_of_trace_gram
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.EntryMemSubringOfTraceGramUnitStatement =====
@@ -332,7 +329,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 
 theorem _root_.GlobalTheory.T.exists_eq_sum_smul_pow_of_commute_of_separable : ∀ {K : Type} [Field K] {n : ℕ} (g t : Matrix (Fin n) (Fin n) K), g.charpoly.Separable →
     t * g = g * t → ∃ c : Fin n → K, t = ∑ i, c i • g ^ (i : ℕ) := by
-  first | exact @GlobalTheory.SepCommutant.exists_eq_sum_pow_of_commute | exact GlobalTheory.SepCommutant.exists_eq_sum_pow_of_commute | (intros; apply GlobalTheory.SepCommutant.exists_eq_sum_pow_of_commute <;> assumption)
+  first | exact @GlobalTheory.SepCommutant.exists_eq_sum_pow_of_commute
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsEqSumPowOfCommuteStatement =====
@@ -437,7 +434,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 theorem _root_.GlobalTheory.T.trace_mem_of_mul_pow_entries_mem : ∀ (E : Type) [Field E] [NumberField E] (w : Pl E) (n : ℕ)
     (y : Matrix (Fin n) (Fin n) (w.adicCompletion E)) (a : w.adicCompletion E), a ≠ 0 →
     (∀ k : ℕ, ∀ i j, a * (y ^ k) i j ∈ Ov E w) → y.trace ∈ Ov E w := by
-  first | exact @GlobalTheory.trace_mem_of_pow_bdd | exact GlobalTheory.trace_mem_of_pow_bdd | (intros; apply GlobalTheory.trace_mem_of_pow_bdd <;> assumption)
+  first | exact @GlobalTheory.trace_mem_of_pow_bdd
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceMemOfPowBddStatement =====
@@ -453,16 +450,6 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 
 namespace GlobalTheory.BCT.GoodCpt
 
-theorem pow_mem_of_mem {K : Type} [Field K] (O : Subring K) {n : ℕ} (M : Matrix (Fin n) (Fin n) K)
-    (hM : ∀ i j, M i j ∈ O) : ∀ k : ℕ, ∀ i j, (M ^ k) i j ∈ O := by
-  intro k
-  induction k with
-  | zero => intro i j; rw [pow_zero, Matrix.one_apply]; split_ifs <;> simp [O.one_mem, O.zero_mem]
-  | succ k ih =>
-    intro i j
-    rw [pow_succ, Matrix.mul_apply]
-    exact O.sum_mem fun m _ => O.mul_mem (ih i m) (hM m j)
-
 theorem gram_map {K L : Type} [Field K] [Field L] (f : K →+* L) {n : ℕ} (g : Matrix (Fin n) (Fin n) K) :
     (Matrix.of fun i j : Fin n => ((g.map f) ^ ((i : ℕ) + j)).trace) =
       (Matrix.of fun i j : Fin n => (g ^ ((i : ℕ) + j)).trace).map f := by
@@ -476,7 +463,7 @@ theorem main : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E →
   intro E _ _ _ hU n γ hs
   set g : Matrix (Fin n) (Fin n) E := γ.1.val with hgdef
   set G : Matrix (Fin n) (Fin n) E := Matrix.of fun i j : Fin n => (g ^ ((i : ℕ) + j)).trace with hGdef
-  have hd : G.det ≠ 0 := GlobalTheory.T.det_trace_pow_matrix_ne_zero_of_separable g hs
+  have hd : G.det ≠ 0 := _root_.GlobalTheory.TraceGram.det_trace_pow_gram_ne_zero g hs
   have h1 : ∀ᶠ w in (cofinite : Filter (Pl E)), ∀ i j, w.valuation E (g i j) ≤ 1 := by
     simp only [Filter.eventually_all]
     exact fun i j => GlobalTheory.LocRatPt.eventually_valuation_le_one _
@@ -509,7 +496,7 @@ theorem main : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E →
     rw [hcm.mul_pow, ← pow_mul, Matrix.mul_apply, Finset.mul_sum]
     refine (Ov E w).sum_mem fun m _ => ?_
     rw [← mul_assoc, ← hpow]
-    exact (Ov E w).mul_mem (hb _ i m) (pow_mem_of_mem _ gw hgwO _ m l)
+    exact (Ov E w).mul_mem (hb _ i m) (_root_.GlobalTheory.TraceGram.pow_entry_mem _ gw hgwO _ m l)
   rw [cptPart, Subgroup.closure_le]
   rintro t ⟨ht, hc⟩
   have ht' : t * locPt w γ = locPt w γ * t := ht
@@ -535,7 +522,7 @@ open scoped Classical TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.centraliser_compactPart_le_integral_almostAll : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ n : ℕ, ∀ γ : UE E n, γ.1.val.charpoly.Separable → ∀ᶠ w in cofinite, cptPart (twCent (MonoidHom.id (UL n w)) (locPt w γ)) ≤ KL n w := by
-  first | exact @GlobalTheory.BCT.GoodCpt.main | exact GlobalTheory.BCT.GoodCpt.main | (intros; apply GlobalTheory.BCT.GoodCpt.main <;> assumption)
+  first | exact @GlobalTheory.BCT.GoodCpt.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.CentraliserCompactPartLeIntegralAlmostAllStatement =====

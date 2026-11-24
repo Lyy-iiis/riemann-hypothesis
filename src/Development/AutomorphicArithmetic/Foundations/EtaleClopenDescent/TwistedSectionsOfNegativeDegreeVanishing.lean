@@ -206,7 +206,7 @@ section -- clump:auto
 open CategoryTheory Limits AlgebraicGeometry Opposite CochainComplex CochainComplex.HomComplex GlobalTheory.EtC
 
 theorem _root_.GlobalTheory.T.tateTwistModule_free_and_generator_summand : ∀ (q : ℕ) [NeZero q] (i : ℤ) (A : Type) [CommRing A] [Nontrivial A], Module.Free (ULift.{1} (ZMod q)) ((Prim q A →₀ ULift.{1} (ZMod q)) ⧸ twRel q i A) ∧ ∀ ζ : Prim q A, ∃ f : ((Prim q A →₀ ULift.{1} (ZMod q)) ⧸ twRel q i A) →ₗ[ULift.{1} (ZMod q)] ULift.{1} (ZMod q), f (Submodule.Quotient.mk (Finsupp.single ζ 1)) = 1 := by
-  first | (exact @GlobalTheory.TwFree.twist_free) | (exact GlobalTheory.TwFree.twist_free) | (intros; apply GlobalTheory.TwFree.twist_free  <;> assumption)
+  first | (exact @GlobalTheory.TwFree.twist_free)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TateTwistModuleFreeAndGeneratorSummandStatement =====
@@ -221,7 +221,7 @@ open CategoryTheory AlgebraicGeometry GlobalTheory.EtC
 theorem UpperTheory.twist_generator_smul_eq_zero_imp :
     ∀ (q : ℕ) [NeZero q] (i : ℤ) (C : CommRingCat.{0}) [Nontrivial C] (ζ : Prim q C) (c : ULift.{1} (ZMod q)), c • (Submodule.Quotient.mk (Finsupp.single ζ 1) : (twF q i).obj C) = 0 → c = 0 := by
   intro q _ i C _ ζ c h
-  obtain ⟨f, hf⟩ := (GlobalTheory.T.tateTwistModule_free_and_generator_summand q i C).2 ζ
+  obtain ⟨f, hf⟩ := (_root_.GlobalTheory.TwFree.twist_free q i C).2 ζ
   have h' : c • (Submodule.Quotient.mk (Finsupp.single ζ 1) :
       (Prim q C →₀ ULift.{1} (ZMod q)) ⧸ twRel q i C) = 0 := h
   have h2 := congrArg f h'

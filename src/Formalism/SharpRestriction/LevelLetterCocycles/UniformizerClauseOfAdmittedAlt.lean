@@ -130,7 +130,7 @@ private theorem phiA_letE_sub_one_eq_letE (W : LocWach PD LL O v n) (i : ZMod n)
   · subst h
     simp [letE]
   · have h' : j - 1 ≠ i - 1 := fun e => h (sub_left_inj.mp e)
-    simp [letE, Pi.single_apply, h, h']
+    simp [letE, h, h']
 
 theorem frobenius_idempotent_shift (W : LocWach PD LL O v n) (T : LocLat G Qp LL O) (i : ZMod n) (x : W.DD T) :
     W.φD T ((letE (i - 1) : LetA O n) • x) = (letE i : LetA O n) • W.φD T x := by
@@ -143,7 +143,7 @@ private theorem letGamma_letE_eq_letE (W : LocWach PD LL O v n) (g : W.Gam) (i :
   by_cases h : j = i
   · subst h
     simp [letE]
-  · simp [letE, Pi.single_apply, h]
+  · simp [letE, h]
 
 theorem gammaD_idempotent_smul (W : LocWach PD LL O v n) (T : LocLat G Qp LL O) (g : W.Gam) (i : ZMod n)
     (x : W.DD T) : W.γD T g ((letE i : LetA O n) • x) = (letE i : LetA O n) • W.γD T g x := by
@@ -782,7 +782,6 @@ theorem step1Kill_cO (hV : Formalism.MainNotions.WachCoordinates.Br.ValRing O v)
       rw [h]
       first
         | exact WithTop.coe_nonneg.mpr (by positivity)
-        | (rw [← WithTop.coe_zero]; exact WithTop.coe_le_coe.mpr (by positivity))
   have hex : ∀ x : ℤ, ∃ o : O, algebraMap O LL o = Formalism.MainNotions.CrystallineLiftingInputs.cR W x := fun x => hV.2.1 _ (hnn x)
   refine ⟨fun x => Classical.choose (hex x), ?_, ?_, ?_⟩
   · intro x
@@ -791,8 +790,6 @@ theorem step1Kill_cO (hV : Formalism.MainNotions.WachCoordinates.Br.ValRing O v)
     unfold Formalism.MainNotions.CrystallineLiftingInputs.cR
     first
       | (rw [div_neg, mul_neg, mul_div_assoc', mul_div_cancel_left₀ _ hp0, neg_sub])
-      | (field_simp; ring)
-      | field_simp
   · apply hV.1
     rw [Classical.choose_spec (hex 0), hRN.1, map_zero]
   · intro x hx
@@ -800,10 +797,8 @@ theorem step1Kill_cO (hV : Formalism.MainNotions.WachCoordinates.Br.ValRing O v)
     rw [hRN.1, sub_zero] at h
     rw [Classical.choose_spec (hex x), h]
     first
-      | exact WithTop.coe_natCast _
       | (norm_cast; done)
       | (simp; done)
-      | (push_cast; rfl)
 
 theorem step1Kill_kill [NeZero n] (hR : Formalism.MainNotions.LiftingTheory.lifta_Ring W) (hDS : DerivationPreservesQLattice W)
     (hD : Formalism.MainNotions.RamifiedCoefficientChains.DssLet W) (hA : Formalism.MainNotions.LiftingTheory.CaseA W) (hT : IsCrys PD T.ρ) (Mi hi : ZMod n → ℕ)
@@ -827,7 +822,7 @@ theorem step1Kill_kill [NeZero n] (hR : Formalism.MainNotions.LiftingTheory.lift
   have hseq := Formalism.MainNotions.LiftingTheory.lifta_seq W T (uniformizerInverse W) (algebraMap_uniformizer_mul_inverse hU) cO _ seq hstep
   rw [h0] at hseq
   have hNs : seq (xListL W T c (Mi c) (hi c) 0 a).length ∈ W.N T :=
-    Formalism.MainNotions.LiftingTheory.liftb_Nl_le W T c (by simpa using hN)
+    _root_.Formalism.MainNotions.LiftingTheory.wmap_Nl_le W T c (by simpa using hN)
   rw [hseq] at hNs
   have hprod : ((xListL W T c (Mi c) (hi c) 0 a).map
       fun x => (X - C (cO x) : Polynomial O)).prod =
@@ -893,7 +888,6 @@ theorem step1Kill_norm (hV : Formalism.MainNotions.WachCoordinates.Br.ValRing O 
       have hq : ((∑ x ∈ Sx, padicValInt PD.p x : ℕ) : ℚ) ≤ (s : ℚ) := by exact_mod_cast hs
       first
         | exact WithTop.coe_nonneg.mpr (by linarith)
-        | (rw [← WithTop.coe_zero]; exact WithTop.coe_le_coe.mpr (by linarith))
   have hw'0 : 0 ≤ v (((PD.p : ℕ) : LL) ^ s / algebraMap O LL (∏ x ∈ Sx, -(cO x))) := by
     apply aux
     rw [← hvc, ← AddValuation.map_mul, div_mul_cancel₀ _ hc0, hvps]
@@ -937,18 +931,6 @@ section SlopeTestRemainingChoices
 
 variable (W : LocWach PD LL O v n) (T : LocLat G Qp LL O)
 
-theorem gammaD_smul_letA' (g : W.Gam) (a : LetA O n) (x : W.DD T) :
-    W.γD T g (a • x) = W.γA g a • W.γD T g x := by
-  have := W.γD_smul T g (algebraMap (LetA O n) W.EE a) x
-  rw [algebraMap_smul, W.γE_ext, algebraMap_smul] at this
-  exact this
-
-theorem idempotent_mul_self'' (c : ZMod n) : (letE c : LetA O n) * letE c = letE c := by
-  funext i
-  by_cases h : i = c
-  · subst h; simp [letE]
-  · simp [letE, h]
-
 theorem invariantLetter_sub {c : ZMod n} {x y : W.DD T} (hx : Formalism.MainNotions.CrystallineLiftingInputs.DL W T c x)
     (hy : Formalism.MainNotions.CrystallineLiftingInputs.DL W T c y) : Formalism.MainNotions.CrystallineLiftingInputs.DL W T c (x - y) := by
   rw [sub_eq_add_neg, ← neg_one_smul O y]
@@ -956,7 +938,7 @@ theorem invariantLetter_sub {c : ZMod n} {x y : W.DD T} (hx : Formalism.MainNoti
 
 theorem invariant_letter_idempotent_smul {c : ZMod n} {z : W.DD T} (hz : ∀ δ ∈ W.DelF, W.γD T δ z = z) :
     Formalism.MainNotions.CrystallineLiftingInputs.DL W T c ((letE c : LetA O n) • z) :=
-  ⟨by rw [smul_smul, idempotent_mul_self''], fun δ hδ => by rw [gammaD_smul_letA', gammaA_idempotent, hz δ hδ]⟩
+  ⟨by rw [smul_smul, _root_.Formalism.MainNotions.LiftingTheory.letter_idempotent_sq], fun δ hδ => by rw [_root_.Formalism.MainNotions.LiftingTheory.gammaD_semilinear, _root_.Formalism.MainNotions.LiftingTheory.gammaA_letter_idempotent, hz δ hδ]⟩
 
 theorem uniformizer_smul_inverse_smul (hU : IsUnit (algebraMap (LetA O n) W.EE W.π₀)) (x : W.DD T) :
     W.π₀ • (uniformizerInverse W • x) = x := by

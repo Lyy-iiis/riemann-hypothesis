@@ -235,8 +235,7 @@ theorem mul_alConj (h : (N : ℤ) * a * d - l * b * c = 1) (hNl : (N : ℤ) * l 
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp only [alQ, alConj, Matrix.mul_apply, Fin.sum_univ_two, hz', Matrix.of_apply, Matrix.cons_val',
-      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_cons,
-      Matrix.head_fin_const, Fin.zero_eta, Fin.mk_one, Fin.isValue] <;> (try rw [hz])
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one, Fin.zero_eta, Fin.mk_one, Fin.isValue] <;> (try rw [hz])
   · linear_combination ((N : ℤ) * a * M 0 0 + N * l * c * M 0 1) * h
   · linear_combination (b * M 0 0 + N * d * M 0 1) * h
   · linear_combination ((N : ℤ) * l * z * (N * a) + M 1 1 * (N * l * c)) * h
@@ -250,8 +249,7 @@ theorem alConjInv_mul (h : (N : ℤ) * a * d - l * b * c = 1) (hNl : (N : ℤ) *
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp only [alQ, alConjInv, Matrix.mul_apply, Fin.sum_univ_two, hz', Matrix.of_apply, Matrix.cons_val',
-      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_cons,
-      Matrix.head_fin_const, Fin.zero_eta, Fin.mk_one, Fin.isValue] <;> (try rw [hz])
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one, Fin.zero_eta, Fin.mk_one, Fin.isValue] <;> (try rw [hz])
   · linear_combination ((N : ℤ) * a * M 0 0 + b * (N * l * z)) * h
   · linear_combination ((N : ℤ) * a * M 0 1 + b * M 1 1) * h
   · linear_combination ((N : ℤ) * l * c * M 0 0 + N * d * (N * l * z)) * h
@@ -280,13 +278,13 @@ theorem alQ_cancel_right (h : (N : ℤ) * a * d - l * b * c = 1) (hN : 0 < N) {A
 
 theorem alConj_mem (M : M2) : ((N * l : ℕ) : ℤ) ∣ alConj N l a b c d M 1 0 := by
   simp only [alConj, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
-    Matrix.cons_val_fin_one, Matrix.head_cons, Matrix.head_fin_const]
+    Matrix.cons_val_fin_one]
   push_cast
   exact Dvd.intro _ rfl
 
 theorem alConjInv_mem (M : M2) : ((N * l : ℕ) : ℤ) ∣ alConjInv N l a b c d M 1 0 := by
   simp only [alConjInv, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
-    Matrix.cons_val_fin_one, Matrix.head_cons, Matrix.head_fin_const]
+    Matrix.cons_val_fin_one]
   push_cast
   exact Dvd.intro _ rfl
 
@@ -344,22 +342,22 @@ theorem alConjInv_mul' (h : (N : ℤ) * a * d - l * b * c = 1) (hN : 0 < N) (hl 
 
 theorem alConj_00_N (h : (N : ℤ) * a * d - l * b * c = 1) (hN : 0 < N) (hl : 0 < l) (M : M2) :
     (N : ℤ) ∣ alConj N l a b c d M 0 0 - M 1 1 := by
-  simp only [alConj, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
-    Matrix.cons_val_fin_one, Matrix.head_cons, Matrix.head_fin_const]
+  simp only [alConj, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.empty_val',
+    Matrix.cons_val_fin_one]
   exact ⟨a * d * M 0 0 - l * a * b * (M 1 0 / ((N : ℤ) * l)) + l * c * d * M 0 1 - a * d * M 1 1,
     by linear_combination (M 1 1) * h⟩
 
 theorem alConj_00_l (h : (N : ℤ) * a * d - l * b * c = 1) (M : M2) :
     (l : ℤ) ∣ alConj N l a b c d M 0 0 - M 0 0 := by
-  simp only [alConj, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
-    Matrix.cons_val_fin_one, Matrix.head_cons, Matrix.head_fin_const]
+  simp only [alConj, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.empty_val',
+    Matrix.cons_val_fin_one]
   exact ⟨b * c * M 0 0 - N * a * b * (M 1 0 / ((N : ℤ) * l)) + N * c * d * M 0 1 - b * c * M 1 1,
     by linear_combination (M 0 0) * h⟩
 
 theorem alConjInv_00_l (h : (N : ℤ) * a * d - l * b * c = 1) (M : M2) :
     (l : ℤ) ∣ alConjInv N l a b c d M 0 0 - M 0 0 := by
-  simp only [alConjInv, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
-    Matrix.cons_val_fin_one, Matrix.head_cons, Matrix.head_fin_const]
+  simp only [alConjInv, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.empty_val',
+    Matrix.cons_val_fin_one]
   exact ⟨b * c * M 0 0 + N * b * d * (M 1 0 / ((N : ℤ) * l)) - N * a * c * M 0 1 - b * c * M 1 1,
     by linear_combination (M 0 0) * h⟩
 
@@ -512,7 +510,7 @@ theorem alHecke : ∀ (k N l : ℕ) (χ : DirichletCharacter ℂ N) (a a' : ℕ 
       ⟨by rw [alConjInv_det h hN hl0 δ hδ.2.1]; exact hδ.1, alConjInv_mem δ, fun hd => hδ.2.2 (by
         have := dvd_sub hd (alConjInv_00_l h δ); simpa using this)⟩
     exact slz_alQ_hsum k χ h hk hN hl0 (DU (N * l) l) l hl0 hcop (fun δ hδ => ⟨hδ.1, hδ.2.1⟩) hφU hψU
-      (repU l) ((zrepU (N * l) l hl).1 (dvd_mul_left l N)) (qs a) (qs a') hqs hinv
+      (repU l) ((_root_.GlobalTheory.EisM.lrep_repU (N * l) l hl).1 (dvd_mul_left l N)) (qs a) (qs a') hqs hinv
 
 end GlobalTheory.EisM.AtkinLehner
 end -- clump:auto
@@ -562,7 +560,7 @@ theorem atkinLehner_conj_int (N l : ℕ) (a b c d : ℤ) (h : (N : ℤ) * a * d 
       Matrix.cons_val_fin_one]
     push_cast
     exact Dvd.intro _ rfl
-  · simp only [Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
+  · simp only [Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_one, Matrix.empty_val',
       Matrix.cons_val_fin_one]
     exact ⟨-(b * d * l * r) + l * a * c * q + a * d * s - a * d * p, by linear_combination p * h⟩
 
@@ -775,8 +773,8 @@ theorem exists_gamma (L N : ℕ) (hL : 0 < L) (hNL : N ∣ L) (u : (ZMod N)ˣ) :
   refine ⟨⟨!![x, -y; (L : ℤ), (((v : ZMod L).val : ℕ) : ℤ)], ?_⟩, ?_, ?_⟩
   · rw [Matrix.det_fin_two_of]; linear_combination hxy
   · simp
-  · simp only [SpecialLinearGroup.coe_mk, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_one,
-      Matrix.cons_val_zero, Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_cons]
+  · simp only [Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_one,
+      Matrix.empty_val', Matrix.cons_val_fin_one]
     rw [← hv, ZMod.unitsMap_val, ZMod.cast_eq_val, Int.cast_natCast]
 
 theorem forms_of_characters_independent : ∀ (k L N : ℕ) (a : DirichletCharacter ℂ N → ℕ → ℂ), 0 < L → N ∣ L →
@@ -1395,7 +1393,7 @@ theorem chapterM_of_level (l : ℕ) [Fact l.Prime] (ι : PadicAlgCl l ≃+* ℂ)
     mul_self_eq_one_iff.mp (by rw [← map_mul, neg_one_mul, neg_neg, map_one])
   have hsg : (-1 : ℂ) ^ e * ψ (-1) = 1 ∨ (-1 : ℂ) ^ e * ψ (-1) = -1 := by
     rcases neg_one_pow_eq_or ℂ e with h | h <;> rcases hψ with h' | h' <;> simp [h, h']
-  obtain ⟨θ, hθm1, hθχ, hθχ'⟩ := chapterM_theta N r χ _ hN hr hr7 hrN hsg
+  obtain ⟨θ, hθm1, hθχ, hθχ'⟩ := _root_.GlobalTheory.exists_char_parity_mul_ne_one_mul_inv_ne_one N r χ _ hN hr hr7 hrN hsg
 
   set u : (ZMod N)ˣ := ZMod.unitOfCoprime l hcop with hu
   have hul : ((u : ZMod N)) = (l : ZMod N) := ZMod.coe_unitOfCoprime l hcop
@@ -1422,7 +1420,7 @@ theorem chapterM_of_level (l : ℕ) [Fact l.Prime] (ι : PadicAlgCl l ≃+* ℂ)
   have hv := key hprim hs hp hα0 hθm1 hθχ B c hEig hval B' c' hrel (fun a ha => hall.U a ha)
   have hmeas := _root_.GlobalTheory.EisM.measMu_of_eig l ι e N χ θ ψ (χ l * α) B' c' he hN hlN
     (by rw [map_mul, norm_mul, hnχ, hα, one_mul]) hall.kill hall.U hθm1 hχm1
-  obtain ⟨c₁, d₁, hc1, hd1, hc1c, hd1c, hc, hd⟩ := chapterM_smooth N l e (θ * χ) (θ * χ⁻¹) ψ hN hlp hlN he hθχ hθχ'
+  obtain ⟨c₁, d₁, hc1, hd1, hc1c, hd1c, hc, hd⟩ := _root_.GlobalTheory.smoothing_integers_two_characters N l e (θ * χ) (θ * χ⁻¹) ψ hN hlp hlN he hθχ hθχ'
   refine ⟨θ, χ l * α, _, B', c', c₁, d₁, ?_, ?_, ?_, ?_, hχm1, hθm1, hmeas, ?_, hc1, hd1, hc1c, hd1c, hc, hd⟩
   · have := Nat.le_of_dvd hN hrN; omega
   · rw [map_mul, norm_mul, hnχ, hα, one_mul]

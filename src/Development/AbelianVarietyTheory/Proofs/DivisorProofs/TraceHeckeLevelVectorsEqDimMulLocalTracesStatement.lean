@@ -118,10 +118,6 @@ section Linear
 
 variable {X V : Type} [AddCommGroup X] [Module ℂ X] [AddCommGroup V] [Module ℂ V]
 
-theorem trOn_map (j : X →ₗ[ℂ] V) (hj : Function.Injective j) (M : Submodule ℂ X) (L' : X →ₗ[ℂ] X) (L : V →ₗ[ℂ] V)
-    (h : ∀ x ∈ M, L (j x) = j (L' x)) : trOn (M.map j) L = trOn M L' :=
-  _root_.GlobalTheory.TraceOnInjectiveMap.trOn_map_of_injective j hj M L' L h
-
 theorem trOn_of_not_finite (M : Submodule ℂ V) (L : V →ₗ[ℂ] V) (h : ¬ Module.Finite ℂ M) : trOn M L = 0 := by
   unfold trOn
   split_ifs with hL
@@ -457,7 +453,7 @@ theorem trOn_levOp_cross (ρ : Representation ℂ G V) (X : Submodule ℂ V) (hX
       trOn (X ⊓ fixed ρ U) (levOp ρ U₀ U F LinearMap.id) =
         trOn (fixed τ K) (levOp τ K₀ K a LinearMap.id ∘ₗ B.toLinearMap) := fun F a hF hFr har ha => by
     rw [hY]
-    refine trOn_map _ X'.injective_subtype _ _ _ fun v hv => ?_
+    refine _root_.GlobalTheory.TraceOnInjectiveMap.trOn_map_of_injective _ X'.injective_subtype _ _ _ fun v hv => ?_
     have hv' : X'.subtype v ∈ X ⊓ fixed ρ U := hY ▸ ⟨v, hv, rfl⟩
     rw [levOp_split ι r hr hc hK1 hK2 ρ U₀ K₀ h0 F a b hF hFr har (fun k hk x => (hbi k hk x).2) ha hb _ hv'.2,
       LinearMap.comp_apply, ← levOp_nat τ ρH X'.subtype (fun _ _ => rfl) K₀ K a ha]
@@ -638,7 +634,7 @@ open scoped Classical TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.trace_heckeOperator_split_one_place : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ n : ℕ, 1 ≤ n → ∀ π : Submodule ℂ (UA E n → ℂ), IsAutRepU π → ∀ S : Set (Pl E), IsSection S → ∀ K' : ∀ w : Pl E, Subgroup (UL n w), IsLevelFam (fun w : Pl E => MonoidHom.id (UL n w)) (KL n) K' → ∀ f : ∀ w : Pl E, UL n w → ℂ, IsTest (KL n) K' f → ∀ w ∈ S, ∀ σ : SmIrr (UL n w), IsCompU π w σ → trOn (π ⊓ fixed (RF E n) (globLev S K')) (hop S K' f) * twTr σ.ρ (KL n w) (K' w) ((K' w : Set (UL n w)).indicator 1) LinearMap.id = twTr σ.ρ (KL n w) (K' w) (f w) LinearMap.id * trOn (π ⊓ fixed (RF E n) (globLev S K')) (hop S K' (Function.update f w ((K' w : Set (UL n w)).indicator 1))) := by
-  first | exact @GlobalTheory.BCT.Peel.trOn_hop_peel | exact GlobalTheory.BCT.Peel.trOn_hop_peel | (intros; apply GlobalTheory.BCT.Peel.trOn_hop_peel <;> assumption)
+  first | exact @GlobalTheory.BCT.Peel.trOn_hop_peel
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceHeckeOperatorSplitOnePlaceStatement =====
@@ -653,7 +649,7 @@ open scoped Classical TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.unitaryHeckeOperator_levelIndicator_eq_inv_index : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ n : ℕ, 1 ≤ n → ∀ S : Set (Pl E), IsSection S → ∀ K' : ∀ w : Pl E, Subgroup (UL n w), IsLevelFam (fun w : Pl E => MonoidHom.id (UL n w)) (KL n) K' → ∀ φ ∈ fixed (RF E n) (globLev S K'), hop S K' (fun w => (K' w : Set (UL n w)).indicator 1) φ = (∏ᶠ w ∈ S, (((K' w).relIndex (KL n w) : ℕ) : ℂ))⁻¹ • φ := by
-  first | exact @GlobalTheory.BCT.hop_indicator_level | exact GlobalTheory.BCT.hop_indicator_level | (intros; apply GlobalTheory.BCT.hop_indicator_level <;> assumption)
+  first | exact @GlobalTheory.BCT.hop_indicator_level
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.UnitaryHeckeOperatorLevelIndicatorEqInvIndexStatement =====
@@ -841,7 +837,7 @@ open scoped Classical TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.trace_hecke_levelVectors_eq_dim_mul_local_traces : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ n : ℕ, 1 ≤ n → ∀ π : Submodule ℂ (UA E n → ℂ), IsAutRepU π → ∀ (S : Set (Pl E)), IsSection S → ∀ (lam : InfinitePlace E → DomWeight n), (∀ v, HasWeightAt π v.embedding (lam v)) → ∀ (K' : ∀ w : Pl E, Subgroup (UL n w)), IsLevelFam (fun w : Pl E => MonoidHom.id (UL n w)) (KL n) K' → ∀ σ : ∀ w : Pl E, SmIrr (UL n w), (∀ w, IsCompU π w (σ w)) → ∀ f : ∀ w : Pl E, UL n w → ℂ, IsTest (KL n) K' f → trOn (π ⊓ fixed (RF E n) (globLev S K')) (hop S K' f) = dimW lam * ∏ᶠ w ∈ S, twTr (σ w).ρ (KL n w) (K' w) (f w) LinearMap.id := by
-  first | exact @GlobalTheory.BCT.trOn_hop_eq_dimW_mul_finprod_twTr | exact GlobalTheory.BCT.trOn_hop_eq_dimW_mul_finprod_twTr | (intros; apply GlobalTheory.BCT.trOn_hop_eq_dimW_mul_finprod_twTr <;> assumption)
+  first | exact @GlobalTheory.BCT.trOn_hop_eq_dimW_mul_finprod_twTr
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TraceHeckeLevelVectorsEqDimMulLocalTracesStatement =====

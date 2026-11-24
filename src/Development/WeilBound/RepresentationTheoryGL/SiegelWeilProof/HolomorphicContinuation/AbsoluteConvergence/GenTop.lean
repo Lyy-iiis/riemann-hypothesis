@@ -372,9 +372,6 @@ end PositivityTheory.Rg.Sw.AbsSt.BasisPf
 
 namespace PositivityTheory.Rg.Sw.AbsSt
 
-theorem basis (hI : Iwa) (hD : CayleyBlocksInvertible) (hM : Mult) (hC : CycSec) (hH : HolParam) : Basis :=
-  BasisPf.basis_of hI hD hM hC hH
-
 end PositivityTheory.Rg.Sw.AbsSt
 end -- clump:auto
 end -- clump:auto
@@ -416,15 +413,6 @@ theorem sL_bound (hI : Iwa) (hM : Mult) (hD : CayleyBlocksInvertible) (hL : LocD
   calc ‖F0 p q e u‖ * ‖sL Q k‖ ≤ ‖F0 p q e u‖ * (max B 0 / ‖F0 p q e k0‖ * ‖F0 p q e k‖) :=
         mul_le_mul_of_nonneg_left (h1.trans h2) (norm_nonneg _)
     _ = max B 0 / ‖F0 p q e k0‖ * (‖F0 p q e u‖ * ‖F0 p q e k‖) := by ring
-
-theorem rpow_le_add {a x₁ x₂ s : ℝ} (ha : 0 < a) (h₁ : x₁ ≤ s) (h₂ : s ≤ x₂) : a ^ s ≤ a ^ x₁ + a ^ x₂ := by
-  rcases le_total 1 a with h | h
-  · have := Real.rpow_le_rpow_of_exponent_le h h₂
-    have := Real.rpow_nonneg ha.le x₁
-    linarith
-  · have := Real.rpow_le_rpow_of_exponent_ge ha h h₁
-    have := Real.rpow_nonneg ha.le x₂
-    linarith
 
 section Glob
 
@@ -485,7 +473,7 @@ theorem hz_bound (hD : CayleyBlocksInvertible) (hG : GlobCore ε c sL ρ G Pp Γ
     ‖hz Ht sec s₀ z Q x‖ ≤ C * (‖hz Ht sec s₀ (σ₁ : ℂ) 1 x‖ + ‖hz Ht sec s₀ (σ₂ : ℂ) 1 x‖) := by
   rw [norm_hz hD hG, norm_hz hD hG, norm_hz hD hG, Complex.ofReal_re, Complex.ofReal_re]
   have hx := Ht_pos hD hG x
-  have hr := rpow_le_add hx (show σ₁ - s₀.re ≤ z.re - s₀.re by linarith) (show z.re - s₀.re ≤ σ₂ - s₀.re by linarith)
+  have hr := _root_.GlobalTheory.Eis.rpow_le_add hx (show σ₁ - s₀.re ≤ z.re - s₀.re by linarith) (show z.re - s₀.re ≤ σ₂ - s₀.re by linarith)
   calc (Ht x : ℝ) ^ (z.re - s₀.re) * ‖sec Q x‖
       ≤ ((Ht x : ℝ) ^ (σ₁ - s₀.re) + (Ht x : ℝ) ^ (σ₂ - s₀.re)) * (C * ‖sec 1 x‖) :=
         mul_le_mul hr (hC x) (norm_nonneg _) (by positivity)
@@ -1026,7 +1014,7 @@ theorem I_eq_of_sL (hS : SecZero) (hLC : LC) (hL : LocData ε c t p q e sL ρ) (
   have hnull : NullSec ε c (Q - Q') :=
     (hS m n ε c t p q e sL ρ hL (Q - Q')).2 (fun y => by simp [map_sub, h y])
   have key := hLC m n ε c hL.cpos ((LinearMap.proj g).comp I) (fun a b P => hD.Iinv g a b P) (Q - Q') hnull
-  simp only [LinearMap.comp_apply, LinearMap.proj_apply, map_sub, Pi.sub_apply] at key
+  simp only [LinearMap.comp_apply, LinearMap.proj_apply, map_sub] at key
   exact sub_eq_zero.mp key
 
 theorem hz_comb (hD : GlobData ε c sL ρ G Pp Γ ι s₀ Ht sec I Λ) {N : ℕ} {P : PX m n} {QQ : Fin N → PX m n} {cc : Fin N → ℂ}
@@ -1372,7 +1360,7 @@ theorem tsGen_of (hD : CayleyBlocksInvertible) (hK : KAK) (hM : Mult) (hS : SecZ
         simpa [LinearMap.submoduleMap] using this
       show I ((Bm v : W) : PX m n) gpt = I Q1 gpt
       exact hIsec _ _ (fun y' => by rw [hv', h1 y'])
-    have hspan := GlobalTheory.dual_mem_span_eval_of_finiteDimensional V ℓ
+    have hspan := _root_.UpperTheory.Reformulated.B.Yyc2.dual_mem_span_eval_of_finiteDimensional V ℓ
     obtain ⟨cf, hcf⟩ := Finsupp.mem_span_range_iff_exists_finsupp.1 hspan
     have hℓeval : ∀ v : V, ℓ v = ∑ y ∈ cf.support, cf y * (v : GR n → ℂ) y := by
       intro v
@@ -1447,7 +1435,7 @@ theorem tsGen_of (hD : CayleyBlocksInvertible) (hK : KAK) (hM : Mult) (hS : SecZ
       have hsecΦ : ∀ y', sL Φ y' = sL Qr y' := by
         intro y'
         have h1 := hΦ ((LinearMap.proj y').comp sL)
-        simp only [LinearMap.comp_apply, LinearMap.proj_apply, map_smul, Pi.smul_apply, smul_eq_mul] at h1
+        simp only [LinearMap.comp_apply, LinearMap.proj_apply, map_smul, smul_eq_mul] at h1
         rw [h1, ← hQr y']
         refine integral_congr_ae (Filter.Eventually.of_forall fun k => ?_)
         simp only
@@ -1620,7 +1608,7 @@ theorem tsGenC_of (hD : CayleyBlocksInvertible) (hK : KAK) (hM : Mult) (hS : Sec
         simpa [LinearMap.submoduleMap] using this
       show I ((Bm v : W) : PX m n) gpt = I Q1 gpt
       exact hIsec _ _ (fun y' => by rw [hv', h1 y'])
-    have hspan := GlobalTheory.dual_mem_span_eval_of_finiteDimensional V ℓ
+    have hspan := _root_.UpperTheory.Reformulated.B.Yyc2.dual_mem_span_eval_of_finiteDimensional V ℓ
     obtain ⟨cf, hcf⟩ := Finsupp.mem_span_range_iff_exists_finsupp.1 hspan
     have hℓeval : ∀ v : V, ℓ v = ∑ y ∈ cf.support, cf y * (v : GR n → ℂ) y := by
       intro v
@@ -1695,7 +1683,7 @@ theorem tsGenC_of (hD : CayleyBlocksInvertible) (hK : KAK) (hM : Mult) (hS : Sec
       have hsecΦ : ∀ y', sL Φ y' = sL Qr y' := by
         intro y'
         have h1 := hΦ ((LinearMap.proj y').comp sL)
-        simp only [LinearMap.comp_apply, LinearMap.proj_apply, map_smul, Pi.smul_apply, smul_eq_mul] at h1
+        simp only [LinearMap.comp_apply, LinearMap.proj_apply, map_smul, smul_eq_mul] at h1
         rw [h1, ← hQr y']
         refine integral_congr_ae (Filter.Eventually.of_forall fun k => ?_)
         simp only
@@ -1801,12 +1789,12 @@ namespace PositivityTheory.Rg.Sw.AbsSt
 
 theorem genCore : Iwa → CayleyBlocksInvertible → KAK → Mult → SecZero → DerivativeVacuumDilations → CycSec → HolParam → Glue → LC → GenCore :=
   fun hI hD hK hM hS hDF hC hH hG hLC =>
-    genCore_of (Proj.projOp hI hM) (tsGenC_of hD hK hM hS hDF hH hLC tsbFacts) (basis hI hD hM hC hH)
+    genCore_of (Proj.projOp hI hM) (tsGenC_of hD hK hM hS hDF hH hLC tsbFacts) (_root_.PositivityTheory.Rg.Sw.AbsSt.BasisPf.basis_of hI hD hM hC hH)
       (farRightC hI hD hM hH) hS hLC hH hG
 
 theorem absThm_of' (hV : VacOut) (hI : Iwa) (hD : CayleyBlocksInvertible) (hK : KAK) (hM : Mult) (hS : SecZero) (hDF : DerivativeVacuumDilations)
     (hC : CycSec) (_hSph : Sph) (hH : HolParam) (hG : Glue) (hLC : LC) (_hN : NullIff) : AbsThm :=
-  absThm_gen hV (Proj.projOp hI hM) (tsGen hI hD hK hM hS hDF hH hLC) (basis hI hD hM hC hH) (farRight hI hD hM hH)
+  absThm_gen hV (Proj.projOp hI hM) (tsGen hI hD hK hM hS hDF hH hLC) (_root_.PositivityTheory.Rg.Sw.AbsSt.BasisPf.basis_of hI hD hM hC hH) (farRight hI hD hM hH)
     hS hLC hH hG
 
 end PositivityTheory.Rg.Sw.AbsSt

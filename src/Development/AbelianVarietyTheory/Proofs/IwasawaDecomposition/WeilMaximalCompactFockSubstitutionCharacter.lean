@@ -59,7 +59,7 @@ open scoped TensorProduct InnerProductSpace Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.fockPolynomialVector_change_orthonormalBases_subst : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) (Sp : D.what₂.Tau → SPar) (M : DSModel T Sp) (BS : D.what₂.Tau → Matrix (Fin S.rank) (Fin S.rank) ℂ), IsStdChar D ψ (-1) → IsInfFam θ → (∀ τ, (BS τ)ᴴ * gramAt D S τ * BS τ = 1) → ∀ (k : D.what₂.Tau → Matrix (Fin T.rank) (Fin T.rank) ℂ) (u : D.what₂.Tau → Matrix (Fin S.rank) (Fin S.rank) ℂ), (∀ τ, k τ ∈ Formalism.REAL.Kset (M.ε τ)) → (∀ τ, u τ ∈ Matrix.unitaryGroup (Fin S.rank) ℂ) → ∀ f, IsThetaFunO ψ S T f → ∀ P : PolF D T.rank S.rank, pureTensorO ψ θ S T (fun _ => 1) (cart M) (fun τ => BS τ * u τ) (fun τ => onb M τ * k τ) f P = pureTensorO ψ θ S T (fun _ => 1) (cart M) BS (onb M) f (fsub M.ε k u P) := by
-  first | exact @GlobalTheory.FockBasis.pureTensorO_basis | exact GlobalTheory.FockBasis.pureTensorO_basis | (intros; apply GlobalTheory.FockBasis.pureTensorO_basis <;> assumption)
+  first | exact @GlobalTheory.FockBasis.pureTensorO_basis
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.FockPolynomialVectorChangeOrthonormalBasesSubstStatement =====
@@ -84,19 +84,7 @@ theorem trace_Jm {n p q : ℕ} (h : p + q = n) (ε : Fin n → Bool) (hε : ∀ 
   rw [Matrix.trace_diagonal, Fin.sum_univ_add]
   simp [hε, sub_eq_add_neg]
 
-theorem isCartanInv_one {n : ℕ} {G B : Matrix (Fin n) (Fin n) ℂ} (h : Bᴴ * G * B = 1) : IsCartanInv G 1 := by
-  have hB : B * (Bᴴ * G) = 1 := mul_eq_one_comm.1 h
-  have hi : B⁻¹ = Bᴴ * G := Matrix.inv_eq_right_inv hB
-  have hu : IsUnit B := IsUnit.of_mul_eq_one _ hB
-  have hG : G = (B⁻¹)ᴴ * B⁻¹ := by
-    have h1 : (B⁻¹)ᴴ * Bᴴ = 1 := by
-      rw [← Matrix.conjTranspose_mul, hi, hB, Matrix.conjTranspose_one]
-    calc G = ((B⁻¹)ᴴ * Bᴴ) * G := by rw [h1, Matrix.one_mul]
-      _ = _ := by rw [Matrix.mul_assoc, ← hi]
-  refine ⟨by simp, by simp, ?_⟩
-  rw [Matrix.mul_one, hG]
-  refine Matrix.PosDef.conjTranspose_mul_self _ (Matrix.mulVec_injective_of_isUnit ?_)
-  exact (Matrix.isUnit_nonsing_inv_iff).2 hu
+alias isCartanInv_one := _root_.GlobalTheory.FockBasis.isCartanInv_one
 
 theorem conj_unitary {n : ℕ} {G B g : Matrix (Fin n) (Fin n) ℂ} (h : Bᴴ * G * B = 1) (hg : gᴴ * G * g = G) :
     B⁻¹ * g * B ∈ Matrix.unitaryGroup (Fin n) ℂ := by

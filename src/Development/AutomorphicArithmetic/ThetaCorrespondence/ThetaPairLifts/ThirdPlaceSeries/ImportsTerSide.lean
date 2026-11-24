@@ -388,7 +388,7 @@ variable {Γ : Type} [Group Γ] [Fintype Γ]
 theorem eq_sum_single (e : MonoidAlgebra ℂ Γ) : e = ∑ q : Γ, MonoidAlgebra.single q (e.coeff q) := by
   classical
   ext x
-  simp [MonoidAlgebra.coeff_sum, Finset.sum_apply', Finsupp.single_apply]
+  simp [MonoidAlgebra.coeff_sum]
 
 theorem coeff_mul_fin (a b : MonoidAlgebra ℂ Γ) (x : Γ) :
     (a * b).coeff x = ∑ q, a.coeff q * b.coeff (q⁻¹ * x) := by
@@ -829,15 +829,6 @@ theorem charpoly_pow_of_prod {K ι : Type} [Field K] [IsAlgClosed K] {r : ℕ} (
     Multiset.map_map, Multiset.map_map]
   rfl
 
-theorem teich_zero {g : ℕ} [Fact g.Prime] (t : Formalism.CyclotomicNorms.Fbar g →* ℂ)
-    (ht : ∀ x y, x ≠ 0 → y ≠ 0 → t x = t y → x = y) : t 0 = 0 := by
-  classical
-  obtain ⟨x, hx⟩ := Infinite.exists_notMem_finset ({0, 1} : Finset (Formalism.CyclotomicNorms.Fbar g))
-  simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at hx
-  by_contra h0
-  have h1 : t 0 * t x = t 0 * t 1 := by rw [← map_mul, ← map_mul, zero_mul, zero_mul]
-  exact hx.2 (ht x 1 hx.1 one_ne_zero (mul_left_cancel₀ h0 h1))
-
 end Alg
 
 section Local
@@ -933,8 +924,7 @@ theorem charpoly_eq_of_gen {n : ℕ} (ρ : Ine (F := E) A →* GL (Fin n) ℂ)
   have hχm : ∀ x ∈ s, χ x γ ^ m = χ x σ := by
     intro x hx
     have := congrArg (fun p : GL (Fin n) ℂ × (T → ℂˣ) => ((p.2 ⟨x, Multiset.mem_toFinset.2 hx⟩ : ℂˣ) : ℂ)) hm
-    simp only [Φ, MonoidHom.prod_apply, Prod.pow_snd, Pi.pow_apply, Units.val_pow_eq_pow_val,
-      Pi.monoidHom_apply] at this
+    simp only [Φ, MonoidHom.prod_apply, Prod.pow_snd, Pi.pow_apply, Units.val_pow_eq_pow_val] at this
     exact this
   rw [hρm, Units.val_pow_eq_pow_val, charpoly_pow_of_prod _ s (fun x => χ x γ) hργ m]
   exact congrArg Multiset.prod (Multiset.map_congr rfl fun x hx => by rw [hχm x hx])
@@ -960,7 +950,7 @@ theorem main : ∀ D : D7, IneRep D → LabDepth D → LabGen D → ∃ Ω : Tam
       rw [← hρP ⟨γ k w, hγw.1⟩]
       rw [show ((⟨γ k w, hγw.1⟩ : ↥(Ine (F := D.host.E) (D.nd.plOm.1 w))) : GE D.nd) = γ k w from rfl, hlabγ]
       have := Multiset.dvd_prod (Multiset.mem_map_of_mem (fun x => X - C (D.ntypes.teichC k x)) hx)
-      simpa [teich_zero (D.ntypes.teichC k) (D.ntypes.teichC_inj k)] using this
+      simpa [_root_.GlobalTheory.TameLabels.teich_zero (D.ntypes.teichC k) (D.ntypes.teichC_inj k)] using this
     rw [X_dvd_iff] at hdvd
     have hdet := Matrix.isUnits_det_units (ρ ⟨γ k w, hγw.1⟩)
     rw [Matrix.det_eq_sign_charpoly_coeff, hdvd, mul_zero] at hdet
@@ -1075,7 +1065,7 @@ section -- clump:auto
 open Formalism Formalism.MainNotions Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.MainNotions.N Formalism.WeaklyAdmissibleFiltrations Formalism.L2 NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.Gal Module Polynomial GlobalTheory.Pass GlobalTheory.PendOf
 
 theorem _root_.GlobalTheory.T.labelTwistMultipliesRoots_of_tame_labels : ∀ D : D7, SumRepresentations.tie0 D → IneRep D → LabDepth D → LabGen D → LabChar D := by
-  first | exact @main | exact main | (intros; apply main <;> assumption)
+  first | exact @main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LabelTwistMultipliesRootsOfTameLabelsStatement =====
@@ -1270,7 +1260,7 @@ theorem main : ∀ (D : D7) (M : MtFam D) (i : D.nd.Loc), HeckeTied D M → Heck
       rw [hπ, Module.Basis.repr_self, Pi.basisFun_apply]
       by_cases hk : k' = k
       · subst hk; simp
-      · simp [Finsupp.single_apply, Pi.single_apply, hk, Ne.symm hk]
+      · simp [hk]
     rw [← this]
     exact hπr _
   let q := p ∘ₗ G.subtype
@@ -1616,7 +1606,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.groupAlgebraCentre_keeps_typeSpaces_at_localisations : ∀ (D : D7) (M : MtFam D), AVTied D M → GlobalTheory.HeightCounting.Up.CenLoc D M → OnMtPreservesTypeV D := by
-  first | exact @GlobalTheory.CenKeepsTypeLoc.main | exact GlobalTheory.CenKeepsTypeLoc.main | (intros; apply GlobalTheory.CenKeepsTypeLoc.main <;> assumption)
+  first | exact @GlobalTheory.CenKeepsTypeLoc.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.GroupAlgebraCentreKeepsTypeSpacesAtLocalisationsStatement =====
@@ -1755,13 +1745,13 @@ theorem depthZero_tame_alt : _root_.GlobalTheory.NRows.ThetaLocalInputsAlt → G
     (D : D7) (P : _root_.GlobalTheory.NPin.CharacterChoiceData hL D), (∀ i : D.nd.Loc, Nonempty (RowMod D P.rep (D.nd.j i))) → LabAll D P.T → ChiTOk D P.cf →
     DepthZ D := by
   intro hP hS hL D P hrow hlab hchi
-  obtain ⟨S, hT, hLaws, -⟩ := _root_.GlobalTheory.T.exists_true_reading_with_laws_suppLaws hP.fin hL D P hrow
+  obtain ⟨S, hT, hLaws, -⟩ := _root_.GlobalTheory.TrueReading.exists_true_reading_alt hP.fin hL D P hrow
   have hfix : ∀ (i : D.nd.Loc) (PI : D.naut.AV i) (k : Fin 2) (v : D.nd.PlG k),
       TameLP D (D.naut.locV i PI (D.naut.plGw k v)) := by
     intro i PI k v
     have hw := GlobalTheory.FixedPlaceSplit.isSplitPl_plGw D k v
     have htame := _root_.GlobalTheory.PendOf.isTame_reading_mu_at_split_plGw hL D P S hT i k v hw
-    have hTB := _root_.GlobalTheory.T.type_block_of_tame_at_split_place hL D P S hT i _ hw ⟨k, D.naut.plGw_over k v⟩ htame
+    have hTB := _root_.GlobalTheory.TypeBlockPf.main_alt_alt hL D P S hT i _ hw ⟨k, D.naut.plGw_over k v⟩ htame
     obtain ⟨x, hx0, hx⟩ := hTB.2 PI
     have hfixd : x ∈ GlobalTheory.PRep.fixed ((S i _ hw).rep PI).π
         (GlobalTheory.SplitWeil.KOne ((D.naut.plGw k v).adicCompletion D.host.E) (Fin (D.R.r + D.R.t))) := by
@@ -1777,7 +1767,7 @@ theorem depthZero_tame_alt : _root_.GlobalTheory.NRows.ThetaLocalInputsAlt → G
   intro i PI k w hw
   obtain ⟨v, rfl | hc⟩ := GlobalTheory.TypePlaceCover.place_cover D k w hw
   · exact hfix i PI k v
-  · exact ((_root_.GlobalTheory.T.conjDual_of_labAll hP hL D P hlab) i PI k v w hc).2.1 (hfix i PI k v)
+  · exact ((_root_.GlobalTheory.ConjPlaceDual.depthZero_tame_alt hP hL D P hlab) i PI k v w hc).2.1 (hfix i PI k v)
 end GlobalTheory.DepthZeroTame
 end
 end
@@ -1805,7 +1795,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.depthZ_of_rowMod_labAll_chiTOk : _root_.GlobalTheory.NRows.ThetaLocalInputsAlt → GlobalTheory.Published.DepthZeroSupport → ∀ (hL : _root_.UpperTheory.Zero.LLC.RecTExists) (D : D7) (P : _root_.GlobalTheory.NPin.CharacterChoiceData hL D), (∀ i : D.nd.Loc, Nonempty (RowMod D P.rep (D.nd.j i))) → LabAll D P.T → ChiTOk D P.cf → DepthZ D := by
-  first | exact @_root_.GlobalTheory.DepthZeroTame.depthZero_tame_alt | exact _root_.GlobalTheory.DepthZeroTame.depthZero_tame_alt | (intros; apply _root_.GlobalTheory.DepthZeroTame.depthZero_tame_alt <;> assumption)
+  first | exact @_root_.GlobalTheory.DepthZeroTame.depthZero_tame_alt
 end
 end
 end -- clump:auto
@@ -1832,7 +1822,7 @@ theorem locComp_of_isRc_classMapD_cenLoc : _root_.GlobalTheory.NRows.ThetaLocalI
   obtain ⟨hIne, hDep, hGen⟩ := GlobalTheory.LabTies.main D P.T hLab
   have hCT : OnMtPreservesTypeV D := GlobalTheory.T.groupAlgebraCentre_keeps_typeSpaces_at_localisations D P.M P.H.av hCen
   have hDZ : DepthZ D := _root_.GlobalTheory.T.depthZ_of_rowMod_labAll_chiTOk hPr hSu hL D P hRow hLab hChi
-  have hAdm : PairedCharacterCondition.RT.AdmDepthZeroTypes (D := D) := _root_.GlobalTheory.T.admDepthZero_of_rowMod_labAll_greenLab hPr hL D P hRow hLab hCen hGr hChi
+  have hAdm : PairedCharacterCondition.RT.AdmDepthZeroTypes (D := D) := _root_.GlobalTheory.DepthZeroRow.locComp_of_isRc_classMapD_cenLoc hPr hL D P hRow hLab hCen hGr hChi
   have hPar : ∀ S : Formalism.L2.ParC D, ∃ σ' : D.ntypes.Par,
       ∀ w, D.ntypes.locPar σ' w = isoLoc D.nd D.naut S.1 w := by
     intro S

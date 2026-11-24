@@ -71,7 +71,7 @@ open ValuativeRel Formalism.L2.Host
 
 
 theorem _root_.GlobalTheory.T.glOrbitIntegral_depthDatum_mem_subfield : ∀ {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] [MeasurableSpace k] [BorelSpace k] {A A' D : Type} [Fintype A] [DecidableEq A] [Fintype A'] [DecidableEq A'] [Fintype D] [DecidableEq D] (F : Subfield ℂ) {J : Subgroup (GL A' k)}, IsOpen (J : Set (GL A' k)) → J ≤ KO k A' → ∀ (σ : A ⊕ A' ≃ D) (ν : kˣ →* ℂˣ) {ϖ : kˣ} {e : ℕ}, IsUnif ϖ → 1 ≤ e → CondLE ϖ e ν → ¬ IsUnram ν → (∀ u, (ν u : ℂ) ∈ F) → (∀ u : kˣ, apow u (1 / 2) ∈ F) → ∀ (c : D → kˣ) {Ψ : Matrix A' D k → ℂ}, HasDepth ϖ e (diagLat c) Ψ → (∀ X, Ψ X ∈ F) → ∀ h : GL D k, smallF (haarVol J) ν Ψ (Y0 k σ * h.val) ∈ F := by
-  first | exact @GlobalTheory.SmallFInF.smallF_mem | exact GlobalTheory.SmallFInF.smallF_mem | (intros; apply GlobalTheory.SmallFInF.smallF_mem <;> assumption)
+  first | exact @GlobalTheory.SmallFInF.smallF_mem
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.GlOrbitIntegralDepthDatumMemSubfieldStatement =====
@@ -225,7 +225,7 @@ open ValuativeRel Formalism.L2.Host
 
 
 theorem _root_.GlobalTheory.T.gridGivenPathTensor_mem_subfield : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {G : GridData L sc} (F : Subfield ℂ) (B : Frames G) (t : T) (Φ : G.Datum) (w : Pl D.host.E), (∀ j x, ((L.C.mu0 j).loc w x : ℂ) ∈ F) → (∀ x, ((L.xiH t).loc w x : ℂ) ∈ F) → ∀ z : (locGrid G t w).Args, (givenStage t w B Φ).tensor z ∈ F := by
-  first | exact @GlobalTheory.GivenField.tensor_givenStage_mem | exact GlobalTheory.GivenField.tensor_givenStage_mem | (intros; apply GlobalTheory.GivenField.tensor_givenStage_mem <;> assumption)
+  first | exact @GlobalTheory.GivenField.tensor_givenStage_mem
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.GridGivenPathTensorMemSubfieldStatement =====
@@ -270,7 +270,7 @@ open ValuativeRel Formalism.L2.Host
 
 
 theorem _root_.GlobalTheory.T.normalisedAbsComplexPow_half_mem_subfield_of_sqrt_norm : ∀ {D : D7} (F : Subfield ℂ) (w : Pl D.host.E), ((Real.sqrt (Ideal.absNorm w.asIdeal) : ℝ) : ℂ) ∈ F → ∀ u : (Kw w)ˣ, apow u (1 / 2) ∈ F := by
-  first | exact @GlobalTheory.HalfPowField.apow_half_mem_of_sqrt | exact GlobalTheory.HalfPowField.apow_half_mem_of_sqrt | (intros; apply GlobalTheory.HalfPowField.apow_half_mem_of_sqrt <;> assumption)
+  first | exact @GlobalTheory.HalfPowField.apow_half_mem_of_sqrt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.NormalisedAbsComplexPowHalfMemSubfieldOfSqrtNormStatement =====
@@ -340,7 +340,7 @@ open ValuativeRel Formalism.L2.Host
 
 
 theorem _root_.GlobalTheory.T.weilTraceAddCharAtPlace_mem_subfield_of_roots : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {G : GridData L sc} (F : Subfield ℂ) {W : G.Weil} {w : Pl D.host.E}, (∀ z : ℂ, z ^ (Ideal.absNorm w.asIdeal ^ depthAt G w) = 1 → z ∈ F) → HasConductor (psiAt W w) 1 → ∀ (x : Kw w), valuation (Kw w) ((((unifAt w) ^ depthAt G w : (Kw w)ˣ) : Kw w) * x) ≤ 1 → (psiAt W w x : ℂ) ∈ F := by
-  first | exact @GlobalTheory.FunObj.psiAt_mem_subfield_of_roots | exact GlobalTheory.FunObj.psiAt_mem_subfield_of_roots | (intros; apply GlobalTheory.FunObj.psiAt_mem_subfield_of_roots <;> assumption)
+  first | exact @GlobalTheory.FunObj.psiAt_mem_subfield_of_roots
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.WeilTraceAddCharAtPlaceMemSubfieldOfRootsStatement =====
@@ -385,7 +385,6 @@ theorem fourierSum_mem {A D : Type} [Fintype A] [DecidableEq A] [DecidableEq D] 
   split_ifs with h
   · refine F.mul_mem (F.inv_mem (F.pow_mem (natCast_mem F _) _)) (F.sum_mem fun T _ => F.mul_mem (hΦ _) (hψ _ ?_))
     rw [← Valuation.mem_integer_iff]
-    change _ ∈ 𝒪[k]
     rw [pairCols, Finset.mul_sum]
     refine Subring.sum_mem _ fun i _ => ?_
     rw [Finset.mul_sum]
@@ -404,7 +403,6 @@ theorem invFourierSum_inv_mem {A D : Type} [Fintype A] [DecidableEq A] [Decidabl
   split_ifs with h
   · refine F.sum_mem fun S _ => F.mul_mem (hΦ _) (hψ _ ?_)
     rw [← Valuation.mem_integer_iff]
-    change _ ∈ 𝒪[k]
     have e1 : ((ϖ ^ e : kˣ) : k) * pairCols P T ((ϖ ^ e)⁻¹ • liftRes S) = ∑ i, ∑ j : P, liftRes S i j * T i j := by
       rw [pairCols, Finset.mul_sum]
       refine Finset.sum_congr rfl fun i _ => ?_
@@ -436,7 +434,7 @@ theorem phiA_mem {A A' D : Type} [Fintype A] [DecidableEq A] [Fintype A'] [Decid
   · unfold fFun
     split_ifs with hX
     · exact F.mul_mem (F.mul_mem (hνF _) (apow_nat_half_mem F habs _ _))
-        (smallF_mem F hJo hJK σ ν hϖ he hν hram hνF habs c hΨ hΨF _)
+        (_root_.GlobalTheory.SmallFInF.smallF_mem F hJo hJK σ ν hϖ he hν hram hνF habs c hΨ hΨF _)
     · exact F.zero_mem
   · exact F.zero_mem
 
@@ -498,7 +496,7 @@ theorem nu_mem (F : Subfield ℂ) (t : T) (w : Pl D.host.E) (hmu : ∀ j x, ((L.
     {i j : ℕ} (hi : i < D.R.m) (hj : j < D.R.m) (u : (Kw w)ˣ) : ((locGrid G t w).nu i j u : ℂ) ∈ F := by
   have e1 : (((locGrid G t w).nu i j u : ℂˣ) : ℂ) =
       ((L.C.mu0 ⟨j, hj⟩).loc w u : ℂ) * ((L.xiH t).loc w u : ℂ) * (((G.ch.chiH (D.R.m - i)).loc w u : ℂ))⁻¹ := by
-    simp only [Grid.nu, locGrid, muBase, dif_pos hj, MonoidHom.div_apply, Units.val_div_eq_div_val, div_eq_mul_inv]
+    simp only [Grid.nu, locGrid, muBase, dif_pos hj, div_eq_mul_inv]
     simp [HChar.loc]
   rw [e1]
   exact F.mul_mem (F.mul_mem (hmu _ _) (hxi _)) (F.inv_mem (hchi _ (by omega) (by omega) _))
@@ -538,8 +536,8 @@ theorem Tflip_mem_range : ∀ {D : D7} {Γ : Type} [Group Γ] [Fintype Γ] {Pl0 
   have hchi : ∀ i, 1 ≤ i → i ≤ D.R.m → ∀ x, ((ch.G.ch.chiH i).loc w x : ℂ) ∈ K :=
     fun i a b x => hK _ (hF.chars.chi i a b w x)
   have habs : ∀ u : (Kw w)ˣ, apow u (1 / 2) ∈ K :=
-    GlobalTheory.TflipField.apow_half_mem K w (hK _ (hF.sqrt w (.inr ⟨t, hw⟩)))
-  have hψ := GlobalTheory.TflipField.psiAt_mem (W := ch.W) K (fun z hz => hK _ (hF.roots t w hw z hz)) h00.cond
+    _root_.GlobalTheory.HalfPowField.apow_half_mem_of_sqrt K w (hK _ (hF.sqrt w (.inr ⟨t, hw⟩)))
+  have hψ := _root_.GlobalTheory.FunObj.psiAt_mem_subfield_of_roots (W := ch.W) K (fun z hz => hK _ (hF.roots t w hw z hz)) h00.cond
   have hν : ∀ x ∈ flipOrder D.R.m, CondLE (unifAt w) (depthAt ch.G w) ((locGrid ch.G t w).nu x.1 x.2) ∧
       ¬ IsUnram ((locGrid ch.G t w).nu x.1 x.2) ∧ ∀ u, ((locGrid ch.G t w).nu x.1 x.2 u : ℂ) ∈ K := by
     intro x hx
@@ -550,7 +548,7 @@ theorem Tflip_mem_range : ∀ {D : D7} {Γ : Type} [Group Γ] [Fintype Γ] {Pl0 
     refine ⟨by rw [← e]; exact hs.condν, by rw [← e]; exact hs.ram, GlobalTheory.TflipField.nu_mem K t w hmu hxi hchi hi hj⟩
   have key := GlobalTheory.TflipField.flips_mem K h00.unif h00.cond h00.one_le habs hψ (flipOrder D.R.m)
     (givenStage t w ch.S.B Φ) hν (canFlip_flipOrder _).1 (fun X => GivenAdm.givenLevel_open hL hw X) hadm.tensor
-    (GlobalTheory.TflipField.givenStage_mem K ch.S.B t Φ w hmu hxi) z
+    (_root_.GlobalTheory.GivenField.tensor_givenStage_mem K ch.S.B t Φ w hmu hxi) z
   exact RingHom.mem_fieldRange.1 key
 
 end GlobalTheory.RowTest

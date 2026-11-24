@@ -65,9 +65,7 @@ theorem dualDiff : DualDiffSt := by
     intro j
     unfold trDual
     first
-      | exact LinearMap.BilinForm.apply_dualBasis_left _ _ _ _ _
       | simp [LinearMap.BilinForm.apply_dualBasis_left]
-      | simp [LinearMap.BilinForm.dualBasis]
   have h10 : (1 : FractionalIdeal (nonZeroDivisors (𝓞 E)) E) ≠ 0 := by
     intro h
     have h1 : (1 : E) ∈ (1 : FractionalIdeal (nonZeroDivisors (𝓞 E)) E) :=
@@ -175,8 +173,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-theorem idempotent_evaluation : ReciprocityTheory.ChartRestriction.G.TB.IdemEvalSt := PI.UnitaryGroupMassFormula.TBIdemDen.idemEval
-theorem dual_difference : ReciprocityTheory.ChartRestriction.G.TB.DualDiffSt := PI.UnitaryGroupMassFormula.TBIdemDen.dualDiff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.TaylorDiscriminants.DiscriminantEstimates.DiscriminantTheorems.TBIdemDen =====

@@ -142,7 +142,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.ArchRec
 
 theorem _root_.GlobalTheory.T.exists_fockPolynomial_operator_heisenberg_derivative : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) (τ : D.what₂.Tau), IsStdChar D ψ (-1) → IsInfFam θ → ∀ (sS frS : Mn S.rank) (εS : Fin S.rank → Bool) (sT frT : Mn T.rank) (εT : Fin T.rank → Bool), IsFrameOf (gramAt D S τ) sS εS frS → IsFrameOf (gramAt D T τ) sT εT frT → ∀ z : Matrix (Fin T.rank) (Fin S.rank) ℂ, ∃ L : Module.End ℂ (LPol T.rank S.rank), ∀ f, IsThetaFunO ψ S T f → IsFockVacAt (heisO ψ S T) θ τ (cplxO sS sT) f → ∀ P, dRho (heisO ψ S T) θ τ z (ptAt ψ θ S T τ sS sT frS⁻¹ frT⁻¹ f P) = ptAt ψ θ S T τ sS sT frS⁻¹ frT⁻¹ f (L P) := by
-  first | exact @GlobalTheory.ArchRec.DerFock.exists_dRho_ptAt | exact GlobalTheory.ArchRec.DerFock.exists_dRho_ptAt | (intros; apply GlobalTheory.ArchRec.DerFock.exists_dRho_ptAt <;> assumption)
+  first | exact @GlobalTheory.ArchRec.DerFock.exists_dRho_ptAt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsFockPolynomialOperatorHeisenbergDerivativeStatement =====
@@ -340,7 +340,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.ArchRec
 
 theorem _root_.GlobalTheory.T.weilGenerator_quadratic_oneParameter_at_place : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) (χS χT : (AE D)ˣ →* Circle) (ω : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)) (τ : D.what₂.Tau), IsInfFam θ → IsWeilDatumO ψ S T χS χT ω → (∀ X ∈ lieAt S τ, QuadGen ψ θ τ ω fun t => (oneP θ S τ X t, 1)) ∧ ∀ Y ∈ lieAt T τ, QuadGen ψ θ τ ω fun t => (1, oneP θ T τ Y t) := by
-  first | exact @GlobalTheory.ArchRec.Gen.quadGen_oneP | exact GlobalTheory.ArchRec.Gen.quadGen_oneP | (intros; apply GlobalTheory.ArchRec.Gen.quadGen_oneP <;> assumption)
+  first | exact @GlobalTheory.ArchRec.Gen.quadGen_oneP
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.WeilGeneratorQuadraticOneParameterAtPlaceStatement =====
@@ -372,31 +372,7 @@ variable {D : D7}
 
 
 open scoped ComplexOrder in
-theorem cart_isCartanInv {V : HSp D} (A : Fr V) (τ : D.what₂.Tau) : IsCartanInv (gramAt D V τ) (A.cart τ) := by
-  have h1 : A.fr τ * (A.fr τ)⁻¹ = 1 := Matrix.mul_nonsing_inv _ ((Matrix.isUnit_iff_isUnit_det _).1 (A.fr_unit τ))
-  have h2 : (A.fr τ)⁻¹ * A.fr τ = 1 := mul_eq_one_comm.1 h1
-  have hJ := Formalism.REAL.Jm_mul_self (A.ε τ)
-  have hJ' := Formalism.REAL.Jm_conjTranspose (A.ε τ)
-  have hG : gramAt D V τ * A.cart τ = (A.fr τ)ᴴ * A.fr τ := by
-    rw [← A.fr_gram τ]; unfold Fr.cart
-    calc _ = (A.fr τ)ᴴ * (Formalism.REAL.Jm (A.ε τ) * (A.fr τ * (A.fr τ)⁻¹) * Formalism.REAL.Jm (A.ε τ)) * A.fr τ := by
-          simp only [Matrix.mul_assoc]
-      _ = _ := by rw [h1, Matrix.mul_one, hJ, Matrix.mul_one]
-  have hs : A.cart τ * A.cart τ = 1 := by
-    unfold Fr.cart
-    calc _ = (A.fr τ)⁻¹ * (Formalism.REAL.Jm (A.ε τ) * (A.fr τ * (A.fr τ)⁻¹) * Formalism.REAL.Jm (A.ε τ)) * A.fr τ := by
-          simp only [Matrix.mul_assoc]
-      _ = _ := by rw [h1, Matrix.mul_one, hJ, Matrix.mul_one, h2]
-  refine ⟨hs, ?_, ?_⟩
-  · have hGh : (gramAt D V τ)ᴴ = gramAt D V τ := by
-      rw [← A.fr_gram τ]; simp [Matrix.conjTranspose_mul, hJ', Matrix.mul_assoc]
-    have h3 : (A.cart τ)ᴴ * gramAt D V τ = gramAt D V τ * A.cart τ := by
-      have := congrArg Matrix.conjTranspose hG
-      rw [Matrix.conjTranspose_mul, hGh, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose] at this
-      rw [this, hG]
-    rw [h3, Matrix.mul_assoc, hs, Matrix.mul_one]
-  · rw [hG]
-    exact Matrix.PosDef.conjTranspose_mul_self _ (Matrix.mulVec_injective_of_isUnit (A.fr_unit τ))
+alias cart_isCartanInv := _root_.GlobalTheory.CompactFockAction.cart_isCartanInv
 
 theorem exists_fr {V : HSp D} {τ : D.what₂.Tau} {s fr : Mn V.rank} {ε : Fin V.rank → Bool}
     (h : IsFrameOf (gramAt D V τ) s ε fr) : ∃ A : Fr V, A.ε τ = ε ∧ A.fr τ = fr ∧ A.cart τ = s := by

@@ -81,6 +81,7 @@ import Mathlib.Tactic.ReduceModChar
 import Mathlib.Algebra.AffineMonoid.UniqueSums
 import Mathlib.RingTheory.WittVector.IsPoly
 import Formalism.LocalRingCardinality.Params
+import Mathlib.RingTheory.MvPolynomial
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: ReciprocityTheory.ReductiveGroups.SymplecticTraces.WeylCharacters.BlockP, ReciprocityTheory.ReductiveGroups.SymplecticTraces.WeylCharacters.SplitA, ReciprocityTheory.ReductiveGroups.SymplecticTraces.WeylCharacters.SplitB, ReciprocityTheory.ReductiveGroups.SymplecticTraces.WeylCharacters.SplitC, ReciprocityTheory.ReductiveGroups.SymplecticTraces.WeylCharacters.SplitD, ReciprocityTheory.ReductiveGroups.SymplecticTraces.WeylCharacters.SpBlkSurj, ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.BranchModel, ReciprocityTheory.ReductiveGroups.SymplecticTraces.WeylCharacters.UCharOf, ReciprocityTheory.ReductiveGroups.SymplecticTraces.WeylCharacters.Weyl
@@ -304,10 +305,6 @@ theorem sp_blk_surj (ε : Fin n → Bool) (a : Fin n) : ∃ r, blk ε (ε a) r =
   obtain ⟨r, hr⟩ := ha
   exact ⟨r, hr⟩
 
-private theorem eps_blk (ε : Fin n → Bool) (c : Bool) (r : Fin (cnt ε c)) : ε (blk ε c r) = c := by
-  have h := Finset.orderEmbOfFin_mem (univ.filter fun i : Fin n => ε i = c) rfl r
-  exact (Finset.mem_filter.mp h).2
-
 private theorem apply_eq_zero_of_commute_Jm_of_eps_ne {ε : Fin n → Bool} {M : Matrix (Fin n) (Fin n) ℂ}
     (hM : M * Jm ε = Jm ε * M) (a b : Fin n) (h : ε a ≠ ε b) : M a b = 0 := by
   have e := congrFun (congrFun hM a) b
@@ -325,7 +322,7 @@ private theorem image_blk_univ_eq_filter_eps (ε : Fin n → Bool) (c : Bool) :
   constructor
   · intro hb
     obtain ⟨t, -, rfl⟩ := Finset.mem_image.mp hb
-    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, eps_blk ε c t⟩
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, _root_.ReciprocityTheory.ChartRestriction.TR.Weyl.blk_mem ε c t⟩
   · intro hb
     have hb' : ε b = c := (Finset.mem_filter.mp hb).2
     subst hb'
@@ -345,7 +342,7 @@ private theorem sp_sub_mul_of_eq_zero_off_eps_blocks {ε : Fin n → Bool} (c : 
   apply Finset.sum_subset (Finset.subset_univ _)
   intro b _ hb
   have hb' : ε b ≠ c := fun e => hb (Finset.mem_filter.mpr ⟨Finset.mem_univ _, e⟩)
-  rw [hM _ _ (by rw [eps_blk ε c r]; exact fun e => hb' e.symm), zero_mul]
+  rw [hM _ _ (by rw [_root_.ReciprocityTheory.ChartRestriction.TR.Weyl.blk_mem ε c r]; exact fun e => hb' e.symm), zero_mul]
 
 theorem sp_sub_mul {ε : Fin n → Bool} (c : Bool) {M : Matrix (Fin n) (Fin n) ℂ}
     (hM : M * Jm ε = Jm ε * M) (N : Matrix (Fin n) (Fin n) ℂ) :
@@ -436,7 +433,7 @@ theorem sp_sub_inK {ε : Fin n → Bool} (c : Bool) {X : Matrix (Fin n) (Fin n) 
   ext i j
   have e := congrFun (congrFun hG (blk ε c i)) (blk ε c j)
   simp only [Jm, Matrix.mul_diagonal, Matrix.diagonal_mul, Matrix.add_apply, Matrix.zero_apply,
-    Matrix.conjTranspose_apply, eps_blk] at e
+    Matrix.conjTranspose_apply, _root_.ReciprocityTheory.ChartRestriction.TR.Weyl.blk_mem] at e
   simp only [sp_sub, Matrix.add_apply, Matrix.zero_apply, Matrix.conjTranspose_apply,
     Matrix.submatrix_apply]
   have hd : (if c = true then (1 : ℂ) else -1) ≠ 0 := by cases c <;> norm_num
@@ -459,8 +456,8 @@ theorem sp_sub_single_same (ε : Fin n → Bool) (c : Bool) (r s : Fin (cnt ε c
 theorem sp_sub_single_other (ε : Fin n → Bool) {c c' : Bool} (h : c ≠ c') (r s : Fin (cnt ε c)) (x : ℂ) :
     sp_sub ε c' (single (blk ε c r) (blk ε c s) x) = 0 := by
   ext i j
-  have hne : blk ε c r ≠ blk ε c' i := fun e => h (by rw [← eps_blk ε c r, e, eps_blk ε c' i])
-  simp [sp_sub, Matrix.single_apply, hne]
+  have hne : blk ε c r ≠ blk ε c' i := fun e => h (by rw [← _root_.ReciprocityTheory.ChartRestriction.TR.Weyl.blk_mem ε c r, e, _root_.ReciprocityTheory.ChartRestriction.TR.Weyl.blk_mem ε c' i])
+  simp [sp_sub, hne]
 
 end ReciprocityTheory.ChartRestriction.TR.Weyl
 end -- clump:auto
@@ -895,7 +892,7 @@ end -- clump:auto
 -- ===== end clump member: ReciprocityTheory.ReductiveGroups.SymplecticTraces.WeylCharacters.SpBlkSurj =====
 
 -- ===== clump member: ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.BranchModel =====
--- clump-header: {"m": "ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.BranchModel", "h": "module\n\npublic import Formalism.LocalRingCardinality.DataCoeff\npublic import Formalism.PeriodIntegrals.UpqRep\npublic import Formalism.GradedWeylDivisibility.DualWeylDominanceOf\npublic import Formalism.PeriodIntegrals.OrbitalBoundsConclusion.HwIrred\npublic import Formalism.PeriodIntegrals.WeylForU\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CompactGroupIntegrability.IsPositiveDefiniteMatrixCoefficientOfMemAlgA\npublic import Formalism.PeriodIntegrals.OrbitalBoundsConclusion.UnitaryDense\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.Assembly\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.DetSplit\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.LowerInv\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.ModelMap\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.PolyExt\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.TorusEigenvalueFormula\npublic import Formalism.PeriodIntegrals.HwIrred\nimport Mathlib.Algebra.AffineMonoid.UniqueSums\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.LocalRingCardinality.Params\n\n"}
+-- clump-header: {"m": "ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.BranchModel", "h": "module\n\npublic import Formalism.LocalRingCardinality.DataCoeff\npublic import Formalism.PeriodIntegrals.UpqRep\npublic import Formalism.GradedWeylDivisibility.DualWeylDominanceOf\npublic import Formalism.PeriodIntegrals.OrbitalBoundsConclusion.HwIrred\npublic import Formalism.PeriodIntegrals.WeylForU\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.CompactGroupIntegrability.IsPositiveDefiniteMatrixCoefficientOfMemAlgA\npublic import Formalism.PeriodIntegrals.OrbitalBoundsConclusion.UnitaryDense\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.Assembly\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.DetSplit\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.LowerInv\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.ModelMap\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.PolyExt\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.PolynomialModelIsometry.TorusEigenvalueFormula\npublic import Formalism.PeriodIntegrals.HwIrred\nimport Mathlib.Algebra.AffineMonoid.UniqueSums\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.LocalRingCardinality.Params\nimport Mathlib.RingTheory.MvPolynomial\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1101,16 +1098,6 @@ end SlopeTestRemainingChoices
 
 open Formalism.BasicNotions PI.UpqRep
 
-theorem model_equiv (N : ℕ) (Λ : Fin N → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    (σ : Matrix (Fin N) (Fin N) ℂ → (H →L[ℂ] H)) (S : Submodule ℂ H)
-    (hU : IsURepOn (Kset (allPos N)) σ) (hK : IsKTypeOf (allPos N) σ Λ S) :
-    ∃ lam : DomWeight N, (∀ a, Λ a = ((lam.w a : ℤ) : ℝ)) ∧
-      ∃ e : S ≃ₗ[ℂ] nablaSq ℂ N lam,
-        ∀ (g : GL (Fin N) ℂ) (hg : (g : Matrix (Fin N) (Fin N) ℂ) ∈ Kset (allPos N)) (x : S),
-          ((e ⟨σ g x, hK.2.1 _ hg _ x.2⟩ : nablaSq ℂ N lam) : MvPolynomial (Fin N × Fin N) ℂ) =
-            sqAct ℂ N lam g (e x) :=
-  highest_weight_model_equiv N Λ H σ S hU hK
-
 end ReciprocityTheory.ChartRestriction.DS.HW
 end -- clump:auto
 end -- clump:auto
@@ -1134,7 +1121,7 @@ theorem uChar_of (hS : SqCharStatement) : UCharStatement := by
   intro N Λ _ T k t hk
   obtain ⟨σ, hσk, hU, hK⟩ := ReciprocityTheory.ChartRestriction.DS.HW.KType.exists_rep T
   obtain ⟨lam, hlam, e, he⟩ :=
-    ReciprocityTheory.ChartRestriction.DS.HW.model_equiv N (fun a => (Λ a : ℝ)) T.V σ ⊤ hU hK
+    _root_.ReciprocityTheory.ChartRestriction.DS.HW.highest_weight_model_equiv N (fun a => (Λ a : ℝ)) T.V σ ⊤ hU hK
   have hw : lam.w = Λ := by
     funext a
     exact_mod_cast (hlam a).symm

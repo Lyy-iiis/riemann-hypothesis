@@ -184,7 +184,7 @@ open GlobalTheory.SepRows
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.firstRowTower_multiplicitySpaces_of_arrow : RowModels → RowStep → RowTower := by
-  first | exact @GlobalTheory.SepRows.rowTower_of_step | exact GlobalTheory.SepRows.rowTower_of_step | (intros; apply GlobalTheory.SepRows.rowTower_of_step <;> assumption)
+  first | exact @GlobalTheory.SepRows.rowTower_of_step
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.FirstRowTowerMultiplicitySpacesOfArrowStatement =====
@@ -291,7 +291,7 @@ open GlobalTheory.SepRows
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.goodRows_principalLevel_are_rows : GoodRows := by
-  first | exact @GlobalTheory.SepRows.goodRows | exact GlobalTheory.SepRows.goodRows | (intros; apply GlobalTheory.SepRows.goodRows <;> assumption)
+  first | exact @GlobalTheory.SepRows.goodRows
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.GoodRowsPrincipalLevelAreRowsStatement =====
@@ -334,7 +334,7 @@ open GlobalTheory.SepRows
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.largeScaleSizes_imply_gapConditions : SizeGap := by
-  first | exact @GlobalTheory.SepRows.sizeGap_of_sizes | exact GlobalTheory.SepRows.sizeGap_of_sizes | (intros; apply GlobalTheory.SepRows.sizeGap_of_sizes <;> assumption)
+  first | exact @GlobalTheory.SepRows.sizeGap_of_sizes
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.LargeScaleSizesImplyGapConditionsStatement =====
@@ -444,7 +444,7 @@ open GlobalTheory.SepRows
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.rowSeparation_by_realFunctionals_of_chain_steps : SizeGap → CoreModels → RowRapid → PeriodNe → CoreOnto → Ascent → WeakSep := by
-  first | exact @GlobalTheory.SepRows.weakSep_of_steps | exact GlobalTheory.SepRows.weakSep_of_steps | (intros; apply GlobalTheory.SepRows.weakSep_of_steps <;> assumption)
+  first | exact @GlobalTheory.SepRows.weakSep_of_steps
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.RowSeparationByRealFunctionalsOfChainStepsStatement =====
@@ -517,7 +517,7 @@ open GlobalTheory.SepRows
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.convergence_of_separating_family : _root_.GlobalTheory.FunPr.ThetaLocalInputs → RowTower → RowConv := by
-  first | exact @_root_.GlobalTheory.RowConvAll.separating_family_converges | exact _root_.GlobalTheory.RowConvAll.separating_family_converges | (intros; apply _root_.GlobalTheory.RowConvAll.separating_family_converges <;> assumption)
+  first | exact @_root_.GlobalTheory.RowConvAll.separating_family_converges
 end
 end -- clump:auto
 end -- clump:auto
@@ -606,7 +606,7 @@ open GlobalTheory.SepRows
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_seesaw_pair_of_theta_data : _root_.GlobalTheory.FunPr.ThetaLocalInputs → PairEx := by
-  first | exact @_root_.GlobalTheory.PairIt.exists_seesaw_pair | exact _root_.GlobalTheory.PairIt.exists_seesaw_pair | (intros; apply _root_.GlobalTheory.PairIt.exists_seesaw_pair <;> assumption)
+  first | exact @_root_.GlobalTheory.PairIt.exists_seesaw_pair
 end
 end -- clump:auto
 end -- clump:auto
@@ -678,7 +678,7 @@ open GlobalTheory.SepRows
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.rapid_decay_of_separating_family : _root_.GlobalTheory.FunPr.ThetaLocalInputs → RowTower → RowRapid := by
-  first | exact @_root_.GlobalTheory.SepRows.RowRapidPf.separating_family_rapid_decay | exact _root_.GlobalTheory.SepRows.RowRapidPf.separating_family_rapid_decay | (intros; apply _root_.GlobalTheory.SepRows.RowRapidPf.separating_family_rapid_decay <;> assumption)
+  first | exact @_root_.GlobalTheory.SepRows.RowRapidPf.separating_family_rapid_decay
 end
 end -- clump:auto
 end -- clump:auto
@@ -876,7 +876,7 @@ open GlobalTheory.SepRows
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.separating_family_extend_by_twist : _root_.GlobalTheory.FunPr.ThetaLocalInputs → PairEx → RowModels → RowStep := by
-  first | exact @_root_.GlobalTheory.RowArrow.separatingFamily_extends_by_twisted_row | exact _root_.GlobalTheory.RowArrow.separatingFamily_extends_by_twisted_row | (intros; apply _root_.GlobalTheory.RowArrow.separatingFamily_extends_by_twisted_row <;> assumption)
+  first | exact @_root_.GlobalTheory.RowArrow.separatingFamily_extends_by_twisted_row
 end
 end -- clump:auto
 end -- clump:auto
@@ -926,16 +926,6 @@ end GlobalTheory.SepRows
 end
 end
 
-section
-open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.L2.Theta Formalism.IndefR Formalism.IndefR.Datum Formalism.IndefR.Links Formalism.IndefR.Mult Formalism.L2.DIV
-open IsDedekindDomain NumberField MeasureTheory GlobalTheory.ChiGrid GlobalTheory.FunObj GlobalTheory.Grow
-open GlobalTheory.IndefiniteRowSideFullHecke.LevelPlusSubgroup (coefPlus Cols SizeRows)
-open GlobalTheory.SepRows
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
-theorem _root_.GlobalTheory.T.exists_models_of_separating_data : _root_.GlobalTheory.FunPr.ThetaLocalInputs → RowModels := by
-  first | exact @_root_.GlobalTheory.SepRows.separating_models_of_separating_data | exact _root_.GlobalTheory.SepRows.separating_models_of_separating_data | (intros; apply _root_.GlobalTheory.SepRows.separating_models_of_separating_data <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.SeparatingModelsOfSeparatingData =====
@@ -1001,8 +991,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.LevelPlusSubgroup (coefPlus Cols Si
 open GlobalTheory.SepRows GlobalTheory.CoreOnto
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.coreChain_lifts_surjective_of_evenRank : (∀ D : D7, GlobalTheory.EvenOnto.OntoAll D) → ComOK → StageOK → ChainEx → TopCols → CoreOnto := by
-  first | exact @GlobalTheory.CoreOnto.coreOnto_of_chain | exact GlobalTheory.CoreOnto.coreOnto_of_chain | (intros; apply GlobalTheory.CoreOnto.coreOnto_of_chain <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.CoreChainLiftsSurjectiveOfEvenRankStatement =====
@@ -1092,7 +1080,7 @@ open GlobalTheory.SepRows GlobalTheory.CoreOnto
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_column_perfectPairing_definiteCoreNode : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} (G : GridData L sc) (θ : InfFam D), IsInfFam θ → ∀ {S : D.what₂.Tau → SPar} (M : DSModel (G.V (.core D.R.m)) S), (∀ τ a, M.ε τ a = true) → (coefPlus G θ).Is → ∀ (pr : (coefPlus G θ).W →ₗ[ℂ] SmT M →ₗ[ℂ] ℂ), IsDualPair θ M (coefPlus G θ) pr → ∀ y ∈ CoreForms G θ D.R.m M, ∃ c ∈ Cols G θ, (coefPlus G θ).toMap pr c = y := by
-  first | exact @GlobalTheory.TopColumn.exists_col | exact GlobalTheory.TopColumn.exists_col | (intros; apply GlobalTheory.TopColumn.exists_col <;> assumption)
+  first | exact @GlobalTheory.TopColumn.exists_col
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsColumnPerfectPairingDefiniteCoreNodeStatement =====
@@ -1300,7 +1288,7 @@ open GlobalTheory.SepRows GlobalTheory.CoreOnto
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_dualPair_positiveWeightCoefficientSpace : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} (G : GridData L sc) (θ : InfFam D), IsInfFam θ → ∀ (M : DSModel (G.V (.core D.R.m)) (Node.par D sc.cGap (.core D.R.m))), ∃ pr : (coefPlus G θ).W →ₗ[ℂ] SmT M →ₗ[ℂ] ℂ, IsDualPair θ M (coefPlus G θ) pr := by
-  first | exact @GlobalTheory.TopCoefPair.exists_dualPair | exact GlobalTheory.TopCoefPair.exists_dualPair | (intros; apply GlobalTheory.TopCoefPair.exists_dualPair <;> assumption)
+  first | exact @GlobalTheory.TopCoefPair.exists_dualPair
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsDualPairPositiveWeightCoefficientSpaceStatement =====
@@ -1383,7 +1371,7 @@ open GlobalTheory.SepRows GlobalTheory.CoreOnto
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.definiteTopSpace_columnValues : TopCols := by
-  first | exact @GlobalTheory.CoreOnto.topCols | exact GlobalTheory.CoreOnto.topCols | (intros; apply GlobalTheory.CoreOnto.topCols <;> assumption)
+  first | exact @GlobalTheory.CoreOnto.topCols
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.DefiniteTopSpaceColumnValuesStatement =====
@@ -1402,7 +1390,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 namespace GlobalTheory.Twist.CoreOntoAssembly
 theorem twist_core_surjective_of_local_components : _root_.GlobalTheory.FunPr.ThetaLocalInputs → GlobalTheory.Published.HarishChandraFinite → GlobalTheory.Published.CuspRapidDecay → GlobalTheory.Published.DiscreteSeriesCover → GlobalTheory.Published.HarishChandraModules → GlobalTheory.Published.CasselmanWallach → GlobalTheory.Hk3.HoweUnram → GlobalTheory.Published.WeilRepresentationUnitaryPair → GlobalTheory.Published.WeilSiegelFormulaUnitary → GlobalTheory.Published.SiegelWeilUnitaryConvergent → _root_.GlobalTheory.Published.DoublingMethodLocalZetaIntegrals → GlobalTheory.Published.UnramifiedDoublingGL → CoreOnto := by
   intro hP hHCF hCRD hDSC hHCM hCW hHowe hWeil hWSF hSWC hDbl hUDG
-  exact GlobalTheory.T.coreChain_lifts_surjective_of_evenRank
+  exact _root_.GlobalTheory.CoreOnto.coreOnto_of_chain
     (_root_.GlobalTheory.T.twist_even_surjective_of_representatives hHCF hCRD hDSC hHCM hCW hHowe hWeil hWSF hSWC hDbl hUDG)
     GlobalTheory.T.testGridCommonData_properties_hold GlobalTheory.T.testGridStageLatticesProperties_proof
     (GlobalTheory.T.core_chain_composites_exist_lift_combinations hDSC hHCM hCRD hCW GlobalTheory.T.dependence_fixed (_root_.GlobalTheory.T.exists_separating_models hP))
@@ -1410,16 +1398,6 @@ theorem twist_core_surjective_of_local_components : _root_.GlobalTheory.FunPr.Th
 end GlobalTheory.Twist.CoreOntoAssembly
 end
 
-section
-open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.L2.Theta Formalism.IndefR Formalism.IndefR.Datum Formalism.IndefR.Links Formalism.IndefR.Mult Formalism.L2.DIV
-open IsDedekindDomain NumberField MeasureTheory GlobalTheory.ChiGrid GlobalTheory.FunObj GlobalTheory.Grow
-open GlobalTheory.IndefiniteRowSideFullHecke.LevelPlusSubgroup (coefPlus Cols SizeRows)
-open GlobalTheory.SepRows GlobalTheory.CoreOnto
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
-theorem _root_.GlobalTheory.T.twist_core_surjective : _root_.GlobalTheory.FunPr.ThetaLocalInputs → GlobalTheory.Published.HarishChandraFinite → GlobalTheory.Published.CuspRapidDecay → GlobalTheory.Published.DiscreteSeriesCover → GlobalTheory.Published.HarishChandraModules → GlobalTheory.Published.CasselmanWallach → GlobalTheory.Hk3.HoweUnram → GlobalTheory.Published.WeilRepresentationUnitaryPair → GlobalTheory.Published.WeilSiegelFormulaUnitary → GlobalTheory.Published.SiegelWeilUnitaryConvergent → _root_.GlobalTheory.Published.DoublingMethodLocalZetaIntegrals → GlobalTheory.Published.UnramifiedDoublingGL → CoreOnto := by
-  first | exact @_root_.GlobalTheory.Twist.CoreOntoAssembly.twist_core_surjective_of_local_components | exact _root_.GlobalTheory.Twist.CoreOntoAssembly.twist_core_surjective_of_local_components | (intros; apply _root_.GlobalTheory.Twist.CoreOntoAssembly.twist_core_surjective_of_local_components <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.TwistCoreSurjectiveOfLocalComponents =====
@@ -1436,12 +1414,12 @@ theorem real_functionals_separate_of_hypothesis
     (hSW : GlobalTheory.Published.SiegelWeilUnitaryConvergent)
     (realIn : Branch.RealInputE) :
     GlobalTheory.IndefiniteRowSideFullHecke.LevelPlusSubgroup.FunctionalsSeparate := by
-  have rowModels := _root_.GlobalTheory.T.exists_models_of_separating_data P
+  have rowModels := _root_.GlobalTheory.SepRows.separating_models_of_separating_data P
   have rowStep := _root_.GlobalTheory.T.separating_family_extend_by_twist P (_root_.GlobalTheory.T.exists_seesaw_pair_of_theta_data P) rowModels
   have rowTower := GlobalTheory.T.firstRowTower_multiplicitySpaces_of_arrow rowModels rowStep
   have conv := _root_.GlobalTheory.T.convergence_of_separating_family P rowTower
   have per := Branch.periodNe_of_eigen P.harishChandraModules P.casselmanWallach P.cuspRapidDecay realIn
-  have onto := _root_.GlobalTheory.T.twist_core_surjective P P.harishChandraFinite P.cuspRapidDecay P.discreteSeriesCover
+  have onto := _root_.GlobalTheory.Twist.CoreOntoAssembly.twist_core_surjective_of_local_components P P.harishChandraFinite P.cuspRapidDecay P.discreteSeriesCover
     P.harishChandraModules P.casselmanWallach hHowe P.weilRepresentationUnitaryPair
     P.weilSiegelFormulaUnitary hSW P.doublingMethod P.unramifiedDoublingGL
   have weak := GlobalTheory.T.rowSeparation_by_realFunctionals_of_chain_steps GlobalTheory.T.largeScaleSizes_imply_gapConditions (_root_.GlobalTheory.T.exists_separating_models P) (_root_.GlobalTheory.T.rapid_decay_of_separating_family P rowTower) per onto

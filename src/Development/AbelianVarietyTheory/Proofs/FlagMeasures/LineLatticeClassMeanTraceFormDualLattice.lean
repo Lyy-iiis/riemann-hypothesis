@@ -152,11 +152,6 @@ theorem det_real_mul_mul (ι : Type) [Fintype ι] (j : ℕ) (A B : ι → Matrix
   first
   | (run_tac Lean.Elab.Tactic.liftMetaTactic (fun g => do pure [← g.revertAll])); exact @_root_.GlobalTheory.DeterminantRealSandwich.det_real_family
   | (run_tac Lean.Elab.Tactic.liftMetaTactic (fun g => do pure [← g.revertAll])); exact _root_.GlobalTheory.DeterminantRealSandwich.det_real_family
-  | exact @_root_.GlobalTheory.DeterminantRealSandwich.det_real_family
-  | exact _root_.GlobalTheory.DeterminantRealSandwich.det_real_family
-  | (apply _root_.GlobalTheory.DeterminantRealSandwich.det_real_family <;> assumption)
-  | (intros; apply _root_.GlobalTheory.DeterminantRealSandwich.det_real_family <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.DeterminantRealSandwich.det_real_family <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.DeterminantRealSandwich.det_real_family ..)
 
 end GlobalTheory.MatMulDet
@@ -200,7 +195,6 @@ theorem main : ∀ {E : Type} [inst : Field E] [NumberField E] {j : ℕ}
         have h2 := coe_smul_mem Λ (n : 𝓞 E) hb
         convert Λ.add_mem h1 h2 using 1
         simp only [smul_add, smul_smul, map_intCast, Int.cast_mul]
-        push_cast
         rw [mul_comm (m : E) (n : E)]
       zero_mem' := ⟨1, one_ne_zero, by simp⟩
       smul_mem' := by
@@ -276,10 +270,6 @@ theorem eq_zero_of_sum_re (hE : IsTotallyComplex E) (c : InfinitePlace E → ℂ
     (h : ∀ e : E, ∑ w : InfinitePlace E, (w.embedding e * c w).re = 0) : c = 0 := by
   apply GlobalTheory.TraceCover.eq_zero_of_sum_re <;> assumption
 
-theorem exists_int_smul_mem {j : ℕ} (Λ : Submodule (𝓞 E) (Fin j → E))
-    (hΛ : Submodule.IsFullLattice E Λ) (x : Fin j → E) : ∃ n : ℤ, n ≠ 0 ∧ (n : E) • x ∈ Λ := by
-  exact _root_.GlobalTheory.IntegralMultiple.main Λ hΛ x
-
 theorem pairing_rational (hE : IsTotallyComplex E) {j : ℕ} (x y : Fin j → E) :
     ∑ w : InfinitePlace E,
       ((fun a => w.embedding (x a)) ⬝ᵥ (fun a => w.embedding (y a))).re =
@@ -302,7 +292,7 @@ theorem exists_trDual (hE : IsTotallyComplex E) {j : ℕ} (Λ : Submodule (𝓞 
         simp [dotProduct, add_mul, Finset.sum_add_distrib] }
   have hq : ∀ x, ∃ q : ℚ, φ x = q := by
     intro x
-    obtain ⟨n, hn, hx⟩ := exists_int_smul_mem Λ hΛ x
+    obtain ⟨n, hn, hx⟩ := _root_.GlobalTheory.IntegralMultiple.main Λ hΛ x
     obtain ⟨z, hz⟩ := hu _ hx
     have h1 : φ (n • x) = z := by
       rw [← Int.cast_smul_eq_zsmul E]; exact hz

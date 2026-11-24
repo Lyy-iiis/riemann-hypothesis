@@ -412,8 +412,6 @@ theorem exists_homog_of_cone {n : ℕ} {c : MvPolynomial (Fin n) ℂ} (hc : c �
     have hdeg : ∑ i ∈ d.support, d i = m := by
       first
       | exact hd.2
-      | (rw [← hd.2]; rfl)
-      | simpa [Finsupp.degree] using hd.2
     simp only [eval_monomial, Finsupp.prod, mul_pow, Finset.prod_mul_distrib,
       Finset.prod_pow_eq_pow_sum, hdeg]
     ring
@@ -617,16 +615,7 @@ section PushForward
 
 variable {e : ℕ} {X : Type} [TopologicalSpace X]
 
-theorem pushForward_null [CompactSpace X] [T2Space X] (A : FinHolAtlas e X)
-    (Φ : Fin e → LocPot X) (hΦ : ∀ i, IsPotential A (Φ i)) (q : X → Fin e → ℂ) (S : Set X)
-    (hS : ∀ j, volume ((A.chart j).target ∩ (A.chart j).symm ⁻¹' S) = 0)
-    (hq : ∀ x ∉ S, ∀ j, x ∈ (A.chart j).source →
-      AnalyticAt ℂ (q ∘ (A.chart j).symm) (A.chart j x) ∧
-        LinearMap.det (fderiv ℂ (q ∘ (A.chart j).symm) (A.chart j x) :
-          (Fin e → ℂ) →ₗ[ℂ] (Fin e → ℂ)) ≠ 0)
-    (hfin : ∀ y, (q ⁻¹' {y} \ S).Finite) (g : X → ℝ) (hg : MIntegrable A Φ g) :
-    mInt A Φ g = ∫ y, ∑ᶠ x ∈ q ⁻¹' {y} \ S, g x * pushDens A Φ q x :=
-  pushForward_null' A Φ hΦ q S hS hq hfin g hg
+alias pushForward_null := _root_.ReciprocityTheory.ChartRestriction.G.Geo.pushForward_null'
 
 end PushForward
 
@@ -635,19 +624,9 @@ section Res
 variable {K : Type} [Fintype K] {ι : K → Type} [∀ k, Fintype (ι k)]
   {P J : Ideal (MRing ι)} {e : ℕ}
 
-theorem psi0_null (R : AnLogRes P J e) (Ψ : (((k : K) → ι k) → ℂ) →ₗ[ℂ] (Fin (e + 1) → ℂ))
-    (hP : IsArithVar P (e + 1)) (hΨ : IsGoodProj P Ψ) (j : Fin R.A.n) :
-    volume ((R.A.chart j).target ∩
-      (R.A.chart j).symm ⁻¹' {x | Ψ (segre (R.lift x x)) 0 = 0}) = 0 :=
-  volume_projection_zeroSet_null R Ψ hP hΨ j
+alias psi0_null := _root_.ReciprocityTheory.ChartRestriction.G.Geo.volume_projection_zeroSet_null
 
-theorem ram_null (R : AnLogRes P J e) (Ψ : (((k : K) → ι k) → ℂ) →ₗ[ℂ] (Fin (e + 1) → ℂ))
-    (hP : IsArithVar P (e + 1)) (hΨ : IsGoodProj P Ψ) (j : Fin R.A.n) :
-    volume ((R.A.chart j).target ∩ (R.A.chart j).symm ⁻¹' {x | Ψ (segre (R.lift x x)) 0 ≠ 0 ∧
-      ∃ k, x ∈ (R.A.chart k).source ∧
-        LinearMap.det (fderiv ℂ (brQ R Ψ ∘ (R.A.chart k).symm) (R.A.chart k x) :
-          (Fin e → ℂ) →ₗ[ℂ] (Fin e → ℂ)) = 0}) = 0 :=
-  ram_null' R Ψ hP hΨ j
+alias ram_null := _root_.ReciprocityTheory.ChartRestriction.G.Geo.ram_null'
 
 theorem brBad_null (R : AnLogRes P J e) (Ψ : (((k : K) → ι k) → ℂ) →ₗ[ℂ] (Fin (e + 1) → ℂ))
     (hP : IsArithVar P (e + 1)) (hΨ : IsGoodProj P Ψ) (j : Fin R.A.n) :

@@ -629,19 +629,19 @@ theorem sum_lifts {α : Type*} [AddCommMonoid α] (p n : ℕ) [hp : Fact p.Prime
   refine Finset.sum_nbij' (fun s => ((x.val + p ^ n * s : ℕ) : ZMod (p ^ (n + 1))))
     (fun y => y.val / p ^ n) ?_ ?_ ?_ ?_ ?_
   · intro s hs
-    simp only [mem_coe, mem_range, mem_filter, mem_univ, true_and] at hs ⊢
+    simp only [mem_range, mem_filter, mem_univ, true_and] at hs ⊢
     rw [hmem, val_lift p n x s hs, Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt (ZMod.val_lt x)]
   · intro y hy
-    simp only [mem_coe, mem_range, mem_filter, mem_univ, true_and] at hy ⊢
+    simp only [mem_range, mem_filter, mem_univ, true_and] at hy ⊢
     rw [Nat.div_lt_iff_lt_mul hpos]
     have := ZMod.val_lt y
     calc y.val < p ^ (n + 1) := this
       _ = p * p ^ n := by ring
   · intro s hs
-    simp only [mem_coe, mem_range] at hs
+    simp only [mem_range] at hs
     rw [val_lift p n x s hs, Nat.add_mul_div_left _ _ hpos, Nat.div_eq_of_lt (ZMod.val_lt x), zero_add]
   · intro y hy
-    simp only [mem_coe, mem_filter, mem_univ, true_and] at hy
+    simp only [mem_filter, mem_univ, true_and] at hy
     rw [hmem] at hy
     rw [← hy, Nat.mod_add_div, ZMod.natCast_zmod_val]
   · intro s _
@@ -660,7 +660,7 @@ theorem sum_range_perm {α : Type*} [AddCommMonoid α] (p : ℕ) [hp : Fact p.Pr
     · intros; simp
     · intro z _; simp [ZMod.val_lt]
     · intro s hs
-      simp only [mem_coe, mem_range] at hs
+      simp only [mem_range] at hs
       simp [ZMod.val_cast_of_lt hs]
     · intro z _; simp
     · intros; rfl
@@ -837,7 +837,7 @@ theorem sum_unitSet_succ_fibre : ∀ (p : ℕ) [Fact p.Prime] (n : ℕ) (K : Typ
       ((γ : Matrix (Fin 2) (Fin 2) (ZMod (p ^ (n + 1)))) 1 1))) ?_ ?_ ?_ ?_
   · intro γ hγ
     obtain ⟨_, hγg⟩ := mem_filter.mp hγ
-    simp only [mem_product, mem_filter, mem_univ, true_and, ← hγg, hent, and_self]
+    simp only [mem_product, mem_filter, mem_univ, ← hγg, hent, and_self]
   · intro γ _ δ _ h
     simp only [Prod.mk.injEq] at h
     obtain ⟨h1, h2, h3, h4⟩ := h
@@ -924,11 +924,6 @@ theorem cauchyProduct_fourfold_finsetSum {K : Type} [Field K] {α : Type} (s₁ 
   rw [Finset.mul_sum]; refine sum_congr rfl fun c _ => ?_
   rw [Finset.mul_sum]
 
-theorem dvd_castHom_val_iff {p : ℕ} [Fact p.Prime] {n : ℕ} (hn : 1 ≤ n) (x : ZMod (p ^ (n + 1))) :
-    p ∣ (ZMod.castHom (pow_dvd_pow p (Nat.le_succ n)) (ZMod (p ^ n)) x).val ↔ p ∣ x.val := by
-  rw [ZMod.castHom_apply, ZMod.cast_eq_val, ZMod.val_natCast,
-    Nat.dvd_mod_iff (dvd_pow_self p (by omega))]
-
 theorem sum_preimage_fibre (p : ℕ) [Fact p.Prime] (n : ℕ) (hn : 1 ≤ n) (K : Type) [CommRing K]
     (X : Finset (GL (Fin 2) (ZMod (p ^ n))))
     (hX : ∀ γ ∈ X, ¬ p ∣ ((γ : Matrix (Fin 2) (Fin 2) (ZMod (p ^ n))) 0 0).val ∧ ¬ p ∣ ((γ : Matrix (Fin 2) (Fin 2) (ZMod (p ^ n))) 1 0).val)
@@ -947,8 +942,8 @@ theorem sum_preimage_fibre (p : ℕ) [Fact p.Prime] (n : ℕ) (hn : 1 ≤ n) (K 
       obtain ⟨h1, h2⟩ := hX _ h
       have e1 : ((Matrix.GeneralLinearGroup.map ρ γ : GL (Fin 2) (ZMod (p ^ n))) : Matrix (Fin 2) (Fin 2) (ZMod (p ^ n))) 0 0 = ρ ((γ : Matrix (Fin 2) (Fin 2) (ZMod (p ^ (n + 1)))) 0 0) := rfl
       have e2 : ((Matrix.GeneralLinearGroup.map ρ γ : GL (Fin 2) (ZMod (p ^ n))) : Matrix (Fin 2) (Fin 2) (ZMod (p ^ n))) 1 0 = ρ ((γ : Matrix (Fin 2) (Fin 2) (ZMod (p ^ (n + 1)))) 1 0) := rfl
-      rw [e1, hρ, dvd_castHom_val_iff hn] at h1
-      rw [e2, hρ, dvd_castHom_val_iff hn] at h2
+      rw [e1, hρ, _root_.GlobalTheory.KummerEisensteinGalois.glFibre_dvd_map_iff hn] at h1
+      rw [e2, hρ, _root_.GlobalTheory.KummerEisensteinGalois.glFibre_dvd_map_iff hn] at h2
       exact ⟨⟨h1, h2⟩, h⟩
     · exact fun h => h.2
   have hX' : (unitSet p n).filter (fun γ => γ ∈ X) = X := by

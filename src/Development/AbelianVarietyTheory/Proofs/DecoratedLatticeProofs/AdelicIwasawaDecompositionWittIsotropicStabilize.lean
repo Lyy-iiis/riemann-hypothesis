@@ -83,7 +83,7 @@ open GlobalTheory.Core.Rk.Exh GlobalTheory.RegSW
 open GlobalTheory.AdelicU Formalism.UG
 
 theorem _root_.GlobalTheory.T.iwasawa_isotropic_columns_ring_iso_complex : ∀ {A : Type} [CommRing A] {n r : ℕ} (σ : A →+* A) (f : A →+* ℂ), Function.Bijective f → (∀ x, f (σ x) = star (f x)) → ∀ {J : Matrix (Fin n) (Fin n) A} (b : GL (Fin n) A) (ε : Fin n → Bool), Formalism.UG.cT σ b.1 * J * b.1 = (Matrix.diagonal fun i => if ε i then 1 else -1) → ∀ (X : Matrix (Fin n) (Fin r) A), Formalism.UG.cT σ X * J * X = 0 → ∀ g : GL (Fin n) A, g ∈ UJ σ J → ∃ k ∈ UJ σ J, b⁻¹ * k * b ∈ UJ σ (1 : Matrix (Fin n) (Fin n) A) ∧ ∃ β : Matrix (Fin r) (Fin r) A, (g * k⁻¹).1 * X = X * β := by
-  first | exact @GlobalTheory.Core.Rk.IwArch.iw_iso_cols | exact GlobalTheory.Core.Rk.IwArch.iw_iso_cols | (intros; apply GlobalTheory.Core.Rk.IwArch.iw_iso_cols <;> assumption)
+  first | exact @GlobalTheory.Core.Rk.IwArch.iw_iso_cols
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.IwasawaIsotropicColumnsRingIsoComplexStatement =====
@@ -233,7 +233,7 @@ open GlobalTheory.Core.Rk.Exh GlobalTheory.RegSW
 open GlobalTheory.AdelicU Formalism.UG
 
 theorem _root_.GlobalTheory.T.mem_wittStabilizer_of_keeps_isotropic_real_places : ∀ {D : D7} {T T₀ : HSp D} {r : ℕ} (d : HypDec T T₀ r) (q : GA D T), q ∈ GinfC T → (∀ w : InfinitePlace D.host.F, ∃ β : Matrix (Fin r) (Fin r) (TensorProduct D.host.F w.Completion D.host.E), (matHom _ D.sp.cm.sig T.gram (projArch D.sp.cm.sig T.gram w q)).1 * Matrix.map d.jX (compInf D.host.F D.host.E w) = Matrix.map d.jX (compInf D.host.F D.host.E w) * β) → q ∈ stab d := by
-  first | exact @GlobalTheory.Core.Rk.IwGlob.mem_stab_of_keeps | exact GlobalTheory.Core.Rk.IwGlob.mem_stab_of_keeps | (intros; apply GlobalTheory.Core.Rk.IwGlob.mem_stab_of_keeps <;> assumption)
+  first | exact @GlobalTheory.Core.Rk.IwGlob.mem_stab_of_keeps
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.MemWittStabilizerOfKeepsIsotropicRealPlacesStatement =====
@@ -302,7 +302,7 @@ open GlobalTheory.Core.Rk.Exh GlobalTheory.RegSW
 open GlobalTheory.AdelicU Formalism.UG
 
 theorem _root_.GlobalTheory.T.wittHyperbolic_isotropic_columns_at_real_place : ∀ {D : D7} {T T₀ : HSp D} {r : ℕ} (d : HypDec T T₀ r) (w : InfinitePlace D.host.F), (Formalism.UG.cT (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR w.Completion D.sp.cm.sig) (Matrix.map d.jX (compInf D.host.F D.host.E w)) * Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.JR w.Completion T.gram : Matrix (Fin r) (Fin T.rank) (TensorProduct D.host.F w.Completion D.host.E)) * Matrix.map d.jX (compInf D.host.F D.host.E w) = 0 := by
-  first | exact @GlobalTheory.IsoColReal.isotropic_at_real | exact GlobalTheory.IsoColReal.isotropic_at_real | (intros; apply GlobalTheory.IsoColReal.isotropic_at_real <;> assumption)
+  first | exact @GlobalTheory.IsoColReal.isotropic_at_real
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.WittHyperbolicIsotropicColumnsAtRealPlaceStatement =====
@@ -384,7 +384,7 @@ theorem local_at_arch {F E : Type} [Field F] [NumberField F] [Field E] [NumberFi
       b⁻¹ * k * b ∈ UJ (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR w.Completion σ) (1 : Matrix (Fin n) (Fin n) _) ∧
       ∃ β : Matrix (Fin r) (Fin r) (TensorProduct F w.Completion E), (g * k⁻¹).1 * X = X * β := by
   obtain ⟨τ⟩ : Nonempty (EmbOver E w) := inferInstance
-  exact local_decomp _ (infEmb τ) (infEmb_bijective hc τ) (fun x => (infEmb_sigR hc τ x).symm) b ε hb X hX g hg
+  exact _root_.GlobalTheory.Core.Rk.IwArch.exists_compact_keep_cols _ (infEmb τ) (infEmb_bijective hc τ) (fun x => (infEmb_sigR hc τ x).symm) b ε hb X hX g hg
 
 theorem mem_stabArch_of {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
     (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (w : InfinitePlace F)
@@ -406,7 +406,7 @@ theorem iwasawa_stab_arch : ∀ (D : D7) (T T₀ : HSp D) (r : ℕ) (d : HypDec 
     have e : finHom T k = GlobalTheory.AdelicU.matHom (Af D.host.F) D.sp.cm.sig T.gram (projFin D.sp.cm.sig T.gram k) := rfl
     rw [e, hkf, map_one]
   refine ⟨y * k⁻¹, ?_, k, ?_, ?_, by group⟩
-  · refine mem_stab_of_arch d _ ?_ fun w => ?_
+  · refine _root_.GlobalTheory.Core.Rk.IwGlob.mem_stab_of_keeps d _ ?_ fun w => ?_
     · show finHom T (y * k⁻¹) = 1
       rw [map_mul, map_inv, hfk, inv_one, mul_one]
       exact hy
@@ -448,7 +448,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Core.Rk.Exh GlobalTheory.RegSW
 
 theorem _root_.GlobalTheory.T.iwasawa_decomposition_isotropicStabilizer_archimedean : ∀ (D : D7) (T T₀ : HSp D) (r : ℕ) (d : HypDec T T₀ r) (b : GL (Fin T.rank) (AE D)), IsMaj T b → ∀ y ∈ GinfC T, ∃ q ∈ stab d, ∃ k ∈ Kmax T b, q ∈ GinfC T ∧ y = q * k := by
-  first | exact @GlobalTheory.Core.Rk.IwIso.iwasawa_stab_arch | exact GlobalTheory.Core.Rk.IwIso.iwasawa_stab_arch | (intros; apply GlobalTheory.Core.Rk.IwIso.iwasawa_stab_arch <;> assumption)
+  first | exact @GlobalTheory.Core.Rk.IwIso.iwasawa_stab_arch
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.IwasawaDecompositionIsotropicStabilizerArchimedeStatement =====
@@ -468,8 +468,6 @@ open GlobalTheory.Core.Rk.IP
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Core.Rk.Exh GlobalTheory.RegSW
 
-theorem _root_.GlobalTheory.T.iwasawa_isotropic_stabiliser_split_place : ∀ (D : D7) (T T₀ : HSp D) (r : ℕ) (d : HypDec T T₀ r) (v : FinPl D), Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) v → ∀ y : Gv T v, ∃ q k : Gv T v, emb D.sp.cm.sig T.gram v q ∈ stab d ∧ k ∈ stabLoc D.sp.cm.sig T.gram (frameLat T) v ∧ y = q * k := by
-  first | exact @GlobalTheory.Core.Rk.IwFlagSplit.iwasawa_stab_split | exact GlobalTheory.Core.Rk.IwFlagSplit.iwasawa_stab_split | (intros; apply GlobalTheory.Core.Rk.IwFlagSplit.iwasawa_stab_split <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.IwasawaIsotropicStabiliserSplitPlaceStatement =====
@@ -489,8 +487,6 @@ open GlobalTheory.Core.Rk.IP
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Core.Rk.Exh GlobalTheory.RegSW
 
-theorem _root_.GlobalTheory.T.iwasawa_isotropicStabilizer_inertPlace : ∀ (D : D7) (T T₀ : HSp D) (r : ℕ) (d : HypDec T T₀ r) (v : FinPl D), ¬ Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) v → ∀ y : Gv T v, ∃ q k : Gv T v, emb D.sp.cm.sig T.gram v q ∈ stab d ∧ k ∈ stabLoc D.sp.cm.sig T.gram (frameLat T) v ∧ y = q * k := by
-  first | exact @GlobalTheory.InertIwasawaIso.iwasawa_inert | exact GlobalTheory.InertIwasawaIso.iwasawa_inert | (intros; apply GlobalTheory.InertIwasawaIso.iwasawa_inert <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.IwasawaIsotropicStabilizerInertPlaceStatement =====
@@ -514,8 +510,8 @@ namespace GlobalTheory.Core.Rk.IwFin
 theorem iwasawa_fin : ∀ (D : D7) (T T₀ : HSp D) (r : ℕ) (d : HypDec T T₀ r), (∀ v : FinPl D, (2 : 𝓞 D.host.F) ∈ v.asIdeal → Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) v) → ∀ (v : FinPl D) (y : Gv T v), ∃ q k : Gv T v, emb D.sp.cm.sig T.gram v q ∈ stab d ∧ k ∈ stabLoc D.sp.cm.sig T.gram (frameLat T) v ∧ y = q * k := by
   intro D T T₀ r d _h2 v y
   by_cases hv : Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) v
-  · exact GlobalTheory.T.iwasawa_isotropic_stabiliser_split_place D T T₀ r d v hv y
-  · exact GlobalTheory.T.iwasawa_isotropicStabilizer_inertPlace D T T₀ r d v hv y
+  · exact _root_.GlobalTheory.Core.Rk.IwFlagSplit.iwasawa_stab_split D T T₀ r d v hv y
+  · exact _root_.GlobalTheory.InertIwasawaIso.iwasawa_inert D T T₀ r d v hv y
 
 end GlobalTheory.Core.Rk.IwFin
 end -- clump:auto
@@ -537,8 +533,6 @@ open GlobalTheory.Core.Rk.IP
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Core.Rk.Exh GlobalTheory.RegSW
 
-theorem _root_.GlobalTheory.T.iwasawa_isotropic_stabiliser_finite_place : ∀ (D : D7) (T T₀ : HSp D) (r : ℕ) (d : HypDec T T₀ r), (∀ v : FinPl D, (2 : 𝓞 D.host.F) ∈ v.asIdeal → Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) v) → ∀ (v : FinPl D) (y : Gv T v), ∃ q k : Gv T v, emb D.sp.cm.sig T.gram v q ∈ stab d ∧ k ∈ stabLoc D.sp.cm.sig T.gram (frameLat T) v ∧ y = q * k := by
-  first | exact @GlobalTheory.Core.Rk.IwFin.iwasawa_fin | exact GlobalTheory.Core.Rk.IwFin.iwasawa_fin | (intros; apply GlobalTheory.Core.Rk.IwFin.iwasawa_fin <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.IwasawaIsotropicStabiliserFinitePlaceStatement =====
@@ -581,7 +575,7 @@ theorem exists_stab_proj_eq {D : D7} {T T₀ : HSp D} {r : ℕ} (d : HypDec T T�
 
 theorem hasIw_Kmax : ∀ (D : D7) (T T₀ : HSp D) (r : ℕ) (d : HypDec T T₀ r) (b : GL (Fin T.rank) (AE D)), (∀ v : FinPl D, (2 : 𝓞 D.host.F) ∈ v.asIdeal → Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) v) → IsMaj T b → HasIw d (Kmax T b) := by
   intro D T T₀ r d b h2 hb h
-  choose x k hx hk hxk using fun v => GlobalTheory.T.iwasawa_isotropic_stabiliser_finite_place D T T₀ r d h2 v (proj D.sp.cm.sig T.gram v h)
+  choose x k hx hk hxk using fun v => _root_.GlobalTheory.Core.Rk.IwFin.iwasawa_fin D T T₀ r d h2 v (proj D.sp.cm.sig T.gram v h)
   have hS := Filter.eventually_cofinite.1 (eventually_proj_mem_stabLoc D.sp.cm.sig T.gram (frameLat T) h)
   obtain ⟨p, hp, e1, e2, e3⟩ := exists_stab_proj_eq d x hx hS.toFinset
   set h' := p⁻¹ * h with hh'

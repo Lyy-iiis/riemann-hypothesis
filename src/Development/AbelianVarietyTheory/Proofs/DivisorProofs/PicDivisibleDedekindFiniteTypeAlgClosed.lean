@@ -314,7 +314,7 @@ theorem residue_exists (k A : Type) [Field k] [IsAlgClosed k] [CommRing A] [Alge
     (Ideal.Quotient.mk Q c)
   refine ⟨a, ?_⟩
   rw [← Ideal.Quotient.eq_zero_iff_mem, map_sub, ← ha]
-  simp [Ideal.Quotient.algebraMap_eq]
+  simp
 
 section Dedekind
 variable {A : Type} [CommRing A] [IsDedekindDomain A]
@@ -322,21 +322,13 @@ variable {A : Type} [CommRing A] [IsDedekindDomain A]
 theorem pow_le_span_sup {Q : Ideal A} [Q.IsPrime] (hQ : Q ≠ ⊥) {π : A} (hπ : π ∈ Q)
     (hπ2 : π ∉ Q ^ 2) : ∀ m : ℕ, Q ^ m ≤ Ideal.span {π ^ m} ⊔ Q ^ (m + 1) := by
   first
-  | exact @_root_.GlobalTheory.SpanPowerSupremum.pow_le_span_pow_sup
-  | exact _root_.GlobalTheory.SpanPowerSupremum.pow_le_span_pow_sup
   | (apply _root_.GlobalTheory.SpanPowerSupremum.pow_le_span_pow_sup <;> assumption)
-  | (intros; apply _root_.GlobalTheory.SpanPowerSupremum.pow_le_span_pow_sup <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.SpanPowerSupremum.pow_le_span_pow_sup <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.SpanPowerSupremum.pow_le_span_pow_sup ..)
 
 theorem pow_not_mem {Q : Ideal A} [Q.IsPrime] (hQ : Q ≠ ⊥) {π : A} (hπ : π ∈ Q)
     (hπ2 : π ∉ Q ^ 2) (m : ℕ) : π ^ m ∉ Q ^ (m + 1) := by
   first
-  | exact @_root_.GlobalTheory.AlgebraicIntegerNormBound.main
-  | exact _root_.GlobalTheory.AlgebraicIntegerNormBound.main
   | (apply _root_.GlobalTheory.AlgebraicIntegerNormBound.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.AlgebraicIntegerNormBound.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.AlgebraicIntegerNormBound.main <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.AlgebraicIntegerNormBound.main ..)
 
 end Dedekind
@@ -473,22 +465,6 @@ noncomputable def serHom : A →ₐ[k] PowerSeries k where
 
 end Construction
 
-section Existence
-variable {k A : Type} [Field k] [CommRing A] [Algebra k A] {Q : Ideal A} {π : A}
-
-theorem exists_approx (hπ : π ∈ Q) (hres : ∀ c : A, ∃ a : k, c - algebraMap k A a ∈ Q)
-    (hsup : ∀ m : ℕ, Q ^ m ≤ Ideal.span {π ^ m} ⊔ Q ^ (m + 1)) :
-    ∀ (m : ℕ) (u : A), ∃ p : k[X], u - aeval π p ∈ Q ^ m := by
-  first
-  | exact @_root_.GlobalTheory.IntegralNormBound.target
-  | exact _root_.GlobalTheory.IntegralNormBound.target
-  | (apply _root_.GlobalTheory.IntegralNormBound.target <;> assumption)
-  | (intros; apply _root_.GlobalTheory.IntegralNormBound.target <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.IntegralNormBound.target <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.IntegralNormBound.target ..)
-
-end Existence
-
 theorem exists_completion_embedding : ∀ (k A : Type) [Field k] [IsAlgClosed k]
     [CommRing A] [IsDedekindDomain A] [Algebra k A] [Algebra.FiniteType k A] (Q : Ideal A),
     Q.IsMaximal → Q ≠ ⊥ → ∃ (σ : A →ₐ[k] PowerSeries k) (π : A), σ π = PowerSeries.X ∧
@@ -501,7 +477,7 @@ theorem exists_completion_embedding : ∀ (k A : Type) [Field k] [IsAlgClosed k]
   obtain ⟨π, hπ1, hπ2⟩ := SetLike.exists_of_lt (Ideal.pow_succ_lt_pow hQ0 1)
   have hπ : π ∈ Q := by simpa using hπ1
   have hnot := pow_not_mem hQ0 hπ hπ2
-  have hex := exists_approx (k := k) hπ (residue_exists k A Q hQ) (pow_le_span_sup hQ0 hπ hπ2)
+  have hex := _root_.GlobalTheory.IntegralNormBound.main (k := k) hπ (residue_exists k A Q hQ) (pow_le_span_sup hQ0 hπ hπ2)
   have hmem : ∀ (m : ℕ) (u : A),
       u ∈ Q ^ m ↔ (PowerSeries.X : PowerSeries k) ^ m ∣ serHom hex hπ hnot u := by
     intro m u
@@ -843,7 +819,7 @@ def boundedIn {n : ℕ} (b : Module.Basis (Fin n) k[X] A) (D : Ideal A) (d : ℕ
 def coeffMap {n : ℕ} (b : Module.Basis (Fin n) k[X] A) (D : Ideal A) (d : ℕ) :
     boundedIn b D d →ₗ[k] (Fin n → Fin (d + 1) → k) where
   toFun f i j := (b.repr (f : A) i).coeff j
-  map_add' f g := by ext i j; simp [coeff_add]
+  map_add' f g := by ext i j; simp
   map_smul' c f := by ext i j; simp [repr_smul_const, coeff_C_mul]
 
 theorem coeffMap_injective {n : ℕ} (b : Module.Basis (Fin n) k[X] A) (D : Ideal A) (d : ℕ) :
@@ -872,7 +848,7 @@ theorem GlobalTheory.PicDiv.linear_system_setup : ∀ (k A : Type) [Field k] [Is
   simp only [Nat.add_sub_cancel]
   set n := Module.finrank k[X] A
   let b : Module.Basis (Fin n) k[X] A := Module.finBasis k[X] A
-  obtain ⟨c, lam, hdeg1, hdeg2⟩ := GlobalTheory.NormDegree.natDegree_norm_of_coord_degree k A n b
+  obtain ⟨c, lam, hdeg1, hdeg2⟩ := _root_.GlobalTheory.NormFormBound.norm_degree k A n b
   obtain ⟨p, hp2, hpP, hpP2⟩ := GlobalTheory.PicDiv.exists_deg_lt_two_correction_simple k A n b P₀ (∑ i, (C (lam i) * X ^ 2) • b i) hP
   set f₁ : A := ∑ i, (C (lam i) * X ^ 2 + p i) • b i with hf₁def
   have hf₁eq : (∑ i, (C (lam i) * X ^ 2) • b i) + ∑ i, p i • b i = f₁ := by
@@ -1083,7 +1059,7 @@ theorem hasseJet_vanishing_mem_pow (k A : Type) [Field k] [IsAlgClosed k] [CommR
     have := hL 1 hN1 1 1
     rw [Finset.sum_range_succ, Finset.sum_range_one] at this
     norm_num [h01] at this
-    first | exact this | linear_combination -this
+    first | exact this
   have hvan : ∀ j, ∀ u ∈ Q ^ j, ∀ l < N, l < j → Δ l u = 0 := by
     intro j
     induction j with
@@ -1752,7 +1728,7 @@ theorem pic_divisible : ∀ (k B : Type) [Field k] [IsAlgClosed k] [CommRing B] 
   rcases Nat.lt_or_ge q 2 with h1 | h2
   · have : q = 1 := by omega
     subst this; exact ⟨c, pow_one c⟩
-  obtain ⟨y, hfin, hred⟩ := GlobalTheory.T.exists_separable_normalization_reduced_fibers k B hfield
+  obtain ⟨y, hfin, hred⟩ := _root_.GlobalTheory.exists_separable_normalisation_reduced_fibres k B hfield
   letI : Algebra k[X] B := (Polynomial.aeval y).toRingHom.toAlgebra
   have hmap : ∀ p : k[X], algebraMap k[X] B p = Polynomial.aeval y p := fun p => rfl
   haveI : IsScalarTower k k[X] B := IsScalarTower.of_algebraMap_eq (fun c => by

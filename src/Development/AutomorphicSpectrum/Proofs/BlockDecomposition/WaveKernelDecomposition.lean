@@ -89,7 +89,7 @@ open GlobalTheory.CompanionTheory.WaveMult
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 theorem _root_.GlobalTheory.T.center_operator_commutes_integral : ∀ (n : ℕ) {V : Type} [NormedAddCommGroup V] [NormedSpace ℂ V] [CompleteSpace V] (U : ℝ → Mat n → V) (g : ℝ → ℝ) (T : ℝ) (w : List (Bool × ℕ)), ContDiffOn ℝ ∞ (Function.uncurry U) (Set.univ ×ˢ GLs n) → IsBump g T → ∀ x ∈ GLs n, zOp w (fun x' => ∫ t, (g t : ℂ) • U t x') x = ∫ t, (g t : ℂ) • zOp w (U t) x := by
-  first | exact @GlobalTheory.CompanionTheory.WaveMult.ZOpAvg.zOp_avg | exact GlobalTheory.CompanionTheory.WaveMult.ZOpAvg.zOp_avg | (intros; apply GlobalTheory.CompanionTheory.WaveMult.ZOpAvg.zOp_avg <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WaveMult.ZOpAvg.zOp_avg
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CenterOperatorCommutesIntegralStatement =====
@@ -107,7 +107,7 @@ open GlobalTheory.CompanionTheory.WaveMult
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 theorem _root_.GlobalTheory.T.center_operator_preserves_wave : RCalc → ∀ (n : ℕ) (E : KMod n) (u : ℝ → Mat n → E.V) (w : List (Bool × ℕ)), IsWave E u → IsWave E (fun t => zOp w (u t)) := by
-  first | exact @GlobalTheory.CompanionTheory.WaveMult.WaveZ.isWave_zOp | exact GlobalTheory.CompanionTheory.WaveMult.WaveZ.isWave_zOp | (intros; apply GlobalTheory.CompanionTheory.WaveMult.WaveZ.isWave_zOp <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WaveMult.WaveZ.isWave_zOp
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CenterOperatorPreservesWaveStatement =====
@@ -125,7 +125,7 @@ open GlobalTheory.CompanionTheory.WaveMult
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 theorem _root_.GlobalTheory.T.gelfand_operator_center_expansion : ∀ (n m : ℕ), ∃ (N : ℕ) (c : Fin N → ℂ) (w : Fin N → List ℕ), (∀ cc : Fin n → ℂ, (-1 : ℂ) ^ m * GlobalTheory.Dec.gelfVal (fun a => - cc a) m = ∑ i, c i * ((w i).map (GlobalTheory.Dec.gelfVal cc)).prod) ∧ (RCalc → ∀ (s : Bool) {V : Type} [NormedAddCommGroup V] [NormedSpace ℂ V] (f : Mat n → V), ContDiffOn ℝ ∞ f (GLs n) → ∀ x ∈ GLs n, gelT s m f x = ∑ i, c i • zOp ((w i).map (fun j => (s, j))) f x) := by
-  first | exact @GlobalTheory.CompanionTheory.WaveMult.GenTr.transposed_invariants | exact GlobalTheory.CompanionTheory.WaveMult.GenTr.transposed_invariants | (intros; apply GlobalTheory.CompanionTheory.WaveMult.GenTr.transposed_invariants <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WaveMult.GenTr.transposed_invariants
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.GelfandOperatorCenterExpansionStatement =====
@@ -365,7 +365,7 @@ open GlobalTheory.CompanionTheory.WaveMult
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 theorem _root_.GlobalTheory.T.gelfand_operator_pairing_adjoint : ∀ (n : ℕ) (w : List (Bool × ℕ)), ∃ (N : ℕ) (c : Fin N → ℂ) (w₁ : Fin N → List (Bool × ℕ)), (∀ χ : Inf n, IsHerm χ → conj (zVal w χ) = ∑ i, c i * zVal (w₁ i) χ) ∧ (LgFacts → RCalc → ∀ [MeasurableSpace (G n)] [BorelSpace (G n)] (μ : Measure (G n)) [μ.IsHaarMeasure] (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] [CompleteSpace V] (f h : Mat n → V), ContDiffOn ℝ ∞ f (GLs n) → ContDiffOn ℝ ∞ h (GLs n) → Cpt f → Cpt h → ∫ y : G n, ⟪zOp w f y.val, h y.val⟫_ℂ ∂μ = ∑ i, c i * ∫ y : G n, ⟪f y.val, zOp (w₁ i) h y.val⟫_ℂ ∂μ) := by
-  first | exact @GlobalTheory.CompanionTheory.WaveMult.WordAdj.word_adjoint | exact GlobalTheory.CompanionTheory.WaveMult.WordAdj.word_adjoint | (intros; apply GlobalTheory.CompanionTheory.WaveMult.WordAdj.word_adjoint <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WaveMult.WordAdj.word_adjoint
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.GelfandOperatorPairingAdjointStatement =====
@@ -419,9 +419,7 @@ theorem one_dim (Φ A B : ℝ → ℝ → ℂ)
 
 variable {n : ℕ}
 
-theorem val_mem_GLs (y : G n) : y.val ∈ GLs n := by
-  have h : IsUnit (y.val.det) := (Matrix.isUnit_iff_isUnit_det _).mp y.isUnit
-  exact h.ne_zero
+alias val_mem_GLs := _root_.GlobalTheory.CompanionTheory.WaveMult.Ibp.val_mem
 
 theorem continuous_val : Continuous (fun y : G n => y.val) := Units.continuous_val
 
@@ -630,22 +628,12 @@ section Gel
 
 variable {V : Type} [NormedAddCommGroup V] [NormedSpace ℂ V]
 
-theorem Rd_zero (X : Mat n) : Rd X (0 : Mat n → V) = 0 := by
-  funext g
-  have : fderiv ℝ (0 : Mat n → V) g = 0 := by
-    change fderiv ℝ (fun _ : Mat n => (0 : V)) g = 0
-    simp
-  simp [Rd, this]
-
-theorem Eu_zero (s : Bool) (a b : Fin n) : Eu s a b (0 : Mat n → V) = 0 := by
-  simp [Eu, Rd_zero]
-
 theorem Epow_one (s : Bool) (c b : Fin n) (f : Mat n → V) : Epow s 1 c b f = Eu s c b f := by
   simp only [Epow]
   rw [Finset.sum_eq_single b]
   · simp
   · intro d _ hd
-    simp [hd, Eu_zero]
+    simp [hd, _root_.GlobalTheory.CompanionTheory.WaveMult.Ibp.Eu_zero]
   · simp
 
 theorem EpowT_one (s : Bool) (c b : Fin n) (f : Mat n → V) : EpowT s 1 c b f = Eu s b c f := by
@@ -653,7 +641,7 @@ theorem EpowT_one (s : Bool) (c b : Fin n) (f : Mat n → V) : EpowT s 1 c b f =
   rw [Finset.sum_eq_single b]
   · simp
   · intro d _ hd
-    simp [hd, Eu_zero]
+    simp [hd, _root_.GlobalTheory.CompanionTheory.WaveMult.Ibp.Eu_zero]
   · simp
 
 theorem gel_two (s : Bool) (f : Mat n → V) : gel s 2 f = ∑ a, ∑ c, Eu s a c (Eu s c a f) := by
@@ -712,13 +700,13 @@ theorem Om_symm (hL : LgFacts) (hR : RCalc) {f h : Mat n → V} (hf : ContDiffOn
       2 * (∫ y : G n, ⟪gel true 2 f y.val, h y.val⟫_ℂ ∂μ + ∫ y : G n, ⟪gel false 2 f y.val, h y.val⟫_ℂ ∂μ) := by
     rw [← integral_add (i1 true) (i1 false), ← integral_const_mul]
     refine integral_congr_ae (Filter.Eventually.of_forall fun y => ?_)
-    simp [Om, inner_add_left, inner_smul_left]
+    simp [Om]
     ring
   have e2 : ∫ y : G n, ⟪f y.val, Om h y.val⟫_ℂ ∂μ =
       2 * (∫ y : G n, ⟪f y.val, gel true 2 h y.val⟫_ℂ ∂μ + ∫ y : G n, ⟪f y.val, gel false 2 h y.val⟫_ℂ ∂μ) := by
     rw [← integral_add (i2 true) (i2 false), ← integral_const_mul]
     refine integral_congr_ae (Filter.Eventually.of_forall fun y => ?_)
-    simp [Om, inner_add_right, inner_smul_right]
+    simp [Om]
     ring
   rw [e1, e2, I true, I false]
   simp only [Bool.not_true, Bool.not_false]
@@ -826,7 +814,7 @@ open GlobalTheory.CompanionTheory.WaveMult
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 theorem _root_.GlobalTheory.T.wave_pairing_time_symmetry : LgFacts → RCalc → WaveSpeed → ∀ (n : ℕ) [MeasurableSpace (G n)] [BorelSpace (G n)] (μ : Measure (G n)) [μ.IsHaarMeasure] (E : KMod n) (u v : ℝ → Mat n → E.V), IsWave E u → IsWave E v → Cpt (u 0) → Cpt (v 0) → ∀ t, ∫ y : G n, ⟪u t y.val, v 0 y.val⟫_ℂ ∂μ = ∫ y : G n, ⟪u 0 y.val, v t y.val⟫_ℂ ∂μ := by
-  first | exact @GlobalTheory.CompanionTheory.WaveMult.wave_symm | exact GlobalTheory.CompanionTheory.WaveMult.wave_symm | (intros; apply GlobalTheory.CompanionTheory.WaveMult.wave_symm <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WaveMult.wave_symm
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.WavePairingTimeSymmetryStatement =====
@@ -844,7 +832,7 @@ open GlobalTheory.CompanionTheory.WaveMult
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 theorem _root_.GlobalTheory.T.wave_time_average_is_wave : WaveSpeed → ∀ (n : ℕ) (E : KMod n) (u : ℝ → Mat n → E.V) (g : ℝ → ℝ) (T : ℝ), IsWave E u → IsBump g T → IsWave E (fun t x => ∫ s, (g s : ℂ) • u (t + s) x) := by
-  first | exact @GlobalTheory.CompanionTheory.WaveMult.WaveAvg.isWave_avg | exact GlobalTheory.CompanionTheory.WaveMult.WaveAvg.isWave_avg | (intros; apply GlobalTheory.CompanionTheory.WaveMult.WaveAvg.isWave_avg <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WaveMult.WaveAvg.isWave_avg
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.WaveTimeAverageIsWaveStatement =====
@@ -1069,7 +1057,7 @@ theorem kernel_adjoint : LgFacts → Unimod → RCalc → WaveSpeed → WaveEx �
   choose K hK using fun i => hO n μ E (w₁ i) g T hb
   refine ⟨N, c, w₁, K, hK, ?_, hval⟩
   have hw := hop hL hR μ E.V
-  obtain ⟨regp, eqvp⟩ := GlobalTheory.T.kernel_adjoint_regular hL n E k ⟨hk.1.continuousOn, hk.2.1⟩ hk.2.2.1
+  obtain ⟨regp, eqvp⟩ := _root_.GlobalTheory.CompanionTheory.WaveMult.adjoint_kernel_reg hL n E k ⟨hk.1.continuousOn, hk.2.1⟩ hk.2.2.1
   have regK : ∀ i, KReg (K i) := fun i => ⟨(hK i).1.continuousOn, (hK i).2.1⟩
   have rp : ∀ y ∈ GLs n, ∀ k₂ : Matrix.unitaryGroup (Fin n) ℂ,
       ContinuousLinearMap.adjoint (k (y * k₂.1)⁻¹) = ContinuousLinearMap.adjoint (k y⁻¹) * E.ρ k₂ := by

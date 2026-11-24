@@ -165,7 +165,7 @@ theorem exists_invariant_posDef_hermitian {n : ℕ} (H : Subgroup (GL (Fin n) �
       simp only [dotProduct, Pi.star_apply, Complex.re_sum]
       refine Finset.sum_congr rfl fun i _ => ?_
       rw [Complex.sq_norm, Complex.normSq_apply]
-      simp [Complex.star_def, Complex.mul_re]
+      simp [Complex.mul_re]
     have hnz : ∀ g : H, m g *ᵥ x ≠ 0 := by
       intro g h0
       have : (((g : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ) * m g) *ᵥ x = x := by
@@ -242,7 +242,7 @@ theorem exists_congr_one {n : ℕ} {P : Matrix (Fin n) (Fin n) ℂ} (hP : P.IsHe
   have := hpos _ hx
   rw [Matrix.star_mulVec, ← Matrix.dotProduct_mulVec, Matrix.mulVec_mulVec, Matrix.mulVec_mulVec, hQ] at this
   cases h : ε i
-  · simp [h, Matrix.mulVec_single_one, dotProduct, Pi.single_apply, Matrix.diagonal_apply] at this
+  · simp [h, dotProduct, Pi.single_apply] at this
     linarith
   · simp
 
@@ -329,7 +329,7 @@ theorem simultaneous_normal_form : ∀ {n : ℕ} {J P : Matrix (Fin n) (Fin n) �
     have : (s i : ℂ) * d i * s i = ((d i * (s i * s i) : ℝ) : ℂ) := by push_cast; ring
     rw [this, hsi]
     rcases lt_or_gt_of_ne (hdne i) with h | h
-    · simp [h, not_lt.2 h.le, abs_of_neg h, (hdne i)]
+    · simp [not_lt.2 h.le, abs_of_neg h, (hdne i)]
     · simp [h, abs_of_pos h, (hdne i)]
   · have hi : (Q₀⁻¹).1ᴴ * Q₀.1ᴴ = 1 := by
       rw [← Matrix.conjTranspose_mul, Units.mul_inv, Matrix.conjTranspose_one]
@@ -463,7 +463,7 @@ theorem _root_.GlobalTheory.T.exists_majorantFrame_compact_subgroup_le : ∀ (F 
     ∃ c : (∀ w : InfinitePlace F, GL (Fin n) (w.Completion ⊗[F] E)),
       (∀ w, ∃ ε : Fin n → Bool, Formalism.UG.cT (sigR _ σ) (c w).1 * JR w.Completion J * (c w).1 =
         Matrix.diagonal fun i => if ε i then 1 else -1) ∧ K ≤ majCpt σ J c := by
-  first | exact @GlobalTheory.CptMajorant.exists_frame_le_majCpt | exact GlobalTheory.CptMajorant.exists_frame_le_majCpt | (intros; apply GlobalTheory.CptMajorant.exists_frame_le_majCpt <;> assumption)
+  first | exact @GlobalTheory.CptMajorant.exists_frame_le_majCpt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsMajorantFrameCompactSubgroupLeStatement =====
@@ -549,8 +549,8 @@ theorem _root_.GlobalTheory.conjTranspose_mul_mul_self_of_unitary_conj :
     simp only [← Matrix.mul_assoc, hBm]
   simp only [conjTranspose_add, conjTranspose_mul, conjTranspose_sub, conjTranspose_one,
     conjTranspose_conjTranspose, hJ, Matrix.add_mul, Matrix.mul_add, Matrix.sub_mul, Matrix.mul_sub,
-    Matrix.one_mul, Matrix.mul_one, Matrix.mul_assoc, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, hXP, hYP,
-    Matrix.mul_zero, Matrix.zero_mul, sub_zero, add_zero, zero_add]
+    Matrix.one_mul, Matrix.mul_one, Matrix.mul_assoc, r1, r2, r3, r4, r5, r6, r9, r10, hXP, hYP,
+    Matrix.mul_zero, sub_zero, add_zero]
   abel
 
 end GlobalTheory
@@ -697,7 +697,7 @@ theorem schur_complement_step_cpx : ∀ (n r : ℕ) (J θ : Matrix (Fin n) (Fin 
     ext a c
     rw [Matrix.mul_apply, Fin.sum_univ_add]
     simp only [K, Fin.addCases_left, Fin.addCases_right, Matrix.add_apply, Matrix.one_apply,
-      mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.sum_ite_eq, Finset.mem_univ, if_true,
+      mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true,
       Matrix.mul_apply]
     rw [add_comm]
     rfl
@@ -1201,7 +1201,7 @@ theorem exists_unip_conj_unitary : ∀ (n r : ℕ) (J : Matrix (Fin n) (Fin n) �
   have e1 : ((c⁻¹).1 * u.1 * G * (u⁻¹).1 * c.1).conjTranspose * ((c⁻¹).1 * u.1 * G * (u⁻¹).1 * c.1) =
       (c.1).conjTranspose * ((u⁻¹).1.conjTranspose *
         (G.conjTranspose * ((u.1).conjTranspose * ((c⁻¹).1.conjTranspose * (c⁻¹).1) * u.1) * G) * (u⁻¹).1) * c.1 := by
-    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+    simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
   rw [e1, ← hQ, hG]
   have e2 : (c.1).conjTranspose * ((u⁻¹).1.conjTranspose * ((u.1).conjTranspose * (J * θ) * u.1) * (u⁻¹).1) * c.1 =
       (c.1).conjTranspose * ((u.1 * (u⁻¹).1).conjTranspose * (J * θ) * (u.1 * (u⁻¹).1)) * c.1 := by
@@ -1488,9 +1488,9 @@ theorem goodPos : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberFi
     exact hnorm g⁻¹ x (hmc.1 hx)
   have hK2c : IsCompact (K2 : Set (GAd σ J)) := by
     have : (K2 : Set (GAd σ J)) = (fun x => g⁻¹ * x * g⁻¹⁻¹) '' (majCpt σ J c : Set (GAd σ J)) := by
-      ext x; simp [hK2, MulAut.conj_apply]
+      ext x; simp [hK2]
     rw [this]; exact hmc.2.image (hconj g⁻¹)
-  have hKK2 : K ≤ K2 := fun x hx => ⟨g * x * g⁻¹, hle ⟨x, hx, rfl⟩, by simp [MulAut.conj_apply, mul_assoc]⟩
+  have hKK2 : K ≤ K2 := fun x hx => ⟨g * x * g⁻¹, hle ⟨x, hx, rfl⟩, by simp [mul_assoc]⟩
   have hK2K : K2 ≤ K := hK.2 ⟨hK2le, hK2c⟩ hKK2
   obtain ⟨u, hu, hui, y, hy⟩ := exists_conj_mem_majCpt_frame F E σ hCM n J hJ r Xf Yf hW c hc S l d h ι hι hd h1 h2 h3
   refine ⟨u, hu, hui, y, (u * ι (GlobalTheory.CuspRep.infGL E d y))⁻¹ * g, by group, fun k => hK2K ?_⟩
@@ -1523,7 +1523,7 @@ theorem _root_.GlobalTheory.T.parabolic_block_embedding_compact : ∀ (F E : Typ
       ∀ g : GAd σ J, ∃ u ∈ GlobalTheory.StdPar.unip σ J Xf S, u ∈ infPts σ J ∧ ∃ (y : GL (Fin d) (GlobalTheory.CuspRep.Cinf E)) (g₀ : GAd σ J),
         g = u * ι (GlobalTheory.CuspRep.infGL E d y) * g₀ ∧
         ∀ k : GlobalTheory.CuspRep.Kinf E d, g₀⁻¹ * ι (GlobalTheory.CuspRep.infGL E d (Unitary.toUnits k)) * g₀ ∈ K := by
-  first | exact @GlobalTheory.CompanionTheory.GoodPos.goodPos | exact GlobalTheory.CompanionTheory.GoodPos.goodPos | (intros; apply GlobalTheory.CompanionTheory.GoodPos.goodPos <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.GoodPos.goodPos
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GlobalProofs.IsBlockPointStatement =====

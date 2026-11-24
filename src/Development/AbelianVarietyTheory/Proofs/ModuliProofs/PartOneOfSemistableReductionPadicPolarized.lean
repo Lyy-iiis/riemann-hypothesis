@@ -316,8 +316,6 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.LN
 
-theorem _root_.GlobalTheory.T.arc_abelianLocus_and_moduli_of_traitData : Laws → Laws2 → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (W₀ : ValuationSubring ℂ) (Y : Model Xo c (c.V W₀).subtype) (O' : Type) [CommRing O'] [IsDomain O'] [CharZero O'] (b : c.V W₀ →+* O') (a : ArcIn D l (c.V W₀).subtype O' b) (ϖ : O'), ArcBase O' ϖ → ∀ (y : Sp (FractionRing (PowerSeries O')) ⟶ Xo.XF c) (χ : Sp (PowerSeries O') ⟶ Y.X), jK _ ≫ χ = y ≫ Y.j → TraitData Y a (RingHom.id _) y → χ ≫ Y.s = spMap (PowerSeries.C (R := O')) ≫ spMap b ∧ (∀ x : Sp (PowerSeries O'), χ x ∈ abLocus Y.t.G ↔ PowerSeries.X ∉ x.asIdeal) ∧ ∀ x : Sp (PowerSeries O'), PowerSeries.C ϖ * PowerSeries.X ∉ x.asIdeal → χ x ∈ Set.range Y.j := by
-  first | exact @GlobalTheory.arc_abLocus_of_traitData | exact GlobalTheory.arc_abLocus_of_traitData | (intros; apply GlobalTheory.arc_abLocus_of_traitData <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ArcAbelianLocusAndModuliOfTraitDataStatement =====
@@ -334,7 +332,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.LN
 
 theorem _root_.GlobalTheory.T.arcGenericPoint_descends_to_powerSeries : Laws → Laws2 → Laws3 → Laws4 → Laws5 → Laws6 → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (W₀ : ValuationSubring ℂ) (Y : Model Xo c (c.V W₀).subtype) (O' : Type) [CommRing O'] [IsDomain O'] [CharZero O'] (b : c.V W₀ →+* O') (a : ArcIn D l (c.V W₀).subtype O' b) (ϖ : O'), ArcBase O' ϖ → ∀ (R₁ : Type) [CommRing R₁] [IsDomain R₁] (g : PowerSeries O' →+* R₁) (y₁ : Sp (FractionRing R₁) ⟶ Xo.XF c) (gam : FractionRing (PowerSeries O') →+* FractionRing R₁), (∀ r, gam (algebraMap (PowerSeries O') _ r) = algebraMap R₁ _ (g r)) → g.Finite → IsIntegrallyClosed R₁ → TraitData Y a g y₁ → ∃ y : Sp (FractionRing (PowerSeries O')) ⟶ Xo.XF c, spMap gam ≫ y = y₁ ∧ TraitData Y a (RingHom.id _) y := by
-  first | exact @GlobalTheory.ArcPointDescent.point_descends | exact GlobalTheory.ArcPointDescent.point_descends | (intros; apply GlobalTheory.ArcPointDescent.point_descends <;> assumption)
+  first | exact @GlobalTheory.ArcPointDescent.point_descends
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ArcGenericPointDescendsToPowerSeriesStatement =====
@@ -350,8 +348,6 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.LN
 
-theorem _root_.GlobalTheory.T.arc_generic_point_extends_powerSeries : Laws → Laws2 → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (W₀ : ValuationSubring ℂ) (Y : Model Xo c (c.V W₀).subtype) (O' : Type) [CommRing O'] [IsDomain O'] [CharZero O'] (b : c.V W₀ →+* O') (a : ArcIn D l (c.V W₀).subtype O' b) (ϖ : O'), ArcBase O' ϖ → ∀ (m : ℕ) (Z : Scheme.{0}) (π : Z ⟶ Y.X) (t : SAB H Z) (_ : SABMap t Y.t π), IsFinite π → Surjective π → Nonempty (AmpFrames t.G t.PP.L (m ^ 2)) → ∀ (R₁ : Type) [CommRing R₁] [IsDomain R₁] (g : PowerSeries O' →+* R₁) (y₁ : Sp (FractionRing R₁) ⟶ Xo.XF c) (gam : FractionRing (PowerSeries O') →+* FractionRing R₁), (∀ r, gam (algebraMap (PowerSeries O') _ r) = algebraMap R₁ _ (g r)) → g.Finite → IsIntegrallyClosed R₁ → ∀ y : Sp (FractionRing (PowerSeries O')) ⟶ Xo.XF c, spMap gam ≫ y = y₁ → y ≫ Y.j ≫ Y.s = jK _ ≫ spMap (PowerSeries.C (R := O')) ≫ spMap b → (∃ θ, IsFrame Y.t.G Y.t.PP.L 1 (y₁ ≫ Y.j) (fun _ : Fin 1 => θ)) → (∃ (n : ℕ) (f : Fin n → _), IsFrame Y.t.G Y.t.PP.L (m ^ 2) (y₁ ≫ Y.j) f) → ∃ χ : Sp (PowerSeries O') ⟶ Y.X, jK _ ≫ χ = y ≫ Y.j := by
-  first | exact @GlobalTheory.LN.ArcExtends.exists_extension | exact GlobalTheory.LN.ArcExtends.exists_extension | (intros; apply GlobalTheory.LN.ArcExtends.exists_extension <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ArcGenericPointExtendsPowerSeriesStatement =====
@@ -368,8 +364,6 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.UU
 open GlobalTheory.LN
 
-theorem _root_.GlobalTheory.T.extendedArc_uAdicUniformisation_of_arcData : Laws → Laws2 → Laws3 → Laws4 → Laws5 → Laws6 → Ega → USt → PelSt → HomExtSt → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (W₀ : ValuationSubring ℂ) (Y : Model Xo c (c.V W₀).subtype) (O' : Type) [CommRing O'] [IsDomain O'] [CharZero O'] (b : c.V W₀ →+* O') (a : ArcIn D l (c.V W₀).subtype O' b) (ϖ : O'), ArcBase O' ϖ → PushInvertible Y.t.G Y.t.PP.L → ∀ (y : Sp (FractionRing (PowerSeries O')) ⟶ Xo.XF c) (χ : Sp (PowerSeries O') ⟶ Y.X), jK _ ≫ χ = y ≫ Y.j → TraitData Y a (RingHom.id _) y → Y.HasArcData a (Ideal.span {(PowerSeries.X : PowerSeries O')}) (PowerSeries.C (R := O')) PowerSeries.X χ := by
-  first | exact @GlobalTheory.ArcData.hasArcData_of_traitData | exact GlobalTheory.ArcData.hasArcData_of_traitData | (intros; apply GlobalTheory.ArcData.hasArcData_of_traitData <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExtendedArcUAdicUniformisationOfArcDataStatement =====
@@ -384,8 +378,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
-theorem _root_.GlobalTheory.T.arcData_specialise_at_uniformiser : Laws → Laws2 → DVR.TwistBaseChangeStatement → UnifBaseChangeSt → Laws5 → ∀ (E : Type) [Field E] [NumberField E] [NumberField.IsCMField E] (H : Geo.Tor.Host E) (Dm : Geo.Tor.Datum H) (l : Geo.Tor.Level H) (Xo : Geo.Tor.Moduli Dm l) (c : Geo.Tor.Coeff l) (O : Type) [CommRing O] (β : O →+* c.F) (Y : Geo.Tor.Model Xo c β) (V : Type) [CommRing V] [IsDomain V] [CharZero V] [IsDiscreteValuationRing V] (b : O →+* V) (ϖ : V) (a : Geo.Tor.ArcIn Dm l β V b), Irreducible ϖ → IsAdicComplete (IsLocalRing.maximalIdeal V) V → ∀ (ev : PowerSeries V →+* V), (∀ x, ev (PowerSeries.C x) = x) → ev PowerSeries.X = ϖ → ∀ χ : Geo.Tor.Sp (PowerSeries V) ⟶ Y.X, χ ≫ Y.s = Geo.Tor.spMap (PowerSeries.C (R := V)) ≫ Geo.Tor.spMap b → Set.range (jK V ≫ Geo.Tor.spMap ev ≫ χ) ⊆ Set.range Y.j → Y.HasArcData a (Ideal.span {PowerSeries.X}) (PowerSeries.C (R := V)) PowerSeries.X χ → Y.HasArcData a (Ideal.span {ϖ}) (RingHom.id V) ϖ (Geo.Tor.spMap ev ≫ χ) := by
-  first | exact @GlobalTheory.hasArcData_specialise | exact GlobalTheory.hasArcData_specialise | (intros; apply GlobalTheory.hasArcData_specialise <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.UniformizationProofs.ArcDataSpecialiseAtUniformiserStatement =====
@@ -466,10 +458,10 @@ theorem arc_clause : DVR.TwistBaseChangeStatement → Laws → Laws2 → Laws3 �
   have hys : y ≫ Y.j ≫ Y.s = jK _ ≫ spMap (PowerSeries.C (R := O')) ≫ spMap b := by
     have := hTy.1
     rwa [show spMap (RingHom.id (PowerSeries O')) = 𝟙 _ from Spec.map_id _, Category.id_comp] at this
-  obtain ⟨χ, hχ⟩ := GlobalTheory.T.arc_generic_point_extends_powerSeries h1 h2 E H D l Xo c W₀ Y O' b a ϖ hB m Z π t mt hfin hsurj hAF R₁ g y₁ gam hgam hgf hR
+  obtain ⟨χ, hχ⟩ := _root_.GlobalTheory.LN.ArcExtends.exists_extension h1 h2 E H D l Xo c W₀ Y O' b a ϖ hB m Z π t mt hfin hsurj hAF R₁ g y₁ gam hgam hgf hR
     y hy hys hθ hf
-  obtain ⟨c1, c2, c3⟩ := GlobalTheory.T.arc_abelianLocus_and_moduli_of_traitData h1 h2 E H D l Xo c W₀ Y O' b a ϖ hB y χ hχ hTy
-  have c4 := GlobalTheory.T.extendedArc_uAdicUniformisation_of_arcData h1 h2 h3 h4 h5 h6 hE hU hP hX E H D l Xo c W₀ Y O' b a ϖ hB hN.2.2.1 y χ hχ hTy
+  obtain ⟨c1, c2, c3⟩ := _root_.GlobalTheory.arc_abLocus_of_traitData h1 h2 E H D l Xo c W₀ Y O' b a ϖ hB y χ hχ hTy
+  have c4 := _root_.GlobalTheory.ArcData.hasArcData_of_traitData h1 h2 h3 h4 h5 h6 hE hU hP hX E H D l Xo c W₀ Y O' b a ϖ hB hN.2.2.1 y χ hχ hTy
   have hϖ : ϖ ≠ 0 := by
     rcases hB with ⟨-, rfl⟩ | ⟨-, h, -⟩
     exacts [one_ne_zero, h.ne_zero]
@@ -501,7 +493,7 @@ theorem arc_clause : DVR.TwistBaseChangeStatement → Laws → Laws2 → Laws3 �
       have := not_mem_generic ev (r := PowerSeries.C ϖ * PowerSeries.X)
         (by rw [map_mul, hC, hXv]; exact mul_ne_zero hϖ hϖ) q
       exact this
-    have c5 := GlobalTheory.T.arcData_specialise_at_uniformiser h1 h2 hT h4.unifBaseChange h5 E H D l Xo c _ _ Y O' b ϖ a hirr hc' ev hC hXv χ c1 hrg c4
+    have c5 := _root_.GlobalTheory.hasArcData_specialise h1 h2 hT h4.unifBaseChange h5 E H D l Xo c _ _ Y O' b ϖ a hirr hc' ev hC hXv χ c1 hrg c4
     obtain ⟨z, hz⟩ := exists_lift (c.V W₀) Y _ hrg
     obtain ⟨z', hz'⟩ := exists_lift (c.V W₀) Y _ hr
     have hid : spMap (RingHom.id O') = 𝟙 _ := Spec.map_id _
@@ -535,7 +527,7 @@ open GlobalTheory.UU
 open GlobalTheory.LN
 
 theorem _root_.GlobalTheory.T.arcFamily_fourthCondition_invertible_pushforward : DVR.TwistBaseChangeStatement → Laws → Laws2 → Laws3 → Laws4 → Laws5 → Laws6 → Ega → USt → PelSt → HomExtSt → ArcFamSt → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (W₀ : ValuationSubring ℂ) (Y : Model Xo c (c.V W₀).subtype) (p : ℕ), Y.LevelStructureConditions p → Amp Y → Y.N4 := by
-  first | exact @GlobalTheory.LN.ArcClause.arc_clause | exact GlobalTheory.LN.ArcClause.arc_clause | (intros; apply GlobalTheory.LN.ArcClause.arc_clause <;> assumption)
+  first | exact @GlobalTheory.LN.ArcClause.arc_clause
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ArcFamilyFourthConditionInvertiblePushforwardStatement =====
@@ -553,7 +545,7 @@ open GlobalTheory.UU
 open GlobalTheory.LN
 
 theorem _root_.GlobalTheory.T.model_uniformisation_of_abelianLocus_directImage : Laws → Laws2 → Laws3 → Laws4 → Laws5 → Ega → USt → PelSt → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (W₀ : ValuationSubring ℂ) (Y : Model Xo c (c.V W₀).subtype) (p : ℕ), Y.LevelStructureConditions p → Y.N3 := by
-  first | exact @GlobalTheory.model_uniformisation_of_clauses | exact GlobalTheory.model_uniformisation_of_clauses | (intros; apply GlobalTheory.model_uniformisation_of_clauses <;> assumption)
+  first | exact @GlobalTheory.model_uniformisation_of_clauses
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ModelUniformisationOfAbelianLocusDirectImageStatement =====
@@ -599,7 +591,7 @@ open GlobalTheory.UU
 open GlobalTheory.LN
 
 theorem _root_.GlobalTheory.T.modelSystems_jointProperties_of_laws : DVR.TwistBaseChangeStatement → Laws → Laws2 → Laws3 → Laws4 → Laws5 → Laws6 → Ega → USt → PelSt → HomExtSt → ArcFamSt → ModelsSt → N0 → PartI := by
-  first | exact @GlobalTheory.LN.partI_of_inputs | exact GlobalTheory.LN.partI_of_inputs | (intros; apply GlobalTheory.LN.partI_of_inputs <;> assumption)
+  first | exact @GlobalTheory.LN.partI_of_inputs
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ModelSystemsJointPropertiesOfLawsStatement =====
@@ -1340,9 +1332,9 @@ theorem exists_localSystems_ample :
   have hlev : ToroidalLevelCompatibility (H := H) (D := D) := (hN E H D hpq).1
 
   obtain ⟨S, hS⟩ := _root_.GlobalTheory.SystemAmple.exists_system_ampFrames hext hL hL2 hL3 htop E H D Xo hpq hlev
-  refine ⟨S.Y, fun p W hp hW => ⟨GlobalTheory.T.localModelSystem_transition_siegel_clauses hext hL hL2 hL3 E H D Xo hpq hlev S p W hp hW, fun i => ?_⟩,
+  refine ⟨S.Y, fun p W hp hW => ⟨_root_.GlobalTheory.Models.system_clauses hext hL hL2 hL3 E H D Xo hpq hlev S p W hp hW, fun i => ?_⟩,
     _root_.GlobalTheory.GlobalModel.exists_global_model hext hL hL2 hL3 E H D Xo hpq hlev S⟩
-  refine ⟨(GlobalTheory.T.localModel_oneModel_and_splitFibres hext hL hL2 hL3 E H D Xo hpq hlev S p W hp hW i).2, ?_⟩
+  refine ⟨(_root_.GlobalTheory.Models.System.levelStructureConditions_and_splitFibres hext hL hL2 hL3 E H D Xo hpq hlev S p W hp hW i).2, ?_⟩
 
   obtain ⟨l₀, h₀, hr⟩ := S.raises p W hp hW i
   obtain ⟨k, hk⟩ := hS (S.ch p)
@@ -1390,11 +1382,9 @@ open GlobalTheory.ZM
 noncomputable section
 namespace GlobalTheory.SiegelFromSharp
 
-theorem spMap_comp {R R' R'' : Type} [CommRing R] [CommRing R'] [CommRing R''] (f : R →+* R') (g : R' →+* R'') :
-    spMap g ≫ spMap f = spMap (g.comp f) := by
-  rw [← Spec.map_comp]; rfl
+alias spMap_comp := _root_.GlobalTheory.spMap_comp_ring
 
-theorem spMap_id (R : Type) [CommRing R] : spMap (RingHom.id R) = 𝟙 _ := Spec.map_id _
+alias spMap_id := _root_.GlobalTheory.ZM.FamilyScheme.spMap_id
 
 def restrictBase {h k : ℕ} {B B' : Type} [CommRing B] [CommRing B'] {ζ : B} {ζ' : B'} (j : B →+* B') (hj : j ζ = ζ')
     {S : Scheme.{0}} {s' : S ⟶ Sp B'} (c : SiegPre h k ζ' s') : SiegPre h k ζ (s' ≫ spMap j) where
@@ -1426,7 +1416,7 @@ theorem finiteType_of_isQProjOver {R : Type} [CommRing R] {X : Scheme.{0}} {f : 
 theorem dirMap_base {o K : Type} [CommRing o] [Field K] {r : ℕ} (β : o →+* K) (lam : (Fin r → K) →ₗ[K] K) :
     spMap (dirMap lam) ≫ spMap ((algebraMap K (TrivSqZeroExt K (Fin r → K))).comp β) =
       constPt (spMap (dirMap lam)) ≫ spMap ((algebraMap K (TrivSqZeroExt K (Fin r → K))).comp β) := by
-  simp only [constPt, Category.assoc, spMap_comp]
+  simp only [constPt, spMap_comp]
   congr 1
   ext x <;> simp [dirMap]
 
@@ -1598,7 +1588,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.twistedPrincipalPolarisation_sections_baseChange : DVR.TwistBaseChangeStatement := by
-  first | exact @GlobalTheory.twistBaseChange | exact GlobalTheory.twistBaseChange | (intros; apply GlobalTheory.twistBaseChange <;> assumption)
+  first | exact @GlobalTheory.twistBaseChange
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.UniformizationProofs.TwistedPrincipalPolarisationSectionsBaseChangeStatement =====

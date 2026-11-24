@@ -498,10 +498,7 @@ theorem lhs_sum (A : FinHolAtlas (e + 1) X) (L : LocPot X) (s : X → X → ℂ)
       have h := ((hf j) j').contDiffAt hmem
       have hle : (2 : WithTop ℕ∞) ≤ ∞ := by
         first
-          | exact_mod_cast (le_top : (2 : ℕ∞) ≤ ⊤)
           | exact WithTop.coe_le_coe.2 le_top
-          | (norm_num; done)
-          | (simp; done)
       exact h.of_le hle
     have key : ∀ F G : (Fin (e + 1) → ℂ) → ℝ, ContDiffAt ℝ 2 F y → ContDiffAt ℝ 2 G y →
         maDens (Fin.cons (fun w => F w + G w) ψs) y =
@@ -514,7 +511,7 @@ theorem lhs_sum (A : FinHolAtlas (e + 1) X) (L : LocPot X) (s : X → X → ℂ)
         intro H
         funext k
         refine Fin.cases ?_ (fun k => ?_) k <;> rfl
-      rw [e1, e1, e1, ReciprocityTheory.AnForm.A.hessC_add F G y hF hG]
+      rw [e1, e1, e1, _root_.ReciprocityTheory.AnForm.A.TraceConjugationCover.complexHessian_add_of_contDiffAt F G y hF hG]
       have h := ReciprocityTheory.AnForm.A.mdisc_cons_smul_add 1 1 (hessC F y) (hessC G y) (fun k => hessC (ψs k) y)
       simp only [one_smul, one_mul] at h
       rw [h, Complex.add_re]
@@ -561,7 +558,6 @@ theorem lhs_sum (A : FinHolAtlas (e + 1) X) (L : LocPot X) (s : X → X → ℂ)
       rw [hdens j' y hy, Finset.mul_sum]
     first
       | exact setIntegral_congr_fun (A.chart j').open_target.measurableSet heq
-      | exact setIntegral_congr (A.chart j').open_target.measurableSet heq
   · simp
 
 theorem pl_good (A : FinHolAtlas (e + 1) X) (L : LocPot X) (s : X → X → ℂ) {r : ℕ} (m : Fin r → ℕ)
@@ -778,7 +774,7 @@ open scoped ContDiff
 
 noncomputable section
 
-theorem poincareLelong : PoincareLelongStatement := PLAux.pl_global
+alias poincareLelong := _root_.ReciprocityTheory.AnForm.M.PLAux.pl_global
 
 end
 

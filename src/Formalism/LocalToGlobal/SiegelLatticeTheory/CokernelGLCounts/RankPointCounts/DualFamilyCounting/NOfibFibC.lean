@@ -556,7 +556,7 @@ theorem mul_mem_cancel {I J K : FI} (hK : K ≠ 0) {x y : D.host.E} (hx : x ∈ 
 
 variable (X : HidaSetting D)
 
-theorem aa_ne (Y : HidaSetting D) (a : Fin D.R.rS) : aaD D a ≠ 0 := Formalism.L2.SG.Pf.NcReal.JX.CovB.aaD_ne_zero Y a
+alias aa_ne := _root_.Formalism.L2.SG.Pf.NcReal.JX.CovB.aaD_ne_zero
 
 theorem e_mem {a : Fin D.R.rS} {c : D.host.E} (hc : c ∈ aaD D a) : c • X.eX a ∈ (VS D).L0 := by
   rw [X.Lam_split]
@@ -923,7 +923,7 @@ theorem hJ_span_ef (v : InfinitePlace X.B.I.F) (α β : Fin D.R.rS → D.host.E)
     (he : ∀ c, hJ (X.B.I.ε v) (rv X.B.I v (X.crd (X.eX c))) w = 0)
     (hf : ∀ c, hJ (X.B.I.ε v) (rv X.B.I v (X.crd (X.fY c))) w = 0) :
     hJ (X.B.I.ε v) (rv X.B.I v (X.crd (∑ c, α c • X.eX c + ∑ c, β c • X.fY c))) w = 0 := by
-  rw [Formalism.L2.SG.NormCut.crd_add', Formalism.L2.SG.NormCut.crd_sum', Formalism.L2.SG.NormCut.crd_sum']
+  rw [_root_.Formalism.L2.SG.Pf.crd_add, Formalism.L2.SG.NormCut.crd_sum', Formalism.L2.SG.NormCut.crd_sum']
   simp only [Formalism.L2.SG.NormCut.crd_smul']
   have rv_add (a b : Fin X.B.I.n → X.B.I.E) : rv X.B.I v (a + b) = rv X.B.I v a + rv X.B.I v b := by
     unfold rv
@@ -978,7 +978,7 @@ theorem dictionary_place_holds : DictPlace := by
       congr 1
       ext i
       simp
-    rw [hy, Formalism.L2.SG.NormCut.crd_add', rv_add, Formalism.L2.SG.RealObj.InfCut.ProductExactness.hJ_add_l,
+    rw [hy, _root_.Formalism.L2.SG.Pf.crd_add, rv_add, Formalism.L2.SG.RealObj.InfCut.ProductExactness.hJ_add_l,
       hJ_span_ef X v _ _ w he hf, add_zero]
   funext p
   rcases p with ((p | b) | (p | a))
@@ -1020,25 +1020,25 @@ section -- clump:auto
 namespace Formalism.L2.SG.Pf.NcReal.JX.NOf
 
 theorem nofibLat_of_rest (hL : DictLat) (hE : DictEx) (hF : FibQ) (hO : FibOnto) : NOfibLat := by
-  have hR : NOratC := by first | exact @noratC_holds | exact @noratC_proved | exact @noratC | exact @nOratC_holds | exact @noratC_of | exact @NOratC_holds
-  have hG : DictGram := by first | exact @dictGram_holds | exact @dictGram_proved | exact @dictGram | exact @DictGram_holds | exact @dictGram_of
-  have hP : DictPlace := by first | exact @dictionary_place_holds | exact @dictPlace_holds | exact @dictPlace_proved | exact @dictPlace | exact @DictPlace_holds | exact @dictPlace_of
+  have hR : NOratC := by first | exact @noratC_holds
+  have hG : DictGram := by first | exact @dictGram_holds
+  have hP : DictPlace := by first | exact @dictionary_place_holds
   exact @nofibLat_of hR hG hL hE hP hF hO
 
 theorem nofib_of_rest (hL : DictLat) (hE : DictEx) (hF : FibQ) (hO : FibOnto) : NOfib := @Formalism.L2.SG.Pf.NcReal.JX.nofib_of (@nofibLat_of_rest hL hE hF hO)
 
 theorem nOfib_of_dict_fib (hB : DictLatB) (hF : FibQ) (hO : FibOnto) : NOfib := by
-  have hLF : DictLatF := by first | exact @dictLatF_proof | exact @dictLatF_holds | exact @dictLatF_proved | exact @dictLatF | exact @DictLatF_holds | exact @dictLatF_of
+  have hLF : DictLatF := by first | exact @dictLatF_holds
   have hL : DictLat := @dictLat_of hLF hB
   have hE : DictEx := @Ex.dictEx_holds
   exact @nofib_of_rest hL hE hF hO
 
 theorem nofib_of_fib (hF : FibQ) (hO : FibOnto) : NOfib := by
-  have hB : DictLatB := by first | exact @dictLatB_proof | exact @dictLatB_holds | exact @dictLatB_proved | exact @dictLatB | exact @DictLatB_holds | exact @dictLatB_of
+  have hB : DictLatB := by first | exact @dictLatB_holds
   exact @nOfib_of_dict_fib hB hF hO
 
 theorem nofib_of_fibQ (hF : FibQ) : NOfib := by
-  have hO : FibOnto := by first | exact @fibOnto_proof | exact @fibOnto_holds | exact @fibOnto_proved | exact @fibOnto | exact @FibOnto_holds | exact @fibOnto_of
+  have hO : FibOnto := by first | exact @fibOnto_holds
   exact @nofib_of_fib hF hO
 
 end Formalism.L2.SG.Pf.NcReal.JX.NOf
@@ -1286,14 +1286,14 @@ theorem xblk {X : HidaSetting D} (u : D.what₂.Word) (X0 : Matrix (Fin D.R.rS) 
     blkQ X u X0 xs M (Sum.inl (Sum.inl p)) - tauQ X u (Sum.inl (Sum.inl p)) (blkQ X u X0 xs M) =
       embV X (X0 p.1.1 p.1.2) := by
   simp only [blkQ, tauQ]
-  first | exact sub_zero _ | rfl | simp
+  first | exact sub_zero _
 
 theorem rblk {X : HidaSetting D} (u : D.what₂.Word) (X0 : Matrix (Fin D.R.rS) (Fin D.R.rS) D.host.E)
     (xs : Fin D.R.rS → (VS D).V) (M : Matrix (Fin D.R.rS) (Fin D.R.rS) D.host.E) (b : Fin D.R.rS) :
     blkQ X u X0 xs M (Sum.inl (Sum.inr b)) - tauQ X u (Sum.inl (Sum.inr b)) (blkQ X u X0 xs M) =
       rowV X u (xs b) := by
   simp only [blkQ, tauQ]
-  first | exact sub_zero _ | rfl | simp
+  first | exact sub_zero _
 
 theorem fibQ_holds : FibQ := by
   intro D X u X0 xs M hok

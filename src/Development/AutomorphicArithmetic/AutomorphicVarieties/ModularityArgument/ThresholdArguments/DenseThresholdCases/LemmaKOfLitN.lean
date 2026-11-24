@@ -665,7 +665,7 @@ theorem UpperTheory.V.ZK.sCoc : UpperTheory.V.ZK.SCoc := by
       have := F_coc u w (fun a b c => by simp only [hu]; exact_mod_cast congrArg (Int.cast : ℤ → ZMod q) (hc a b c))
         (fun a b => by simp [hw]) _ g
 
-      simp only [bd, Finsupp.linearCombination_single, map_smul, map_add (f := _), map_sum, one_smul, smul_eq_mul, one_mul]
+      simp only [bd, Finsupp.linearCombination_single, map_smul, map_add (f := _), map_sum, smul_eq_mul, one_mul]
       exact mul_eq_zero_of_right _ this
   · have key : ∑ j : ZMod q, u (chi q ζ hζ.pow_eq_one x (Multiplicative.ofAdd j))
         (chi q ζ hζ.pow_eq_one x (Multiplicative.ofAdd 1)) = x := by
@@ -688,7 +688,7 @@ theorem UpperTheory.V.ZK.sCoc : UpperTheory.V.ZK.SCoc := by
         (prism (ZMod q) g _ (Finsupp.single h 1)) = F u w (2 * (e + 1)) h * w g := fun h => by
       rw [← F_ins u w (fun a b => by simp only [hu, hs a b]) g (e + 1) h]
 
-      simp only [prism, Finsupp.linearCombination_single, one_smul, map_sum, map_smul, smul_eq_mul, mul_one, one_mul,
+      simp only [prism, Finsupp.linearCombination_single, one_smul, map_sum, map_smul, smul_eq_mul, one_mul,
       inv_mul_cancel_comm, ite_self]
       rfl
 
@@ -859,7 +859,6 @@ theorem UpperTheory.V.ZK.sPhi :
       simp [φ, piRep, red_apply, psi, h1]
       rw [← finProdFinEquiv.sum_comp]
       simp [h1, Fintype.sum_prod_type, Matrix.one_apply]
-      done
     exact (val_iso hθ _ _ φ hφ hz).symm
 end -- clump:auto
 end -- clump:auto
@@ -1321,9 +1320,6 @@ section -- clump:auto
 @[expose] public section
 
 namespace LateralTheory.Fin.SDetect
-theorem detection_statement_holds : UpperTheory.V.ZK.SDetect := by
-  apply LateralTheory.Q.SDetectCut.goal
-theorem intersectionNumber_baseChange : UpperTheory.V.ZK.SDetect := detection_statement_holds
 end LateralTheory.Fin.SDetect
 end -- clump:auto
 end -- clump:auto
@@ -1558,9 +1554,6 @@ section -- clump:auto
 @[expose] public section
 
 namespace LateralTheory.Fin.SFewOf
-theorem few_of_statement_holds : UpperTheory.V.ZK.SFewOf := by
-  apply LateralTheory.Q.SFewOfCut.sFewOf
-theorem intersectionNumber_baseChange : UpperTheory.V.ZK.SFewOf := few_of_statement_holds
 end LateralTheory.Fin.SFewOf
 end -- clump:auto
 end -- clump:auto
@@ -1687,9 +1680,6 @@ section -- clump:auto
 @[expose] public section
 
 namespace LateralTheory.Fin.SLayer
-theorem layer_statement_holds : UpperTheory.V.ZK.SLayer := by
-  apply LateralTheory.Q.SLayerCut.goal_of
-theorem intersectionNumber_baseChange : UpperTheory.V.ZK.SLayer := layer_statement_holds
 end LateralTheory.Fin.SLayer
 end -- clump:auto
 end -- clump:auto
@@ -1939,9 +1929,6 @@ section -- clump:auto
 @[expose] public section
 
 namespace LateralTheory.Fin.SStein
-theorem stein_statement_holds : UpperTheory.V.ZK.SStein := by
-  apply LateralTheory.Q.SSteinT.SStein_of
-theorem intersectionNumber_baseChange : UpperTheory.V.ZK.SStein := stein_statement_holds
 end LateralTheory.Fin.SStein
 end -- clump:auto
 end -- clump:auto
@@ -1959,7 +1946,7 @@ namespace UpperTheory.V.ZK
 theorem lemmaK (hB : BOdd) (hP : GlobalTheory.Published.PoitouTateDuality) (hF : LocalFinitenessK) (hT : LocalTateDualityK) :
     ∃ CK, LemmaK CK :=
   lemmaK_of_steps hB hP hF hT
-    sChain sPrism sPrismMul sZc LateralTheory.Fin.SRel.intersectionNumber_baseChange sTrans sCoc sThetaOf sPhi sEta LateralTheory.Fin.SStein.intersectionNumber_baseChange sClassOf sUpperOf LateralTheory.Fin.SDetect.intersectionNumber_baseChange sCount LateralTheory.Fin.SFewOf.intersectionNumber_baseChange PositivityTheory.QuaternionShaBounds.sSha LateralTheory.Fin.SLayer.intersectionNumber_baseChange sTors sNum sFinal
+    sChain sPrism sPrismMul sZc _root_.LateralTheory.Q.SRelT.SRel_of sTrans sCoc sThetaOf sPhi sEta _root_.LateralTheory.Q.SSteinT.SStein_of sClassOf sUpperOf _root_.LateralTheory.Q.SDetectCut.goal sCount _root_.LateralTheory.Q.SFewOfCut.sFewOf PositivityTheory.QuaternionShaBounds.sSha _root_.LateralTheory.Q.SLayerCut.goal_of sTors sNum sFinal
 
 end UpperTheory.V.ZK
 end -- clump:auto

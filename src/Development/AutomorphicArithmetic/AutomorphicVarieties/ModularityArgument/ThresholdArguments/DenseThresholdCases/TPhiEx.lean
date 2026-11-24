@@ -377,7 +377,7 @@ private theorem det_one_sub {n : ℕ} {C A : Type} [CommRing C] [CommRing A] (ψ
   rw [Matrix.charpolyRev, ← coe_eval₂RingHom, RingHom.map_det]
   congr 1
   ext i j
-  by_cases hij : i = j <;> simp [hij, Matrix.one_apply, eval₂_sub, eval₂_mul] <;> ring
+  by_cases hij : i = j <;> simp [hij, eval₂_sub, eval₂_mul] <;> ring
 
 private theorem core2 {n : ℕ} {P A C Γ : Type} [CommRing P] [CommRing A] [CommRing C] [Algebra A C]
     [Group Γ] (φ : P →+* C) (ρ : Γ →* Matrix (Fin n) (Fin n) A)
@@ -478,7 +478,7 @@ private theorem lemA {n : ℕ} {A H G : Type} [CommRing A] [Group H] [Group G] (
     rw [← R.homog]
     congr 1
     ext1
-    simp [Finsupp.mapDomain_smul]
+    simp
   · ext C _ _ x
     change R.D C ((x.mapDomain π).mapDomain s) = _
     rw [dom_dom, h]
@@ -706,7 +706,7 @@ theorem UpperTheory.Reformulated.B.DeterminantIdentities.phiDet :
     change Matrix.det (GDet.repAlg ρ A[X] _) = Matrix.det _
     congr 1
     ext i j : 2
-    by_cases hij : i = j <;> simp [GDet.repAlg, hij, Matrix.charmatrix_apply, Matrix.one_apply]
+    by_cases hij : i = j <;> simp [GDet.repAlg, hij]
   refine ⟨D, ?_, hchi, fun i N U => ?_⟩
   · rw [← hR, ← hD]
     rfl
@@ -726,9 +726,6 @@ section -- clump:auto
 
 open NumberField IsDedekindDomain Formalism.ConjugateSelfDual Formalism.HC ReciprocityTheory.Gal IsLocalRing Polynomial UpperTheory.V UpperTheory.V.Base UpperTheory.V.Alg UpperTheory.V.HV UpperTheory.V.GradeZeroInterpolatingElement UpperTheory.V.Ws GlobalTheory.GalOfCusp
 
-theorem UpperTheory.V.Ws.phiDet :
-    ∀ {n : ℕ} {B A H G : Type} [CommRing B] [CommRing A] [Group H] [Group G] [TopologicalSpace H] [IsTopologicalGroup H] [TopologicalSpace G] (I : Ideal B) [IsHausdorff I B] (f : B →+* A), Function.Injective f → ∀ (π : H →* G), Function.Surjective π → Topology.IsQuotientMap π → ∀ (ρ : H →* Matrix (Fin n) (Fin n) A) (cp : H → B[X]), (∀ g, (cp g).map f = (ρ g).charpoly) → (∀ j, AdicCont I fun g => (cp g).coeff j) → (∀ U : Subgroup H, IsClosed (U : Set H) → ρ.ker ≤ U → π.ker ≤ U) → ∃ D : W.GDet n B G, (D.comap π).map f = W.GDet.ofRep ρ ∧ (∀ g, D.chi (MonoidAlgebra.single (π g) 1) = cp g) ∧ D.IsCont I :=
-  _root_.UpperTheory.Reformulated.B.DeterminantIdentities.phiDet
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.WeakShimuraTheory.PhiCharacterResidues.PhiDet =====
@@ -759,7 +756,7 @@ theorem UpperTheory.V.Ws.phiFlag :
       (⟨adj (X.P.n (K.e v)), X.P.n (K.e v), h1, h2⟩ : GL (Fin 4) X.A)⁻¹ : GL (Fin 4) X.A) :
         Matrix (Fin 4) (Fin 4) X.A) =
       (algebraMap c'.O X.A (K.sc n s)) • (adj (X.P.n (K.e v)) * X.P.r (resLe T.F_le s) * X.P.n (K.e v)) := by
-    simp [UpperTheory.V.Ws.Link.rho_apply, Matrix.mul_smul, Matrix.smul_mul]
+    simp [UpperTheory.V.Ws.Link.rho_apply]
   refine ⟨fun i j hij => ?_, fun i => ?_⟩
   · rw [hval, Matrix.smul_apply, X.pair.flag (K.e v) _ hs' i j hij, smul_zero]
   · rw [hval, Matrix.smul_apply]
@@ -1252,7 +1249,7 @@ theorem UpperTheory.V.Ws.phiPsiEx :
     have hr := X.ψ_red w i s hs
     have hu := ((((T.fr ∅).χ i s).isUnit.map (inc h)).map (IsLocalRing.residue c'.O))
     rw [← hr] at hu
-    simp only [res, h0] at hu
+    simp only [res] at hu
     simp at hu
     exact hne hu
   have hsc : ∀ g g' : G T.L Ω, K.sc n (g * g') = K.sc n g * K.sc n g' := by
@@ -1302,7 +1299,7 @@ theorem UpperTheory.V.Ws.exists_phi_universal_ordinary_det_ring_of_link :
     _root_.UpperTheory.V.Ws.UnramifiedInputs → ∀ {Ω : Type} [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] {l : ℕ} [Fact l.Prime] {c : Coef l} (D : Raw Ω c) (T : Tower D), T.Fit → T.Deep → ∀ (c' : Coef l) (h : c.O ≤ c'.O) (K : Link T c' h) (X : Space (T.fr ∅) (inc h)) (n : ℕ), (∃ B : W.UniversalOrdinaryDeterminantRing K.r, True) ∧ ∀ B : W.UniversalOrdinaryDeterminantRing K.r, ∃ φ : B.B →ₐ[c'.O] X.B, K.IsPhi X n B φ := by
   intro U Ω _ _ _ l _ c D T _ _ c' h K X n
   obtain ⟨hs, hq, hk⟩ := phiKer K.V
-  obtain ⟨E, hE, hcp, hc⟩ := phiDet (maximalIdeal X.B) (algebraMap X.B X.A) X.inj K.V.pr hs hq (K.rho X n) (K.cpT X n)
+  obtain ⟨E, hE, hcp, hc⟩ := _root_.UpperTheory.Reformulated.B.DeterminantIdentities.phiDet (maximalIdeal X.B) (algebraMap X.B X.A) X.inj K.V.pr hs hq (K.rho X n) (K.cpT X n)
     (fun g => (phiCpMap K X n g).2.2.2) (phiCpCont K X n)
     fun U hU hle => hk U hU fun A v hA hv => (phiUnr K X n A v hA hv).trans hle
   obtain ⟨ψ, hψ⟩ := phiPsiEx K X n

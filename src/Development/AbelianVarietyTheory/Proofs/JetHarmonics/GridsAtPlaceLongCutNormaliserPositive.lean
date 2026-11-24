@@ -346,7 +346,6 @@ private lemma bracket_product_le_of_neg_between_lemma (k r l : ℕ) (b c Y : ℝ
     apply prod_le_cube_mul_prod_of_bracket_chain b c (l - 1 - 1) hn hc hcb _
       (fun j => Y + lam (1 + (l - 1 - 1 - 1 - j)))
     intro j hj
-    beta_reduce
     set s := 1 + (l - 1 - 1 - 1 - j) with hs
     have hs1 : 1 ≤ s := by omega
     have hsj : s + j = l - 2 := by omega
@@ -372,7 +371,6 @@ private lemma bracket_product_le_of_neg_between_lemma (k r l : ℕ) (b c Y : ℝ
     apply prod_le_cube_mul_prod_of_bracket_chain b c (k - (l + 1)) hn hc hcb _
       (fun j => -Y - lam (l + 1 + j) - 1)
     intro j hj
-    beta_reduce
     have e0 := hspread j (l + 1) (by omega) (by omega)
     have e1 := (hint (l + 1) (by omega) (by omega)).1 (by omega)
     have e2 := (hdec l h1l (by omega)).1
@@ -545,7 +543,7 @@ theorem main : ∀ (C b c : ℝ) (P : M.Par) (l : ℕ) (lam : Fin (2 * P.r + P.k
   have e1 : ∏ s, (|y + 1 + lam s| + c) = ∏ s ∈ Finset.Icc 1 n, (|y + 1 + lamN s| + c) :=
     prod_fin_eq_prod_Icc n _ (fun s => |y + 1 + lamN s| + c) (fun s => by simp only [hlamN])
   rw [← e0, ← e1] at hmain
-  have hq := Formalism.FourierDecayAlt.P.q_positive_interlacing P.k P.u P.u' P.lo l y P.T P.T' hl hlk hinter hcy
+  have hq := _root_.Formalism.FourierDecayAlt.P.Interlace.qPositive P.k P.u P.u' P.lo l y P.T P.T' hl hlk hinter hcy
     hP.T_pos hP.T'_pos
   have hTT : 0 < P.T * P.T' := mul_pos hP.T_pos hP.T'_pos
   have hqe : I.qpoly P.k P.T P.T' P.u P.u' y = (P.T * P.T') *

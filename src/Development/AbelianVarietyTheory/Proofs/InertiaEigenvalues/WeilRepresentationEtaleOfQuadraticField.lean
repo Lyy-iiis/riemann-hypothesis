@@ -289,7 +289,7 @@ abbrev QL := A.L ⧸ (Ideal.span {e}).map (algebraMap A.K A.L)
 
 instance twQ : IsScalarTower F (QK A e) (QL A e) := IsScalarTower.of_algebraMap_eq fun x => by
   rw [IsScalarTower.algebraMap_apply F A.K (QK A e)]
-  simp only [Ideal.Quotient.algebraMap_eq, RingHom.comp_apply, Ideal.Quotient.algebraMap_quotient_map_quotient]
+  simp only [Ideal.Quotient.algebraMap_eq, Ideal.Quotient.algebraMap_quotient_map_quotient]
   show Ideal.Quotient.mk _ (algebraMap F A.L x) = _
   rw [IsScalarTower.algebraMap_apply F A.K A.L]
 
@@ -394,7 +394,7 @@ theorem exists_idem (K : Type) [CommRing K] [IsArtinianRing K] [IsReduced K] [No
     simp at this
   · intro h
     have := congrFun (congrArg φ h) j
-    simp [Pi.single_apply, hij] at this
+    simp [hij] at this
 
 end GlobalTheory.JR.EtQuot
 
@@ -541,7 +541,7 @@ theorem selfDual_kx_exists : ∀ (F E : Type) [NontriviallyNormedField F] [Nontr
   obtain ⟨hL, -⟩ := hT
   have hsymm : (trxForm A (x : A.K)).IsSymm := by
     refine ⟨fun u b => ?_⟩
-    simp only [trxForm, LinearMap.mk₂_apply, RingHom.id_apply]
+    simp only [trxForm, LinearMap.mk₂_apply]
     ring_nf
   have hleft : ∀ u : A.K, (∀ b, trxForm A (x : A.K) u b = 0) → u = 0 := by
     intro u hu
@@ -674,7 +674,7 @@ theorem pt_scale_eq_rg_mS : ∀ (F E : Type) [NontriviallyNormedField F] [Nontri
     (fun b' => Φ (a * (s : A.K), b') * A.psiK ψ (x * b' * (u * ((s⁻¹ : A.Kˣ) : A.K))))
   simp only [pt, rg, mS, fourB, kx]
   simp only [Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
-    Matrix.cons_val_fin_one, Matrix.head_cons, Matrix.head_fin_const, mul_zero, add_zero, zero_add]
+    Matrix.cons_val_fin_one, mul_zero, add_zero, zero_add]
   rw [eq_inv_mul_iff_mul_eq₀ (by exact_mod_cast hs0)] at key
   rw [← key, ← integral_const_mul]
   refine integral_congr_ae (Eventually.of_forall fun b => ?_)
@@ -931,7 +931,7 @@ theorem weilHyp_nS : ∀ (F E : Type) [NontriviallyNormedField F] [NontriviallyN
   funext p
   simp only [Hyp.pt, Hyp.rg, nS, fourB, Hyp.kx, Et.psiK]
   simp only [Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
-    Matrix.cons_val_fin_one, mul_one, mul_zero, add_zero, zero_add]
+    Matrix.cons_val_fin_one, mul_one, mul_zero, add_zero]
   congr 1
   funext b
   rw [show x * b * (p.1 * z + p.2) = z * x * (p.1 * b) + x * b * p.2 by ring, map_add (f := _), AddChar.map_add_eq_mul]
@@ -1555,7 +1555,7 @@ theorem rel_m (s : A.Kˣ) (s₁ : A₁.Kˣ) (s₂ : A₂.Kˣ) (hs₁ : (s₁ : A
   have t := hf2 (mS s₂) (eL y).2
   rw [e2] at t ⊢
   rw [(hW₁.2 _ t).2.1, smul_split A A₁ A₂ eK eL hS, etaK_split A A₁ A₂ eK s,
-    absK_split F E A A₁ A₂ eK s, hs₁, hs₂]
+    _root_.GlobalTheory.JR.EtProdAbs.absK_prod F E A A₁ A₂ eK s, hs₁, hs₂]
   push_cast
   ring
 
@@ -1593,12 +1593,12 @@ theorem weilAt_prod : ∀ (F E : Type) [NontriviallyNormedField F] [Nontrivially
   have hc₁ : Continuous eL := IsModuleTopology.continuous_of_linearMap eL.toLinearMap
   have hc₂ : Continuous eL.symm := IsModuleTopology.continuous_of_linearMap eL.symm.toLinearMap
   let eH : A.L ≃ₜ A₁.L × A₂.L := ⟨eL.toEquiv, hc₁, hc₂⟩
-  obtain ⟨c, hc0, hc⟩ := fourB_split eL.toRingEquiv.toAddEquiv hc₁ hc₂ (A.kerL ψ x) (A₁.kerL ψ x₁)
+  obtain ⟨c, hc0, hc⟩ := _root_.GlobalTheory.JR.fourB_prod_iterated eL.toRingEquiv.toAddEquiv hc₁ hc₂ (A.kerL ψ x) (A₁.kerL ψ x₁)
     (A₂.kerL ψ x₂) (continuous_kerL A₁ ψ hψ _) (continuous_kerL A₂ ψ hψ _)
     (fun y' y => kerL_split A A₁ A₂ eK eL hS ψ x y' y) μ μ₁ μ₂ hμ.1 hμ₁.1 hμ₂.1
   let ρ : SpecialLinearGroup (Fin 2) A.K →* SpecialLinearGroup (Fin 2) A₁.K × SpecialLinearGroup (Fin 2) A₂.K :=
     (SpecialLinearGroup.map f₁).prod (SpecialLinearGroup.map f₂)
-  obtain ⟨hT, hfib⟩ := tensor_isTestRep W₁ W₂ hW₁.1 hW₂.1
+  obtain ⟨hT, hfib⟩ := _root_.GlobalTheory.JR.WeilProd.isTestRep_tensorRep W₁ W₂ hW₁.1 hW₂.1
   refine ⟨γ₁ * γ₂ / c, transRep ρ eH.toEquiv (tensorRep W₁ W₂), isTestRep_transRep ρ eH _ hT, fun φ hφ => ?_⟩
   have hf : IsTest (φ ∘ eH.symm) := isTest_comp_homeomorph eH.symm hφ
   obtain ⟨hf1, hf2⟩ := hfib _ hf

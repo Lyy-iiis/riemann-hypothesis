@@ -124,7 +124,7 @@ open GlobalTheory.ChainOnto
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.thetaChainStep_vector_exists_nonzero_vacuum : ∀ (D : D7) (c : Com D), c.Is → ∀ (k : Fin D.R.m) (s s' : PiLocalization₂ D), s.Is c k → s'.Is c (k + 1) → (∃ ξ f₀ f, IsStepVecOf c.ψ c.θ s.V s'.V (cart s.M) (cart s'.M) s.Λ s'.Λ s.β s'.β s.L (c.chi (k + 1)) ∅ ξ f₀ f) ∧ ∀ ξ f₀ f, IsStepVecOf c.ψ c.θ s.V s'.V (cart s.M) (cart s'.M) s.Λ s'.Λ s.β s'.β s.L (c.chi (k + 1)) ∅ ξ f₀ f → IsThetaFunO c.ψ s.V s'.V f ∧ f ≠ 0 ∧ (∀ τ, IsFockVacAt (heisO c.ψ s.V s'.V) c.θ τ (cplxO (cart s.M τ) (cart s'.M τ)) f) ∧ ∀ φ, IsThetaFunO c.ψ s.V s'.V (pureTensorO c.ψ c.θ s.V s'.V (cart s.M) (cart s'.M) (onb s.M) (onb s'.M) f φ) := by
-  first | exact @GlobalTheory.ChainOnto.StepVecOK.stepVec_exists_vac | exact GlobalTheory.ChainOnto.StepVecOK.stepVec_exists_vac | (intros; apply GlobalTheory.ChainOnto.StepVecOK.stepVec_exists_vac <;> assumption)
+  first | exact @GlobalTheory.ChainOnto.StepVecOK.stepVec_exists_vac
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.ThetaChainStepVectorExistsNonzeroVacuumStatement =====
@@ -326,7 +326,7 @@ theorem isLatVac_pureTensorO_off {ψ : AddChar (AF D.host.F) ℂ} {θ : InfFam D
   have fix : ∀ u ∈ latO S T LS LT (fun v => v ∉ Sf), heisO ψ S T u f₀ = f₀ →
       heisO ψ S T u (pureTensorO ψ θ S T sS sT BS BT f φ) = pureTensorO ψ θ S T sS sT BS BT f φ := fun u hu h0 =>
     GlobalTheory.Hk3.FiniteHeis.heisO_pureTensorO_of_finite ψ θ S T hθ sS sT BS BT f hpt u
-      (GlobalTheory.VacGood.infPart_latO (hle hu))
+      (_root_.GlobalTheory.SplitScalar.latO_fin (hle hu))
       (GlobalTheory.Hk3.heisO_fix_thetaAt_off ψ S T e _ 1 f₀ Φ f hth u
         (idemSum_mul_of he (fun PP h hn => hn (hP PP h)) hu) h0) φ
   exact ⟨fun u hu => fix (2 • u) (AddSubgroup.nsmul_mem _ hu 2) (hlat.1 u (hle hu)),

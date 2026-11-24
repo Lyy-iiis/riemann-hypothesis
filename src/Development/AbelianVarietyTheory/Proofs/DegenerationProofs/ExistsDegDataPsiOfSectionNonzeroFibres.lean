@@ -106,7 +106,7 @@ theorem exists_unit_term :
   have hf : (lift (toUnit T) y).left ≫ (fst _ D.P.A).left = (lift (toUnit T) x).left ≫ (fst _ G).left := by
     rw [← Over.comp_left, ← Over.comp_left, lift_fst, lift_fst]
   have hr : (lift (toUnit T) x).left z = z₀ := by
-    have hi : lift (toUnit T) x = x ≫ (λ_ G).inv := by ext1 <;> simp [toUnit_unique]
+    have hi : lift (toUnit T) x = x ≫ (λ_ G).inv := by ext1 <;> simp
     have hj : (snd (𝟙_ _) G).left ≫ (λ_ G).inv.left = 𝟙 _ := by
       rw [← Over.comp_left, ← leftUnitor_hom, Iso.hom_inv_id, Over.id_left]
     have hx : x.left z = (snd (𝟙_ _) G).left z₀ := hz
@@ -147,7 +147,7 @@ open GlobalTheory.LN
 open GlobalTheory.PsiRing
 
 theorem _root_.GlobalTheory.T.exists_expansionTerm_unit_closedFibre : ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] (I : Ideal R), I ≠ ⊤ → ∀ (D : DegPre R) (A : PolAV (Sp (FractionRing R))) (G : Over (Spec (CommRingCat.of R))) [GrpObj G] [IsCommMonObj G] (U : PreU I D A G) (k : ℕ) (σ : U.SecGT (𝟙_ _) k) (f : ∀ α, SecBT D (𝟙_ _) k α), U.ExpT (𝟙_ _) k σ f → FibNZ (𝟙_ _ ⊗ G).hom σ → ∃ (T : Over (Spec (CommRingCat.of R))) (y : T ⟶ D.P.A) (z : T.left) (J : (T.left ⟶ D.P.A.left) → D.P.L.ι) (α : D.X), Good D.P.L z J ∧ T.hom z = IsLocalRing.closedPoint R ∧ (∀ b ∈ I, Geo.Tor.cst T.hom z b = 0) ∧ IsUnit (sval (f α) (lift (toUnit T) y).left z J) := by
-  first | exact @GlobalTheory.PsiRing.exists_unit_term | exact GlobalTheory.PsiRing.exists_unit_term | (intros; apply GlobalTheory.PsiRing.exists_unit_term <;> assumption)
+  first | exact @GlobalTheory.PsiRing.exists_unit_term
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsExpansionTermUnitClosedFibreStatement =====
@@ -166,7 +166,7 @@ open GlobalTheory.LN
 open GlobalTheory.PsiRing
 
 theorem _root_.GlobalTheory.T.fibrewiseNonzeroSection_prod_and_baseChange : ∀ (R V : Type) [CommRing R] [IsDomain R] [CommRing V] [IsDomain V] (I : Ideal R) (I' : Ideal V) (φ : R →+* V) (D : DegPre R) (D' : DegPre V) (A : PolAV (Sp (FractionRing R))) (G : Over (Spec (CommRingCat.of R))) [GrpObj G] [IsCommMonObj G] (A' : PolAV (Sp (FractionRing V))) (G' : Over (Spec (CommRingCat.of V))) [GrpObj G'] [IsCommMonObj G'] (U : PreU I D A G) (U' : PreU I' D' A' G') (F : G'.left ⟶ G.left) (C : Cmp φ U U' F), (ThetaNZ G U.P.L.L → ∃ σ : U.SecGT (𝟙_ _) 1, FibNZ (𝟙_ _ ⊗ G).hom σ) ∧ ∀ (k : ℕ) (σ : U.SecGT (𝟙_ _) k) (σ' : U'.SecGT (𝟙_ _) k), (∀ (Z : Scheme.{0}) (r' : Z ⟶ (𝟙_ _ ⊗ G').left) (r : Z ⟶ (𝟙_ _ ⊗ G).left), r ≫ (snd _ G).left = r' ≫ (snd _ G').left ≫ F → ∀ z J J', Good U.P.L.L z J → Good U'.P.L.L z J' → sval σ r z J = (gw C.wL (r' ≫ (snd _ G').left) z (J (r ≫ (snd _ G).left)) (J' (r' ≫ (snd _ G').left))).val ^ k * sval σ' r' z J') → FibNZ (𝟙_ _ ⊗ G).hom σ → FibNZ (𝟙_ _ ⊗ G').hom σ' := by
-  first | exact @GlobalTheory.fibNZ_prod_and_baseChange | exact GlobalTheory.fibNZ_prod_and_baseChange | (intros; apply GlobalTheory.fibNZ_prod_and_baseChange <;> assumption)
+  first | exact @GlobalTheory.fibNZ_prod_and_baseChange
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.FibrewiseNonzeroSectionProdAndBaseChangeStatement =====
@@ -251,12 +251,12 @@ theorem exists_degData_of_thetaNZ : Laws → Laws2 → Ega → ∀ (R : Type) [C
   obtain ⟨ga, a, hS⟩ := exists_psiScal R E
   obtain ⟨th, hth, hmul⟩ := GlobalTheory.T.exists_thetaSection_nonzeroFibres_localRing h₂.secTwist R D
   obtain ⟨q, hq⟩ := hmul (f 0)
-  choose b hb using fun χ : D.X => GlobalTheory.T.exists_twistedSection_thetaTranslate_coef R D th hmul χ (ga χ) (hS χ).1 (f χ)
+  choose b hb using fun χ : D.X => _root_.GlobalTheory.PsiCoef.exists_coef R D th hmul χ (ga χ) (hS χ).1 (f χ)
   have hab : ∀ χ, algebraMap R (FractionRing R) q * (a χ).val = algebraMap R (FractionRing R) (b χ) := fun χ =>
-    GlobalTheory.T.psiScalar_eq_expansionCoef_ratio R E ga a f th hS hrelE hth χ q (b χ) hq (hb χ)
+    _root_.GlobalTheory.psiScal_eq_ratio R E ga a f th hS hrelE hth χ q (b χ) hq (hb χ)
   have hbI : ∀ χ : D.X, χ ≠ 0 → b χ ∈ I := fun χ hχ => by
     obtain ⟨x, rfl⟩ := C.xe.surjective χ
-    obtain ⟨m, hm₁, hm₂⟩ := GlobalTheory.T.psiScalar_mem_of_psi_mem_ideal R V φ E D'.toPre C.β C.v C.xe C.pbB C.v_gen C.c_pr gam hgam hpsi ga a hS x _
+    obtain ⟨m, hm₁, hm₂⟩ := _root_.GlobalTheory.PsiRing.scalar_mem_of_psiIn R V φ E D'.toPre C.β C.v C.xe C.pbB C.v_gen C.c_pr gam hgam hpsi ga a hS x _
       (D'.psi_pos x fun h0 => hχ (by rw [h0, map_zero])) _ q (hab _)
     refine hI.le (Ideal.mem_comap.2 ?_)
     exact (congrArg (· ∈ IsLocalRing.maximalIdeal V) hm₂).mpr (Ideal.mul_mem_left _ _ hm₁)
@@ -276,7 +276,7 @@ theorem exists_degData_of_thetaNZ : Laws → Laws2 → Ega → ∀ (R : Type) [C
       refine (congrArg (_ * ·) (hab χ).symm).trans ?_
       rw [← _root_.mul_assoc, ← map_mul, Units.inv_mul, map_one, _root_.one_mul]⟩
   refine ⟨psi, h, ⟨E, hev, hbi, fun χ hχ => hin χ I (hbI χ hχ), fun n => ?_⟩, hD, rfl, hD₁, hD₂, hD₃⟩
-  obtain ⟨s, hs⟩ := GlobalTheory.T.expansionCoef_mem_adic_pow R I hP.ne_top D A G U σ f th hf hth n
+  obtain ⟨s, hs⟩ := _root_.GlobalTheory.PsiRing.coef_mem_pow R I hP.ne_top D A G U σ f th hf hth n
   refine s.finite_toSet.subset fun χ hχ => ?_
   by_contra hn
   exact hχ (hin χ _ (Ideal.pow_le_pow_right (Nat.le_succ n) (hs χ hn _ _ (hb χ))))

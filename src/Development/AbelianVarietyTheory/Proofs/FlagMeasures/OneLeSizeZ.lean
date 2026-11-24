@@ -1,5 +1,6 @@
 module
 
+import Formalism.LocalToGlobal.SubmoduleMembership
 public import Formalism.SharpRestriction.CuspSpanNormBounds.CntPartners
 public import Development.AbelianVarietyTheory.Proofs.FlagMeasures.LatDetHMapInjectiveIsometryStatement
 public import Development.AbelianVarietyTheory.Definitions.SemilocalFrames.RowMinor
@@ -151,8 +152,6 @@ theorem primInv_le (h : V →ₗ⋆[K] V →ₗ[K] K) (γ : V ≃ₗ[K] V) (hγ 
     exact primInv_mem h γ hγ L j de M hM
   first
     | exact Set.encard_le_encard hsub
-    | exact Set.encard_mono hsub
-    | exact Set.encard_le_card hsub
 
 end
 
@@ -177,7 +176,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.cntPrim_latticeImage_isometry : ∀ (K V : Type) [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V] [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V] (h : V →ₗ⋆[K] V →ₗ[K] K), ∀ γ ∈ Formalism.HermitianLatticesTheory.isom h, ∀ (L : Submodule (𝓞 K) V) (j de : ℕ), cntPrim h (Formalism.HermitianLatticesTheory.gmap γ L) j de = cntPrim h L j de := by
-  first | exact @GlobalTheory.LoopC.cntPrim_gmap_isom | exact GlobalTheory.LoopC.cntPrim_gmap_isom | (intros; apply GlobalTheory.LoopC.cntPrim_gmap_isom <;> assumption)
+  first | exact @GlobalTheory.LoopC.cntPrim_gmap_isom
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.CntPrimLatticeImageIsometryStatement =====
@@ -192,7 +191,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.encard_sublattices_bounded_det_le_sum : ∀ (D : D7) (L : LatW D), IsPosDef (D.sp.X 0).hT → finrank D.host.E (D.sp.X 0).V = D.R.k → L.FG → Formalism.HermitianLatticesTheory.IsIntegralLat (D.sp.X 0).hT L → ∀ (n : ℕ) (De : ℝ), 1 ≤ De → (Set.encard {P : LatW D | P ≤ L ∧ rkW D P = n ∧ detW D P ≤ De} : ℝ≥0∞) ≤ ∑ de ∈ Finset.Icc 1 ⌊De⌋₊, (cntPrim (D.sp.X 0).hT L n de : ℝ≥0∞) * ENNReal.ofReal ((De / (de : ℝ)) ^ ((D.R.k : ℝ) + lg2f D.R.f + 1)) := by
-  first | exact @GlobalTheory.LoopC.SubCount.main | exact GlobalTheory.LoopC.SubCount.main | (intros; apply GlobalTheory.LoopC.SubCount.main <;> assumption)
+  first | exact @GlobalTheory.LoopC.SubCount.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.EncardSublatticesBoundedDetLeSumStatement =====
@@ -296,7 +295,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_common_sublattice_small_det : ∀ (D : D7) (L M A' A'' B' B'' : LatW D), IsPosDef (D.sp.X 0).hT → L.FG → Formalism.HermitianLatticesTheory.IsIntegralLat (D.sp.X 0).hT L → M ≤ A' → M ≤ A'' → A' ≤ L → A'' ≤ L → B' ≤ A' → B'' ≤ A'' → rkW D B' = rkW D A' → rkW D B'' = rkW D A'' → ∃ P : LatW D, P ≤ M ∧ P ≤ B' ∧ P ≤ B'' ∧ rkW D P = rkW D M ∧ detW D P ≤ detW D M * (idxW D A' B' : ℝ) * (idxW D A'' B'' : ℝ) := by
-  first | exact @GlobalTheory.LoopC.CommonSub.main | exact GlobalTheory.LoopC.CommonSub.main | (intros; apply GlobalTheory.LoopC.CommonSub.main <;> assumption)
+  first | exact @GlobalTheory.LoopC.CommonSub.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsCommonSublatticeSmallDetStatement =====
@@ -311,7 +310,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.isPair_move_by_integralUnipotent : ∀ (D : D7) (T T' : D.host.E) (Λ : LatV D) (g : ℕ) (F : Fg D T) (F' F'' A B : Fg D T') (β n' n'' : (hS D).V ≃ₗ[D.host.E] (hS D).V), IsPair Λ F F' F'' β g → n' ∈ NLam Λ F → n'' ∈ NLam Λ F → FrameEqv D n' F' A → FrameEqv D n'' F'' B → IsAutLam (hS D) Λ (n'' * β * n'⁻¹) ∧ (Xsp A).map ((n'' * β * n'⁻¹ : (hS D).V ≃ₗ[D.host.E] (hS D).V) : (hS D).V →ₗ[D.host.E] (hS D).V) = Xsp B ∧ (n'' * β * n'⁻¹) A.fl.z - B.fl.z ∈ Xsp B ∧ IotaCompat Λ F A B (n'' * β * n'⁻¹) g := by
-  first | exact @GlobalTheory.LoopC.PairMove.pair_move | exact GlobalTheory.LoopC.PairMove.pair_move | (intros; apply GlobalTheory.LoopC.PairMove.pair_move <;> assumption)
+  first | exact @GlobalTheory.LoopC.PairMove.pair_move
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.IsPairMoveByIntegralUnipotentStatement =====
@@ -453,7 +452,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.latticeSeenInDefiniteSpace_det_rank_index : ∀ (D : D7) (T : D.host.E) (F : Fg D T) (H : Submodule D.host.E (hS D).V), WHyp D F (Wsp D) → H ≤ orth (hS D) (Xplus F) → H ⊓ Xsp F = ⊥ → ∀ N N' : LatV D, N ≤ toO (hS D) H → N' ≤ toO (hS D) H → detW D (seen D F N) = latDet (hS D) N ∧ rkW D (seen D F N) = finrank D.host.E (spanE (hS D) N) ∧ idxW D (seen D F N) (seen D F N') = idx (hS D) N N' := by
-  first | exact @GlobalTheory.LoopC.SeenIso.main | exact GlobalTheory.LoopC.SeenIso.main | (intros; apply GlobalTheory.LoopC.SeenIso.main <;> assumption)
+  first | exact @GlobalTheory.LoopC.SeenIso.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.LatticeSeenInDefiniteSpaceDetRankIndexStatement =====
@@ -550,7 +549,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.liftedFlag_lattice_chain_spans : ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (S : HSpace E) (r : ℕ) (T T' : E) (Λ : Submodule (𝓞 E) S.V) (g : ℕ) (F : LFlag S r T) (F' : LFlag S r T'), Submodule.IsFullLattice E Λ → IsLift Λ F → IsLift Λ F' → Thp Λ F F' ≤ La Λ g F F' ∧ La Λ g F F' ≤ L0sub Λ F ⊓ toO S (Hp Λ F F') ∧ spanE S (Thp Λ F F') = Hp Λ F F' ∧ ∀ (F'' : LFlag S r T') (β : S.V ≃ₗ[E] S.V), spanE S (Mlat Λ F F' F'' β g) = Th Λ F F' F'' β := by
-  first | exact @GlobalTheory.LoopC.LatChain.lattice_chain_spans | exact GlobalTheory.LoopC.LatChain.lattice_chain_spans | (intros; apply GlobalTheory.LoopC.LatChain.lattice_chain_spans <;> first | assumption | (letI := ‹Submodule.IsFullLattice _ _›; infer_instance))
+  first | exact @GlobalTheory.LoopC.LatChain.lattice_chain_spans
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.LiftedFlagLatticeChainSpansStatement =====
@@ -659,11 +658,8 @@ namespace GlobalTheory.LoopC.PerpFlags
 
 variable {E : Type} [Field E] [NumberField E] [StarRing E] {S : HSpace E} {r : ℕ}
 
-theorem mem_orth (U : Submodule E S.V) (v : S.V) : v ∈ orth S U ↔ ∀ x ∈ U, S.hT x v = 0 := by
-  simp [orth, Submodule.mem_iInf]
-
 theorem orth_anti {U U' : Submodule E S.V} (h : U ≤ U') : orth S U' ≤ orth S U := fun v hv =>
-  (mem_orth _ _).2 fun x hx => (mem_orth _ _).1 hv x (h hx)
+  (_root_.Formalism.MainNotions.mem_orth_iff _ _).2 fun x hx => (_root_.Formalism.MainNotions.mem_orth_iff _ _).1 hv x (h hx)
 
 theorem xplus_le {T : E} {Λ : Submodule (𝓞 E) S.V} (hΛ : Submodule.IsFullLattice E Λ) (F : LFlag S r T)
     (M : Submodule (𝓞 E) S.V) (h1 : XLam Λ F ≤ M) (h2 : F.fl.z ∈ M) : Xplus F ≤ spanE S M := by
@@ -708,7 +704,7 @@ theorem main : ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (S : HSpace
   by_cases hc : c = 0
   · simp [hc]
   refine absurd (gflag_eq_zero F.fl F'.fl c hc fun b => ?_) hG
-  refine GlobalTheory.Mass.RowPerp.swap_zero S.herm ((mem_orth _ _).1 (a2 hx.1) _ ?_)
+  refine GlobalTheory.Mass.RowPerp.swap_zero S.herm ((_root_.Formalism.MainNotions.mem_orth_iff _ _).1 (a2 hx.1) _ ?_)
   refine Fin.lastCases ?_ (fun i => ?_) b
   · rw [FlagG.fvec, Fin.snoc_last]
     exact Submodule.mem_sup_right (Submodule.mem_span_singleton_self _)
@@ -730,7 +726,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.orth_transversal_flags_inf_isotropic_eq_bot : ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (S : HSpace E) (r : ℕ) (T T' : E) (Λ : Submodule (𝓞 E) S.V) (F : LFlag S r T) (F' : LFlag S r T'), Submodule.IsFullLattice E Λ → IsLift Λ F → IsLift Λ F' → Gval F F' ≠ 0 → Hp Λ F F' ≤ orth S (Xplus F) ∧ Hp Λ F F' ≤ orth S (Xplus F') ∧ Hp Λ F F' ⊓ Xsp F = ⊥ := by
-  first | exact @GlobalTheory.LoopC.PerpFlags.main | exact GlobalTheory.LoopC.PerpFlags.main | (intros; apply GlobalTheory.LoopC.PerpFlags.main <;> first | assumption | exact (by assumption : Submodule.IsFullLattice _ _).toIsLattice)
+  first | exact @GlobalTheory.LoopC.PerpFlags.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.OrthTransversalFlagsInfIsotropicEqBotStatement =====
@@ -1076,7 +1072,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.pair_isometry_unique_on_orth_mod_isotropic : ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (S : HSpace E) (r : ℕ) (T T' : E) (Λ : Submodule (𝓞 E) S.V) (g : ℕ) (F : LFlag S r T) (A B : LFlag S r T') (β₁ β₂ : S.V ≃ₗ[E] S.V), Submodule.IsLattice E Λ → Formalism.HermitianLatticesTheory.IsUnimodular S.hT Λ → 3 ≤ g → T' ≠ 0 → (∀ x ∈ orth S (Xplus A), x ∉ Xsp A → 0 < Algebra.trace ℚ E (S.hT x x)) → XLam Λ F ≤ Ideal.span {(g : 𝓞 E)} • Λ ⊔ XLam Λ A → XLam Λ F ≤ Ideal.span {(g : 𝓞 E)} • Λ ⊔ XLam Λ B → IsAutLam S Λ β₁ → (Xsp A).map (β₁ : S.V →ₗ[E] S.V) = Xsp B → β₁ A.fl.z - B.fl.z ∈ Xsp B → IotaCompat Λ F A B β₁ g → IsAutLam S Λ β₂ → (Xsp A).map (β₂ : S.V →ₗ[E] S.V) = Xsp B → β₂ A.fl.z - B.fl.z ∈ Xsp B → IotaCompat Λ F A B β₂ g → ∀ x ∈ orth S (Xsp A), β₁ x - β₂ x ∈ Xsp B := by
-  first | exact @GlobalTheory.LoopC.BetaUniq.main | exact GlobalTheory.LoopC.BetaUniq.main | (intros; apply GlobalTheory.LoopC.BetaUniq.main <;> assumption)
+  first | exact @GlobalTheory.LoopC.BetaUniq.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.PairIsometryUniqueOnOrthModIsotropicStatement =====
@@ -1241,7 +1237,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.pairLattice_le_liftedPairLattice_sup_isotropic : ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (S : HSpace E) (r : ℕ) (T T' : E) (Λ : Submodule (𝓞 E) S.V) (g : ℕ) (F : LFlag S r T) (F' F'' : LFlag S r T') (β : S.V ≃ₗ[E] S.V), IsPair Λ F F' F'' β g → Mlat Λ F F' F'' β g ≤ La Λ g F F'' ⊔ toO S (Xsp F) := by
-  first | exact @GlobalTheory.LoopC.PairLat.Mlat_le_La_sup | exact GlobalTheory.LoopC.PairLat.Mlat_le_La_sup | (intros; apply GlobalTheory.LoopC.PairLat.Mlat_le_La_sup <;> assumption)
+  first | exact @GlobalTheory.LoopC.PairLat.Mlat_le_La_sup
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.PairLatticeLeLiftedPairLatticeSupIsotropicStatement =====
@@ -1256,7 +1252,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.rowLattices_mean_eq_genus_mean : ∀ (D : D7) (u : D.what₂.Word), (Tu D u).Prime → 3 ≤ Tu D u → SplitsCompletely (E := D.host.E) (Tu D u) → ∀ F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E), F0.e = D.sp.hypE → F0.z = D.zmOf u → ∀ what₂ : Finset (LatV D), IsRowReps D F0 what₂ → ∀ Λ₀ : LatV D, IsRowLat D F0 Λ₀ → ∀ reps : Finset (LatW D), Formalism.ThetaLiftIndependence.IsClassReps (D.sp.X 0).hT (L0X D Λ₀ (lf D F0)) reps → ∀ N : LatW D → ℕ∞, (∀ γ ∈ Formalism.HermitianLatticesTheory.isom (D.sp.X 0).hT, ∀ L, N (Formalism.HermitianLatticesTheory.gmap γ L) = N L) → (∑ Λ ∈ what₂, ENNReal.ofReal (wRow D F0 Λ) * (N (L0X D Λ (lf D F0)) : ℝ≥0∞)) * ENNReal.ofReal (Formalism.HermitianLatticesTheory.mass (D.sp.X 0).hT (L0X D Λ₀ (lf D F0))) = (∑ Λ ∈ what₂, ENNReal.ofReal (wRow D F0 Λ)) * ∑ L' ∈ reps, ENNReal.ofReal ((Nat.card (Formalism.ThetaLiftIndependence.autL (D.sp.X 0).hT L') : ℝ))⁻¹ * (N L' : ℝ≥0∞) := by
-  first | exact @GlobalTheory.MeanGenus.mean_rows_eq_mean_genus | exact GlobalTheory.MeanGenus.mean_rows_eq_mean_genus | (intros; apply GlobalTheory.MeanGenus.mean_rows_eq_mean_genus <;> assumption)
+  first | exact @GlobalTheory.MeanGenus.mean_rows_eq_mean_genus
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.RowLatticesMeanEqGenusMeanStatement =====
@@ -1271,13 +1267,13 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.trace_form_pos_on_orth_liftedFlag : ∀ (D : D7) (T' : ℕ) (F' : Fg D ((T' : ℕ) : D.host.E)), 0 < T' → ∀ x ∈ orth (hS D) (Xplus F'), x ∉ Xsp F' → 0 < Algebra.trace ℚ D.host.E ((hS D).hT x x) := by
-  first | exact @GlobalTheory.LoopC.PerpPos.trace_pos_perp | exact GlobalTheory.LoopC.PerpPos.trace_pos_perp | (intros; apply GlobalTheory.LoopC.PerpPos.trace_pos_perp <;> assumption)
+  first | exact @GlobalTheory.LoopC.PerpPos.trace_pos_perp
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.TraceFormPosOnOrthLiftedFlagStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.XLamLeSmulSupXLamAdmissibleFlag =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FlagMeasures.XLamLeSmulSupXLamAdmissibleFlag", "h": "module\n\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.IsPrimitiveSub\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Definitions.SemilocalFrames.RowMinor\nimport Formalism.SharpRestriction.CuspSpanNormBounds.CntPartners\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FlagMeasures.XLamLeSmulSupXLamAdmissibleFlag", "h": "module\n\nimport Formalism.LocalToGlobal.SubmoduleMembership\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.IsPrimitiveSub\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Definitions.SemilocalFrames.RowMinor\nimport Formalism.SharpRestriction.CuspSpanNormBounds.CntPartners\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1315,17 +1311,7 @@ end Loc
 theorem mem_of_forall_locP {E W : Type} [Field E] [NumberField E] [AddCommGroup W]
     [Module (𝓞 E) W] (N : Submodule (𝓞 E) W) (x : W)
     (h : ∀ P : HeightOneSpectrum (𝓞 E), x ∈ (haveI := P.isPrime; localization₂ P.asIdeal N)) : x ∈ N := by
-  by_contra hx
-  let I : Ideal (𝓞 E) := N.comap (LinearMap.toSpanSingleton (𝓞 E) W x)
-  have hI : I ≠ ⊤ := by
-    intro hI
-    have : (1 : 𝓞 E) ∈ I := by rw [hI]; trivial
-    apply hx
-    simpa [I] using this
-  obtain ⟨M, hM, hIM⟩ := Ideal.exists_le_maximal I hI
-  have hM0 : M ≠ ⊥ := Ring.ne_bot_of_isMaximal_of_not_isField hM (RingOfIntegers.not_isField E)
-  obtain ⟨s, hs, hsx⟩ := h ⟨M, hM.isPrime, hM0⟩
-  exact hs (hIM (by simpa [I] using hsx))
+  exact Submodule.mem_of_forall_heightOne_exists_smul_mem (NumberField.RingOfIntegers.not_isField E) N x h
 
 theorem xLam_le_smul_sup_xLam :
     ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (S : HSpace E) (r : ℕ) (T T' : E)
@@ -1404,7 +1390,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.xLam_le_smul_sup_xLam_admissible_flag : ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (S : HSpace E) (r : ℕ) (T T' : E) (Λ : Submodule (𝓞 E) S.V) (g : ℕ) (F : LFlag S r T) (F' : LFlag S r T'), IsFixedConv Λ g F → IsFixedConv Λ g F' → IsAdmissible Λ g F F' → XLam Λ F ≤ Ideal.span {(g : 𝓞 E)} • Λ ⊔ XLam Λ F' := by
-  first | exact @GlobalTheory.AdmFlagSub.xLam_le_smul_sup_xLam | exact GlobalTheory.AdmFlagSub.xLam_le_smul_sup_xLam | (intros; apply GlobalTheory.AdmFlagSub.xLam_le_smul_sup_xLam <;> assumption)
+  first | exact @GlobalTheory.AdmFlagSub.xLam_le_smul_sup_xLam
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.XLamLeSmulSupXLamAdmissibleFlagStatement =====
@@ -1483,7 +1469,7 @@ theorem term_seen (D : D7) {T T' : D.host.E} (F : Fg D T) (F' : Fg D T') (Λ : L
     seen D F (La Λ (gS D) F F') ≤ L0X D Λ F ∧ seen D F (Thp Λ F F') ≤ seen D F (La Λ (gS D) F F') ∧
     rkW D (seen D F (Thp Λ F F')) = rkW D (seen D F (La Λ (gS D) F F')) ∧
     idxW D (seen D F (La Λ (gS D) F F')) (seen D F (Thp Λ F F')) = iIdx Λ (gS D) F F' := by
-  obtain ⟨a1, -, a3⟩ := GlobalTheory.T.orth_transversal_flags_inf_isotropic_eq_bot _ _ _ _ _ Λ F F' (by first | exact fixedHyp_full D F Λ hF | exact (fixedHyp_full D F Λ hF).toIsLattice) hF.2.2.1 h.1.1 h.1.2.2
+  obtain ⟨a1, -, a3⟩ := GlobalTheory.T.orth_transversal_flags_inf_isotropic_eq_bot _ _ _ _ _ Λ F F' (by first | exact fixedHyp_full D F Λ hF) hF.2.2.1 h.1.1 h.1.2.2
   obtain ⟨b1, b2, b3, -⟩ := GlobalTheory.T.liftedFlag_lattice_chain_spans _ _ _ _ _ Λ (gS D) F F' (fixedHyp_full D F Λ hF) hF.2.2.1 h.1.1
   have b4 : La Λ (gS D) F F' ≤ toO (hS D) (Hp Λ F F') := b2.trans inf_le_right
   obtain ⟨-, c2, c3⟩ := GlobalTheory.T.latticeSeenInDefiniteSpace_det_rank_index D T F _ hW a1 a3 _ _ b4 (b1.trans b4)
@@ -1503,7 +1489,7 @@ theorem pair_sub (D : D7) {T T' : D.host.E} (F : Fg D T) (Λ : LatV D) (hF : Fix
   obtain ⟨t1, t2, hpr, z1, z2, hs0, hd⟩ := hp
   obtain ⟨a1, a2, a3, a4⟩ := term_seen D F p.1 Λ hF hW t1
   obtain ⟨b1, b2, b3, b4⟩ := term_seen D F p.2.1 Λ hF hW t2
-  obtain ⟨c1, -, c3⟩ := GlobalTheory.T.orth_transversal_flags_inf_isotropic_eq_bot _ _ _ _ _ Λ F p.1 (by first | exact fixedHyp_full D F Λ hF | exact (fixedHyp_full D F Λ hF).toIsLattice) hF.2.2.1 t1.1.1 t1.1.2.2
+  obtain ⟨c1, -, c3⟩ := GlobalTheory.T.orth_transversal_flags_inf_isotropic_eq_bot _ _ _ _ _ Λ F p.1 (by first | exact fixedHyp_full D F Λ hF) hF.2.2.1 t1.1.1 t1.1.2.2
   obtain ⟨-, d2, -, d4⟩ := GlobalTheory.T.liftedFlag_lattice_chain_spans _ _ _ _ _ Λ (gS D) F p.1 (fixedHyp_full D F Λ hF) hF.2.2.1 t1.1.1
   have hM : Mlat Λ F p.1 p.2.1 p.2.2 (gS D) ≤ La Λ (gS D) F p.1 := inf_le_left
   have hMH := hM.trans (d2.trans inf_le_right)
@@ -1623,13 +1609,6 @@ theorem Xi_mono (D : D7) (u : D.what₂.Word) (HH C C' : ℝ) (s : ℕ) (hH : 1 
       (by positivity) (by positivity)⟩
   · exact ⟨le_rfl, le_rfl⟩
 
-theorem one_le_sizeZ (D : D7) (b C : ℝ) (Z : GramM D) : 1 ≤ sizeZ D b C Z := by
-  unfold sizeZ
-  have key : ∀ {ι : Type} (s : Finset ι) (f : ι → ℝ), (∀ i ∈ s, 1 ≤ f i) → 1 ≤ ∏ i ∈ s, f i := by
-    intro ι s f h
-    exact Finset.prod_induction f (fun x => 1 ≤ x) (fun a b ha hb => one_le_mul_of_one_le_of_one_le ha hb) le_rfl h
-  exact key _ _ fun τ _ => key _ _ fun l _ => le_max_left _ _
-
 theorem rpow_le_HHZ (D : D7) (b C x : ℝ) (hb : 1 ≤ b) (hC : 1 ≤ C) (hx : x ≤ C * (D.R.m : ℝ) ^ 2 * D.R.f)
     (Z : GramM D) : b ^ x ≤ HHZ D b C Z := by
   have hm : (1 : ℝ) ≤ D.R.m := by have := D.R.two_le_m; exact_mod_cast (by omega : 1 ≤ D.R.m)
@@ -1637,7 +1616,7 @@ theorem rpow_le_HHZ (D : D7) (b C x : ℝ) (hb : 1 ≤ b) (hC : 1 ≤ C) (hx : x
   calc b ^ x ≤ b ^ (C * (D.R.m : ℝ) ^ 2 * D.R.f) := Real.rpow_le_rpow_of_exponent_le hb hx
     _ ≤ (b ^ (C * (D.R.m : ℝ) ^ 2 * D.R.f)) ^ (C * (D.R.m : ℝ)) :=
       Real.self_le_rpow_of_one_le h1 (one_le_mul_of_one_le_of_one_le hC hm)
-    _ ≤ _ := le_mul_of_one_le_right (by positivity) (one_le_pow₀ (one_le_sizeZ D b C Z))
+    _ ≤ _ := le_mul_of_one_le_right (by positivity) (one_le_pow₀ (_root_.GlobalTheory.LoopC.TermsOver.one_le_sizeZ D b C Z))
 
 theorem main : ∀ Cg cb Cu cT CT C0 A Ad C₁ : ℝ, 0 ≤ C₁ → ∃ C₀ : ℝ, ∀ C ≥ C₀, ∀ (D : D7) (large₂ : SizeData₂ D) (u u' : D.what₂.Word) (C' Cl : ℝ), 1 ≤ Cl → Formalism.MainNotions.S.UnitaryVolumeMass.stLem3L0 D u → Formalism.MainNotions.S.UnitaryVolumeMass.congruence_at_split_frobenius_holds D large₂ u u' C' Cl Cg cb Cu cT CT C0 A C₁ → Formalism.MainNotions.S.UnitaryVolumeMass.MeanFlagPairCount D large₂ u u' C' Cl Cg cb Cu cT CT C0 A Ad C := by
   intro Cg cb Cu cT CT C0 A Ad C₁ hC₁

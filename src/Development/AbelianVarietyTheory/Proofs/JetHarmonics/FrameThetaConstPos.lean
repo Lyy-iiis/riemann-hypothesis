@@ -398,28 +398,13 @@ variable {X : Data E r}
 open NumberField Topology in
 open scoped ContDiff in
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ} in
-private lemma cpt_zero_jet_harmonics (X : _root_.ReciprocityTheory.ChartRestriction.G.FD.Data E r) (x0 : _root_.ReciprocityTheory.ChartRestriction.G.FD.Frame X.Ψ r) :
-    _root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.cpt X x0 0 = x0 := by
-  unfold _root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.cpt _root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.nmat _root_.ReciprocityTheory.ChartRestriction.G.FD.rmul
-  simp only [_root_.ReciprocityTheory.ChartRestriction.G.FD.mat]
-  funext τ a b
-  rw [Matrix.mul_apply, Finset.sum_eq_single b]
-  · simp
-  · intro j _ hj
-    simp only [Matrix.of_apply]
-    split_ifs <;> first | exact mul_zero _ | simp_all
-  · simp
-
-open NumberField Topology in
-open scoped ContDiff in
-variable {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ} in
 variable {X : _root_.ReciprocityTheory.ChartRestriction.G.FD.Data E r} in
 private lemma exists_surjective_diagForm_leviM (A : _root_.ReciprocityTheory.ChartRestriction.G.AR.Up.ArchInM X) :
     ∃ x0 ∈ X.dom, _root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.cpt X x0 0 ∈ X.dom ∧
       ∃ D : (Fin (_root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.nd X) → ℂ) →ₗ[ℂ] Fin (_root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.nd X) → ℂ, Function.Surjective D ∧
         ∀ la ξ, _root_.ReciprocityTheory.ChartRestriction.G.AR.Up.leviM X (_root_.ReciprocityTheory.ChartRestriction.G.AR.Up.phla X la) x0 0 ξ = _root_.GlobalTheory.FrameThetaCompare.diagForm X la (D ξ) := by
   obtain ⟨x0, hx0, -⟩ := A.et_ne
-  have hd : _root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.cpt X x0 0 ∈ X.dom := by rw [cpt_zero_jet_harmonics]; exact hx0
+  have hd : _root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.cpt X x0 0 ∈ X.dom := by rw [_root_.ReciprocityTheory.ChartRestriction.G.AR.Up.IW.cpt_zero]; exact hx0
   obtain ⟨x1, D, -, hD, -, hdiag, -⟩ := _root_.GlobalTheory.FrameThetaCompare.transfer X x0 0 hd
   exact ⟨x0, hx0, hd, D, LinearMap.injective_iff_surjective.1 hD, fun la ξ => hdiag la ξ⟩
 
@@ -444,7 +429,7 @@ private lemma single_ne_zero_jet_harmonics (τ : X.Ψ) (i j : Fin r) (h : i < j)
       if (k : ℕ) = (Fintype.equivFin (_root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.Ent X) (τ, ⟨(j, i), h⟩) : ℕ) then (1 : ℂ) else 0 :
       Fin (_root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.nd X) → ℂ) ≠ 0 := fun hz => by
   have := congrFun hz (Fintype.equivFin (_root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.Ent X) (τ, ⟨(j, i), h⟩))
-  simp only [if_pos rfl] at this
+  simp only at this
   exact one_ne_zero this
 
 open NumberField Topology in
@@ -530,7 +515,7 @@ theorem _root_.GlobalTheory.ThetaRecordCompare.arch_gaps (A : _root_.Reciprocity
       · rw [if_neg hj, if_neg (by omega)]; norm_num
     have h1 := diagForm_Fp_sub_pos A (single_ne_zero_jet_harmonics τ i j hlt)
     rw [diagForm_single' _ τ i j hlt, hs, one_mul] at h1
-    simp only [Pi.sub_apply, Pi.smul_apply, nsmul_eq_mul, Pi.mul_apply, Pi.natCast_apply,
+    simp only [Pi.sub_apply, nsmul_eq_mul, Pi.mul_apply, Pi.natCast_apply,
       _root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.kapW] at h1
     push_cast at h1
     have hR : (0 : ℝ) < ((A.Fp τ i - A.Fp τ j + 2 * ((j : ℤ) - i) -
@@ -550,7 +535,7 @@ theorem _root_.GlobalTheory.ThetaRecordCompare.arch_gaps (A : _root_.Reciprocity
       rw [if_neg (by omega), if_pos (by omega)]; norm_num
     have h1 := diagForm_Fp_sub_pos A (single_ne_zero_jet_harmonics τ i0 i1 hlt)
     rw [diagForm_single' _ τ i0 i1 hlt, hs] at h1
-    simp only [Pi.sub_apply, Pi.smul_apply, nsmul_eq_mul, Pi.mul_apply, Pi.natCast_apply,
+    simp only [Pi.sub_apply, nsmul_eq_mul, Pi.mul_apply, Pi.natCast_apply,
       _root_.ReciprocityTheory.ChartRestriction.G.AR.Inst.kapW] at h1
     push_cast at h1
     have hR : (0 : ℝ) < ((A.Fp τ i1 - A.Fp τ i0 - 2 * ((i1 : ℤ) - i0) -
@@ -591,7 +576,7 @@ theorem _root_.GlobalTheory.ThetaRecordCompare.gaps_add {la la' : _root_.Recipro
   have a2 : (0 : ℤ) ≤ la' τ i - la' τ j := by exact_mod_cast h' τ i j hij hne
   have hk : (0 : ℤ) ≤ (k : ℤ) := Int.natCast_nonneg k
   have : (0 : ℤ) ≤ (la + k • la') τ i - (la + k • la') τ j := by
-    simp only [Pi.add_apply, Pi.smul_apply, nsmul_eq_mul, Pi.mul_apply, Pi.natCast_apply]
+    simp only [Pi.add_apply, nsmul_eq_mul, Pi.mul_apply, Pi.natCast_apply]
     nlinarith
   exact_mod_cast this
 
@@ -607,7 +592,7 @@ theorem _root_.GlobalTheory.ThetaRecordCompare.pair_add {la la' : _root_.Recipro
   have a2 : (1 : ℤ) ≤ la' τ i1 - la' τ i0 := by exact_mod_cast h' τ i0 i1 hi0 hi1
   have hk : (0 : ℤ) ≤ (k : ℤ) := Int.natCast_nonneg k
   have : (1 : ℤ) ≤ (la + k • la') τ i1 - (la + k • la') τ i0 := by
-    simp only [Pi.add_apply, Pi.smul_apply, nsmul_eq_mul, Pi.mul_apply, Pi.natCast_apply]
+    simp only [Pi.add_apply, nsmul_eq_mul, Pi.mul_apply, Pi.natCast_apply]
     nlinarith
   exact_mod_cast this
 

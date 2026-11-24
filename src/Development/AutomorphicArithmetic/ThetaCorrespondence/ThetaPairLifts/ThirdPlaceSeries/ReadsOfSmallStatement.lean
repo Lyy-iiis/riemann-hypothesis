@@ -96,6 +96,7 @@ import Formalism.LocalToGlobal.Columns.CoefficientsModP.TauLatticeLatticeHolds
 import Formalism.LocalToGlobal.GlobalTheory.GL6.PBwLocGen
 import Mathlib.RingTheory.WittVector.IsPoly
 import Development.AbelianVarietyTheory.Definitions.Divisors.HasBlockOfOccurs
+import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.NormEmbeddingIntegerLeOne
 import Formalism.LocalToGlobal.IndefiniteReal.FinitePlaces.IdemElt
 import Mathlib.RingTheory.PicardGroup
 import Formalism.PieriBlockIdeals.PieriColumnMinors.RealLocalDeltaNabla
@@ -300,7 +301,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.adelicPoint_integral_relative_localBasis : ∀ {D : D7} (V : Formalism.BasicNotions.TH.HSp D) (l : ℕ) [Fact l.Prime] (inc : D.host.E →+* PadicAlgCl l) (ev : FiniteAdeleRing (𝓞 D.host.F) D.host.F ⊗[D.host.F] D.host.E →+* PadicAlgCl l), EvOk inc ev → V.L0 = Submodule.span (𝓞 D.host.E) (Set.range V.frame) → ∀ (y : Bridge.Gf V) (B : GL (Fin V.rank) D.host.E), Formalism.L2.Forms.IsLocBasis l (Bridge.hLat V y : Set (Fin V.rank → D.host.E)) B → ∀ a b, ‖((Matrix.GeneralLinearGroup.map inc B)⁻¹ * Matrix.GeneralLinearGroup.map ev (y : GL (Fin V.rank) (FiniteAdeleRing (𝓞 D.host.F) D.host.F ⊗[D.host.F] D.host.E))).val a b‖ ≤ 1 := by
-  first | exact @GlobalTheory.LocBasisInt.norm_le_one_of_isLocBasis | exact GlobalTheory.LocBasisInt.norm_le_one_of_isLocBasis | (intros; apply GlobalTheory.LocBasisInt.norm_le_one_of_isLocBasis <;> assumption)
+  first | exact @GlobalTheory.LocBasisInt.norm_le_one_of_isLocBasis
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AdelicPointIntegralRelativeLocalBasisStatement =====
@@ -323,18 +324,6 @@ noncomputable section
 
 namespace GlobalTheory.FrameRead.LiftEquiv
 
-theorem map_rowAct_eq {R S : Type} [CommRing R] [CommRing S] (φ : R →+* S) {r n : ℕ}
-    (M : Matrix (Fin r) (Fin r) R) (f : MvPolynomial (Fin r × Fin n) R) :
-    MvPolynomial.map φ (rowAct R M f) = rowAct S (M.map φ) (MvPolynomial.map φ f) := by
-  induction f using MvPolynomial.induction_on with
-  | C a => simp [rowAct]
-  | add p q hp hq => simp only [map_add (f := _), hp, hq]
-  | mul_X p v hp =>
-    rw [map_mul, map_mul, map_mul, hp, map_X]
-    congr 1
-
-    simp [rowAct, map_sum, Matrix.map_apply]
-
 theorem rowAct_detPol_eq {R : Type} [CommRing R] {n : ℕ} (M : Matrix (Fin n) (Fin n) R) :
     rowAct R M (detPol R n) = MvPolynomial.C M.det * detPol R n := by
   unfold detPol
@@ -348,7 +337,7 @@ theorem rowAct_liftPol_eq {K C : Type} [CommRing K] [CommRing C] {n : ℕ} (e0 :
     rowAct C (M.map e0) (liftPol e0 k f) = (e0 M.det) ^ k • liftPol e0 k (rowAct K M f) := by
   unfold liftPol
   have hd : (M.map e0).det = e0 M.det := (RingHom.map_det e0 M).symm
-  rw [map_mul, map_pow, rowAct_detPol_eq, map_rowAct_eq, mul_pow, smul_eq_C_mul, map_pow, mul_assoc, hd]
+  rw [map_mul, map_pow, rowAct_detPol_eq, _root_.Formalism.UG.P.wlocal_map_rowAct, mul_pow, smul_eq_C_mul, map_pow, mul_assoc, hd]
 
 theorem grp_tprod_eq (C : Type) [CommRing C] {ι : Type} (n : ℕ) (lamW : ι → ℕ → ℕ) (g : ι → GL (Fin n) C)
     (y : ∀ τ, dualWeyl C n n (res n (lamW τ))) :
@@ -443,7 +432,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.dualWeylTensorLift_equivariant : ∀ (K C : Type) [Field K] [Field C] (e0 : K →+* C) (ι : Type) [Fintype ι] [DecidableEq ι] (n : ℕ) (lam : ι → DomWeight n) (lamW : ι → ℕ → ℕ) (c : ι → ℤ) (Φ : VV K lam →ₛₗ[e0] NablaT C n lamW), Shift lam lamW c → IsPhi e0 lam lamW Φ → ∀ (g : ι → GL (Fin n) K) (v : VV K lam), Φ (rhoK lam (invTrK g) v) = lamG C n lamW c (fun τ => Matrix.GeneralLinearGroup.map e0 (g τ)) (Φ v) := by
-  first | exact @GlobalTheory.FrameRead.LiftEquiv.phi_equivariant | exact GlobalTheory.FrameRead.LiftEquiv.phi_equivariant | (intros; apply GlobalTheory.FrameRead.LiftEquiv.phi_equivariant <;> assumption)
+  first | exact @GlobalTheory.FrameRead.LiftEquiv.phi_equivariant
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DualWeylTensorLiftEquivariantStatement =====
@@ -504,7 +493,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.variableMatrixDetPoly_pow_mul_mem_dualWeyl : ∀ (R : Type) [CommRing R] (n k : ℕ) (ν : Fin n → ℕ) (f : MvPolynomial (Fin n × Fin n) R), f ∈ dualWeyl R n n ν → detPol R n ^ k * f ∈ dualWeyl R n n fun a => ν a + k := by
-  first | exact @GlobalTheory.FrameRead.detPol_pow_mul_mem_dualWeyl | exact GlobalTheory.FrameRead.detPol_pow_mul_mem_dualWeyl | (intros; apply GlobalTheory.FrameRead.detPol_pow_mul_mem_dualWeyl <;> assumption)
+  first | exact @GlobalTheory.FrameRead.detPol_pow_mul_mem_dualWeyl
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.VariableMatrixDetPolyPowMulMemDualWeylStatement =====
@@ -602,7 +591,7 @@ theorem semiConstr_basis {K C V M I : Type} [Field K] [Field C] [AddCommGroup V]
   rw [Finset.sum_eq_single i]
   · simp
   · intro j _ hj
-    simp [Finsupp.single_apply, hj.symm]
+    simp [hj.symm]
   · simp
 
 def mulMap (C : Type) [Field C] {ι : Type} [Fintype ι] [DecidableEq ι] (n : ℕ) (lamW : ι → ℕ → ℕ) :
@@ -693,8 +682,6 @@ open GlobalTheory.FrameRead
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
-theorem _root_.GlobalTheory.T.exists_dualWeylTensor_lift_coefficientSpace : ∀ (K C : Type) [Field K] [Field C] (e0 : K →+* C) (ι : Type) [Fintype ι] [DecidableEq ι] (n : ℕ) (lam : ι → DomWeight n) (lamW : ι → ℕ → ℕ) (c : ι → ℤ), Shift lam lamW c → ∃ Φ : VV K lam →ₛₗ[e0] NablaT C n lamW, IsPhi e0 lam lamW Φ ∧ LinearIndependent C fun i => Φ (bVV K lam i) := by
-  first | exact @GlobalTheory.FrameRead.ExPhi.exists_phi | exact GlobalTheory.FrameRead.ExPhi.exists_phi | (intros; apply GlobalTheory.FrameRead.ExPhi.exists_phi <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsDualWeylTensorLiftCoefficientSpaceStatement =====
@@ -754,7 +741,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.intermediateField_padic_integers_eq_norm_le_one : ∀ (l : ℕ) [Fact l.Prime] (Lf : IntermediateField ℚ_[l] (PadicAlgCl l)) [FiniteDimensional ℚ_[l] Lf], Function.Injective (intEmb Lf) ∧ ∀ x, x ∈ Set.range (intEmb Lf) ↔ x ∈ Lf ∧ ‖x‖ ≤ 1 := by
-  first | exact @GlobalTheory.FrameOf.intEmb_range_norm_le_one | exact GlobalTheory.FrameOf.intEmb_range_norm_le_one | (intros; apply GlobalTheory.FrameOf.intEmb_range_norm_le_one <;> assumption)
+  first | exact @GlobalTheory.FrameOf.intEmb_range_norm_le_one
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntermediateFieldPadicIntegersEqNormLeOneStatement =====
@@ -988,7 +975,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.isPhi_mem_latN_of_frame_injective_shift : ∀ (K : Type) [Field K] [NumberField K] (l : ℕ) [Fact l.Prime] (w : HeightOneSpectrum (𝓞 K)) (e0 : K →+* PadicAlgCl l) (ι : Type) [Fintype ι] [DecidableEq ι] (n : ℕ) (lam : ι → DomWeight n) (lamW : ι → ℕ → ℕ) (c : ι → ℤ) (F : Frame l ι n) (Φ : VV K lam →ₛₗ[e0] NablaT (PadicAlgCl l) n lamW), AtPlace w e0 → Function.Injective F.emb → (∀ x : K, ‖e0 x‖ ≤ 1 → e0 x ∈ Set.range F.emb) → Shift lam lamW c → IsPhi e0 lam lamW Φ → ∀ v : VV K lam, (v : Pol K ι n) ∈ Formalism.HermitianLatticesTheory.localization₂ w.asIdeal (nabStd K lam) → Φ v ∈ F.latN lamW := by
-  first | exact @GlobalTheory.FrameRead.lift_nabStd_mem_latN | exact GlobalTheory.FrameRead.lift_nabStd_mem_latN | (intros; apply GlobalTheory.FrameRead.lift_nabStd_mem_latN <;> assumption)
+  first | exact @GlobalTheory.FrameRead.lift_nabStd_mem_latN
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsPhiOfFrameInjectiveShiftStatement =====
@@ -1045,7 +1032,7 @@ theorem exists_avatar {K C X W M I : Type} [Field K] [Field C] [AddCommGroup X] 
     rw [← hB, hθ, B.repr_self, Finset.sum_eq_single i]
     · simp
     · intro j _ hj
-      simp [Finsupp.single_apply, hj.symm]
+      simp [hj.symm]
     · simp
   refine ⟨θ, hs, fun x => ?_, (injective_iff_map_eq_zero θ).2 fun w hw => ?_⟩
   · rw [← b.sum_repr x]
@@ -1217,13 +1204,13 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.localBasis_dualBasis_embeddedLattice : ∀ (E K : Type) [Field E] [NumberField E] [Field K] [NumberField K] (ι : Type) [Fintype ι] (n : ℕ) (emb : ι → E →+* K) (τ : ι) (w : HeightOneSpectrum (𝓞 K)) (l : ℕ), l.Prime → ((l : ℕ) : 𝓞 K) ∈ w.asIdeal → ∀ (M : Submodule (𝓞 E) (Fin n → E)), Submodule.IsFullLattice E M → (∃ B, Formalism.L2.Forms.IsLocBasis l (M : Set (Fin n → E)) B) ∧ Submodule.IsLattice K (dualFr (tauLat emb τ M)) ∧ ∀ B : GL (Fin n) E, Formalism.L2.Forms.IsLocBasis l (M : Set (Fin n → E)) B → IsBasisAt w (dualFr (tauLat emb τ M)) (inside₂ K n (Matrix.GeneralLinearGroup.map (emb τ) B)) := by
-  first | exact @GlobalTheory.LocBasisDual.basisAt_dualFr_tauLat | exact GlobalTheory.LocBasisDual.basisAt_dualFr_tauLat | (intros; apply GlobalTheory.LocBasisDual.basisAt_dualFr_tauLat <;> first | assumption | exact Submodule.IsFullLattice.toIsLattice (self := by assumption))
+  first | exact @GlobalTheory.LocBasisDual.basisAt_dualFr_tauLat
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalBasisDualBasisEmbeddedLatticeStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalBasisIntegralRelativeAdelicPoint =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalBasisIntegralRelativeAdelicPoint", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ClassesAt\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.Valuation.Integral\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.LamGApply\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalBasisIntegralRelativeAdelicPoint", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ClassesAt\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.Valuation.Integral\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.LamGApply\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.NormEmbeddingIntegerLeOne\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1245,15 +1232,6 @@ section General
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
   {l : ℕ} [Fact l.Prime]
 
-theorem norm_le_one_of_isIntegral' {K : Type} [NormedField K] [IsUltrametricDist K] {x : K} (hx : IsIntegral ℤ x) :
-    ‖x‖ ≤ 1 := by
-  have := (Valuation.integer.integers (NormedField.valuation (K := K))).mem_of_integral hx.tower_top
-  rw [Valuation.mem_integer_iff, NormedField.valuation_apply] at this
-  exact_mod_cast this
-
-theorem norm_inc_le_one (inc : E →+* PadicAlgCl l) (r : 𝓞 E) : ‖inc (r : E)‖ ≤ 1 :=
-  norm_le_one_of_isIntegral' ((RingOfIntegers.isIntegral_coe r).map inc.toIntAlgHom)
-
 theorem norm_natCast_eq_one' {m : ℕ} (hm : ¬ l ∣ m) : ‖(m : PadicAlgCl l)‖ = 1 := by
   have h : (m : PadicAlgCl l) = algebraMap ℚ_[l] (PadicAlgCl l) (m : ℚ_[l]) := (map_natCast _ m).symm
   rw [h, norm_algebraMap', Padic.norm_natCast_eq_one_iff]
@@ -1272,7 +1250,7 @@ theorem norm_ev_latHat_le_one (inc : E →+* PadicAlgCl l)
       rw [Algebra.TensorProduct.tmul_mul_tmul, mul_one, one_mul]
     show ‖ev (c ⊗ₜ[F] x a)‖ ≤ 1
     rw [e, map_mul, norm_mul, hev.1, ← hr]
-    exact mul_le_one₀ (hev.2.1 c hc) (norm_nonneg _) (norm_inc_le_one inc r)
+    exact mul_le_one₀ (hev.2.1 c hc) (norm_nonneg _) (_root_.GlobalTheory.LadicPlace.norm_embedding_integer_le_one inc r)
   | zero => simp
   | add y w _ _ hy hw =>
     show ‖ev (y a + w a)‖ ≤ 1
@@ -1346,7 +1324,7 @@ theorem norm_ev_hLat_le_one (V : Formalism.BasicNotions.TH.HSp D) (hL0 : V.L0 = 
       simp only [Pi.smul_apply, smul_eq_mul, Algebra.TensorProduct.tmul_mul_tmul, mul_one]
       congr 1
     rw [e, Matrix.mulVec_smul, Pi.smul_apply, smul_eq_mul, map_mul, norm_mul, hev.1]
-    exact mul_le_one₀ (norm_inc_le_one inc r) (norm_nonneg _) hx
+    exact mul_le_one₀ (_root_.GlobalTheory.LadicPlace.norm_embedding_integer_le_one inc r) (norm_nonneg _) hx
 
 end Space
 
@@ -1398,7 +1376,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.localBasis_integral_relative_adelicPoint : ∀ {D : D7} (V : Formalism.BasicNotions.TH.HSp D) (l : ℕ) [Fact l.Prime] (inc : D.host.E →+* PadicAlgCl l) (ev : FiniteAdeleRing (𝓞 D.host.F) D.host.F ⊗[D.host.F] D.host.E →+* PadicAlgCl l), EvOk inc ev → V.L0 = Submodule.span (𝓞 D.host.E) (Set.range V.frame) → ∀ (y : Bridge.Gf V) (B : GL (Fin V.rank) D.host.E), Formalism.L2.Forms.IsLocBasis l (Bridge.hLat V y : Set (Fin V.rank → D.host.E)) B → ∀ a b, ‖((Matrix.GeneralLinearGroup.map ev (y : GL (Fin V.rank) (FiniteAdeleRing (𝓞 D.host.F) D.host.F ⊗[D.host.F] D.host.E)))⁻¹ * Matrix.GeneralLinearGroup.map inc B).val a b‖ ≤ 1 := by
-  first | exact @GlobalTheory.LocBasisInt.locBasis_integral | exact GlobalTheory.LocBasisInt.locBasis_integral | (intros; apply GlobalTheory.LocBasisInt.locBasis_integral <;> assumption)
+  first | exact @GlobalTheory.LocBasisInt.locBasis_integral
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalBasisIntegralRelativeAdelicPointStatement =====
@@ -1555,7 +1533,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.unimodular_matrices_preserve_frame_lattices : ∀ (l : ℕ) [Fact l.Prime] (ι : Type) [Fintype ι] [DecidableEq ι] (n : ℕ) (lamW : ι → ℕ → ℕ) (c : ι → ℤ) (F : Frame l ι n), Function.Injective F.emb → (∀ τ, Antitone (res n (lamW τ))) → ∀ u : ι → GL (Fin n) (PadicAlgCl l), (∀ τ a b, (u τ).val a b ∈ Set.range F.emb ∧ (u τ)⁻¹.val a b ∈ Set.range F.emb) → ∀ z, (z ∈ F.latN lamW → lamG (PadicAlgCl l) n lamW c u z ∈ F.latN lamW) ∧ (z ∈ F.latD lamW → lamG (PadicAlgCl l) n lamW c u z ∈ F.latD lamW) := by
-  first | exact @GlobalTheory.FrameRead.lamG_mem_lattices | exact GlobalTheory.FrameRead.lamG_mem_lattices | (intros; apply GlobalTheory.FrameRead.lamG_mem_lattices <;> assumption)
+  first | exact @GlobalTheory.FrameRead.lamG_mem_lattices
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.UnimodularMatricesPreserveFrameLatticesStatement =====
@@ -1619,7 +1597,7 @@ theorem exists_reading_lat {E K : Type} [Field E] [NumberField E] [Field K] [Num
         ∀ g, rd f' g = ∑ s ∈ A, rd f (g * s)) ∧
       (∀ f : S.Forms, (∀ c, (f : S.Cl → S.V) c ∈ S.Nab c) → ∀ g, rd f g ∈ F.latN lamW) ∧
       ∀ f : S.Forms, (∀ g, rd f g ∈ F.latD lamW) → ∃ s : 𝓞 K, s ∉ w.asIdeal ∧ ∀ c, s • (f : S.Cl → S.V) c ∈ S.Del c := by
-  obtain ⟨Φ, hΦ, hli⟩ := GlobalTheory.T.exists_dualWeylTensor_lift_coefficientSpace _ _ e0 _ _ lam lamW cs hS
+  obtain ⟨Φ, hΦ, hli⟩ := _root_.GlobalTheory.FrameRead.ExPhi.exists_phi _ _ e0 _ _ lam lamW cs hS
   obtain ⟨θ, hs, hθ, hθi⟩ := exists_avatar io hio (bVV K lam) c0 hc1 hc2 Φ hli
   have heq := GlobalTheory.T.dualWeylTensorLift_equivariant _ _ e0 _ _ lam lamW cs Φ hS hΦ
   let Λ0 := lamG (PadicAlgCl l) n lamW cs
@@ -1660,7 +1638,6 @@ theorem exists_reading_lat {E K : Type} [Field E] [NumberField E] [Field K] [Num
     have hb := fun τ => by
       first
       | exact GlobalTheory.T.localBasis_dualBasis_embeddedLattice _ _ _ _ lab τ w l Fact.out hlw _ (hlat c)
-      | exact GlobalTheory.T.localBasis_dualBasis_embeddedLattice _ _ _ _ lab τ w l Fact.out hlw _ (hlat c).toIsLattice
     rcases isEmpty_or_nonempty T with hE | ⟨⟨τ0⟩⟩
     · refine ⟨1, 1, fun τ => hE.elim τ, fun τ => hE.elim τ, fun τ => hE.elim τ, fun v => ?_⟩
       have : m (P.y c)⁻¹ = 1 := Subsingleton.elim _ _
@@ -1946,13 +1923,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions Formalism.L2.DIV Formalism.IndefR Formalism.IndefR.Links Formalism.L2.Pj GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.ExpFrame GlobalTheory.ExpTie GlobalTheory.FrameOf
-open scoped TensorProduct
-
-theorem _root_.GlobalTheory.T.readsAt_of_smallAt : _root_.GlobalTheory.ExpTie.InRangeAlt fun _ _ _ _ p j P W w => SmallAt p j P w → ReadsAt p j P W w := by
-  first | exact @_root_.GlobalTheory.FrameRead.reads_of_small_alt | exact _root_.GlobalTheory.FrameRead.reads_of_small_alt | (intros; apply _root_.GlobalTheory.FrameRead.reads_of_small_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.ReadsOfSmallStatement =====

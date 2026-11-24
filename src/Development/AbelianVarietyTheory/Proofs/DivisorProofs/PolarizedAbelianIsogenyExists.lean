@@ -87,7 +87,7 @@ theorem _root_.GlobalTheory.T.hermitian_forms_add_of_factor_product : ∀ (g : �
     M₁.IsLB → M₂.IsLB → M₃.IsLB → u₂.ex = u₁.ex → u₃.ex = u₁.ex →
     IsFactorAH u₁ H₁ χ₁ → IsFactorAH u₂ H₂ χ₂ → IsFactorAH u₃ H₃ χ₃ → H₃ = H₁ + H₂ →
     LBIso (abelian₂ A M₂) (LB.div (abelian₂ A M₃) (abelian₂ A M₁)) := by
-  first | exact @GlobalTheory.TorusRM.lbIso_lam_of_add | exact GlobalTheory.TorusRM.lbIso_lam_of_add | (intros; apply GlobalTheory.TorusRM.lbIso_lam_of_add <;> assumption)
+  first | exact @GlobalTheory.TorusRM.lbIso_lam_of_add
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -129,7 +129,7 @@ def trivUnif {L : LB A.left} {g : ℕ} (u : HolUnif A L g) : HolUnif A (LB.triv 
   fr_hol := fun _ => differentiableOn_const 1
   fr_ne := fun _ _ _ => one_ne_zero
   fr_compat := fun i j z h => by
-    simp [valAt', valAt, h]
+    simp [valAt', valAt]
 
 theorem trivUnif_factor {L : LB A.left} {g : ℕ} (u : HolUnif A L g) :
     IsFactorAH (trivUnif u) 0 (fun _ => 1) :=
@@ -179,9 +179,6 @@ theorem ex_nsmul {G : Over (Sp ℂ)} [GrpObj G] {g : ℕ} (e : (Fin g → ℂ) �
   | zero => simp [he0]
   | succ n ih => rw [Nat.cast_succ, add_smul, one_smul, he, ih, pow_succ]
 
-theorem unif_ex_zero {G : Over (Sp ℂ)} [GrpObj G] {L : LB G.left} {g : ℕ} (u : HolUnif G L g) : u.ex 0 = 1 :=
-  (u.ker 0).2 (zero_mem _)
-
 end GlobalTheory.PosAHIsog
 
 namespace GlobalTheory.PosAHIsog
@@ -221,11 +218,11 @@ theorem exists_isog_principal_lam :
   · refine GlobalTheory.ComplexPoints.over_hom_ext_of_complexPoints fun x => ?_
     obtain ⟨w, rfl⟩ := u.ex_onto x
     rw [← Category.assoc, hψe', hρe', comp_pow, Category.comp_id,
-      ex_nsmul u.ex u.ex_add (unif_ex_zero u)]
+      ex_nsmul u.ex u.ex_add (_root_.GlobalTheory.TangentOrigin.ex_zero u)]
   · refine GlobalTheory.ComplexPoints.over_hom_ext_of_complexPoints fun x => ?_
     obtain ⟨w, rfl⟩ := uB.ex_onto x
     rw [← Category.assoc, hρe', hψe', comp_pow, Category.comp_id,
-      ex_nsmul uB.ex uB.ex_add (unif_ex_zero uB)]
+      ex_nsmul uB.ex uB.ex_add (_root_.GlobalTheory.TangentOrigin.ex_zero uB)]
   · haveI := hψ
     have hM' : (P.L.pull ψ.left).IsLB := pull_isLB P.isLB _
     have hF₃ := pullUnif_factor ψ u uB hψe' hle' Hm χB (isFactorAH_of_isAH hAHB)

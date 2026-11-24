@@ -807,7 +807,7 @@ namespace GlobalTheory.CompanionTheory.Ar.Num.HodgeModel.FlagBasis
 theorem flagStep_full {E : Type} [AddCommGroup E] (Ω : Type) [Field Ω] [Module Ω E] {r : ℕ} (b : Fin r → E) :
     GlobalTheory.CompanionTheory.Ar.flagStep Ω b r = Submodule.span Ω (Set.range b) := by
   unfold GlobalTheory.CompanionTheory.Ar.flagStep
-  have : {k : Fin r | (k : ℕ) < r} = Set.univ := by ext k; simp [k.2]
+  have : {k : Fin r | (k : ℕ) < r} = Set.univ := by ext k; simp
   rw [this, Set.image_univ]
 
 theorem flag_b_basis : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H)
@@ -1338,9 +1338,6 @@ open MvPolynomial GroundTheory.Heights₂.Heights.NumbersDVR GlobalTheory.Compan
 
 namespace GlobalTheory.CompanionTheory.Ar.Num
 
-theorem teichmuller_lift_of_embedding : ∀ (O : Type) [CommRing O] [IsDomain O] [IsLocalRing O] (F : Type) [Field F] [Fintype F] (p : ℕ) [Fact p.Prime] [CharP F p] (ζ : O), IsPrimitiveRoot ζ (Fintype.card F - 1) → ∀ σ : F →+* IsLocalRing.ResidueField O, (∃! χ : F →*₀ O, ∀ a, IsLocalRing.residue O (χ a) = σ a) ∧ ∀ (σ' : F →+* IsLocalRing.ResidueField O) (χ χ' : F →*₀ O), (∀ a, σ' a = σ a ^ p) → (∀ a, IsLocalRing.residue O (χ a) = σ a) → (∀ a, IsLocalRing.residue O (χ' a) = σ' a) → ∀ a, χ' a = χ a ^ p :=
-  PositivityTheory.HtPt.Teich.glue_teich
-
 end GlobalTheory.CompanionTheory.Ar.Num
 end -- clump:auto
 end -- clump:auto
@@ -1707,7 +1704,7 @@ theorem main : ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing
 
   have hex : ∀ τ, ∃ χ : F →*₀ O', ∀ a, IsLocalRing.residue O' (χ a) =
       ((IsLocalRing.ResidueField.map (algebraMap O O')).comp (σ τ)) a := fun τ =>
-    (teichmuller_lift_of_embedding O' F p ζ hζ _).1.exists
+    (_root_.PositivityTheory.HtPt.Teich.glue_teich O' F p ζ hζ _).1.exists
   choose χ₀ hχ₀ using hex
   refine ⟨fun τ a => χ₀ τ a, fun c => (Df c).bc
     ((chartRing O' (mseg fun v => algebraMap Ω Ω' (y v)) c).restrictScalars O), ⟨?_, ?_, ?_, ?_, ?_⟩,

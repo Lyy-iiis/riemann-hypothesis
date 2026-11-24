@@ -239,7 +239,6 @@ private theorem sec_tr {μ₂ : Measure (G1 K 2)} [μ₂.IsHaarMeasure] {τ₁ �
   · rw [mul_assoc, hh_nn, hh_nn, hf.unip]
   · have e : x = lv 1 1 (Real.log r.1) * g := Subtype.ext (by rw [hx, Subgroup.coe_mul, lv_ray'])
     have e2 : f (x * y) = f (g * y) := hf.ray r _ _ (by rw [Subgroup.coe_mul, Subgroup.coe_mul, hx, mul_assoc])
-    beta_reduce
     rw [e2, e, mul_assoc, hh_lv, hh_lv, add_sub_add_left_eq_sub]
   · obtain ⟨d, φ, ψ, hφ, hψ, hx⟩ := hf.levi (g * y)
     refine ⟨d, fun i m => Complex.exp (2 * ((HH (g * y) - HH g : ℝ) : ℂ)) * φ i m, ψ,
@@ -249,10 +248,6 @@ private theorem sec_tr {μ₂ : Measure (G1 K 2)} [μ₂.IsHaarMeasure] {τ₁ �
     beta_reduce
     rw [e2, e, mul_assoc, hh_lv, hh_lv, add_sub_add_left_eq_sub, Finset.mul_sum]
     simp only [mul_assoc]
-
-private theorem sec_add {μ₂ : Measure (G1 K 2)} [μ₂.IsHaarMeasure] {τ₁ τ₂ : Submodule ℂ (L2 μ₂)} {f f' : G1 K (2 + 2) → ℂ}
-    (hf : IsSec τ₁ τ₂ f) (hf' : IsSec τ₁ τ₂ f') (c : ℂ) : IsSec τ₁ τ₂ (f + c • f') :=
-  _root_.UpperTheory.Reformulated.B.Glb3.sec_add hf hf' c
 
 end SlopeTestRemainingChoices
 
@@ -265,7 +260,7 @@ theorem UpperTheory.V.Z.InvariantSubmoduleMonicPolynomial.IwahoriBlocks.secTr :
   intro K _ _ _ μ₂ _ τ₁ τ₂ κ e _
   refine ⟨⟨⟨continuous_const, ⟨0, fun g => by simp⟩, fun _ _ => rfl, fun _ _ _ _ => rfl,
       fun g => ⟨0, Fin.elim0, Fin.elim0, fun i => i.elim0, fun i => i.elim0, fun _ _ _ _ => by simp⟩⟩,
-    fun f f' hf hf' c => sec_add hf hf' c⟩, fun f _ => ⟨fixA_flat κ e f, fun U hU => ?_⟩, fun f f' h => ?_, fun f h hf hA => ?_⟩
+    fun f f' hf hf' c => _root_.UpperTheory.Reformulated.B.Glb3.sec_add hf hf' c⟩, fun f _ => ⟨fixA_flat κ e f, fun U hU => ?_⟩, fun f f' h => ?_, fun f h hf hA => ?_⟩
   · refine forall₂_congr fun u hu => forall_congr' fun g => ?_
     rw [flat_k f g (fin_mem (hU hu)), flat, mul_right_inj' (Complex.exp_ne_zero _)]
   · funext x

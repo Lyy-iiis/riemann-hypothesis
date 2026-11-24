@@ -97,6 +97,7 @@ import Development.AbelianVarietyTheory.Proofs.DegenerationProofs.WeightSpaceVal
 import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsCommonFibre
 import Development.AbelianVarietyTheory.Proofs.UniformizationProofs.UTorsClosed
 import Mathlib.Tactic.Basify
+import Mathlib.CategoryTheory.Monoidal.Opposite.Mon
 import Development.AbelianVarietyTheory.Proofs.DivisorProofs.TorsFrameTwoLevels
 import Mathlib.Algebra.Order.Star.Int
 
@@ -644,37 +645,7 @@ noncomputable section
 
 namespace GlobalTheory.UPoinc.UDeepEx
 
-theorem big_ge (g n : ℕ) (hn : 2 ≤ n) (B : ℕ) : ∃ k j₁ : ℕ, 2 ≤ k ∧ B ≤ (n ^ k) ^ 2 ∧ 1 ≤ j₁ ∧ ∀ j ≥ j₁,
-    ∀ (o Ω : Type) [CommRing o] [Field Ω] [Algebra o Ω] (S : ThetaSys o Ω),
-      S.g = g → S.N = (n ^ k) ^ 2 → S.r = n ^ j → S.Big := by
-  have lt : ∀ m : ℕ, m < n ^ m := fun m => Nat.lt_pow_self hn
-  obtain ⟨k₀, hk₀⟩ := exists_nat_gt (1 + 2 * (g : ℝ) * (2 : ℝ) ^ ((g : ℝ) / 2))
-  set K := max k₀ B with hK
-  set N := (n ^ (K + 2)) ^ 2 with hN
-  have hN₁ : K + 2 < N := (lt _).trans_le (Nat.le_self_pow two_ne_zero _)
-  obtain ⟨j₀, hj₀⟩ := exists_nat_gt
-    (2 * ((N ^ g * g.factorial : ℕ) : ℝ) * ((g : ℝ) * (3 / 2 : ℝ) ^ g * (2 : ℝ) ^ ((g : ℝ) / 2 - 1)))
-  refine ⟨K + 2, j₀ + 6 * (N ^ g * g.factorial) + 1, by omega, ?_, by omega, fun j hj o Ω _ _ _ S hg hS hr => ?_⟩
-  · have : B ≤ K := le_max_right _ _
-    omega
-  have hj' := lt j
-  unfold ThetaSys.Big
-  rw [hg, hS, hr, ← hN]
-  have hk₀K : k₀ ≤ K := le_max_left _ _
-  refine ⟨hk₀.trans (by exact_mod_cast (by omega : k₀ < N)), ?_, ?_⟩
-  · rw [Nat.cast_mul (n ^ j)]
-    exact mul_lt_mul_of_pos_right (hj₀.trans (by exact_mod_cast (by omega : j₀ < n ^ j)))
-      (by exact_mod_cast (by omega : 0 < N))
-  · exact lt_of_lt_of_le (by omega) (Nat.le_mul_of_pos_right _ (by omega))
-
-theorem lbIso_pull_comp {X Y Z : Scheme.{0}} {L : LB X} {M : LB Y} {a : Y ⟶ X} (h : LBIso M (L.pull a)) (j : Z ⟶ Y)
-    {a' : Z ⟶ X} (e : a' = j ≫ a) : LBIso (M.pull j) (L.pull a') :=
-  LBIso.chartPull (ReciprocityTheory.ChartRestriction.G.Geo.Tor.chartPullPull M j j rfl)
-    (ReciprocityTheory.ChartRestriction.G.Geo.Tor.chartPullSame L _ (fun _ => a) _ j fun _ => e) h
-
-theorem spMap_comp {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B) (g : B →+* C) :
-    spMap g ≫ spMap f = spMap (g.comp f) :=
-  (Spec.map_comp (CommRingCat.ofHom f) (CommRingCat.ofHom g)).symm
+alias lbIso_pull_comp := _root_.GlobalTheory.Ex.GenericFibre.lbIso_pull
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : Datum H} {l : Geo.Tor.Level H}
   {Xo : Moduli Dw l} {cf : Coeff l} {C : UCompact Xo cf}
@@ -795,7 +766,7 @@ theorem isUnit_n (X₁ : USetup C) : IsUnit ((X₁.ρ.n : ℕ) : C.o) := by
     intro a ha
     have e : X₁.M.pt ≫ g = (spMap (ratHull X₁.S.R).val.toRingHom ≫ X₁.u ≫ C.iF ≫ pullback.snd _ _) ≫ spMap C.b := by
       simp only [g, ← Category.assoc, X₁.comp]
-      simp only [Category.assoc, UCompact.i, pullback.condition]
+      simp only [Category.assoc, pullback.condition]
     have e2 : g (X₁.M.pt w) = (spMap C.b) ((spMap (ratHull X₁.S.R).val.toRingHom ≫ X₁.u ≫ C.iF ≫ pullback.snd _ _) w) := by
       rw [show g (X₁.M.pt w) = (X₁.M.pt ≫ g) w from rfl, e]; rfl
     rw [e2] at ha
@@ -893,7 +864,7 @@ theorem exists_base (X₁ : USetup C) (Ω₂ : Type) [Field Ω₂] [Algebra X₁
     exact RingHom.finiteType_algebraMap.1 h₂
   refine ⟨o₃, _, _, ⟨hded, hft, inferInstance, hinj⟩, κ, ze, hκ, congrArg Units.val hze, ?_⟩
   rw [moduli_point_comp_compactification_structure, ← Category.assoc, ← hβ, hc]
-  exact UDeepEx.spMap_comp C.b β.hom
+  exact _root_.GlobalTheory.spMap_comp_ring C.b β.hom
 
 theorem exists_model (X₁ : USetup C) (o₃ Ω₂ : Type) [CommRing o₃] [Field Ω₂] [Algebra o₃ Ω₂] [ArithBase o₃ Ω₂]
     [Algebra X₁.Ω₁ Ω₂] [FiniteDimensional X₁.Ω₁ Ω₂] (κ : C.o →+* o₃) (hκ : κ.Finite)
@@ -925,7 +896,7 @@ theorem exists_udeep_proj : ∀ (E : Type) [Field E] [NumberField E] [IsCMField 
   have hL₁ : X₁.S.r * X₁.S.N = X₁.ρ.n ^ (j₁ + 2 * X₁.ρ.k) := by
     rw [hr, X₁.ρ.N_eq, ← pow_mul, ← pow_add, mul_comm X₁.ρ.k 2]
   obtain ⟨k, j, hk, hB, hj, big⟩ :=
-    UDeepEx.big_ge X₁.ρ.P.g X₁.ρ.n hℓ2 ((X₁.ρ.n ^ (j₁ + 2 * X₁.ρ.k) * max m₀ 1) ^ 2)
+    _root_.GlobalTheory.UPoinc.GSetup.exists_big_level X₁.ρ.P.g X₁.ρ.n hℓ2 ((X₁.ρ.n ^ (j₁ + 2 * X₁.ρ.k) * max m₀ 1) ^ 2)
   have hun1 : IsUnit (X₁.ρ.n : X₁.o₁) := by
     have hd : X₁.ρ.n ∣ X₁.S.r * X₁.S.N := by
       rw [hL₁]; exact dvd_pow_self _ (by omega)
@@ -951,7 +922,7 @@ theorem exists_udeep_proj : ∀ (E : Type) [Field E] [NumberField E] [IsCMField 
   have hPg : P.g = X₁.ρ.P.g := hPg₁.trans hPg₀
   let ψ := φ₀ ≫ ψ₀
   have hpb : IsGrpPullback P.A X₁.ρ.P.A (spMap h) ψ := by
-    rw [← UDeepEx.spMap_comp]
+    rw [← _root_.GlobalTheory.spMap_comp_ring]
     exact hpb₁.comp hpb₀
   have hlb : LBIso P.L (X₁.ρ.P.L.pull ψ) :=
     LBIso.trans P.isLB (pull_isLB P₀.isLB _) (pull_isLB X₁.ρ.P.isLB _) hlb₁ (UDeepEx.lbIso_pull_comp hlb₀ φ₀ rfl)
@@ -963,7 +934,7 @@ theorem exists_udeep_proj : ∀ (E : Type) [Field E] [NumberField E] [IsCMField 
   set h' : X₁.S.R →+* S₂.R := (Subalgebra.inclusion hR).toRingHom.comp h with hh'
   have hval : ∀ a, ((h' a : S₂.R) : Ω₂) = algebraMap X₁.Ω₁ Ω₂ a := fun a => hh a
   have hpb' : IsGrpPullback ρ₂.P.A X₁.ρ.P.A (spMap h') (φ ≫ ψ) := by
-    rw [hh', ← UDeepEx.spMap_comp]
+    rw [hh', ← _root_.GlobalTheory.spMap_comp_ring]
     exact hpb₂.comp hpb
   have hlb' : LBIso ρ₂.P.L (X₁.ρ.P.L.pull (φ ≫ ψ)) :=
     LBIso.trans ρ₂.P.isLB (pull_isLB P.isLB _) (pull_isLB X₁.ρ.P.isLB _) hlb₂ (UDeepEx.lbIso_pull_comp hlb φ rfl)
@@ -982,7 +953,7 @@ theorem exists_udeep_proj : ∀ (E : Type) [Field E] [NumberField E] [IsCMField 
     exact hval a
   have key : spMap (ratHull S₂.R).val.toRingHom ≫ spMap τ =
       spMap (algebraMap X₁.Ω₁ Ω₂) ≫ spMap (ratHull X₁.S.R).val.toRingHom := by
-    rw [UDeepEx.spMap_comp, UDeepEx.spMap_comp]
+    rw [_root_.GlobalTheory.spMap_comp_ring, _root_.GlobalTheory.spMap_comp_ring]
     rfl
   have hpulled : UOver Xo cf ρ₂.P (toRat S₂.R) (spMap τ ≫ X₁.u) := by
     rw [uOver_baseChange_iff hpb' hlb', hτ]
@@ -1031,7 +1002,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ModuliPointCompCompactificationStructure =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.SameOfUSame =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.SameOfUSame", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MapInverseNatCast\npublic import Development.AbelianVarietyTheory.Counterexamples.ModuliSurvey.DeltaIsGreatest\nimport Development.AbelianVarietyTheory.Proofs.AbelianSchemeLawProofs.AbelianSchemeLawsUnconditional\nimport Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ThetaConstantBoundedByShortestVector\nimport Development.AbelianVarietyTheory.Proofs.DegenerationProofs.UnitThetaConstantsGenerateIntegralTorsion\nimport Development.AbelianVarietyTheory.Proofs.DegenerationProofs.WeightSpaceValuesIntegralTorsionBoundShortestVec\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsCommonFibre\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLatticeIsoOfTwoPadicAlgClUniformisationsStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.UniformisedPointOverLabelPowRNEqOne\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeightPartAttainsBoundUniqueShortestVectorStatement\nimport Development.AbelianVarietyTheory.Proofs.UniformizationProofs.UTorsClosed\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.SameOfUSame", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MapInverseNatCast\npublic import Development.AbelianVarietyTheory.Counterexamples.ModuliSurvey.DeltaIsGreatest\nimport Development.AbelianVarietyTheory.Proofs.AbelianSchemeLawProofs.AbelianSchemeLawsUnconditional\nimport Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ThetaConstantBoundedByShortestVector\nimport Development.AbelianVarietyTheory.Proofs.DegenerationProofs.UnitThetaConstantsGenerateIntegralTorsion\nimport Development.AbelianVarietyTheory.Proofs.DegenerationProofs.WeightSpaceValuesIntegralTorsionBoundShortestVec\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsCommonFibre\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLatticeIsoOfTwoPadicAlgClUniformisationsStatement\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.UniformisedPointOverLabelPowRNEqOne\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeightPartAttainsBoundUniqueShortestVectorStatement\nimport Development.AbelianVarietyTheory.Proofs.UniformizationProofs.UTorsClosed\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.CategoryTheory.Monoidal.Opposite.Mon\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1105,7 +1076,7 @@ theorem GLab.conj [IsNoetherianRing o] (hM : ReciprocityTheory.ChartRestriction.
     (same_of_uSame hS₁) σ g P b t (fun _ => 𝟙 _) hb ht l₁ lt (fun _ => ⟨by simp, by simp⟩) hp
   obtain ⟨P₀, a, a', ha, ha', hL, hL', hlab, -⟩ := GalTrans.spread M hM ρ' ρ'' σ s hs y hR hR₁ y₀ y₁ hy₀ hy₁ u u' Q
     hb' hb'' l' l''
-  obtain ⟨e, hψ, htor⟩ := GlobalTheory.T.exists_latticeIso_of_two_padicAlgCl_uniformisations _ _ ρ' ρ'' p y₀ y₁ u u' P₀ a a' ha ha' hL hL'
+  obtain ⟨e, hψ, htor⟩ := _root_.GlobalTheory.UnifTorsK.main _ _ ρ' ρ'' p y₀ y₁ u u' P₀ a a' ha ha' hL hL'
   haveI : CharZero (FractionRing u.V) := (algebraMap (FractionRing u.V) (PadicAlgCl p)).charZero
   haveI : CharZero u.V := (algebraMap u.V (FractionRing u.V)).charZero
   haveI : CharZero (FractionRing u'.V) := (algebraMap (FractionRing u'.V) (PadicAlgCl p)).charZero
@@ -1652,7 +1623,7 @@ open GlobalTheory.UPoinc
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.unitary_thetaFourier_classSums_deeper_integral : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H), 1 ≤ Dw.p + Dw.q → ∀ (l : Geo.Tor.Level H) (Xo : Moduli Dw l) (cf : Coeff l) (C : UCompact Xo cf), ∀ (X₁ : USetup C) (D : UDeep X₁) (p : ℕ) [Fact p.Prime] (z₁ : X₁.M.Z) (z₂ : D.X.M.Z), D.q z₂ = z₁ → ∃ (f : D.X.S.Gam → X₁.S.HH X₁.M z₁ → D.X.Ω₁) (t : ∀ (ct : UCTrait X₁ p z₁) (_ : X₁.S.Gam →+ ModN (X₁.S.r * X₁.S.N) ct.T.P.D.toPre.X), ct.T.P.D.toPre.X → X₁.S.HH X₁.M z₁ → PadicAlgCl p), (∀ a κ (z' : D.X.M.Z), D.q z' = z₁ → f a κ ∈ D.X.M.O z') ∧ ∀ (ct : UCTrait X₁ p z₁) (yy₁ : X₁.S.Gam →+ ModN (X₁.S.r * X₁.S.N) ct.T.P.D.toPre.X), UIsLab X₁ ct yy₁ → (∀ μ κ, ‖t ct yy₁ μ κ‖ ≤ Real.exp (-(ct.sc * (ct.T.be μ μ : ℝ) / 2))) ∧ (∀ μ, ∃ κ, ‖t ct yy₁ μ κ‖ = Real.exp (-(ct.sc * (ct.T.be μ μ : ℝ) / 2))) ∧ ∀ (y : Sp (OO p) ⟶ D.X.M.Z) (h : y ≫ D.q = ct.y), y (cPt p) = z₂ → ∀ yy : D.X.S.Gam →+ ModN (D.X.S.r * D.X.S.N) ct.T.P.D.toPre.X, UIsLab D.X (D.lift ct y h) yy → D.Compat yy₁ yy → ∀ a ν κ, yy a = QuotientAddGroup.mk ν → ∀ δ : ℝ, 0 < δ → ∃ S₀ : Finset ct.T.P.D.toPre.X, ∀ S : Finset ct.T.P.D.toPre.X, (∀ μ ∈ S, CongMod D.m μ ν) → (∀ μ ∈ S₀, CongMod D.m μ ν → μ ∈ S) → ‖D.X.M.val (gPt p ≫ y) (f a κ) - ∑ μ ∈ S, t ct yy₁ μ κ‖ ≤ δ := by
-  first | exact @GlobalTheory.UPoinc.USum.main | exact GlobalTheory.UPoinc.USum.main | (intros; apply GlobalTheory.UPoinc.USum.main <;> assumption)
+  first | exact @GlobalTheory.UPoinc.USum.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.UnitaryThetaFourierClassSumsDeeperIntegralStatement =====

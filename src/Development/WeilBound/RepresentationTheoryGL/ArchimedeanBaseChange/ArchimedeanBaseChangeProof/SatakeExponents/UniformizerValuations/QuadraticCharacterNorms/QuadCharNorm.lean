@@ -106,7 +106,7 @@ theorem char_eq_zpow (χ : ℂˣ →* ℂˣ) (hc : Continuous χ) (hu : ∀ z, �
   have hz0 : (z : ℂ) ≠ 0 := z.ne_zero
   have hn0 : (‖(z : ℂ)‖ : ℂ) ≠ 0 := by exact_mod_cast norm_ne_zero_iff.2 hz0
   have hw : (z : ℂ) / (‖(z : ℂ)‖ : ℂ) ∈ Submonoid.unitSphere ℂ := by
-    simp [Submonoid.unitSphere, mem_sphere_zero_iff_norm, norm_div, hz0]
+    simp [Submonoid.unitSphere, hz0]
   let w : Circle := (⟨_, hw⟩ : Circle)
   let r : ℂˣ := Units.mk0 (‖(z : ℂ)‖ : ℂ) hn0
   have hzr : z = Circle.toUnits w * r := Units.ext (by
@@ -266,7 +266,7 @@ theorem _root_.GlobalTheory.T.infinityType_unitaryHeckeCharCM_restricting_to_eta
     (∀ x, μ.1 (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleMap (maximalRealSubfield E) E x) = (GlobalTheory.GalOfCusp.quadChar E).1 x) →
     ∃ e : InfinitePlace E → ℤ, (∀ v, Odd (e v)) ∧
       ∀ z : (Cinf E)ˣ, (chiInf μ z : ℂ) = ∏ v, (z.1 v / (‖z.1 v‖ : ℂ)) ^ e v := by
-  first | exact @GlobalTheory.MuInfType.infType | exact GlobalTheory.MuInfType.infType | (intros; apply GlobalTheory.MuInfType.infType <;> assumption)
+  first | exact @GlobalTheory.MuInfType.infType
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.InfinityTypeUnitaryHeckeCharCMRestrictingToEtaStatement =====
@@ -394,22 +394,6 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 
 namespace PositivityTheory.Rg.BcB.F.Fok
 
-theorem quadChar_unrAt (E : Type) [Field E] [NumberField E] [IsCMField E]
-    (w : HeightOneSpectrum (𝓞 E)) (hw : Algebra.IsUnramifiedAt (𝓞 (maximalRealSubfield E)) w.asIdeal) :
-    (GlobalTheory.GalOfCusp.quadChar E).UnrAt (w.under (𝓞 (maximalRealSubfield E))) := by
-  have h2 : Module.finrank (maximalRealSubfield E) E = 2 := Algebra.IsQuadraticExtension.finrank_eq_two _ _
-  have hu : Formalism.MainNotions.SchurIrreducible.IsUnram (E := E) (w.under (𝓞 (maximalRealSubfield E))) := by
-    by_cases hs : Formalism.MainNotions.SchurIrreducible.IsSplit (E := E) (w.under (𝓞 (maximalRealSubfield E)))
-    · exact GlobalTheory.LFun.isUnram_of_isSplit h2 hs
-    · refine GlobalTheory.LFun.isUnram_iff.2 fun u hu => ?_
-      obtain rfl := GlobalTheory.LFun.eq_of_not_isSplit hs hu rfl
-      have := u.isPrime
-      exact Algebra.isUnramifiedAt_iff_of_isDedekindDomain.1 hw
-  intro x hx
-  have hn := GlobalTheory.LFun.mem_normGroup_of_isUnram h2 hu hx
-  change Units.map _ (GlobalTheory.IdeleNormChar.normSign E (Neutral.B1.localIdele _ _ x)) = 1
-  rw [GlobalTheory.LFun.normSign_localIdele, GlobalTheory.QuadSymbol.eta_eq_one_iff.2 hn, map_one]
-
 theorem cm_quadratic_character_unramified : type_of% GlobalTheory.T.quadratic_character_trivial_unit_ideles := by
   intro E _ _ _ hU b hb
   have hs : ∀ v : HeightOneSpectrum (𝓞 (maximalRealSubfield E)), ∃ w : HeightOneSpectrum (𝓞 E),
@@ -424,7 +408,7 @@ theorem cm_quadratic_character_unramified : type_of% GlobalTheory.T.quadratic_ch
   rw [GlobalTheory.Mem.Chr.finPartI_snd] at hx
   have hxu : Valued.v (x : v.adicCompletion (maximalRealSubfield E)) = 1 := by rw [hx]; exact hb v
   obtain ⟨w, rfl⟩ := hs v
-  exact quadChar_unrAt E w (hU w) x hxu
+  exact _root_.GlobalTheory.QuadCharUnr.quadChar_unrAt_of_isUnramifiedAt E w (hU w) x hxu
 
 end PositivityTheory.Rg.BcB.F.Fok
 end -- clump:auto
@@ -568,7 +552,7 @@ theorem _root_.GlobalTheory.T.exists_unitary_hecke_character_norm : ∀ (E : Typ
         Neutral.B1.diagUnits E k * GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleMap (maximalRealSubfield E) E b * u ∈ U →
         (GlobalTheory.GalOfCusp.quadChar E).1 b =
           ψ (Neutral.B1.diagUnits E k * GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleMap (maximalRealSubfield E) E b * u) := by
-  first | exact @GlobalTheory.ConsEta.exists_open_subgroup_eta_consistent | exact GlobalTheory.ConsEta.exists_open_subgroup_eta_consistent | (intros; apply GlobalTheory.ConsEta.exists_open_subgroup_eta_consistent <;> assumption)
+  first | exact @GlobalTheory.ConsEta.exists_open_subgroup_eta_consistent
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUnitaryHeckeCharacterNormStatement =====
@@ -620,67 +604,8 @@ theorem eta_eq_infSign (hU : Unr E) (b : Neutral.B1.Ideles (maximalRealSubfield 
     rw [← map_mul, ← map_mul, inv_mul_cancel_right]
   rw [e1, e2, h2, h3, infSign_ideleMap_finPartI, mul_one]
 
-theorem quadratic_character_square : type_of% GlobalTheory.T.exists_unitary_hecke_character_norm := by
-  intro E _ _ _ hUnr
-  obtain ⟨w0, hw0⟩ := GlobalTheory.T.exists_splitPlaceBelowCMField E
-  obtain ⟨V, hVo, hV⟩ := GlobalTheory.T.exists_isOpen_subgroup_adicUnits_no_rootsOfUnity E w0
-  have hC : Continuous (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleConj (maximalRealSubfield E) E) :=
-    @GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.continuous_ideleMap E E _ _ _ _ (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.conj (maximalRealSubfield E) E).toRingEquiv.toRingHom.toAlgebra
-  refine ⟨GlobalTheory.Mem.Chr.unitIdl E ⊓ (GlobalTheory.Mem.Chr.unitIdl E).comap (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleConj (maximalRealSubfield E) E) ⊓
-    V.comap (conjQuot E w0), infSign E, ?_, continuous_infSign, norm_infSign E, ?_⟩
-  · exact (GlobalTheory.Mem.UnitOpen.isOpen_unitIdl.inter (GlobalTheory.Mem.UnitOpen.isOpen_unitIdl.preimage hC)).inter
-      (hVo.preimage (continuous_conjQuot w0))
-  intro k b u hu hx
-  obtain ⟨⟨hx1, hx2⟩, hx3⟩ := hx
-  have hu1 := nsUnits_le_unitIdl hu
-  have hCu := GlobalTheory.T.cmExtensionIdeleConj_mem_finiteUnitIdeles E u hu1
-  set C := GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleConj (maximalRealSubfield E) E with hCdef
-  set I := GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleMap (maximalRealSubfield E) E b with hI
-  set c : Eˣ →* Eˣ := Units.map (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.conj (maximalRealSubfield E) E).toRingEquiv.toRingHom.toMonoidHom with hc
-  have hCx : C (Neutral.B1.diagUnits E k * I * u) = Neutral.B1.diagUnits E (c k) * I * C u := by
-    rw [map_mul, map_mul, hI, GlobalTheory.T.cmExtensionIdeleConj_ideleMap_maxRealSubfield]
-    congr 2
-    exact GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleConj_principalIdele (maximalRealSubfield E) E k
-  set x := Neutral.B1.diagUnits E k * I * u with hxdef
-  set t : Eˣ := k / c k with ht
-  have hdt : Neutral.B1.diagUnits E t = (x / C x) * (u / C u)⁻¹ := by
-    rw [hCx, hxdef, ht, _root_.map_div]
-    exact commGroup_div_eq_mul_div_mul_inv_div _ _ _ _ _
-  have htu : Neutral.B1.diagUnits E t ∈ GlobalTheory.Mem.Chr.unitIdl E := by
-    rw [hdt]; exact mul_mem (div_mem hx1 hx2) (inv_mem (div_mem hu1 hCu))
-  have hnorm : ∀ φ : E →+* ℂ, ‖φ (t : E)‖ = 1 := by
-    intro φ
-    have h0 : φ (k : E) ≠ 0 := by simp
-    have e : φ ((c k : Eˣ) : E) = starRingEnd ℂ (φ k) := GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.embedding_conj (maximalRealSubfield E) E φ k
-    rw [ht, Units.val_div_eq_div_val, map_div₀, e, norm_div, Complex.norm_conj, div_self (norm_ne_zero_iff.2 h0)]
-  have htor := GlobalTheory.T.exists_pow_eq_one_of_principal_unitIdele_norm_one E t htu hnorm
-  have hcqu := GlobalTheory.T.conjQuot_eq_one_of_mem_nsUnits_of_isSplitAt E w0 hw0 u hu
-  have hmem : Units.map (algebraMap E (w0.adicCompletion E)).toMonoidHom t ∈ V := by
-    have e1 : Units.map (algebraMap E (w0.adicCompletion E)).toMonoidHom t =
-        Units.map (GlobalTheory.IdeleNormChar.finEval w0) (Neutral.B1.diagUnits E t) := Units.ext rfl
-    have e2 : conjQuot E w0 x = Units.map (GlobalTheory.IdeleNormChar.finEval w0) (x / C x) := rfl
-    have e3 : conjQuot E w0 u = Units.map (GlobalTheory.IdeleNormChar.finEval w0) (u / C u) := rfl
-    rw [e1, hdt, map_mul, map_inv, ← e2, ← e3, hcqu, inv_one, mul_one]
-    exact hx3
-  have ht1 := hV t htor hmem
-  have hck : c k = k := (div_eq_one.1 ht1).symm
-  have hkF : (k : E) ∈ maximalRealSubfield E := by
-    refine (IsCMField.complexConj_eq_self_iff E _).1 ?_
-    exact congrArg Units.val hck
-  set k' : (maximalRealSubfield E)ˣ := Units.mk0 ⟨(k : E), hkF⟩ (fun h => k.ne_zero (congrArg Subtype.val h)) with hk'
-  have hdk : Neutral.B1.diagUnits E k =
-      GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleMap (maximalRealSubfield E) E (Neutral.B1.diagUnits (maximalRealSubfield E) k') := by
-    refine (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleMap_principalIdele (maximalRealSubfield E) E k').trans ?_ |>.symm
-    exact congrArg (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.principalIdele E) (Units.ext rfl)
-  set b' := Neutral.B1.diagUnits (maximalRealSubfield E) k' * b with hb'
-  have hxb : x = GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleMap (maximalRealSubfield E) E b' * u := by
-    rw [hxdef, hdk, hb', map_mul]
-  have hηb : (GlobalTheory.GalOfCusp.quadChar E).1 b = (GlobalTheory.GalOfCusp.quadChar E).1 b' := by
-    rw [hb', map_mul, (GlobalTheory.GalOfCusp.quadChar E).2.2 k', one_mul]
-  have hb'E : GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleMap (maximalRealSubfield E) E b' ∈ GlobalTheory.Mem.Chr.unitIdl E := by
-    have : GlobalTheory.IndefiniteRowSideFullHecke.UnitaryHeckeCharacterIdele.ideleMap (maximalRealSubfield E) E b' = x * u⁻¹ := by rw [hxb, mul_inv_cancel_right]
-    rw [this]; exact mul_mem hx1 (inv_mem hu1)
-  rw [hηb, eta_eq_infSign hUnr b' (GlobalTheory.T.mem_finiteUnitIdeles_of_map_maxRealSubfield E b' hb'E), hxb, (infSign E).map_mul _ u, infSign_nsUnits hu, mul_one]
+theorem quadratic_character_square : type_of% GlobalTheory.T.exists_unitary_hecke_character_norm :=
+  GlobalTheory.T.exists_unitary_hecke_character_norm
 
 end PositivityTheory.Rg.BcB.F.Fok.Mu2
 end -- clump:auto

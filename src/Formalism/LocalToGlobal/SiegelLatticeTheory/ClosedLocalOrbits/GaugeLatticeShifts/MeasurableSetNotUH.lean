@@ -150,34 +150,13 @@ variable {D : D7} {X : HidaSetting D} {θ : ℝ}
 def Tm (C : Choice X θ) (τ : D.what₂.Tau) (x : Formalism.REAL.UJ (X.B.I.ε (vOf X τ))) : Formalism.QuantumDeterminants.Mt D.R.k D.R.rS :=
   Matrix.of.symm (Formalism.L2.SG.RealObj.trG (Qcs C τ) (Qics C τ) x)
 
-private theorem muT_ne_zero (D : D7) : Formalism.L2.SG.LocWSOf.muT D ≠ 0 := by
-  have hrd : 0 < D.host.rdE := by
-    unfold Formalism.BasicNotions.Host.rdE
-    exact Real.rpow_pos_of_pos (abs_pos.mpr (Int.cast_ne_zero.mpr (NumberField.discr_ne_zero _))) _
-  have hka : 0 < D.host.ka := by
-    unfold Formalism.BasicNotions.Host.ka Formalism.BasicNotions.Host.v
-    exact div_pos Real.pi_pos (half_pos hrd)
-  have hg : (D.host.g 0 * D.host.g 1 : ℕ) ≠ 0 :=
-    Nat.mul_ne_zero (D.host.g_prime 0).ne_zero (D.host.g_prime 1).ne_zero
-  have hfr : Formalism.L2.SG.LocWSOf.frS D ≠ 0 := by
-    unfold Formalism.L2.SG.LocWSOf.frS
-    exact Complex.ofReal_ne_zero.mpr (div_pos hka (by positivity : (0:ℝ) < 2 * Real.pi)).ne'
-  have hcf : Formalism.L2.SG.LocWSOf.cfS D ≠ 0 := by
-    unfold Formalism.L2.SG.LocWSOf.cfS
-    have hpi : (2 * (Real.pi : ℂ)) ≠ 0 :=
-      mul_ne_zero two_ne_zero (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero)
-    refine div_ne_zero (neg_ne_zero.mpr (mul_ne_zero Complex.I_ne_zero ?_)) hpi
-    exact Complex.ofReal_ne_zero.mpr (Nat.cast_ne_zero.mpr hg)
-  unfold Formalism.L2.SG.LocWSOf.muT
-  exact div_ne_zero hcf hfr
-
 private theorem torS_mul_torS_inv_eq_one {μ : ℂ} (hμ : μ ≠ 0) (k r : ℕ) :
     Formalism.L2.SG.LocWSOf.torS μ k r * Formalism.L2.SG.LocWSOf.torS μ⁻¹ k r = 1 := by
   unfold Formalism.L2.SG.LocWSOf.torS
   rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
   congr 1
   funext i
-  split_ifs <;> first | (simp [hμ]; done) | (field_simp; done) | (simp [hμ, inv_pow, star_inv']; done)
+  split_ifs <;> first | (simp [hμ]; done)
 
 private theorem torS_conjTranspose_mul_Hpk_mul_torS_eq_Hpk {μ : ℂ} (hμ : μ ≠ 0) (k r : ℕ) :
     (Formalism.L2.SG.LocWSOf.torS μ k r)ᴴ * Formalism.QuantumDeterminants.Hpk k r * Formalism.L2.SG.LocWSOf.torS μ k r =
@@ -192,13 +171,12 @@ private theorem torS_conjTranspose_mul_Hpk_mul_torS_eq_Hpk {μ : ℂ} (hμ : μ 
     | (simp; done)
     | (rw [show 2 * r + k - (j : ℕ) = (i : ℕ) by omega]; simp [hμ]; done)
     | (rw [show 2 * r + k - (i : ℕ) = (j : ℕ) by omega]; simp [hμ]; done)
-    | (simp [hμ]; done)
 
 private theorem Qics_mul_Qcs_eq_one (C : Choice X θ) (τ : D.what₂.Tau) : Qics C τ * Qcs C τ = 1 := by
   have hT := C.isT τ
   unfold Formalism.L2.SG.LocWSOf.IsTranspC at hT
   obtain ⟨h1, -, -, -⟩ := hT
-  have ht := torS_mul_torS_inv_eq_one (inv_ne_zero (muT_ne_zero D)) D.R.k D.R.rS
+  have ht := torS_mul_torS_inv_eq_one (inv_ne_zero (_root_.Formalism.L2.SG.Pf.muT_ne D)) D.R.k D.R.rS
   rw [inv_inv] at ht
   unfold Formalism.L2.SG.LocWSOf.Qics Formalism.L2.SG.LocWSOf.Qcs
   rw [Matrix.mul_assoc, ← Matrix.mul_assoc (C.Qi τ), h1, Matrix.one_mul, ht]
@@ -209,7 +187,7 @@ private theorem Qcs_mul_Qics_eq_one (C : Choice X θ) (τ : D.what₂.Tau) : Qcs
   obtain ⟨-, h2, -, -⟩ := hT
   unfold Formalism.L2.SG.LocWSOf.Qics Formalism.L2.SG.LocWSOf.Qcs
   rw [Matrix.mul_assoc, ← Matrix.mul_assoc (Formalism.L2.SG.LocWSOf.torS (Formalism.L2.SG.LocWSOf.muT D) D.R.k D.R.rS),
-    torS_mul_torS_inv_eq_one (muT_ne_zero D), Matrix.one_mul, h2]
+    torS_mul_torS_inv_eq_one (_root_.Formalism.L2.SG.Pf.muT_ne D), Matrix.one_mul, h2]
 
 private theorem Qcs_conjTranspose_mul_Jm_mul_Qcs_eq_Hpk (C : Choice X θ) (τ : D.what₂.Tau) :
     (Qcs C τ)ᴴ * Formalism.REAL.Jm (X.B.I.ε (vOf X τ)) * Qcs C τ = Formalism.QuantumDeterminants.Hpk D.R.k D.R.rS := by
@@ -222,7 +200,7 @@ private theorem Qcs_conjTranspose_mul_Jm_mul_Qcs_eq_Hpk (C : Choice X θ) (τ : 
         ((C.Q τ)ᴴ * Formalism.REAL.Jm (X.B.I.ε (vOf X τ)) * C.Q τ) *
         Formalism.L2.SG.LocWSOf.torS (Formalism.L2.SG.LocWSOf.muT D) D.R.k D.R.rS := by
         simp only [Matrix.mul_assoc]
-    _ = _ := by rw [h3, torS_conjTranspose_mul_Hpk_mul_torS_eq_Hpk (muT_ne_zero D)]
+    _ = _ := by rw [h3, torS_conjTranspose_mul_Hpk_mul_torS_eq_Hpk (_root_.Formalism.L2.SG.Pf.muT_ne D)]
 
 private theorem of_Tm_eq_Qics_mul_mul_Qcs (C : Choice X θ) (τ : D.what₂.Tau) (x : Formalism.REAL.UJ (X.B.I.ε (vOf X τ))) :
     Matrix.of (Tm C τ x) = Qics C τ * ((x : (Matrix (Fin X.B.I.n) (Fin X.B.I.n) ℂ)ˣ) : Matrix (Fin X.B.I.n) (Fin X.B.I.n) ℂ) * Qcs C τ := rfl
@@ -231,13 +209,6 @@ private theorem Qics_mul_Qcs_conj_mul_conj_eq_conj_mul (C : Choice X θ) (τ : D
     Qics C τ * U * Qcs C τ * (Qics C τ * V * Qcs C τ) = Qics C τ * (U * V) * Qcs C τ := by
   simp only [Matrix.mul_assoc]
   rw [← Matrix.mul_assoc (Qcs C τ) (Qics C τ), Qcs_mul_Qics_eq_one, Matrix.one_mul]
-
-private theorem Jm_mul_self_eq_one {n : ℕ} (ε : Fin n → Bool) : Formalism.REAL.Jm ε * Formalism.REAL.Jm ε = 1 := by
-  unfold Formalism.REAL.Jm
-  rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-  congr 1
-  funext a
-  split_ifs <;> norm_num
 
 private theorem Qcs_conj_conjTranspose_Jm_eq_Jm_of_mem_UH (C : Choice X θ) (τ : D.what₂.Tau) (m : Formalism.QuantumDeterminants.Mt D.R.k D.R.rS)
     (hm : Matrix.of m ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk D.R.k D.R.rS)) :
@@ -282,9 +253,9 @@ private theorem mem_range_Tm_of_of_mem_UH (C : Choice X θ) (τ : D.what₂.Tau)
   have hU := Qcs_conj_conjTranspose_Jm_eq_Jm_of_mem_UH C τ m hm
   have hl : Formalism.REAL.Jm (X.B.I.ε (vOf X τ)) * (Qcs C τ * Matrix.of m * Qics C τ)ᴴ * Formalism.REAL.Jm (X.B.I.ε (vOf X τ)) * (Qcs C τ * Matrix.of m * Qics C τ) = 1 := by
     rw [show ∀ A B : Matrix (Fin X.B.I.n) (Fin X.B.I.n) ℂ, A * Bᴴ * A * B = A * (Bᴴ * A * B) from fun A B => by
-      simp only [Matrix.mul_assoc], hU, Jm_mul_self_eq_one]
+      simp only [Matrix.mul_assoc], hU, _root_.Formalism.REAL.Jm_mul_self]
   refine ⟨⟨⟨Qcs C τ * Matrix.of m * Qics C τ, Formalism.REAL.Jm (X.B.I.ε (vOf X τ)) * (Qcs C τ * Matrix.of m * Qics C τ)ᴴ * Formalism.REAL.Jm (X.B.I.ε (vOf X τ)),
-    (by first | exact Matrix.mul_eq_one_comm.mp (hl) | exact mul_eq_one_comm.mp (hl) | exact Matrix.mul_eq_one_symm (hl) | exact (Matrix.mul_eq_one_comm_of_equiv (Equiv.refl _)).mp (hl)), hl⟩, hU⟩, ?_⟩
+    (by first | exact mul_eq_one_comm.mp (hl)), hl⟩, hU⟩, ?_⟩
   apply Matrix.of.injective
   rw [of_Tm_eq_Qics_mul_mul_Qcs]
   exact Qics_mul_Qcs_conj_mul_Qcs_eq_self C τ (Matrix.of m)
@@ -321,10 +292,10 @@ theorem Tm_emb (C : Choice X θ) (τ : D.what₂.Tau) : MeasurableEmbedding (Tm 
       (Qcs C τ * Matrix.of m.1 * Qics C τ) = 1 := by
     intro m
     rw [show ∀ A B : Matrix (Fin X.B.I.n) (Fin X.B.I.n) ℂ, A * Bᴴ * A * B = A * (Bᴴ * A * B) from fun A B => by
-      simp only [Matrix.mul_assoc], hUJ m, Jm_mul_self_eq_one]
+      simp only [Matrix.mul_assoc], hUJ m, _root_.Formalism.REAL.Jm_mul_self]
   let g : Set.range (Tm C τ) → Formalism.REAL.UJ (X.B.I.ε (vOf X τ)) := fun m =>
     ⟨⟨Qcs C τ * Matrix.of m.1 * Qics C τ, Formalism.REAL.Jm (X.B.I.ε (vOf X τ)) * (Qcs C τ * Matrix.of m.1 * Qics C τ)ᴴ * Formalism.REAL.Jm (X.B.I.ε (vOf X τ)),
-      (by first | exact Matrix.mul_eq_one_comm.mp (hl m) | exact mul_eq_one_comm.mp (hl m) | exact Matrix.mul_eq_one_symm (hl m) | exact (Matrix.mul_eq_one_comm_of_equiv (Equiv.refl _)).mp (hl m)), hl m⟩, hUJ m⟩
+      (by first | exact mul_eq_one_comm.mp (hl m)), hl m⟩, hUJ m⟩
   have hv : Continuous fun m : Set.range (Tm C τ) => Qcs C τ * Matrix.of m.1 * Qics C τ := by
     have h0 : Continuous fun m : Set.range (Tm C τ) => (Matrix.of m.1 : Matrix (Fin (2 * D.R.rS + D.R.k + 1))
         (Fin (2 * D.R.rS + D.R.k + 1)) ℂ) := continuous_subtype_val
@@ -350,7 +321,7 @@ theorem Tm_mul (C : Choice X θ) (τ : D.what₂.Tau) (a b : Formalism.REAL.UJ (
   apply Matrix.of.injective
   show Matrix.of (Tm C τ (a * b)) = Matrix.of (Tm C τ a) * Matrix.of (Tm C τ b)
   rw [of_Tm_eq_Qics_mul_mul_Qcs, of_Tm_eq_Qics_mul_mul_Qcs, of_Tm_eq_Qics_mul_mul_Qcs, Qics_mul_Qcs_conj_mul_conj_eq_conj_mul]
-  all_goals first | rfl | simp [Subgroup.coe_mul, Units.val_mul]
+  all_goals first | rfl
 
 theorem Tm_inv (C : Choice X θ) (τ : D.what₂.Tau) (a : Formalism.REAL.UJ (X.B.I.ε (vOf X τ))) :
     Tm C τ a⁻¹ = Formalism.FourierDecayAlt.B2.invM (Tm C τ a) := by
@@ -362,11 +333,9 @@ theorem Tm_inv (C : Choice X θ) (τ : D.what₂.Tau) (a : Formalism.REAL.UJ (X.
   rw [Qics_mul_Qcs_conj_mul_conj_eq_conj_mul]
   simp only [Subgroup.coe_inv, Units.mul_inv, Matrix.mul_one, Qics_mul_Qcs_eq_one]
 
-theorem Tm_mem (C : Choice X θ) (τ : D.what₂.Tau) (x : Formalism.REAL.UJ (X.B.I.ε (vOf X τ))) :
-    Matrix.of (Tm C τ x) ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk D.R.k D.R.rS) := of_Tm_mem_UH_Hpk C τ x
+alias Tm_mem := _root_.Formalism.L2.SG.RealObj.EnergyConvJ.of_Tm_mem_UH_Hpk
 
-theorem mem_range_Tm (C : Choice X θ) (τ : D.what₂.Tau) {m : Formalism.QuantumDeterminants.Mt D.R.k D.R.rS}
-    (hm : Matrix.of m ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk D.R.k D.R.rS)) : m ∈ Set.range (Tm C τ) := mem_range_Tm_of_of_mem_UH C τ hm
+alias mem_range_Tm := _root_.Formalism.L2.SG.RealObj.EnergyConvJ.mem_range_Tm_of_of_mem_UH
 
 theorem comap_lint (C : Choice X θ) (τ : D.what₂.Tau) {μ : Measure (Formalism.QuantumDeterminants.Mt D.R.k D.R.rS)}
     (hμ : μ {m | Matrix.of m ∉ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk D.R.k D.R.rS)} = 0)
@@ -386,13 +355,11 @@ theorem sigmaFinite_comap (C : Choice X θ) (τ : D.what₂.Tau) {μ : Measure (
   have hE := Tm_emb C τ
   first
     | exact SigmaFinite.of_map _ hE.measurable.aemeasurable (by rw [hE.map_comap]; infer_instance)
-    | infer_instance
 
 theorem sFinite_comap (C : Choice X θ) (τ : D.what₂.Tau) {μ : Measure (Formalism.QuantumDeterminants.Mt D.R.k D.R.rS)}
     [SFinite μ] : SFinite (μ.comap (Tm C τ)) := by
   have hE := Tm_emb C τ
   first
-    | infer_instance
     | (have h : μ.comap (Tm C τ) = Measure.sum (fun n => (sfiniteSeq μ n).comap (Tm C τ)) := by
           ext s hs
           rw [hE.comap_apply, Measure.sum_apply _ hs]
@@ -440,12 +407,12 @@ theorem quot_conc {μG μS ν : Measure (Formalism.QuantumDeterminants.Mt D.R.k 
       refine lintegral_mono fun s => ?_
       by_cases hs : s ∈ S
       · have hs2 : s ∉ Sᶜ := fun h2 => h2 hs
-        first | rw [Set.indicator_of_not_mem hs2] | rw [Set.indicator_of_notMem hs2]
-        first | exact zero_le | exact zero_le _ | positivity
+        first | rw [Set.indicator_of_notMem hs2]
+        first | exact zero_le
       · rw [Set.indicator_of_mem (Set.mem_compl hs), Set.indicator_of_mem (key s x hs hx)]
         all_goals exact le_rfl
-    · first | rw [Set.indicator_of_not_mem hx] | rw [Set.indicator_of_notMem hx]
-      first | exact zero_le | exact zero_le _ | positivity
+    · first | rw [Set.indicator_of_notMem hx]
+      first | exact zero_le
   rw [← h, lintegral_indicator_const hSm] at hle
   exact (mul_eq_zero.mp (le_zero_iff.mp hle)).resolve_left hne
 
@@ -488,7 +455,7 @@ private theorem measurable_invM' (k r : ℕ) : Measurable (Formalism.FourierDeca
     funext x i j
     show ((Matrix.of x)⁻¹ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ) i j = _
     rw [Matrix.inv_def, Matrix.smul_apply, smul_eq_mul]
-    first | rw [Ring.inverse_eq_inv'] | rw [Ring.inverse_eq_inv] | simp
+    first | rw [Ring.inverse_eq_inv']
   rw [e]
   refine Measurable.of_eval fun i => Measurable.of_eval fun j => ?_
   exact hinv.mul ((continuous_apply j).comp ((continuous_apply i).comp hadj)).measurable

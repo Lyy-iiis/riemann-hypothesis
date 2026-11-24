@@ -111,10 +111,6 @@ theorem adelicHermitian_hyperbolicE_anisotropic_eq_zero (a : Fin D.R.rS) : hA X.
   rw [HidaSetting.zR, HidaSetting.eR, hA_crd, (X.zu_orth u a).1]
   simp
 
-theorem adelicHermitian_hyperbolicF_anisotropic_eq_zero (a : Fin D.R.rS) : hA X.B.I (incl X.B.I (X.fR a)) (incl X.B.I (X.zR u)) = 0 := by
-  rw [HidaSetting.zR, HidaSetting.fR, hA_crd, (X.zu_orth u a).2]
-  simp
-
 theorem pc_e (a : Fin D.R.rS) : pc X u (incl X.B.I (X.eR a)) = 0 := by
   rw [pc_apply, prA_e, hA_z_e]; simp
 
@@ -122,14 +118,8 @@ theorem pc_f (a : Fin D.R.rS) : pc X u (incl X.B.I (X.fR a)) = 0 := by
   rw [pc_apply, prA_f, hA_z_f]; simp
 
 theorem orthogonalProjection_anisotropic_eq_zero : pc X u (incl X.B.I (X.zR u)) = 0 := by
-  rw [pc_apply, prA_fix X _ (adelicHermitian_hyperbolicE_anisotropic_eq_zero X u) (adelicHermitian_hyperbolicF_anisotropic_eq_zero X u), adelicHermitian_anisotropic_self_eq_neg_norm, smul_smul, neg_mul, T_mul_tInv]
+  rw [pc_apply, prA_fix X _ (adelicHermitian_hyperbolicE_anisotropic_eq_zero X u) (_root_.Formalism.L2.SG.PoincareInHH.Cut.adelicHermitian_hyperbolicF_anisotropic_eq_zero X u), adelicHermitian_anisotropic_self_eq_neg_norm, smul_smul, neg_mul, T_mul_tInv]
   simp
-
-theorem zR_mem : X.zR u ∈ X.B.I.L := by
-  refine (X.L_eq _).2 ?_
-  show toV X (X.crd (X.zu u)) ∈ (VS D).L0
-  rw [toV_crd]
-  exact Lb_le X (X.zu_Lb u)
 
 theorem hE_z_int {x : Fin X.B.I.n → X.B.I.E} (hx : x ∈ X.B.I.L) :
     hE X (X.zR u) x ∈ (algebraMap (𝓞 X.B.I.E) X.B.I.E).range := by
@@ -159,7 +149,7 @@ theorem T_pc_Lf (y : VA X.B.I) (hy : y ∈ X.B.I.Lf) :
     rw [hA_incl, show Formalism.UG.hform (starRingEnd X.B.I.E) X.B.I.J (X.zR u) (x : Fin X.B.I.n → X.B.I.E) = hE X (X.zR u) x from rfl,
       ← ha, ← incl_smul]
     refine incl_mem_Lf X _ ?_
-    have := X.B.I.L.smul_mem a (zR_mem X u)
+    have := X.B.I.L.smul_mem a (_root_.Formalism.L2.SG.Pf.Level.zR_L X u)
     rwa [← IsScalarTower.algebraMap_smul X.B.I.E a] at this
   | zero => simp
   | add y z _ _ hy hz => rw [map_add (f := _), smul_add]; exact add_mem hy hz
@@ -306,7 +296,7 @@ open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_coprime_projection_adelic_lattice_into_columns : ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word) (wt : (VS D).V ≃ₗ[D.host.E] (VS D).V) (ιA : X.B.I.E ⊗[X.B.I.F] Af X.B.I.F ≃+* D.host.E ⊗[D.host.F] Ad D.host.F), WittX X u wt → IsAdeleIso X ιA → ∃ (c : ℕ) (p : VA X.B.I →ₗ[X.B.I.E ⊗[X.B.I.F] Af X.B.I.F] VA X.B.I), c ≡ 1 [MOD X.B.g] ∧ (∀ y, ∃ x, p y = embA X wt ιA x) ∧ (∀ x, p (embA X wt ιA x) = embA X wt ιA x) ∧ (∀ y ∈ X.B.I.Lf, (c : X.B.I.E ⊗[X.B.I.F] Af X.B.I.F) • p y ∈ X.B.I.Lf) ∧ (∀ a, p (incl X.B.I (X.eR a)) = 0 ∧ p (incl X.B.I (X.fR a)) = 0) ∧ p (incl X.B.I (X.zR u)) = 0 ∧ ∀ y ∈ X.B.I.Lf, (∀ a, InAt X.B.I X.B.g X.B.g (hA X.B.I (incl X.B.I (X.eR a)) y • incl X.B.I (X.fR a)) ∧ InAt X.B.I X.B.g X.B.g (hA X.B.I (incl X.B.I (X.fR a)) y • incl X.B.I (X.eR a))) → InAt X.B.I X.B.g X.B.g (hA X.B.I (incl X.B.I (X.zR u)) y • incl X.B.I (X.zR u)) → (c : X.B.I.E ⊗[X.B.I.F] Af X.B.I.F) • p y - y ∈ mL X.B.I X.B.g := by
-  first | exact @GlobalTheory.St.G.g_proj | exact GlobalTheory.St.G.g_proj | (intros; apply GlobalTheory.St.G.g_proj <;> assumption)
+  first | exact @GlobalTheory.St.G.g_proj
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsCoprimeProjectionAdelicLatticeIntoColumnsStatement =====

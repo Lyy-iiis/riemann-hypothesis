@@ -72,7 +72,7 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 open scoped CategoryTheory.Obj TensorProduct
 open GlobalTheory.ZM
 theorem _root_.GlobalTheory.T.embedding_sections_span_geometric_fibre : Out.Laws → Out.Laws2 → ∀ (o : Type) [CommRing o] (g N' : ℕ) (J : Type) (b : TBase o (N' ^ 2)) (S : Scheme.{0}) (s : S ⟶ Sp o) (t : TObj g (N' ^ 2) J b s) (m : ℕ) (K : Type) [Field K] [IsAlgClosed K] (x : Sp K ⟶ S) σ, Odd N' → m ∣ N' → 2 ≤ m → t.Emb m (Over.mk x) σ → Submodule.span Γ((Over.mk x).left, ⊤) (Set.range fun a => (Out.SecM.ofSec t.A (σ a) : Out.SecM t.A t.L ((m : ℤ) ^ 2) (Over.mk x))) = ⊤ := by
-  first | exact @GlobalTheory.EmbSpan.emb_span_eq_top | exact GlobalTheory.EmbSpan.emb_span_eq_top | (intros; apply GlobalTheory.EmbSpan.emb_span_eq_top <;> assumption)
+  first | exact @GlobalTheory.EmbSpan.emb_span_eq_top
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.EmbeddingSectionsSpanGeometricFibreStatement =====
@@ -107,10 +107,7 @@ theorem mono_of_geom_points {X Y : Scheme.{0}} (f : X ⟶ Y) [LocallyOfFiniteTyp
   have : IsIso (pullback.diagonal f) := (isIso_iff_isOpenImmersion_and_surjective _).2 ⟨inferInstance, hs⟩
   exact (pullback.isIso_diagonal_iff f).1 this
 
-theorem sp_comp {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B) (h : B →+* C) :
-    spMap h ≫ spMap f = spMap (h.comp f) := by
-  unfold spMap
-  rw [← Spec.map_comp]; rfl
+alias sp_comp := _root_.GlobalTheory.ZM.ClosedCoord.spMap_comp_eq
 
 theorem sp_id {A : Type} [CommRing A] : spMap (RingHom.id A) = 𝟙 _ := Spec.map_id _
 

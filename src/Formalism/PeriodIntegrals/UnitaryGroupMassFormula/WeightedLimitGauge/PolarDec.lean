@@ -212,9 +212,6 @@ open PI.RhsWLim
 
 variable {k r : ℕ}
 
-theorem hpk_mulVec_gen (v : Fin (2 * r + k + 1) → ℂ) (i : Fin (2 * r + k + 1)) :
-    (Hpk k r *ᵥ v) i = HU.sgn k r i * v (HU.tau k r i) := hpk_mulVec_apply v i
-
 theorem herm_bvec (u : Fin (2 * r + k + 1) → ℂ) (i : Fin (2 * r + k + 1)) :
     herm (Hpk k r) u (bvec i) = (Hpk k r *ᵥ u) i := by
   unfold herm bvec
@@ -259,7 +256,7 @@ theorem uwb_emb {p : Mat k r} (hp : p ∈ UWb k r) :
           set a : Fin r := ⟨i.val, hi⟩
           have hfix := (hp.2 a).2
           have h1 := herm_pres hp.1 (bvec (wI k r j')) (bvec (esI k r a))
-          rw [hfix, herm_bvec, herm_bvec, hpk_mulVec_gen, hpk_mulVec_gen] at h1
+          rw [hfix, herm_bvec, herm_bvec, _root_.PI.RhsWLim.W.hpk_mulVec_apply, _root_.PI.RhsWLim.W.hpk_mulVec_apply] at h1
           have ht : HU.tau k r (esI k r a) = i := by
             unfold HU.tau esI; apply Fin.ext; simp only [a]; split_ifs <;> omega
           have hs : HU.sgn k r (esI k r a) = 1 := by
@@ -270,7 +267,7 @@ theorem uwb_emb {p : Mat k r} (hp : p ∈ UWb k r) :
         · set a : Fin r := ⟨2 * r + k - i.val, by omega⟩
           have hfix := (hp.2 a).1
           have h1 := herm_pres hp.1 (bvec (wI k r j')) (bvec (eI k r a))
-          rw [hfix, herm_bvec, herm_bvec, hpk_mulVec_gen, hpk_mulVec_gen] at h1
+          rw [hfix, herm_bvec, herm_bvec, _root_.PI.RhsWLim.W.hpk_mulVec_apply, _root_.PI.RhsWLim.W.hpk_mulVec_apply] at h1
           have ht : HU.tau k r (eI k r a) = i := by
             unfold HU.tau eI; apply Fin.ext; simp only [a]; split_ifs <;> omega
           have hs : HU.sgn k r (eI k r a) = 1 := by
@@ -316,7 +313,7 @@ theorem col_unitary (μ : Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ) (hμ : μᴴ *
     · rw [hrow j hj, mul_zero, mul_zero, add_zero, Hb, Matrix.diagonal_apply_ne _ (fun h => hj (h.symm.trans hi)),
         Matrix.one_apply_ne (fun h => hj (h.symm.trans hi))]
   · rw [hrow i hi, map_zero, zero_mul, mul_zero, add_zero, Hb, Matrix.diagonal_apply, Matrix.one_apply]
-    split_ifs with h1 h2 <;> first | rfl | (exfalso; exact hi (h1 ▸ h2))
+    split_ifs with h1 h2 <;> first | rfl
 
 theorem boost_herm (y : Fin k → ℂ) (n : ℝ) (hn : 0 < n) : (boost y (n : ℂ))ᴴ = boost y (n : ℂ) := by
   have hnn : ‖(n : ℂ)‖ = n := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos hn]
@@ -327,10 +324,10 @@ theorem boost_herm (y : Fin k → ℂ) (n : ℝ) (hn : 0 < n) : (boost y (n : �
   | last =>
     induction j using Fin.lastCases with
     | last => simp [boost]
-    | cast j => simp [boost, hnn, hn0, abs_of_pos hn, div_self hn0]
+    | cast j => simp [boost, hn0, abs_of_pos hn]
   | cast i =>
     induction j using Fin.lastCases with
-    | last => simp [boost, hnn, hn0, abs_of_pos hn, div_self hn0]
+    | last => simp [boost, hn0, abs_of_pos hn]
     | cast j =>
       simp only [boost, Fin.lastCases_castSucc, hnn, map_add (f := _), map_div₀, map_mul, Complex.conj_conj,
         Complex.conj_ofReal, map_one]

@@ -429,7 +429,6 @@ theorem split_formula_k (B : Base F E) (M : Model σ X W) (χX χW : Chr F E) (o
   have hm : ∀ (ψ' : (Fin n × Fin d → Fv F v) → ℂ) y, (LinearMap.funLeft ℂ ℂ (mulH_pk P⁻¹ Q⁻¹) ∘ₗ ι) ψ' y = ι ψ' ((P⁻¹).1 * y * (Q⁻¹).1) := fun _ _ => rfl
   have hy : ι φ'' Y = (LinearMap.funLeft ℂ ℂ (mulH_pk P⁻¹ Q⁻¹) ∘ₗ ι) φ'' (P.1 * Y * Q.1) := by
     rw [hm]
-    congr 1
     simp only [Matrix.mul_assoc, Units.mul_inv, Matrix.mul_one]
     rw [← Matrix.mul_assoc, Units.inv_mul, Matrix.one_mul]
   have c1 : (g₀⁻¹).1 = (P⁻¹).1 * g₁.1ᵀ * P.1 := by rw [cg]; rfl
@@ -518,7 +517,7 @@ namespace PositivityTheory.ThKF0
 def ArchBd_k : Prop := ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ) (X : Spc F E n) (W : Spc F E d) (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), _root_.GlobalTheory.ThK.IsPair_k B M χX χW om r s r' s' → ∀ Φ ∈ schA F (Fin n × Fin d), ∀ N : ℕ, ∃ (C : ℝ) (k : ℕ), ∀ g h (x : Fin n × Fin d → AF F),
     ‖om (g, h) Φ x‖ * (1 + ‖fun i => evI F (x i)‖) ^ N ≤ C * ((ht g : ℝ) * ht h) ^ k
 theorem norm_theta_le_mul_ht_pow_of_isPair (harch : _root_.PositivityTheory.ThKF0.ArchBd_k) : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ) (X : Spc F E n) (W : Spc F E d) (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), _root_.GlobalTheory.ThK.IsPair_k B M χX χW om r s r' s' → ∀ Φ ∈ schA F (Fin n × Fin d), ∃ (C : ℝ) (k : ℕ), ∀ g h, ‖theta om Φ g h‖ ≤ C * ((ht g : ℝ) * ht h) ^ k := by
-  have hlat := theta_sum_norm_bound_denominator
+  have hlat := _root_.PositivityTheory.ThKF0.LatSum.thetaSum_norm_le_pow
   have hfin := _root_.PositivityTheory.ThKF0.weil_rational_support_bound
   intro F E _ _ _ _ _ σ B n d X W M χX χW om r s r' s' hP Φ hΦ
   obtain ⟨N₀, k₂, C₂, hL⟩ := hlat F (Fin n × Fin d)
@@ -1565,7 +1564,7 @@ theorem tools_holds_k : _root_.UpperTheory.TP.Tools_k :=
     dbl := _root_.GlobalTheory.ThK.Dbl.dblX_k
     stab2 := _root_.GlobalTheory.ThK.Dbl.stab2Cpt_k
     cpt := _root_.GlobalTheory.ThK.Dbl.cptAll_of_k PositivityTheory.ThKEst.grpTop_of _root_.PositivityTheory.ThKEst.epsOf_of_k
-      (PositivityTheory.ThKEst.siegelAll_of UpperTheory.Lit.siegelSetUnitary_of_core) PositivityTheory.ThKEst.finVolU PositivityTheory.ThKF.unimodularity_holds
+      (PositivityTheory.ThKEst.siegelAll_of _root_.GlobalTheory.CompanionTheory.SiegelRed.siegelSetUnitary) PositivityTheory.ThKEst.finVolU PositivityTheory.ThKF.unimodularity_holds
     basic := _root_.PositivityTheory.ThKF0.thetaBasic_k
     polSch := _root_.GlobalTheory.ThK.Dbl.polSch_k
     unfold0 := _root_.GlobalTheory.ThK.Dbl.unfold0_k

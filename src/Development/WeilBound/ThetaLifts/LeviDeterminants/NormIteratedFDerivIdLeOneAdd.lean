@@ -131,7 +131,7 @@ def linForm (B : κ → mixedEmbedding.mixedSpace F) : (κ → mixedEmbedding.mi
 theorem linForm_apply (B y : κ → mixedEmbedding.mixedSpace F) :
     linForm B y = Algebra.trace ℝ (mixedEmbedding.mixedSpace F) (∑ i, y i * B i) := by
 
-  simp [linForm, map_sum, LinearMap.sum_apply]
+  simp [linForm, map_sum]
 
 
 open scoped Classical in
@@ -186,7 +186,7 @@ theorem dop_apply (a : V) (L : V →L[ℝ] ℝ) (f : 𝓢(V, ℂ)) (x : V) :
 theorem dop_add (a b : V) (L M : V →L[ℝ] ℝ) (f : 𝓢(V, ℂ)) :
     dop (a + b) (L + M) f = dop a L f + dop b M f := by
   ext x
-  simp only [SchwartzMap.add_apply, dop_apply, map_add (f := _), ContinuousLinearMap.add_apply]
+  simp only [SchwartzMap.add_apply, dop_apply, map_add (f := _)]
   push_cast
   ring
 
@@ -575,10 +575,6 @@ theorem norm_iteratedFDeriv_rexp (i : ℕ) (y : ℝ) : ‖iteratedFDeriv ℝ i R
   rw [show (fun s => Real.exp s) = Real.exp from rfl] at h
   rw [h, Real.norm_eq_abs, abs_of_pos (Real.exp_pos y)]
 
-theorem exists_bound_poly_mul_exp (c : ℝ) (hc : 0 < c) (N : ℕ) :
-    ∃ C, ∀ r : ℝ, 0 ≤ r → (1 + r) ^ N * Real.exp (-(c * r ^ 2)) ≤ C :=
-  _root_.UpperTheory.Reformulated.B.Rd2.exists_bound_poly_mul_exp c hc N
-
 theorem exists_coercive [FiniteDimensional ℝ E] (B : E →L[ℝ] E →L[ℝ] ℝ) (hB : ∀ x, x ≠ 0 → B x x < 0) :
     ∃ c > 0, ∀ x, B x x ≤ -(c * ‖x‖ ^ 2) := by
   rcases subsingleton_or_nontrivial E with hE | hE
@@ -613,7 +609,7 @@ theorem exists_schwartz_exp_diag [FiniteDimensional ℝ E] (B : E →L[ℝ] E �
   refine ⟨⟨Complex.ofRealLI ∘ (Real.exp ∘ fun y : E => B y y),
     Complex.ofRealLI.toContinuousLinearMap.contDiff.comp hg, ?_⟩, fun x => rfl⟩
   intro k n
-  obtain ⟨C, hC⟩ := exists_bound_poly_mul_exp c hc (k + 2 * n)
+  obtain ⟨C, hC⟩ := _root_.UpperTheory.Reformulated.B.Rd2.exists_bound_poly_mul_exp c hc (k + 2 * n)
   refine ⟨n ! * (2 * (‖B‖ + 1)) ^ n * C, fun x => ?_⟩
   have hn : ((n : ℕ∞) : WithTop ℕ∞) ≤ ((⊤ : ℕ∞) : WithTop ℕ∞) := by exact_mod_cast le_top
   rw [LinearIsometry.norm_iteratedFDeriv_comp_left _ hg.contDiffAt hn]

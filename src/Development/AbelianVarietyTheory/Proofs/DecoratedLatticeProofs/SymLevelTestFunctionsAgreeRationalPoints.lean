@@ -155,7 +155,7 @@ theorem _root_.GlobalTheory.T.iteratedLevelPattern_to_framePlaces : ∀ (F : Typ
         (κ + s + 1 ≤ p ∨ symIdx κ ρ p' < symIdx κ ρ p ∨ (p' = κ + ρ ∧ p < κ)) → R p p' = 0) ∧
       (∀ p p', κ + s + 1 ≤ p' → p' < κ + s + 1 + j * τ → p < κ + s + 1 + j * τ →
         (p' - (κ + s + 1)) / τ < (p - (κ + s + 1)) / τ → R p p' = 0)) := by
-  first | exact @GlobalTheory.PatPlaces.pattern_to_places | exact GlobalTheory.PatPlaces.pattern_to_places | (intros; apply GlobalTheory.PatPlaces.pattern_to_places <;> assumption)
+  first | exact @GlobalTheory.PatPlaces.pattern_to_places
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.IteratedLevelPatternToFramePlacesStatement =====
@@ -320,7 +320,7 @@ theorem phiAgree : ∀ (E K k : Type) [Field E] [NumberField E] [StarRing E] [Fi
       rw [TypeDatum.Phi_of_mem _ _ ⟨g, hgJ⟩ (by rw [hY1]; exact hgv) hmax]
       obtain ⟨g₀, D, hg₀, hD, hlam⟩ := _root_.GlobalTheory.SymBridge.iter_lam_closed k (Fin κ ⊕ Fin (s + 1)) (Fin τ) S.P S.μ S.tame j ⟨g, hgJ⟩
       rw [hlam]
-      have hl0 := symmetricLevelCharacter_rationalPoint_eq_residue E K k P q ι σ₀ ψ₀ χ s κ S hT M (fun p p' hp hp' => c1 p p' (by omega) (by omega)) g₀ (by
+      have hl0 := _root_.GlobalTheory.symLevel_lam_residue E K k P q ι σ₀ ψ₀ χ s κ S hT M (fun p p' hp hp' => c1 p p' (by omega) (by omega)) g₀ (by
         rw [hg₀]; ext a b
         rcases a with a | a <;> rcases b with b | b <;> simp [hgv, hG, zPos, GlobalTheory.IndefiniteRowSideFullHecke.FramePositiveSum.framePos])
       have hDi : ∀ i : Fin j, ((S.μ (i.val + 1) (Matrix.GeneralLinearGroup.det (D i)) : ℂˣ) : ℂ) =

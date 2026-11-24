@@ -457,9 +457,7 @@ namespace SdTestInfW
 
 open MeasureTheory Complex Filter Topology
 
-theorem char_real (f : ℝ → ℂ) (hc : Continuous f) (hadd : ∀ s t, f (s + t) = f s * f t)
-    (hn : ∀ s, ‖f s‖ = 1) : ∃ b : ℝ, ∀ s : ℝ, f s = exp (↑(b * s) * I) := by
-  first | exact Bl.FunctionAtZero.goal1 .. | (apply Bl.FunctionAtZero.goal1 <;> assumption) | (intros; apply Bl.FunctionAtZero.goal1 <;> assumption)
+alias char_real := _root_.Bl.FunctionAtZero.goal1
 
 theorem freq_unique {u v : ℝ} (h : ∀ s : ℝ, exp (↑(u * s) * I) = exp (↑(v * s) * I)) : u = v := by
   by_contra huv
@@ -1045,11 +1043,8 @@ instance nontrivAF : Nontrivial (AF F) := by
   haveI : Nontrivial (Ainf F) := by
     first
     | exact inferInstance
-    | (haveI : Nonempty (NumberField.InfinitePlace F) := inferInstance; exact Pi.nontrivial)
   first
-  | exact inferInstance
   | exact inferInstanceAs (Nontrivial (Ainf F × Af F))
-  | exact (Prod.nontrivial_left : Nontrivial (Ainf F × Af F))
 
 theorem ratTup_injective {a : ℕ} : Function.Injective (ratTup (F := F) (E := E) (M := M) (n := a) (AF F)) := by
   intro X X' h
@@ -1390,8 +1385,6 @@ theorem unfold_abs {Γ H : Subgroup G} [Countable Γ]
           gcongr
           first
           | exact Measure.restrict_le_self
-          | exact setLIntegral_le_lintegral _ _
-          | exact le_rfl
 
 end Abs3
 
@@ -1808,8 +1801,6 @@ namespace PI.VolStabS.Assembly
 
 open PI.VolStabS
 
-theorem fibPin_closed : FibPin := fibPin_holds
-
 theorem sWeqOm_closed : SWeqOm := sWeqOm_of densFibInf_holds densFibV_holds
 
 theorem sdUniq_closed : SdUniq :=
@@ -1819,7 +1810,7 @@ theorem exOmT_holds : ExOmT :=
   exOmT_of_open (fibInfEx_of DiscreteGroups.fibOfDens_holds tensAll_holds densInf_holds)
     (fibVEx_of DiscreteGroups.fibOfDens_holds tensAll_holds densV_holds) sdUniq_closed restrProd_holds
 
-theorem nuInv_holds : NuInv := nuInv_of_pin detAdm_holds compG_holds fibPin_closed sdUniq_closed
+theorem nuInv_holds : NuInv := nuInv_of_pin detAdm_holds compG_holds _root_.PI.VolStabS.fibPin_holds sdUniq_closed
 
 theorem volStabFromSW_of_nuNe (hN : NuNeZero) : PI.VolStabS.VolStabFromSWS := volStabFromSW_of exChar_holds exOmT_holds (exStab_of_nu nuInv_holds nuFin_holds hN)
     exFDStab_holds sWeqOm_closed unfold_holds posTest_holds

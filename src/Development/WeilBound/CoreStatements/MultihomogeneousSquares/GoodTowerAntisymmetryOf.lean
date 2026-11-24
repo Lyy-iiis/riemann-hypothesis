@@ -197,7 +197,7 @@ noncomputable def pml {σ : Type} [Fintype σ] (n : ℕ) (a : (Fin n → σ) →
 
 theorem pml_apply {σ : Type} [Fintype σ] (n : ℕ) (a : (Fin n → σ) → ℝ) (c : Fin n → σ → ℝ) :
     pml n a c = polar n a c := by
-  simp [pml, polar, MultilinearMap.sum_apply, mul_comm]
+  simp [pml, polar, mul_comm]
 
 theorem pml_symm {σ : Type} [Fintype σ] (n : ℕ) (a : (Fin n → σ) → ℝ)
     (ha : ∀ (π : Equiv.Perm (Fin n)) w, a (w ∘ π) = a w) : IsSymmForm (pml n a) := by
@@ -206,7 +206,7 @@ theorem pml_symm {σ : Type} [Fintype σ] (n : ℕ) (a : (Fin n → σ) → ℝ)
   unfold polar
   refine Fintype.sum_equiv (π.arrowCongr (Equiv.refl σ)) _ _ ?_
   intro w
-  simp only [Equiv.arrowCongr_apply, Equiv.coe_refl, Function.comp_apply, Function.id_comp]
+  simp only [Equiv.arrowCongr_apply, Equiv.coe_refl, Function.comp_apply]
   congr 1
   · exact Fintype.prod_equiv π _ _ (fun r => by simp)
   · have h := ha π (w ∘ π.symm)
@@ -434,7 +434,7 @@ def eY (d : ℕ) : ((Fin d → ℂ) × ℂ) ≃ᵐ (Fin (d + 1) → ℂ) :=
   MeasurableEquiv.prodComm.trans (MeasurableEquiv.piFinSuccAbove (fun _ => ℂ) 0).symm
 
 theorem eY_apply {d : ℕ} (x : (Fin d → ℂ) × ℂ) : eY d x = Fin.cons x.2 x.1 := by
-  first | rfl | (simp [eY, MeasurableEquiv.prodComm, MeasurableEquiv.piFinSuccAbove, Fin.consEquiv]; done) | (simp [eY, MeasurableEquiv.piFinSuccAbove]; rfl)
+  first | (simp [eY, MeasurableEquiv.prodComm, MeasurableEquiv.piFinSuccAbove, Fin.consEquiv]; done)
 
 theorem eY_measurePreserving (d : ℕ) : MeasurePreserving (eY d) volume volume :=
   (Measure.measurePreserving_swap).trans
@@ -448,7 +448,7 @@ def eW (d : ℕ) : ((Fin d → ℂ) × (ℂ × ℂ)) ≃ᵐ (Fin (d + 2) → ℂ
 
 theorem eW_apply {d : ℕ} (x : (Fin d → ℂ) × (ℂ × ℂ)) :
     eW d x = Fin.cons x.2.1 (Fin.cons x.2.2 x.1) := by
-  first | rfl | (simp [eW, MeasurableEquiv.prodComm, MeasurableEquiv.prodAssoc, MeasurableEquiv.prodCongr, MeasurableEquiv.piFinSuccAbove, Fin.consEquiv]; done) | (simp [eW, MeasurableEquiv.piFinSuccAbove]; rfl)
+  first | (simp [eW, MeasurableEquiv.prodComm, MeasurableEquiv.prodAssoc, MeasurableEquiv.prodCongr, MeasurableEquiv.piFinSuccAbove, Fin.consEquiv]; done)
 
 theorem eW_measurePreserving (d : ℕ) : MeasurePreserving (eW d) volume volume :=
   ((Measure.measurePreserving_swap).trans (measurePreserving_prodAssoc volume volume volume)).trans
@@ -506,7 +506,7 @@ theorem ae_ne (d : ℕ) : ∀ᵐ z : Fin (d + 2) → ℂ, z 0 ≠ z 1 := by
   have hs : LinearMap.ker L ≠ ⊤ := by
     intro h
     have h1 : (Pi.single 0 1 : Fin (d + 2) → ℂ) ∈ LinearMap.ker L := by rw [h]; trivial
-    simp [L, LinearMap.mem_ker, Pi.single_apply] at h1
+    simp [L, LinearMap.mem_ker] at h1
   have h0 := Measure.addHaar_submodule (volume : Measure (Fin (d + 2) → ℂ)) (LinearMap.ker L) hs
   refine measure_mono_null ?_ h0
   intro z hz
@@ -852,29 +852,13 @@ theorem samePot_comb {P J : Ideal (MRing ι)} {e : ℕ} (R : AnLogRes P J e) {X 
     show _ = (c a : ℝ) * (Real.log ((C a).h (R.lift x y)) - (Pp a).φ (π x) (π y))
     ring
 
-theorem continuous_of_smooth {e : ℕ} {X : Type} [TopologicalSpace X] (A : FinHolAtlas e X) {u : X → ℝ}
-    (hu : A.Smooth u) : Continuous u := by
-  rw [continuous_iff_continuousAt]
-  intro x
-  obtain ⟨j, hj⟩ := A.cover x
-  have hm : A.chart j x ∈ (A.chart j).target ∩ (A.chart j).symm ⁻¹' Set.univ :=
-    ⟨(A.chart j).map_source hj, trivial⟩
-  have hopen : IsOpen ((A.chart j).target ∩ (A.chart j).symm ⁻¹' Set.univ) := by
-    simpa using (A.chart j).open_target
-  have h1 : ContinuousAt (u ∘ (A.chart j).symm) (A.chart j x) :=
-    (hu j).continuousOn.continuousAt (hopen.mem_nhds hm)
-  have h2 := ContinuousAt.comp (f := A.chart j) (x := x) h1 ((A.chart j).continuousAt hj)
-  refine h2.congr ?_
-  filter_upwards [(A.chart j).open_source.mem_nhds hj] with y hy
-  simp [(A.chart j).left_inv hy]
-
 theorem mIntegrable_gT {d : ℕ} {SY : AnSys (d + 1) σ} {a₀ : σ} {ε : σ → ℤ} (Q : AnSq SY a₀ ε) {t : ℝ}
     (ht : 0 < t) (ht' : t ≤ SY.t₀) (Φ : Fin (d + 2) → LocPot Q.SW.X)
     (hΦ : ∀ i, IsPotential Q.SW.A (Φ i)) : MIntegrable Q.SW.A Φ (Q.gT t) := by
   have h1 : MIntegrable Q.SW.A Φ (logNormSec Q.L' Q.v) :=
     logNormIntegrable Q.SW.A Q.L' Q.v _ _ Q.potL' Q.secv Q.sncv Φ hΦ
   have hc : ∀ a, Continuous (SY.phT a t) := fun a =>
-    continuous_of_smooth SY.A (((SY.reg a).2.2 t ht ht').1)
+    _root_.ReciprocityTheory.AnForm.M.st_smooth_continuous SY.A (((SY.reg a).2.2 t ht ht').1)
   have hcont : Continuous fun x => Q.cst + (1 / 2) * ∑ a, (ε a : ℝ) *
       (SY.phT a t (Q.q 0 x) + SY.phT a t (Q.q 1 x)) :=
     continuous_const.add (continuous_const.mul (continuous_finsetSum _ fun a _ =>
@@ -1475,7 +1459,7 @@ theorem antisymmetry : Antisymmetry := by
     apply (_root_.GlobalTheory.CompanionTheory.Ar.PB.tsgPoly_linePoly_smul_toWt_injective).2.2 Ψ N
     rw [hS, map_mul, hdeg0]
     congr 1
-    simp [toWt, MvPolynomial.aeval_C, MvPolynomial.algebraMap_eq]
+    simp [toWt, MvPolynomial.algebraMap_eq]
 
   obtain ⟨Cst, hC⟩ := GlobalTheory.T.weighted_polynomial_homogeneous_coeff_bound Ψ N (antisymDegree Ψ N + 1)
   have hhomT : (toWt (Re.PB II)).IsHomogeneous (antisymDegree Ψ N + 1) := by

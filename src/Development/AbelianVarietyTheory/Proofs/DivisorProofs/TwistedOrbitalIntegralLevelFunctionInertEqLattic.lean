@@ -129,7 +129,7 @@ namespace GlobalTheory.TwLat
 theorem nrmL_dlt : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (K : GlobalTheory.UnitLemma.UQ) (e : K.E ≃+* w.adicCompletion E), (∀ x, e (K.c x) = cj w (e x)) → (∀ x, x ∈ (algebraMap K.O K.E).range ↔ Valued.v (e x) ≤ 1) → (∀ x, GlobalTheory.UnitLemma.val K.O x = ordL (e x)) → ∀ (B : GlobalTheory.UnitLemma.InvAlg K) (m : ℕ) (b : Module.Basis (Fin m) K.E B.A), ∀ u β : B.A, IsUnit (GlobalTheory.TwLat.gram e b β) → B.σ β = β * ((-1) ^ (m - 1) * u) → (nrmL m w (GlobalTheory.TwLat.dlt e b β)).val = GlobalTheory.TwLat.mulMat e b u := by
   intro E _ _ _ _ w hw K e hec _ _ B m b u β hG hβ
   let B' : GlobalTheory.UnitLemma.InvAlg K := { B with g := u }
-  have hGc0 := GlobalTheory.GramTwistNorm.gram_map_conj B' (w.adicCompletion E) e (cj w) hec m β hβ b
+  have hGc0 := _root_.GlobalTheory.ScalarSigmaBasis.main B' (w.adicCompletion E) e (cj w) hec m β hβ b
   set G := gram e b β with hGdef
   set P := mulMat e b u with hP
   set Φ := GlobalTheory.Tw.Phi m (w.adicCompletion E) with hΦ
@@ -310,8 +310,8 @@ lemma intV_mulVec {M : Matrix (Fin m) (Fin m) (w.adicCompletion E)} (hM : ∀ i 
 lemma intV_single (j : Fin m) : IntV (w := w) (Pi.single j 1) := by
   intro i
   rcases eq_or_ne i j with rfl | h
-  · simp [Subring.one_mem]
-  · simp [Pi.single_apply, h, Subring.zero_mem]
+  · simp
+  · simp [h]
 
 lemma gl_vec (h : GL (Fin m) (w.adicCompletion E)) (z : Fin m → w.adicCompletion E) :
     (↑h⁻¹ : Matrix (Fin m) (Fin m) (w.adicCompletion E)) *ᵥ ((↑h : Matrix (Fin m) (Fin m) (w.adicCompletion E)) *ᵥ z) = z := by
@@ -579,17 +579,6 @@ theorem isReduced_of_adjoin {F A : Type} [Field F] [CommRing A] [Algebra F A] [M
   change aeval u (minpoly F u * g) = 0
   rw [map_mul, minpoly.aeval, zero_mul]
 
-theorem eq_zero_of_trace_mul {F A : Type} [Field F] [CharZero F] [CommRing A] [Algebra F A] [Module.Finite F A]
-    [IsReduced A] (x : A) (h : ∀ z, Algebra.trace F A (x * z) = 0) : x = 0 := by
-  first
-  | (rename_i h_2 h_3 h_4 h_5 h_6 h_7; revert F A h_2 h_3 h_4 h_5 h_6 h_7 x h; exact @_root_.GlobalTheory.TraceMulVanishing.trace_mul_eq_zero_imp)
-  | exact @_root_.GlobalTheory.TraceMulVanishing.trace_mul_eq_zero_imp
-  | exact _root_.GlobalTheory.TraceMulVanishing.trace_mul_eq_zero_imp
-  | (apply _root_.GlobalTheory.TraceMulVanishing.trace_mul_eq_zero_imp <;> assumption)
-  | (intros; apply _root_.GlobalTheory.TraceMulVanishing.trace_mul_eq_zero_imp <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.TraceMulVanishing.trace_mul_eq_zero_imp <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.TraceMulVanishing.trace_mul_eq_zero_imp ..)
-
 theorem det_gram_ne_zero {K : GlobalTheory.UnitLemma.UQ} (B : GlobalTheory.UnitLemma.InvAlg K) [IsReduced B.A] {m : ℕ}
     (b : Module.Basis (Fin m) K.E B.A) (β : B.A) (hβ : IsUnit β) :
     (Matrix.of fun i j => B.herm β (b i) (b j)).det ≠ 0 := by
@@ -624,7 +613,7 @@ theorem det_gram_ne_zero {K : GlobalTheory.UnitLemma.UQ} (B : GlobalTheory.UnitL
     have := hj j
     simp only [GlobalTheory.UnitLemma.InvAlg.herm] at this
     rw [this, mul_zero]
-  have hβy : β * y = 0 := eq_zero_of_trace_mul (β * y) hall
+  have hβy : β * y = 0 := _root_.GlobalTheory.TraceMulVanishing.trace_mul_eq_zero_imp (β * y) hall
   have hy0 : y = 0 := by
     obtain ⟨u, rfl⟩ := hβ
     have := congrArg (fun t => ((u⁻¹ : B.Aˣ) : B.A) * t) hβy
@@ -1459,7 +1448,7 @@ theorem twOrb_level_eq_stSum : ∀ (E : Type) [Field E] [NumberField E] [IsCMFie
       have h2 : mulMat e b u = (LinearMap.toMatrix b b (LinearMap.mulLeft K.E u)).map (e : K.E →+* w.adicCompletion E) := rfl
       rw [h2, h1, LinearMap.charpoly_toMatrix, hP, Polynomial.map_map]
       ext n
-      simp [Polynomial.coeff_map]
+      simp
     obtain ⟨hΛK, hlat⟩ := _root_.GlobalTheory.TwLatCoset.lat_coset E hE w hw K e hc hint hval B m b
     have hOrb : ∀ x : B.Aˣ, B.σ (x : B.A) = x →
         twOrb (thL m w) (GlobalTheory.LFun.KGL w (n := m)) (dlt e b ((β₀ : B.A) * x)) f = ((B.N x : ℚ) : ℂ) := by
@@ -1503,7 +1492,7 @@ theorem twOrb_level_eq_stSum : ∀ (E : Type) [Field E] [NumberField E] [IsCMFie
         refine ⟨c, g'⁻¹ * g, ?_⟩
         show _ = _ * dlt e b ((β₀ : B.A) * ((Quot.out c).1 : B.Aˣ)) * _
         rw [hg']
-        simp only [map_mul, map_inv, _root_.mul_inv_rev, inv_inv, mul_assoc, mul_inv_cancel_left, inv_mul_cancel_left])
+        simp only [map_mul, map_inv, _root_.mul_inv_rev, inv_inv, mul_assoc, mul_inv_cancel_left])
       (by
         intro c c' hcc
         obtain ⟨a, ha⟩ := (_root_.GlobalTheory.TwLatInj.dlt_twConj_iff E hE w hw K e hc hint hval B m b u hadj β₀ hβ₀' hgram (Quot.out c).1

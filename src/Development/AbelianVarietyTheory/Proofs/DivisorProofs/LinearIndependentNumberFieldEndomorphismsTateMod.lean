@@ -1,6 +1,5 @@
 module
 
-public import Mathlib
 public import Development.AbelianVarietyTheory.Definitions.Divisors.MapSmulOfIsHausdorff
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.FlagBasis
 public import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.UniformisationConclusion
@@ -16,6 +15,8 @@ public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsTateMo
 public import Mathlib.NumberTheory.Padics.RingHoms
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PadicIntExistsLevelNotDvdMulLift
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ProdEndomorphismPowLevelComponentEqOneOfRelationStatement
+import Mathlib
+import Mathlib.CategoryTheory.Monoidal.Opposite.Mon
 import Mathlib.Algebra.Order.Floor.Extended
 import Mathlib.Algebra.Order.Floor.Semifield
 import Mathlib.Algebra.Order.Interval.Basic
@@ -109,7 +110,7 @@ theorem linearIndependent_actTate : ∀ (K Ω : Type) [Field K] [Field Ω] [Alge
   obtain ⟨e, he, hE⟩ := _root_.GlobalTheory.exists_dvd_coords_of_definite_form (Additive (B ⟶ B)) H (fun f => Q (Additive.toMul f))
     (fun f g => by
       have := hQ1 (Additive.toMul f) (Additive.toMul g)
-      simpa [div_eq_mul_inv] using this)
+      exact this)
     (fun f => hQ2 _) (fun f hf h0 => by
       have := hQ3 (Additive.toMul f) hf h0
       exact this) n (fun i => ψ (a i)) hu hindep
@@ -124,7 +125,7 @@ theorem linearIndependent_actTate : ∀ (K Ω : Type) [Field K] [Field Ω] [Alge
   have hm : ∀ i, PadicInt.toZModPow N (c i) = (m i : ZMod (l ^ N)) := fun i => by
     simp [m]
   let φ : Fin n → ((ptOver K Ω ⟶ A) →* (ptOver K Ω ⟶ A)) := fun i => actPts α.toRingAct (ptOver K Ω) (a i)
-  have kill := GlobalTheory.T.prod_endomorphism_pow_levelComponent_eq_one_of_relation (ptOver K Ω ⟶ A) l n φ c hc N m hm
+  have kill := _root_.GlobalTheory.TateRel.prod_pow_eq_one (ptOver K Ω ⟶ A) l n φ c hc N m hm
   let x : O := ∑ i, m i • a i
   have hcomp : ∀ y : ptOver K Ω ⟶ A, y ≫ α.act x = ∏ i, (y ≫ α.act (a i)) ^ m i := by
     intro y

@@ -506,16 +506,15 @@ theorem gram_sq {D : D7} (X : HidaSetting D) (u' : D.what₂.Word) :
   rw [Matrix.mul_apply, Fin.sum_univ_add, Fin.sum_univ_castSucc]
   refine Fin.addCases (fun i1 => ?_) (fun i2 => ?_) i <;> refine Fin.addCases (fun j1 => ?_) (fun j2 => ?_) j
   · refine Fin.lastCases ?_ (fun a => ?_) i1 <;> refine Fin.lastCases ?_ (fun b => ?_) j1 <;>
-      simp [gramH, wF, Fin.append_left, Fin.append_right, Fin.snoc_castSucc, Fin.snoc_last, X.ee, X.ff, X.ef,
-        hT_fe, hT_ze, hT_zf, (X.zu_orth u' _).1, (X.zu_orth u' _).2, X.zu_norm, Matrix.diagonal_apply, h1, h1', h2, h2', eq_comm]
+      simp [gramH, wF, Fin.append_left, Fin.append_right, Fin.snoc_castSucc, Fin.snoc_last, X.ee, X.ef,
+        hT_fe, hT_ze, hT_zf, (X.zu_orth u' _).1, (X.zu_orth u' _).2, X.zu_norm, Matrix.diagonal_apply, h1', eq_comm]
   · refine Fin.lastCases ?_ (fun a => ?_) i1 <;>
       simp [gramH, wF, Fin.append_left, Fin.append_right, Fin.snoc_castSucc, Fin.snoc_last, X.ee, X.ff, X.ef,
-        hT_fe, hT_ze, hT_zf, (X.zu_orth u' _).1, (X.zu_orth u' _).2, X.zu_norm, Matrix.diagonal_apply, h1, h1', h2, h2', eq_comm]
+        hT_ze, hT_zf, (X.zu_orth u' _).1, X.zu_norm, h2, eq_comm]
   · refine Fin.lastCases ?_ (fun b => ?_) j1 <;>
-      simp [gramH, wF, Fin.append_left, Fin.append_right, Fin.snoc_castSucc, Fin.snoc_last, X.ee, X.ff, X.ef,
-        hT_fe, hT_ze, hT_zf, (X.zu_orth u' _).1, (X.zu_orth u' _).2, X.zu_norm, Matrix.diagonal_apply, h1, h1', h2, h2', eq_comm]
-  · simp [gramH, wF, Fin.append_left, Fin.append_right, Fin.snoc_castSucc, Fin.snoc_last, X.ee, X.ff, X.ef,
-      hT_fe, hT_ze, hT_zf, (X.zu_orth u' _).1, (X.zu_orth u' _).2, X.zu_norm, Matrix.diagonal_apply, h1, h1', h2, h2', eq_comm]
+      simp [gramH, wF, Fin.append_left, Fin.append_right, Fin.snoc_castSucc, Fin.snoc_last, X.ee, X.ff, hT_fe, hT_ze, (X.zu_orth u' _).1, (X.zu_orth u' _).2, X.zu_norm, h2', eq_comm]
+  · simp [gramH, wF, Fin.append_left, Fin.append_right, Fin.snoc_castSucc, Fin.snoc_last, X.ff, X.ef,
+      hT_fe, hT_zf, (X.zu_orth u' _).2, Matrix.diagonal_apply, eq_comm]
 
 theorem detT_holds : DetT := by
   intro D X u' ψ hT μinf νinf fibInf hP v
@@ -680,7 +679,7 @@ theorem exists_orthonormal_perp {m k : ℕ} (hn : n = m + k) (w : Fin m → Fin 
     rw [map_smul, hker, smul_zero]
   · intro i j
     dsimp only
-    simp only [LinearMap.map_smulₛₗ, LinearMap.smul_apply, map_smul, smul_eq_mul, RingHom.id_apply]
+    simp only [LinearMap.map_smulₛₗ, LinearMap.smul_apply, map_smul, smul_eq_mul]
     split_ifs with hij
     · subst hij
       set z := ((v (Fin.castLE hW i) : LinearMap.ker L) : Fin n → ℂ) with hzdef
@@ -756,10 +755,6 @@ theorem card_true_ge {k : ℕ} (u : Fin k → Fin n → ℂ) (huo : ∀ i j, BJ 
   have h3 := LinearMap.finrank_le_finrank_of_injective hinj
   simpa [Module.finrank_fin_fun, Fintype.card_subtype] using h3
 
-theorem BJ_orth_sum {k : ℕ} (u : Fin k → Fin n → ℂ) (huo : ∀ i j, BJ ε (u i) (u j) = if i = j then 1 else 0)
-    (c : Fin k → ℂ) (j : Fin k) : BJ ε (u j) (∑ l, c l • u l) = c j := by
-  exact card_true_ge_lemma ε u huo c j
-
 private theorem wittLin_holds_lemma {k : ℕ} (a b : Fin k → Fin n → ℂ)
     (h : ∀ i j, BJ ε (a i) (a j) = BJ ε (b i) (b j)) (c d : Fin k → ℂ) :
     BJ ε (∑ i, c i • a i) (∑ j, d j • a j) = BJ ε (∑ i, c i • b i) (∑ j, d j • b j) := by
@@ -772,7 +767,7 @@ private theorem wittLin_holds_lemma_2 (c : Matrix (Fin n) (Fin n) ℂ) (i j : Fi
   unfold Formalism.REAL.Jm
   rw [Matrix.mul_apply]
   simp only [Matrix.mul_diagonal]
-  simp [mulVec_diagonal, mulVec_single_one, dotProduct, conjTranspose_apply, mul_assoc]
+  simp [mulVec_diagonal, dotProduct, conjTranspose_apply]
 
 theorem wittLin_holds : WittLin := by
   intro n m k hn ε w hli hpos
@@ -797,7 +792,7 @@ theorem wittLin_holds : WittLin := by
   have hliu : LinearIndependent ℂ u := by
     rw [Fintype.linearIndependent_iff]
     intro c hc j
-    have h1 := BJ_orth_sum ε u huo c j
+    have h1 := _root_.PI.AprimeInfW.card_true_ge_lemma ε u huo c j
     rw [hc, map_zero] at h1
     exact h1.symm
   let bU := Module.Basis.span hliu

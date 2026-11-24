@@ -244,16 +244,7 @@ theorem fn_eq_of_generic {X : Scheme.{0}} [IsIntegral X] (ξ : X)
     exact germ_injective_of_isIntegral X (U := U) ξ hm e
   · exact fn_ext fun x hx => (hU ⟨x, hx⟩).elim
 
-theorem exists_push {X Y : Scheme.{0}} (f : Y ⟶ X) [IsOpenImmersion f] (V : Y.Opens) (u : Γ(Y, V)ˣ) :
-    ∃ t : Γ(X, f ''ᵁ V)ˣ, ∀ (Z : Scheme.{0}) (r : Z ⟶ Y) (z : Z), r z ∈ V → gm (r ≫ f) z _ t = gm r z V u := by
-  have h : V ≤ f ⁻¹ᵁ (f ''ᵁ V) := (f.preimage_image_eq V).ge
-  let t : Γ(X, f ''ᵁ V)ˣ := Units.map (f.appIso V).inv.hom.toMonoidHom u
-  have e' : Semi.res h (pullU f _ t) = u := by
-    apply Units.ext
-    rw [val_res_pullU, ← Scheme.Hom.appIso_hom']
-    exact Iso.inv_hom_id_apply _ _
-  refine ⟨t, fun Z r z hz => ?_⟩
-  rw [← e', gm_res r z h hz, gm_pull r f z _ (h hz)]
+alias exists_push := _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.exists_ext_unit
 
 theorem exists_ratio {X G : Scheme.{0}} (p₁ p₂ : X ⟶ G) {E E' : G.Opens} (t : Γ(G, E)ˣ) (t' : Γ(G, E')ˣ)
     (V : X.Opens) (h₁ : V ≤ p₁ ⁻¹ᵁ E) (h₂ : V ≤ p₂ ⁻¹ᵁ E') :
@@ -1607,18 +1598,13 @@ theorem exists_sec_of_lbIso_pull {X X' : Scheme.{0}} {L : LB X} {L' : LB X'} {F 
   refine (mem_nonzeroLocus _ _).2 ⟨k, hk, ?_⟩
   exact isUnit_of_mul_isUnit_right ((congrArg IsUnit e).mp (u.map (F.stalkMap y).hom))
 
-theorem mulN_eq_pow' {S : Scheme.{0}} (G : Over S) [GrpObj G] (n : ℕ) : mulN G n = (𝟙 G) ^ n := by
-  induction n with
-  | zero => rfl
-  | succ n ih => rw [pow_succ, ← ih]; rfl
-
 theorem mulN_comm_of_isGrpPullback {S S' : Scheme.{0}} {G : Over S} {G' : Over S'} [GrpObj G] [IsCommMonObj G]
     [GrpObj G'] [IsCommMonObj G'] {f : S' ⟶ S} {φ : G'.left ⟶ G.left} (h : IsGrpPullback G' G f φ) (n : ℕ) :
     (mulN G' n).left ≫ φ = φ ≫ (mulN G n).left := by
   have e := congrArg (fun q => q.left) (map_pow (pushHom h G') (𝟙 G') n)
   have e₂ : pushHom h G' (𝟙 G') ≫ mulN G n = pushHom h G' (𝟙 G') ^ n := by
-    rw [mulN_eq_pow', MonObj.comp_pow, Category.comp_id]
-  rw [← e₂, ← mulN_eq_pow'] at e
+    rw [_root_.GlobalTheory.GrpTangent.mulN_eq_pow, MonObj.comp_pow, Category.comp_id]
+  rw [← e₂, ← _root_.GlobalTheory.GrpTangent.mulN_eq_pow] at e
   refine Eq.trans e ?_
   change (𝟙 _ ≫ φ) ≫ _ = _
   rw [Category.id_comp]
@@ -1882,7 +1868,7 @@ open GlobalTheory.ZH ReciprocityTheory.ChartRestriction.G.Out Classical
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.exists_semiAbelian_groupScheme_cubical_bundle_closure : Laws → Laws2 → ThmUSt → ∀ (o Ω : Type) [CommRing o] [Field Ω] [Algebra o Ω] [ArithBase o Ω] (S : ThetaSys o Ω) (ρ : S.Real) (M : RatModel o Ω) (U₀ : M.Z.Opens) (EE : M.Lat S.J) (Q : Clos ρ M U₀ EE) (ex : Q.Ext), S.Big → ex.core.HasTests → ex.core.Indep → ex.core.HasCharts → ex.core.TorsSec (S.r * S.N) → (∃ T : ex.core.Theta, LBIso T.L.L (ρ.P.L.pull (pullback.fst ρ.P.A.hom Q.u₀))) → ∃ Z : ZHPre ρ M U₀, (∃ e : Z.G.left ≅ Q.G.toScheme, e.hom ≫ Q.G.ι ≫ Q.P.hom = Z.G.hom ∧ Z.u₀ = Q.u₀ ∧ HEq (Z.φ ≫ e.hom) ex.a) ∧ Z.LocTheta ∧ Nonempty ex.core.Law := by
-  first | exact @GlobalTheory.ClosureGroup.exists_pre | exact GlobalTheory.ClosureGroup.exists_pre | (intros; apply GlobalTheory.ClosureGroup.exists_pre <;> assumption)
+  first | exact @GlobalTheory.ClosureGroup.exists_pre
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsSemiAbelianGroupSchemeCubicalBundleClosureStatement =====

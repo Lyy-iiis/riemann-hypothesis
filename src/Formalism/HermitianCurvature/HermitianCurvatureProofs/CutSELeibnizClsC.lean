@@ -95,10 +95,6 @@ theorem wOp_cons (j : Fin 6) (js : List (Fin 6)) (Φ : RadSp k r z z' π π') :
   simp only [wOp, List.map_cons, List.prod_cons]
   rfl
 
-theorem wOp_nil_sg (Φ : RadSp k r z z' π π') : wOp X l [] Φ = Φ := by
-  simp only [wOp, List.map_nil, List.prod_nil]
-  rfl
-
 theorem wOp_op (js : List (Fin 6)) (j : Fin 6) (Φ : RadSp k r z z' π π') :
     wOp X l js (X.op l j Φ) = wOp X l (js ++ [j]) Φ := by
   simp only [wOp, List.map_append, List.map_cons, List.map_nil, List.prod_append, List.prod_cons,
@@ -108,7 +104,7 @@ theorem wOp_op (js : List (Fin 6)) (j : Fin 6) (Φ : RadSp k r z z' π π') :
 theorem wOp_lc (js : List (Fin 6)) : ∀ Φ ∈ lcSub k r z z' π π', wOp X l js Φ ∈ lcSub k r z z' π π' := by
   intro Φ hΦ
   induction js with
-  | nil => rwa [wOp_nil_sg]
+  | nil => rwa [_root_.Formalism.FourierDecayAlt.P.CutSE.wOp_nil]
   | cons j js ih =>
     rw [wOp_cons]
     exact Formalism.FourierDecayAlt.P5.HerC.op_lc X l j _ ih
@@ -119,7 +115,7 @@ theorem slDom_zero : SlDom μ l c (0 : RadSp k r z z' π π') := by
     rw [show B.hsVec (0 : Wq →L[ℂ] Wp) = 0 from map_zero hsVecLin, inner_zero_left]
   have h0 : ∀ p : Fin r → ℂ, pairAt μ (0 : RadSp k r z z' π π') 0 p = 0 := fun p => by
     unfold pairAt
-    simp only [Submodule.coe_zero, ZeroMemClass.coe_zero, Pi.zero_apply, hz, integral_zero]
+    simp only [Submodule.coe_zero, Pi.zero_apply, hz, integral_zero]
   intro t0 _
   refine ⟨1, one_pos, fun _ => 0, integrable_zero _ _ _, fun t _ c' => ?_⟩
   rw [h0, mul_zero, norm_zero]
@@ -131,7 +127,6 @@ theorem slDom_add (hμ : B.IsHaarOn (Glev k r (Fin.last r)) μ) {Φ Ψ : RadSp k
   haveI : SFinite μ := by
     first
       | infer_instance
-      | exact (sigmaFinite_of_locallyFinite (μ := μ)).toSFinite
 
   have hconj : ∀ (A C : RadSp k r z z' π π') p, pairAt μ A C p = starRingEnd ℂ (pairAt μ C A p) := by
     intro A C p
@@ -148,8 +143,6 @@ theorem slDom_add (hμ : B.IsHaarOn (Glev k r (Fin.last r)) μ) {Φ Ψ : RadSp k
     unfold pairAt B.hsInner
     first
       | rw [← integral_complex_ofReal]
-      | rw [← integral_ofReal]
-      | rw [← integral_coe]
     congr 1
     funext x
     rw [inner_self_eq_norm_sq_to_K]
@@ -208,7 +201,6 @@ theorem slDom_smul (a : ℂ) {Φ : RadSp k r z z' π π'} (h : SlDom μ l c Φ) 
       inner_smul_right]
     first
       | (rw [← integral_const_mul]; congr 1; funext x; ring)
-      | (rw [← integral_mul_left]; congr 1; funext x; ring)
   intro t0 ht0
   obtain ⟨ε, hε, F, hF, hb⟩ := h t0 ht0
   refine ⟨ε, hε, fun c' => ‖a‖ ^ 2 * F c', hF.const_mul _, fun t ht c' => ?_⟩
@@ -249,10 +241,8 @@ theorem wirt_of_hasFDerivAt {F : ℂ → ℂ} {A B t : ℂ} (h : HasFDerivAt F (
   refine ⟨?_, ?_⟩ <;> simp [wirt, hf, wl]
   · first
       | linear_combination ((B - A) / 2) * Complex.I_sq
-      | linear_combination ((A - B) / 2) * Complex.I_sq
   · first
       | linear_combination ((A - B) / 2) * Complex.I_sq
-      | linear_combination ((B - A) / 2) * Complex.I_sq
 
 theorem levelSquareIntegrable_succ_update_of_sliceGood {k r : ℕ} {z z' : Fin (2 * r + k + 1) → ℂ} {Wp Wq : Type} [NormedAddCommGroup Wp]
     [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp]
@@ -261,7 +251,7 @@ theorem levelSquareIntegrable_succ_update_of_sliceGood {k r : ℕ} {z z' : Fin (
     {Φ : RadSp k r z z' π π'} (h : SliceGood X μ l c Φ) {t : ℂ} (ht : t ≠ 0) :
     LevelSquareIntegrable μ l.succ Φ (Function.update c l t) := by
   have h0 := h.2 []
-  rw [wOp_nil_sg] at h0
+  rw [_root_.Formalism.FourierDecayAlt.P.CutSE.wOp_nil] at h0
   exact level_l2_of_slice_domination μ l c h0 ht
 
 theorem contDiffOn_inverse_norm_sq (n : ℕ) :
@@ -308,15 +298,12 @@ theorem form_contDiffOn (hO : OuterLeib) {k r : ℕ} {z z' : Fin (2 * r + k + 1)
           form μ l.succ u (fun b => dT X l (v b)) (Function.update c l t))) {t : ℂ | t ≠ 0} := by
       first
         | exact (Lw.contDiff.comp_contDiffOn (hA.prodMk hB)).congr fun t _ => rfl
-        | exact (Lw.contDiff.comp_contDiffOn (hA.prod hB)).congr fun t _ => rfl
     have hF : ContDiffOn ℝ n (fderiv ℝ fun t => form μ l.succ u v (Function.update c l t)) {t : ℂ | t ≠ 0} :=
       hW.congr fun t ht => (hd t ht).fderiv
     rw [Nat.cast_succ]
     first
       | exact (contDiffOn_succ_iff_fderiv_of_isOpen hs).2
           ⟨fun t ht => (hd t ht).differentiableAt.differentiableWithinAt, fun h => by simp at h, hF⟩
-      | exact (contDiffOn_succ_iff_fderiv_of_isOpen hs).2
-          ⟨fun t ht => (hd t ht).differentiableAt.differentiableWithinAt, hF⟩
 
 end Formalism.FourierDecayAlt.P.CutSE
 end -- clump:auto

@@ -170,9 +170,9 @@ theorem jordan_transitivity : JordanTransitive := by
     obtain ⟨g, hg⟩ := htr.exists_smul_eq x y
     exact ⟨⟨MulAction.toPermHom G Ω g, ⟨g, rfl⟩⟩, hg⟩
   have hprim : MulAction.IsPreprimitive K Ω :=
-    Formalism.GaloisIrreducibility.primitiveOfPCycle Ω K σ p hp hσK hcyc hsupp hlt htrK
+    _root_.Formalism.GaloisIrreducibility.primitive_of_p_cycle Ω K σ p hp hσK hcyc hsupp hlt htrK
   have halt : alternatingGroup Ω ≤ K :=
-    Formalism.GaloisIrreducibility.jordanPrime Ω K σ p hp hσK hcyc hsupp hle hprim
+    _root_.Formalism.GaloisIrreducibility.jordan_prime_cycle_theorem Ω K σ p hp hσK hcyc hsupp hle hprim
   refine ⟨halt, ?_⟩
   have hpc : p ∈ σ.cycleType := by
     rw [hcyc.cycleType, hsupp]
@@ -548,8 +548,8 @@ theorem restriction_of_blocks_and_jordan (hB : BlocksCycle) (hJ : JordanTransiti
       intro c c' j j' hc' h
       by_contra hjj
       have h2 := congrArg (fun v => e.repr v j') h
-      simp [Finsupp.single_apply, hjj, Ne.symm hjj] at h2
-      exact hc' (by first | exact h2.symm | exact h2)
+      simp [Ne.symm hjj] at h2
+      exact hc' (by first | exact h2.symm)
     have hline : ∀ (g : G) (i : Fin N), ∃ j, ∃ c : k, c ≠ 0 ∧ ρ g (e i) = c • e j := by
       intro g i
       obtain ⟨g', hg'⟩ := hcov i
@@ -609,8 +609,7 @@ theorem restriction_of_blocks_and_jordan (hB : BlocksCycle) (hJ : JordanTransiti
     letI : MulAction (G ⧸ H) (Fin N) := MulAction.compHom (Fin N) (QuotientGroup.lift H σ (by
       intro x hx
       first
-      | exact hker1 x hx
-      | exact (MonoidHom.mem_ker).mpr (hker1 x hx)))
+      | exact hker1 x hx))
     have htrans : MulAction.IsPretransitive (G ⧸ H) (Fin N) := by
       refine ⟨fun x y => ?_⟩
       obtain ⟨gx, rfl⟩ := horb x
@@ -640,7 +639,7 @@ namespace Formalism.CyclotomicNorms
 
 theorem restriction : Restriction := restriction_of_blocks_and_jordan blocks_form_cycle jordan_transitivity
 
-theorem irreducibility_of_good_tuple : IrreducibilityCriterion := irreducibility_of_restriction restriction
+theorem irreducibility_of_good_tuple : IrreducibilityCriterion := _root_.Formalism.CyclotomicNorms.CycleTypeFiniteOrder.t1 restriction
 
 end Formalism.CyclotomicNorms
 end -- clump:auto

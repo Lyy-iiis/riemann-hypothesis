@@ -233,18 +233,6 @@ theorem exists_joint_beig [Nonempty κ] {Φ : (ι → GL (Fin n) ℂ) → Matrix
       rw [Function.update_of_ne hne]
       exact ⟨hw.1, hwS τ hτ⟩
 
-theorem joint_upper {Φ : (ι → GL (Fin n) ℂ) → Matrix κ κ ℂ} (hone : Φ 1 = 1) (hmul : ∀ g h, Φ (g * h) = Φ g * Φ h)
-    {v : κ → ℂ} {lam : ι → Fin n → ℤ} (hv : ∀ τ, IsBEig (fun B => Φ (Pi.mulSingle τ B)) v (lam τ))
-    (g : ι → GL (Fin n) ℂ) (hg : ∀ τ, (g τ).val.BlockTriangular id) :
-    Φ g *ᵥ v = (∏ τ, ∏ i, ((g τ).val i i) ^ (lam τ i)) • v := by
-  first
-  | exact @_root_.GlobalTheory.MulVecProduct.mulVec_eq_prod_smul
-  | exact _root_.GlobalTheory.MulVecProduct.mulVec_eq_prod_smul
-  | (apply _root_.GlobalTheory.MulVecProduct.mulVec_eq_prod_smul <;> assumption)
-  | (intros; apply _root_.GlobalTheory.MulVecProduct.mulVec_eq_prod_smul <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.MulVecProduct.mulVec_eq_prod_smul <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.MulVecProduct.mulVec_eq_prod_smul ..)
-
 def trGL (B : GL (Fin n) ℂ) : GL (Fin n) ℂ :=
   ⟨B.valᵀ, (B⁻¹).valᵀ, by rw [← Matrix.transpose_mul, ← Units.val_mul, inv_mul_cancel, Units.val_one, Matrix.transpose_one],
     by rw [← Matrix.transpose_mul, ← Units.val_mul, mul_inv_cancel, Units.val_one, Matrix.transpose_one]⟩
@@ -291,7 +279,7 @@ theorem exists_covec [Nonempty κ] {Φ : (ι → GL (Fin n) ℂ) → Matrix κ �
     exact isPolyRep_tr (hpoly τ)
   obtain ⟨u, lam, hu0, hu⟩ := exists_joint_beig h2 h3
   refine ⟨u, hu0, fun l hl => ?_⟩
-  have h := joint_upper h1 h2 hu (fun τ => trGL (l τ)) (fun τ i j hij => (hl τ).1 j i hij)
+  have h := _root_.GlobalTheory.MulVecProduct.mulVec_eq_prod_smul h1 h2 hu (fun τ => trGL (l τ)) (fun τ i j hij => (hl τ).1 j i hij)
   have hd : ∀ τ i, (trGL (l τ)).val i i = 1 := fun τ i => (hl τ).2 i
   simp only [Φt, trGL_trGL, hd, _root_.one_zpow, Finset.prod_const_one, one_smul, Matrix.mulVec_transpose] at h
   exact h
@@ -557,7 +545,7 @@ theorem iso_of_hwAt (a a' : AlgWt L n) (lam : ι → Fin n → ℤ) (ha : ∀ τ
     subst hmu
     refine ⟨κ, inferInstance, inferInstance, b, fun g => evM P (upt (ptOf emb g)), u, v, hmul,
       continuous_ptOf emb hinj hcm hall P, fun x hx w => ?_, hu0, hv0, hu,
-      joint_upper (Φ := fun g => evM P (upt (ptOf emb g))) hone hmul hv, fun γ => ?_⟩
+      _root_.GlobalTheory.MulVecProduct.mulVec_eq_prod_smul (Φ := fun g => evM P (upt (ptOf emb g))) hone hmul hv, fun γ => ?_⟩
     · refine Submodule.span_mono ?_ (span_ratPt_orbit L n c κ b P hP' x hx w)
       rintro _ ⟨γ₀, hγ, rfl⟩
       exact ⟨mtwEmb emb γ₀, by simp only [ptOf_rat emb hinj hcm hall γ₀ hγ]⟩
@@ -624,7 +612,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.algebraic_weight_dominant_iso_exists : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (ι : Type) [Fintype ι] (emb : ι → L →+* ℂ), Function.Injective (emb) → (∀ t t', (emb) t ≠ ComplexEmbedding.conjugate ((emb) t')) → (∀ σ : L →+* ℂ, ∃ t, σ = (emb) t ∨ σ = ComplexEmbedding.conjugate ((emb) t)) → ∀ a : NG.AlgWt L n, ∃ (lam : ι → DomWeight n) (T : a.W ≃ₗ[ℂ] VV ℂ lam), ∀ (γ : ReciprocityTheory.Aut.GQ L n) (γ₀ : GL (Fin n) L), (((γ : GAf L n) : GL (Fin n) (ReciprocityTheory.Aut.AL L)) : Matrix (Fin n) (Fin n) (ReciprocityTheory.Aut.AL L)) = (γ₀ : Matrix (Fin n) (Fin n) L).map Algebra.TensorProduct.includeLeftRingHom → ∀ x, T (a.ρ γ x) = rhoVr emb lam γ₀ (T x) := by
-  first | exact @GlobalTheory.WtClass.exists_equiv_VV | exact GlobalTheory.WtClass.exists_equiv_VV | (intros; apply GlobalTheory.WtClass.exists_equiv_VV <;> assumption)
+  first | exact @GlobalTheory.WtClass.exists_equiv_VV
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.AlgebraicWeightDominantIsoExistsStatement =====

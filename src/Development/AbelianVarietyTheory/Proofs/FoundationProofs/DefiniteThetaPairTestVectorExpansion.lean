@@ -64,7 +64,7 @@ open NumberField Classical Formalism.BasicNotions Formalism.MainNotions Formalis
 open scoped BigOperators
 
 theorem _root_.GlobalTheory.T.vacuum_under_adelic_pair_modulus_one : ∀ (D : D7), Inp D → ∀ (cc : Ideal (𝓞 D.host.K)) (δ : ℂ), Crv D cc δ → ∀ (N N' : ℕ), Even (N * N') → ∀ e0 ∈ Th D (tor0 D cc δ) (stdL D N) (stdL D N'), ∀ (W : WeilO D cc δ N N' e0) (g : GA D N) (g' : GA D N') L₁ L₁', Moves D (g : GL (Fin N) (AE D)) L₁ → Moves D (g' : GL (Fin N') (AE D)) L₁' → ∃ c : ℂ, Mod1All c ∧ (W.Om g g' e0 = fun z => c * Iop D (tor0 D cc δ) (La0 D (tor0 D cc δ) N N') (La D (tor0 D cc δ) L₁ L₁') e0 z) ∧ ∀ (p : ℕ) [Fact p.Prime] (lam : Qbar →+* ℂ_[p]) (k' : GA D N'), k' ∈ intG D N' → TrivAt D p (g : GL (Fin N) (AE D)) → TrivAt D p ((g' * k' : GA D N') : GL (Fin N') (AE D)) → ‖lamC lam c‖ = 1 := by
-  first | exact @GlobalTheory.NormSum.vacuum_under_adelic_pair | exact GlobalTheory.NormSum.vacuum_under_adelic_pair | (intros; apply GlobalTheory.NormSum.vacuum_under_adelic_pair <;> assumption)
+  first | exact @GlobalTheory.NormSum.vacuum_under_adelic_pair
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FoundationProofs.VacuumUnderAdelicPairModulusOneStatement =====
@@ -233,15 +233,6 @@ theorem approx_hom {N N' : ℕ} (g : GL (Fin N) (AE D)) (g' : GL (Fin N') (AE D)
   · have := he i j
     rw [dif, Matrix.sub_apply, Matrix.map_apply, Matrix.of_apply, this, Nat.cast_mul, mul_assoc]
 
-theorem IhE_mul {cc : Ideal (𝓞 D.host.K)} {s y : AE D} (hs : s ∈ OhE D) (hy : y ∈ IhE D cc) :
-    s * y ∈ IhE D cc := by
-  refine AddSubgroup.closure_induction (p := fun y _ => s * y ∈ IhE D cc) ?_ ?_ ?_ ?_ hy
-  · rintro y ⟨c, hc, a, ha, t, ht, rfl⟩
-    exact AddSubgroup.subset_closure ⟨c, hc, a, ha, s * t, mul_mem hs ht, by ring⟩
-  · rw [mul_zero]; exact zero_mem _
-  · intro a b _ _ ha hb; rw [mul_add]; exact add_mem ha hb
-  · intro a _ ha; rw [mul_neg]; exact neg_mem ha
-
 theorem closeTo_iff {cc : Ideal (𝓞 D.host.K)} {N N' m : ℕ} {g : GL (Fin N) (AE D)} {g' : GL (Fin N') (AE D)}
     {z z' : Matrix (Fin N') (Fin N) D.host.E} :
     CloseTo D cc m g g' z z' ↔ ∀ i j, ∃ y ∈ IhE D cc, dif g g' z z' i j = (m : AE D) * y := Iff.rfl
@@ -261,7 +252,7 @@ theorem closeTo_smul {cc : Ideal (𝓞 D.host.K)} {N N' m : ℕ} {g : GL (Fin N)
   rw [closeTo_iff] at *
   intro i j
   obtain ⟨y, hy, e⟩ := h i j
-  exact ⟨inc D a * y, IhE_mul ha hy, by rw [dif_smul, Matrix.smul_apply, e, smul_eq_mul]; ring⟩
+  exact ⟨inc D a * y, _root_.GlobalTheory.NormSum.MovedTheta.mul_mem_IhE ha hy, by rw [dif_smul, Matrix.smul_apply, e, smul_eq_mul]; ring⟩
 
 theorem closeTo_zero {cc : Ideal (𝓞 D.host.K)} {N N' m : ℕ} {g : GL (Fin N) (AE D)} {g' : GL (Fin N') (AE D)} :
     CloseTo D cc m g g' 0 0 := by

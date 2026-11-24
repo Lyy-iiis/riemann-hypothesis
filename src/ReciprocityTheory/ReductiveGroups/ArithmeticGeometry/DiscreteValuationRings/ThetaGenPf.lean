@@ -138,24 +138,11 @@ private lemma sections_eq_of_locally_rs_eq {Z : Scheme.{0}} {W : Z.Opens} (a b :
      have hb := congrArg (fun f => f.hom b) (Z.presheaf.germ_res (homOfLE hV) z hzV)
      have hc := congrArg (Z.presheaf.germ V z hzV).hom he
      exact ha.symm.trans (hc.trans hb))
-  | (choose V hV hzV he using h
-     exact TopCat.Sheaf.eq_of_locally_eq' Z.sheaf (fun z : W => V z.1 z.2) W
-       (fun z => homOfLE (hV z.1 z.2))
-       (by intro z hz; exact TopologicalSpace.Opens.mem_iSup.mpr ⟨⟨z, hz⟩, hzV z hz⟩) a b
-       (fun z => he z.1 z.2))
 
 lemma rs_resTop {Z : Scheme.{0}} {U V : Z.Opens} (h : V ≤ U) (c : Γ(Z, ⊤)) :
     rs h (resTop U c) = resTop V c := by
   first
-  | rfl
   | (simp only [rs, resTop]; rw [← RingHom.comp_apply, ← CommRingCat.hom_comp, ← Functor.map_comp]; rfl)
-  | (unfold rs; rw [← RingHom.comp_apply, ← CommRingCat.hom_comp, ← Functor.map_comp]; rfl)
-  | (simp [rs, resTop, ← Functor.map_comp])
-
-private lemma map_mul_rs {Z : Scheme.{0}} {U V : Z.Opens} (h : V ≤ U) (a b : Γ(Z, U)) :
-    rs h (a * b) = rs h a * rs h b := by
-  first
-  | exact map_mul _ a b
 
 theorem secCorr_scal (hL : L.IsLB) (φ : K → (Y ⟶ X)) (ε : K → ℤ) (φ' : K' → (Y ⟶ X)) (ε' : K' → ℤ)
     {s₁ s₂ : LB.Sec (LB.LinComb L φ ε)} {x₁ x₂ : LB.Sec (LB.LinComb L φ' ε')}
@@ -178,10 +165,10 @@ theorem secCorr_scal (hL : L.IsLB) (φ : K → (Y ⟶ X)) (ε : K → ℤ) (φ' 
     · have e1 := h1 j j' hj hj' hcomp
       have e2 := h2 j j' hj hj' hcomp
       have e3 := congrArg (rs (inf_le_right : LB.wchart L φ j ⊓ LB.wchart L φ' j' ≤ _)) (hx j')
-      have m1 := map_mul_rs (inf_le_left : LB.wchart L φ j ⊓ LB.wchart L φ' j' ≤ _) (resTop _ c) (s₁.f j)
-      have m2 := map_mul_rs (inf_le_left : LB.wchart L φ j ⊓ LB.wchart L φ' j' ≤ _) (resTop _ d) (s₂.f j)
-      have m3 := map_mul_rs (inf_le_right : LB.wchart L φ j ⊓ LB.wchart L φ' j' ≤ _) (resTop _ c) (x₁.f j')
-      have m4 := map_mul_rs (inf_le_right : LB.wchart L φ j ⊓ LB.wchart L φ' j' ≤ _) (resTop _ d) (x₂.f j')
+      have m1 := _root_.ReciprocityTheory.ChartRestriction.G.DVR.rs_mul (inf_le_left : LB.wchart L φ j ⊓ LB.wchart L φ' j' ≤ _) (resTop _ c) (s₁.f j)
+      have m2 := _root_.ReciprocityTheory.ChartRestriction.G.DVR.rs_mul (inf_le_left : LB.wchart L φ j ⊓ LB.wchart L φ' j' ≤ _) (resTop _ d) (s₂.f j)
+      have m3 := _root_.ReciprocityTheory.ChartRestriction.G.DVR.rs_mul (inf_le_right : LB.wchart L φ j ⊓ LB.wchart L φ' j' ≤ _) (resTop _ c) (x₁.f j')
+      have m4 := _root_.ReciprocityTheory.ChartRestriction.G.DVR.rs_mul (inf_le_right : LB.wchart L φ j ⊓ LB.wchart L φ' j' ≤ _) (resTop _ d) (x₂.f j')
       rw [rs_resTop] at m1 m2 m3 m4
       exact m1.trans ((congrArg (fun t => resTop _ c * t) e1).trans (m3.symm.trans (e3.trans
         (m4.trans ((congrArg (fun t => resTop _ d * t) e2.symm).trans m2.symm)))))
@@ -197,13 +184,13 @@ theorem secCorr_scal (hL : L.IsLB) (φ : K → (Y ⟶ X)) (ε : K → ℤ) (φ' 
     have e2 := s₂.compat j j''
     have e3 := congrArg (rs (inf_le_right : (LB.LinComb L φ ε).U j ⊓ (LB.LinComb L φ ε).U j'' ≤ _))
       (stepA j'' hj'')
-    have m1 := map_mul_rs (inf_le_left : (LB.LinComb L φ ε).U j ⊓ (LB.LinComb L φ ε).U j'' ≤ _)
+    have m1 := _root_.ReciprocityTheory.ChartRestriction.G.DVR.rs_mul (inf_le_left : (LB.LinComb L φ ε).U j ⊓ (LB.LinComb L φ ε).U j'' ≤ _)
       (resTop _ c) (s₁.f j)
-    have m2 := map_mul_rs (inf_le_left : (LB.LinComb L φ ε).U j ⊓ (LB.LinComb L φ ε).U j'' ≤ _)
+    have m2 := _root_.ReciprocityTheory.ChartRestriction.G.DVR.rs_mul (inf_le_left : (LB.LinComb L φ ε).U j ⊓ (LB.LinComb L φ ε).U j'' ≤ _)
       (resTop _ d) (s₂.f j)
-    have m3 := map_mul_rs (inf_le_right : (LB.LinComb L φ ε).U j ⊓ (LB.LinComb L φ ε).U j'' ≤ _)
+    have m3 := _root_.ReciprocityTheory.ChartRestriction.G.DVR.rs_mul (inf_le_right : (LB.LinComb L φ ε).U j ⊓ (LB.LinComb L φ ε).U j'' ≤ _)
       (resTop _ c) (s₁.f j'')
-    have m4 := map_mul_rs (inf_le_right : (LB.LinComb L φ ε).U j ⊓ (LB.LinComb L φ ε).U j'' ≤ _)
+    have m4 := _root_.ReciprocityTheory.ChartRestriction.G.DVR.rs_mul (inf_le_right : (LB.LinComb L φ ε).U j ⊓ (LB.LinComb L φ ε).U j'' ≤ _)
       (resTop _ d) (s₂.f j'')
     rw [rs_resTop] at m1 m2 m3 m4
     have key := m3.symm.trans (e3.trans m4)
@@ -244,7 +231,6 @@ lemma famφB0_two : D.toPre.famφB 0 2 = D.toPre.famφB 0 3 := by
   rw [c_zero D, Hom.one_def]
   first
   | simp
-  | (congr 1; rw [← Category.assoc]; congr 1)
 
 lemma sameSum_famφB0 : LB.SameSum (D.toPre.famφB 0) (DegPre.famε 1)
     (fun _ : Fin 1 => 𝟙 D.toPre.P.A.left) (fun _ => ((1 : ℕ) : ℤ)) := by

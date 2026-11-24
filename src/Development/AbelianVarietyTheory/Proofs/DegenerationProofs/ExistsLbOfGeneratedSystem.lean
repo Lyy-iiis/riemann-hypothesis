@@ -271,7 +271,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.exists_hom_algebraising_thickenings_projective : ∀ (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing R] (I : Ideal R), I ≠ ⊤ → IsAdicComplete I R → ∀ (Y Z : Over (Spec (CommRingCat.of R))), IsProjBy Y.hom → IsProjBy Z.hom → Flat Y.hom → ∀ f : ∀ e, (thickObj R I e Y).left ⟶ Z.left, (∀ e, f e ≫ Z.hom = pullback.fst Y.hom (thick R I e) ≫ Y.hom) → (∀ e, thickMap R I e Y ≫ f (e + 1) = f e) → ∃ g : Y ⟶ Z, ∀ e, pullback.fst Y.hom (thick R I e) ≫ g.left = f e := by
-  first | exact @GlobalTheory.MorAlgIdeal.exists_hom_of_thickenings | exact GlobalTheory.MorAlgIdeal.exists_hom_of_thickenings | (intros; apply GlobalTheory.MorAlgIdeal.exists_hom_of_thickenings <;> assumption)
+  first | exact @GlobalTheory.MorAlgIdeal.exists_hom_of_thickenings
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsHomAlgebraisingThickeningsProjectiveStatement =====
@@ -299,8 +299,8 @@ theorem step_comm {C : Type*} [Category C] {Y Y' B S S' T : C} {p : B ⟶ T} {t 
   have key : β ≫ hb'.isoPullback.hom
       = hb.isoPullback.hom ≫ pullback.map p t p t' (𝟙 _) τ (𝟙 _) e₁ e₂ := by
     apply pullback.hom_ext
-    · simp [h₁, pullback.map, pullback.lift_fst]
-    · simp [h₂, pullback.map, pullback.lift_snd]
+    · simp [h₁, pullback.map]
+    · simp [h₂, pullback.map]
   rw [Iso.eq_inv_comp, ← Category.assoc, ← key, Category.assoc, Iso.hom_inv_id_assoc, hc]
 
 theorem base_comm {C : Type*} [Category C] {Y B S T Z : C} {p : B ⟶ T} {t : S ⟶ T}
@@ -338,7 +338,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.exists_hom_algebraisation_of_reductionTower : ∀ (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing R] (I : Ideal R), I ≠ ⊤ → IsAdicComplete I R → ∀ (Y : ∀ e : ℕ, Over (Spec (CommRingCat.of (R ⧸ I ^ (e + 1))))) (β : ∀ e, (Y e).left ⟶ (Y (e + 1)).left), (∀ e, IsPullback (β e) (Y e).hom (Y (e + 1)).hom (thickTrans R I e)) → ∀ (B : Over (Spec (CommRingCat.of R))) (b : ∀ e, (Y e).left ⟶ B.left), IsProjBy B.hom → Flat B.hom → (∀ e, IsPullback (b e) (Y e).hom B.hom (thick R I e)) → (∀ e, β e ≫ b (e + 1) = b e) → ∀ Z : Over (Spec (CommRingCat.of R)), IsProjBy Z.hom → ∀ c : ∀ e, (Y e).left ⟶ Z.left, (∀ e, c e ≫ Z.hom = (Y e).hom ≫ thick R I e) → (∀ e, β e ≫ c (e + 1) = c e) → ∃ g : B ⟶ Z, ∀ e, b e ≫ g.left = c e := by
-  first | exact @GlobalTheory.MorAlgTower.exists_hom_of_tower | exact GlobalTheory.MorAlgTower.exists_hom_of_tower | (intros; apply GlobalTheory.MorAlgTower.exists_hom_of_tower <;> assumption)
+  first | exact @GlobalTheory.MorAlgTower.exists_hom_of_tower
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsHomAlgebraisationOfReductionTowerStatement =====
@@ -361,10 +361,7 @@ def Rel {H : LB X} {H' : LB X'} (β : X' ⟶ X) (w : LB.Iso H' (H.pull β)) (s :
   ∀ z (k : H.ι) (k' : H'.ι), β z ∈ H.U k → z ∈ H'.U k' →
     gs β z _ (s.f k) = (gw w (𝟙 _) z k k').val * gs (𝟙 _) z _ (s'.f k')
 
-theorem gs_stalkMap (r : Z ⟶ X') (β : X' ⟶ X) (z : Z) (U : X.Opens) (h : β (r z) ∈ U) (a : Γ(X, U)) :
-    (r.stalkMap z).hom (gs β (r z) U a) = gs (r ≫ β) z U a := by
-  rw [← gs_pull r β z U h, gs_eq β _ U h, gs_eq r z _ h]
-  exact Scheme.Hom.germ_stalkMap_apply r (β ⁻¹ᵁ U) z h _
+alias gs_stalkMap := _root_.GlobalTheory.Unif.PolyStep.gs_stalkMap
 
 theorem Rel.pull {H : LB X} {H' : LB X'} {β : X' ⟶ X} {w : LB.Iso H' (H.pull β)} {s : LB.Sec H} {s' : LB.Sec H'}
     (h : Rel β w s s') (r : Z ⟶ X') (z : Z) (k : H.ι) (k' : H'.ι) (hk : β (r z) ∈ H.U k) (hk' : r z ∈ H'.U k') :
@@ -387,26 +384,6 @@ theorem Rel.comp {H : LB X} {H' : LB X'} {H'' : LB X''} {β : X' ⟶ X} {β' : X
   rw [h.pull β' z k i hk hi, h' z i k'' hi hk'', T _ (𝟙 _) z k i k'' hk hi hk'', Category.id_comp, Units.val_mul,
     _root_.mul_assoc]
 
-theorem surjective_thickTrans (R : Type) [CommRing R] (I : Ideal R) (e : ℕ) : Surjective (thickTrans R I e) := by
-  refine ⟨fun x => ?_⟩
-  have h : I ^ (e + 1 + 1) ≤ I ^ (e + 1) := Ideal.pow_le_pow_right (by omega)
-  have hx : (x : PrimeSpectrum (R ⧸ I ^ (e + 1 + 1))) ∈
-      Set.range (PrimeSpectrum.comap (Ideal.Quotient.factor h)) := by
-    rw [range_comap_of_surjective _ _ (Ideal.Quotient.factor_surjective h)]
-    intro a ha
-    obtain ⟨a, rfl⟩ := Ideal.Quotient.mk_surjective a
-    have ha' : a ∈ I ^ (e + 1) := by
-      simpa [RingHom.mem_ker, Ideal.Quotient.eq_zero_iff_mem] using ha
-    refine x.2.mem_of_pow_mem 2 ?_
-    have : Ideal.Quotient.mk (I ^ (e + 1 + 1)) a ^ 2 = 0 := by
-      rw [← map_pow, Ideal.Quotient.eq_zero_iff_mem]
-      refine Ideal.pow_le_pow_right (show e + 1 + 1 ≤ (e + 1) * 2 by omega) ?_
-      rw [pow_mul]
-      exact Ideal.pow_mem_pow ha' 2
-    rw [this]
-    exact Ideal.zero_mem _
-  exact hx
-
 theorem exists_lb_of_generated_system : ∀ (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing R] (I : Ideal R), I ≠ ⊤ → IsAdicComplete I R → ∀ (Y : ∀ e : ℕ, Over (Spec (CommRingCat.of (R ⧸ I ^ (e + 1))))) (β : ∀ e, (Y e).left ⟶ (Y (e + 1)).left), (∀ e, IsPullback (β e) (Y e).hom (Y (e + 1)).hom (thickTrans R I e)) → ∀ (B : Over (Spec (CommRingCat.of R))) (b : ∀ e, (Y e).left ⟶ B.left), IsProjBy B.hom → Flat B.hom → (∀ e, IsPullback (b e) (Y e).hom B.hom (thick R I e)) → (∀ e, β e ≫ b (e + 1) = b e) → ∀ (H : ∀ e, LB (Y e).left) (v : ∀ e, LB.Iso (H e) ((H (e + 1)).pull (β e))), (∀ e, (H e).IsLB ∧ (v e).IsGen) → ∀ (n : ℕ) (s : ∀ e, Fin (n + 1) → LB.Sec (H e)), (∀ e j, (∀ z (k : (H (e + 1)).ι) (k' : (H e).ι), (β e) z ∈ (H (e + 1)).U k → z ∈ (H e).U k' → gs (β e) z _ ((s (e + 1) j).f k) = (Geo.Tor.gw (v e) (𝟙 _) z k k').val * gs (𝟙 _) z _ ((s e j).f k'))) → (⨆ i, nonzeroLocus (s 0 i) = ⊤) → ∃ M : LB B.left, M.IsLB ∧ ∀ e, LBIso (H e) (M.pull (b e)) := by
   intro R _ _ _ I hI hc Y β hβ B b hB hfl hb hbb H v hH n s hs h0
   have hgen : ∀ e, ⨆ i, nonzeroLocus (s e i) = ⊤ := by
@@ -415,7 +392,7 @@ theorem exists_lb_of_generated_system : ∀ (R : Type) [CommRing R] [IsLocalRing
     | zero => exact h0
     | succ e ih =>
       have hsur : Surjective (β e) :=
-        MorphismProperty.of_isPullback (P := @Surjective) (hβ e).flip (surjective_thickTrans R I e)
+        MorphismProperty.of_isPullback (P := @Surjective) (hβ e).flip (_root_.GlobalTheory.LBAlg.surjective_thickTrans R I e)
       refine top_le_iff.1 fun y _ => ?_
       obtain ⟨z, rfl⟩ := hsur.surj y
       obtain ⟨i, hi⟩ := TopologicalSpace.Opens.mem_iSup.1

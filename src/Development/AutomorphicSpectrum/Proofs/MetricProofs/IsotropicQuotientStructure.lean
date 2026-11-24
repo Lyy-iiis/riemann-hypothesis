@@ -170,7 +170,7 @@ theorem ringAction_descends_along_surjection
     fun a z => hF a z⟩
   · exact hext _ _ fun z => by simp [hF]
   · intro a b
-    exact hext _ _ fun z => by simp [hF, Module.End.mul_apply]
+    exact hext _ _ fun z => by simp [hF]
   · exact hext _ _ fun z => by simp [hF]
   · intro a b
     exact hext _ _ fun z => by simp [hF]
@@ -861,7 +861,7 @@ theorem exists_quot (hb : Function.Bijective form) (halt : ∀ x, form x x = 0) 
     { carrier := {x | ∀ y ∈ I, form x y = 0}
       add_mem' := by
         intro x z hx hz y hy
-        simp only [Set.mem_setOf_eq, map_add (f := _), LinearMap.add_apply, hx y hy, hz y hy, add_zero]
+        simp only [map_add (f := _), LinearMap.add_apply, hx y hy, hz y hy, add_zero]
       zero_mem' := by
         intro y _
         simp
@@ -952,10 +952,6 @@ theorem im_part_zero (hI : IsIsoSub R.form I) {u u' : Fin g → ℂ} (hu : u ∈
   rw [map_add (f := _), imB_iso R hI hu' hu, zero_add, imB_apply, ip_smul_right, Complex.I_mul_im] at h
   exact eq_zero_of_re R h
 
-theorem span_split {T : Set (Fin g → ℂ)} {w : Fin g → ℂ} (hw : w ∈ Submodule.span ℂ T) :
-    ∃ u ∈ Submodule.span ℝ T, ∃ u' ∈ Submodule.span ℝ T, w = u + Complex.I • u' :=
-  _root_.UpperTheory.Reformulated.B.Yhc5.main hw
-
 theorem complex_indep (hI : IsIsoSub R.form I) {k : ℕ} {i : Fin k → Λ} (hi : ∀ b, i b ∈ I)
     (hli : LinearIndependent ℤ i) : LinearIndependent ℂ fun b => R.P (i b) := by
   rw [Fintype.linearIndependent_iff]
@@ -1018,7 +1014,7 @@ theorem isotropic_quotient_lattice : ∀ (E : Type) [Field E] [NumberField E] [I
   have hSW : ∀ u ∈ Submodule.span ℝ (R.P '' I), u ∈ Submodule.span ℂ (R.P '' I) := fun u hu =>
     Submodule.span_le_restrictScalars ℝ ℂ _ hu
   have hS : ∀ x, (∀ y ∈ I, R.form x y = 0) → R.P x - j (q (R.P x)) ∈ Submodule.span ℝ (R.P '' I) := fun x hx => by
-    obtain ⟨u, hu, u', hu', h⟩ := span_split (hsub (R.P x))
+    obtain ⟨u, hu, u', hu', h⟩ := _root_.UpperTheory.Reformulated.B.Yhc5.main (hsub (R.P x))
     have h1 : u' = 0 := im_part_zero R hI hu hu' (by
       rw [← h, map_sub, imB_span R (fun v hv => by rw [imB_P, hx v hv, Int.cast_zero]) hu', imB_apply,
         horth _ (hSW _ hu'), Complex.zero_im, sub_zero])
@@ -1118,7 +1114,7 @@ section -- clump:auto
 open NumberField Matrix Filter Topology GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.Cusp GroundTheory.Heights₂.Heights.LowerBoundFree GroundTheory.Heights₂.Heights.Regular
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.quotient_lattice_by_isotropic_submodule : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (g : ℕ) (Λ : Type) [AddCommGroup Λ] [Module (𝓞 E) Λ] (Ψ : Type) [Fintype Ψ] (R : RiemLat E g Λ) (I : Submodule (𝓞 E) Λ), IsSaturated I → IsIsoSub R.form I → ∃ (g' : ℕ) (Λ' : Type) (_ : AddCommGroup Λ') (_ : Module (𝓞 E) Λ') (R' : RiemLat E g' Λ') (q : (Fin g → ℂ) →ₗ[ℂ] (Fin g' → ℂ)), Function.Surjective q ∧ LinearMap.ker q = Submodule.span ℂ (R.P '' I) ∧ (∀ a x, q (R.B a x) = R'.B a (q x)) ∧ Set.range R'.P = q '' (R.P '' {x | ∀ y ∈ I, R.form x y = 0}) ∧ ∀ x y, (∀ v ∈ I, R.ip (R.P v) x = 0) → R'.ip (q x) (q y) = R.ip x y := by
-  first | exact @LevelTowerAlt.isotropic_quotient_lattice | exact LevelTowerAlt.isotropic_quotient_lattice
+  first | exact @LevelTowerAlt.isotropic_quotient_lattice
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.MetricProofs.QuotientLatticeByIsotropicSubmodule =====

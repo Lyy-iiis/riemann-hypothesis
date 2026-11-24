@@ -405,10 +405,10 @@ theorem exists_subquot (T C : Ob k G) (Y : Submodule (MonoidAlgebra k G) T.ρ.as
     C.ρ.asModuleEquiv.toLinearMap ∘ₗ q.restrictScalars k ∘ₗ e.symm.toLinearMap, fun g x => ?_,
     T.ρ.asModuleEquiv.injective.comp (Y.subtype_injective.comp e.symm.injective), fun g x => ?_,
     C.ρ.asModuleEquiv.surjective.comp (hq.comp e.symm.surjective)⟩
-  · simp [key, Representation.asModuleEquiv_map_smul]
+  · simp [key]
     rfl
   · simp only [LinearMap.comp_apply, LinearEquiv.coe_coe, LinearMap.restrictScalars_apply, key, map_smul]
-    simp [Representation.asModuleEquiv_map_smul]
+    simp
     rfl
 
 theorem jh_match : ∀ {k G : Type} [Field k] [Group G] (T : Ob k G) (ω : G →* kˣ) (t μ s : ℕ) (C : Fin s → Ob k G), (∀ a, IsSimpleModule (MonoidAlgebra k G) (C a).ρ.asModule) → SameSS (piRep fun a => (C a).ρ) (piRep fun _ : Fin μ => refSum T ω t) → ∃ c : Fin s → Option (Fin t), (∀ a e, c a = some e → ∃ f, IsHom (C a) (chr (ω ^ (-(e.val : ℤ)))) f ∧ Function.Bijective f) ∧ (∀ a, c a = none → ∃ (A₁ : Ob k G) (j : (Fin A₁.m → k) →ₗ[k] (Fin T.m → k)) (p : (Fin A₁.m → k) →ₗ[k] (Fin (C a).m → k)), IsHom A₁ T j ∧ Function.Injective j ∧ IsHom A₁ (C a) p ∧ Function.Surjective p) ∧ ∀ e, (Finset.univ.filter fun a => c a = some e).card = μ := by
@@ -593,29 +593,9 @@ namespace GlobalTheory.Models.ThroughLine
 
 variable {k G : Type} [Field k] [Group G]
 
-theorem exists_ker (A B : Ob k G) (p : (Fin A.m → k) →ₗ[k] (Fin B.m → k)) (hp : IsHom A B p) :
-    ∃ (K : Ob k G) (f : (Fin K.m → k) →ₗ[k] (Fin A.m → k)),
-      IsHom K A f ∧ Function.Injective f ∧ Function.Exact f p := by
-  obtain ⟨K, e, he⟩ := exists_ob (A.ρ.subrepresentation (LinearMap.ker p) (fun g x hx => by
-    rw [Submodule.mem_comap, LinearMap.mem_ker, hp g x, LinearMap.mem_ker.mp hx, map_zero]))
-  refine ⟨K, (LinearMap.ker p).subtype ∘ₗ e.symm.toLinearMap, fun g x => ?_,
-    (LinearMap.ker p).subtype_injective.comp e.symm.injective, fun y => ⟨fun hy => ?_, ?_⟩⟩
-  · obtain ⟨x, rfl⟩ := e.surjective x
-    rw [← he]
-    simp
-  · exact ⟨e ⟨y, hy⟩, by simp⟩
-  · rintro ⟨x, rfl⟩
-    exact (e.symm x).2
+alias exists_ker := _root_.GlobalTheory.Models.SubModel.exists_ker
 
-theorem exists_coker (A B : Ob k G) (j : (Fin A.m → k) →ₗ[k] (Fin B.m → k)) (hj : IsHom A B j) :
-    ∃ (Q : Ob k G) (q : (Fin B.m → k) →ₗ[k] (Fin Q.m → k)),
-      IsHom B Q q ∧ Function.Surjective q ∧ Function.Exact j q := by
-  obtain ⟨Q, e, he⟩ := exists_ob (B.ρ.quotient (LinearMap.range j) (fun g x hx => by
-    obtain ⟨y, rfl⟩ := hx
-    exact ⟨A.ρ g y, hj g y⟩))
-  refine ⟨Q, e.toLinearMap ∘ₗ (LinearMap.range j).mkQ, fun g x => he g (Submodule.Quotient.mk x),
-    e.surjective.comp (LinearMap.range j).mkQ_surjective, fun y => ?_⟩
-  simp [Submodule.Quotient.mk_eq_zero]
+alias exists_coker := _root_.GlobalTheory.Models.SubModel.exists_coker
 
 theorem simple_chr (χ : G →* kˣ) : IsSimpleModule (MonoidAlgebra k G) (chr χ).ρ.asModule := by
   rw [← Representation.irreducible_iff_isSimpleModule_asModule]

@@ -64,6 +64,7 @@ import Mathlib.Algebra.Order.Archimedean.Real.Hom
 import Mathlib.Tactic.Basify
 import Mathlib.Tactic.ENatToNat
 import Mathlib.Tactic.Linter.Style
+import Formalism.PeriodIntegrals.ExplicitFormulaCounts.WeylForK
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Formalism.LocalToGlobal.SiegelLatticeTheory.TraceIntegralEstimates.PeriodG, Formalism.LocalToGlobal.SiegelLatticeTheory.TraceIntegralEstimates.AmpNZTie
@@ -159,7 +160,7 @@ end -- clump:auto
 -- ===== end clump member: Formalism.LocalToGlobal.SiegelLatticeTheory.TraceIntegralEstimates.PeriodG =====
 
 -- ===== clump member: Formalism.LocalToGlobal.SiegelLatticeTheory.TraceIntegralEstimates.AmpNZTie =====
--- clump-header: {"m": "Formalism.LocalToGlobal.SiegelLatticeTheory.TraceIntegralEstimates.AmpNZTie", "h": "module\n\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.BetaCut\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.FramesTurn\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.IsPtRepTrDat\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.AmpOrbOfAmpDD\npublic import Formalism.FormalDegreeBessel.FinalBF\npublic import Formalism.HermitianCurvature.HermitianCurvatureProofs.BXiAsm\nimport Formalism.HermitianCurvature.HermitianCurvatureProofs.BesselDecayBounds.BesselUnitNorm.BesselNormSteps.BesselLine.SfiniteMuN\nimport Formalism.HermitianCurvature.HermitianCurvatureProofs.RegularisedPairingViaPhase\npublic import Formalism.LocalToGlobal.SiegelLatticeTheory.TraceIntegralEstimates.PeriodG\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.BigCellDensity\nimport Formalism.SharpRestriction.CuspSpanNormBounds.BridgeCSB\nimport Formalism.SharpRestriction.CuspSpanNormBounds.DMiMulVecApply\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.AmpBig\nimport Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.BigCellConjI\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.SigmaFiniteAmplitudes.SigmaFiniteOfUnfold\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.UnimodularSchurMeasures.OrderedAtRanksOfPositionElement\nimport Mathlib.Algebra.Order.Archimedean.Real.Hom\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Real\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\npublic import Formalism.FormalDegreeBessel.FormalDegreeRatio.UnitaryWeylNormalHolds\n\n"}
+-- clump-header: {"m": "Formalism.LocalToGlobal.SiegelLatticeTheory.TraceIntegralEstimates.AmpNZTie", "h": "module\n\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.BetaCut\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.FramesTurn\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.IsPtRepTrDat\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.AmpOrbOfAmpDD\npublic import Formalism.FormalDegreeBessel.FinalBF\npublic import Formalism.HermitianCurvature.HermitianCurvatureProofs.BXiAsm\nimport Formalism.HermitianCurvature.HermitianCurvatureProofs.BesselDecayBounds.BesselUnitNorm.BesselNormSteps.BesselLine.SfiniteMuN\nimport Formalism.HermitianCurvature.HermitianCurvatureProofs.RegularisedPairingViaPhase\npublic import Formalism.LocalToGlobal.SiegelLatticeTheory.TraceIntegralEstimates.PeriodG\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.BigCellDensity\nimport Formalism.SharpRestriction.CuspSpanNormBounds.BridgeCSB\nimport Formalism.SharpRestriction.CuspSpanNormBounds.DMiMulVecApply\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.AmpBig\nimport Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.BigCellConjI\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.FrobeniusCoefficientMemLp.SigmaFiniteAmplitudes.SigmaFiniteOfUnfold\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.UnimodularSchurMeasures.OrderedAtRanksOfPositionElement\nimport Mathlib.Algebra.Order.Archimedean.Real.Hom\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Real\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\npublic import Formalism.FormalDegreeBessel.FormalDegreeRatio.UnitaryWeylNormalHolds\nimport Formalism.PeriodIntegrals.ExplicitFormulaCounts.WeylForK\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -188,8 +189,6 @@ theorem stdL_c (L : LocBessel k r) (ka : ℝ) (hka : 0 < ka) : (stdL L ka hka).c
   simp only [cOfDpsi, cStd, Complex.ofReal_inv]
   first
   | (rw [mul_comm, mul_assoc, mul_inv_cancel₀ hk0, mul_one])
-  | field_simp
-  | (field_simp; ring)
 
 theorem jNorm2_std (L : LocBessel k r) (ka : ℝ) (hka : 0 < ka) (hc : L.c = ((2 * ka : ℝ) : ℂ)) (hk2 : 2 ≤ k)
     (f : Mx k r → (L.Wq →L[ℂ] L.Wp)) (μsec : ℂ → Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ)
@@ -275,11 +274,6 @@ theorem normSq_tie {k0 r : ℕ} (hk2 : 2 ≤ k0 + 1) (L : LocBessel (k0 + 1) r) 
   rw [h1, h2, h3, h4, h5, h6, h7, ← hc]
   rfl
 
-theorem inner_iso {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] (T : H →L[ℂ] H) (hT : ∀ u, ‖T u‖ = ‖u‖)
-    (a b : H) : ⟪T a, T b⟫_ℂ = ⟪a, b⟫_ℂ := by
-  let T' : H →ₗᵢ[ℂ] H := { toLinearMap := (T : H →ₗ[ℂ] H), norm_map' := hT }
-  exact T'.inner_map_map a b
-
 theorem stdF_coef (L : LocBessel k r) (ka : ℝ) (hka : 0 < ka) (v v' : L.Hs) (ξ : L.Wp) (ξ' : L.Wq) :
     ∀ x ∈ UH (Hpk k r), stdF L ka (Formalism.MainNotions.S.Pv.AmpDD.coefF L v v' ξ ξ') x =
       Formalism.MainNotions.S.Pv.BetaCut.coefM (turnL L ka).σ ((turnL L ka).σ (dMi k r ka⁻¹ 1) v)
@@ -298,7 +292,7 @@ theorem stdF_coef (L : LocBessel k r) (ka : ℝ) (hka : 0 < ka) (v v' : L.Hs) (�
     rw [hmul' _ (WeylGroupFacts.uh_mul hdM hx) _ hdMi, hmul' _ hdM _ hx, ContinuousLinearMap.comp_assoc]
   have e2 : ∀ a b : L.Hs, ⟪a, (turnL L ka).σ (dM k r ka⁻¹ 1) b⟫_ℂ = ⟪(turnL L ka).σ (dMi k r ka⁻¹ 1) a, b⟫_ℂ := by
     intro a b
-    rw [← inner_iso ((turnL L ka).σ (dM k r ka⁻¹ 1)) (hiso' _ hdM) ((turnL L ka).σ (dMi k r ka⁻¹ 1) a) b]
+    rw [← _root_.PI.WeylForKWork.wt_inner_iso ((turnL L ka).σ (dM k r ka⁻¹ 1)) (hiso' _ hdM) ((turnL L ka).σ (dMi k r ka⁻¹ 1) a) b]
     congr 1
     rw [← ContinuousLinearMap.comp_apply, ← hmul' _ hdM _ hdMi, dM_mul_dMi hκ one_pos, h1']
     rfl
@@ -389,7 +383,7 @@ theorem be_dil (L : LocBessel k r) (ka : ℝ) (hka : 0 < ka) [SigmaFinite L.μN]
   have hin : ⟪(turnL L ka).σ (dMi k r ka⁻¹ 1) w,
       (turnL L ka).σ (cj k r ka⁻¹ 1 (Matrix.of a) * cj k r ka⁻¹ 1 (Matrix.of b)) ((turnL L ka).σ (dMi k r ka⁻¹ 1) v)⟫_ℂ =
       ⟪w, (turnL L ka).σ (Matrix.of a * Matrix.of b) v⟫_ℂ := by
-    rw [← inner_iso ((turnL L ka).σ (dM k r ka⁻¹ 1)) (hiso' _ hdM)]
+    rw [← _root_.PI.WeylForKWork.wt_inner_iso ((turnL L ka).σ (dM k r ka⁻¹ 1)) (hiso' _ hdM)]
     rw [← ContinuousLinearMap.comp_apply ((turnL L ka).σ (dM k r ka⁻¹ 1)) ((turnL L ka).σ (dMi k r ka⁻¹ 1)),
       ← hmul' _ hdM _ hdMi, dM_mul_dMi hκ one_pos, h1', ContinuousLinearMap.one_apply]
     congr 1
@@ -491,7 +485,7 @@ theorem be_dil' (L : LocBessel k r) (ka : ℝ) (hka : 0 < ka) [SigmaFinite L.μN
   have hin : ⟪(turnL L ka).σ (dMi k r ka⁻¹ 1) w,
       (turnL L ka).σ (cj k r ka⁻¹ 1 (Matrix.of a) * cj k r ka⁻¹ 1 (Matrix.of b)) ((turnL L ka).σ (dMi k r ka⁻¹ 1) v)⟫_ℂ =
       ⟪w, (turnL L ka).σ (Matrix.of a * Matrix.of b) v⟫_ℂ := by
-    rw [← inner_iso ((turnL L ka).σ (dM k r ka⁻¹ 1)) (hiso' _ hdM)]
+    rw [← _root_.PI.WeylForKWork.wt_inner_iso ((turnL L ka).σ (dM k r ka⁻¹ 1)) (hiso' _ hdM)]
     rw [← ContinuousLinearMap.comp_apply ((turnL L ka).σ (dM k r ka⁻¹ 1)) ((turnL L ka).σ (dMi k r ka⁻¹ 1)),
       ← hmul' _ hdM _ hdMi, dM_mul_dMi hκ one_pos, h1', ContinuousLinearMap.one_apply]
     congr 1
@@ -529,8 +523,6 @@ theorem normSq_ne_of_beta {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSp
     intro f hf0 hl
     first
     | rw [integral_complex_ofReal]
-    | rw [← integral_complex_ofReal]
-    | rw [integral_ofReal (𝕜 := ℂ)]
     by_cases hm : AEStronglyMeasurable f (volume : Measure ((Fin r → ℂ) × ℂ))
     · rw [integral_eq_lintegral_of_nonneg_ae (Filter.Eventually.of_forall hf0) hm, hl, ENNReal.toReal_zero,
         Complex.ofReal_zero]
@@ -621,7 +613,6 @@ theorem smooth_turn (L : LocBessel k r) (ka : ℝ) {v : L.Hs} (hv : v ∈ PI.Upq
     rw [Matrix.diagonal_mul_diagonal] at h1 ⊢
     first
     | (simpa only [mul_comm] using h1)
-    | (convert h1 using 3 <;> ring)
   have hTH : (tT k r)ᴴ = tTi k r := by
     unfold tT tTi
     rw [Matrix.diagonal_conjTranspose]
@@ -640,7 +631,7 @@ theorem smooth_turn (L : LocBessel k r) (ka : ℝ) {v : L.Hs} (hv : v ∈ PI.Upq
   let Φ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ →ₗ[ℝ] Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ :=
     { toFun := fun g => tT k r * g * tTi k r
       map_add' := by intro a b; simp [Matrix.mul_add, Matrix.add_mul]
-      map_smul' := by intro c a; simp [Matrix.mul_smul, Matrix.smul_mul] }
+      map_smul' := by intro c a; simp }
   have hcont : Continuous fun g : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ => tT k r * g * tTi k r :=
     (LinearMap.toContinuousLinearMap Φ).continuous
   simp only [PI.UpqRep.smoothVecs, Set.mem_setOf_eq, PI.UpqRep.IsSmoothVec] at hv ⊢

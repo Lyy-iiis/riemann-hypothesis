@@ -198,10 +198,6 @@ theorem isHaarSub_comap (Φ : G ≃* H) (hΦ : Continuous Φ) (hΦ' : Continuous
     show SigmaFinite (μ.map M.symm)
     first
       | exact M.symm.sigmaFinite_map
-      | exact MeasurableEquiv.sigmaFinite_map M.symm
-      | (refine SigmaFinite.of_map _ M.measurable.aemeasurable ?_
-         rw [Measure.map_map M.measurable M.symm.measurable, M.self_comp_symm, Measure.map_id]
-         exact hσ)
   · intro h
     exact h0 ((Measure.map_eq_zero_iff hs.aemeasurable).1 h)
   · rw [hmap]
@@ -288,9 +284,6 @@ open Formalism.MainNotions.S (uMat)
 variable {k r : ℕ} {ε : Fin (2 * r + k + 1) → Bool} {e f : Fin r → Fin (2 * r + k + 1) → ℂ}
   {wf : Fin k → Fin (2 * r + k + 1) → ℂ} {z0 : Fin (2 * r + k + 1) → ℂ}
 
-theorem uMat_ext {a b : Formalism.REAL.UJ ε} (h : uMat a = uMat b) : a = b :=
-  Subtype.ext (Units.ext h)
-
 theorem continuous_uMat : Continuous (uMat : Formalism.REAL.UJ ε → Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ) :=
   Units.continuous_val.comp continuous_subtype_val
 
@@ -309,12 +302,12 @@ def psiF (hF : IsFrameJ ε e f wf z0) : GH k r ≃* Formalism.REAL.UJ ε where
     rw [toM_ofM, uMat_toUJ]
     exact Qi_Qm_conj hF _
   right_inv s := by
-    apply uMat_ext
+    apply _root_.Formalism.L2.SG.Pf.WFL.UJ_ext
     rw [uMat_toUJ, toM_ofM]
     simp only [← Matrix.mul_assoc, Qm_mul_Qi hF, Matrix.one_mul]
     rw [Matrix.mul_assoc, Qm_mul_Qi hF, Matrix.mul_one]
   map_mul' g h := by
-    apply uMat_ext
+    apply _root_.Formalism.L2.SG.Pf.WFL.UJ_ext
     rw [uMat_mul, uMat_toUJ, uMat_toUJ, uMat_toUJ, toM_mul]
     calc Qm e f wf z0 * (g.toM * h.toM) * Qi ε e f wf z0
         = Qm e f wf z0 * g.toM * (Qi ε e f wf z0 * Qm e f wf z0) * h.toM * Qi ε e f wf z0 := by
@@ -577,7 +570,7 @@ theorem hermitian_scaled_right {n : ℕ} (ε : Fin n → Bool) (T : ℝ) (x z : 
 theorem hermitian_scaled_left {n : ℕ} (ε : Fin n → Bool) (T : ℝ) (x z : Fin n → ℂ) :
     hJ ε (z0v T z) x = (((Real.sqrt T)⁻¹ : ℝ) : ℂ) * hJ ε z x := by
   unfold z0v hJ
-  simp [Matrix.mulVec_smul, smul_dotProduct, star_smul]
+  simp [smul_dotProduct, star_smul]
 
 theorem folner_of_haar {D : D7} (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (u : D.what₂.Word)
     (hμ : IsHaarSub (X.SinfU u) (Formalism.L2.SG.RealObj.muS X u)) :

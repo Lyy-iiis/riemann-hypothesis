@@ -92,8 +92,7 @@ theorem finrank_eq_of_nondegenerate {LL : Type} [Field LL] {V V' : Type} [AddCom
   have eb : Module.finrank LL (V →ₗ[LL] LL) = Module.finrank LL V := Subspace.dual_finrank_eq
   omega
 
-theorem main : ∀ {LL : Type} [inst : Field LL] {V V' : Type} [inst_1 : AddCommGroup V] [inst_2 : Module LL V] [FiniteDimensional LL V] [inst_4 : AddCommGroup V'] [inst_5 : Module LL V'] [FiniteDimensional LL V'] (P : V →ₗ[LL] V' →ₗ[LL] LL), (∀ (x : V), (∀ (y : V'), ((P : V → V' →ₗ[LL] LL) x : V' → LL) y = (0 : LL)) → x = (0 : V)) → (∀ (y : V'), (∀ (x : V), ((P : V → V' →ₗ[LL] LL) x : V' → LL) y = (0 : LL)) → y = (0 : V')) → Module.finrank LL V = Module.finrank LL V' :=
-  fun P h1 h2 => finrank_eq_of_nondegenerate P h1 h2
+alias main := _root_.GlobalTheory.NondegenerateFinrank.finrank_eq_of_nondegenerate
 
 end GlobalTheory.NondegenerateFinrank
 end -- clump:auto
@@ -176,7 +175,7 @@ theorem exists_rep (φ : (Fin a → Fin n → LL) →ₗ[LL] LL) :
   refine ⟨fun b k => φ (Pi.single b (Pi.single k 1)), fun u => ?_⟩
   have hu : u = ∑ b, ∑ k, u b k • (Pi.single b (Pi.single k 1) : Fin a → Fin n → LL) := by
     funext b' k'
-    simp [Finset.sum_apply, Pi.single_apply, ite_apply, Finset.sum_ite_eq, Finset.sum_ite_eq']
+    simp [Finset.sum_apply, Pi.single_apply, ite_apply, Finset.sum_ite_eq]
   conv_lhs => rw [hu]
   rw [pr_apply]
 
@@ -240,21 +239,6 @@ theorem ann_stable (hU : ∀ b g, U b g = χ g • (T b g⁻¹).transpose) (C : 
 
 end Lin2
 
-theorem finrank_eq_of_perfect {LL : Type} [Field LL] {V V' : Type} [AddCommGroup V] [Module LL V]
-    [FiniteDimensional LL V] [AddCommGroup V'] [Module LL V'] [FiniteDimensional LL V']
-    (P : V →ₗ[LL] V' →ₗ[LL] LL) (h1 : ∀ x, (∀ y, P x y = 0) → x = 0) (h2 : ∀ y, (∀ x, P x y = 0) → y = 0) :
-    finrank LL V = finrank LL V' := by
-  first
-  | exact @_root_.GlobalTheory.NondegenerateFinrank.main
-  | exact _root_.GlobalTheory.NondegenerateFinrank.main
-  | (apply _root_.GlobalTheory.NondegenerateFinrank.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.NondegenerateFinrank.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.NondegenerateFinrank.main <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.NondegenerateFinrank.main ..)
-
-
-
-
 theorem dual_of_summand (D : D7) (i : D.nd.Loc)
     (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i))) (hr : GoodR D.nd i r)
     (Xs : Set (D.nd.X i)) (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i))
@@ -294,7 +278,7 @@ theorem dual_of_summand (D : D7) (i : D.nd.Loc)
     exact right_nondeg (LinearMap.range j) C hcompl y.1 y.2 (by
       rintro u ⟨v, rfl⟩
       exact h v)
-  refine ⟨X', PX, ⟨fun g v y => ?_, h2, h3, finrank_eq_of_perfect PX h2 h3⟩, ?_⟩
+  refine ⟨X', PX, ⟨fun g v y => ?_, h2, h3, _root_.GlobalTheory.NondegenerateFinrank.finrank_eq_of_nondegenerate PX h2 h3⟩, ?_⟩
   · rw [hPX, hPX, hjeq]
     exact pr_equiv T (fun b => Ms (x b)) χ hU g (j v) ((ann C).subtype y)
   · refine ⟨a, x, fun b => LinearMap.proj b ∘ₗ (ann C).subtype, fun b g v => rfl, fun v hv => ?_⟩

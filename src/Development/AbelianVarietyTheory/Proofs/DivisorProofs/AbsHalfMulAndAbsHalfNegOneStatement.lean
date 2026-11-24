@@ -55,19 +55,6 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 noncomputable section
 namespace GlobalTheory.AbsHalf
 
-theorem ordL_mul {L : Type} [Field L] [Valued L (WithZero (Multiplicative ℤ))] (x y : L) (hx : x ≠ 0) (hy : y ≠ 0) :
-    ordL (x * y) = ordL x + ordL y := by
-  have hx' : Valued.v x ≠ 0 := by simpa using hx
-  have hy' : Valued.v y ≠ 0 := by simpa using hy
-  have hxy : Valued.v (x * y) ≠ 0 := by simpa using mul_ne_zero hx hy
-  unfold ordL
-  rw [dite_eq_right hxy, dite_eq_right hx', dite_eq_right hy']
-  have : WithZero.unzero hxy = WithZero.unzero hx' * WithZero.unzero hy' := by
-    apply WithZero.coe_injective
-    simp [map_mul]
-  rw [this, toAdd_mul]
-  ring
-
 theorem ordL_neg_one {L : Type} [Field L] [Valued L (WithZero (Multiplicative ℤ))] : ordL (-1 : L) = 0 := by
   have h1 : Valued.v (-1 : L) ≠ 0 := by simp
   unfold ordL
@@ -96,7 +83,7 @@ theorem absHalf_mul_neg_one : ∀ (E : Type) [Field E] [NumberField E] [IsCMFiel
     exact_mod_cast Nat.pos_of_ne_zero this
   refine ⟨fun x y hx hy => ?_, ?_⟩
   · unfold absHalf
-    rw [ordL_mul x y hx hy, neg_add, zpow_add₀ hq.ne', Real.sqrt_mul (zpow_nonneg hq.le _)]
+    rw [_root_.Formalism.UG.P.fIwasawa_ordL_mul x y hx hy, neg_add, zpow_add₀ hq.ne', Real.sqrt_mul (zpow_nonneg hq.le _)]
     push_cast
     ring
   · unfold absHalf
@@ -119,7 +106,7 @@ open scoped Classical TensorProduct
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.absHalf_mul_and_absHalf_neg_one : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (w : Pl E), (∀ x y : w.adicCompletion E, x ≠ 0 → y ≠ 0 → absHalf w (x * y) = absHalf w x * absHalf w y) ∧ absHalf w (-1) = 1 := by
-  first | exact @GlobalTheory.AbsHalf.absHalf_mul_neg_one | exact GlobalTheory.AbsHalf.absHalf_mul_neg_one | (intros; apply GlobalTheory.AbsHalf.absHalf_mul_neg_one <;> assumption)
+  first | exact @GlobalTheory.AbsHalf.absHalf_mul_neg_one
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AbsHalfMulAndAbsHalfNegOneStatement =====

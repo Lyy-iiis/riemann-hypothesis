@@ -140,7 +140,7 @@ private theorem gammaA_letE_eq_letE (g : W.Gam) (c : ZMod n) : W.γA g (letE c :
   unfold letE
   by_cases h : i = c
   · subst h; simp
-  · simp [Pi.single_apply, h]
+  · simp [h]
 
 theorem twA_pow_letE (uE' : LetA O n) (h' : ℕ) (c : ZMod n) (k : ℕ) (a : LetA O n) :
     (twA W uE' h' ^ k) ((letE c : LetA O n) * a) = (letE c : LetA O n) * (twA W uE' h' ^ k) a := by
@@ -251,9 +251,8 @@ theorem ev_aeval_twA (c : ZMod n) (ζ : LL) (Eπ : LetA O n) (h' : ℕ)
     unfold ev
     split_ifs
     · first
-      | (simp only [map_smul, smul_mul_assoc, PowerSeries.coeff_smul, Algebra.smul_def]; done)
+      | (simp only [Algebra.smul_def]; done)
       | (rw [map_smul, smul_mul_assoc, PowerSeries.coeff_smul, Algebra.smul_def])
-      | (simp [Algebra.smul_def, mul_assoc]; done)
     · simp
   have hsum : ∀ (s : Finset ℕ) (g : ℕ → LetA O n),
       ev W c ζ Eπ h' (∑ k ∈ s, g k) i = ∑ k ∈ s, ev W c ζ Eπ h' (g k) i := by
@@ -335,11 +334,6 @@ namespace Formalism.MainNotions.N.Ln34.UniversalLiftFrames
 open Formalism.WeaklyAdmissibleFiltrations Formalism.BasicNotions Formalism.BasicNotions.Loc Module Formalism.MainNotions.N.Ln34 TensorProduct
 
 section Gen
-
-theorem aeval_mem_of_stable {R M : Type*} [CommRing R] [AddCommGroup M] [Module R M]
-    (S : Submodule R M) (f : Module.End R M) (hf : ∀ v ∈ S, f v ∈ S) (P : Polynomial R) {v : M}
-    (hv : v ∈ S) : Polynomial.aeval f P v ∈ S := by
-  first | exact Bl.PowerMembership.goal1 .. | (apply Bl.PowerMembership.goal1 <;> assumption) | (intros; apply Bl.PowerMembership.goal1 <;> assumption) | (apply @Bl.PowerMembership.goal1 <;> assumption) | (intros; apply @Bl.PowerMembership.goal1 <;> assumption) | (apply @Bl.PowerMembership.goal1 <;> first | assumption | infer_instance) | exact @Bl.PowerMembership.goal1 R M ‹_› ‹_› ‹_› S f hf P v hv | exact @Bl.PowerMembership.goal1 R M ‹_› ‹_› ‹_› S f hf P v | exact @Bl.PowerMembership.goal1 R M ‹_› ‹_› ‹_› S f hf P | exact @Bl.PowerMembership.goal1 R M ‹_› ‹_› ‹_› S f hf | exact @Bl.PowerMembership.goal1 R M ‹_› ‹_› ‹_› S f | exact @Bl.PowerMembership.goal1 R M ‹_› ‹_› ‹_› S | exact @Bl.PowerMembership.goal1 R M ‹_› ‹_› ‹_› | exact @Bl.PowerMembership.goal1 R M ‹_› ‹_› | exact @Bl.PowerMembership.goal1 R M ‹_› | exact @Bl.PowerMembership.goal1 R M | exact @Bl.PowerMembership.goal1 R
 
 theorem aeval_comm {R M : Type*} [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M)
     (P : Polynomial R) (v : M) : Polynomial.aeval f P (f v) = f (Polynomial.aeval f P v) := by
@@ -1151,7 +1145,7 @@ theorem universal_lift_frame [IsDomain O] (hdvr : IsDiscreteValuationRing O) (hf
       simp only [LinearMap.mulLeft_apply, twA_apply, map_mul, hγπ', Formalism.MainNotions.LiftingTheory.gammaA_letter_idempotent]
       ring
     have hzmem : ∀ j, Polynomial.aeval (twA W uE' h') PΩ (π' * ((letE c : LetA O n) * H j)) ∈ Sπ :=
-      fun j => aeval_mem_of_stable Sπ (twA W uE' h') hSπ PΩ ⟨H j, hHΔ j, by simp⟩
+      fun j => _root_.Bl.PowerMembership.goal1 Sπ (twA W uE' h') hSπ PΩ ⟨H j, hHΔ j, by simp⟩
     choose zj hzjΔ hzj using fun j => Submodule.mem_map.1 (hzmem j)
     simp only [LinearMap.mulLeft_apply] at hzj
 
@@ -1336,7 +1330,7 @@ theorem universal_lift_frame [IsDomain O] (hdvr : IsDiscreteValuationRing O) (hf
     have hPb : γLA W T₂ π' c (Polynomial.aeval (γLA W T₂ π' c) PΩ b₀) - Polynomial.aeval (γLA W T₂ π' c) PΩ b₀ ∈
         piNL W T₂ Pt π' Eπ h' c 1 := by
       rw [← aeval_comm, ← map_sub]
-      exact aeval_mem_of_stable _ _ hpiγ PΩ hγb1
+      exact _root_.Bl.PowerMembership.goal1 _ _ hpiγ PΩ hγb1
     have hxrI : xr ∈ InvL W T₂ Pt π' Eπ h' c Lr := by
       refine Submodule.mem_inf.2 ⟨hxrL, ?_⟩
       rw [Submodule.mem_comap]
@@ -1375,7 +1369,7 @@ theorem universal_lift_frame [IsDomain O] (hdvr : IsDiscreteValuationRing O) (hf
         rw [← h3, map_sub, LinearMap.sub_apply, Polynomial.aeval_C, Module.algebraMap_end_apply, hPΩ1, hstar]
         abel
       rw [e2]
-      exact Submodule.neg_mem _ (aeval_mem_of_stable _ _ hpiγ R hγb1)
+      exact Submodule.neg_mem _ (_root_.Bl.PowerMembership.goal1 _ _ hpiγ R hγb1)
 
 end Formalism.MainNotions.N.Ln34.UniversalLiftFrames
 end -- clump:auto

@@ -147,12 +147,12 @@ theorem normal_idem {n : ℕ} {Hc : Matrix (Fin n) (Fin n) ℂ} (hH : Hc.PosDef)
   have h1 : M - M * E = 0 := by
     apply eq_zero_of_form hH
     simp only [Matrix.conjTranspose_sub, Matrix.conjTranspose_mul, sub_mul, mul_sub,
-      Matrix.mul_assoc, A, B, MM, EM, hM, hc]
+      Matrix.mul_assoc, A, B, MM, EM, hc]
     abel
   have h2 : E - M * E = 0 := by
     apply eq_zero_of_form hH
     simp only [Matrix.conjTranspose_sub, Matrix.conjTranspose_mul, sub_mul, mul_sub,
-      Matrix.mul_assoc, A, B, MM, EM, hM, hc]
+      Matrix.mul_assoc, A, B, MM, EM]
     abel
   rw [sub_eq_zero] at h1 h2
   exact h2.trans h1.symm
@@ -398,11 +398,7 @@ theorem exists_proj {v0 : InfinitePlace K} (hv0 : IsConjAt v0) {n : ℕ}
     rw [Matrix.mulVec_mulVec,
       show B * (G⁻¹ * (Bᴴ * H)) * B = B by simp only [Matrix.mul_assoc, R0, hGi1, Matrix.mul_one]]
 
-private theorem hform_eq_lemma {n : ℕ} (H : Matrix (Fin n) (Fin n) K) (x y : Fin n → K) :
-    hform H x y = star x ⬝ᵥ H *ᵥ y := by
-  simp only [hform, Matrix.toLinearMapₛₗ₂'_apply, Matrix.mulVec, dotProduct, Finset.mul_sum,
-    Pi.star_apply, starRingEnd_apply, RingHom.id_apply, smul_eq_mul]
-  exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun k _ => by ring
+private alias hform_eq_lemma := _root_.Formalism.DivisionValues.RationalHermitianForm.hform_eq_dot
 
 theorem adj_matrix {n : ℕ} {H T T' : Matrix (Fin n) (Fin n) K}
     (h : ∀ x y : Fin n → K, hform H (T *ᵥ x) y = hform H x (T' *ᵥ y)) : Tᴴ * H = H * T' := by

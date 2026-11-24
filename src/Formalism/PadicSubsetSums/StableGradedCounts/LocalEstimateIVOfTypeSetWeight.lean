@@ -381,10 +381,6 @@ namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 open Formalism.GaloisIrreducibility (IsSubSum)
 
-theorem exists_le_map_eq {α β : Type*} [DecidableEq β] (f : α → β) (t : Multiset α) :
-    ∀ s : Multiset β, s ≤ t.map f → ∃ u ≤ t, u.map f = s := by
-  first | exact Bl.general_b_fact_right_rest.goal1 .. | (apply Bl.general_b_fact_right_rest.goal1 <;> assumption) | (intros; apply Bl.general_b_fact_right_rest.goal1 <;> assumption) | (apply @Bl.general_b_fact_right_rest.goal1 <;> assumption) | (intros; apply @Bl.general_b_fact_right_rest.goal1 <;> assumption) | (apply @Bl.general_b_fact_right_rest.goal1 <;> first | assumption | infer_instance) | exact @Bl.general_b_fact_right_rest.goal1 α β ‹_› f t s ‹_› | exact @Bl.general_b_fact_right_rest.goal1 α β ‹_› f t s | exact @Bl.general_b_fact_right_rest.goal1 α β ‹_› f t | exact @Bl.general_b_fact_right_rest.goal1 α β ‹_› f | exact @Bl.general_b_fact_right_rest.goal1 α β ‹_› | exact @Bl.general_b_fact_right_rest.goal1 α β | exact @Bl.general_b_fact_right_rest.goal1 α
-
 theorem divisor_degree_subsum : DivisorDegreeSubSum := by
   classical
   intro K _ f a hf
@@ -403,7 +399,7 @@ theorem divisor_degree_subsum : DivisorDegreeSubSum := by
     rw [← hdeg _ hle]
     exact natDegree_eq_of_degree_eq (degree_eq_degree_of_associated (prod_normalizedFactors hh))
   · rintro ⟨s, hs, rfl⟩
-    obtain ⟨u, hu, rfl⟩ := exists_le_map_eq natDegree _ s hs
+    obtain ⟨u, hu, rfl⟩ := _root_.Bl.general_b_fact_right_rest.goal1 natDegree _ s hs
     refine ⟨u.prod, ?_, hdeg u hu⟩
     exact (Multiset.prod_dvd_prod_of_le hu).trans (prod_normalizedFactors hf).dvd
 
@@ -446,8 +442,6 @@ theorem card_fixed_ge (β : Type) [Fintype β] [DecidableEq β] (hβ : 1 ≤ Fin
     rw [← Fintype.card_perm, ← Finset.card_univ]
     first
     | exact Finset.card_filter_add_card_filter_not _
-    | exact Finset.filter_card_add_filter_neg_card_eq_card _
-    | exact Finset.card_filter_add_card_filter_neg _
   have hneg : ((univ : Finset (Equiv.Perm β)).filter (fun s => ¬ ∃ x, s x = x)).card =
       Fintype.card (derangements β) := by
     rw [Fintype.card_subtype]
@@ -635,46 +629,28 @@ end -- clump:auto
 -- ===== end clump member: Formalism.PadicSubsetSums.StableGradedCounts.IRRLemmaP =====
 
 -- ===== clump member: Formalism.PadicSubsetSums.StableGradedCounts.LocalEstimateIVOfTypeSetWeight =====
--- clump-header: {"m": "Formalism.PadicSubsetSums.StableGradedCounts.LocalEstimateIVOfTypeSetWeight", "h": "module\n\npublic import Formalism.PadicSubsetSums.CentralIdempotents.EigenbasisOfDistinctRoots\npublic import Formalism.GaloisIrreducibility.NoSolvableTransitive\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRCycleProbSum\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRCycleTypeProb\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRDivisorDegreeSubSum\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRIrredCountUpper\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRLemmaP\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRPrimeRecipSum\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRSquarefreeCount\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRTypeCountExact\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.RegularizedHypergeometric\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\npublic import Mathlib.FieldTheory.Finite.Extension\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Henselian\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.RegularLocalRing.Defs\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Std.Tactic.BVDecide.Normalize.Prop\npublic import Mathlib.Algebra.BigOperators.Field\npublic import Mathlib.Algebra.Order.Group.Indicator\n\n"}
+-- clump-header: {"m": "Formalism.PadicSubsetSums.StableGradedCounts.LocalEstimateIVOfTypeSetWeight", "h": "module\n\npublic import Formalism.PadicSubsetSums.CentralIdempotents.EigenbasisOfDistinctRoots\npublic import Formalism.GaloisIrreducibility.NoSolvableTransitive\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRCycleProbSum\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRCycleTypeProb\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRDivisorDegreeSubSum\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRIrredCountUpper\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRLemmaP\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRPrimeRecipSum\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRSquarefreeCount\npublic import Formalism.PadicSubsetSums.StableGradedCounts.IRRTypeCountExact\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.RegularizedHypergeometric\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\npublic import Mathlib.FieldTheory.Finite.Extension\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Henselian\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.RegularLocalRing.Defs\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Std.Tactic.BVDecide.Normalize.Prop\npublic import Mathlib.Algebra.BigOperators.Field\npublic import Mathlib.Algebra.Order.Group.Indicator\nimport Formalism.GaloisIrreducibility.NoSolvableTransitive\n\n"}
 section -- clump:auto
 @[expose] public section
 
-section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
 section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
@@ -761,18 +737,12 @@ theorem comparison_transfer_holds : ComparisonTransfer := by
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 end
 
-section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
 section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
@@ -803,23 +773,14 @@ theorem share_from_count : ShareFromCount := by
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 end
 
-section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
-open Finset Polynomial
-open scoped ComplexOrder
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
 section
 open Finset Polynomial
 open scoped ComplexOrder
@@ -846,11 +807,9 @@ theorem primeToPart_unique {M : Type} [Monoid M] {l : ℕ} (hl : l.Prime) {x z :
   have hφz : 0 < Nat.totient oz := by
     first
     | exact Nat.totient_pos.2 hoz0
-    | exact Nat.totient_pos hoz0
   have hφm : 0 < Nat.totient m' := by
     first
     | exact Nat.totient_pos.2 hm'pos
-    | exact Nat.totient_pos hm'pos
   set j := (l ^ a) ^ Nat.totient oz with hj
   have hjz : j % oz = 1 % oz := Nat.ModEq.pow_totient hcz
   have hzj : z ^ j = z := by
@@ -915,7 +874,6 @@ private theorem ptp_lemma {M : Type} [Monoid M] {l : ℕ} (hl : l.Prime) {x : M}
   have hφm : 0 < Nat.totient (orderOf x / l ^ (orderOf x).factorization l) := by
     first
     | exact Nat.totient_pos.2 hm'pos
-    | exact Nat.totient_pos hm'pos
   have hP : primeToPart l x = x ^ ((l ^ (orderOf x).factorization l) ^
       Nat.totient (orderOf x / l ^ (orderOf x).factorization l)) := rfl
   set v := (orderOf x).factorization l with hv
@@ -995,21 +953,15 @@ theorem subsum_bound : LemmaPSubSum := by
   apply Finset.card_le_card
   intro σ hσ
   simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hσ ⊢
-  obtain ⟨A, hA, hc⟩ := Formalism.GaloisIrreducibility.permSubSumInv (Fin N) σ a hσ
+  obtain ⟨A, hA, hc⟩ := _root_.Formalism.GaloisIrreducibility.permutation_subset_sum_invariant (Fin N) σ a hσ
   exact ⟨A, hc, hA⟩
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 end
 
-section
-open Finset Polynomial
-open scoped ComplexOrder
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
 section
 open Finset Polynomial
 open scoped ComplexOrder
@@ -1035,7 +987,7 @@ theorem of_mul_twistedIdem {G : Type} [Group G] [Fintype G] (J : Subgroup G) (χ
   have h1 := (χ v).ne_zero
   have h2 := (χ u).ne_zero
   simp only [Equiv.coe_mulLeft, map_mul, mul_inv_rev, Units.val_mul, Units.val_inv_eq_inv_val]
-  field_simp <;> ring
+  field_simp
 
 
 
@@ -1043,43 +995,19 @@ theorem of_mul_twistedIdem {G : Type} [Group G] [Fintype G] (J : Subgroup G) (χ
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 end
-
-section
-open Finset Polynomial
-open scoped ComplexOrder
 
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
-open Finset Polynomial
-open scoped ComplexOrder
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
-open Finset Polynomial
-open scoped ComplexOrder
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
-open Finset Polynomial
-open scoped ComplexOrder
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
 section
 open Finset Polynomial
 open scoped ComplexOrder
@@ -1250,50 +1178,23 @@ theorem type_weight_exact : TypeWeightExact := by
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 end
 
-section
-open Finset Polynomial
-open scoped ComplexOrder
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
-open Finset Polynomial
-open scoped ComplexOrder
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
-open Finset Polynomial
-open scoped ComplexOrder
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
-open Finset Polynomial
-open scoped ComplexOrder
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
 section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 open Polynomial Formalism.GaloisIrreducibility
-
-theorem monicOf_monic' {K : Type} [Field K] {N : ℕ} (c : Fin N → K) : (monicOf c).Monic := by
-  exact Polynomial.monic_X_pow_add (Polynomial.degree_sum_fin_lt c)
 
 theorem sqMassLeOne_of (h : TypeSetWeight) : SqMassLeOne := by
   intro K _ _ M
@@ -1307,7 +1208,7 @@ theorem localEstimateIV_of (h : TypeSetWeight) (hP : LemmaPSubSum) (hD : Divisor
       (sqSet K N).filter (fun c => IsSubSum (degType (monicOf c)) a) := by
     apply Finset.filter_congr
     intro c _
-    exact hD K (monicOf c) a (monicOf_monic' c).ne_zero
+    exact hD K (monicOf c) a (_root_.Formalism.IrreducibleCountingLemmas.GaloisIrreducibility.monicOf_monic c).ne_zero
   rw [hfilt]
   refine le_trans (h K N (fun m => IsSubSum m a)) ?_
   have hP' := hP N a ha haN
@@ -1344,7 +1245,7 @@ theorem localEstimateV_of (h : TypeSetWeight) (hC : CycleProbSum) (hS : PrimeRec
       (sqSet K N).filter (fun c => ¬ ∃ p ∈ degType (monicOf c), p.Prime ∧ N < 2 * p ∧ p + 3 ≤ N) := by
     apply Finset.filter_congr
     intro c _
-    rw [hiff _ (monicOf_monic' c).ne_zero]
+    rw [hiff _ (_root_.Formalism.IrreducibleCountingLemmas.GaloisIrreducibility.monicOf_monic c).ne_zero]
   rw [hfilt]
   have hT := h K N (fun m => ¬ ∃ p ∈ m, p.Prime ∧ N < 2 * p ∧ p + 3 ≤ N)
   have hparts : ∀ σ : Equiv.Perm (Fin N), (∃ p ∈ σ.partition.parts, p.Prime ∧ N < 2 * p ∧ p + 3 ≤ N) ↔
@@ -1368,7 +1269,6 @@ theorem localEstimateV_of (h : TypeSetWeight) (hC : CycleProbSum) (hS : PrimeRec
       (s := (Finset.univ : Finset (Equiv.Perm (Fin N))))
       (fun σ : Equiv.Perm (Fin N) => ∃ p ∈ σ.partition.parts, p.Prime ∧ N < 2 * p ∧ p + 3 ≤ N)
     simp only [Finset.card_univ, Fintype.card_perm, Fintype.card_fin] at hadd
-    beta_reduce at hadd
     have hQ : (Finset.univ.filter fun σ : Equiv.Perm (Fin N) =>
         ∃ p ∈ σ.partition.parts, p.Prime ∧ N < 2 * p ∧ p + 3 ≤ N) =
         Finset.univ.filter fun σ : Equiv.Perm (Fin N) =>
@@ -1393,14 +1293,9 @@ theorem localEstimateV_of (h : TypeSetWeight) (hC : CycleProbSum) (hS : PrimeRec
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 end
 
-section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
-open Polynomial
-
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
 section
 open Finset Polynomial
 
@@ -1632,22 +1527,12 @@ theorem divisor_square_weight_sum_le (hM : SqMassLeOne) (K : Type) [Field K] [Fi
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 end
 
-section
-open Finset
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
-section
-open Finset
-
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
-end
-
 section
 namespace Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 
@@ -1817,7 +1702,7 @@ theorem propW_of (h1 : SqMassLower) (h3 : LocalEstimateII) (h4 : LocalEstimateII
     intro x hx
     by_contra hcon
     simp only [Set.mem_union, Set.mem_iUnion, not_or, not_exists, Set.mem_setOf_eq,
-      Finset.mem_univ, true_implies, forall_true_left] at hcon
+      Finset.mem_univ, true_implies] at hcon
     obtain ⟨⟨⟨⟨c1, c3⟩, c4⟩, c5⟩, c6⟩ := hcon
     have hsq : ∀ v, x v ∈ sqSet K N := by
       intro v

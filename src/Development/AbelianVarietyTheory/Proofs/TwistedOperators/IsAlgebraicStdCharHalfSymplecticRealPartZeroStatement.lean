@@ -64,7 +64,7 @@ namespace GlobalTheory.PsiFinAlgebraic
 
 theorem exists_pow_psi_fin_eq_one {F : Type} [Field F] [NumberField F] {ψ : AddChar (AF F) ℂ} (hψ : IsCharAF F ψ)
     (y : Af F) : ∃ M : ℕ, 0 < M ∧ ψ (pairA F 0 y) ^ M = 1 := by
-  obtain ⟨N, hN, h⟩ := GlobalTheory.AdLat.OpenLat.exists_nsmul_adele F {c | ψ (pairA F 0 c) = 1}
+  obtain ⟨N, hN, h⟩ := _root_.GlobalTheory.LocalNormBound.main F {c | ψ (pairA F 0 c) = 1}
     (GlobalTheory.FinTranslate.eventually_fin_eq_one hψ)
   obtain ⟨m, hm, hy⟩ := GlobalTheory.UnRep.SmallMat.exists_nsmul_integral y
   refine ⟨N * m, Nat.mul_pos hN (Nat.pos_of_ne_zero hm), ?_⟩
@@ -107,7 +107,7 @@ open GlobalTheory.RowEx MeasureTheory
 
 theorem _root_.GlobalTheory.T.isAlgebraic_stdChar_halfSymplectic_realPart_zero : ∀ {D : D7} {ψ : AddChar (AF D.host.F) ℂ}, IsStdChar D ψ (-1) → ∀ (S T : HSp D) (u v : WO S T),
     u.map (infPart D) = 0 → v.map (infPart D) = 0 → IsAlgebraic ℚ (ψ (symplOH S T u v)) := by
-  first | exact @GlobalTheory.PsiFinAlgebraic.isAlgebraic_psi_symplOH | exact GlobalTheory.PsiFinAlgebraic.isAlgebraic_psi_symplOH | (intros; apply GlobalTheory.PsiFinAlgebraic.isAlgebraic_psi_symplOH <;> assumption)
+  first | exact @GlobalTheory.PsiFinAlgebraic.isAlgebraic_psi_symplOH
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.IsAlgebraicStdCharHalfSymplecticRealPartZeroStatement =====

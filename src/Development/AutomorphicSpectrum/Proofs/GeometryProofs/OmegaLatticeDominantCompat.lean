@@ -86,10 +86,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 
 namespace GlobalTheory.CompanionTheory.Ar.HTPull
 
-theorem dual_sq {A B : Type} [CommRing A] [CommRing B] (c : A →+* B) :
-    (dualMap c).comp (algebraMap A (DualNumber A)) = (algebraMap B (DualNumber B)).comp c := by
-  ext r <;> simp [dualMap, TrivSqZeroExt.algebraMap_eq_inl]
-
 theorem dualMap_comp {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (c : A →+* B) (d : B →+* C) :
     (dualMap d).comp (dualMap c) = dualMap (d.comp c) := by
   ext r <;> simp [dualMap]
@@ -136,7 +132,7 @@ theorem isHT_move {R : Type} [CommRing R] [IsDomain R] {T : Type} [CommGroup T] 
   · have w₁ := Over.w (Mb.pt e)
     rw [Category.assoc, hover, ← Category.assoc, h1, Category.assoc, w₁]
     show _ = _ ≫ Spec.map _ ≫ x'
-    rw [← Category.assoc _ _ x', ← Spec.map_comp, ← CommRingCat.ofHom_comp, dual_sq]
+    rw [← Category.assoc _ _ x', ← Spec.map_comp, ← CommRingCat.ofHom_comp, _root_.GlobalTheory.CompanionTheory.Ar.SqAdd.dualMap_comp_algebraMap]
 
 theorem isHT_lie {R : Type} [CommRing R] [IsDomain R] {T : Type} [CommGroup T] (Γ : BT.QFGroup R T)
     {S : Scheme.{0}} {G : Over S} [GrpObj G] {x : Sp R ⟶ S} {i : Γ.G.left ⟶ G.left} {L₁ L₂ : Type} [AddCommGroup L₁]
@@ -357,7 +353,7 @@ theorem om_decomp {R : Type} [CommRing R] [IsLocalRing R] {X : Scheme.{0}} {x : 
         simp
       · intro a _ hne
         rw [LinearMap.smul_apply, hjd, hδ]
-        simp [Module.Basis.coord_apply, Finsupp.single_apply, hne.symm]
+        simp [Module.Basis.coord_apply, hne.symm]
       · simp
     have A : ∀ l, P (j (j₁ l)) = 0 := fun l => by
       have hl : l ∈ Submodule.span R (Set.range b) := by

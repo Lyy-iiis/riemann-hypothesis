@@ -61,8 +61,7 @@ namespace GlobalTheory.EtC.SuppAcyc
 
 variable {R : Type} [CommRing R]
 
-theorem map_comp {F G H : Shv R} (φ : F ⟶ G) (ψ : G ⟶ H) {U : Scheme.{0}} (a : Sec F U) :
-    Sec.map (φ ≫ ψ) a = Sec.map ψ (Sec.map φ a) := rfl
+alias map_comp := _root_.GlobalTheory.EtC.exactIff_map_comp
 
 theorem map_zero' {F G : Shv R} (φ : F ⟶ G) {U : Scheme.{0}} : Sec.map φ (0 : Sec F U) = 0 :=
   map_zero (φ.hom.app (op U)).hom
@@ -97,7 +96,7 @@ theorem GlobalTheory.EtC.subsingleton_of_locExact_supp : ∀ (R : Type) [CommRin
 
   have hD : D.Acyclic := by
     intro k
-    rw [HomologicalComplex.exactAt_iff' D (k - 1) k (k + 1) (by simp) (by simp), GlobalTheory.T.etaleSheaf_shortComplex_exact_iff_locally]
+    rw [HomologicalComplex.exactAt_iff' D (k - 1) k (k + 1) (by simp) (by simp), _root_.GlobalTheory.EtC.exactIff]
     intro U (b : Sec (D.X k) U) hb
     change Sec.map (D.d k (k + 1)) b = 0 at hb
     have hc : Sec.map (C.d k (k + 1)) (Sec.map (ι.f k) b) = 0 := by
@@ -234,7 +233,7 @@ section -- clump:auto
 open CategoryTheory Limits AlgebraicGeometry Opposite CochainComplex CochainComplex.HomComplex GlobalTheory.EtC
 
 theorem _root_.GlobalTheory.T.subsingleton_hypercohomology_of_locallyExact_on_support : ∀ (R : Type) [CommRing R] (E : Spc) (C : Cx R) [C.IsKInjective], (∀ (U : Scheme.{0}), Nonempty (Sx E 0 U) → ∀ (n : ℤ) (b : Sec (C.X n) U), Sec.map (C.d n (n + 1)) b = 0 → Loc U fun V g => ∃ a : Sec (C.X (n - 1)) V, Sec.map (C.d (n - 1) n) a = Sec.res g b) → ∀ n, Subsingleton (CohomologyClass ((chains R).obj E) C n) := by
-  first | (exact @GlobalTheory.EtC.subsingleton_of_locExact_supp) | (exact GlobalTheory.EtC.subsingleton_of_locExact_supp) | (intros; apply GlobalTheory.EtC.subsingleton_of_locExact_supp  <;> assumption)
+  first | (exact @GlobalTheory.EtC.subsingleton_of_locExact_supp)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.SubsingletonHypercohomologyOfLocallyExactOnSuppoStatement =====

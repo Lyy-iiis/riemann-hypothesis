@@ -154,11 +154,6 @@ open Matrix Polynomial
 
 namespace UpperTheory.V.Pr
 
-private lemma diagE {κ : Type} [Field κ] (M : Matrix (Fin 2) (Fin 2) κ) (α : Fin 2 → κ)
-    (hα : Function.Injective α) (h : M.charpoly = ∏ i, (X - C (α i))) :
-    ∃ P : GL (Fin 2) κ, M * (P : Matrix (Fin 2) (Fin 2) κ) = (P : Matrix (Fin 2) (Fin 2) κ) * diagonal α :=
-  _root_.UpperTheory.Reformulated.B.DiagonalizeTwoByTwo.diagE M α hα h
-
 private lemma strongIrr_conjE {G κ : Type} [Group G] [Field κ] {n : ℕ} (r : G →* GL (Fin n) κ) (h : StrongIrr r)
     (P : GL (Fin n) κ) : StrongIrr ((MulAut.conj P⁻¹).toMonoidHom.comp r) := by
   intro W S hS hW
@@ -202,7 +197,7 @@ private def blkE {κ : Type} [Field κ] (M : Matrix (Fin 2) (Fin 2) κ) (w : κ)
 private lemma charpoly_blkE {κ : Type} [Field κ] (M : Matrix (Fin 2) (Fin 2) κ) (w : κ) :
     (blkE M w).charpoly = M.charpoly * (X - C w) := by
   simp only [Matrix.charpoly, det_fin_three, det_fin_two]
-  simp [blkE, charmatrix_apply]
+  simp [blkE]
   ring
 
 private lemma blkE_mul {κ : Type} [Field κ] (M : Matrix (Fin 2) (Fin 2) κ) (w : κ) (a : Fin 2 → κ) (c : κ) (m : ℕ)
@@ -326,7 +321,7 @@ theorem UpperTheory.V.Pr.regCosetE :
     have := hα i.castSucc j.castSucc (by simpa using hne) 1 one_pos
     have h2 : α i = α j := Units.ext hij
     fin_cases i <;> fin_cases j <;> simp_all
-  obtain ⟨P, hP⟩ := diagE (gm σ u) _ hinj hu
+  obtain ⟨P, hP⟩ := _root_.UpperTheory.Reformulated.B.DiagonalizeTwoByTwo.diagE (gm σ u) _ hinj hu
   obtain ⟨h, hh⟩ := diagCaseE G κ _ ψ₀ (strongIrr_conjE σ hσ P) u α hα (by
     simp only [gm] at hP
     simp [gm, Matrix.mul_assoc, hP]) (P⁻¹ * y * P) z
@@ -432,7 +427,7 @@ private lemma charpoly_block {κ : Type} [Field κ] (M : Matrix (Fin 3) (Fin 3) 
   obtain ⟨a1, a2, a3, a4⟩ := hb
   rw [sub_eq]
   simp only [Matrix.charpoly, det_fin_three, det_fin_two]
-  simp [charmatrix_apply, *]
+  simp [*]
   ring
 
 private lemma cosetE {G κ : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
@@ -575,9 +570,9 @@ private def blk {H K : Type} [Group H] [CommRing K] (ρ : H →* GL (Fin 3) K)
         obtain ⟨a1, a2, a3, a4⟩ := hz g
         obtain ⟨b1, b2, b3, b4⟩ := hz h
         ext i j
-        simp only [map_mul, Matrix.mul_apply, Matrix.submatrix_apply, Matrix.transpose_apply]
+        simp only [map_mul, Matrix.mul_apply, Matrix.submatrix_apply]
         fin_cases i <;> fin_cases j <;>
-          simp [map_mul, Matrix.mul_apply, Fin.sum_univ_three, Fin.sum_univ_two, a1, a2, a3, a4, b1, b2, b3, b4] }
+          simp [Fin.sum_univ_three, Fin.sum_univ_two, a1, a4, b2, b3] }
 
 private def mid {H K : Type} [Group H] [CommRing K] (ρ : H →* GL (Fin 3) K)
     (hz : ∀ g, mat ρ g 0 1 = 0 ∧ mat ρ g 1 0 = 0 ∧ mat ρ g 1 2 = 0 ∧ mat ρ g 2 1 = 0) :
@@ -590,9 +585,9 @@ private def mid {H K : Type} [Group H] [CommRing K] (ρ : H →* GL (Fin 3) K)
       map_mul' := fun g h => by
         obtain ⟨a1, a2, a3, a4⟩ := hz g
         ext i j
-        simp only [map_mul, Matrix.mul_apply, Matrix.submatrix_apply, Matrix.transpose_apply]
+        simp only [map_mul, Matrix.mul_apply, Matrix.submatrix_apply]
         fin_cases i; fin_cases j
-        simp [map_mul, Matrix.mul_apply, Fin.sum_univ_three, a2, a3] }
+        simp [Fin.sum_univ_three, a2, a3] }
 
 private def eqv : Fin 3 ≃ Fin 2 ⊕ Fin 1 where
   toFun := ![.inl 0, .inr 0, .inl 1]
@@ -678,7 +673,7 @@ private theorem blk_form {K : Type} [CommRing K] (X Y : Matrix (Fin 3) (Fin 3) K
     simp only [Matrix.mul_apply, Matrix.transpose_apply, Matrix.submatrix_apply, Matrix.smul_apply,
       Fin.sum_univ_two, Fin.sum_univ_three] at this ⊢
     fin_cases i <;> fin_cases j <;>
-      simp [Jmat, x1, x2, x3, x4, y1, y2, y3, y4] at this ⊢ <;>
+      simp [Jmat, x2, x3, y2, y3] at this ⊢ <;>
       linear_combination this
   · ext i j
     have := he 1 1
@@ -686,7 +681,7 @@ private theorem blk_form {K : Type} [CommRing K] (X Y : Matrix (Fin 3) (Fin 3) K
       Fin.sum_univ_one, Fin.sum_univ_three] at this ⊢
     fin_cases i
     fin_cases j
-    simp [Jmat, x1, x2, x3, x4, y1, y2, y3, y4] at this ⊢
+    simp [Jmat, x1, x4, y1, y4] at this ⊢
     linear_combination this
 
 private def JU (K : Type) [CommRing K] (n : ℕ) : GL (Fin n) K := ⟨Jmat K n, Jmat K n, Jmat_mul_Jmat n, Jmat_mul_Jmat n⟩

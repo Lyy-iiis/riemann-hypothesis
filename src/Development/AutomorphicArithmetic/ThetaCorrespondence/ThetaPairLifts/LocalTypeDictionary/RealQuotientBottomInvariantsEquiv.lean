@@ -342,10 +342,6 @@ section -- clump:auto
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.IndefR Formalism.IndefR.Datum Formalism.IndefR.Links
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.fockSourceGlActionSymmetrised_opposite_signs : ∀ {D : D7} {a b : ℕ} (τ : D.what₂.Tau) (ε : Fin a → Bool) (ε' : Fin b → Bool) (Y : Matrix (Fin a) (Fin a) ℂ),
-    (∀ i j, ε' i ≠ ε j) →
-    GlobalTheory.IndefiniteRowSideFullHecke.RaisingLoweringOperators.fockS τ ε ε' Y = -(GlobalTheory.ColLie.colDer τ Y.transpose : Module.End ℂ (PolF D b a)) - (((b : ℂ) / 2) * Y.trace) • 1 := by
-  first | exact @GlobalTheory.FockOpp.fockS_of_opposite | exact GlobalTheory.FockOpp.fockS_of_opposite | (intros; apply GlobalTheory.FockOpp.fockS_of_opposite <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FockSourceGlActionSymmetrisedOppositeSignsStatement =====
@@ -404,7 +400,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 theorem _root_.GlobalTheory.T.fockSourceGlActionSymmetrised_same_signs : ∀ {D : D7} {a b : ℕ} (τ : D.what₂.Tau) (ε : Fin a → Bool) (ε' : Fin b → Bool) (Y : Matrix (Fin a) (Fin a) ℂ),
     (∀ i j, ε' i = ε j) →
     GlobalTheory.IndefiniteRowSideFullHecke.RaisingLoweringOperators.fockS τ ε ε' Y = (GlobalTheory.ColLie.colDer τ Y : Module.End ℂ (PolF D b a)) + (((b : ℂ) / 2) * Y.trace) • 1 := by
-  first | exact @GlobalTheory.ColLie.fockS_eq_colDer_of_same_signs | exact GlobalTheory.ColLie.fockS_eq_colDer_of_same_signs | (intros; apply GlobalTheory.ColLie.fockS_eq_colDer_of_same_signs <;> assumption)
+  first | exact @GlobalTheory.ColLie.fockS_eq_colDer_of_same_signs
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FockSourceGlActionSymmetrisedSameSignsStatement =====
@@ -597,7 +593,7 @@ theorem act_eq (D : D7) (ε : Bool) (M X : HSp D) (A : GlobalTheory.ChainFr.Fr M
       rw [← Matrix.conjTranspose_mul, hFFi, Matrix.conjTranspose_one]
     calc _ = F.conjTranspose * -Zf * ((F⁻¹).conjTranspose * F.conjTranspose) * F +
           F.conjTranspose * (F * F⁻¹) * Zf * F := by simp only [Matrix.mul_assoc]
-      _ = 0 := by rw [h1, hFFi]; simp [Matrix.mul_neg, Matrix.neg_mul]
+      _ = 0 := by rw [h1, hFFi]; simp
   · have hconj : F * (F⁻¹ * Zf * F) * F⁻¹ = Zf := by
       rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hFFi, Matrix.one_mul, Matrix.mul_assoc, hFFi, Matrix.mul_one]
     have htr : (F⁻¹ * Zf * F).trace = Zf.trace := by
@@ -625,7 +621,7 @@ theorem act_eq (D : D7) (ε : Bool) (M X : HSp D) (A : GlobalTheory.ChainFr.Fr M
       simp only [Bool.false_eq_true, if_false]
       push_cast
       module
-    · have h1 := GlobalTheory.T.fockSourceGlActionSymmetrised_opposite_signs (D := D) τ (fun _ : Fin M.rank => !true) (B.ε τ) (Zf.map (starRingEnd ℂ))
+    · have h1 := _root_.GlobalTheory.FockOpp.fockS_of_opposite (D := D) τ (fun _ : Fin M.rank => !true) (B.ε τ) (Zf.map (starRingEnd ℂ))
         (fun i j => by simp [hB τ i])
       rw [h1]
       have hY : (Zf.map (starRingEnd ℂ)).transpose = -S := by
@@ -638,7 +634,6 @@ theorem act_eq (D : D7) (ε : Bool) (M X : HSp D) (A : GlobalTheory.ChainFr.Fr M
       have hZt : Zf.trace = S.trace := by simp [hZf]
       rw [hY, hYt, hZt, hn', colDer_neg]
       simp only [if_true]
-      push_cast
       module
 
 theorem colSub_unitary_of_coinv : ∀ (D : D7) (ε : Bool) (M X : HSp D) (A : GlobalTheory.ChainFr.Fr M) (B : GlobalTheory.ChainFr.Fr X) (eT : D.what₂.Tau → ℚ)
@@ -686,7 +681,7 @@ theorem colSub_unitary_of_coinv : ∀ (D : D7) (ε : Bool) (M X : HSp D) (A : Gl
         by_cases h : σ = τ
         · subst h
           simp [GlobalTheory.ColLie.atPl, hτ]
-        · simp [GlobalTheory.ColLie.atPl, h, Function.update_of_ne h]
+        · simp [GlobalTheory.ColLie.atPl, h]
       rw [hsplit, GlobalTheory.MinorFrame.colSub_mul, h1, ih, smul_smul, Finset.prod_insert hτ]
   have := key Finset.univ P
   simp only [Finset.mem_univ, if_true] at this
@@ -722,7 +717,7 @@ theorem _root_.GlobalTheory.T.columnSubstitution_unitary_of_kills_lieCoinvariant
     ∀ (g : D.what₂.Tau → Matrix.unitaryGroup (Fin M.rank) ℂ) (P : PolF D X.rank M.rank),
       q (GlobalTheory.MinorFrame.colSub (fun τ => (g τ : Matrix (Fin M.rank) (Fin M.rank) ℂ)) P) =
         GlobalTheory.MinorFrame.detChar n₀ (fun τ => (g τ : Matrix (Fin M.rank) (Fin M.rank) ℂ)) • q P := by
-  first | exact @GlobalTheory.LieInt.colSub_unitary_of_coinv | exact GlobalTheory.LieInt.colSub_unitary_of_coinv | (intros; apply GlobalTheory.LieInt.colSub_unitary_of_coinv <;> assumption)
+  first | exact @GlobalTheory.LieInt.colSub_unitary_of_coinv
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ColumnSubstitutionUnitaryOfKillsLieCoinvariantsStatement =====
@@ -935,7 +930,7 @@ theorem idem_mem (hL : LieRel q q' n) (τ : ι) (S : Matrix (Fin d) (Fin d) ℂ)
   intro P P' h
   have hinv : (1 + (t - 1) • S)⁻¹ = 1 + (t⁻¹ - 1) • S := by
     apply Matrix.inv_eq_left_inv
-    simp only [add_mul, mul_add, one_mul, mul_one, smul_mul_assoc, mul_smul_comm, hS, smul_smul, add_assoc, ← add_smul]
+    simp only [add_mul, mul_add, one_mul, mul_one, smul_mul_assoc, mul_smul_comm, hS, add_assoc, ← add_smul]
     have : t⁻¹ - 1 + (t - 1) * (1 + (t⁻¹ - 1)) = 0 := by field_simp; ring
     simp only [smul_add, smul_smul, ← add_smul]
     have h2 : t⁻¹ - 1 + (t - 1 + (t - 1) * (t⁻¹ - 1)) = 0 := by rw [← this]; ring
@@ -1125,7 +1120,7 @@ theorem fockT_neg (τ : D.what₂.Tau) (Y : Matrix (Fin b) (Fin b) ℂ) (P : Pol
   · subst h
     simp [raiO, lowO, sgn]
     module
-  · simp [raiO, lowO, sgn, h, pderiv_X, Pi.single_apply, Ne.symm h]
+  · simp [raiO, lowO, sgn, h, pderiv_X, Ne.symm h]
 
 theorem actT_true {M X : HSp D} (A : GlobalTheory.ChainFr.Fr M) (B : GlobalTheory.ChainFr.Fr X) (eS : D.what₂.Tau → ℚ) (τ : D.what₂.Tau)
     (hA : ∀ j, A.ε τ j = true) (hB : ∀ i, B.ε τ i = true) (Y : Matrix (Fin X.rank) (Fin X.rank) ℂ)
@@ -1247,7 +1242,7 @@ theorem _root_.GlobalTheory.T.definite_bottom_row_transport_contragredient : ∀
       q' (GlobalTheory.MinorFrame.rowSub (fun τ => (κ τ : Matrix (Fin X.rank) (Fin X.rank) ℂ)) P') =
         GlobalTheory.MinorFrame.detChar n₀ (fun τ => (κ τ : Matrix (Fin X.rank) (Fin X.rank) ℂ)) •
           q (GlobalTheory.MinorFrame.rowSub (fun τ => (κ τ : Matrix (Fin X.rank) (Fin X.rank) ℂ).map (starRingEnd ℂ)) P) := by
-  first | exact @GlobalTheory.RowTransport.row_transport | exact GlobalTheory.RowTransport.row_transport | (intros; apply GlobalTheory.RowTransport.row_transport <;> assumption)
+  first | exact @GlobalTheory.RowTransport.row_transport
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DefiniteBottomRowTransportContragredientStatement =====
@@ -1331,7 +1326,7 @@ theorem _root_.GlobalTheory.T.definiteBottomTriple_weight_natural : ∀ (D : D7)
     GlobalTheory.SquareComm.IsTriple A A' WW α β → (∀ τ, HasInfExp D α τ (a τ) ∧ HasInfExp D β τ (b τ)) →
     GlobalTheory.Grid.IsWeil ψ true A WW β (β / α) ωA → (∃ f, GlobalTheory.SquareComm.IsFinF ψ θ true FA FW f ∧ f ≠ 0) →
     ∃ n₀ : D.what₂.Tau → ℕ, ∀ τ, (n₀ τ : ℚ) = b τ - a τ - (WW.rank : ℚ) / 2 := by
-  first | exact @GlobalTheory.WeightNat.weight_nat | exact GlobalTheory.WeightNat.weight_nat | (intros; apply GlobalTheory.WeightNat.weight_nat <;> assumption)
+  first | exact @GlobalTheory.WeightNat.weight_nat
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DefiniteBottomTripleWeightNaturalStatement =====
@@ -1355,22 +1350,10 @@ open scoped ComplexOrder
 
 namespace GlobalTheory.DefiniteFrame
 
-theorem cT_conj_eq {m p : Type} (M : Matrix m p ℂ) :
-    Formalism.UG.cT (starRingEnd ℂ) M = M.conjTranspose := by
-  ext i j; simp [Formalism.UG.cT, Matrix.conjTranspose_apply]
-
-theorem Jpq_zero (n : ℕ) : Formalism.UG.Jpq n 0 = 1 := by
-  ext i j
-  rcases i with i | i
-  · rcases j with j | j
-    · simp [Formalism.UG.Jpq, Matrix.one_apply]
-    · exact j.elim0
-  · exact i.elim0
-
 theorem posSemidef_of_hasSignature {n : ℕ} {G : Matrix (Fin n) (Fin n) ℂ}
     (h : Formalism.UG.HasSignature G n 0) : G.PosSemidef := by
   obtain ⟨e, P, hP⟩ := h
-  rw [cT_conj_eq, Jpq_zero] at hP
+  rw [_root_.Formalism.UG.P.cT_conj_eq, _root_.Formalism.UG.P.Jpq_zero] at hP
   set Q : Matrix (Fin n ⊕ Fin 0) (Fin n ⊕ Fin 0) ℂ := P.inv
   have hPQ : P.val * Q = 1 := by
     exact P.val_inv
@@ -1429,7 +1412,7 @@ open scoped TensorProduct
 
 theorem _root_.GlobalTheory.T.diagonalHermitianFrame_signs_pos_of_definite : ∀ (D : D7) (V : HSp D) (F : GlobalTheory.ChainFr.Fr V) (τ : D.what₂.Tau),
     Formalism.UG.HasSignature (gramAt D V τ) V.rank 0 → ∀ j, F.ε τ j = true := by
-  first | exact @GlobalTheory.DefiniteFrame.frame_signs_pos | exact GlobalTheory.DefiniteFrame.frame_signs_pos | (intros; apply GlobalTheory.DefiniteFrame.frame_signs_pos <;> assumption)
+  first | exact @GlobalTheory.DefiniteFrame.frame_signs_pos
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DiagonalHermitianFrameSignsPosOfDefiniteStatement =====
@@ -1584,50 +1567,6 @@ theorem GlobalTheory.RealQuotBot.real_quotient_invariants_equiv : GlobalTheory.P
     rw [hrow κ P P' hP, ← hP, hσ]
 end
 
-section
-open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.IndefR Formalism.IndefR.Datum Formalism.IndefR.Links Formalism.L2.Theta IsDedekindDomain NumberField Finset MeasureTheory
-open Formalism.MainNotions.TaylorLogMetric Formalism.MainNotions.StandardLatticesGL3 Formalism.L2.Indef.Tree.ArchimedeanLeafBounds.Cuts
-open Formalism.DivisionValues (vw)
-open GlobalTheory.ChiGrid GlobalTheory.FunObj GlobalTheory.FunObj.SqNum GlobalTheory.RowTest
-open GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle (Tri)
-open GlobalTheory.NormSum (Pair Tup)
-open Classical
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-open scoped TensorProduct
-
-theorem _root_.GlobalTheory.T.real_quotient_bottom_invariants_equiv : GlobalTheory.Published.HoweDualityReal → _root_.GlobalTheory.FunPr.ThetaLocalInputs → GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.ThetaIntegralsAgree → GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.LocalMatching →
-  ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D), IsStdChar D ψ (-1) → IsInfFam θ →
-  ∀ (A A' WW : HSp D) (FA : GlobalTheory.ChainFr.Fr A) (FA' : GlobalTheory.ChainFr.Fr A') (FW : GlobalTheory.ChainFr.Fr WW) (a b : D.what₂.Tau → ℚ)
-    (had : A.rank + A'.rank = WW.rank),
-    (∀ τ, Formalism.UG.HasSignature (gramAt D A τ) A.rank 0) → (∀ τ, Formalism.UG.HasSignature (gramAt D A' τ) A'.rank 0) →
-    (∀ τ, Formalism.UG.HasSignature (gramAt D WW τ) WW.rank 0) →
-    (∃ α β, GlobalTheory.SquareComm.IsTriple A A' WW α β ∧ ∀ τ, HasInfExp D α τ (a τ) ∧ HasInfExp D β τ (b τ)) →
-  ∀ (Pr : ModuleCat.{0} ℂ) (q : PolF D WW.rank A.rank →ₗ[ℂ] Pr) (q' : PolF D WW.rank A'.rank →ₗ[ℂ] Pr),
-    Function.Surjective q → Function.Surjective q' →
-    (∀ α β, GlobalTheory.SquareComm.IsTriple A A' WW α β → (∀ τ, HasInfExp D α τ (a τ) ∧ HasInfExp D β τ (b τ)) →
-      (∃ ωA ωB Pi rf rl p p', GlobalTheory.SquareComm.IsMatch ψ θ FA FA' FW α β ωA ωB Pi rf rl p p') ∧
-      ∀ ωA ωB Pi rf rl p p', GlobalTheory.SquareComm.IsMatch ψ θ FA FA' FW α β ωA ωB Pi rf rl p p' →
-        ∃ (Pf : ModuleCat.{0} ℂ) (r : (WO A WW → ℂ) →ₗ[ℂ] Pf) (r' : (WO A' WW → ℂ) →ₗ[ℂ] Pf) (e : Pr ⊗[ℂ] Pf ≃ₗ[ℂ] Pi),
-          (∀ x, ∃ f, GlobalTheory.SquareComm.IsFinF ψ θ true FA FW f ∧ r f = x) ∧
-          (∀ x, ∃ f, GlobalTheory.SquareComm.IsFinF ψ θ false FA' FW f ∧ r' f = x) ∧
-          (∀ f, GlobalTheory.SquareComm.IsFinF ψ θ true FA FW f → ∀ P, p (GlobalTheory.SquareComm.fockF ψ θ true FA FW f P) = e (q P ⊗ₜ r f)) ∧
-          ∀ f, GlobalTheory.SquareComm.IsFinF ψ θ false FA' FW f → ∀ P,
-            p' (GlobalTheory.SquareComm.fockF ψ θ false FA' FW f P) = e (q' P ⊗ₜ r' f)) →
-    Nontrivial Pr ∧ ∃ (n₀ : D.what₂.Tau → ℕ) (σ : (D.what₂.Tau → Matrix (Fin WW.rank) (Fin WW.rank) ℂ) → Module.End ℂ Pr),
-    (∀ (g : D.what₂.Tau → Matrix.unitaryGroup (Fin A.rank) ℂ) (P : PolF D WW.rank A.rank),
-      q (GlobalTheory.MinorFrame.colSub (fun τ => (g τ : Matrix (Fin A.rank) (Fin A.rank) ℂ)) P) =
-        GlobalTheory.MinorFrame.detChar n₀ (fun τ => (g τ : Matrix (Fin A.rank) (Fin A.rank) ℂ)) • q P) ∧
-    (∀ (g : D.what₂.Tau → Matrix.unitaryGroup (Fin A'.rank) ℂ) (P : PolF D WW.rank A'.rank),
-      q' (GlobalTheory.MinorFrame.colSub (fun τ => (g τ : Matrix (Fin A'.rank) (Fin A'.rank) ℂ)) P) =
-        GlobalTheory.MinorFrame.detChar n₀ (fun τ => (g τ : Matrix (Fin A'.rank) (Fin A'.rank) ℂ)) • q' P) ∧
-    (∀ (κ : D.what₂.Tau → Matrix.unitaryGroup (Fin WW.rank) ℂ), ∀ P ∈ GlobalTheory.MinorFrame.inv (ι := D.what₂.Tau) A.rank WW.rank n₀,
-      q (GlobalTheory.MinorFrame.rowSub (fun τ => (κ τ : Matrix (Fin WW.rank) (Fin WW.rank) ℂ).map (starRingEnd ℂ)) P) =
-        σ (fun τ => (κ τ : Matrix (Fin WW.rank) (Fin WW.rank) ℂ)) (q P)) ∧
-    (∀ (κ : D.what₂.Tau → Matrix.unitaryGroup (Fin WW.rank) ℂ), ∀ P ∈ GlobalTheory.MinorFrame.inv (ι := D.what₂.Tau) A'.rank WW.rank n₀,
-      q' (GlobalTheory.MinorFrame.rowSub (fun τ => (κ τ : Matrix (Fin WW.rank) (Fin WW.rank) ℂ)) P) =
-        GlobalTheory.MinorFrame.detChar n₀ (fun τ => (κ τ : Matrix (Fin WW.rank) (Fin WW.rank) ℂ)) • σ (fun τ => (κ τ : Matrix (Fin WW.rank) (Fin WW.rank) ℂ)) (q' P)) := by
-  first | exact @_root_.GlobalTheory.RealQuotBot.real_quotient_invariants_equiv | exact _root_.GlobalTheory.RealQuotBot.real_quotient_invariants_equiv | (intros; apply _root_.GlobalTheory.RealQuotBot.real_quotient_invariants_equiv <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.RealQuotientBottomInvariantsEquiv =====

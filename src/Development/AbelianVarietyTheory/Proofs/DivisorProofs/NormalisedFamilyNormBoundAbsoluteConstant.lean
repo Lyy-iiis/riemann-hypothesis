@@ -202,9 +202,6 @@ noncomputable section
 
 namespace GlobalTheory.LatticePeriodEtaObj
 
-theorem latticePeriodEta_obj : GlobalTheory.IndefiniteRowSideFullHecke.PeriodLatticeAgreement.LatticePeriodEta :=
-  GlobalTheory.LatticePeriodEtaProof.latticePeriodEta
-
 end GlobalTheory.LatticePeriodEtaObj
 end -- clump:auto
 end -- clump:auto
@@ -894,7 +891,6 @@ theorem eulerProd_identity {t : ℂ} (ht : ‖t‖ < 1) :
   rw [← pow_mul] at c
   norm_num at c
   have d := oddProd_neg_mul ht
-  norm_num at c
   linear_combination (eulerProd t * eulerProd (t ^ 4)) * a + (oddProd (-t) * eulerProd (t ^ 2) * eulerProd (t ^ 4)) * b +
     (eulerProd (t ^ 2) ^ 2 * eulerProd (t ^ 4)) * d - eulerProd (t ^ 2) ^ 2 * c
 
@@ -1170,7 +1166,7 @@ open Formalism.BasicNotions
 namespace GlobalTheory.Theta0MeanLeC
 
 theorem theta0MeanLeC : ∃ C : ℝ, 0 ≤ C ∧ ∀ D : Formalism.BasicNotions.D7, GlobalTheory.IndefiniteRowSideFullHecke.SignedLogMeans.MeanLeC C D :=
-  (_root_.GlobalTheory.Theta0MeanCore.theta0Mean GlobalTheory.LatticePeriodEtaObj.latticePeriodEta_obj GlobalTheory.ThetaWeberObj.thetaWeberStatement).1.2.2
+  (_root_.GlobalTheory.Theta0MeanCore.theta0Mean _root_.GlobalTheory.LatticePeriodEtaProof.latticePeriodEta GlobalTheory.ThetaWeberObj.thetaWeberStatement).1.2.2
 
 end GlobalTheory.Theta0MeanLeC
 end -- clump:auto

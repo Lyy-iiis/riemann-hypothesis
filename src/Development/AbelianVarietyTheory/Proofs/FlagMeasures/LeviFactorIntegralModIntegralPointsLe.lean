@@ -1136,13 +1136,7 @@ section GenLin
 
 variable {E : Type} [Field E] [NumberField E] {j : ℕ}
 
-theorem measurable_detNorm : Measurable (detNorm E j) := by
-  have hc : Continuous fun x : InfinitePlace E → Fin j → Fin j → ℂ =>
-      ∏ w, ‖(Matrix.of (x w)).det‖ ^ 2 := by
-    refine continuous_finsetProd _ fun w _ => ?_
-    exact ((Continuous.matrix_det (continuous_apply w :
-      Continuous fun x : InfinitePlace E → Fin j → Fin j → ℂ => Matrix.of (x w))).norm).pow 2
-  exact hc.measurable
+alias measurable_detNorm := _root_.GlobalTheory.LatDom.measurable_detNorm
 
 theorem sigmaFinite_haarGL : SigmaFinite (haarGL E j) := by
   haveI h1 : SigmaFinite (volume : Measure (Fin j → ℂ)) := by rw [volume_pi]; infer_instance
@@ -1310,7 +1304,6 @@ theorem exists_dom (hE : IsTotallyComplex E) (hj : 1 ≤ j) {Λ : Submodule (�
       rw [detNorm_aut_mul hE hΛ hγ g]
       exact hg)
   rw [haarGL_restrict hj, Set.inter_eq_right.2 hDpos] at h1
-  beta_reduce at h1
   rw [← h1]
   have h2 := _root_.GlobalTheory.DetSlab.covol_withDensity_detNorm E hE j hj Λ hΛ
     (fun t => G ((t / κ) ^ (-(1 / N)))) hF

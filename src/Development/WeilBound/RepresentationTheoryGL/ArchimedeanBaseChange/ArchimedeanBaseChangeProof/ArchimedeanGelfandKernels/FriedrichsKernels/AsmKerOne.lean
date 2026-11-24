@@ -696,7 +696,7 @@ section -- clump:auto
 
 
 theorem _root_.GlobalTheory.T.absolute_fourier_coefficients : PositivityTheory.RgBcC.Fc.AbsFC := by
-  first | exact @GlobalTheory.CompanionTheory.FuncCalc.absFC | exact GlobalTheory.CompanionTheory.FuncCalc.absFC | (intros; apply GlobalTheory.CompanionTheory.FuncCalc.absFC <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.FuncCalc.absFC
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.AbsoluteFourierCoefficientsStatement =====
@@ -1577,12 +1577,7 @@ attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 variable {n : ℕ}
 
-theorem mul_mem {x y : Mat n} (hx : x ∈ GLs n) (hy : y ∈ GLs n) : x * y ∈ GLs n := by
-  have hx' : x.det ≠ 0 := hx
-  have hy' : y.det ≠ 0 := hy
-  show (x * y).det ≠ 0
-  rw [Matrix.det_mul]
-  exact mul_ne_zero hx' hy'
+alias mul_mem := _root_.GlobalTheory.CompanionTheory.WaveAll.mul_mem_GLs
 
 theorem inv_mem {x : Mat n} (hx : x ∈ GLs n) : x⁻¹ ∈ GLs n :=
   (Matrix.isUnit_nonsing_inv_det x (isUnit_iff_ne_zero.mpr hx)).ne_zero
@@ -1932,8 +1927,6 @@ theorem wvAlg : WvAlg := by
     simp only [PositivityTheory.RgBcC.Fc.wv, PositivityTheory.RgBcC.Fc.chj, h2, h0, if_true, hsq, pow_zero, one_mul]
     first
       | ring
-      | (simp [hsq]; ring_nf)
-      | simp [hsq]
   · simp [PositivityTheory.RgBcC.Fc.wv, PositivityTheory.RgBcC.Fc.chj]
   · simp [PositivityTheory.RgBcC.Fc.wv, PositivityTheory.RgBcC.Fc.chj]
   · intro j

@@ -233,10 +233,6 @@ theorem infChar_local (φ : I → E →+* ℂ) (n : I → ℤ) (v : HeightOneSpe
 theorem finPartI_finIdele (y : (Af E)ˣ) : GlobalTheory.Mem.Chr.finPartI E (finIdele E y) = finIdele E y :=
   GlobalTheory.Mem.Chr.finPartI_eq_self fun _ => rfl
 
-theorem finPartI_local (v : HeightOneSpectrum (𝓞 E)) (x : (v.adicCompletion E)ˣ) :
-    GlobalTheory.Mem.Chr.finPartI E (localIdele E v x) = localIdele E v x :=
-  GlobalTheory.Mem.Chr.finPartI_eq_self fun _ => rfl
-
 theorem finPartI_diag (k : Eˣ) :
     GlobalTheory.Mem.Chr.finPartI E (diagUnits E k) = finIdele E (Units.map (algebraMap E (Af E)).toMonoidHom k) :=
   Units.ext rfl
@@ -363,7 +359,7 @@ theorem conjChar_loc (v : HeightOneSpectrum (𝓞 E)) (x : (v.adicCompletion E)�
   show (conjChar φ σ p hp χ m hχ).1 (localIdele E v x) = _
   rw [conjChar_apply, infChar_local, one_mul]
   show Units.map (σ : ℂ →+* ℂ).toMonoidHom (χ.1 (GlobalTheory.Mem.Chr.finPartI E (localIdele E v x))) = _
-  rw [finPartI_local]
+  rw [_root_.GlobalTheory.Mem.KerDet.finPartI_localIdele]
   rfl
 
 theorem conjChar_finPart (y : (Af E)ˣ) :
@@ -853,7 +849,6 @@ theorem sizes : ∀ ε : ℝ, ∃ Cx x₁ : ℝ, ∀ (D : Formalism.BasicNotions
     push_cast
     rw [hcard]
     have : (2 * (s : ℝ)) * F ≤ 2 * b * F := mul_le_mul_of_nonneg_right (by linarith) (by positivity)
-    push_cast at hsumκ
     linarith
   have T4 : (Formalism.PairingDivisionLocalBalance.wtM (2 * s) (kap D 1 i j s) : ℝ) * ((Real.log D.host.d + |large₂.logDerivativeAtOne|) / 2) ≤ 12 * (F * b * L) := by
     have a1 : (Real.log D.host.d + |large₂.logDerivativeAtOne|) / 2 ≤ L := by linarith

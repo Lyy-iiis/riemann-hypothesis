@@ -191,11 +191,6 @@ lemma exists_nat_mem_AA : ∃ N : ℕ, 0 < N ∧ ((N : D.host.E)) ∈ (D.host.AA
     simpa using hm
   exact h3
 
-lemma exists_nat_smul_mem {n : ℕ} {Λ : Submodule (𝓞 D.host.E) (Fin n → D.host.E)}
-    (hΛ : Submodule.IsFullLattice D.host.E Λ) (x : Fin n → D.host.E) :
-    ∃ N : ℕ, 0 < N ∧ (N : D.host.E) • x ∈ Λ :=
-  _root_.UpperTheory.Reformulated.B.Rd4.exists_nat_smul_mem hΛ x
-
 section V
 
 variable {S T : HSp D} {ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)}
@@ -208,15 +203,15 @@ lemma gen_single (hS : IsSelfDualC S ΛS) (hT : IsSelfDualC T ΛT) (i : Fin T.ra
     ∃ NT NS : ℕ, 0 < NT ∧ 0 < NS ∧ ∀ α ∈ intAf D.host.F, ∀ a ∈ D.host.AA,
       Matrix.single i j (pairA D.host.F 0 α ⊗ₜ[D.host.F] (a * ((NT * NS : ℕ) : D.host.E))) ∈ latAll S T ΛS ΛT := by
   classical
-  obtain ⟨NT, hNT, ht⟩ := exists_nat_smul_mem (PDA.selfDual_isFullLattice T ΛT hT) (Pi.single i (1 : D.host.E))
+  obtain ⟨NT, hNT, ht⟩ := _root_.UpperTheory.Reformulated.B.Rd4.exists_nat_smul_mem (PDA.selfDual_isFullLattice T ΛT hT) (Pi.single i (1 : D.host.E))
   set w : Fin S.rank → D.host.E := Matrix.vecMul (Pi.single j (1 : D.host.E)) S.gram⁻¹ with hw
-  obtain ⟨NS, hNS, hs⟩ := exists_nat_smul_mem (PDA.selfDual_isFullLattice S ΛS hS) (star w)
+  obtain ⟨NS, hNS, hs⟩ := _root_.UpperTheory.Reformulated.B.Rd4.exists_nat_smul_mem (PDA.selfDual_isFullLattice S ΛS hS) (star w)
   refine ⟨NT, NS, hNT, hNS, fun α hα a ha => ?_⟩
   have hrow : ∀ j', ∑ k, star (((NS : D.host.E) • star w) k) * S.gram k j' =
       (NS : D.host.E) * (if j = j' then 1 else 0) := by
     intro j'
     have h1 : ∀ k, star (((NS : D.host.E) • star w) k) = (NS : D.host.E) * w k := fun k => by
-      simp [Pi.smul_apply, star_smul, star_natCast]
+      simp [Pi.smul_apply, star_natCast]
     simp_rw [h1, mul_assoc, ← Finset.mul_sum]
     congr 1
     have h2 : ∑ k, w k * S.gram k j' = (Matrix.vecMul w S.gram) j' := rfl

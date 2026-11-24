@@ -67,7 +67,7 @@ open GlobalTheory.FunObj GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheor
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField GlobalTheory.FunObj.borelKw GlobalTheory.FunObj.borelSpaceKw
 
 theorem _root_.GlobalTheory.T.unitaryInBasis_integral_at_conjugatePlace : ∀ {D : D7} (V : HSp D) (β : GL (Fin V.rank) (Lev.EAf D)) (Λ : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)), IsFrame β Λ → Formalism.L2.Herm.dualL D.sp.cm V Λ = Λ → ∀ x ∈ UA D.sp.cm V.gram, ∀ w : Pl D.host.E, inBasis rfl β w x ∈ GlobalTheory.SplitWeil.KO (Kw w) (Fin V.rank) → inBasis rfl β (Formalism.DivisionValues.conjPl w) x ∈ GlobalTheory.SplitWeil.KO (Kw (Formalism.DivisionValues.conjPl w)) (Fin V.rank) := by
-  first | exact @GlobalTheory.ConjPlaceUnitary.inBasis_conjPl_mem_KO | exact GlobalTheory.ConjPlaceUnitary.inBasis_conjPl_mem_KO | (intros; apply GlobalTheory.ConjPlaceUnitary.inBasis_conjPl_mem_KO <;> assumption)
+  first | exact @GlobalTheory.ConjPlaceUnitary.inBasis_conjPl_mem_KO
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnitaryInBasisIntegralAtConjugatePlaceStatement =====
@@ -210,7 +210,7 @@ theorem rowPt_mem_stdLat : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts}
     have e2 : (rowPt S k).2 = 1 := rfl
     rw [e2, inv_one]
     intro y _
-    rw [GlobalTheory.VacMove.mt_one₀, Matrix.one_mulVec]
+    rw [_root_.GlobalTheory.BesselCompare.mt_one, Matrix.one_mulVec]
   have hl := (lastIx D).2
   have sdS : IsSelfDualC (G.pS (.chi (lastIx D) D.R.m : Pair T)) (S.N.latS (.chi (lastIx D) D.R.m)) :=
     isSelfDualC_neg (OrthoFrame.isSelfDualC_colLat_of_orthonormal _ _ (S.N.fr_on _ ⟨by omega, rfl⟩))

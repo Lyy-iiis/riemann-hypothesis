@@ -142,7 +142,7 @@ theorem tMat_add (ϖ : L) (h0 : ϖ ≠ 0) (m : ℕ) (a c : Fin m → ℤ) :
   unfold tMat
   rw [diagonal_mul_diagonal]
   congr 1; funext i
-  split_ifs <;> simp [zpow_add₀ h0, neg_add] <;> ring
+  split_ifs <;> simp [zpow_add₀ h0] <;> ring
 
 theorem tMat_zero (ϖ : L) (m : ℕ) : tMat ϖ n m 0 = 1 := by
   unfold tMat
@@ -773,7 +773,7 @@ theorem dTor_mul {σ : L →+* L} {ϖ : L} (hσϖ : σ ϖ = ϖ) (hϖ : ϖ ≠ 0)
   by_cases h1 : j = lo n k
   · subst h1; simp [hne.symm, hσϖ, hϖ]
   by_cases h2 : j = (lo n k).rev
-  · subst h2; simp [hne, hne.symm, hσϖ, hϖ]
+  · subst h2; simp [hne.symm, hσϖ, hϖ]
   have h3 : j.rev ≠ lo n k := fun h => h2 (by rw [← h, Fin.rev_rev])
   have h4 : j.rev ≠ (lo n k).rev := fun h => h1 (Fin.rev_injective h)
   simp [h1, h2, h3, h4]
@@ -1322,37 +1322,20 @@ namespace GlobalTheory.SphTheta.LowBlocks
 
 variable {L : Type} [Field L] [Valued L (WithZero (Multiplicative ℤ))]
 
-theorem ordL_congr_v {x y : L} (h : Valued.v x = Valued.v y) : Formalism.UG.ordL x = Formalism.UG.ordL y := by
-  unfold Formalism.UG.ordL
-  by_cases hx : Valued.v x = 0
-  · have hy : Valued.v y = 0 := h ▸ hx
-    rw [dite_eq_left hx, dite_eq_left hy]
-  · have hy : Valued.v y ≠ 0 := h ▸ hx
-    rw [dite_eq_right hx, dite_eq_right hy]
-    congr 2
-    apply WithZero.coe_injective
-    rw [WithZero.coe_unzero, WithZero.coe_unzero, h]
-
-theorem ordL_one_eq : Formalism.UG.ordL (1 : L) = 0 :=
-  Formalism.UG.P.fIwasawa_ordL_unit 1 1 (by simp) (by simp) (by simp)
-
 theorem ordL_of_mul_eq_one {x y : L} (h : x * y = 1) : Formalism.UG.ordL y = - Formalism.UG.ordL x := by
   have hx : x ≠ 0 := left_ne_zero_of_mul_eq_one h
   have hy : y ≠ 0 := right_ne_zero_of_mul_eq_one h
   have := Formalism.UG.P.fIwasawa_ordL_mul x y hx hy
-  rw [h, ordL_one_eq] at this
+  rw [h, _root_.Formalism.UG.P.fSatake_ord_one] at this
   omega
 
 variable {σ : L →+* L} {n : ℕ}
 
 theorem ordL_rev_diag (hv : ∀ x, Valued.v (σ x) = Valued.v x) {b : GU σ n} (hb : IsBorelU b) (i : Fin n) :
     Formalism.UG.ordL (b.1.1 i.rev i.rev) = - Formalism.UG.ordL (b.1.1 i i) := by
-  rw [ordL_of_mul_eq_one (Formalism.UG.P.fSatake_unit_diag hb i), ordL_congr_v (hv _)]
+  rw [ordL_of_mul_eq_one (Formalism.UG.P.fSatake_unit_diag hb i), _root_.Formalism.UG.P.fSatake_ord_of_v (hv _)]
 
-theorem diag_ne_zero {b : GU σ n} (hb : IsBorelU b) (i : Fin n) : b.1.1 i i ≠ 0 := fun h0 => by
-  have := Formalism.UG.P.fSatake_unit_diag hb i
-  rw [show (((b : GU σ n) : GL (Fin n) L) : Matrix (Fin n) (Fin n) L) i i = 0 from h0, map_zero, zero_mul] at this
-  exact zero_ne_one this
+alias diag_ne_zero := _root_.Formalism.UG.P.fSatake_ne_zero_of_borel
 
 theorem lowBlock_tri {M : Matrix (Fin n) (Fin n) L} (hM : ∀ i j : Fin n, j < i → M i j = 0) :
     (lowBlock M).BlockTriangular id := fun i j hij => by
@@ -1494,7 +1477,7 @@ theorem prodId2 : ∀ (n n' : ℕ) (hn : n ≤ n') (qu : ℂˣ) (α : Fin (n / 2
     have e : Fin.cast (show n' / 2 - n / 2 + n / 2 = n' / 2 by omega) (Fin.natAdd (n' / 2 - n / 2) r) =
         ⟨n' / 2 - n / 2 + r.1, by omega⟩ := Fin.ext (by simp)
     rw [e, dite_eq_left (by simp)]
-    simp only [Fin.val_mk, Nat.add_sub_cancel_left, Fin.eta]
+    simp only [Nat.add_sub_cancel_left, Fin.eta]
   · rw [dite_eq_right (by simp; omega), _root_.one_zpow]
 
 theorem satU_eq_satU_liftPar_of_heckeVec_eq : ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicative ℤ))] [CompleteSpace L] (ϖ : L) (σ : L →+* L) (q : ℕ) (δ : L) (ψ : AddChar L ℂ) (n n' : ℕ) (M : Type) [AddCommGroup M] [Module ℂ M] (ρ : Matrix (Fin n') (Fin n) L → Module.End ℂ M) (ω : GU σ n × GU σ n' →* Module.End ℂ M) (s : M), IsStd ϖ σ q δ ψ ρ ω s → CayleyRule q n' ρ (ω.comp (MonoidHom.inl _ _)) s → CayleyRule q n ρ (ω.comp (MonoidHom.inr _ _)) s → n ≤ n' → ∀ h ∈ Hecke ℂ (KU σ n), ∀ h' ∈ Hecke ℂ (KU σ n'), heckeVec (ω.comp (MonoidHom.inl _ _)) (KU σ n) h s = heckeVec (ω.comp (MonoidHom.inr _ _)) (KU σ n') h' s → ∀ qu : ℂˣ, (qu : ℂ) = q → ∀ α : Fin (n / 2) → ℂˣ, SatU ϖ q h (fun i => (α i : ℂ)) = SatU ϖ q h' (fun i => (liftPar qu n n' α i : ℂ)) := by

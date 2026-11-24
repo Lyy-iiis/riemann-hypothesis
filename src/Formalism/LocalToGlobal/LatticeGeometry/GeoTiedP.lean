@@ -102,7 +102,6 @@ theorem exists_alp (D : D7) (p n : ℕ) (h : ModuliIntegralCharts.NHyp D p n) : 
     have h1 : ((mm : 𝓞 D.host.E) : D.host.E) = (mm : D.host.E) := by
       first
       | simp
-      | norm_cast
     rw [h1, map_natCast]
     push_cast
     ring
@@ -976,7 +975,7 @@ def mdlJunk (p : ℕ) [Fact p.Prime] (jc : DV.KW p →+* ℂ) (N j : ℕ) (hj : 
   om := fun _ => fpJunk _ _
   lieW := fpJunk _ _
   omW := fpJunk _ _
-  om_dual := fun τ => ⟨finCongr (rkOf_dual D _ N j hj (fun τ => psiOf_cm p jc τ) τ), fun _ => by show (0 : ℚ) = -0; rw [neg_zero]⟩
+  om_dual := fun τ => ⟨finCongr (rkOf_dual D _ N j hj (fun τ => _root_.Formalism.L2.Geo.cm_type_meets_conjugate_pair p jc τ) τ), fun _ => by show (0 : ℚ) = -0; rw [neg_zero]⟩
   dim_eq := rfl
   omW_dual := ⟨Equiv.refl _, fun _ => by show (0 : ℚ) = -0; rw [neg_zero]⟩
 

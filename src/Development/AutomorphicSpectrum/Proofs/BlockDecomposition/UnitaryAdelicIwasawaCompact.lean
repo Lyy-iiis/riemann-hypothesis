@@ -114,7 +114,7 @@ theorem mat_extH_eq_add (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin 
   · subst h
     simp [map_sub]
     ring
-  · simp [Matrix.one_apply, h]
+  · simp [h]
 
 theorem extH_stab (σ : E →ₐ[F] E) {n r : ℕ} (J : Matrix (Fin n) (Fin n) E) (g : HA R σ J)
     (X : Matrix (Fin n) (Fin r) E) (B : Matrix (Fin r) (Fin r) (R ⊗[F] E)) (hB : B.BlockTriangular id)
@@ -125,7 +125,7 @@ theorem extH_stab (σ : E →ₐ[F] E) {n r : ℕ} (J : Matrix (Fin n) (Fin n) E
   · intro a b hab
     have hne : a ≠ b := fun e => by subst e; exact lt_irrefl _ hab
     have h0 : B a b = 0 := hB hab
-    simp [Matrix.one_apply, hne, h0]
+    simp [hne, h0]
   · rw [mat_extH_eq_add, Matrix.add_mul, Matrix.mul_add, Matrix.one_mul, Matrix.mul_one, map_tensNU_mul_inclR,
       inclR_mul_map_tensNU, Matrix.sub_mul, Matrix.mul_sub, h, Matrix.one_mul, Matrix.mul_one]
 
@@ -159,7 +159,7 @@ open Formalism.UG (cT)
 open scoped TensorProduct
 
 theorem _root_.GlobalTheory.T.block_triangular_mem_minimal_parabolic : ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E} {n : ℕ} {J : Matrix (Fin n) (Fin n) E} {r : ℕ} {X Y : Matrix (Fin n) (Fin r) E}, IsCMExt F E σ → IsHermND σ J → IsWittFrame σ J X Y → ∀ (A : Type) [CommRing A] [Algebra F A] [TopologicalSpace A] (p : HA A σ J) (B : Matrix (Fin r) (Fin r) (A ⊗[F] E)), B.BlockTriangular id → (matHom A σ J p).1 * X.map (inclR (F := F) A) = X.map (inclR (F := F) A) * B → ∃ m : HA A σ J, (matHom A σ J m).1 = leviMat σ J A X Y (matHom A σ J p).1 ∧ (∃ d : Fin r → A ⊗[F] E, (matHom A σ J m).1 * X.map (inclR (F := F) A) = X.map (inclR (F := F) A) * diagonal d) ∧ (∃ d' : Fin r → A ⊗[F] E, (matHom A σ J m).1 * Y.map (inclR (F := F) A) = Y.map (inclR (F := F) A) * diagonal d') ∧ (∃ B' : Matrix (Fin r) (Fin r) (A ⊗[F] E), B'.BlockTriangular id ∧ (∀ i, B' i i = 1) ∧ (matHom A σ J (m⁻¹ * p)).1 * X.map (inclR (F := F) A) = X.map (inclR (F := F) A) * B') ∧ ∀ z : Fin n → A ⊗[F] E, ((cT (σ : E →+* E) X * J).map (inclR (F := F) A)) *ᵥ z = 0 → ∃ a : Fin r → A ⊗[F] E, ((matHom A σ J (m⁻¹ * p)).1 - 1) *ᵥ z = X.map (inclR (F := F) A) *ᵥ a := by
-  first | exact @GlobalTheory.CompanionTheory.KFin.LeviPt.exists_levi | exact GlobalTheory.CompanionTheory.KFin.LeviPt.exists_levi | (intros; apply GlobalTheory.CompanionTheory.KFin.LeviPt.exists_levi <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.KFin.LeviPt.exists_levi
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.BlockTriangularMemMinimalParabolicStatement =====
@@ -504,7 +504,7 @@ theorem hR_single (i : Fin n) (z : Fin n → Fv F v ⊗[F] E) :
   rw [hR_apply, Finset.sum_eq_single i]
   · simp [Matrix.mulVec, dotProduct]
   · intro j _ hj
-    simp [Pi.single_apply, hj]
+    simp [hj]
   · simp
 
 theorem mem_of_hR_single (hdet : J.det ≠ 0) (hJi : ∀ i j, inclR (Fv F v) (J⁻¹ i j) ∈ intLoc F E v)
@@ -1055,9 +1055,6 @@ section Tensor
 variable {F E : Type} [Field F] [Field E] [Algebra F E] (R : Type) [CommRing R] [Algebra F R]
   (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E)
 
-theorem sigR_inclR (a : E) : sigR R σ (inclR (F := F) R a) = inclR (F := F) R (σ a) := by
-  simp [Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR, Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.inclR]
-
 theorem sigR_sigR_of_invol (hσ : ∀ x, σ (σ x) = x) (t : R ⊗[F] E) : sigR R σ (sigR R σ t) = t := by
   induction t using TensorProduct.induction_on with
   | zero => simp
@@ -1090,7 +1087,7 @@ theorem isHerm_isPerfect_hR : ∀ {F E : Type} [Field F] [NumberField F] [Field 
   have hM : ∀ i j, sigR (Fv F v) σ (JR (F := F) (Fv F v) J j i) = JR (F := F) (Fv F v) J i j := by
     intro i j
     simp only [Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.JR, Matrix.map_apply]
-    rw [HermForm.sigR_inclR, hJ.1]
+    rw [_root_.GlobalTheory.Mem.VolFin.sigR_inclR, hJ.1]
   exact ⟨HermForm.isHerm_hform _ _ hc hM,
     HermForm.isPerfect_hform _ _ hc (HermForm.isUnit_det_JR (F := F) (Fv F v) J hJ.2)⟩
 
@@ -1378,11 +1375,6 @@ theorem hR_colV (v : HeightOneSpectrum (𝓞 F)) (A : Matrix (Fin n) (Fin r) E)
 
   simp only [mulVec, dotProduct, map_apply, colV, map_sum, map_mul]
 
-theorem sigma_sigma (hCM : IsCMExt F E σ) (x : E) : σ (σ x) = x := by
-  obtain ⟨τ⟩ : Nonempty (E →+* ℂ) := inferInstance
-  apply τ.injective
-  rw [hCM.2.2.2 τ, hCM.2.2.2 τ, star_star]
-
 theorem cT_mul_rect (s : E →+* E) {a b c : Type} [Fintype b] (P : Matrix a b E) (Q : Matrix b c E) :
     cT s (P * Q) = cT s Q * cT s P := by
   simp [cT, Matrix.map_mul, transpose_mul]
@@ -1394,7 +1386,7 @@ theorem gram_yx (hCM : IsCMExt F E σ) (hJ : IsHermND σ J) {X Y : Matrix (Fin n
     exact hJ.1 i j
   have hcc : cT (σ : E →+* E) (cT (σ : E →+* E) X) = X := by
     ext i j
-    exact sigma_sigma hCM _
+    exact _root_.GlobalTheory.AdelicU.cm_conj_conj hCM _
   have h1 : cT (σ : E →+* E) (1 : Matrix (Fin r) (Fin r) E) = 1 := by
     ext i j
     simp [cT, Matrix.one_apply, eq_comm]

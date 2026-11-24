@@ -156,7 +156,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.continuous_wittTowerRestriction_weilCharacter : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.IsIsoSplit V V' C B → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT χS' χT' : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ω' : GA D V' × GA D W →* Module.End ℂ (WO V' W → ℂ)), IsWeilDatumO ψ V W χS χT ω → IsWeilDatumO ψ V' W χS' χT' ω' → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.ratMx D W.rank r) μ 𝓨 → ∀ c : GA D W →* Circle, (∀ h f, IsThetaFunO ψ V W f → GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.res V V' W C B μ 𝓨 (ω (1, h) f) = (c h : ℂ) • ω' (1, h) (GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.res V V' W C B μ 𝓨 f)) → Continuous c := by
-  first | exact @GlobalTheory.TowerRestrictChar.continuous_char | exact GlobalTheory.TowerRestrictChar.continuous_char | (intros; apply GlobalTheory.TowerRestrictChar.continuous_char <;> assumption)
+  first | exact @GlobalTheory.TowerRestrictChar.continuous_char
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ContinuousWittTowerRestrictionWeilCharacterStatement =====
@@ -170,7 +170,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_open_subgroup_half_characters_separate : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (W : HSp D) (r : ℕ) (e : AE D), IsSplitIdem D e → ∀ U : AddSubgroup (halfMx (cA D e) W.rank r), IsOpen (U : Set (halfMx (cA D e) W.rank r)) → ∃ L : AddSubgroup (halfMx (cA D e) W.rank r), IsOpen (L : Set (halfMx (cA D e) W.rank r)) ∧ L ≤ U ∧ ∀ x, x ∉ L → ∃ a : halfMx e W.rank r, (∀ l ∈ L, ψ (halfSympl W (a : Mx D W.rank r) (l : Mx D W.rank r)) = 1) ∧ ψ (halfSympl W (a : Mx D W.rank r) (x : Mx D W.rank r)) ≠ 1 := by
-  first | exact @GlobalTheory.HalfSeparate.exists_open_separated | exact GlobalTheory.HalfSeparate.exists_open_separated | (intros; apply GlobalTheory.HalfSeparate.exists_open_separated <;> assumption)
+  first | exact @GlobalTheory.HalfSeparate.exists_open_separated
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsOpenSubgroupHalfCharactersSeparateStatement =====
@@ -257,7 +257,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.symplectic_restriction_isotropic_part_eq_pairing : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → ∀ K : Matrix (Fin r) (Fin V.rank) D.host.E, K * C = 1 → ∀ a t : Mx D W.rank r, symplO V W (restEmb V W K t) (isoPart V W C a) = halfSympl W a t := by
-  first | exact @GlobalTheory.HalfAverage.sympl_restEmb_isoPart | exact GlobalTheory.HalfAverage.sympl_restEmb_isoPart | (intros; apply GlobalTheory.HalfAverage.sympl_restEmb_isoPart <;> assumption)
+  first | exact @GlobalTheory.HalfAverage.sympl_restEmb_isoPart
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SymplecticRestrictionIsotropicPartEqPairingStatement =====
@@ -339,7 +339,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_halfInvariantForm_isotropicAverage_ne_zero : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (V V' W : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (ratMx D W.rank r) μ 𝓨 → ∀ K : Matrix (Fin r) (Fin V.rank) D.host.E, K * C = 1 → K * B = 0 → ∀ e, IsSplitIdem D e → ∃ ℓ' : (WO V' W → ℂ) →ₗ[ℂ] ℂ, (∀ u : WO V' W, (∀ i j, cA D e * u i j = u i j) → ∀ f, IsThetaFunO ψ V' W f → ℓ' (heisO ψ V' W u f) = ℓ' f) ∧ ∃ f, IsThetaFunO ψ V W f ∧ avgForm ψ V V' W C B μ 𝓨 K e ℓ' f ≠ 0 := by
-  first | exact @GlobalTheory.HalfAverage.avgForm_ne_zero | exact GlobalTheory.HalfAverage.avgForm_ne_zero | (intros; apply GlobalTheory.HalfAverage.avgForm_ne_zero <;> assumption)
+  first | exact @GlobalTheory.HalfAverage.avgForm_ne_zero
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsHalfInvariantFormIsotropicAverageNeZeroStatement =====
@@ -410,7 +410,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_leftInverse_isotropicFrame_killing_embedding : ∀ (D : D7) (V V' : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → ∃ K : Matrix (Fin r) (Fin V.rank) D.host.E, K * C = 1 ∧ K * B = 0 := by
-  first | exact @GlobalTheory.HalfAverage.exists_leftInv_frame_kill_emb | exact GlobalTheory.HalfAverage.exists_leftInv_frame_kill_emb | (intros; apply GlobalTheory.HalfAverage.exists_leftInv_frame_kill_emb <;> assumption)
+  first | exact @GlobalTheory.HalfAverage.exists_leftInv_frame_kill_emb
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsLeftInverseIsotropicFrameKillingEmbeddingStatement =====
@@ -473,7 +473,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_pos_integral_halfAdelicMatrix_leftMul_eq : ∀ (D : D7) (a : AE D) (m n : ℕ) (M M' : Matrix (Fin m) (Fin m) (AE D)), M * M' = 1 → M' * M = 1 → ∃ κ : ℝ, 0 < κ ∧ ∀ φ : halfMx a m n → ℂ, ∫ t, φ (leftMul a M t) ∂haarHalf a m n = κ * ∫ t, φ t ∂haarHalf a m n := by
-  first | exact @GlobalTheory.HalfAverage.integral_leftMul_eq_smul | exact GlobalTheory.HalfAverage.integral_leftMul_eq_smul | (intros; apply GlobalTheory.HalfAverage.integral_leftMul_eq_smul <;> assumption)
+  first | exact @GlobalTheory.HalfAverage.integral_leftMul_eq_smul
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsPosIntegralHalfAdelicMatrixLeftMulEqStatement =====
@@ -546,7 +546,7 @@ theorem exists_decomp_one (V V' : HSp D) {r : ℕ} (C : Matrix (Fin V.rank) (Fin
     simp only [Pi, N, Matrix.mul_assoc]
     rw [← Matrix.mul_assoc G, Matrix.mul_nonsing_inv _ hG, Matrix.one_mul, ← adj_mul, hKC, adj_one]
   have hKN' : K * N' = 0 := by
-    simp only [N', Matrix.mul_sub, ← Matrix.mul_assoc, hKC, hKB, Matrix.one_mul, Matrix.zero_mul, sub_self, sub_zero]
+    simp only [N', Matrix.mul_sub, ← Matrix.mul_assoc, hKC, hKB, Matrix.one_mul, Matrix.zero_mul, sub_self]
   have hPmN' : Pm * N' = 0 := by
     simp only [N', Matrix.mul_sub, ← Matrix.mul_assoc, hPmC, hPmB, Matrix.one_mul, Matrix.zero_mul, sub_zero, sub_self]
   have hPiN' : Pi * N' = 1 := by
@@ -578,7 +578,7 @@ theorem half_decomp : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C : Matrix (Fin V
     HMul.hMul (u : Matrix (Fin W.rank) (Fin V.rank) (AE D)) (C.map (incA D)),
     isHalf_mul hu _, isHalf_mul hu _, isHalf_mul hu _, ?_⟩
   have h1 := congrArg (fun M : Matrix (Fin V.rank) (Fin V.rank) D.host.E => M.map (incA D)) hN'
-  simp only [Matrix.map_add (f := _), Matrix.map_mul, Matrix.map_one _ (map_zero _) (map_one _)] at h1
+  simp only [Matrix.map_one _ (map_zero _) (map_one _)] at h1
   simp only [isoPart, midPart, restEmb, Matrix.map_mul, Matrix.mul_assoc]
   conv_lhs => rw [← Matrix.mul_one u, ← h1]
   simp only [Matrix.map_add _ (map_add (incA D)), Matrix.map_mul, Matrix.mul_add, Matrix.mul_assoc]
@@ -600,7 +600,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.halfAdelicHom_decompose_isotropic_middle_complement : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → ∀ K : Matrix (Fin r) (Fin V.rank) D.host.E, K * C = 1 → K * B = 0 → ∀ (a : AE D) (u : WO V W), IsHalf a u → ∃ (y : Mx D W.rank r) (x : WO V' W) (t : Mx D W.rank r), IsHalf a y ∧ IsHalf a x ∧ IsHalf a t ∧ u = isoPart V W C y + midPart V V' W B x + restEmb V W K t := by
-  first | exact @GlobalTheory.HalfDecomp.half_decomp | exact GlobalTheory.HalfDecomp.half_decomp | (intros; apply GlobalTheory.HalfDecomp.half_decomp <;> assumption)
+  first | exact @GlobalTheory.HalfDecomp.half_decomp
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.HalfAdelicHomDecomposeIsotropicMiddleComplementStatement =====
@@ -617,13 +617,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.HalfAverage
-variable {D : D7}
-theorem mt_mul'' (V : HSp D) (g h : GA D V) :
-    Formalism.L2.Theta.mt V (g * h) = Formalism.L2.Theta.mt V g * Formalism.L2.Theta.mt V h := by
-  unfold Formalism.L2.Theta.mt; rw [map_mul]; rfl
-
-theorem mt_one'' (V : HSp D) : Formalism.L2.Theta.mt V 1 = 1 := by
-  unfold Formalism.L2.Theta.mt; rw [map_one]; rfl
 end GlobalTheory.HalfAverage
 
 namespace GlobalTheory.HalfAverage
@@ -638,11 +631,6 @@ theorem res_add {V V' W : HSp D} {r : ℕ} {C : Matrix (Fin V.rank) (Fin r) D.ho
     (hG : ∀ x, IntegrableOn (fun y => G (isoPart V W C y + midPart V V' W B x)) 𝓨 μ) :
     res V V' W C B μ 𝓨 (F + G) = res V V' W C B μ 𝓨 F + res V V' W C B μ 𝓨 G :=
   funext fun x => integral_add (hF x) (hG x)
-
-theorem res_smul {V V' W : HSp D} {r : ℕ} {C : Matrix (Fin V.rank) (Fin r) D.host.E}
-    {B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E} {μ : Measure (Mx D W.rank r)} {𝓨 : Set (Mx D W.rank r)}
-    (a : ℂ) (F : WO V W → ℂ) : res V V' W C B μ 𝓨 (a • F) = a • res V V' W C B μ 𝓨 F :=
-  funext fun x => integral_const_mul a _
 
 theorem res_zero {V V' W : HSp D} {r : ℕ} {C : Matrix (Fin V.rank) (Fin r) D.host.E}
     {B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E} {μ : Measure (Mx D W.rank r)} {𝓨 : Set (Mx D W.rank r)} :
@@ -708,7 +696,7 @@ theorem charTwist_eq_one_at_split : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C :
         refine ⟨fun t x => ?_, ?_⟩
         · rw [GlobalTheory.SplitScalar.heisO_smul]; exact (hf1 t x).const_mul a
         · refine (hf2.const_mul a).congr (Filter.Eventually.of_forall fun t => ?_)
-          simp only [GlobalTheory.SplitScalar.heisO_smul, res_smul, map_smul, smul_eq_mul] }
+          simp only [GlobalTheory.SplitScalar.heisO_smul, _root_.GlobalTheory.HalfAverage.res_smul_twisted_operators, map_smul, smul_eq_mul] }
   have hP : ∀ f, IsThetaFunO ψ V W f → f ∈ P := fun f hf => ⟨fun t x => (hR _ (hth hf _)).1 x, hint f hf⟩
   let ℓ₀ : P →ₗ[ℂ] ℂ :=
     { toFun := fun f => avgForm ψ V V' W C B μ 𝓨 K e ℓ' f.1
@@ -725,7 +713,7 @@ theorem charTwist_eq_one_at_split : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C :
         unfold avgForm
         rw [smul_eq_mul, ← integral_const_mul]
         refine integral_congr_ae (Filter.Eventually.of_forall fun t => ?_)
-        simp only [GlobalTheory.SplitScalar.heisO_smul, res_smul, map_smul, smul_eq_mul] }
+        simp only [GlobalTheory.SplitScalar.heisO_smul, _root_.GlobalTheory.HalfAverage.res_smul_twisted_operators, map_smul, smul_eq_mul] }
   obtain ⟨ℓ, hℓ⟩ := LinearMap.exists_extend ℓ₀
   have hℓP : ∀ f, f ∈ P → ℓ f = avgForm ψ V V' W C B μ 𝓨 K e ℓ' f := fun f hf =>
     LinearMap.congr_fun hℓ ⟨f, hf⟩
@@ -763,8 +751,8 @@ theorem charTwist_eq_one_at_split : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C :
     exact integral_add_right_eq_self (fun t : halfMx (cA D e) W.rank r =>
       ℓ' (res V V' W C B μ 𝓨 (heisO ψ V W (restEmb V W K ↑t) f))) t₀'
 
-  have hmi : mt W g * mt W g⁻¹ = 1 := by rw [← mt_mul'', mul_inv_cancel, mt_one'']
-  have him : mt W g⁻¹ * mt W g = 1 := by rw [← mt_mul'', inv_mul_cancel, mt_one'']
+  have hmi : mt W g * mt W g⁻¹ = 1 := by rw [← _root_.GlobalTheory.BesselCompare.mt_mul, mul_inv_cancel, _root_.GlobalTheory.BesselCompare.mt_one]
+  have him : mt W g⁻¹ * mt W g = 1 := by rw [← _root_.GlobalTheory.BesselCompare.mt_mul, inv_mul_cancel, _root_.GlobalTheory.BesselCompare.mt_one]
   have hdet : IsUnit (mt W g).det := Matrix.isUnit_det_of_right_inverse hmi
   set s : AE D := ((hdet.unit : (AE D)ˣ) : AE D) with hs_def
   set s' : AE D := (((hdet.unit)⁻¹ : (AE D)ˣ) : AE D) with hs'_def
@@ -778,10 +766,10 @@ theorem charTwist_eq_one_at_split : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C :
     show e * s + (1 - e) = e * (mt W g).det + (1 - e)
     rw [hs_def, IsUnit.unit_spec]
   have hV1 : ∀ X : HSp D, SuppAt e X 1 := fun X i j => by
-    rw [mt_one'', sub_self]; simp
+    rw [_root_.GlobalTheory.BesselCompare.mt_one, sub_self]; simp
   have hD1 : ∀ X : HSp D, IsDetAt e X 1 1 := fun X => by
     show (1 : AE D) = e * (mt X 1).det + (1 - e)
-    rw [mt_one'', Matrix.det_one]; ring
+    rw [_root_.GlobalTheory.BesselCompare.mt_one, Matrix.det_one]; ring
   obtain ⟨r₁, hr₁, hsp⟩ := hω.om_split e he 1 g (hV1 V) hg 1 y (hD1 V) hy
   obtain ⟨r₂, hr₂, hsp'⟩ := hω'.om_split e he 1 g (hV1 V') hg 1 y (hD1 V') hy
   have E1 := hsp ℓ hinv f₀ hf₀
@@ -801,7 +789,7 @@ theorem charTwist_eq_one_at_split : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C :
         congr 1
         show HMul.hMul (HMul.hMul (mt W g) (HMul.hMul (HMul.hMul (mt W g⁻¹) (t : Mx D W.rank r)) (K.map (incA D))))
           (mt V 1⁻¹) = HMul.hMul (t : Mx D W.rank r) (K.map (incA D))
-        rw [inv_one, mt_one'', Matrix.mul_one, ← Matrix.mul_assoc, ← Matrix.mul_assoc, hmi, Matrix.one_mul]
+        rw [inv_one, _root_.GlobalTheory.BesselCompare.mt_one, Matrix.mul_one, ← Matrix.mul_assoc, ← Matrix.mul_assoc, hmi, Matrix.one_mul]
       rw [← hcomm, hc g _ hG, map_smul, hsp' ℓ' hℓ' _ (hR _ hG).2.1, smul_eq_mul]
       ring
     rw [integral_congr_ae (Filter.Eventually.of_forall key2), integral_const_mul,
@@ -820,7 +808,7 @@ theorem charTwist_eq_one_at_split : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C :
   have h4 : (c g : ℂ) = ((r₁ / (r₂ * κ) : ℝ) : ℂ) := by
     rw [Complex.ofReal_div, Complex.ofReal_mul, eq_div_iff (by exact_mod_cast hpos.ne'), h3]
   have hn : ‖(c g : ℂ)‖ = 1 := by
-    first | exact Circle.norm_coe (c g) | exact Circle.abs_coe (c g) | exact mem_sphere_zero_iff_norm.1 (c g).2
+    first | exact Circle.norm_coe (c g)
   rw [h4, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (div_pos hr₁ hpos)] at hn
   have h5 : (c g : ℂ) = 1 := by rw [h4, hn, Complex.ofReal_one]
   exact Circle.ext (by rw [h5, Circle.coe_one])
@@ -840,7 +828,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.restriction_weilData_twistCharacter_trivial_splitPlaces : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.IsIsoSplit V V' C B → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT χT' : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ω' : GA D V' × GA D W →* Module.End ℂ (WO V' W → ℂ)), IsWeilDatumO ψ V W χS χT ω → IsWeilDatumO ψ V' W χS χT' ω' → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.ratMx D W.rank r) μ 𝓨 → ∀ c : GA D W →* Circle, (∀ h f, IsThetaFunO ψ V W f → GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.res V V' W C B μ 𝓨 (ω (1, h) f) = (c h : ℂ) • ω' (1, h) (GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.res V V' W C B μ 𝓨 f)) → ∀ e, IsSplitIdem D e → ∀ g, Formalism.L2.Theta.SuppAt e W g → c g = 1 := by
-  first | exact @GlobalTheory.HalfAverage.charTwist_eq_one_at_split | exact GlobalTheory.HalfAverage.charTwist_eq_one_at_split | (intros; apply GlobalTheory.HalfAverage.charTwist_eq_one_at_split <;> assumption)
+  first | exact @GlobalTheory.HalfAverage.charTwist_eq_one_at_split
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.RestrictionWeilDataTwistCharacterTrivialSplitPlaStatement =====
@@ -855,7 +843,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.wittTowerRestriction_intertwines_weil_upToCharacter : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT χS' χT' : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ω' : GA D V' × GA D W →* Module.End ℂ (WO V' W → ℂ)), IsWeilDatumO ψ V W χS χT ω → IsWeilDatumO ψ V' W χS' χT' ω' → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (ratMx D W.rank r) μ 𝓨 → ∃ c : GA D W →* Circle, ∀ h f, IsThetaFunO ψ V W f → res V V' W C B μ 𝓨 (ω (1, h) f) = (c h : ℂ) • ω' (1, h) (res V V' W C B μ 𝓨 f) := by
-  first | exact @GlobalTheory.TowerRestrictScalar.main | exact GlobalTheory.TowerRestrictScalar.main | (intros; apply GlobalTheory.TowerRestrictScalar.main <;> assumption)
+  first | exact @GlobalTheory.TowerRestrictScalar.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.WittTowerRestrictionIntertwinesWeilUpToCharacterStatement =====
@@ -876,10 +864,7 @@ namespace GlobalTheory.TwistCharRat
 
 variable {D : D7}
 
-theorem symplOH_add_right {S T : HSp D} (x y y' : WO S T) :
-    symplOH S T x (y + y') = symplOH S T x y + symplOH S T x y' := by
-  simp only [symplOH, symplO, hO, Matrix.add_apply, RingHom.map_add (f := _), mul_add, add_mul, Finset.sum_add_distrib,
-    LinearMap.map_add]
+alias symplOH_add_right := _root_.GlobalTheory.OrientedHeis.symplOH_add_right
 
 theorem symplOH_isoPart_midPart (V V' W : HSp D) {r : ℕ} (C : Matrix (Fin V.rank) (Fin r) D.host.E)
     (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E) (hs : IsIsoSplit V V' C B)
@@ -1037,7 +1022,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.wittTowerRestriction_weilCharacter_rational_eq_one : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.IsIsoSplit V V' C B → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT χS' χT' : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ω' : GA D V' × GA D W →* Module.End ℂ (WO V' W → ℂ)), IsWeilDatumO ψ V W χS χT ω → IsWeilDatumO ψ V' W χS' χT' ω' → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.ratMx D W.rank r) μ 𝓨 → ∀ c : GA D W →* Circle, (∀ h f, IsThetaFunO ψ V W f → GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.res V V' W C B μ 𝓨 (ω (1, h) f) = (c h : ℂ) • ω' (1, h) (GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.res V V' W C B μ 𝓨 f)) → ∀ γ ∈ GQ W, c γ = 1 := by
-  first | exact @GlobalTheory.TwistCharRat.char_eq_one_of_rat | exact GlobalTheory.TwistCharRat.char_eq_one_of_rat | (intros; apply GlobalTheory.TwistCharRat.char_eq_one_of_rat <;> assumption)
+  first | exact @GlobalTheory.TwistCharRat.char_eq_one_of_rat
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.WittTowerRestrictionWeilCharacterRationalEqOneStatement =====
@@ -1076,7 +1061,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.weilCompatible_of_sameSplittingCharacter : ∀ D : D7, GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.CompatibleOfSameChar D := by
-  first | exact @GlobalTheory.SameCharCompat.compatibleOfSameChar | exact GlobalTheory.SameCharCompat.compatibleOfSameChar | (intros; apply GlobalTheory.SameCharCompat.compatibleOfSameChar <;> assumption)
+  first | exact @GlobalTheory.SameCharCompat.compatibleOfSameChar
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.WeilCompatibleOfSameSplittingCharacterStatement =====

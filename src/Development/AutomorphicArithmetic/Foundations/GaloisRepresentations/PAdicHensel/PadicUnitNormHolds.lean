@@ -91,7 +91,6 @@ private theorem UpperTheory.Gal.G1.exists_local (hF : LocFour) (hU : LocUnit) (h
       have h0 : v.valuation F (c : F) = v.intValuation c := HeightOneSpectrum.valuation_of_algebraMap v c
       rw [h0]
       first
-        | exact (HeightOneSpectrum.intValuation_eq_one_iff v).2 hcm
         | exact le_antisymm (v.intValuation_le_one c)
             (not_lt.1 fun h => hcm ((v.intValuation_lt_one_iff_mem c).1 h))
     have hval' : Valued.v (algebraMap F (v.adicCompletion F) (c : F))⁻¹ = 1 := by
@@ -248,7 +247,7 @@ theorem UpperTheory.Gal.G1.pBlockMat :
     constructor
     · intro i j
       fin_cases i <;> fin_cases j <;> simp [b] <;>
-        first | assumption | exact S.neg_mem hsy
+        first | assumption
     · intro i j
       fin_cases i <;> fin_cases j <;> simp [b'] <;>
         first | exact S.neg_mem (S.mul_mem hcS hy) | exact S.mul_mem hcS hsx | exact S.mul_mem hcS hsy | exact S.mul_mem hcS hx | exact S.mul_mem hcS hy
@@ -1857,30 +1856,16 @@ section -- clump:auto
 
 namespace UpperTheory.Gal.G1
 
-theorem LocFour_holds : LocFour := pLocFour
-theorem HenselV_holds : HenselV := pHenselV
-theorem SplitRep_holds : SplitRep := pSplitRep
-theorem BlockMat_holds : BlockMat := pBlockMat
-theorem PadMap_holds : PadMap := pPadMap
-theorem Scale_holds : Scale := pScale
-theorem PadicUnitNorm_holds : PadicUnitNorm := pPadicUnitNorm
-theorem PadicSqFin_holds : PadicSqFin := pPadicSqFin
-theorem TrivMat_holds : TrivMat := pTrivMat
-theorem CongrScale_holds : CongrScale := pCongrScale
-theorem SplitCongr_holds : SplitCongr := pSplitCongr
-theorem InfCongr_holds : InfCongr := pInfCongr
-theorem DefSign_holds : DefSign := pDefSign
-theorem RelOf_holds : RelOf := pRelOf
-theorem LocUnit_holds : LocUnit := pLocUnit HenselV_holds
-theorem LocRoot_holds : LocRoot := pLocRoot HenselV_holds
-theorem ZUnitNorm_holds : ZUnitNorm := pZUnitNorm PadicUnitNorm_holds
-theorem ZSqFin_holds : ZSqFin := pZSqFin PadicSqFin_holds
-theorem AdFour_holds : AdFour := pAdFour LocFour_holds LocUnit_holds LocRoot_holds SplitRep_holds
-theorem UnitCls_holds : UnitCls := pUnitCls Scale_holds ZUnitNorm_holds ZSqFin_holds
-theorem FinCongr_holds : FinCongr := pFinCongr PadMap_holds LocRoot_holds TrivMat_holds CongrScale_holds SplitCongr_holds DefSign_holds
+theorem LocUnit_holds : LocUnit := pLocUnit _root_.UpperTheory.Gal.G1.pHenselV
+theorem LocRoot_holds : LocRoot := pLocRoot _root_.UpperTheory.Gal.G1.pHenselV
+theorem ZUnitNorm_holds : ZUnitNorm := pZUnitNorm _root_.UpperTheory.Gal.G1.pPadicUnitNorm
+theorem ZSqFin_holds : ZSqFin := pZSqFin _root_.UpperTheory.Gal.G1.pPadicSqFin
+theorem AdFour_holds : AdFour := pAdFour _root_.UpperTheory.Gal.G1.pLocFour LocUnit_holds LocRoot_holds _root_.UpperTheory.Gal.G1.pSplitRep
+theorem UnitCls_holds : UnitCls := pUnitCls _root_.UpperTheory.Gal.G1.pScale ZUnitNorm_holds ZSqFin_holds
+theorem FinCongr_holds : FinCongr := pFinCongr _root_.UpperTheory.Gal.G1.pPadMap LocRoot_holds _root_.UpperTheory.Gal.G1.pTrivMat _root_.UpperTheory.Gal.G1.pCongrScale _root_.UpperTheory.Gal.G1.pSplitCongr _root_.UpperTheory.Gal.G1.pDefSign
 theorem NormTwo_holds : NormTwo := pNormTwo AdFour_holds
-theorem FinCls_holds : FinCls := pFinCls UnitCls_holds FinCongr_holds InfCongr_holds DefSign_holds RelOf_holds
-theorem IsoEx_holds : IsoEx := pIsoEx NormTwo_holds BlockMat_holds
+theorem FinCls_holds : FinCls := pFinCls UnitCls_holds FinCongr_holds _root_.UpperTheory.Gal.G1.pInfCongr _root_.UpperTheory.Gal.G1.pDefSign _root_.UpperTheory.Gal.G1.pRelOf
+theorem IsoEx_holds : IsoEx := pIsoEx NormTwo_holds _root_.UpperTheory.Gal.G1.pBlockMat
 
 end UpperTheory.Gal.G1
 end -- clump:auto

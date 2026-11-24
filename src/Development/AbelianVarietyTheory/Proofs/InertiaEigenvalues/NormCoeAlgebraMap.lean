@@ -166,7 +166,7 @@ theorem exists_teich (g : ℤ_[l]ˣ) :
   have hval : ‖F.aeval (g : ℤ_[l])‖ < 1 := by
     have hg0 : PadicInt.toZMod (g : ℤ_[l]) ≠ 0 := (g.isUnit.map PadicInt.toZMod).ne_zero
     rw [norm_lt_one_iff_toZMod]
-    simp only [hF, Polynomial.aeval_sub, Polynomial.aeval_X_pow, Polynomial.aeval_X, Polynomial.aeval_one, map_sub, map_pow,
+    simp only [hF, Polynomial.aeval_X, map_sub, map_pow,
       map_one]
     rw [ZMod.pow_card_sub_one_eq_one hg0, sub_self]
   obtain ⟨z, hz, hzg, -, -⟩ := hensels_lemma (F := F) (a := (g : ℤ_[l]))
@@ -178,11 +178,6 @@ theorem exists_teich (g : ℤ_[l]ˣ) :
   refine ⟨hu.unit, isOfFinOrder_iff_pow_eq_one.2 ⟨l - 1, by omega, Units.ext ?_⟩, ?_⟩
   · rw [Units.val_pow_eq_pow_val, IsUnit.unit_spec, hz', Units.val_one]
   · rw [IsUnit.unit_spec]; exact hzg
-
-private lemma padicInt_norm_natCast_eq_one_of_not_dvd (n : ℕ) (h : ¬ l ∣ n) : ‖(n : ℤ_[l])‖ = 1 := by
-  refine le_antisymm (PadicInt.norm_le_one _) (not_lt.1 fun hlt => h ?_)
-  have := (PadicInt.norm_int_lt_one_iff_dvd (n : ℤ)).1 (by rw [Int.cast_natCast]; exact hlt)
-  exact_mod_cast this
 
 theorem exists_gam_gamK_torsion :
     ∀ (l : ℕ) [Fact l.Prime] (s : ℕ) (Γ : Subgroup ℤ_[l]ˣ), 1 ≤ s → (l = 2 → 2 ≤ s) → (∀ u : ℤ_[l]ˣ, (l : ℤ_[l]) ^ s ∣ (u : ℤ_[l]) - 1 → u ∈ Γ) → ∃ (gam gamK : ↥Γ) (D : Finset ↥Γ), ‖((gam : ℤ_[l]ˣ) : ℤ_[l]) - 1‖ = (l : ℝ) ^ (-(s : ℤ)) ∧ (∀ g, g ∈ D ↔ ∃ k : ℕ, 0 < k ∧ g ^ k = 1) ∧ (∀ g : ↥Γ, ‖((g : ℤ_[l]ˣ) : ℤ_[l]) ^ D.card - 1‖ ≤ ‖((gamK : ℤ_[l]ˣ) : ℤ_[l]) ^ D.card - 1‖) ∧ ((∀ g : ↥Γ, ‖((g : ℤ_[l]ˣ) : ℤ_[l]) ^ D.card - 1‖ ≤ ‖((gam : ℤ_[l]ˣ) : ℤ_[l]) ^ D.card - 1‖) → gamK = gam) ∧ (s = 1 → l ≠ 2 → gamK = gam) := by
@@ -242,7 +237,7 @@ theorem exists_gam_gamK_torsion :
           ?_ ?_
         · intro g _
           simp only [Finset.coe_erase, Finset.coe_univ, Set.mem_diff, Set.mem_univ,
-            Set.mem_singleton_iff, true_and, Finset.mem_erase, Finset.mem_univ, and_true]
+            Set.mem_singleton_iff, true_and]
           exact ((g : ℤ_[l]ˣ).isUnit.map PadicInt.toZMod).ne_zero
         · intro g hg h hh hgh
           have hgD := (hD g).1 hg
@@ -261,7 +256,7 @@ theorem exists_gam_gamK_torsion :
       have := hlp.two_le
       omega
     have hN : ‖((hTfin.toFinset.card : ℕ) : ℤ_[l])‖ = 1 :=
-      padicInt_norm_natCast_eq_one_of_not_dvd _ (Nat.not_dvd_of_pos_of_lt hNpos hcard)
+      _root_.GlobalTheory.PadicUnitSub.norm_natCast_padicInt_eq_one_of_not_dvd _ (Nat.not_dvd_of_pos_of_lt hNpos hcard)
     have hgam1 : ‖(hunit.unit : ℤ_[l]) - 1‖ = (l : ℝ)⁻¹ := by
       rw [hg0, add_sub_cancel_left, pow_one, PadicInt.norm_p]
     have hgam : ‖(hunit.unit : ℤ_[l]) ^ hTfin.toFinset.card - 1‖ = (l : ℝ)⁻¹ := by

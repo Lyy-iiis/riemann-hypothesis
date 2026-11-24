@@ -82,17 +82,6 @@ namespace UpperTheory.ConvolutionTheory.R2.G
 
 variable {F : Type} [Field F] [NumberField F]
 
-private theorem continuous_cD (s : (A F)ˣ) : Continuous (cD s : G1 F → G1 F) := by
-  refine Matrix.SpecialLinearGroup.isClosedEmbedding_val.isInducing.continuous_iff.2 ?_
-  have he : ∀ i j, Continuous fun g : G1 F => g.1 i j := fun i j =>
-    (Matrix.SpecialLinearGroup.isClosedEmbedding_val.continuous).matrix_elem i j
-  refine continuous_matrix fun i j => ?_
-  fin_cases i <;> fin_cases j
-  · exact he 0 0
-  · exact (he 0 1).mul continuous_const
-  · exact continuous_const.mul (he 1 0)
-  · exact he 1 1
-
 private theorem cD_cD_inv (s : (A F)ˣ) (k : G1 F) : cD s (cD s⁻¹ k) = k := by
   ext i j
   fin_cases i <;> fin_cases j <;> simp [cD, mul_assoc]
@@ -179,7 +168,7 @@ theorem UpperTheory.ConvolutionTheory.R2.G.majL :
     rw [h2, ht, one_mul] at h1
     exact h1
   have hC : IsCompact (cD (nu F h)⁻¹ '' KK F) :=
-    (UpperTheory.ConvolutionTheory.R2.M.kkCpt F).2.image (continuous_cD _)
+    (UpperTheory.ConvolutionTheory.R2.M.kkCpt F).2.image (_root_.UpperTheory.ConvolutionTheory.R2.M.continuous_cD _)
   have hO : ∀ k ∈ cD (nu F h)⁻¹ '' KK F, InfOrth k := by
     rintro _ ⟨k, hk, rfl⟩
     exact infOrth_cD hinv (by rw [inv_inv]; exact ht) hk.1
@@ -667,7 +656,7 @@ private theorem enorm_tsum_le' {β : Type*} (f : β → ℂ) : ‖∑' b, f b‖
     have h1 : ‖∑' b, f b‖ ≤ ∑' b, ‖f b‖ := norm_tsum_le_tsum_norm hs
     have h2 : ENNReal.ofReal (∑' b, ‖f b‖) = ∑' b, ‖f b‖ₑ := by
       rw [ENNReal.ofReal_tsum_of_nonneg (fun _ => norm_nonneg _) hs]
-      simp [ofReal_norm_eq_enorm]
+      simp
     rw [← h2, ← ofReal_norm_eq_enorm]
     exact ENNReal.ofReal_le_ofReal h1
 

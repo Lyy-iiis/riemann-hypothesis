@@ -331,11 +331,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 open NumberField
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.isFiniteDatum_of_homLatticeCoset_selfDual : ∀ {D : D7} {ψ : AddChar (AF D.host.F) ℂ} {θ : InfFam D} {ε : Bool} {S T : GlobalTheory.Grid.Node D} {e : AE D}
-    {P : Finset (Pl D.host.E)} {I : Ideal (𝓞 D.host.E)} (c : GlobalTheory.Grid.Coset S T I) {f₀ f : WO S.V T.V → ℂ},
-    GlobalTheory.Grid.IsVac ψ θ ε S T f₀ → IsSelfDualC S.V S.Λ → IsSelfDualC T.V T.Λ → IsIdemSum e P → I ≠ ⊥ →
-    GlobalTheory.Grid.IsCosetVec ψ ε S T e I c f₀ f → GlobalTheory.Grid.IsFinVec ψ θ ε S T f := by
-  first | exact @GlobalTheory.Grid.isFinVec_of_isCosetVec | exact GlobalTheory.Grid.isFinVec_of_isCosetVec | (intros; apply GlobalTheory.Grid.isFinVec_of_isCosetVec <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.IsFiniteDatumOfHomLatticeCosetSelfDualStatement =====
@@ -363,7 +358,7 @@ theorem unitMap_perm {m n : ℕ} (B : Matrix (Fin n) (Fin n) ℂ) (B' : Matrix (
     simpa using Matrix.inv_submatrix_equiv B (Equiv.refl _) σ
   rw [h]
   ext a b
-  simp [Matrix.mul_apply, Matrix.single_apply, ite_and, Finset.sum_ite_eq, Finset.sum_ite_eq', ite_mul]
+  simp [Matrix.mul_apply, Matrix.single_apply, ite_and, Finset.sum_ite_eq, ite_mul]
 
 theorem pureTensorO_perm {ψ : AddChar (AF D.host.F) ℂ} {θ : InfFam D} (hψ : IsStdChar D ψ (-1)) (hθ : IsInfFam θ)
     {S T : HSp D} {sS : D.what₂.Tau → Matrix (Fin S.rank) (Fin S.rank) ℂ} {sT : D.what₂.Tau → Matrix (Fin T.rank) (Fin T.rank) ℂ}
@@ -443,7 +438,7 @@ theorem kernel_row : ∀ {D : D7} {Γ : Type} [Group Γ] [Fintype Γ] {Pl0 T : T
     · exact hY
     · exact GlobalTheory.SDFrameLattice.isSelfDualC_of_isSDFrame D _ _ _ 1 (hG.spaces.vert k 0 hk (Nat.zero_le _)).frame
   have hfin : GlobalTheory.Grid.IsFinVec R.ψ R.θ true (G.V ((i : ℕ) + 1) 0) (G.V i 0) (G.vC i c) :=
-    GlobalTheory.T.isFiniteDatum_of_homLatticeCoset_selfDual c (hG.arrows.X i 0 hi (Nat.zero_le _)).vac (sd _ hi) (sd _ hi.le) hG.chars.places.idem
+    _root_.GlobalTheory.Grid.isFinVec_of_isCosetVec c (hG.arrows.X i 0 hi (Nat.zero_le _)).vac (sd _ hi) (sd _ hi.le) hG.chars.places.idem
       (G.toPlaceDat.ideal_ne_bot _) (hG.data i hi c)
   refine ⟨G.vC i c, hfin, ?_⟩
   have n1 := hsp.vert ((i : ℕ) + 1) 0 hi (Nat.zero_le _)
@@ -497,18 +492,6 @@ end GlobalTheory.RowLift
 end
 end
 
-section
-open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.L2.Theta Formalism.IndefR Formalism.IndefR.Datum Formalism.IndefR.Links Formalism.L2.DIV
-open IsDedekindDomain NumberField GlobalTheory.ChiGrid GlobalTheory.FunObj GlobalTheory.RowTest GlobalTheory.RowClaim MeasureTheory
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
-theorem _root_.GlobalTheory.T.twist_row_lift_exists : _root_.GlobalTheory.FunPr.ThetaLocalInputs → ∀ {D : D7} (large₂ : SizeData₂ D)
-    {Γ : Type} [Group Γ] [Fintype Γ] {Pl0 T : Type} {A : FamIn D.what₂.LL Γ Pl0 T D.R.m}
-    {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] {R : RealDat D A Ks} {F : Face D A},
-    HidaSetting large₂ R F → ∀ (ch : Choice R), ch.IsBase → ∀ (CF : ℝ), ch.AtScale CF large₂.sc.b →
-    ∃ G' : GlobalTheory.Grid.GridPre R, G'.Is ∧ GlobalTheory.RowLift.RowMatchS ch G' := by
-  first | exact @_root_.GlobalTheory.RowLift.exists_row_lift_matching | exact _root_.GlobalTheory.RowLift.exists_row_lift_matching | (intros; apply _root_.GlobalTheory.RowLift.exists_row_lift_matching <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ExistsRowLiftMatching =====
@@ -531,7 +514,7 @@ theorem twisted_lift_from_base_field : _root_.GlobalTheory.FunPr.ThetaLocalInput
     ThetaConv ch.W ch.M ch.ρ (ch.Phi a) (ch.form u) ∧
       IsAutFun (ch.G.V (.grid D.R.m 0)) (thetaChi ch.W ch.M ch.ρ (ch.Phi a) (ch.form u)) := by
   intro hP hL D large₂ Γ _ _ Pl0 T A Ks _ _ _ R F hS ch hb CF hs a u
-  obtain ⟨G', hG', hM⟩ := _root_.GlobalTheory.T.twist_row_lift_exists hP large₂ hS ch hb CF hs
+  obtain ⟨G', hG', hM⟩ := _root_.GlobalTheory.RowLift.exists_row_lift_matching hP large₂ hS ch hb CF hs
   have hC : GlobalTheory.IndefiniteRowSideFullHecke.CuspAlongSmoothLifts.CuspAlong G' :=
     hL D (GlobalTheory.RowSizes.sizes_of_sizeRows large₂ hS.size) Γ Pl0 T A Ks R G' (rowBase_of_core hS.core) hG'
   let C : ∀ i, Set (Fn ch.G (.grid i 0)) := fun i =>
@@ -563,7 +546,7 @@ theorem _root_.GlobalTheory.T.twisted_base_change_lift_exists : _root_.GlobalThe
     HidaSetting large₂ R F → ∀ (ch : Choice R), ch.IsBase → ∀ (CF : ℝ), ch.AtScale CF large₂.sc.b → ∀ (a : Fin ch.n) (u : R.HE.H),
     ThetaConv ch.W ch.M ch.ρ (ch.Phi a) (ch.form u) ∧
       IsAutFun (ch.G.V (.grid D.R.m 0)) (thetaChi ch.W ch.M ch.ρ (ch.Phi a) (ch.form u)) := by
-  first | exact @_root_.GlobalTheory.RowLift.twisted_lift_from_base_field | exact _root_.GlobalTheory.RowLift.twisted_lift_from_base_field | (intros; apply _root_.GlobalTheory.RowLift.twisted_lift_from_base_field <;> assumption)
+  first | exact @_root_.GlobalTheory.RowLift.twisted_lift_from_base_field
 end
 end -- clump:auto
 end -- clump:auto

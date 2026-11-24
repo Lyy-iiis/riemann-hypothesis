@@ -92,14 +92,10 @@ def wm (ε : Fin n → Bool) (wb : Fin k → Fin n → ℂ) (M : Matrix (Fin n) 
 
 variable {ε : Fin n → Bool}
 
-theorem uMat_mul_ (a b : Formalism.REAL.UJ ε) : uMat (a * b) = uMat a * uMat b := rfl
-
-theorem uMat_mul_inv_ (a : Formalism.REAL.UJ ε) : uMat a * uMat a⁻¹ = 1 := by simp [uMat]
-
-theorem uMat_inv_mul_ (a : Formalism.REAL.UJ ε) : uMat a⁻¹ * uMat a = 1 := by simp [uMat]
+alias uMat_mul_ := _root_.Formalism.L2.SG.PoincareInHH.Cut.uMat_mul
 
 theorem cancel_ (g : Formalism.REAL.UJ ε) (w : Fin n → ℂ) : uMat g *ᵥ (uMat g⁻¹ *ᵥ w) = w := by
-  rw [mulVec_mulVec, uMat_mul_inv_, one_mulVec]
+  rw [mulVec_mulVec, _root_.Formalism.L2.SG.RealObj.InfCut.PtRepPf.uMat_mul_inv, one_mulVec]
 
 theorem hJ_adj (g : Formalism.REAL.UJ ε) (x y : Fin n → ℂ) :
     hJ ε x (uMat g *ᵥ y) = hJ ε (uMat g⁻¹ *ᵥ x) y := by
@@ -107,7 +103,7 @@ theorem hJ_adj (g : Formalism.REAL.UJ ε) (x y : Fin n → ℂ) :
 
 theorem fix_inv (g : Formalism.REAL.UJ ε) {x : Fin n → ℂ} (h : uMat g *ᵥ x = x) : uMat g⁻¹ *ᵥ x = x := by
   calc uMat g⁻¹ *ᵥ x = uMat g⁻¹ *ᵥ (uMat g *ᵥ x) := by rw [h]
-    _ = x := by rw [mulVec_mulVec, uMat_inv_mul_, one_mulVec]
+    _ = x := by rw [mulVec_mulVec, _root_.Formalism.L2.SG.PoincareInHH.Cut.uMat_inv_mul, one_mulVec]
 
 theorem hJ_span_zero (w : Fin n → ℂ) {S : Set (Fin n → ℂ)} (hS : ∀ y ∈ S, hJ ε w y = 0) {x : Fin n → ℂ}
     (hx : x ∈ Submodule.span ℂ S) : hJ ε w x = 0 := by
@@ -201,11 +197,6 @@ theorem tri_adj (Z Q Q' : Matrix (Fin (r + 1)) (Fin (r + 1)) ℂ) (hQt : Q.IsUpp
     rw [adjugate_mul_distrib, adjugate_mul_distrib, Matrix.mul_assoc, Matrix.mul_assoc, hA1, Matrix.mul_one,
       ← vecMul_vecMul, hs]
   · rw [det_mul, det_mul, det_conjTranspose, hQdet, hQdet', star_one, one_mul, mul_one]
-
-theorem Dl_full (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) ℂ) : Formalism.L2.SG.RealObj.Dl Z (r + 1) = Z.det := by
-  unfold Formalism.L2.SG.RealObj.Dl
-  rw [dite_eq_left le_rfl]
-  rfl
 
 theorem xPr_move (Z₂ Z Q' : Matrix (Fin (r + 1)) (Fin (r + 1)) ℂ) (G₂ G Nm Am : Matrix (Fin n) (Fin n) ℂ)
     (f' : Fin (r + 1) → Fin n → ℂ) (hG : ∀ b, G₂ *ᵥ f' b = Nm *ᵥ (Am *ᵥ ∑ c, Q' c b • (G *ᵥ f' c)))
@@ -304,7 +295,7 @@ theorem wCoord_fix (M : Matrix (Fin n) (Fin n) ℂ) (he : ∀ c, M *ᵥ F.e c = 
   show hJ ε (F.wb i) (M *ᵥ x) = ∑ j, wm ε F.wb M i j * hJ ε (F.wb j) x
   rw [h2, Fintype.sum_sum_type, Fintype.sum_sum_type, Fintype.sum_sum_type]
   simp only [PtRepPf.Fr.bv, PtRepPf.Fr.dv, Sum.elim_inl, Sum.elim_inr, he, hf, hz, F.we, F.wf, F.wz, mul_zero,
-    Finset.sum_const_zero, zero_add, Fintype.sum_unique]
+    Finset.sum_const_zero, zero_add]
   exact Finset.sum_congr rfl fun j _ => mul_comm _ _
 
 theorem wCoord_N (N : Matrix (Fin n) (Fin n) ℂ) (hN : InN ε F.e F.z N) {x : Fin n → ℂ}
@@ -329,7 +320,7 @@ theorem wm_unitary (g : Formalism.REAL.UJ ε) (he : ∀ c, uMat g *ᵥ F.e c = F
   have hzw : ∀ m, hJ ε F.z (uMat g *ᵥ F.wb m) = 0 := fun m => by rw [← hz, PtRepPf.hJ_UJ, F.zw]
   have hew : ∀ m c, hJ ε (F.e c) (uMat g *ᵥ F.wb m) = 0 := fun m c => by rw [← he c, PtRepPf.hJ_UJ, F.ew]
   have hp := F.pair (uMat g *ᵥ F.wb j) (uMat g *ᵥ F.wb l) (hew j) (hew l)
-  simp only [hzw, mul_zero, zero_mul, star_zero, zero_add] at hp
+  simp only [hzw, mul_zero, star_zero, zero_add] at hp
   rw [PtRepPf.hJ_UJ, F.ww] at hp
   rw [Matrix.mul_apply, Matrix.one_apply, hp]
   refine Finset.sum_congr rfl fun i _ => ?_
@@ -363,9 +354,9 @@ theorem move_loc (A B : PtRepPf.Fr ε r k) (i0 i0' : Fin k) (γ nn a nn' a' : Fo
   have haiF : ∀ b, uMat a⁻¹ *ᵥ fam A.e A.z b = fam A.e A.z b := fun b => fix_inv a (haF b)
   have haiF' : ∀ b, uMat a'⁻¹ *ᵥ fam B.e B.z b = fam B.e B.z b := fun b => fix_inv a' (haF' b)
   obtain ⟨Q, hQt, hQd, hQ⟩ := tri A.e A.z (uMat nn⁻¹)
-    (Formalism.L2.SG.RealObj.SpanPreservation.inN_inv ε A.e A.z (uMat nn) (uMat nn⁻¹) (uMat_inv_mul_ nn) hn).1
+    (Formalism.L2.SG.RealObj.SpanPreservation.inN_inv ε A.e A.z (uMat nn) (uMat nn⁻¹) (_root_.Formalism.L2.SG.PoincareInHH.Cut.uMat_inv_mul nn) hn).1
   obtain ⟨Q', hQt', hQd', hQ'⟩ := tri B.e B.z (uMat nn'⁻¹)
-    (Formalism.L2.SG.RealObj.SpanPreservation.inN_inv ε B.e B.z (uMat nn') (uMat nn'⁻¹) (uMat_inv_mul_ nn') hn').1
+    (Formalism.L2.SG.RealObj.SpanPreservation.inN_inv ε B.e B.z (uMat nn') (uMat nn'⁻¹) (_root_.Formalism.L2.SG.PoincareInHH.Cut.uMat_inv_mul nn') hn').1
   obtain ⟨Qn, -, -, hQn⟩ := tri A.e A.z (uMat nn) hn.1
   obtain ⟨Qn', -, -, hQn'⟩ := tri B.e B.z (uMat nn') hn'.1
   have hWa := wm_unitary A a hae haz
@@ -387,7 +378,7 @@ theorem move_loc (A B : PtRepPf.Fr ε r k) (i0 i0' : Fin k) (γ nn a nn' a' : Fo
   obtain ⟨hcol, hrow, hdetZ⟩ := tri_adj (Zhat ε (fam A.e A.z) (fam B.e B.z) (uMat γ)) Q Q' hQt hQd hQt' hQd'
   have hdet : Formalism.L2.SG.RealObj.Dl (Zhat ε (fam A.e A.z) (fam B.e B.z) (uMat (nn * a * γ * a'⁻¹ * nn'⁻¹))) (r + 1) =
       Formalism.L2.SG.RealObj.Dl (Zhat ε (fam A.e A.z) (fam B.e B.z) (uMat γ)) (r + 1) := by
-    rw [Dl_full, Dl_full, hZ2, hdetZ]
+    rw [_root_.Formalism.L2.SG.RealObj.InfCut.PtRepPf.dl_top, _root_.Formalism.L2.SG.RealObj.InfCut.PtRepPf.dl_top, hZ2, hdetZ]
 
   have hxPr : xPr (Zhat ε (fam A.e A.z) (fam B.e B.z) (uMat (nn * a * γ * a'⁻¹ * nn'⁻¹)))
       (uMat (nn * a * γ * a'⁻¹ * nn'⁻¹)) (fam B.e B.z) =
@@ -1435,8 +1426,8 @@ theorem gval_ne (s : Formalism.L2.SG.TermOp.GTerm X u u' (X.Fu u) (X.Fu u') (Y.w
     (hG : (Y.tO u u').G s ≠ 0) : Gval (lf D (X.Fu u)) s.frame ≠ 0 := by
   have hG' : s.G ≠ 0 := fun h => hG (by show Formalism.L2.SG.TermOp.Gt s = 0; simp [Formalism.L2.SG.TermOp.Gt, h])
   have hRL : IsRowLat D (X.Fu u) s.lam := (Y.rowsOK u).1 s.lam s.mem
-  have hEq := Formalism.L2.SG.Closed.TermEqIff_holds D u u' (X.Fu u) s.lam hRL
-  have hGF := (Formalism.L2.SG.Closed.TermFun_holds D u u' (X.Fu u) s.lam hRL).1
+  have hEq := _root_.term_eq_iff_relation D u u' (X.Fu u) s.lam hRL
+  have hGF := (_root_.term_function_const D u u' (X.Fu u) s.lam hRL).1
   let x : Formalism.L2.SG.TermDef.Carrier (Formalism.L2.SG.TermDef.PD D s.lam (lf D (X.Fu u)) u') := ⟨s.frame, s.rep.2.2.2.2⟩
   have gv : Formalism.L2.SG.TermDef.Gt s.lam (lf D (X.Fu u)) (Formalism.L2.SG.TermDef.PD D s.lam (lf D (X.Fu u)) u')
       (Formalism.L2.SG.TermDef.mk _ _ _ x) = Gval (lf D (X.Fu u)) x.1 :=
@@ -1509,11 +1500,11 @@ theorem agree_pair (s₁ s₂ : Formalism.L2.SG.TermOp.GTerm X u u' (X.Fu u) (X.
     constructor
     · intro h
       obtain ⟨d, hd, hdO, hd0⟩ := ker_of_det X Y u u' s₁ gv₁ h
-      obtain ⟨d₂, hd₂, hd₂O, hd₂0⟩ := ker_transport (by first | exact hlat | exact hlat.toIsLattice) rfl hz₁ hz₂ gv₁ hTh'' hsc hd hdO hd0
+      obtain ⟨d₂, hd₂, hd₂O, hd₂0⟩ := ker_transport (by first | exact hlat) rfl hz₁ hz₂ gv₁ hTh'' hsc hd hdO hd0
       exact det_of_ker X Y u u' s₂ hd₂ hd₂O hd₂0
     · intro h
       obtain ⟨d, hd, hdO, hd0⟩ := ker_of_det X Y u u' s₂ gv₂ h
-      obtain ⟨d₁, hd₁, hd₁O, hd₁0⟩ := ker_transport_rev (by first | exact hlat | exact hlat.toIsLattice) rfl hz₁ hz₂ gv₂ hTh hsc hd hdO hd0
+      obtain ⟨d₁, hd₁, hd₁O, hd₁0⟩ := ker_transport_rev (by first | exact hlat) rfl hz₁ hz₂ gv₂ hTh hsc hd hdO hd0
       exact det_of_ker X Y u u' s₁ hd₁ hd₁O hd₁0
   refine ⟨?_, ?_, ?_⟩
   ·
@@ -1521,7 +1512,7 @@ theorem agree_pair (s₁ s₂ : Formalism.L2.SG.TermOp.GTerm X u u' (X.Fu u) (X.
     · have h₂ := hdet.1 h₁
       simp [nu1E, h₁, h₂]
     have h₂ : (ZE X u u' (Mof X Y u u' s₂)).det ≠ 0 := fun h => h₁ (hdet.2 h)
-    obtain ⟨ν, hνm, hνe, hνz, hνd⟩ := firstNormal_transport (by first | exact hlat | exact hlat.toIsLattice) rfl hz₁ hz₂ hT0 hTh'' hsc (firstNormal_mem_Xplus X Y u u' s₁)
+    obtain ⟨ν, hνm, hνe, hνz, hνd⟩ := firstNormal_transport (by first | exact hlat) rfl hz₁ hz₂ hT0 hTh'' hsc (firstNormal_mem_Xplus X Y u u' s₁)
       (firstNormal_e X Y u u' s₁ h₁) (firstNormal_z X Y u u' s₁ h₁)
     have hνeq : ν = Formalism.L2.SG.Pf.Level.toV X (nu1E X u u' (Mof X Y u u' s₂)) := by
       by_contra hne
@@ -1546,7 +1537,7 @@ theorem agree_pair (s₁ s₂ : Formalism.L2.SG.TermOp.GTerm X u u' (X.Fu u) (X.
     · have h₂ := hdet.1 h₁
       simp [nu2E, h₁, h₂]
     have h₂ : (ZE X u u' (Mof X Y u u' s₂)).det ≠ 0 := fun h => h₁ (hdet.2 h)
-    obtain ⟨x, hxm, hxe, hxz, hxd⟩ := secondNormal_transport (by first | exact hlat | exact hlat.toIsLattice) rfl hz₁ hz₂ hT0' hi hβe hβz hTh'' hsc
+    obtain ⟨x, hxm, hxe, hxz, hxd⟩ := secondNormal_transport (by first | exact hlat) rfl hz₁ hz₂ hT0' hi hβe hβz hTh'' hsc
       (secondNormal_mem_Xplus X Y u u' s₁) (secondNormal_e X Y u u' s₁ h₁) (secondNormal_z X Y u u' s₁ h₁)
     have hxeq : x = Formalism.L2.SG.Pf.Level.toV X (x2E X u u' (Mof X Y u u' s₂)) := by
       by_contra hne
@@ -1568,7 +1559,7 @@ theorem agree_pair (s₁ s₂ : Formalism.L2.SG.TermOp.GTerm X u u' (X.Fu u) (X.
     intro y₂ hy₂
     have hV := orthogonal_toV (Λ := s₁.lam) X Y u u' s₂ hy₂
     obtain ⟨y₁, hy₁, hd1, hd2⟩ := orthogonal_transport hTh'' hV
-    refine ⟨X.crd y₁, orthogonal_ofV X Y u u' s₁ (by first | exact hgen.1 | exact hgen.1.toIsLattice) hlift hL₁ hy₁, ?_, ?_⟩
+    refine ⟨X.crd y₁, orthogonal_ofV X Y u u' s₁ (by first | exact hgen.1) hlift hL₁ hy₁, ?_, ?_⟩
     · apply wperp_of X u
       rw [Formalism.L2.SG.Pf.Level.toV_sub, Formalism.L2.SG.Pf.Level.toV_crd]
       exact fixedX X u _ hd1

@@ -1404,11 +1404,6 @@ theorem carr_of_inN {s : V ≃ₗ[K] V} {A : FlagD H r} (h : A.InN (s : V →ₗ
   | last => exact GlobalTheory.UnipStab.hermFlagUnipotent_anisotropic_vector_sub_mem h
   | cast b => exact h.2.2.1 b
 
-theorem flagFrameVector_mem_commonSubspace (A B : FlagD H r) (a : Fin (r + 1)) : A.e a ∈ V0 A B := by
-  induction a using Fin.lastCases with
-  | last => exact Submodule.mem_sup_right (Submodule.subset_span (Or.inl rfl))
-  | cast b => exact Submodule.mem_sup_left (Submodule.mem_sup_left (GlobalTheory.UnipStab.e_mem_X A b))
-
 end Carry
 
 section Main
@@ -1443,7 +1438,7 @@ theorem finrank_wt (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) {F G : F
   have h3 : N.Wt ⊔ F.X = LinearMap.range e ⊔ F.X := by
     apply le_antisymm
     · refine sup_le (fun x hx => (he.2 x).1 fun a => hlift.1 x hx _ ?_) le_sup_right
-      rw [hV]; exact flagFrameVector_mem_commonSubspace F G a
+      rw [hV]; exact _root_.GlobalTheory.DegAsm.DatMove.flag_vector_mem_base_lattice F G a
     · refine sup_le ?_ le_sup_right
       rintro _ ⟨w, rfl⟩
       obtain ⟨x, hx, hx'⟩ := hfull.2.2.2.2.2.2.2.1 (e w) fun a => by
@@ -1702,7 +1697,7 @@ open MeasureTheory Matrix NumberField Formalism.BasicNotions Formalism.MainNotio
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.sum_frameClassWeights_le_datumBound : ∀ (D : D7) (large₂ : SizeData₂ D) (X : HidaSetting D) (Y : Full X) (u : D.what₂.Word), Std D large₂ → ∀ (W : Submodule D.host.E (VS D).V) (HW : Formalism.HermitianLatticeCounting.S6.HermSpace D.host.E W), GlobalTheory.DegAsm.IsEmb (F0 X u) HW W.subtype → ∀ (Λ : Submodule (𝓞 D.host.E) (VS D).V) (j x : ℕ) (δ : ℕ → D.host.E) (d : Submodule (𝓞 D.host.E) W × Submodule (𝓞 D.host.E) (W × W)) (N : GTu Y u → GlobalTheory.DegCnt.NF (HV D) D.R.rS) (A : Finset (GTu Y u)), A.Nonempty → (∀ t ∈ A, t ∈ relSet Y u ∧ t.lam = Λ ∧ jT t = j ∧ labT t = δ ∧ AdT t (N t) ∧ (N t).IsTerm (gS D) Λ ∧ (N t).gI (gS D) Λ = x ∧ GlobalTheory.DegAsm.datOf (F0 X u) (Ft t) W.subtype (gS D) Λ = d) → ∑ b ∈ A.image (frCls Λ), clsOm Y u Λ b ≤ GlobalTheory.DegAsm.datBd D.host.E D.R.k D.R.rS (k2Del D j δ) (DbL D j δ) (NT D u) x := by
-  first | exact @GlobalTheory.TypeAsm.PerRow.sum_clsOm_le_datBd | exact GlobalTheory.TypeAsm.PerRow.sum_clsOm_le_datBd | (intros; apply GlobalTheory.TypeAsm.PerRow.sum_clsOm_le_datBd <;> assumption)
+  first | exact @GlobalTheory.TypeAsm.PerRow.sum_clsOm_le_datBd
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.SumFrameClassWeightsLeDatumBoundStatement =====

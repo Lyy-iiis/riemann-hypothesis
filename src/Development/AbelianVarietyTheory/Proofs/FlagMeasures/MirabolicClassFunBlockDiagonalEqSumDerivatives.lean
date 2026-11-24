@@ -291,7 +291,7 @@ theorem inMir_Em (h : Mt g m) (v) : InMir (Em h v) := by
   intro i j hi
   have : i = Fin.last m := Fin.ext (by simp; omega)
   subst this
-  induction j using Fin.lastCases <;> simp [Matrix.one_apply, (Fin.castSucc_ne_last _).symm]
+  induction j using Fin.lastCases <;> simp [(Fin.castSucc_ne_last _).symm]
 
 theorem eq_Em {M : Mt g (m + 1)} (hM : InMir M) : M = Em (tl m M) fun i => M i.castSucc (Fin.last m) := by
   ext i j
@@ -793,7 +793,7 @@ theorem toG_tl_surj {m : ℕ} (y : Gn g m) : ∃ p ∈ mir g (m + 1), toG (tl m 
   have hp : p ∈ mir g (m + 1) := by
     intro i j hi
     obtain rfl : i = Fin.last m := Fin.ext (by simpa using hi)
-    induction j using Fin.lastCases <;> simp [p, ext1, Matrix.one_apply, (Fin.castSucc_lt_last _).ne']
+    induction j using Fin.lastCases <;> simp [p, ext1, (Fin.castSucc_lt_last _).ne']
   refine ⟨p, hp, Units.ext ?_⟩
   rw [coe_toG_tl hp]
   ext i j
@@ -1058,7 +1058,7 @@ theorem der_one (ψ : AddChar (ZMod g) ℂ) (F : Gn g 1 → ℂ) (h : Gn g 0) : 
   rw [eU_one, Finset.sum_eq_single (1 : Gn g 1)]
   · rw [MonoidAlgebra.coeff_single, Finsupp.single_eq_same, one_mul, res_one]
   · intro b _ hb
-    simp [MonoidAlgebra.coeff_single, Finsupp.single_apply, Ne.symm hb]
+    simp [MonoidAlgebra.coeff_single, Ne.symm hb]
   · intro h1
     exact absurd (Finset.mem_univ _) h1
 
@@ -1119,10 +1119,7 @@ open scoped Classical
 
 variable {g : ℕ} [Fact g.Prime]
 
-theorem coe_toG {n : ℕ} {M : Mt g n} (h : IsUnit M) : ((toG M : Gn g n) : Mt g n) = M := by
-  unfold toG
-  rw [dif_pos h]
-  rfl
+alias coe_toG := _root_.GlobalTheory.GLm.ParBasic.toG_val
 
 theorem toG_coe {n : ℕ} (x : Gn g n) : toG (x : Mt g n) = x := by
   unfold toG
@@ -1320,12 +1317,6 @@ theorem card_inR (i n : ℕ) (hi : i ≤ n) :
   simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
   ring
 
-theorem isUniUp_one (n : ℕ) : IsUniUp (1 : Mt g n) := by
-  intro a b
-  refine ⟨fun hab => Matrix.one_apply_ne (ne_of_lt hab).symm, fun hab => ?_⟩
-  subst hab
-  exact Matrix.one_apply_eq a
-
 theorem stages (ψ : AddChar (ZMod g) ℂ) (i n : ℕ) (hi : i ≤ n) (ρ : Gn g i → ℂ) (hρ : IsClass ρ)
     (h : Gn g n) :
     ((Finset.univ.filter fun p : Gn g n => InR i (p : Mt g n)).card : ℂ)⁻¹ *
@@ -1340,7 +1331,7 @@ theorem stages (ψ : AddChar (ZMod g) ℂ) (i n : ℕ) (hi : i ≤ n) (ρ : Gn g
     rw [Nat.cast_ne_zero]
     refine Finset.card_ne_zero_of_mem (a := 1) (Finset.mem_filter.2 ⟨Finset.mem_univ _, ?_⟩)
     rw [Units.val_one]
-    exact isUniUp_one _
+    exact _root_.GlobalTheory.GLm.ParBasic.isUniUp_one _
   have hg : (g : ℂ) ≠ 0 := Nat.cast_ne_zero.2 (Fact.out : g.Prime).ne_zero
   have hGi : (Fintype.card (Gn g i) : ℂ) ≠ 0 := Nat.cast_ne_zero.2 Fintype.card_ne_zero
   have hgg : ∀ x : Gn g (n - i), ∑ w : Gn g (n - i), fU ψ (w⁻¹ * x * w) =
@@ -1428,7 +1419,7 @@ theorem inMir_iff {k : ℕ} (M : Mt g (k + 1)) :
 private theorem br_one_zero_zero_eq_last {k : ℕ} (M : Mt g (k + 1)) : br k 1 M 0 0 = M (Fin.last k) (Fin.last k) := by
   show entN M (k + ((0 : Fin 1) : ℕ)) (k + ((0 : Fin 1) : ℕ)) = _
   rw [entN, dif_pos ⟨by simp, by simp⟩]
-  congr 1 <;> exact Fin.ext (by simp)
+  congr 1
 
 theorem inMir_iff' {k : ℕ} (M : Mt g (k + 1)) : InMir M ↔ InPar k M ∧ br k 1 M = 1 := by
   rw [inMir_iff]
@@ -1491,7 +1482,7 @@ private theorem dM_mul_flag_measures {k : ℕ} (A B : Mt g k) : dM A * dM B = dM
   | last =>
     induction c using Fin.lastCases with
     | last => simp [Matrix.mul_apply, Fin.sum_univ_castSucc, dM_lc, dM_ll]
-    | cast b => simp [Matrix.mul_apply, Fin.sum_univ_castSucc, dM_lc, dM_ll, dM_cl]
+    | cast b => simp [Matrix.mul_apply, Fin.sum_univ_castSucc, dM_lc, dM_ll]
   | cast a =>
     induction c using Fin.lastCases with
     | last => simp [Matrix.mul_apply, Fin.sum_univ_castSucc, dM_cl, dM_ll, dM_cc]
@@ -1533,10 +1524,10 @@ theorem inR_iff_ent {i n : ℕ} (M : Mt g n) :
       · exact hP ⟨a, hh.1⟩ ⟨b, hh.2⟩ hb ha
       · rfl
     · have := (hu ⟨a - i, by omega⟩ ⟨b - i, by omega⟩).1 (by show b - i < a - i; omega)
-      simp only [br, Fin.val_mk] at this
+      simp only [br] at this
       rwa [show i + (a - i) = a by omega, show i + (b - i) = b by omega] at this
     · have := (hu ⟨a - i, by omega⟩ ⟨b - i, by omega⟩).2 (Fin.ext (by show a - i = b - i; omega))
-      simp only [br, Fin.val_mk] at this
+      simp only [br] at this
       rwa [show i + (a - i) = a by omega, show i + (b - i) = b by omega] at this
   · rintro ⟨hA, hB⟩
     refine ⟨fun r c hc hr => ?_, fun a b => ⟨fun hba => ?_, fun hab => ?_⟩⟩

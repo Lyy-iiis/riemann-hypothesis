@@ -514,7 +514,7 @@ private theorem weight_indicator_fst_eq_sum {n : ℕ} (i : ℕ) (d : ℕ × Fin 
     by_cases hj : j = i
     · subst hj
       simp [Finsupp.single_apply, Prod.ext_iff]
-    · simp [Finsupp.single_apply, Prod.ext_iff, hj]
+    · simp [Prod.ext_iff, hj]
 
 theorem psi_support (hr : PolBRank) {n N : ℕ} {isVec : ℕ → Bool} {B : ℕ → ℕ} {μ : ℕ → Fin n → ℤ}
     {I : ℤ → Finset (Fin n)} (hμ : IsPath n isVec B μ N) (hI : IsIndex (μ N) I) :
@@ -581,20 +581,17 @@ namespace Formalism.InvariantFactorPaths.GelfandTsetlinBases.Top
 
 open Formalism.InvariantFactorPaths.GelfandTsetlinBases
 
-theorem psiWeight : PsiWeight := psi_weight
-theorem fact_index_weights : IndexWeightsDominance := index_weights_dominance
-theorem polBRank : PolBRank := polynomial_b_rank
-theorem pathIdxFinite : PathIdxFinite := path_index_finite
-theorem factBrk : FactBrk := fact_break
-theorem factEV : FactEV := factEV_of fact_index_weights psiWeight
-theorem lemmaA2indep : LemmaA2indep := lemmaA2indep_of factEV factBrk
+alias polBRank := _root_.Formalism.InvariantFactorPaths.GelfandTsetlinBases.polynomial_b_rank
+alias pathIdxFinite := _root_.Formalism.InvariantFactorPaths.GelfandTsetlinBases.path_index_finite
+theorem factEV : FactEV := factEV_of _root_.Formalism.InvariantFactorPaths.GelfandTsetlinBases.index_weights_dominance _root_.Formalism.InvariantFactorPaths.GelfandTsetlinBases.psi_weight
+theorem lemmaA2indep : LemmaA2indep := lemmaA2indep_of factEV _root_.Formalism.InvariantFactorPaths.GelfandTsetlinBases.fact_break
 theorem path_basis_theorem : PathBasisOfCount := path_basis_of_count lemmaA2indep pathIdxFinite polBRank
 
 theorem psiPath_basis (n N : ℕ) (isVec : ℕ → Bool) (B : ℕ → ℕ) (R : Type) [CommRing R] :
     LinearIndependent R (fun x : PathIdx n N isVec B => psiPath R isVec x.1.1 N x.1.2) ∧
       Submodule.span R (Set.range fun x : PathIdx n N isVec B => psiPath R isVec x.1.1 N x.1.2) =
         polB R n N B := path_basis_theorem n N isVec B (countPAll n N isVec B) R
-theorem factSplit : FactSplit := factSplit_valid
+alias factSplit := _root_.Formalism.InvariantFactorPaths.GelfandTsetlinBases.factSplit_valid
 
 end Formalism.InvariantFactorPaths.GelfandTsetlinBases.Top
 end -- clump:auto

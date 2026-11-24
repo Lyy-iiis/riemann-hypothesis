@@ -924,7 +924,7 @@ theorem blockPol_map_ringHom {A B : Type} [CommRing A] [CommRing B] {n : ℕ} (f
   rw [← Polynomial.coe_mapRingHom, RingHom.map_det]
   congr 1
   ext i j : 2
-  by_cases h : i = j <;> simp [h, Matrix.one_apply]
+  by_cases h : i = j <;> simp [h]
 
 theorem map_mem_span_frac {Γ A : Type} [CommRing A] [IsDomain A] {n : ℕ}
     (σ : Γ → Matrix (Fin n) (Fin n) A) {w : Matrix (Fin n) (Fin n) A}
@@ -1273,7 +1273,7 @@ variable {l : ℕ} [Fact l.Prime] in
 private theorem toZMod_principalUnit_eq_one {u w : ℤ_[l]} {r : ℕ} (hr : 1 ≤ r)
     (hu : u = 1 + (l : ℤ_[l]) ^ r * w) : PadicInt.toZMod u = 1 := by
   rw [hu]
-  simp [ZMod.natCast_self, zero_pow (Nat.one_le_iff_ne_zero.1 hr)]
+  simp [zero_pow (Nat.one_le_iff_ne_zero.1 hr)]
 
 variable {l : ℕ} [Fact l.Prime] in
 private theorem principalUnit_pow_of_not_dvd {u w : ℤ_[l]} {r m : ℕ} (hr : 1 ≤ r)
@@ -1531,10 +1531,7 @@ theorem blockPol_map {B : Type} [CommRing B] (f : A →+* B) (e M : Matrix (Fin 
   rw [← Polynomial.coe_mapRingHom, RingHom.map_det]
   congr 1
   ext a b : 2
-  by_cases h : a = b <;> simp [h, Matrix.one_apply]
-
-theorem overK_apply {k : ℕ} (σ : Γ →* GL (Fin k) A) (g : Γ) (u : Fin k → FractionRing A) :
-    overK σ g u = ((mat σ g).map (toFr A)).mulVec u := rfl
+  by_cases h : a = b <;> simp [h]
 
 theorem blockPol_coeff_mem {T : Subalgebra A (X → A)} {rep : X → (Γ →* GL (Fin n) A)}
     (hT : CharPolyIn T rep) {e M : X → Matrix (Fin n) (Fin n) A} (he : InRing T rep e)
@@ -1546,7 +1543,7 @@ theorem blockPol_coeff_mem {T : Subalgebra A (X → A)} {rep : X → (Γ →* GL
   apply congrArg (fun p : Polynomial A => p.coeff j)
   apply congrArg Matrix.det
   ext a b : 2
-  by_cases h : a = b <;> simp [h, Matrix.one_apply] <;> abel
+  by_cases h : a = b <;> simp [h] <;> abel
 
 theorem rank_const [IsDomain A] [IsLocalRing A] {T : Subalgebra A (X → A)}
     {rep : X → (Γ →* GL (Fin n) A)} (hl : IsLocalRing T)
@@ -1560,7 +1557,7 @@ theorem rank_const [IsDomain A] [IsLocalRing A] {T : Subalgebra A (X → A)}
   apply congrArg (fun p : Polynomial A => p.coeff j)
   apply congrArg Matrix.det
   ext a b : 2
-  by_cases h : a = b <;> simp [h, Matrix.one_apply]
+  by_cases h : a = b <;> simp [h]
 
 theorem corner_act {K : Type} [Field K] (e : (Fin n → K) ≃ₗ[K] ((Fin r → K) × (Fin t → K)))
     {E G : Matrix (Fin n) (Fin n) K} {P : Matrix (Fin r) (Fin r) K} {d : Fin t → K}
@@ -1659,11 +1656,7 @@ theorem charPolyIn_map {T : Subalgebra A (X → A)} {T' : Subalgebra B (X → B)
   rw [← Polynomial.coe_mapRingHom, RingHom.map_det]
   congr 1
   ext a b : 2
-  by_cases hab : a = b <;> simp [hab, Matrix.one_apply, mat, mapRep]
-
-theorem span_top_map {ρ : Γ →* GL (Fin r) A} (h : Submodule.span A (Set.range (mat ρ)) = ⊤) :
-    Submodule.span B (Set.range (mat (mapRep (algebraMap A B) ρ))) = ⊤ :=
-  _root_.GlobalTheory.SpanMapTop.span_mapRep_eq_top h
+  by_cases hab : a = b <;> simp [hab, mat, mapRep]
 
 end Base
 
@@ -1851,13 +1844,13 @@ theorem consExist : ConsExist N i := by
     obtain ⟨S, s0, s1, s2, s3, hG⟩ := exists_good N i _ ρ π g0 hg
       (fun x => (eB x).map (algebraMap A (N.O i))) (fun x => (e1 x).map (algebraMap A (N.O i)))
       (fun x => (X0 x).map (algebraMap A (N.O i))) (charPolyIn_map hTT hS.2.2.2.1)
-      (by rw [hρ π hπ]; exact span_top_map (span_top (hS.2.2.2.2.2.2.2 π hπ)))
+      (by rw [hρ π hπ]; exact _root_.GlobalTheory.SpanMapTop.span_mapRep_eq_top (span_top (hS.2.2.2.2.2.2.2 π hπ)))
       ⟨inRing_map hTT hB, inRing_map hTT h1, hmul hBB, hmul h11,
         (hmul hB1).trans (by funext x; simp), (hmul h1B).trans (by funext x; simp),
         fun x => by rw [hφM, _root_.GlobalTheory.matrix_rank_map_field, hrB], fun x => by rw [hφM, _root_.GlobalTheory.matrix_rank_map_field, hr1]⟩
       e' (by
         intro g u
-        rw [hρ π hπ, overK_apply, overK_apply]
+        rw [hρ π hπ, _root_.GlobalTheory.SpanIdem.overK_apply, _root_.GlobalTheory.SpanIdem.overK_apply]
         have := he' ((mat (repA π) g).map (toFr A)) ((mat (ρA π) g).map (toFr A)) _ (hd g) u
         rw [← hφM, ← hφM] at this
         refine this.trans ?_

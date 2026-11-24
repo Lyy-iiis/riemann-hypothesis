@@ -939,8 +939,8 @@ private theorem nabs_norm [CharZero k] (x : k'ˣ) :
   have hT := _root_.GlobalTheory.KSp.map_linearEquiv_haar k k' μ T
   have hdet : LinearEquiv.det T = (Units.map (Algebra.norm k : k' →* k) x)⁻¹ := by
     ext
-    simp only [LinearEquiv.coe_det, T, Units.coe_map, MonoidHom.coe_coe, Algebra.norm_apply,
-      Units.val_inv_eq_inv_val, map_inv₀]
+    simp only [LinearEquiv.coe_det, T, Units.coe_map, Algebra.norm_apply,
+      Units.val_inv_eq_inv_val]
     have hl : (↑(DistribMulAction.toLinearEquiv k k' x⁻¹) : k' →ₗ[k] k') =
         LinearMap.mul k k' ↑x⁻¹ := by
       ext y
@@ -1265,12 +1265,6 @@ open UpperTheory.ConvolutionTheory UpperTheory.ConvolutionTheory.C UpperTheory.C
 open UpperTheory.Gal.LocD UpperTheory.Gal.InertialTypesAlt.G UpperTheory.Gal.Join
 open scoped Classical
 
-private lemma exists_common_eigenvector {ι M : Type} [AddCommGroup M] [Module ℂ M] [FiniteDimensional ℂ M]
-    (f : ι → Module.End ℂ M) (hc : ∀ i j, f i * f j = f j * f i) (W : Submodule ℂ M) (hW : W ≠ ⊥)
-    (hst : ∀ i, ∀ y ∈ W, f i y ∈ W) :
-    ∃ y ∈ W, y ≠ 0 ∧ ∀ i, ∃ c : ℂ, f i y = c • y :=
-  _root_.UpperTheory.Reformulated.B.CommonEigenvectorInInvariantComplexSubspace.exists_common_eigenvector f hc W hW hst
-
 theorem UpperTheory.Gal.Join.twExp :
     UpperTheory.Gal.Join.TwExp := by
   intro T X _ _ _ ρ P _ s A hρ hA hAρ t₁ htr
@@ -1281,14 +1275,14 @@ theorem UpperTheory.Gal.Join.twExp :
   have r_mul : ∀ a b, r (a * b) = r a * r b := by
     intro a b
     ext y
-    simp [r_apply, Module.End.mul_apply, map_mul]
+    simp [r_apply, map_mul]
   have hcomm : ∀ a b, r a * r b = r b * r a := by
     intro a b
     rw [← r_mul, ← r_mul, mul_comm]
   have hsemi : ∀ t, A' * r t = r (s t) * A' := by
     intro t
     ext y
-    simp [r_apply, A_apply, Module.End.mul_apply, hAρ]
+    simp [r_apply, A_apply, hAρ]
   let N : (T → ℂ) → Submodule ℂ P := fun χ => ⨅ t, (r t).maxGenEigenspace (χ t)
   have hmaps : ∀ a b c, Set.MapsTo (r a) ((r b).maxGenEigenspace c) ((r b).maxGenEigenspace c) :=
     fun a b c => Module.End.mapsTo_maxGenEigenspace_of_comm (hcomm b a) c
@@ -1357,7 +1351,7 @@ theorem UpperTheory.Gal.Join.twExp :
   have hNst : ∀ t, ∀ y ∈ N χ, r t y ∈ N χ := by
     intro t y hy
     exact (Submodule.mem_iInf _).mpr fun t' => hmaps t t' _ ((Submodule.mem_iInf _).mp hy t')
-  obtain ⟨y, hyN, hy0, hy⟩ := exists_common_eigenvector r hcomm (N χ) hN hNst
+  obtain ⟨y, hyN, hy0, hy⟩ := _root_.UpperTheory.Reformulated.B.CommonEigenvectorInInvariantComplexSubspace.exists_common_eigenvector r hcomm (N χ) hN hNst
   choose c hc using hy
   have hcχ : ∀ t, c t = χ t := by
     intro t
@@ -1604,13 +1598,6 @@ open UpperTheory.ConvolutionTheory UpperTheory.ConvolutionTheory.C UpperTheory.C
 open UpperTheory.Gal.LocD UpperTheory.Gal.InertialTypesAlt.G UpperTheory.Gal.Join
 open scoped Classical
 
-private theorem lift_eigen {T V : Type} [CommGroup T] [AddCommGroup V] [Module ℂ V]
-    (ρ : Representation ℂ T V) {ψ μ : T →* ℂˣ} {v y : V} (hψ : ∀ t, ρ t v = (ψ t : ℂ) • v)
-    (hne : μ ≠ ψ) (hy : y ∉ Submodule.span ℂ {v})
-    (hq : ∀ t, ρ t y - (μ t : ℂ) • y ∈ Submodule.span ℂ {v}) (hv : v ≠ 0) :
-    ∃ z, z ≠ 0 ∧ ∀ t, ρ t z = (μ t : ℂ) • z :=
-  _root_.UpperTheory.Reformulated.B.R4.lift_eigen ρ hψ hne hy hq hv
-
 private theorem exists_eigenchars {T : Type} [CommGroup T] (d : ℕ) : ∀ (V : Type) [AddCommGroup V] [Module ℂ V]
     [FiniteDimensional ℂ V] (ρ : Representation ℂ T V), Module.finrank ℂ V = d →
     ∃ E : Multiset (T →* ℂˣ), (∀ t, LinearMap.trace ℂ V (ρ t) = (E.map fun χ => (χ t : ℂ)).sum) ∧
@@ -1642,7 +1629,7 @@ private theorem exists_eigenchars {T : Type} [CommGroup T] (d : ℕ) : ∀ (V : 
       · exact ⟨v, hv, hne ▸ hψ⟩
       obtain ⟨q, hq0, hq⟩ := (h2 μ).1 ((Multiset.mem_cons.1 hμ).resolve_left hne)
       obtain ⟨y, rfl⟩ := Submodule.Quotient.mk_surjective _ q
-      refine lift_eigen ρ hψ hne (fun hy => hq0 ((Submodule.Quotient.mk_eq_zero _).2 hy)) (fun t => ?_) hv
+      refine _root_.UpperTheory.Reformulated.B.R4.lift_eigen ρ hψ hne (fun hy => hq0 ((Submodule.Quotient.mk_eq_zero _).2 hy)) (fun t => ?_) hv
       refine (Submodule.Quotient.eq _).1 ?_
       exact hq t
     · rintro ⟨y, hy, hμ⟩

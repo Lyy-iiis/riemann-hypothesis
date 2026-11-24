@@ -177,8 +177,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 
-theorem _root_.GlobalTheory.T.affineHilbertCoordinateMap_restrict_bijective : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (N r : ℕ) (e : Module.Basis (Fin N) A B) (σ : Fin r ↪ Fin N) (Z : Scheme.{0}) (y : (GlobalTheory.HilbAff.functor A B r).obj (op Z)) (U : Z.Opens) (W : U.toScheme.Opens), Function.Bijective (GlobalTheory.HilbAff.coord A B e σ y (U.ι ''ᵁ W)) → Function.Bijective (GlobalTheory.HilbAff.coord A B e σ ((GlobalTheory.HilbAff.functor A B r).map U.ι.op y) W) := by
-  first | (exact @GlobalTheory.HilbAff.coord_restrict_bijective) | (exact GlobalTheory.HilbAff.coord_restrict_bijective) | (intros; apply GlobalTheory.HilbAff.coord_restrict_bijective  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AffineHilbertCoordinateMapRestrictBijectiveStatement =====
@@ -291,8 +289,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 
-theorem _root_.GlobalTheory.T.affineHilbertSections_basis_span_eq_top : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (N r : ℕ) (e : Module.Basis (Fin N) A B) (Z : Scheme.{0}) (y : (GlobalTheory.HilbAff.functor A B r).obj (op Z)) (W : Z.affineOpens), Submodule.span Γ(Z, W) (Set.range fun j => GlobalTheory.HilbAff.gen A B y W (e j)) = ⊤ := by
-  first | (exact @GlobalTheory.HilbAff.span_gen_eq_top) | (exact GlobalTheory.HilbAff.span_gen_eq_top) | (intros; apply GlobalTheory.HilbAff.span_gen_eq_top  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AffineHilbertSectionsBasisSpanEqTopStatement =====
@@ -331,8 +327,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 
-theorem _root_.GlobalTheory.T.affineHilbertSections_finite_flat : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (r : ℕ) (Z : Scheme.{0}) (y : (GlobalTheory.HilbAff.functor A B r).obj (op Z)) (W : Z.affineOpens), Module.Finite Γ(Z, W) (GlobalTheory.HilbAff.Sec A B y W) ∧ Module.Flat Γ(Z, W) (GlobalTheory.HilbAff.Sec A B y W) := by
-  first | (exact @GlobalTheory.HilbAff.sec_finite_flat) | (exact GlobalTheory.HilbAff.sec_finite_flat) | (intros; apply GlobalTheory.HilbAff.sec_finite_flat  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AffineHilbertSectionsFiniteFlatStatement =====
@@ -386,8 +380,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 
-theorem _root_.GlobalTheory.T.affineHilbertSections_rankAtStalk : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (r : ℕ) (Z : Scheme.{0}) (y : (GlobalTheory.HilbAff.functor A B r).obj (op Z)) (W : Z.affineOpens) (P : PrimeSpectrum Γ(Z, W)), Module.rankAtStalk (GlobalTheory.HilbAff.Sec A B y W) P = r := by
-  first | (exact @GlobalTheory.HilbAff.rankAtStalk_sec) | (exact GlobalTheory.HilbAff.rankAtStalk_sec) | (intros; apply GlobalTheory.HilbAff.rankAtStalk_sec  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AffineHilbertSectionsRankAtStalkStatement =====
@@ -466,7 +458,7 @@ theorem localizedModule_map_surjective_of_smul_mem_range
     rw [LocalizedModule.map_mk, LocalizedModule.mk_eq]
     refine ⟨1, ?_⟩
     rw [hx]
-    simp only [one_smul, Submonoid.smul_def, Submonoid.coe_mul, mul_smul]
+    simp only [one_smul, Submonoid.smul_def, mul_smul]
     exact smul_comm _ _ _
 
 theorem exists_pow_smul_eq_zero_of_localizedModule_map_injective
@@ -560,7 +552,7 @@ theorem exists_embedding_bijective_localizedModule_map_of_rankAtStalk :
     obtain ⟨n, hn⟩ := exists_pow_smul_eq_zero_of_localizedModule_map_injective φ f hloc _ hk
     rw [← LocalizedModule.zero_mk s, LocalizedModule.mk_eq]
     refine ⟨⟨f ^ n, n, rfl⟩ * u, ?_⟩
-    simp only [Submonoid.smul_def, smul_zero, Submonoid.coe_mul, mul_smul]
+    simp only [Submonoid.smul_def, smul_zero, mul_smul]
     exact hn
 
 end GlobalTheory
@@ -574,8 +566,6 @@ section -- clump:auto
 @[expose] public section
 
 
-theorem _root_.GlobalTheory.T.exists_localizedModule_map_bijective_of_rankAtStalk_eq : ∀ (R Q : Type) [CommRing R] [AddCommGroup Q] [Module R Q] [Module.Finite R Q] [Module.Flat R Q] (N r : ℕ) (b : Fin N → Q), Submodule.span R (Set.range b) = ⊤ → (∀ P : PrimeSpectrum R, Module.rankAtStalk Q P = r) → ∀ P₀ : PrimeSpectrum R, ∃ (σ : Fin r ↪ Fin N) (f : R), f ∉ P₀.asIdeal ∧ Function.Bijective (LocalizedModule.map (Submonoid.powers f) (Fintype.linearCombination R (b ∘ σ))) := by
-  first | (exact @GlobalTheory.exists_embedding_bijective_localizedModule_map_of_rankAtStalk) | (exact GlobalTheory.exists_embedding_bijective_localizedModule_map_of_rankAtStalk) | (intros; apply GlobalTheory.exists_embedding_bijective_localizedModule_map_of_rankAtStalk  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsEmbeddingBijectiveLocalizedModuleMapOfRankStatement =====
@@ -593,7 +583,7 @@ theorem coord_bijective_of_le_affine : ∀ (A B : Type) [CommRing A] [CommRing B
   intro A B _ _ _ N r e σ Z y W W' hle hW
   have hbas : ∀ f : Γ(Z, W), Function.Bijective (coord A B e σ y (Z.basicOpen f)) := by
     intro f
-    rw [GlobalTheory.T.affineHilbertCoordinateMap_basicOpen_bijective A B N r e σ Z y W f]
+    rw [_root_.GlobalTheory.HilbAff.coord_basicOpen_bijective_iff A B N r e σ Z y W f]
     exact ⟨LocalizedModule.map_injective _ _ hW.1, LocalizedModule.map_surjective _ _ hW.2⟩
   let s : Set Γ(Z, W') := {g | Function.Bijective (coord A B e σ y (Z.basicOpen g))}
   have hspan : Ideal.span s = ⊤ := by
@@ -605,7 +595,7 @@ theorem coord_bijective_of_le_affine : ∀ (A B : Type) [CommRing A] [CommRing B
       rw [← hfg]; exact hbas f
     · show x ∈ Z.basicOpen g
       rw [← hfg]; exact hxf
-  exact bijective_of_localized_span s hspan _ fun g => (GlobalTheory.T.affineHilbertCoordinateMap_basicOpen_bijective A B N r e σ Z y W' g.1).1 g.2
+  exact bijective_of_localized_span s hspan _ fun g => (_root_.GlobalTheory.HilbAff.coord_basicOpen_bijective_iff A B N r e σ Z y W' g.1).1 g.2
 
 end GlobalTheory.HilbAff
 end -- clump:auto
@@ -619,8 +609,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 
-theorem _root_.GlobalTheory.T.hilbertCoordinateMap_bijective_of_le_affine : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (N r : ℕ) (e : Module.Basis (Fin N) A B) (σ : Fin r ↪ Fin N) (Z : Scheme.{0}) (y : (GlobalTheory.HilbAff.functor A B r).obj (op Z)) (W W' : Z.affineOpens), (W' : Z.Opens) ≤ W → Function.Bijective (GlobalTheory.HilbAff.coord A B e σ y W) → Function.Bijective (GlobalTheory.HilbAff.coord A B e σ y W') := by
-  first | (exact @GlobalTheory.HilbAff.coord_bijective_of_le_affine) | (exact GlobalTheory.HilbAff.coord_bijective_of_le_affine) | (intros; apply GlobalTheory.HilbAff.coord_bijective_of_le_affine  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertCoordinateMapBijectiveOfLeAffineStatement =====
@@ -638,11 +626,11 @@ theorem exists_basic_nhd : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A
   intro A B _ _ _ N r e Z y z
   obtain ⟨W₀, hW₀, hzW₀, -⟩ := exists_isAffineOpen_mem_and_subset (show z ∈ (⊤ : Z.Opens) from trivial)
   let W : Z.affineOpens := ⟨W₀, hW₀⟩
-  obtain ⟨hfin, hflat⟩ := GlobalTheory.T.affineHilbertSections_finite_flat A B r Z y W
-  obtain ⟨σ, f, hf, hbij⟩ := GlobalTheory.T.exists_localizedModule_map_bijective_of_rankAtStalk_eq Γ(Z, W₀) (GlobalTheory.HilbAff.Sec A B y W) N r
-    (fun j => GlobalTheory.HilbAff.gen A B y W (e j)) (GlobalTheory.T.affineHilbertSections_basis_span_eq_top A B N r e Z y W) (GlobalTheory.T.affineHilbertSections_rankAtStalk A B r Z y W)
+  obtain ⟨hfin, hflat⟩ := _root_.GlobalTheory.HilbAff.sec_finite_flat A B r Z y W
+  obtain ⟨σ, f, hf, hbij⟩ := _root_.GlobalTheory.exists_embedding_bijective_localizedModule_map_of_rankAtStalk Γ(Z, W₀) (GlobalTheory.HilbAff.Sec A B y W) N r
+    (fun j => GlobalTheory.HilbAff.gen A B y W (e j)) (_root_.GlobalTheory.HilbAff.span_gen_eq_top A B N r e Z y W) (_root_.GlobalTheory.HilbAff.rankAtStalk_sec A B r Z y W)
     (hW₀.primeIdealOf ⟨z, hzW₀⟩)
-  have hD := (GlobalTheory.T.affineHilbertCoordinateMap_basicOpen_bijective A B N r e σ Z y W f).2 hbij
+  have hD := (_root_.GlobalTheory.HilbAff.coord_basicOpen_bijective_iff A B N r e σ Z y W f).2 hbij
   have hzf : z ∈ Z.basicOpen f := by
     have h1 : hW₀.primeIdealOf ⟨z, hzW₀⟩ ∈ hW₀.fromSpec ⁻¹ᵁ Z.basicOpen f := by
       rw [hW₀.fromSpec_preimage_basicOpen]; exact hf
@@ -653,8 +641,8 @@ theorem exists_basic_nhd : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A
   refine ⟨σ, Z.basicOpen f, hzf, ?_⟩
   rw [GlobalTheory.HilbAff.basic_iff]
   intro W'
-  apply GlobalTheory.T.affineHilbertCoordinateMap_restrict_bijective
-  exact GlobalTheory.T.hilbertCoordinateMap_bijective_of_le_affine A B N r e σ Z y ⟨Z.basicOpen f, hW₀.basicOpen f⟩
+  apply _root_.GlobalTheory.HilbAff.coord_restrict_bijective
+  exact _root_.GlobalTheory.HilbAff.coord_bijective_of_le_affine A B N r e σ Z y ⟨Z.basicOpen f, hW₀.basicOpen f⟩
     ⟨_, W'.2.image_of_isOpenImmersion (Z.basicOpen f).ι⟩ (Scheme.Opens.ι_image_le _ _) hD
 
 end GlobalTheory.HilbAff
@@ -669,8 +657,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 
-theorem _root_.GlobalTheory.T.exists_affineHilbertChartBasic_neighbourhood : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (N r : ℕ) (e : Module.Basis (Fin N) A B) (Z : Scheme.{0}) (y : (GlobalTheory.HilbAff.functor A B r).obj (op Z)) (z : Z), ∃ (σ : Fin r ↪ Fin N) (U : Z.Opens), z ∈ U ∧ GlobalTheory.HilbAff.Basic A B e σ ((GlobalTheory.HilbAff.functor A B r).map U.ι.op y) := by
-  first | (exact @GlobalTheory.HilbAff.exists_basic_nhd) | (exact GlobalTheory.HilbAff.exists_basic_nhd) | (intros; apply GlobalTheory.HilbAff.exists_basic_nhd  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsAffineHilbertChartBasicNeighbourhoodStatement =====

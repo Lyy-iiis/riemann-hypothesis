@@ -207,7 +207,7 @@ private theorem dividedPower_identities_D_and_e_eq_gb (Q : PDPoly B) : ∃ D : �
     | empty => simp
     | insert k S hk ih =>
       rw [Finset.prod_insert hk, PowerSeries.coeff_mul]
-      simp [ih, hF, gb_zero]
+      simp [hF, gb_zero]
   refine ⟨fun n x => PowerSeries.coeff n (E (Finset.range ((Q.e.repr x).support.sup id)) x),
     ?_, ?_, ?_, ?_, ?_⟩
   · intro x
@@ -312,7 +312,7 @@ namespace FubiniStudyChowHeightFormula₂.Adr
 
 variable {B : Type} [CommRing B]
 
-theorem e_succ_mem_aug (Q : PDPoly B) (n : ℕ) : Q.e (n + 1) ∈ Q.aug := Ideal.subset_span ⟨n, rfl⟩
+alias e_succ_mem_aug := _root_.GlobalTheory.PDA.PDPoly.e_succ_mem_aug
 
 def liftAlg (Q : PDPoly B) {C : Type} [CommRing C] [Algebra B C] (c : ℕ → C) (h0 : c 0 = 1)
     (hm : ∀ m n, c m * c n = ((m + n).choose m : C) * c (m + n)) : Q.P →ₐ[B] C :=

@@ -170,7 +170,7 @@ open scoped TensorProduct ComplexConjugate Real Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_vacua_inner_eq_const_mul_testInner : ∀ (D : D7) (S T : HSp D) (C : Ctx S T), ∀ (μ : Measure (WO S T)) (𝓕 : Set (WO S T)), IsCovolOne (ratL T S) μ 𝓕 → ∃ a : ℂ, a ≠ 0 ∧ ∀ B, C.IsB B → ∀ φ φ' : TF S.rank C.g, SW.IsSB φ → SW.IsSB φ' → ipO μ 𝓕 (C.Th (C.xB B) φ) (C.Th (C.xB B) φ') = a * ip φ φ' := by
-  first | exact @GlobalTheory.KerVacIp.ip_vacua | exact GlobalTheory.KerVacIp.ip_vacua | (intros; apply GlobalTheory.KerVacIp.ip_vacua <;> assumption)
+  first | exact @GlobalTheory.KerVacIp.ip_vacua
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.ExistsVacuaInnerEqConstMulTestInnerStatement =====
@@ -338,7 +338,7 @@ open scoped TensorProduct ComplexConjugate Real Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.definite_group_vacuum_phase_independent_of_lattice : ∀ (D : D7) (S T : HSp D) (C : Ctx S T), ∀ om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ), IsWeak C.ψ S T om → ∀ (Lv : SW.Level C.X) (hn : T.rank ≤ S.rank) (M : ℕ), IdemTwo Lv.w → 0 < M → (M : 𝓞 D.host.E) ∈ Lv.𝔪 → ∀ v₀ : Lt D.host.E T.rank → TF S.rank C.g, (∀ L ∈ Lv.lats, IsVac C.X C.bas Lv.w (tens (stdL D.host.E S.rank) (Lv.sh L)) (v₀ L)) → ∀ B, C.IsB B → ∀ (h : GA D S) (Λ : Lt D.host.E S.rank), h ∈ GfC S → TrivAt S (Ideal.span {(M : 𝓞 D.host.F)}) h → Λ.FG → IsMov (fmtC S h) (stdL D.host.E S.rank) Λ → ∃ ep : ℂ, ‖ep‖ = 1 ∧ ∀ (g : GA D T) (L : Lt D.host.E T.rank), g ∈ GfC T → TrivAt T (C.under Lv) g → L.FG → IsMov (fmt T g) C.X.Λ L → om (h, 1) (C.Th (C.xB B) (v₀ L)) = ep • (C.Th (C.xB B) (unitv (projA C.X C.bas Lv.w (tens Λ (Lv.sh L)) (v₀ L)))) := by
-  first | exact @GlobalTheory.Ker.VacPhase.phase_indep | exact GlobalTheory.Ker.VacPhase.phase_indep | (intros; apply GlobalTheory.Ker.VacPhase.phase_indep <;> assumption)
+  first | exact @GlobalTheory.Ker.VacPhase.phase_indep
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.DefiniteGroupVacuumPhaseIndependentOfLatticeStatement =====
@@ -535,7 +535,7 @@ theorem mem_of_hat {N : Lt E r} (hfg : N.FG) (hsp : Submodule.span E (N : Set (F
     have h := HatLat.smul_mem_tens (stdL E 1) N (algebraMap (𝓞 F) (𝓞 E) c) hz
     convert h using 1
     ext i j
-    simp only [Matrix.smul_apply, Algebra.smul_def, smul_eq_mul]
+    simp only [Matrix.smul_apply, Algebra.smul_def]
     rfl
   have hfgT := HatLat.tens_fg (stdL E 1) N (stdL_fg' 1) hfg
   have hden := HatLat.tens_den (stdL E 1) N (span_stdL_eq_top 1) hsp
@@ -677,7 +677,7 @@ theorem col_mem {n : ℕ} {Λ : Lt E n} {L L₀ : Lt E r} {𝔪 : Ideal (𝓞 E)
     convert h1 using 1
     funext a
     simp only [HatLat.fT_apply, finG_pairA_zero_tmul, Matrix.vecMulVec_apply,
-      Pi.smul_apply, smul_eq_mul, Algebra.TensorProduct.tmul_mul_tmul, mul_one]
+      Pi.smul_apply, smul_eq_mul, Algebra.TensorProduct.tmul_mul_tmul]
     congr 1 <;> ring
   exact key hy
 
@@ -843,7 +843,7 @@ open scoped TensorProduct ComplexConjugate Real Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.rows_congr_of_trivial_at_level : ∀ (D : D7) (S T : HSp D) (C : Ctx S T), ∀ (Lv : SW.Level C.X) (hn : T.rank ≤ S.rank) (M : ℕ), IdemTwo Lv.w → 0 < M → (M : 𝓞 D.host.E) ∈ Lv.𝔪 → ∀ (h : GA D S) (Λ : Lt D.host.E S.rank) (g : GA D T) (L : Lt D.host.E T.rank), h ∈ GfC S → TrivAt S (Ideal.span {(M : 𝓞 D.host.F)}) h → Λ.FG → IsMov (fmtC S h) (stdL D.host.E S.rank) Λ → g ∈ GfC T → TrivAt T (C.under Lv) g → L.FG → IsMov (fmt T g) C.X.Λ L → ∀ y y' : Matrix (Fin S.rank) (Fin T.rank) D.host.E, finW S T y' - actO S T h g (finW S T y) ∈ hatA S T (tens Λ (Lv.𝔪 • L)) → ∀ k, Cong C.X Lv.𝔪 (y' k) (y k) := by
-  first | exact @GlobalTheory.Ker.LevCong.cong_of_act | exact GlobalTheory.Ker.LevCong.cong_of_act | (intros; apply GlobalTheory.Ker.LevCong.cong_of_act <;> assumption)
+  first | exact @GlobalTheory.Ker.LevCong.cong_of_act
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.RowsCongrOfTrivialAtLevelStatement =====
@@ -866,14 +866,6 @@ namespace GlobalTheory.Ker.LevelMove
 section Lattices
 
 variable {E : Type} [Field E] [NumberField E] {r : ℕ}
-
-theorem full_stdL (E : Type) [Field E] [NumberField E] (r : ℕ) :
-    (stdL E r).FG ∧ Submodule.span E (stdL E r : Set (Fin r → E)) = ⊤ := by
-  refine ⟨Submodule.fg_span (Set.finite_range _), ?_⟩
-  rw [eq_top_iff, ← (Pi.basisFun E (Fin r)).span_eq]
-  refine Submodule.span_mono ?_
-  rintro _ ⟨a, rfl⟩
-  exact Submodule.subset_span ⟨a, by simp⟩
 
 theorem full_smul {L : Lt E r} (hL : L.FG ∧ Submodule.span E (L : Set (Fin r → E)) = ⊤)
     {𝔠 : Ideal (𝓞 E)} (h : 𝔠 ≠ ⊥) :
@@ -992,7 +984,7 @@ theorem om_Th_phi : ∀ (D : D7) (S T : HSp D) (C : Ctx S T), ∀ om : GA D S ×
   intro D S T C om hom Lv hn M hw hM0 hM v₀ hv₀ B hB
   have hx : C.xB B ∈ C.X.dom := ((GlobalTheory.T.thetaKernel_orthonormalFrame_inDomain_periodLinear D S T C).2 B hB).2.1
   obtain ⟨hX, -, -, hl, -, hd, -⟩ := level_laws D.host.E T.rank C.X C.g C.bas C.idx S.rank C.sympl C.even Lv hn
-  have hS := full_stdL D.host.E S.rank
+  have hS := _root_.GlobalTheory.ThetaSpace.stdL_full D.host.E S.rank
   have hSV := Base.stdL_mem_Vset (E := D.host.E) S.rank M
   have hX0 : C.X.Λ.FG ∧ _ := ⟨hX.1.1, (hl _ hX).2.1⟩
   have hone : IsMov (fmtC S 1) (stdL D.host.E S.rank) (stdL D.host.E S.rank) := by
@@ -1092,7 +1084,7 @@ open scoped TensorProduct ComplexConjugate Real Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.weilPair_levelTrivial_maps_levelVector : ∀ (D : D7) (S T : HSp D) (C : Ctx S T), ∀ om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ), IsWeak C.ψ S T om → ∀ (Lv : SW.Level C.X) (hn : T.rank ≤ S.rank) (M : ℕ), IdemTwo Lv.w → 0 < M → (M : 𝓞 D.host.E) ∈ Lv.𝔪 → ∀ v₀ : Lt D.host.E T.rank → TF S.rank C.g, (∀ L ∈ Lv.lats, IsVac C.X C.bas Lv.w (tens (stdL D.host.E S.rank) (Lv.sh L)) (v₀ L)) → ∀ B, C.IsB B → ∃ (ep : GA D S → ℂ) (c : GA D T → ℂ), ∀ (h : GA D S) (Λ : Lt D.host.E S.rank) (g : GA D T) (L : Lt D.host.E T.rank), h ∈ GfC S → TrivAt S (Ideal.span {(M : 𝓞 D.host.F)}) h → Λ.FG → IsMov (fmtC S h) (stdL D.host.E S.rank) Λ → g ∈ GfC T → TrivAt T (C.under Lv) g → L.FG → IsMov (fmt T g) C.X.Λ L → ‖ep h‖ = 1 ∧ ‖c g‖ = 1 ∧ om (h, g) (C.Th (C.xB B) (Lv.phi C.bas hn v₀ C.X.Λ (stdL D.host.E S.rank))) = (ep h * c g) • (C.Th (C.xB B) (Lv.phi C.bas hn v₀ L Λ)) := by
-  first | exact @GlobalTheory.Ker.LevelMove.om_Th_phi | exact GlobalTheory.Ker.LevelMove.om_Th_phi | (intros; apply GlobalTheory.Ker.LevelMove.om_Th_phi <;> assumption)
+  first | exact @GlobalTheory.Ker.LevelMove.om_Th_phi
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.WeilPairLevelTrivialMapsLevelVectorStatement =====

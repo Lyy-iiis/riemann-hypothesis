@@ -309,7 +309,7 @@ theorem GlobalTheory.AdTh.norm_factor_eq_of_reads : ∀ (D : D7) (ψ : AddChar (
   have h₀ := hn x hd hu ϑ κ₀ hϑ hmean hκ₀
   suffices h : ρ = ‖κ‖ from fun x' hx' hu' ϑ' κ' h1 h2 h3 => (hn x' hx' hu' ϑ' κ' h1 h2 h3).trans h
   obtain ⟨X', m, hq', hq, bas', idx', hs', hΛ, -, -, -, -, -, hB⟩ :=
-    GlobalTheory.T.orthonormal_frame_reading_eq_conjugate_datum_theta D ψ θ V W g X bas idx hstd hinf he hV hm hs
+    _root_.GlobalTheory.AdTh.reads_iff_eq_th D ψ θ V W g X bas idx hstd hinf he hV hm hs
   obtain ⟨⟨B, hB1⟩, hB2⟩ := hB x hx
   let C : GlobalTheory.Ker.Ctx V W := ⟨ψ, hstd, θ, hinf, X', m, g, X.p0, hq', bas', idx', hs', he⟩
   obtain ⟨hCB, -, -, hz, hpv, -⟩ := hB2 B hB1
@@ -378,7 +378,7 @@ open scoped TensorProduct Classical ComplexConjugate
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.norm_adelicClassicalVacuumFactor_eq : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (r g : ℕ) (hr : W.rank = r) (X : Data D.host.E r) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (idx : Fin g ≃ X.Ψ × Fin r), IsStdChar D ψ (-1) → IsInfFam θ → V.gram = 1 → Even V.rank → IsMod W hr X → IsSympl X bas → ∀ (H : Geo.Tor.Host D.host.E), (H.rt : D.host.E) = D.host.sqrtMinusD → ∀ (ΛV : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (ΛW : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E)), IsSelfDualC V ΛV → IsSelfDualC W ΛW → (ΛV : Set (Fin V.rank → D.host.E)) = (Formalism.L2.Pj.stdLat D.host.E V.rank : Set (Fin V.rank → D.host.E)) → (∀ L₀ : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E), L₀ = Submodule.span (𝓞 D.host.E) {w | ∃ a : D.host.E, a ∈ D.host.AA ∧ ∃ v ∈ ΛW, w = a • v} → X.Λ = latR hr L₀) → ∀ (x : Frame X.Ψ r) (s : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ), IsONFr X x → ∀ f, IsVacO ψ θ V W (fun _ => 1) s (ΛV : Set (Fin V.rank → D.host.E)) (ΛW : Set (Fin W.rank → D.host.E)) f → ∀ v : TF V.rank g, IsVac X bas (H.w0 : D.host.E) (tens (stdL D.host.E V.rank) X.Λ) v → ∀ κ : ℂ, Reads θ V W hr X bas idx f (κ • v) x → (∀ x' ∈ X.dom, IsUnitFr X x' → ∀ (ϑ : (Fin g → ℂ) → ℂ) (κ' : ℂ), IsTheta1 X bas idx (H.w0 : D.host.E) x' X.Λ ϑ → MeanOne X bas idx x' X.Λ ϑ → (∀ z : Fin V.rank → Fin g → ℂ, ∏ b, ϑ (z b) = κ' * thA X bas idx v x' z) → ‖κ'‖ = ‖κ‖) := by
-  first | exact @GlobalTheory.AdTh.norm_factor_eq_of_reads | exact GlobalTheory.AdTh.norm_factor_eq_of_reads | (intros; apply GlobalTheory.AdTh.norm_factor_eq_of_reads <;> assumption)
+  first | exact @GlobalTheory.AdTh.norm_factor_eq_of_reads
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.NormAdelicClassicalVacuumFactorEqStatement =====
@@ -396,7 +396,7 @@ open scoped TensorProduct Classical ComplexConjugate
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.inner_thetaFunctions_reading_testFunction_frames : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (r g : ℕ) (hr : W.rank = r) (X : Data D.host.E r) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (idx : Fin g ≃ X.Ψ × Fin r), IsStdChar D ψ (-1) → IsInfFam θ → V.gram = 1 → Even V.rank → IsMod W hr X → IsSympl X bas → ∃ G : Frame X.Ψ r → Frame X.Ψ r → ℂ, ∀ x x' : Frame X.Ψ r, IsONFr X x → IsONFr X x' → G x x' ≠ 0 ∧ (∀ u : GA D W, G (frMove θ W hr X u x) (frMove θ W hr X u x') = G x x') ∧ ∀ v : TF V.rank g, GlobalTheory.SW.IsSB v → v ≠ 0 → ∃ c : ℂ, c ≠ 0 ∧ ∀ y y' : Frame X.Ψ r, IsONFr X y → IsONFr X y' → ∀ (f f' : WO V W → ℂ) (κ κ' : ℂ), IsThetaFunO ψ V W f → IsThetaFunO ψ V W f' → Reads θ V W hr X bas idx f (κ • v) y → Reads θ V W hr X bas idx f' (κ' • v) y' → ∀ (μ : Measure (WO V W)) (𝓕 : Set (WO V W)), IsCovolOne (ratL W V) μ 𝓕 → ∫ w in 𝓕, f w * conj (f' w) ∂μ = κ * conj κ' * (c * G y y') := by
-  first | exact @GlobalTheory.AdTh.inner_of_reads | exact GlobalTheory.AdTh.inner_of_reads | (intros; apply GlobalTheory.AdTh.inner_of_reads <;> assumption)
+  first | exact @GlobalTheory.AdTh.inner_of_reads
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.InnerThetaFunctionsReadingTestFunctionFramesStatement =====
@@ -414,7 +414,7 @@ open scoped TensorProduct Classical ComplexConjugate
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.thetaReading_linear_injective_at_orthonormal_frame : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (r g : ℕ) (hr : W.rank = r) (X : Data D.host.E r) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (idx : Fin g ≃ X.Ψ × Fin r), IsStdChar D ψ (-1) → IsInfFam θ → V.gram = 1 → Even V.rank → IsMod W hr X → IsSympl X bas → ∀ x : Frame X.Ψ r, IsONFr X x → ∀ (f f' : WO V W → ℂ) (φ φ' : TF V.rank g), Reads θ V W hr X bas idx f φ x → Reads θ V W hr X bas idx f' φ' x → (∀ a b : ℂ, Reads θ V W hr X bas idx (a • f + b • f') (a • φ + b • φ') x) ∧ (f = f' → φ = φ') ∧ (IsThetaFunO ψ V W f → IsThetaFunO ψ V W f' → φ = φ' → f = f') := by
-  first | exact @GlobalTheory.AdTh.reads_linear_injective | exact GlobalTheory.AdTh.reads_linear_injective | (intros; apply GlobalTheory.AdTh.reads_linear_injective <;> assumption)
+  first | exact @GlobalTheory.AdTh.reads_linear_injective
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaReadingLinearInjectiveAtOrthonormalFrameStatement =====
@@ -537,15 +537,10 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.AdTh.RealCompact
 
-theorem realM_tauE {D : D7} (θ : InfFam D) {m n : ℕ} (w : Mx D m n) (ρ : D.what₂.Tau) :
-    realM θ w (tauE D ρ) = compAt θ ρ w := by
-  have h : ∃ ρ', tauE D ρ = tauE D ρ' := ⟨ρ, rfl⟩
-  rw [realM, dite_eq_left h, ← GlobalTheory.SmoothForms.RealPts.tauE_injective D h.choose_spec]
-
 theorem mat_frMove {D : D7} (θ : InfFam D) (W : HSp D) (X : Data D.host.E W.rank) (k : GA D W)
     (x : Frame X.Ψ W.rank) (ρ : D.what₂.Tau) (τ : X.Ψ) (h : τ.1 = tauE D ρ) :
     mat (frMove θ W rfl X k x) τ = compAt θ ρ (Formalism.L2.Theta.mt W k) * mat x τ := by
-  rw [← realM_tauE, ← h]
+  rw [← _root_.GlobalTheory.AdTh.RealCoord.realM_tauE, ← h]
   rfl
 
 theorem isONFr_frMove {D : D7} {θ : InfFam D} (hθ : IsInfFam θ) (W : HSp D) (X : Data D.host.E W.rank)
@@ -641,7 +636,7 @@ open scoped TensorProduct Classical ComplexConjugate
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.weilDatum_compact_vacuum_reads_det_character : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsPair ψ θ V W χV χW om → ∀ mu : GA D W → ℂ, Formalism.L2.Pj.MuVal W χV mu → ∀ (r g : ℕ) (hr : W.rank = r) (X : Data D.host.E r) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (idx : Fin g ≃ X.Ψ × Fin r), IsMod W hr X → IsSympl X bas → ∀ (x : Frame X.Ψ r) (s : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ), IsONFr X x → IsInvOf W hr X x s → ∀ (f : WO V W → ℂ) (φ : TF V.rank g), IsThetaFunO ψ V W f → Reads θ V W hr X bas idx f φ x → ∀ k ∈ GinfC W, (∀ τ, s τ * compAt θ τ (Formalism.L2.Theta.mt W k) = compAt θ τ (Formalism.L2.Theta.mt W k) * s τ) → Reads θ V W hr X bas idx (om (1, k) f) (mu k • φ) (frMove θ W hr X k x) := by
-  first | exact @GlobalTheory.AdTh.RealCompact.om_compact_reads | exact GlobalTheory.AdTh.RealCompact.om_compact_reads | (intros; apply GlobalTheory.AdTh.RealCompact.om_compact_reads <;> assumption)
+  first | exact @GlobalTheory.AdTh.RealCompact.om_compact_reads
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilDatumCompactVacuumReadsDetCharacterStatement =====
@@ -691,7 +686,7 @@ theorem om_real_reads : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfF
   subst hr
   have hstd := hP.weil.std
   obtain ⟨X', m, hq', hq, bas', idx', hs, -, -, -, -, -, -, hfr⟩ :=
-    GlobalTheory.T.orthonormal_frame_reading_eq_conjugate_datum_theta D ψ θ V W g X bas idx hstd hP.inf hP.even hP.std hX hS
+    _root_.GlobalTheory.AdTh.reads_iff_eq_th D ψ θ V W g X bas idx hstd hP.inf hP.even hP.std hX hS
   set C : GlobalTheory.Ker.Ctx V W := ⟨ψ, hstd, θ, hP.inf, X', m, g, X.p0, hq', bas', idx', hs, hP.even⟩ with hC
   obtain ⟨⟨B, hB⟩, hBx⟩ := hfr x hx
   obtain ⟨hIsB, hinv, -, -, -, -, -, hmv, hTh⟩ := hBx B hB
@@ -780,7 +775,7 @@ open scoped TensorProduct Classical ComplexConjugate
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.weilRepresentation_real_moves_frame_detChar : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsPair ψ θ V W χV χW om → ∀ mu : GA D W → ℂ, Formalism.L2.Pj.MuVal W χV mu → ∀ (r g : ℕ) (hr : W.rank = r) (X : Data D.host.E r) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (idx : Fin g ≃ X.Ψ × Fin r), IsMod W hr X → IsSympl X bas → ∀ (x : Frame X.Ψ r), IsONFr X x → ∀ (f : WO V W → ℂ) (φ : TF V.rank g), IsThetaFunO ψ V W f → Reads θ V W hr X bas idx f φ x → ∀ u ∈ GinfC W, Reads θ V W hr X bas idx (om (1, u) f) (mu u • φ) (frMove θ W hr X u x) := by
-  first | exact @GlobalTheory.RealMove.om_real_reads | exact GlobalTheory.RealMove.om_real_reads | (intros; apply GlobalTheory.RealMove.om_real_reads <;> assumption)
+  first | exact @GlobalTheory.RealMove.om_real_reads
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilRepresentationRealMovesFrameDetCharStatement =====
@@ -798,16 +793,6 @@ open scoped TensorProduct Classical ComplexConjugate
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.VacFamily
-
-theorem muVal_mul {D : D7} {V : HSp D} {χ : (AE D)ˣ →* Circle} {mu : GA D V → ℂ} (h : Formalism.L2.Pj.MuVal V χ mu)
-    (g g' : GA D V) : mu (g * g') = mu g * mu g' := by
-  obtain ⟨x, hx⟩ := h.1 g
-  obtain ⟨x', hx'⟩ := h.1 g'
-  have hxx : IsDetRoot V (g * g') (x * x') := by
-    unfold IsDetRoot at *
-    rw [map_mul, Units.val_mul, Units.val_mul, Matrix.det_mul, map_mul]
-    rw [mul_mul_mul_comm, ← hx, ← hx']
-  rw [h.2 _ _ hxx, h.2 _ _ hx, h.2 _ _ hx', map_mul, Circle.coe_mul]
 
 theorem compAt_fin {D : D7} (θ : InfFam D) (V : HSp D) {k : GA D V} (hk : k ∈ GfC V) (τ : D.what₂.Tau) :
     compAt θ τ (Formalism.L2.Theta.mt V k) = 1 := by
@@ -900,12 +885,7 @@ theorem actO_mul {D : D7} (V W : HSp D) (h h' : GA D W) (u : WO V W) :
   rw [e1, e2]
   simp only [Matrix.mul_one, Matrix.mul_assoc]
 
-theorem actO_one {D : D7} (V W : HSp D) (u : WO V W) : actO V W 1 1 u = u := by
-  have e1 : Formalism.L2.Theta.mt V 1⁻¹ = 1 := by rw [inv_one]; rfl
-  have e2 : Formalism.L2.Theta.mt W 1 = 1 := rfl
-  unfold actO
-  rw [e1, e2]
-  simp only [Matrix.mul_one, Matrix.one_mul]
+alias actO_one := _root_.GlobalTheory.LatNhds.actO_one
 
 theorem latR_rfl {E : Type} [Field E] [NumberField E] {m : ℕ} (L : Submodule (𝓞 E) (Fin m → E)) : latR rfl L = L := by
   have : LinearMap.funLeft (𝓞 E) E (Fin.cast (rfl : m = m).symm) = LinearMap.id := rfl
@@ -917,39 +897,6 @@ theorem latG_mul {D : D7} (W : HSp D) {u : GA D W} (hu : u ∈ GinfC W) (k : GA 
   have h : finHom W u = 1 := hu
   unfold Formalism.L2.Pj.latG Formalism.L2.Pj.gLat
   rw [map_mul, h, one_mul]
-
-theorem hostHalfRoot_add_conj_eq_one {E : Type} [Field E] [NumberField E] [IsCMField E] (H : Geo.Tor.Host E) :
-    (H.w0 : E) + cc (H.w0 : E) = 1 := by
-  have h2 : (2 : E) * (H.w0 : E) = 1 + (H.rt : E) := by
-    have := congrArg (algebraMap (𝓞 E) E) H.two_weight_eq_one_add_root
-    rw [map_mul, map_add (f := _), map_one, map_ofNat] at this
-    exact this
-  have hs : (H.rt : E) ^ 2 = -(H.d : E) := by
-    have := congrArg (algebraMap (𝓞 E) E) H.rt_sq
-    rw [map_pow, map_neg, map_natCast] at this
-    exact this
-  have hc : cc (H.rt : E) = -(H.rt : E) := by
-    obtain ⟨τ⟩ : Nonempty (E →+* ℂ) := inferInstance
-    apply τ.injective
-    have h1 : τ (H.rt : E) ^ 2 = -(H.d : ℂ) := by rw [← map_pow, hs, map_neg, map_natCast]
-    have hd : (0 : ℝ) < H.d := by exact_mod_cast H.d_prime.pos
-    have hre := congrArg Complex.re h1
-    have him := congrArg Complex.im h1
-    simp only [pow_two, Complex.mul_re, Complex.mul_im, Complex.neg_re, Complex.neg_im, Complex.natCast_re,
-      Complex.natCast_im, neg_zero] at hre him
-    have h0 : (τ (H.rt : E)).re = 0 := by
-      by_contra h
-      have h5 : (τ (H.rt : E)).im = 0 := mul_left_cancel₀ h (by linarith)
-      rw [h5] at hre
-      nlinarith [mul_self_nonneg (τ (H.rt : E)).re]
-    rw [cc, IsCMField.complexEmbedding_complexConj, map_neg]
-    apply Complex.ext <;> simp [h0]
-  have h3 : (2 : E) * cc (H.w0 : E) = 1 - (H.rt : E) := by
-    have := congrArg (IsCMField.complexConj E) h2
-    rw [map_mul, map_add (f := _), map_one, map_ofNat] at this
-    rw [sub_eq_add_neg, ← hc]
-    exact this
-  linear_combination (h2 + h3) / 2
 
 theorem mem_stdL {E : Type} [Field E] [NumberField E] {n : ℕ} (w : Fin n → E) :
     w ∈ stdL E n ↔ ∀ j, ∃ b : 𝓞 E, (b : E) = w j := by
@@ -970,7 +917,7 @@ theorem exists_vacuum_multiplier : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ)
   by_cases hex : ∃ k : GA D W, latR rfl (Formalism.L2.Pj.latG W k) = X.Λ
   swap
   · obtain ⟨ρ, hρ, h⟩ := GlobalTheory.Dict.VacNorm.norm_factor_eq D.host.E W.rank X g bas idx V.rank hS hP.even _
-      H.w0.isIntegral_coe (hostHalfRoot_add_conj_eq_one H) X.Λ hsd v hv
+      H.w0.isIntegral_coe (_root_.GlobalTheory.AdTh.VacLine.hostHalfRoot_add_conj_eq_one H) X.Λ hsd v hv
     refine ⟨ρ, by exact_mod_cast hρ.ne', fun x' hx' hu ϑ κ' h1 h2 h3 => ?_, fun k hk => absurd ⟨k, hk⟩ hex⟩
     rw [h x' hx' hu ϑ κ' h1 h2 h3, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hρ]
   have hsplit := (GlobalTheory.UnitarySplit.real_finite_split D W).1
@@ -1040,8 +987,8 @@ theorem exists_vacuum_multiplier : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ)
     rw [← Module.End.mul_apply, ← Module.End.mul_apply, ← map_mul, ← map_mul, Prod.mk_mul_mk, Prod.mk_mul_mk]
     simp only [mul_one, mul_assoc, inv_mul_cancel]
   have e2 : κ₀ / mu k₀ * mu (u * c) = mu u * (mu (c * k₀⁻¹) * κ₀) := by
-    have : mu c = mu (c * k₀⁻¹) * mu k₀ := by rw [← muVal_mul hmu, inv_mul_cancel_right]
-    rw [muVal_mul hmu, this]
+    have : mu c = mu (c * k₀⁻¹) * mu k₀ := by rw [← _root_.GlobalTheory.RealMove.muVal_mul hmu, inv_mul_cancel_right]
+    rw [_root_.GlobalTheory.RealMove.muVal_mul hmu, this]
     field_simp
   rw [e1, smul_smul, smul_smul, mul_assoc, ← e2] at hR'
   rw [frMove_mul_fin θ W X u hc]
@@ -1065,7 +1012,7 @@ open scoped TensorProduct Classical ComplexConjugate
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_vacuum_multiplier_constant_per_lattice : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsPair ψ θ V W χV χW om → ∀ mu : GA D W → ℂ, Formalism.L2.Pj.MuVal W χV mu → ∀ (r g : ℕ) (hr : W.rank = r) (X : Data D.host.E r) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (idx : Fin g ≃ X.Ψ × Fin r), IsMod W hr X → IsSympl X bas → ∀ (H : Geo.Tor.Host D.host.E), (H.rt : D.host.E) = D.host.sqrtMinusD → ∀ (ΛV : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (ΛW : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E)), V.rank ≠ 0 → (ΛV : Set (Fin V.rank → D.host.E)) = L0c D V → (ΛW : Set (Fin W.rank → D.host.E)) = L0c D W → IsSelfDualC V ΛV → IsSelfDualC W ΛW → (ΛV : Set (Fin V.rank → D.host.E)) = (Formalism.L2.Pj.stdLat D.host.E V.rank : Set (Fin V.rank → D.host.E)) → SelfD X X.Λ → ∀ (x₀ : Frame X.Ψ r) (s : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ), IsONFr X x₀ → IsInvOf W hr X x₀ s → ∀ f, IsVacO ψ θ V W (fun _ => 1) s (ΛV : Set (Fin V.rank → D.host.E)) (ΛW : Set (Fin W.rank → D.host.E)) f → ∀ v : TF V.rank g, IsVac X bas (H.w0 : D.host.E) (tens (stdL D.host.E V.rank) X.Λ) v → ∃ κ : ℂ, κ ≠ 0 ∧ (∀ x' ∈ X.dom, IsUnitFr X x' → ∀ (ϑ : (Fin g → ℂ) → ℂ) (κ' : ℂ), IsTheta1 X bas idx (H.w0 : D.host.E) x' X.Λ ϑ → MeanOne X bas idx x' X.Λ ϑ → (∀ z : Fin V.rank → Fin g → ℂ, ∏ b, ϑ (z b) = κ' * thA X bas idx v x' z) → ‖κ'‖ = ‖κ‖) ∧ ∀ k : GA D W, latR hr (Formalism.L2.Pj.latG W k) = X.Λ → IsONFr X (frMove θ W hr X k x₀) ∧ Reads θ V W hr X bas idx (om (1, k) f) ((κ * mu k) • v) (frMove θ W hr X k x₀) := by
-  first | exact @GlobalTheory.VacFamily.exists_vacuum_multiplier | exact GlobalTheory.VacFamily.exists_vacuum_multiplier | (intros; apply GlobalTheory.VacFamily.exists_vacuum_multiplier <;> assumption)
+  first | exact @GlobalTheory.VacFamily.exists_vacuum_multiplier
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsVacuumMultiplierConstantPerLatticeStatement =====
@@ -1084,7 +1031,7 @@ open scoped TensorProduct Classical ComplexConjugate
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.pow_generator_eq_const_mul_vacuum_theta : Formalism.MainNotions.ModuliIntegralCharts.H1.ChartIndepSt2 → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Geo.Tor.Host E) (Dw : Datum H) (l : Geo.Tor.Level H) (Xo : Moduli Dw l) (c : Coeff l) (σ : c.F →+* ℂ) (r : ℕ) (U : Unf Xo c σ r), GoodEmb c σ → IsUnf U → 1 ≤ r → l.A = 1 → ∀ (k : U.Comp) (n g : ℕ) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] (U.X k).Λ) (idx : Fin g ≃ (U.X k).Ψ × Fin r) (e : Fin g ≃ Lt1 Dw), Even n → IsSympl (U.X k) bas → IdxIs c σ (U.X k) idx e → ∀ v : TF n g, IsVac (U.X k) bas (H.w0 : E) (tens (stdL E n) (U.X k).Λ) v → ∃ C : ℂ, C ≠ 0 ∧ ∀ x : (U.X k).dom, IsUnitFr (U.X k) x.1 → (∃ ϑ, GenReads U k bas idx e x ϑ) ∧ ∀ ϑ, GenReads U k bas idx e x ϑ → IsTheta1 (U.X k) bas idx (H.w0 : E) x.1 (U.X k).Λ ϑ ∧ MeanOne (U.X k) bas idx x.1 (U.X k).Λ ϑ ∧ ∀ z : Fin n → Fin g → ℂ, ∏ b, ϑ (z b) = C * thA (U.X k) bas idx v x.1 z := by
-  first | exact @GlobalTheory.AdTh.prod_gen_eq_const_mul_thA | exact GlobalTheory.AdTh.prod_gen_eq_const_mul_thA | (intros; apply GlobalTheory.AdTh.prod_gen_eq_const_mul_thA <;> assumption)
+  first | exact @GlobalTheory.AdTh.prod_gen_eq_const_mul_thA
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.PowGeneratorEqConstMulVacuumThetaStatement =====

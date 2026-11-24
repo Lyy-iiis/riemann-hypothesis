@@ -375,7 +375,7 @@ theorem nLeft_holds : Formalism.MainNotions.MeasFS.NLeft := fun k r κ h0 h1 a h
 theorem muN_eq_haarLie (k r : ℕ) :
     ∃ κ₀ : ENNReal, κ₀ ≠ 0 ∧ κ₀ ≠ ⊤ ∧ Formalism.FourierDecayAlt.D.muN k r = haarLie (Nset k r) κ₀ := by
   have hH := Formalism.MainNotions.MeasFS.haar_lie_measure_on_nilpotent (k := k) (r := r) nLeft_holds 1 one_ne_zero ENNReal.one_ne_top
-  have hM := Formalism.FourierDecayAlt.Final.d_muNHaar k r
+  have hM := _root_.Formalism.FourierDecayAlt.P.nilpotent_measure_is_haar k r
   obtain ⟨c, hc⟩ := Formalism.FourierDecayAlt.P.haar_measure_unique_up_to_scalar k r (Nset k r) _ _ (Formalism.FourierDecayAlt.P.unipotent_radical_closed k r) hH
     hM.conc hM.left hM.finite_compact
   refine ⟨(c : ENNReal), fun h => hM.ne_zero ?_, ENNReal.coe_ne_top, ?_⟩
@@ -421,7 +421,7 @@ theorem torS_conj (D : Formalism.BasicNotions.D7) (k r : ℕ) (M : Mx k r) :
       gStd (kaB D) M := by
   rw [torS_muT, torS_muT_inv, gStd]
   have hI : (Complex.I ^ r) ≠ 0 := pow_ne_zero _ Complex.I_ne_zero
-  simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, inv_mul_cancel₀ hI, mul_inv_cancel₀ hI, one_smul]
+  simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, inv_mul_cancel₀ hI, one_smul]
   simp only [cj, Matrix.mul_assoc]
 
 theorem torS_conjI (D : Formalism.BasicNotions.D7) (k r : ℕ) (M : Mx k r) :
@@ -429,7 +429,7 @@ theorem torS_conjI (D : Formalism.BasicNotions.D7) (k r : ℕ) (M : Mx k r) :
       tT k r * cjI k r (kaB D)⁻¹ 1 M * tTi k r := by
   rw [torS_muT, torS_muT_inv]
   have hI : (Complex.I ^ r) ≠ 0 := pow_ne_zero _ Complex.I_ne_zero
-  simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, inv_mul_cancel₀ hI, mul_inv_cancel₀ hI, one_smul]
+  simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, mul_inv_cancel₀ hI, one_smul]
   simp only [cjI, Matrix.mul_assoc]
 
 end Formalism.L2.SG.Pf.Carrier.CarPinTor

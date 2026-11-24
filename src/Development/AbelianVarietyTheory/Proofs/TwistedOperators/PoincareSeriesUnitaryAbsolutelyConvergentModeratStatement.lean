@@ -111,7 +111,7 @@ theorem exists_nsmul_single_mem (Λ : Submodule (𝓞 E) (Fin n → E)) (hsp : S
     ∃ c : ℕ, 0 < c ∧ ∀ j, c • (Pi.single j (1 : E) : Fin n → E) ∈ Λ := by
   classical
   obtain ⟨c, hc, h⟩ := GlobalTheory.LatSandwich.exists_nsmul_le (Finset.univ.image fun j : Fin n => (Pi.single j (1 : E) : Fin n → E)) Λ
-    (fun x _ => GlobalTheory.LatSandwich.exists_nsmul_mem_of_span Λ hsp x)
+    (fun x _ => _root_.GlobalTheory.NatMulMemUnitaryExistence.main Λ hsp x)
   exact ⟨c, hc, fun j => h _ (Submodule.subset_span (by simp))⟩
 
 end GlobalTheory.LevelDenom
@@ -136,7 +136,7 @@ theorem exists_denom_stab (hc : Formalism.BasicNotions.CMData F E) (J : Matrix (
     funext l
     by_cases e : l = j
     · subst e; simp [nsmul_eq_mul]
-    · simp [Pi.single_eq_of_ne e, nsmul_eq_mul]
+    · simp [Pi.single_eq_of_ne e]
   rw [ez] at hzmem
   have hkz := (hs _).1 hzmem
   have h2 := natCast_smul_mem_hatL_std Λ c hce _ hkz
@@ -144,7 +144,7 @@ theorem exists_denom_stab (hc : Formalism.BasicNotions.CMData F E) (J : Matrix (
   have h3 := h2 i
   rw [Matrix.mulVec_smul] at h3
   convert h3 using 1
-  simp [Matrix.mulVec_single_one, mul_comm, mul_left_comm, mul_assoc]
+  simp [mul_left_comm, mul_assoc]
 
 end GlobalTheory.LevelDenom
 
@@ -208,7 +208,7 @@ open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_common_denominator_selfDual_level : ∀ (D : D7) (V : HSp D) (Λ : Lat V), IsSelfDualC V Λ → ∃ b : ℕ, 0 < b ∧ ∀ k ∈ congLev D.sp.cm V.gram Λ ⊤, ∀ i j, (b : Lev.EAf D) * k.1 i j ∈ Formalism.L2.Herm.intAf D.host.F D.host.E := by
-  first | exact @GlobalTheory.LevelDenom.exists_denom_congLev | exact GlobalTheory.LevelDenom.exists_denom_congLev | (intros; apply GlobalTheory.LevelDenom.exists_denom_congLev <;> assumption)
+  first | exact @GlobalTheory.LevelDenom.exists_denom_congLev
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsCommonDenominatorSelfDualLevelStatement =====
@@ -260,7 +260,7 @@ theorem exists_denom_comm {m : ℕ} (b : Module.Basis (Fin m) F E) : ∃ c : ℕ
       (∀ k, (e : 𝔸) * (Algebra.TensorProduct.basis 𝔸 b).repr z k ∈ intRing F) →
       ((c * e : ℕ) : E ⊗[F] 𝔸) * Algebra.TensorProduct.comm F 𝔸 E z ∈ Formalism.L2.Herm.intAf F E := by
   obtain ⟨c, hc, h⟩ := GlobalTheory.HolDict.ShortVec.exists_common_denom (integralClosure ℤ E).toSubring b fun k => by
-    obtain ⟨k, hk, r, hr⟩ := GlobalTheory.SmoothForms.denom_exists_int (b k)
+    obtain ⟨k, hk, r, hr⟩ := _root_.GlobalTheory.NatMulMemRingOfIntegers.exists_nat_mul_mem_ringOfIntegers (b k)
     exact ⟨k, hk, hr ▸ r.2⟩
   refine ⟨c, hc, fun e z hz => ?_⟩
   rw [comm_eq_sum b, Finset.mul_sum]
@@ -302,7 +302,7 @@ open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_finitePart_denominator_le_height_pow : ∀ (D : D7) (V : HSp D), ∃ (C : ℝ) (A : ℕ), ∀ g : GA D V, ∃ d : ℕ, 0 < d ∧ (d : ℝ) ≤ C * height V g ^ A ∧ ∀ i j, (d : Lev.EAf D) * (Lev.finE V g).1 i j ∈ Formalism.L2.Herm.intAf D.host.F D.host.E := by
-  first | exact @GlobalTheory.PointDenom.exists_denom_le_height_pow | exact GlobalTheory.PointDenom.exists_denom_le_height_pow | (intros; apply GlobalTheory.PointDenom.exists_denom_le_height_pow <;> assumption)
+  first | exact @GlobalTheory.PointDenom.exists_denom_le_height_pow
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsFinitePartDenominatorLeHeightPowStatement =====
@@ -520,7 +520,7 @@ theorem hsn_mul_le {n : ℕ} (X Y : Matrix (Fin n) (Fin n) ℂ) : hsn (X * Y) �
 theorem one_le_prod_tauE (D : D7) {y : D.host.E} (hy : y ≠ 0) (hi : IsIntegral ℤ y) : 1 ≤ ∏ τ, ‖tauE D τ y‖ := by
   have hnorm : ∏ τ, ‖tauE D τ y‖ ^ 2 = |((Algebra.norm ℚ y : ℚ) : ℝ)| := by
     rw [← Rat.cast_abs, ← NumberField.InfinitePlace.prod_eq_abs_norm]
-    refine (Fintype.prod_bijective _ (GlobalTheory.LevelSeries.mk_tauE_bij D) _ _ (fun τ => ?_))
+    refine (Fintype.prod_bijective _ (_root_.GlobalTheory.CMTypePlaces.mk_tauE_bijective D) _ _ (fun τ => ?_))
     rw [NumberField.InfinitePlace.mult, if_neg (GlobalTheory.LevelSeries.mk_tauE_complex D τ)]
     rfl
   have h1 : (1 : ℝ) ≤ |((Algebra.norm ℚ y : ℚ) : ℝ)| := by
@@ -539,7 +539,7 @@ theorem one_le_prod_tauE (D : D7) {y : D.host.E} (hy : y ≠ 0) (hi : IsIntegral
 theorem exists_rat (V : HSp D) (γ : GQ V) :
     ∃ δ : GL (Fin V.rank) D.host.E, Formalism.UG.bc (inclR (AF D.host.F)) δ = matHom V (γ : GA D V) := by
   have h1 := γ.2
-  simp only [GQ, HFinIn, HFin, Subgroup.mem_subgroupOf, Subgroup.mem_map] at h1
+  simp only [GQ, HFinIn, HFin] at h1
   obtain ⟨δ, -, hδ⟩ := h1
   exact ⟨δ, hδ⟩
 
@@ -596,8 +596,8 @@ theorem exists_den (D : D7) (V : HSp D) (Λ : Lat V) (hΛ : IsSelfDualC V Λ) (c
       ∀ γ : GA D V, Lev.finE V (c * γ * g) ∈ congLev D.sp.cm V.gram Λ ⊤ →
         ∀ δ : GL (Fin V.rank) D.host.E, Formalism.UG.bc (inclR (AF D.host.F)) δ = matHom V γ →
           ∀ i j, IsIntegral ℤ ((m : D.host.E) * (δ : Matrix (Fin V.rank) (Fin V.rank) D.host.E) i j) := by
-  obtain ⟨b, hb0, hb⟩ := level_den D V Λ hΛ
-  obtain ⟨C, A, hg⟩ := point_den D V
+  obtain ⟨b, hb0, hb⟩ := _root_.GlobalTheory.LevelDenom.exists_denom_congLev D V Λ hΛ
+  obtain ⟨C, A, hg⟩ := _root_.GlobalTheory.PointDenom.exists_denom_le_height_pow D V
   obtain ⟨dc, hdc0, -, hdc⟩ := hg c⁻¹
   refine ⟨(dc : ℝ) * b * C, A, fun g => ?_⟩
   obtain ⟨dg, hdg0, hdgH, hdg⟩ := hg g⁻¹
@@ -664,10 +664,10 @@ theorem poincare_count : ∀ (D : D7) (θ : InfFam D), IsInfFam θ → ∀ (V : 
       ∑ γ ∈ s, ∏ τ, ((1 + hsn (GlobalTheory.SepPer.cmp θ τ (c * (γ : GA D V) * g))) ^ (2 * V.rank ^ 2 + 1))⁻¹ ≤
         C * height V g ^ A := by
   intro D θ hθ V Λ hΛ c
-  haveI : Nonempty D.what₂.Tau := ⟨((GlobalTheory.LevelSeries.mk_tauE_bij D).2 (Classical.arbitrary _)).choose⟩
+  haveI : Nonempty D.what₂.Tau := ⟨((_root_.GlobalTheory.CMTypePlaces.mk_tauE_bijective D).2 (Classical.arbitrary _)).choose⟩
   obtain ⟨C3, A3, h3⟩ := exists_den D V Λ hΛ c
   obtain ⟨C4, hC4, h4⟩ := hsn_cmp_le hθ V
-  obtain ⟨C5, hC5, h5⟩ := sum_sep_le D.what₂.Tau V.rank
+  obtain ⟨C5, hC5, h5⟩ := _root_.GlobalTheory.SepSum.sum_weights_le_of_separated D.what₂.Tau V.rank
   set N := 2 * V.rank ^ 2 + 1 with hN
   set f := Fintype.card D.what₂.Tau with hf
   set Kc : ℝ := ∑ τ, hsn (cmp θ τ c⁻¹) with hKc
@@ -798,7 +798,7 @@ open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.poincareSeries_unitary_absolutelyConvergent_moderateGrowth : ∀ (D : D7) (θ : InfFam D), IsInfFam θ → ∀ (V : HSp D) (Λ : Lat V), IsSelfDualC V Λ → ∀ c : GA D V, ∃ (C : ℝ) (A : ℕ), ∀ (g : GA D V) (s : Finset (GQ V)), (∀ γ ∈ s, Lev.finE V (c * (γ : GA D V) * g) ∈ congLev D.sp.cm V.gram Λ ⊤) → ∑ γ ∈ s, ∏ τ, ((1 + hsn (GlobalTheory.SepPer.cmp θ τ (c * (γ : GA D V) * g))) ^ (2 * V.rank ^ 2 + 1))⁻¹ ≤ C * height V g ^ A := by
-  first | exact @GlobalTheory.PoinCount.poincare_count | exact GlobalTheory.PoinCount.poincare_count | (intros; apply GlobalTheory.PoinCount.poincare_count <;> assumption)
+  first | exact @GlobalTheory.PoinCount.poincare_count
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.PoincareSeriesUnitaryAbsolutelyConvergentModeratStatement =====

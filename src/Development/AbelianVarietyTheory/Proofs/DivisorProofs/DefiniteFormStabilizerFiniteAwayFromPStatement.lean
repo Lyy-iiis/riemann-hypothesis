@@ -206,18 +206,6 @@ theorem form_smul {n : ℕ} (M : Matrix (Fin n) (Fin n) ℂ) (t : ℝ) (x y : Fi
   simp only [smul_eq_mul, Complex.coe_algebraMap, Complex.star_def, Complex.conj_ofReal]
   push_cast; ring
 
-theorem bound_of_form {n : ℕ} (f : (Fin n → ℂ) → ℝ) (hc : Continuous f)
-    (hh : ∀ (t : ℝ) (x : Fin n → ℂ), f (t • x) = t ^ 2 * f x) (hp : ∀ x, x ≠ 0 → 0 < f x) :
-    ∃ K : ℝ, ∀ (A : Matrix (Fin n) (Fin n) ℂ) (s : ℝ), 0 ≤ s → (∀ x, f (A *ᵥ x) = s * f x) →
-      ∀ a b, ‖A a b‖ ≤ K * Real.sqrt s := by
-  first
-  | exact @_root_.GlobalTheory.LowerTriangularEntryBound.entry_bound
-  | exact _root_.GlobalTheory.LowerTriangularEntryBound.entry_bound
-  | (apply _root_.GlobalTheory.LowerTriangularEntryBound.entry_bound <;> assumption)
-  | (intros; apply _root_.GlobalTheory.LowerTriangularEntryBound.entry_bound <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.LowerTriangularEntryBound.entry_bound <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.LowerTriangularEntryBound.entry_bound ..)
-
 end GlobalTheory.LKCx.PsiBound
 
 namespace GlobalTheory.LKCx
@@ -472,7 +460,7 @@ theorem psi_bound (G : HTGroup p) (B : GlobalTheory.LKDef.DForm G) : ∃ K : ℝ
   have hK : ∀ w, ∃ K : ℝ, ∀ (A : Matrix (Fin G.n) (Fin G.n) ℂ) (s : ℝ), 0 ≤ s →
       (∀ x, f w (A *ᵥ x) = s * f w x) → ∀ a b, ‖A a b‖ ≤ K * Real.sqrt s := by
     intro w
-    apply GlobalTheory.LKCx.PsiBound.bound_of_form
+    apply _root_.GlobalTheory.LowerTriangularEntryBound.entry_bound
     · by_cases h : sigPosH (G.gram_herm w) = 1
       · simp only [f, h, if_true]; fun_prop
       · simp only [f, h, if_false]; fun_prop
@@ -518,11 +506,11 @@ theorem isTest_indicator_comm (G : HTGroup p) (K' : Subgroup (Gr G 1))
   · rw [hθ]
     by_cases hg : g ∈ K'
     · have h' : k⁻¹ * g * k ∈ K' := K'.mul_mem (K'.mul_mem (K'.inv_mem hk) hg) hk
-      simp [Set.indicator_apply, hg, h']
+      simp [hg, h']
     · have h' : k⁻¹ * g * k ∉ K' := fun h => hg (by
         have e : g = k * (k⁻¹ * g * k) * k⁻¹ := by group
         rw [e]; exact K'.mul_mem (K'.mul_mem hk h) (K'.inv_mem hk))
-      simp [Set.indicator_apply, hg, h']
+      simp [hg, h']
   · set K₀ := KHT p G.m G.n 1 G.Fw
     haveI : (K₀.subgroupOf K').FiniteIndex := Subgroup.isFiniteRelIndex_iff_finiteIndex.mp hK.2
     haveI : Finite (K' ⧸ K₀.subgroupOf K') := Subgroup.finite_quotient_of_finiteIndex
@@ -639,7 +627,7 @@ open scoped TensorProduct Classical
 theorem _root_.GlobalTheory.T.definiteForm_stabilizer_finite_away_from_p : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p), G.a = 1 → ∀ (L : G.Level) (K' : Subgroup (Gr G 1)),
   Subgroup.Commensurable K' (KHT p G.m G.n 1 G.Fw) → ∀ (B : GlobalTheory.LKDef.DForm G) (x : G.GAf × Gr G 1),
     Finite (GlobalTheory.LKLoc.locPart B.emb.range (L.K.toSubgroup.prod K') x) := by
-  first | (exact @GlobalTheory.DefStab.finite_locPart) | (exact GlobalTheory.DefStab.finite_locPart) | (intros; apply GlobalTheory.DefStab.finite_locPart  <;> assumption)
+  first | (exact @GlobalTheory.DefStab.finite_locPart)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DefiniteFormStabilizerFiniteAwayFromPStatement =====

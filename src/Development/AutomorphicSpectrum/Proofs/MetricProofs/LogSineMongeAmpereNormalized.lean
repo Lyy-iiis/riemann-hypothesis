@@ -133,7 +133,7 @@ theorem hessC_comp_tail (d : ℕ) (α : (Fin d → ℂ) → ℝ) (y : Fin d → 
   refine Fin.cases ?_ (fun i' => ?_) i <;> refine Fin.cases ?_ (fun j' => ?_) j
   all_goals
     simp [Matrix.mul_apply, Matrix.transpose_apply, Matrix.map_apply, jacC_tailCL, blk,
-      Fin.succ_ne_zero, Finset.sum_ite_eq, Finset.sum_ite_eq']
+      Fin.succ_ne_zero, Finset.sum_ite_eq']
 
 end
 
@@ -530,7 +530,7 @@ theorem pderiv_fin_prod {σ : Type*} (k : σ) : ∀ (d : ℕ) (f : Fin (d + 1) �
       ring
 
 theorem pderiv_row_weight (c v : ℝ) : pderiv (some 0 : Option (Fin 2)) (rowW ![c, 0] v) = C c := by
-  simp [rowW, pderiv_X, Pi.single_apply]
+  simp [rowW, pderiv_X]
 
 theorem eval_row_weight (n : Fin 3 → ℝ) (c v : ℝ) :
     evalW n n (rowW ![c, 0] v) = lin4 (fun i => c * n i) + C v * X none := by
@@ -561,7 +561,7 @@ theorem extract_one : ∀ (d : ℕ) (T : Fin 3 → Matrix (Fin d) (Fin d) ℂ) (
   have h3 := hL (fun s i => c (r.succAbove s) * n i) (fun s => v (r.succAbove s))
   rw [h3, pderiv_row_weight, map_mul (evalW n n), map_prod (evalW n n)]
   simp only [eval_row_weight]
-  have h4 : evalW n n (C (c r)) = C (c r) := by simp [evalW, aeval_def, algebraMap_eq]
+  have h4 : evalW n n (C (c r)) = C (c r) := by simp [evalW, algebraMap_eq]
   rw [h4, C_mul', map_smul, Complex.real_smul]
   ring
 
@@ -606,14 +606,14 @@ theorem derivation_prod_succAbove_xt {σ : Type*} {n : ℕ}
   rfl
 
 theorem pderiv_rowW_zero_xt (u : Fin 2 → ℝ) (v : ℝ) : pderiv (some 0) (rowW u v) = C (u 0) := by
-  simp [rowW, pderiv_X, Pi.single_apply, pderiv_C, Derivation.leibniz]
+  simp [rowW, pderiv_X, Derivation.leibniz]
 
 theorem pderiv_rowW_one_xt (u : Fin 2 → ℝ) (v : ℝ) : pderiv (some 1) (rowW u v) = C (u 1) := by
-  simp [rowW, pderiv_X, Pi.single_apply, pderiv_C, Derivation.leibniz]
+  simp [rowW, pderiv_X, Derivation.leibniz]
 
 theorem pderiv_C_mul_xt {σ : Type*} [DecidableEq σ] (j : σ) (a : ℝ) (p : MvPolynomial σ ℝ) :
     pderiv j (C a * p) = C a * pderiv j p := by
-  simp [Derivation.leibniz, pderiv_C]
+  simp [Derivation.leibniz]
 
 theorem linear_form_linear_combination (a b : ℝ) (n m : Fin 3 → ℝ) :
     lin4 (fun i => a * n i + b * m i) = C a * lin4 n + C b * lin4 m := by
@@ -738,7 +738,7 @@ theorem evalW_pderiv_prod_rowW : ∀ (d k : ℕ), 1 ≤ k → 2 * k ≤ d + 2 �
   rw [hprod, hm2, hj, Derivation.leibniz, Derivation.leibniz_pow, Derivation.leibniz_pow]
   have hne : (none : Option (Fin 2)) ≠ some 0 := by simp
   simp only [pderiv_X_self, pderiv_X_of_ne hne, smul_eq_mul, smul_zero, zero_add, mul_zero,
-    add_zero, mul_one, Nat.add_sub_cancel, nsmul_eq_mul]
+    mul_one, Nat.add_sub_cancel, nsmul_eq_mul]
   simp only [map_mul, map_pow, map_natCast, evalW_X_some_zero, evalW_X_none]
   have hc : (C (2 * ((t + 1 : ℕ) : ℝ) - 1) : MvPolynomial (Option (Fin 3)) ℝ) =
       ((2 * t + 1 : ℕ) : MvPolynomial (Option (Fin 3)) ℝ) := by
@@ -873,22 +873,20 @@ noncomputable section
 
 def crd (m : S2) : Fin 3 → ℝ := fun i => (m : E3) i
 
-def dens (a : ℂ) : ℝ := Real.pi⁻¹ / (1 + ‖a‖ ^ 2) ^ 2
-
-def stereoMeasure : Measure ℂ := volume.withDensity fun a => ENNReal.ofReal (dens a)
+def stereoMeasure : Measure ℂ := volume.withDensity fun a => ENNReal.ofReal (_root_.PositivityTheory.Xgp.fib_stereo.wt a)
 
 theorem continuous_crd : Continuous crd :=
   continuous_pi fun i => (EuclideanSpace.proj i).continuous.comp continuous_subtype_val
 
-theorem measurable_dens : Measurable dens := by
-  have : Continuous dens := by
-    unfold dens
+theorem measurable_dens : Measurable _root_.PositivityTheory.Xgp.fib_stereo.wt := by
+  have : Continuous _root_.PositivityTheory.Xgp.fib_stereo.wt := by
+    unfold _root_.PositivityTheory.Xgp.fib_stereo.wt
     refine continuous_const.div₀ (by fun_prop) fun a => ?_
     positivity
   exact this.measurable
 
-theorem dens_nonneg (a : ℂ) : 0 ≤ dens a := by
-  unfold dens
+theorem dens_nonneg (a : ℂ) : 0 ≤ _root_.PositivityTheory.Xgp.fib_stereo.wt a := by
+  unfold _root_.PositivityTheory.Xgp.fib_stereo.wt
   have := Real.pi_pos
   positivity
 
@@ -901,8 +899,8 @@ theorem measurable_nS : Measurable nS := by
   exact this.measurable
 
 theorem stereo_hyp (f : (Fin 3 → ℝ) → ℝ) (hf : Measurable f) :
-    (Integrable (fun a : ℂ => f (nS a) * dens a) ↔ Integrable (fun m : S2 => f (crd m)) sphereMeasure) ∧
-      ∫ a : ℂ, f (nS a) * dens a = ∫ m : S2, f (crd m) ∂sphereMeasure :=
+    (Integrable (fun a : ℂ => f (nS a) * _root_.PositivityTheory.Xgp.fib_stereo.wt a) ↔ Integrable (fun m : S2 => f (crd m)) sphereMeasure) ∧
+      ∫ a : ℂ, f (nS a) * _root_.PositivityTheory.Xgp.fib_stereo.wt a = ∫ m : S2, f (crd m) ∂sphereMeasure :=
   (_root_.GlobalTheory.CompanionTheory.Relay.sphere_measure_stereographic_integral).1 f hf
 
 theorem map_stereo : stereoMeasure.map nS = sphereMeasure.map crd := by
@@ -916,16 +914,16 @@ theorem map_stereo : stereoMeasure.map nS = sphereMeasure.map crd := by
     (integrable_const (1 : ℝ)).indicator hpre
   obtain ⟨h1, h2⟩ := stereo_hyp _ hf
   have hI := h1.2 hfI
-  have hnn : 0 ≤ᵐ[volume] fun a => s.indicator (1 : (Fin 3 → ℝ) → ℝ) (nS a) * dens a :=
+  have hnn : 0 ≤ᵐ[volume] fun a => s.indicator (1 : (Fin 3 → ℝ) → ℝ) (nS a) * _root_.PositivityTheory.Xgp.fib_stereo.wt a :=
     Eventually.of_forall fun a => mul_nonneg (Set.indicator_nonneg (fun _ _ => zero_le_one) _) (dens_nonneg a)
-  calc stereoMeasure (nS ⁻¹' s) = ∫⁻ a in nS ⁻¹' s, ENNReal.ofReal (dens a) := withDensity_apply _ hpre'
-    _ = ∫⁻ a, ENNReal.ofReal (s.indicator (1 : (Fin 3 → ℝ) → ℝ) (nS a) * dens a) := by
+  calc stereoMeasure (nS ⁻¹' s) = ∫⁻ a in nS ⁻¹' s, ENNReal.ofReal (_root_.PositivityTheory.Xgp.fib_stereo.wt a) := withDensity_apply _ hpre'
+    _ = ∫⁻ a, ENNReal.ofReal (s.indicator (1 : (Fin 3 → ℝ) → ℝ) (nS a) * _root_.PositivityTheory.Xgp.fib_stereo.wt a) := by
         rw [← lintegral_indicator hpre']
         refine lintegral_congr fun a => ?_
         by_cases ha : nS a ∈ s
         · simp [Set.indicator, ha]
         · simp [Set.indicator, ha]
-    _ = ENNReal.ofReal (∫ a, s.indicator (1 : (Fin 3 → ℝ) → ℝ) (nS a) * dens a) :=
+    _ = ENNReal.ofReal (∫ a, s.indicator (1 : (Fin 3 → ℝ) → ℝ) (nS a) * _root_.PositivityTheory.Xgp.fib_stereo.wt a) :=
         (ofReal_integral_eq_lintegral_ofReal hI hnn).symm
     _ = ENNReal.ofReal (∫ m, s.indicator (1 : (Fin 3 → ℝ) → ℝ) (crd m) ∂sphereMeasure) := by rw [h2]
     _ = sphereMeasure (crd ⁻¹' s) := by
@@ -944,7 +942,7 @@ instance : IsFiniteMeasure stereoMeasure := by
   simp
 
 theorem integral_pair (Φ : (Fin 3 → ℝ) × (Fin 3 → ℝ) → ℝ) (hΦ : Measurable Φ) :
-    ∫ p : ℂ × ℂ, dens p.1 * dens p.2 * Φ (nS p.1, nS p.2) =
+    ∫ p : ℂ × ℂ, _root_.PositivityTheory.Xgp.fib_stereo.wt p.1 * _root_.PositivityTheory.Xgp.fib_stereo.wt p.2 * Φ (nS p.1, nS p.2) =
       ∫ p : S2 × S2, Φ (crd p.1, crd p.2) ∂(sphereMeasure.prod sphereMeasure) := by
   have := FibreLocal.isProbabilityMeasure_sphere
   have hc := continuous_crd.measurable
@@ -952,13 +950,13 @@ theorem integral_pair (Φ : (Fin 3 → ℝ) × (Fin 3 → ℝ) → ℝ) (hΦ : M
   have hmap : (stereoMeasure.prod stereoMeasure).map (Prod.map nS nS) =
       (sphereMeasure.prod sphereMeasure).map (Prod.map crd crd) := by
     rw [← Measure.map_prod_map _ _ hn hn, ← Measure.map_prod_map _ _ hc hc, map_stereo]
-  have hd : Measurable fun a => ENNReal.ofReal (dens a) := ENNReal.measurable_ofReal.comp measurable_dens
+  have hd : Measurable fun a => ENNReal.ofReal (_root_.PositivityTheory.Xgp.fib_stereo.wt a) := ENNReal.measurable_ofReal.comp measurable_dens
   have hprod : stereoMeasure.prod stereoMeasure =
       (volume : Measure (ℂ × ℂ)).withDensity
-        (fun p => ENNReal.ofReal (dens p.1) * ENNReal.ofReal (dens p.2)) := by
+        (fun p => ENNReal.ofReal (_root_.PositivityTheory.Xgp.fib_stereo.wt p.1) * ENNReal.ofReal (_root_.PositivityTheory.Xgp.fib_stereo.wt p.2)) := by
     rw [stereoMeasure, prod_withDensity hd hd]
     rfl
-  have hL : ∫ p : ℂ × ℂ, dens p.1 * dens p.2 * Φ (nS p.1, nS p.2) =
+  have hL : ∫ p : ℂ × ℂ, _root_.PositivityTheory.Xgp.fib_stereo.wt p.1 * _root_.PositivityTheory.Xgp.fib_stereo.wt p.2 * Φ (nS p.1, nS p.2) =
       ∫ p, Φ (Prod.map nS nS p) ∂(stereoMeasure.prod stereoMeasure) := by
     rw [hprod, integral_withDensity_eq_integral_toReal_smul₀
       (by exact ((hd.comp measurable_fst).mul (hd.comp measurable_snd)).aemeasurable)
@@ -1019,7 +1017,7 @@ theorem continuous_coeff_pp {Ω : Type*} [TopologicalSpace Ω] (u v : Ω → Fin
     funext r
 
     fin_cases r <;> simp [w, dp, mapAlgHom_apply] <;>
-      apply Finset.sum_congr rfl <;> intro i hi <;> congr 2 <;> funext q <;> rfl
+      apply Finset.sum_congr rfl <;> intro i hi <;> congr 2 <;> funext q
   rw [pp, hw, ← comp_aeval, AlgHom.comp_apply, mapAlgHom_apply, coeff_map]
   exact (AddMonoidAlgebra.coeff (aeval w Q) m).continuous
 
@@ -1079,9 +1077,9 @@ theorem integral_eq_moment : ∀ (ℓ : MvPolynomial (Fin 3) ℝ →ₗ[ℝ] ℝ
   rw [← h, ← integral_const_mul]
   refine integral_congr_ae (Eventually.of_forall fun p => ?_)
   have hk : logSin 1 p.1 p.2 = ker (nS p.1, nS p.2) := (_root_.GlobalTheory.CompanionTheory.Relay.sphere_measure_stereographic_integral).2 p.1 p.2
-  have hw : ∀ a, wS a = Real.pi * dens a := fun a => by
+  have hw : ∀ a, wS a = Real.pi * _root_.PositivityTheory.Xgp.fib_stereo.wt a := fun a => by
     have := Real.pi_ne_zero
-    simp only [wS, dens]
+    simp only [wS, _root_.PositivityTheory.Xgp.fib_stereo.wt]
     field_simp
   simp only [hk, hw]
   ring
@@ -1122,7 +1120,7 @@ theorem pderiv_some_rename_mul (j : Fin 2) (P : MvPolynomial (Fin 2) ℝ) (m : �
     pderiv (some j) (rename some P * (X none : MvPolynomial (Option (Fin 2)) ℝ) ^ m) =
       rename some (pderiv j P) * X none ^ m := by
   have h0 : pderiv (some j) ((X none : MvPolynomial (Option (Fin 2)) ℝ) ^ m) = 0 := by
-    simp [Derivation.leibniz_pow, pderiv_X, Pi.single_apply]
+    simp [Derivation.leibniz_pow, pderiv_X]
   rw [Derivation.leibniz, h0, pderiv_rename (Option.some_injective _)]
   simp [mul_comm]
 
@@ -1487,7 +1485,7 @@ theorem _root_.GlobalTheory.CompanionTheory.Relay.xi_potential_hessian_decomposi
   ext p q
   refine Fin.cases ?_ (fun p' => ?_) p <;> refine Fin.cases ?_ (fun q' => ?_) q
   all_goals simp only [hessC, Matrix.of_apply, Fin.cases_zero, Fin.cases_succ, hH, PositivityTheory.Xgp.fib_hess.tl_zero, PositivityTheory.Xgp.fib_hess.tl_zero', PositivityTheory.Xgp.fib_hess.tl_succ, PositivityTheory.Xgp.fib_hess.tl_succ', map_zero, ContinuousLinearMap.zero_apply]
-  all_goals simp only [Pi.smul_apply, smul_eq_mul, Pi.single_eq_same, ne_eq, Fin.succ_ne_zero, not_false_eq_true, Pi.single_eq_of_ne, mul_zero, mul_one, Complex.zero_re, Complex.zero_im, Complex.one_re, Complex.one_im, Complex.I_re, Complex.I_im]
+  all_goals simp only [Pi.smul_apply, smul_eq_mul, Pi.single_eq_same, mul_zero, mul_one, Complex.one_re, Complex.one_im, Complex.I_re, Complex.I_im]
   all_goals clear hH hc h0 h1 hC
   all_goals have hr : ‖a‖ ^ 2 = a.re ^ 2 + a.im ^ 2 := by rw [Complex.sq_norm, Complex.normSq_apply]; ring
   all_goals have hpos : (0:ℝ) < 1 + (a.re ^ 2 + a.im ^ 2) := by positivity
@@ -1497,15 +1495,15 @@ theorem _root_.GlobalTheory.CompanionTheory.Relay.xi_potential_hessian_decomposi
     push_cast
     field_simp
     ring
-  all_goals have hz : ∀ j : Fin d, (Pi.single j.succ (1:ℂ) : Fin (d+1) → ℂ) 0 = 0 := fun j => by simp [Pi.single_apply, (Fin.succ_ne_zero j).symm]
-  all_goals simp only [hz, mul_zero, Complex.zero_re, Complex.zero_im, Fin.sum_univ_three, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons, Matrix.tail_cons, PositivityTheory.Xgp.fib_hess.hm, ContinuousLinearMap.add_apply, ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply, ContinuousLinearMap.coe_smul', Pi.smul_apply, smul_eq_mul, ContinuousLinearMap.neg_apply]
+  all_goals have hz : ∀ j : Fin d, (Pi.single j.succ (1:ℂ) : Fin (d+1) → ℂ) 0 = 0 := fun j => by simp [(Fin.succ_ne_zero j).symm]
+  all_goals simp only [hz, mul_zero, Complex.zero_re, Complex.zero_im, Fin.sum_univ_three, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons, Matrix.tail_cons, PositivityTheory.Xgp.fib_hess.hm, ContinuousLinearMap.add_apply, ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
   all_goals try rw [hr]
   case refine_2.refine_2 =>
     apply Complex.ext
-    · simp only [Complex.add_re, Complex.div_re, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im, Complex.sub_re, Complex.neg_re, Complex.re_ofNat, Complex.im_ofNat, Complex.add_im, Complex.div_im, Complex.mul_im, Complex.sub_im, Complex.neg_im, Complex.normSq_ofNat]
+    · simp only [Complex.add_re, Complex.div_re, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im, Complex.re_ofNat, Complex.im_ofNat, Complex.add_im, Complex.div_im, Complex.mul_im, Complex.normSq_ofNat]
       field_simp
       ring
-    · simp only [Complex.add_re, Complex.div_re, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im, Complex.sub_re, Complex.neg_re, Complex.re_ofNat, Complex.im_ofNat, Complex.add_im, Complex.div_im, Complex.mul_im, Complex.sub_im, Complex.neg_im, Complex.normSq_ofNat]
+    · simp only [Complex.add_re, Complex.div_re, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im, Complex.re_ofNat, Complex.im_ofNat, Complex.add_im, Complex.div_im, Complex.mul_im, Complex.normSq_ofNat]
       field_simp
       ring
   all_goals push_cast
@@ -1650,7 +1648,7 @@ theorem fibre_integral_normal : GroundTheory.Heights₂.Heights.Inter.FibreLocal
           simp only [DiagonalFibreFubini.wordCoef]
           split_ifs <;> rfl
         by_cases hr : (r : ℕ) < 2 * k
-        · simp only [hr, if_true, hcoef, hf, Fin.tail, Fin.cons_zero, Fin.cons_succ]
+        · simp only [hr, if_true, hcoef, hf, Fin.cons_zero]
           simp
         · simp [hr]
     simp_rw [hpt]

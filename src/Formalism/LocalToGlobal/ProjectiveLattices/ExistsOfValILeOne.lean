@@ -74,7 +74,6 @@ theorem exists_of_valI_le_one {x : F} (h : valI (V := V) x ≤ 1) : ∃ a : V, a
     intro w
     first
     | exact IsDedekindDomain.HeightOneSpectrum.ext (IsLocalRing.eq_maximalIdeal w.isMaximal)
-    | (ext1; exact IsLocalRing.eq_maximalIdeal w.isMaximal)
   obtain ⟨a, ha⟩ := IsDedekindDomain.HeightOneSpectrum.mem_integers_of_valuation_le_one F x
     (fun w => by rw [hall w]; exact h)
   exact ⟨a, ha⟩

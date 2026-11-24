@@ -90,8 +90,7 @@ def scaleCoeff (p : ℕ) {S : Type} [CommRing S] (t : S) (x : WittVector p S) : 
 theorem ghostComponent_scaleCoeff (p : ℕ) [Fact p.Prime] {S : Type} [CommRing S] (t : S)
     (x : WittVector p S) (n : ℕ) :
     ghostComponent n (scaleCoeff p t x) = t ^ p ^ n * ghostComponent n x := by
-  simp only [ghostComponent_apply, aeval_wittPolynomial, scaleCoeff, WittVector.coeff_mk,
-    Finset.mul_sum]
+  simp only [ghostComponent_apply, aeval_wittPolynomial, scaleCoeff, Finset.mul_sum]
   refine Finset.sum_congr rfl fun i hi => ?_
   have h : i + (n - i) = n := by
     have := Finset.mem_range.1 hi
@@ -130,15 +129,7 @@ variable {R : Type} [CommRing R] (a : R → ℝ) (hb : ∀ x, 0 ≤ a x ∧ a x 
   (h1 : a 1 = 1) (hm : ∀ x y, a (x * y) = a x * a y) (ha : ∀ x y, a (x + y) ≤ max (a x) (a y))
 
 include h0 ha in
-theorem sum_le {ι : Type} (s : Finset ι) (f : ι → R) (c : ℝ) (hc : 0 ≤ c)
-    (h : ∀ i ∈ s, a (f i) ≤ c) : a (∑ i ∈ s, f i) ≤ c := by
-  first
-  | exact @_root_.GlobalTheory.UltrametricSum.ultra_sum_le
-  | exact _root_.GlobalTheory.UltrametricSum.ultra_sum_le
-  | (apply _root_.GlobalTheory.UltrametricSum.ultra_sum_le <;> assumption)
-  | (intros; apply _root_.GlobalTheory.UltrametricSum.ultra_sum_le <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.UltrametricSum.ultra_sum_le <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.UltrametricSum.ultra_sum_le ..)
+alias sum_le := _root_.GlobalTheory.UltrametricSum.ultra_sum_le
 
 include hb h1 hm in
 theorem neg_eq (x : R) : a (-x) = a x := by
@@ -212,7 +203,7 @@ theorem weight_add_trunc (p : ℕ) [Fact p.Prime] (c : ℝ) (hc : 0 ≤ c) (x y 
     intro z hz
     refine ⟨WittVector.mk p fun i => if i ≤ n then z.coeff i else 0, ?_, fun i => ?_⟩
     · ext i
-      simp only [coeff_truncate, WittVector.coeff_mk, if_pos (Nat.lt_succ_iff.1 i.2)]
+      simp only [coeff_truncate, if_pos (Nat.lt_succ_iff.1 i.2)]
     · rw [WittVector.coeff_mk]
       split_ifs with h
       · exact hz i h

@@ -125,8 +125,7 @@ theorem cauchy_schwarz (I : V →ₗ⋆[ℂ] V →ₗ[ℂ] ℂ) (hI : ∀ x : V,
     rw [hyx] at h
     simp only [Complex.add_re, Complex.mul_re, Complex.mul_im, Complex.conj_re, Complex.conj_im,
       Complex.neg_re, Complex.neg_im, Complex.ofReal_re, Complex.ofReal_im, map_mul, map_neg,
-      Complex.conj_ofReal, RingHom.map_neg, Complex.conj_conj, ← hb, Complex.add_im, mul_zero,
-      sub_zero, neg_zero, zero_mul, add_zero] at h
+      Complex.conj_ofReal, Complex.conj_conj, ← hb, Complex.add_im, sub_zero, neg_zero, zero_mul, add_zero] at h
     rw [← hy.2] at h
     nlinarith [h, hx.2, hy.2]
   have hd := discrim_le_zero hq
@@ -141,8 +140,7 @@ theorem cauchy_schwarz (I : V →ₗ⋆[ℂ] V →ₗ[ℂ] ℂ) (hI : ∀ x : V,
 
 end GlobalTheory.HermitianCauchySchwarz
 
-theorem GlobalTheory.HermitianCauchySchwarz.main : ∀ {V : Type} [inst : AddCommGroup V] [inst_1 : Module ℂ V] (I : V →ₗ⋆[ℂ] V →ₗ[ℂ] ℂ), (∀ (x : V), (0 : ℂ) ≤ ((I : V → V →ₗ[ℂ] ℂ) x : V → ℂ) x) → ∀ (x y : V), ‖((I : V → V →ₗ[ℂ] ℂ) x : V → ℂ) y‖ ^ (2 : ℕ) ≤ Complex.re (((I : V → V →ₗ[ℂ] ℂ) x : V → ℂ) x) * Complex.re (((I : V → V →ₗ[ℂ] ℂ) y : V → ℂ) y) :=
-  fun I hI x y => GlobalTheory.HermitianCauchySchwarz.cauchy_schwarz I hI x y
+alias GlobalTheory.HermitianCauchySchwarz.main := _root_.GlobalTheory.HermitianCauchySchwarz.cauchy_schwarz
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.CauchySchwarz =====
@@ -186,16 +184,6 @@ open scoped Topology FourierTransform
 
 namespace GlobalTheory
 
-theorem integrable_exp_neg_mul_abs_line {c : ℝ} (hc : 0 < c) :
-    Integrable (fun s : ℝ => Real.exp (-(c * |s|))) := by
-  first
-  | exact @_root_.GlobalTheory.IntegrableExpNegAbs.integrable_exp_neg_mul_abs
-  | exact _root_.GlobalTheory.IntegrableExpNegAbs.integrable_exp_neg_mul_abs
-  | (apply _root_.GlobalTheory.IntegrableExpNegAbs.integrable_exp_neg_mul_abs <;> assumption)
-  | (intros; apply _root_.GlobalTheory.IntegrableExpNegAbs.integrable_exp_neg_mul_abs <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.IntegrableExpNegAbs.integrable_exp_neg_mul_abs <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.IntegrableExpNegAbs.integrable_exp_neg_mul_abs ..)
-
 theorem eq_zero_of_exp_decay_of_fourier_eq_zero_on_halfLine :
     ∀ (φ : ℝ → ℂ) (R : ℝ), Continuous φ →
       (∃ A e : ℝ, 0 < e ∧ ∀ s, ‖φ s‖ ≤ A * Real.exp (-(e * |s|))) →
@@ -210,7 +198,7 @@ theorem eq_zero_of_exp_decay_of_fourier_eq_zero_on_halfLine :
     simp only [hUdef, mem_inter_iff, mem_setOf_eq, Complex.ofReal_im]
     constructor <;> linarith
   have hint : Integrable (fun s : ℝ => A * Real.exp (-(e / 2 * |s|))) :=
-    (integrable_exp_neg_mul_abs_line (half_pos he)).const_mul A
+    (_root_.GlobalTheory.IntegrableExpNegAbs.integrable_exp_neg_mul_abs (half_pos he)).const_mul A
   have hA : 0 ≤ A := by
     have := (norm_nonneg _).trans (hb 0)
     simpa using this
@@ -262,7 +250,7 @@ theorem eq_zero_of_exp_decay_of_fourier_eq_zero_on_halfLine :
     push_cast
     ring
   have hφi : Integrable φ :=
-    ((integrable_exp_neg_mul_abs_line he).const_mul A).mono' hφ.aestronglyMeasurable
+    ((_root_.GlobalTheory.IntegrableExpNegAbs.integrable_exp_neg_mul_abs he).const_mul A).mono' hφ.aestronglyMeasurable
       (Eventually.of_forall hb)
   have hinv := hφ.fourierInv_fourier_eq hφi (by rw [hF]; exact integrable_zero _ _ _)
   rw [← hinv, hF]
@@ -424,27 +412,6 @@ open scoped InnerProductSpace ComplexOrder ContDiff
 
 namespace GlobalTheory.LipFlow
 
-theorem cauchy {V : Type} [AddCommGroup V] [Module ℂ V] (I : V →ₗ⋆[ℂ] V →ₗ[ℂ] ℂ)
-    (h : ∀ x, 0 ≤ I x x) (x y : V) : ‖I x y‖ ^ 2 ≤ (I x x).re * (I y y).re := by
-  first
-  | exact @_root_.GlobalTheory.HermitianCauchySchwarz.main
-  | exact _root_.GlobalTheory.HermitianCauchySchwarz.main
-  | (apply _root_.GlobalTheory.HermitianCauchySchwarz.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.HermitianCauchySchwarz.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.HermitianCauchySchwarz.main <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.HermitianCauchySchwarz.main ..)
-
-theorem integrable_exp_abs {e : ℝ} (he : 0 < e) :
-    Integrable (fun s : ℝ => Real.exp (-(e * |s|))) := by
-  rw [← integrableOn_univ, ← Set.Iic_union_Ioi (a := (0:ℝ))]
-  refine IntegrableOn.union ?_ ?_
-  · refine (integrableOn_exp_mul_Iic he 0).congr_fun (fun x hx => ?_) measurableSet_Iic
-    simp only [abs_of_nonpos (Set.mem_Iic.1 hx)]
-    congr 1; ring
-  · refine (exp_neg_integrableOn_Ioi 0 he).congr_fun (fun x hx => ?_) measurableSet_Ioi
-    simp only [abs_of_pos (Set.mem_Ioi.1 hx)]
-    congr 1; ring
-
 theorem decay_shift {φ : ℝ → ℂ} {A e : ℝ} (he : 0 < e)
     (h : ∀ s, ‖φ s‖ ≤ A * Real.exp (-(e * |s|))) (r t : ℝ) :
     ‖φ (r + t)‖ ≤ A * Real.exp (e * |r|) * Real.exp (-(e * |t|)) := by
@@ -463,7 +430,7 @@ theorem decay_shift {φ : ℝ → ℂ} {A e : ℝ} (he : 0 < e)
 theorem integrable_fourier {φ : ℝ → ℂ} (hc : Continuous φ) {A e : ℝ} (he : 0 < e)
     (h : ∀ s, ‖φ s‖ ≤ A * Real.exp (-(e * |s|))) (ξ : ℝ) :
     Integrable (fun s : ℝ => Complex.exp (-(Complex.I * ξ * s)) * φ s) := by
-  refine ((integrable_exp_abs he).const_mul A).mono' (by fun_prop) (ae_of_all _ fun s => ?_)
+  refine ((_root_.GlobalTheory.IntegrableExpNegAbs.integrable_exp_neg_mul_abs he).const_mul A).mono' (by fun_prop) (ae_of_all _ fun s => ?_)
   rw [norm_mul, Complex.norm_exp]
   simpa using h s
 
@@ -495,7 +462,7 @@ theorem coeff_eq_zero : ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (I : V �
       have e1 : φ u - φ t = I v (U (u - t) (U t v) - U t v) := by
         simp [hφ, hU]
       rw [e1]
-      refine (cauchy I hpos _ _).trans ?_
+      refine (_root_.GlobalTheory.HermitianCauchySchwarz.cauchy_schwarz I hpos _ _).trans ?_
       have := hlip (u - t) (U t v) hu'
       rw [hiso] at this
       exact mul_le_mul_of_nonneg_left this (hre v)
@@ -1035,11 +1002,7 @@ omit [Group G] [TopologicalSpace G] in
 theorem decays_span_left {ρ : G → (H →L[ℂ] H)} {D : G → ℝ} {c : ℝ} {S : Set H} {u : H}
     (h : ∀ v ∈ S, Decays ρ D c v u) : ∀ v ∈ Submodule.span ℂ S, Decays ρ D c v u := by
   first
-  | exact @_root_.GlobalTheory.DecayOfMemSpan.decay_of_mem_span
-  | exact _root_.GlobalTheory.DecayOfMemSpan.decay_of_mem_span
   | (apply _root_.GlobalTheory.DecayOfMemSpan.decay_of_mem_span <;> assumption)
-  | (intros; apply _root_.GlobalTheory.DecayOfMemSpan.decay_of_mem_span <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.DecayOfMemSpan.decay_of_mem_span <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.DecayOfMemSpan.decay_of_mem_span ..)
 
 
@@ -1047,11 +1010,7 @@ omit [Group G] [TopologicalSpace G] in
 theorem decays_span_right {ρ : G → (H →L[ℂ] H)} {D : G → ℝ} {c : ℝ} {S : Set H} {v : H}
     (h : ∀ u ∈ S, Decays ρ D c v u) : ∀ u ∈ Submodule.span ℂ S, Decays ρ D c v u := by
   first
-  | exact @_root_.GlobalTheory.SpanDecay.span_decay
-  | exact _root_.GlobalTheory.SpanDecay.span_decay
   | (apply _root_.GlobalTheory.SpanDecay.span_decay <;> assumption)
-  | (intros; apply _root_.GlobalTheory.SpanDecay.span_decay <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.SpanDecay.span_decay <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.SpanDecay.span_decay ..)
 
 theorem decays_translate {ρ : G → (H →L[ℂ] H)} (hρ : IsURep ρ) {D : G → ℝ} {c : ℝ} (hc : 0 ≤ c)
@@ -1101,8 +1060,7 @@ theorem form_add_le {V : Type} [AddCommGroup V] [Module ℂ V] (I : V →ₗ⋆[
       2 * a ^ 2 * (I x x).re + 2 * b ^ 2 * (I y y).re := by
   have h1 := (Complex.nonneg_iff.1 (h ((a : ℂ) • x - (b : ℂ) • y))).1
   simp only [map_add (f := _), map_sub, LinearMap.map_smulₛₗ, LinearMap.add_apply, LinearMap.sub_apply, LinearMap.smul_apply,
-    map_smul, smul_eq_mul, Complex.conj_ofReal, Complex.add_re, Complex.sub_re, Complex.re_ofReal_mul,
-    RingHom.id_apply] at h1 ⊢
+    map_smul, smul_eq_mul, Complex.conj_ofReal, Complex.add_re, Complex.sub_re, Complex.re_ofReal_mul] at h1 ⊢
   nlinarith
 
 end General
@@ -1259,8 +1217,7 @@ theorem form_zero {ρ : G → (H →L[ℂ] H)} (hρ : IsURep ρ) {D : G → ℝ}
     simp only [LinearMap.comp_apply, hU, map_smul, Submodule.coe_smul, hR, hadd, act_mul hρ, smul_smul, mul_add,
       Real.exp_add, Complex.ofReal_mul]
   · intro s x y
-    simp only [hU, LinearMap.map_smulₛₗ, LinearMap.smul_apply, map_smul, smul_eq_mul, Complex.conj_ofReal,
-      RingHom.id_apply]
+    simp only [hU, LinearMap.map_smulₛₗ, LinearMap.smul_apply, map_smul, smul_eq_mul, Complex.conj_ofReal]
     rw [hI, hI, hR, hR, key, ← act_mul hρ, ← hadd, neg_add_cancel, ha0, hρ.1, ← mul_assoc, ← mul_assoc,
       ← Complex.ofReal_mul, ← Complex.ofReal_mul, ← Real.exp_add, ← Real.exp_add]
     have : κ / 2 * s + κ / 2 * s + κ * -s = 0 := by ring

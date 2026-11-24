@@ -176,7 +176,7 @@ theorem blockM_mul_diag (a : ℕ) (h : 2 * (a + 2) ≤ n) (X Y X' Y' : Matrix (F
       have hb : ∀ r, cI n a h p ≠ cJ n a h r := cI_ne_cJ a h p
       rw [blockM_out a h _ _ (Or.inr heI) (Or.inl hb), blockM_out a h _ _ (Or.inr heI) (Or.inl hb)]
       have hne : cI n a h p ≠ e := fun hh => heI p hh.symm
-      simp [Matrix.one_apply, hne]
+      simp [hne]
   · push_neg at hbI
     by_cases hbJ : ∃ p, b = cJ n a h p
     · obtain ⟨p, rfl⟩ := hbJ
@@ -186,13 +186,13 @@ theorem blockM_mul_diag (a : ℕ) (h : 2 * (a + 2) ≤ n) (X Y X' Y' : Matrix (F
       · push_neg at heJ
         rw [blockM_out a h _ _ (Or.inl hbI) (Or.inr heJ), blockM_out a h _ _ (Or.inl hbI) (Or.inr heJ)]
         have hne : cJ n a h p ≠ e := fun hh => heJ p hh.symm
-        simp [Matrix.one_apply, hne]
+        simp [hne]
     · push_neg at hbJ
       rw [blockM_out a h _ _ (Or.inl hbI) (Or.inl hbJ), blockM_out a h _ _ (Or.inl hbI) (Or.inl hbJ)]
       by_cases hbe : b = e
       · subst hbe
         simp [hO b hbI hbJ]
-      · simp [Matrix.one_apply, hbe]
+      · simp [hbe]
 
 theorem partner_nU (σ : L →+* L) (x : L) : partner σ (nU x) = !![1, -σ x; 0, 1] := by
   have hc : cT σ (!![1, -x; 0, 1] : Matrix (Fin 2) (Fin 2) L) = !![1, 0; -σ x, 1] := by
@@ -218,7 +218,7 @@ theorem diag_unitary (σ : L →+* L) (t : GU σ n) (d : Fin n → L)
     by_cases hbe : b = e
     · subst hbe; simp [cT]
     · have : e ≠ b := fun hh => hbe hh.symm
-      simp [cT, Matrix.diagonal_apply, hbe, this]
+      simp [cT, hbe, this]
   rw [hc] at h2
   have h3 := congrFun (congrFun h2 p) r
   rw [Matrix.mul_diagonal, Matrix.diagonal_mul] at h3
@@ -267,9 +267,9 @@ theorem sR_conj_val (σ : L →+* L) (hσ : ∀ x, σ (σ x) = x) (a : ℕ) (h :
       Matrix.diagonal (dS a h d) * blockM a h (w2 L) (w2 L) := by
     refine blockM_mul_diag a h _ _ _ _ d _ ?_ ?_ ?_
     · intro p r
-      fin_cases p <;> fin_cases r <;> simp [w2, dS, n01, n01.symm]
+      fin_cases p <;> fin_cases r <;> simp [w2, dS, n01.symm]
     · intro p r
-      fin_cases p <;> fin_cases r <;> simp [w2, dS, m01, m01.symm, (hne _ _).symm]
+      fin_cases p <;> fin_cases r <;> simp [w2, dS, m01.symm, (hne _ _).symm]
     · intro b h1 h2
       simp [dS, h1, h2]
   have hs : (((sR σ hσ a h : GU σ n) : GL (Fin n) L) : Matrix (Fin n) (Fin n) L) = blockM a h (w2 L) (w2 L) := by
@@ -306,18 +306,6 @@ theorem prod_compare {m : ℕ} (χ : Fin m → ℂˣ) (Q : ℂ) (hQ : Q ≠ 0) (
     push_cast
     ring
   linear_combination ((χ i : ℂ) ^ (o j) * (χ j : ℂ) ^ (o i) * P) * hq
-
-section Ord
-
-variable {L : Type} [Field L] [Valued L (WithZero (Multiplicative ℤ))]
-
-theorem ordL_mul' {x y : L} (hx : x ≠ 0) (hy : y ≠ 0) : ordL (x * y) = ordL x + ordL y := by
-  have h1 := v_eq_exp' (mul_ne_zero hx hy)
-  rw [map_mul, v_eq_exp' hx, v_eq_exp' hy, ← WithZero.exp_add] at h1
-  have := WithZero.exp_injective h1
-  omega
-
-end Ord
 
 theorem torus_step : ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicative ℤ))] (ϖ : L) (σ : L →+* L) (q n : ℕ) (hU : IsUnramInv ϖ σ q) (a : ℕ) (h : 2 * (a + 2) ≤ n) (χ : Fin (n / 2) → ℂˣ) (i j : Fin (n / 2)), i.val = a → j.val = a + 1 → ∀ t : GU σ n, PositivityTheory.SphericalProduct.IsDiagM (t : GL (Fin n) L) →
     ∃ c : L, c ≠ 0 ∧ ∃ t' : GU σ n, IsBorelU t' ∧
@@ -368,7 +356,7 @@ theorem torus_step : ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicativ
     have hoi : o i = ordL (d (cI n a h 0)) := by simp only [hodef, hci]
     have hoj : o j = ordL (d (cI n a h 1)) := by simp only [hodef, hcj]
     have hc : ordL (d (cI n a h 1) * (d (cI n a h 0))⁻¹) = o j - o i := by
-      rw [ordL_mul' (hd _) (inv_ne_zero (hd _)), ordL_inv' (hd _), hoi, hoj]
+      rw [_root_.Formalism.UG.P.fSatake_ord_mul (hd _) (inv_ne_zero (hd _)), ordL_inv' (hd _), hoi, hoj]
       ring
     rw [hL, hR, hc]
     refine prod_compare χ _ hq _ i j (by omega) o o' ?_ ?_ ?_
@@ -933,11 +921,11 @@ private theorem pm_cases {n : ℕ} (A A1 B B1 k : Fin n) :
     simp [h1]
   by_cases h3 : k = B
   · subst h3
-    simp [h1, h2, Fin.ext_iff]
+    simp [h1, h2]
   by_cases h4 : k = B1
   · subst h4
-    simp [h1, h2, h3, Fin.ext_iff]
-  · simp [h1, h2, h3, h4, Fin.ext_iff]
+    simp [h1, h2, h3]
+  · simp [h1, h2, h3, h4]
     omega
 
 private theorem pm_invol {n : ℕ} {A A1 B B1 : Fin n} (hA : (A : ℕ) + 1 = A1) (hB : (B : ℕ) + 1 = B1)
@@ -1036,7 +1024,7 @@ private theorem partner_nU {L : Type} [Field L] (σ : L →+* L) (z : L) :
     fin_cases i <;> fin_cases j <;> simp [cT]
   simp only [partner]
   rw [e, e2]
-  simp [w2, Matrix.mul_fin_two]
+  simp [w2]
 
 private theorem S_apply {L : Type} [Field L] {n a : ℕ} (σ : L →+* L)
     (hσ : ∀ x : L, σ (σ x) = x) (h : 2 * (a + 2) ≤ n) (i j : Fin n) :
@@ -1399,7 +1387,7 @@ theorem cM_conj_int {n : ℕ} (c : Fin 2 → Fin n) (P : Matrix (Fin 2) (Fin 2) 
 
 theorem weyl_sub_one_entries_integral (p r : Fin 2) : Valued.v ((w2 L - 1) p r) ≤ 1 := by
   delta w2
-  fin_cases p <;> fin_cases r <;> simp [Matrix.one_apply]
+  fin_cases p <;> fin_cases r <;> simp
 
 theorem block_matrix_weyl_integral {n : ℕ} (a : ℕ) (h : 2 * (a + 2) ≤ n) :
     Formalism.UG.P.fIwasawaInt (blockM a h (w2 L) (w2 L)) := by
@@ -1508,8 +1496,6 @@ theorem ordL_neg' (x : L) (hx : x ≠ 0) : ordL (-x) = ordL x := by
   have := WithZero.exp_injective h1
   omega
 
-theorem ordL_one' : ordL (1 : L) = 0 := by simp [ordL]; rfl
-
 theorem isBorel_root (hσ : ∀ x, σ (σ x) = x) (a : ℕ) (h : 2 * (a + 2) ≤ n) (x : L) (hx : x ≠ 0) :
     IsBorelU (rootHom σ hσ a h (betaU x hx)) := by
   intro i j hji
@@ -1603,7 +1589,7 @@ theorem sR_uR_factor : ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicat
       have hkn : k.val < n := by omega
       rw [dite_eq_left hkn, diag_other hU.1 a h x hx ⟨k.val, hkn⟩ (by simpa using k.2)
         (fun e => hk.1 (Fin.ext (by simpa [hi] using e)))
-        (fun e => hk.2 (Fin.ext (by simpa [hj] using e))), ordL_one']
+        (fun e => hk.2 (Fin.ext (by simpa [hj] using e))), _root_.Formalism.UG.P.fSatake_ord_one]
       simp
   · simp only [sR, uR, ← map_mul]
     exact congrArg _ (wU_mul_nU x hx)

@@ -114,7 +114,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.exists_formal_germ_open_affine : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (X0 : Scheme.{0}) (t : SAB H X0), PowFns t → ∀ z : X0, ∃ (A : Type) (_ : CommRing A) (j : Sp A ⟶ X0) (d : ℕ), IsOpenImmersion j ∧ z ∈ Set.range j ∧ Nonempty (GermAt t j d) := by
-  first | exact @PositivityTheory.HtPt.Cd.germ_affine | exact PositivityTheory.HtPt.Cd.germ_affine
+  first | exact @PositivityTheory.HtPt.Cd.germ_affine
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.ExistsFormalGermOpenAffine =====
@@ -130,7 +130,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.exists_formal_germ_open_affine : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (X0 : Scheme.{0}) (t : SAB H X0), PowFns t → ∀ z : X0, ∃ (A : Type) (_ : CommRing A) (j : Sp A ⟶ X0) (d : ℕ), IsOpenImmersion j ∧ z ∈ Set.range j ∧ Nonempty (GermAt t j d) := by
-  first | exact @GlobalTheory.CompanionTheory.Relay.exists_formal_germ_open_affine | exact GlobalTheory.CompanionTheory.Relay.exists_formal_germ_open_affine | (intros; apply GlobalTheory.CompanionTheory.Relay.exists_formal_germ_open_affine <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Relay.exists_formal_germ_open_affine
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.ExistsFormalGermOpenAffineStatement =====
@@ -166,7 +166,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.formal_germs_isomorphic : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (X0 : Scheme.{0}) (t : SAB H X0), PowFns t → ∀ (S : Type) [CommRing S] [IsLocalRing S] (x : Sp S ⟶ X0) (d : ℕ) (g g₂ : GermAt t x d), ∃ (φ ψ : Germ.Pt S 1 d) (lam : Germ.PS S 2 d), IsIso g.B g₂.B φ ψ lam ∧ ∀ l, IsCombAtG t x g.tg (fun j => lin φ 1 j l) (g₂.tg l) := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Conj.germ_iso_main | exact GlobalTheory.CompanionTheory.Ar.Conj.germ_iso_main | (intros; apply GlobalTheory.CompanionTheory.Ar.Conj.germ_iso_main <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Conj.germ_iso_main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.FormalGermsIsomorphicStatement =====
@@ -182,7 +182,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.geometric_to_tangent_power_free : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (X0 : Scheme.{0}) (t : SAB H X0), PowFns t → ∀ (k : Type) [Field k] (p : ℕ) [Fact p.Prime] [CharP k p] (x : Sp k ⟶ X0), GeomPF t x → TanPF t x p := by
-  first | exact @PositivityTheory.HtPt.Ce.geompf_tan | exact PositivityTheory.HtPt.Ce.geompf_tan
+  first | exact @PositivityTheory.HtPt.Ce.geompf_tan
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.GeometricToTangentPowerFree =====
@@ -198,7 +198,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.geometric_to_tangent_power_free : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (X0 : Scheme.{0}) (t : SAB H X0), PowFns t → ∀ (k : Type) [Field k] (p : ℕ) [Fact p.Prime] [CharP k p] (x : Sp k ⟶ X0), GeomPF t x → TanPF t x p := by
-  first | exact @GlobalTheory.CompanionTheory.Relay.geometric_to_tangent_power_free | exact GlobalTheory.CompanionTheory.Relay.geometric_to_tangent_power_free | (intros; apply GlobalTheory.CompanionTheory.Relay.geometric_to_tangent_power_free <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Relay.geometric_to_tangent_power_free
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.GeometricToTangentPowerFreeStatement =====
@@ -214,7 +214,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.tangent_power_free_conj_injective : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (X0 : Scheme.{0}) (t : SAB H X0) (k : Type) [Field k] [IsAlgClosed k] (p : ℕ) [Fact p.Prime] [CharP k p] (x : Sp k ⟶ X0) (d : ℕ) (g : GermAt t x d), TanPF t x p → ConjInj g.B p := by
-  first | exact @PositivityTheory.HtPt.Cocp.tanpf_inj | exact PositivityTheory.HtPt.Cocp.tanpf_inj
+  first | exact @PositivityTheory.HtPt.Cocp.tanpf_inj
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.TangentPowerFreeConjInjective =====
@@ -230,7 +230,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.tangent_power_free_conj_injective : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (X0 : Scheme.{0}) (t : SAB H X0) (k : Type) [Field k] [IsAlgClosed k] (p : ℕ) [Fact p.Prime] [CharP k p] (x : Sp k ⟶ X0) (d : ℕ) (g : GermAt t x d), TanPF t x p → ConjInj g.B p := by
-  first | exact @GlobalTheory.CompanionTheory.Relay.tangent_power_free_conj_injective | exact GlobalTheory.CompanionTheory.Relay.tangent_power_free_conj_injective | (intros; apply GlobalTheory.CompanionTheory.Relay.tangent_power_free_conj_injective <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Relay.tangent_power_free_conj_injective
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.TangentPowerFreeConjInjectiveStatement =====
@@ -268,8 +268,7 @@ theorem isMapOf_cancel {R R₂ R₃ O : Type} [CommRing R] [CommRing R₂] [Comm
       sy := by simp only [h'.sy, h.sy, MvPowerSeries.map_comp, RingHom.comp_apply]
       ad := fun a => by simp only [h'.ad a, h.ad a, MvPowerSeries.map_comp, RingHom.comp_apply] }
 
-theorem spMap_comp' {R R₂ R₃ : Type} [CommRing R] [CommRing R₂] [CommRing R₃] (f : R →+* R₂) (g : R₂ →+* R₃) :
-    spMap g ≫ spMap f = spMap (g.comp f) := (Spec.map_comp _ _).symm
+alias spMap_comp' := _root_.GlobalTheory.CompanionTheory.Ar.LieFin.spMap_comp'
 
 theorem dualMap_comp' {R R₂ R₃ : Type} [CommRing R] [CommRing R₂] [CommRing R₃] (f : R →+* R₂) (g : R₂ →+* R₃) :
     (GlobalTheory.CompanionTheory.Ar.dualMap g).comp (GlobalTheory.CompanionTheory.Ar.dualMap f) = GlobalTheory.CompanionTheory.Ar.dualMap (g.comp f) := by
@@ -320,7 +319,7 @@ theorem family_ex_of' (hfib : ∀ (E : Type) [Field E] [NumberField E] [IsCMFiel
       refine ⟨gi, g.B, φ₀, ψ₀, lam₀, isMapOf_cancel hgi hg, h₀, fun _ => ⟨rfl, rfl, rfl⟩, fun l => ?_⟩
       rw [hgit, ← Category.assoc, spMap_comp', dualMap_comp', ← hgt]
       exact h₀t l
-    · obtain ⟨d', ⟨gi⟩⟩ := PositivityTheory.HtPt.Cd.germ_local E H hs X0 t hP _ (Y.x i)
+    · obtain ⟨d', ⟨gi⟩⟩ := _root_.GlobalTheory.CompanionTheory.Ar.Conj.GermInh.germ_local E H hs X0 t hP _ (Y.x i)
       obtain ⟨g₂, hg₂, hg₂t⟩ := bc (C.v i).valuationSubring.subtype (Y.gen i).symm gi
       obtain rfl := (huniv E H hs X0 t K z d g).1 d' g₂
       obtain ⟨φ, ψ, lam, h, ht⟩ := hiso E H hs X0 t hP K z d g g₂

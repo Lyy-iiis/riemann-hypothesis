@@ -74,8 +74,7 @@ def coordsL (n : ℕ) : Mat n →L[ℝ] (Fin n × Fin n → ℝ) :=
 
 theorem coordsL_apply (A : Mat n) : coordsL n A = coords A := rfl
 
-theorem isOpen_GLs : IsOpen (GLs n) :=
-  isOpen_compl_singleton.preimage (continuous_id.matrix_det)
+alias isOpen_GLs := _root_.GlobalTheory.CompanionTheory.LengthGL.isOpen_GLs
 
 theorem eq_of_mul_conj {Z : Type} {F : Mat n → Z}
     (hFk : ∀ x ∈ GLs n, ∀ k : Matrix.unitaryGroup (Fin n) ℂ, F (x * k.1) = F x)
@@ -86,7 +85,7 @@ theorem eq_of_mul_conj {Z : Type} {F : Mat n → Z}
     have e1 : b⁻¹ * a * (b⁻¹ * a)ᴴ = b⁻¹ * (a * aᴴ) * b⁻¹ᴴ := by
       simp only [conjTranspose_mul, Matrix.mul_assoc]
     have e2 : b⁻¹ * (b * bᴴ) * b⁻¹ᴴ = (b⁻¹ * b) * (b⁻¹ * b)ᴴ := by
-      simp only [conjTranspose_mul, conjTranspose_conjTranspose, Matrix.mul_assoc]
+      simp only [conjTranspose_mul, Matrix.mul_assoc]
     rw [e1, h, e2, Matrix.nonsing_inv_mul b hd, conjTranspose_one, Matrix.one_mul]
   have hmem : b⁻¹ * a ∈ Matrix.unitaryGroup (Fin n) ℂ := by
     rw [Matrix.mem_unitaryGroup_iff, Matrix.star_eq_conjTranspose]

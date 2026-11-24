@@ -99,6 +99,7 @@ import Mathlib.Tactic.Lemma
 import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.CmDataIsCMExtAndGramIsHermND
 import Mathlib.RingTheory.Coalgebra.IsFrobenius
 import Mathlib.RingTheory.HopfAlgebra.Basic
+import Mathlib.RingTheory.PicardGroup
 import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
 import Mathlib.RingTheory.PiTensorProduct
 import Development.AbelianVarietyTheory.Definitions.Foundations.T2SpaceAdeleRing
@@ -251,8 +252,8 @@ theorem integral_hasSum_eq_integral_indicator_hasSum :
       if i ∈ p then k i else fun _ => 0 := by
     intro i
     by_cases hp : i ∈ p
-    · funext x; simp [Set.indicator_of_mem hp, hp]
-    · funext x; simp [Set.indicator_of_notMem hp, hp]
+    · funext x; simp [hp]
+    · funext x; simp [hp]
   rw [integral_congr_ae hKae, integral_congr_ae hKpae,
     MeasureTheory.integral_finsetSum s (fun i _ => hk i),
     MeasureTheory.integral_finsetSum s (fun i _ => by
@@ -397,7 +398,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.TruncKer
 
 theorem _root_.GlobalTheory.T.isRegularSemisimple_of_testFunction_ne_zero : GlobalTheory.IndefiniteRowSideFullHecke.IwahoriSubgroup.IwahoriEigenvalues → ∀ (D : D7) (V : HSp D) (T : TypeDataG V) (U : AuxiliaryPlaceHermitianSpace V) (μf : ∀ v, Measure (GLoc D.sp.cm.sig V.gram v)) (ff : ∀ v, GLoc D.sp.cm.sig V.gram v → ℂ), IsTestFin T U μf ff → ∀ (fa : ∀ w, GArch D.sp.cm.sig V.gram w → ℂ) (δ : GF V) (x : GA D V), tensor D.sp.cm.sig V.gram fa ff (x⁻¹ * rat V δ * x) ≠ 0 → IsRegSS δ.1.1 := by
-  first | exact @GlobalTheory.RegSupp.isRegSS_of_tensor_ne_zero | exact GlobalTheory.RegSupp.isRegSS_of_tensor_ne_zero | (intros; apply GlobalTheory.RegSupp.isRegSS_of_tensor_ne_zero <;> assumption)
+  first | exact @GlobalTheory.RegSupp.isRegSS_of_tensor_ne_zero
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.IsRegularSemisimpleOfTestFunctionNeZeroStatement =====
@@ -560,16 +561,12 @@ lemma cd_aeval (P : ℂ[X]) : ∀ a b, ContDiff ℝ ∞ (fun Y : Mx n => (aeval 
     simp only [Polynomial.aeval_monomial]
     exact cd_mul (fun a b => contDiff_const) (cd_pow k)
 
-lemma conj_pow (g g' D : Matrix (Fin n) (Fin n) ℂ) (h1 : g' * g = 1) (h2 : g * g' = 1) (k : ℕ) :
-    (g' * D * g) ^ k = g' * D ^ k * g :=
-  _root_.UpperTheory.Reformulated.B.Yhd8.main g g' D h1 h2 k
-
 lemma aeval_conj (g g' D : Matrix (Fin n) (Fin n) ℂ) (h1 : g' * g = 1) (h2 : g * g' = 1) (P : ℂ[X]) :
     aeval (g' * D * g) P = g' * aeval D P * g := by
   induction P using Polynomial.induction_on' with
   | add p q hp hq => rw [map_add (f := _), map_add (f := _), hp, hq, mul_add, add_mul]
   | monomial k c =>
-    rw [Polynomial.aeval_monomial, Polynomial.aeval_monomial, conj_pow g g' D h1 h2,
+    rw [Polynomial.aeval_monomial, Polynomial.aeval_monomial, _root_.UpperTheory.Reformulated.B.Yhd8.main g g' D h1 h2,
       ← Algebra.smul_def, ← Algebra.smul_def, mul_smul_comm, smul_mul_assoc]
 
 lemma aeval_diag (l : Fin n → ℂ) (P : ℂ[X]) :
@@ -685,7 +682,7 @@ end -- clump:auto
 -- ===== end clump member: Development.WeilBound.RepresentationTheoryGL.LimitMultiplicityWeights.RegularClassIntegrals.PArchGroup =====
 
 -- ===== clump member: Development.WeilBound.RepresentationTheoryGL.LimitMultiplicityWeights.RegularClassIntegrals.PArchUnimod =====
--- clump-header: {"m": "Development.WeilBound.RepresentationTheoryGL.LimitMultiplicityWeights.RegularClassIntegrals.PArchUnimod", "h": "module\n\npublic import Development.WeilBound.RepresentationTheoryGL.LimitMultiplicityWeights.RegularClassIntegrals.ArchUnimod\npublic import Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.ArchimedeanUnitaryGroupStabilisersUnimodular\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.CmDataIsCMExtAndGramIsHermND\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Definitions.Divisors.HasTypeVec\nimport Development.AbelianVarietyTheory.Definitions.Foundations.InnerEqZeroOfNotUEquiv\n\n"}
+-- clump-header: {"m": "Development.WeilBound.RepresentationTheoryGL.LimitMultiplicityWeights.RegularClassIntegrals.PArchUnimod", "h": "module\n\npublic import Development.WeilBound.RepresentationTheoryGL.LimitMultiplicityWeights.RegularClassIntegrals.ArchUnimod\npublic import Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.ArchimedeanUnitaryGroupStabilisersUnimodular\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.CmDataIsCMExtAndGramIsHermND\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Definitions.Divisors.HasTypeVec\nimport Development.AbelianVarietyTheory.Definitions.Foundations.InnerEqZeroOfNotUEquiv\nimport Mathlib.RingTheory.PicardGroup\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -881,7 +878,7 @@ lemma tsum_single [DecidableEq I] (i : I) (x : Ω) : ∑' j, (lp.single 1 i (1 :
   rw [tsum_eq_single i]
   · simp [lp.single_apply]
   · intro j hj
-    simp [lp.single_apply, Pi.single_apply, hj]
+    simp [lp.single_apply, hj]
 
 end MainStatements.WeightKernel.PClosedGraph
 
@@ -985,7 +982,7 @@ noncomputable section
 theorem MainStatements.WeightKernel.cuspAny : MainStatements.WeightKernel.CuspAny := by
   intro D V hodd T U hNoFixed μf hμf ff hff fa hA 𝔉 hP
   have := hμf
-  have hH := (GlobalTheory.T.typeHypothesis_forms_agree D V T hNoFixed).1
+  have hH := (_root_.GlobalTheory.TypeHypForms.hypH_and_noRadicalFixed D V T hNoFixed).1
   obtain ⟨a, ha0, ha2, hpar⟩ := parabolicAtSplitPlaces D V hodd T 𝔉 hP
   obtain ⟨v, hv⟩ := hH a ha0 (by omega)
   obtain ⟨h, hh, e⟩ := hff.2.1 v
@@ -1763,7 +1760,7 @@ theorem hyperX : CuspAny → ArchZero → GlobalTheory.IndefiniteRowSideFullHeck
   haveI : ∀ w, (μa w).IsHaarMeasure := hRP.haar_arch
   haveI : ∀ v, (μf v).IsHaarMeasure := hRP.haar_loc
   obtain ⟨w⟩ : Nonempty (InfinitePlace D.host.F) := inferInstance
-  have hnc := (GlobalTheory.T.centralizer_regular_levi_commutative_noncompact D V Φ P hpar γ0 hreg0 hmem).2.2 (Finset.nonempty_iff_ne_empty.1 hne) w
+  have hnc := (_root_.GlobalTheory.LeviCent.cent_levi D V Φ P hpar γ0 hreg0 hmem).2.2 (Finset.nonempty_iff_ne_empty.1 hne) w
   have hcm := isCMExt_host D
   have horb : ∀ (ds : Measure (cent (projArch D.sp.cm.sig V.gram w (rat V γ0)))) [ds.IsHaarMeasure]
       [ds.IsMulRightInvariant], HasOrbInt (μa w) (projArch D.sp.cm.sig V.gram w (rat V γ0)) ds (fa w) 0 := by
@@ -1823,7 +1820,7 @@ theorem ellTrace_of_middleX : MainStatements.RegularCuspidalTrace.RegClassInt �
   set f := tensor D.sp.cm.sig V.gram fa ff with hfdef
   have hcc : f ∈ CcGA V := tensor_mem_ccAd harch.mem hfin.isFinFamily
   have hcs := continuous_of_mem_ccAd hcc
-  obtain ⟨hH, -⟩ := GlobalTheory.T.typeHypothesis_forms_agree D V T hnf
+  obtain ⟨hH, -⟩ := _root_.GlobalTheory.TypeHypForms.hypH_and_noRadicalFixed D V T hnf
   haveI := hμa
   haveI := hμf
   have hconst := hPC.2 D V hodd S M T hH U μa μf f ⟨fa, ff, harch, hfin, rfl⟩

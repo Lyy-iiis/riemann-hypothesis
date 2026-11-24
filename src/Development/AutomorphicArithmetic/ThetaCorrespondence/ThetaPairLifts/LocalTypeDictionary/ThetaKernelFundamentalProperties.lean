@@ -94,7 +94,7 @@ open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.Inde
 open scoped TensorProduct NNReal Matrix
 
 theorem _root_.GlobalTheory.T.theta_pair_moderate_growth : _root_.GlobalTheory.FunPr.ThetaLocalInputs → ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ) (X : Spc F E n) (W : Spc F E d) (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), IsPair B M χX χW om r s r' s' → ∀ Φ ∈ schA F (Fin n × Fin d), ∃ (C : ℝ) (k : ℕ), ∀ g h, ‖theta om Φ g h‖ ≤ C * ((ht g : ℝ) * ht h) ^ k := by
-  first | exact @_root_.GlobalTheory.ThetaModGrowthPair.theta_moderate_growth | exact _root_.GlobalTheory.ThetaModGrowthPair.theta_moderate_growth | (intros; apply _root_.GlobalTheory.ThetaModGrowthPair.theta_moderate_growth <;> assumption)
+  first | exact @_root_.GlobalTheory.ThetaModGrowthPair.theta_moderate_growth
 end
 end -- clump:auto
 end -- clump:auto
@@ -124,14 +124,6 @@ end GlobalTheory.ThetaRatPair
 end
 end
 
-section
-open NumberField IsDedekindDomain MeasureTheory Filter Topology Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes
-open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK
-open scoped TensorProduct NNReal Matrix
-
-theorem _root_.GlobalTheory.T.theta_pair_sum_rational : _root_.GlobalTheory.FunPr.ThetaLocalInputs → ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ) (X : Spc F E n) (W : Spc F E d) (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), IsPair B M χX χW om r s r' s' → ∀ γ ∈ ratU σ X.J, ∀ γ' ∈ ratU σ W.J, ∀ Φ ∈ schA F (Fin n × Fin d), thetaSum F (om (γ, γ') Φ) = thetaSum F Φ := by
-  first | exact @_root_.GlobalTheory.ThetaRatPair.theta_sum_omega_rational | exact _root_.GlobalTheory.ThetaRatPair.theta_sum_omega_rational | (intros; apply _root_.GlobalTheory.ThetaRatPair.theta_sum_omega_rational <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ThetaSumOmegaRational =====
@@ -160,7 +152,7 @@ theorem theta_kernel_basic_properties : _root_.GlobalTheory.FunPr.ThetaLocalInpu
     have e : om (γ * g, γ' * h) Φ = om (γ, γ') (om (g, h) Φ) := by
       rw [← Module.End.mul_apply, ← map_mul]; rfl
     rw [e]
-    exact _root_.GlobalTheory.T.theta_pair_sum_rational hKP F E σ B n d X W M χX χW om r s r' s' hP γ hγ γ' hγ' _ (hS.pres _ _ hΦ)
+    exact _root_.GlobalTheory.ThetaRatPair.theta_sum_omega_rational hKP F E σ B n d X W M χX χW om r s r' s' hP γ hγ γ' hγ' _ (hS.pres _ _ hΦ)
   · intro φ hφ g h
     obtain ⟨T, hT⟩ := hS.adm (g, h) l hl φ hφ
     refine T.continuous.congr fun f => ?_
@@ -173,11 +165,6 @@ end GlobalTheory.ThKBasic
 end
 end
 
-section
-
-theorem _root_.GlobalTheory.T.theta_kernel_fundamental_properties : _root_.GlobalTheory.FunPr.ThetaLocalInputs → GlobalTheory.ThK.ThetaBasic := by
-  first | exact @_root_.GlobalTheory.ThKBasic.theta_kernel_basic_properties | exact _root_.GlobalTheory.ThKBasic.theta_kernel_basic_properties | (intros; apply _root_.GlobalTheory.ThKBasic.theta_kernel_basic_properties <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.ThetaKernelFundamentalProperties =====

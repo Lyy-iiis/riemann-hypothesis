@@ -140,7 +140,7 @@ theorem conjLine_tensor (A B : HermLine ι) :
 theorem conjLine_conjLine (A : HermLine ι) : conjLine (conjLine A) = A := by
   cases A with
   | mk a h pos smul =>
-    simp only [conjLine, HermLine.mk.injEq, heq_eq_eq, true_and]
+    simp only [conjLine, HermLine.mk.injEq, true_and]
     funext z
     rw [conjPt_conjPt]
 
@@ -186,11 +186,11 @@ theorem madens_cx (D : ℕ) (φ : (Fin D → ℂ) → ℝ) (y : Fin D → ℂ) :
   have h1 : ∀ i : Fin D, c (Pi.single i 1) = Pi.single i 1 := by
     intro i; funext k; rw [hc]; by_cases h : k = i
     · subst h; simp
-    · simp [Pi.single_apply, h]
+    · simp [h]
   have h2 : ∀ i : Fin D, c (Complex.I • Pi.single i 1) = -(Complex.I • Pi.single i 1) := by
     intro i; funext k; rw [hc]; by_cases h : k = i
     · subst h; simp
-    · simp [Pi.single_apply, h]
+    · simp [h]
   ext i j
   simp only [cxHessian, Matrix.map_apply, hf, madens_hess, h1, h2, map_neg, ContinuousLinearMap.neg_apply, neg_neg]
   rw [hc y]
@@ -388,9 +388,6 @@ open ReciprocityTheory.ChartRestriction.G.AI.I1 (IsBlockMap pullDeg)
 
 namespace GlobalTheory.CompanionTheory.Ar.Cmp
 
-theorem arInt_conj : SheetIndepStatement → PtsIndepStatement → GoodProjExistsStatement → ∀ (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)] (P : Ideal (MRing ι)) (e : ℕ) (L : Fin e → HermLine ι) (A : HermLine ι) (s : MRing ι), IsArithVar P (e + 1) → (∀ j, IsSmoothHerm (L j)) → IsSmoothHerm A → IsSectionOn P A s → arInt P s (conjLine A) (fun j => conjLine (L j)) = arInt P s A L :=
-  PositivityTheory.UnitarySelfGeneration.c_arint
-
 end GlobalTheory.CompanionTheory.Ar.Cmp
 end -- clump:auto
 end -- clump:auto
@@ -407,7 +404,7 @@ namespace GlobalTheory.CompanionTheory.Ar.Tw
 
 theorem ptsIntegral_conjLine : PtsIndepStatement → ∀ (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)] (Q : Ideal (MRing ι)) (e : ℕ) (L : Fin e → HermLine ι) (A : HermLine ι) (s : MRing ι), IsArithVar Q (e + 1) → (∀ j, IsSmoothHerm (L j)) → IsSmoothHerm A → IsSectionOn Q A s → ptsIntegral Q (pot fun j => conjLine (L j)) (logNorm (conjLine A) s) = ptsIntegral Q (pot L) (logNorm A s) := by
   intro hI K _ ι _ Q e L A s hQ hL hA hs
-  exact GlobalTheory.CompanionTheory.Ar.Cmp.arInt_conj
+  exact _root_.PositivityTheory.UnitarySelfGeneration.c_arint
     (fun K _ ι _ P e Ψ L A s hP hΨ hL hA hs => sheetIndep K ι P e Ψ L A s hP hΨ hL hA hs) hI
     (fun K _ ι _ P e hP => goodProjExists K ι P e hP) K ι Q e L A s hQ hL hA hs
 

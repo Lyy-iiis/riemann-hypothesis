@@ -250,7 +250,7 @@ theorem UpperTheory.exists_specialization_of_eval_ne_zero :
   refine ⟨g, fun h0 => ha (Ideal.Quotient.eq_zero_iff_mem.2 h0), fun c hc hg => ?_⟩
   let e : MvPolynomial (Fin n) k →ₐ[k] k := MvPolynomial.aeval c
   have he : ∀ p, e p = MvPolynomial.eval c p := fun p => by
-    simp [e, MvPolynomial.coe_aeval_eq_eval]
+    simp [e]
   let φ : (MvPolynomial (Fin n) k ⧸ J) →ₐ[k] k :=
     Ideal.Quotient.liftₐ J e (fun p hp => by
       rw [he]
@@ -297,11 +297,6 @@ section -- clump:auto
 
 open GroundTheory.FunctionField UpperTheory.Et.Sel
 open scoped TensorProduct
-
-private lemma exists_psi (L T : Type) [Field L] [IsAlgClosed L] [CommRing T] [Algebra L T]
-    [Algebra.FiniteType L T] (m : Ideal T) (hm : m.IsMaximal) :
-    ∃ ψ : T →ₐ[L] L, ∀ x, ψ x = 0 ↔ x ∈ m :=
-  _root_.UpperTheory.Reformulated.B.Qi48.exists_psi L T m hm
 
 private lemma exists_unif (T : Type) [CommRing T] [IsDedekindDomain T] (hT : ¬ IsField T)
     (m : Ideal T) (hm : m.IsMaximal) :
@@ -437,7 +432,7 @@ theorem UpperTheory.tensor_dedekind_local_uniformizer :
   classical
   intro k L B _ _ _ _ _ _ _ _ _ _ hB hT m hm a b ha hb
   obtain ⟨hS, hE, -⟩ := UpperTheory.specialization_tensor_ring_hom_properties k L B
-  obtain ⟨ψ, hψ⟩ := exists_psi L (L ⊗[k] B) m hm
+  obtain ⟨ψ, hψ⟩ := _root_.UpperTheory.Reformulated.B.Qi48.exists_psi L (L ⊗[k] B) m hm
   obtain ⟨π, hπm, hπ0, hdec⟩ := exists_unif (L ⊗[k] B) hT m hm
   obtain ⟨s, t, e, hs, ht, hst⟩ := hdec a ha
   obtain ⟨s', t', e', hs', ht', hst'⟩ := hdec b hb

@@ -84,6 +84,7 @@ import Mathlib.RingTheory.RegularLocalRing.Defs
 import Formalism.MahlerMeasure.MahlerMeasureProofs.RemoveS
 import Mathlib.Algebra.Ring.IsFormallyReal
 import Mathlib.Tactic.Polynomial.Basic
+import Formalism.MahlerMeasure.MahlerMeasureProofs.GamInt
 import Std.Tactic.BVDecide.Normalize.Prop
 import Mathlib.GroupTheory.Nilpotent
 import Mathlib.RingTheory.SimpleRing.Principal
@@ -602,7 +603,7 @@ theorem gramWindow2_proved : GramWindow2 := by
     intro j a b
     rw [hAq, binMatK_eval_nat]
     simp only [hMdef, PadicInt.coe_sum, PadicInt.coe_mul, PadicInt.coe_natCast, hczc]
-  choose U V d hU hV hfac using fun j => Formalism.GM.Top.smithZp p n (M j)
+  choose U V d hU hV hfac using fun j => _root_.Formalism.GM.smith_form_p_adic_integers p n (M j)
 
   have hpt : ∀ j ∈ Finset.range Y0,
       (Formalism.GM.M.bad p (Ψ j) (Submodule.span ℤ_[p] (Set.range e)) k : ℝ) ≤
@@ -862,8 +863,6 @@ section -- clump:auto
 
 namespace Formalism.CountingSumsFrames.Top
 
-theorem detLeadDiag : Formalism.CountingSumsFrames.DetLeadDiag := Formalism.CountingSumsFrames.det_leading_diagonal
-
 end Formalism.CountingSumsFrames.Top
 end -- clump:auto
 end -- clump:auto
@@ -923,7 +922,7 @@ theorem lead_bound (p : ℕ) [hp : Fact p.Prime] (n J : ℕ) (c : Fin n → Fin 
       -Real.logb p ‖(binMatK ℚ_[p] J c).det.leadingCoeff‖ +
         ((binMatK ℚ_[p] J c).det.natDegree : ℝ) / ((p : ℝ) - 1) ≤ (n : ℝ) * (R + Λ) := by
   have hJ0 : ((J.factorial : ℚ_[p])) ≠ 0 := by exact_mod_cast J.factorial_ne_zero
-  obtain ⟨h1, h2⟩ := Formalism.CountingSumsFrames.Top.detLeadDiag ℚ_[p] n J (binMatK ℚ_[p] J c) (fun a => d a * ((J.factorial : ℚ_[p]))⁻¹)
+  obtain ⟨h1, h2⟩ := _root_.Formalism.CountingSumsFrames.det_leading_diagonal ℚ_[p] n J (binMatK ℚ_[p] J c) (fun a => d a * ((J.factorial : ℚ_[p]))⁻¹)
     (binMat_natDegree_le ℚ_[p] J c) (fun a b => by
       rw [binMat_coeff_top, hc]; split_ifs <;> simp)
   have hne : ∏ a, d a * ((J.factorial : ℚ_[p]))⁻¹ ≠ 0 :=
@@ -1065,7 +1064,7 @@ end -- clump:auto
 -- ===== end clump member: Formalism.SharpRestriction.GrowthBounds.FockGramWindow.NeglogPowMul =====
 
 -- ===== clump member: Formalism.SharpRestriction.GrowthBounds.FockGramWindow.NormFockLe =====
--- clump-header: {"m": "Formalism.SharpRestriction.GrowthBounds.FockGramWindow.NormFockLe", "h": "module\n\npublic import Formalism.MahlerMeasure.MahlerMeasureProofs.PhiInt\npublic import Formalism.MahlerMeasure.TieVars\npublic import Formalism.MahlerMeasure.MahlerMeasureProofs.MeanGam\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Formalism.SharpRestriction.GrowthBounds.FockGramWindow.NormFockLe", "h": "module\n\npublic import Formalism.MahlerMeasure.MahlerMeasureProofs.PhiInt\npublic import Formalism.MahlerMeasure.TieVars\npublic import Formalism.MahlerMeasure.MahlerMeasureProofs.MeanGam\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.MahlerMeasure.MahlerMeasureProofs.GamInt\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1079,13 +1078,11 @@ section Ops
 
 variable {p : ℕ} [hp : Fact p.Prime] {σ : Type} {r : ℕ}
 
-theorem one_le_p : (1 : ℝ) ≤ p := by exact_mod_cast hp.out.one_lt.le
-
 theorem bnd_Xl (w e : Fin r → σ) (J l : ℕ) (hl : l ≤ J) (B : ℝ) (hB : 0 ≤ B) (u : MvPolynomial σ ℚ_[p])
     (hu : Bnd B u) :
     Bnd (B * (p : ℝ) ^ ((r + 1) * Nat.log p J))
       ((((l.factorial : ℚ_[p]) ^ 2 * (J.choose l : ℚ_[p]))⁻¹) • ((tieE w e ^ l) ((tieF w e ^ l) u))) := by
-  have hp1 : (1 : ℝ) ≤ p := one_le_p
+  have hp1 : (1 : ℝ) ≤ p := _root_.Formalism.GM.gammaIntegralityLemmas.p_real_one_le
   set Mc : ℝ := (p : ℝ) ^ (Nat.log p J) with hMc
   have hM1 : 1 ≤ Mc := one_le_pow₀ hp1
   have hM : ∀ j ≤ J, ∀ k ≤ j, ‖(((j.choose k : ℕ) : ℚ_[p]))⁻¹‖ ≤ Mc := fun j hj k hk =>
@@ -1117,7 +1114,7 @@ theorem bnd_Xl (w e : Fin r → σ) (J l : ℕ) (hl : l ≤ J) (B : ℝ) (hB : 0
 
 theorem bnd_pow_iff (k : ℕ) (u : MvPolynomial σ ℚ_[p]) :
     Bnd ((p : ℝ) ^ k) u ↔ M.IsIntegral' p (((p : ℚ_[p]) ^ k) • u) := by
-  have hp0 : (0 : ℝ) < p := lt_of_lt_of_le zero_lt_one one_le_p
+  have hp0 : (0 : ℝ) < p := lt_of_lt_of_le zero_lt_one _root_.Formalism.GM.gammaIntegralityLemmas.p_real_one_le
   have hk : (0 : ℝ) < (p : ℝ) ^ k := pow_pos hp0 k
   refine forall_congr' fun m => ?_
   rw [MvPolynomial.coeff_smul, smul_eq_mul, norm_mul, norm_pow, Padic.norm_p, inv_pow, inv_mul_le_iff₀ hk, mul_one]
@@ -1126,9 +1123,9 @@ theorem bnd_phi (w e : Fin r → σ) (hw : Function.Injective w) (he : Function.
     (hr : 1 ≤ r) (o n z Λ : ℕ) (hΛ : Nat.log p (o + n + r + z) + 1 ≤ Λ) (k : ℕ) (u : MvPolynomial σ ℚ_[p])
     (hu : Bnd ((p : ℝ) ^ k) u) : Bnd ((p : ℝ) ^ (k + (r + 1) * Λ)) (tiePhi w e o n z u) := by
   have h1 := (bnd_pow_iff k u).1 hu
-  have h2 := Formalism.GM.projectorIntegral p σ r w e hw he hwe hr o n z _ h1
+  have h2 := _root_.Formalism.GM.M.PhiIntegrality.phi_integrality p σ r w e hw he hwe hr o n z _ h1
   rw [map_smul, smul_smul, ← pow_add] at h2
-  refine bnd_mono ((bnd_pow_iff _ _).2 h2) (pow_le_pow_right₀ one_le_p ?_)
+  refine bnd_mono ((bnd_pow_iff _ _).2 h2) (pow_le_pow_right₀ _root_.Formalism.GM.gammaIntegralityLemmas.p_real_one_le ?_)
   have := Nat.mul_le_mul_left (r + 1) hΛ
   omega
 
@@ -1149,7 +1146,7 @@ theorem norm_fock_le (U v : MvPolynomial σ ℚ_[p]) (dF : ℕ) (hdF : dF ≠ 0)
     (hv : Bnd 1 v)
     (hval : ∀ m ∈ v.support, padicValNat p dF ≤ padicValNat p (m.prod fun _ i => i.factorial) + E) :
     ‖M.fockK U v / (dF : ℚ_[p])‖ ≤ (p : ℝ) ^ (k + E) := by
-  have hp1 : (1 : ℝ) ≤ p := one_le_p
+  have hp1 : (1 : ℝ) ≤ p := _root_.Formalism.GM.gammaIntegralityLemmas.p_real_one_le
   have hp0 : (0 : ℝ) < p := lt_of_lt_of_le zero_lt_one hp1
   unfold M.fockK
   rw [Finset.sum_div]
@@ -1239,7 +1236,7 @@ theorem int_lvl (hB : G.BlockOK) (A : ℕ) (hdeg : ∀ x, G.LL.deg x ≤ 2 * A) 
     ‖(p : ℚ_[p]) ^ (x0N p A r N G.T.t) *
       (mX (fun c => (Sum.inl (Fin.castSucc G.uPos, c) : M.BVar N r G.T.t)) (fun c => M.xiVar N r G.T.t c) (JN G jp) l
         (phisB p (r := r) G j jp u) v / (degFact G j jp : ℚ_[p]))‖ ≤ 1 := by
-  have hp1 : (1 : ℝ) ≤ p := one_le_p
+  have hp1 : (1 : ℝ) ≤ p := _root_.Formalism.GM.gammaIntegralityLemmas.p_real_one_le
   have hp0 : (0 : ℝ) < p := lt_of_lt_of_le zero_lt_one hp1
   have h1 := bnd_phisB p G hB A hdeg hz j jp u (Ljj_int p G j jp u hu)
   have h2 := bnd_Xl (fun c => (Sum.inl (Fin.castSucc G.uPos, c) : M.BVar N r G.T.t)) (fun c => M.xiVar N r G.T.t c)
@@ -1457,12 +1454,9 @@ lemma norm_two_eq_one (hp2 : p ≠ 2) : ‖(2 : ℚ_[p])‖ = 1 := by
   have h1 : ‖((2 : ℤ) : ℚ_[p])‖ ≤ 1 := by
     first
       | exact Padic.norm_int_le_one 2
-      | exact padicNormE.norm_int_le_one 2
   have h3 : ¬ ‖((2 : ℤ) : ℚ_[p])‖ < 1 := fun h => h2 (by
     first
-      | exact Padic.norm_intCast_lt_one_iff.mp h
-      | exact (Padic.norm_int_lt_one_iff_dvd 2).1 h
-      | exact (padicNormE.norm_int_lt_one_iff_dvd 2).1 h)
+      | exact Padic.norm_intCast_lt_one_iff.mp h)
   have := le_antisymm h1 (not_lt.1 h3)
   exact_mod_cast this
 
@@ -1481,13 +1475,12 @@ lemma bound_span (B : V → V → ℚ_[p])
     rw [h0, norm_zero]; exact hM
   | add x y _ _ hx hy =>
     rw [hadd]
-    exact (show ‖B x w + B y w‖ ≤ max ‖B x w‖ ‖B y w‖ by first | exact Padic.nonarchimedean _ _ | exact IsUltrametricDist.norm_add_le_max _ _).trans (max_le hx hy)
+    exact (show ‖B x w + B y w‖ ≤ max ‖B x w‖ ‖B y w‖ by first | exact Padic.nonarchimedean _ _).trans (max_le hx hy)
   | smul c x _ hx =>
     rw [hsm, norm_mul]
     have hc : ‖(c : ℚ_[p])‖ ≤ 1 := by
       first
         | exact c.2
-        | simpa using PadicInt.norm_le_one c
     calc ‖(c : ℚ_[p])‖ * ‖B x w‖ ≤ 1 * ‖B x w‖ := mul_le_mul_of_nonneg_right hc (norm_nonneg _)
       _ ≤ M := by rw [one_mul]; exact hx
 
@@ -1538,13 +1531,12 @@ theorem main (hp2 : p ≠ 2) (B : V → V → ℚ_[p]) (L : Submodule ℤ_[p] V)
     refine ⟨a + b, habL, ?_⟩
     have e : B (a + b) (a + b) = 2 * B a b + (B a a + B b b) := by
       rw [hadd, hsym a haL _ habL, hsym b hbL _ habL, hadd, hadd, hsym b hbL a haL]; ring
-    have hlt : ‖B a a + B b b‖ < ‖B a b‖ := lt_of_le_of_lt (show ‖B a a + B b b‖ ≤ max ‖B a a‖ ‖B b b‖ by first | exact Padic.nonarchimedean _ _ | exact IsUltrametricDist.norm_add_le_max _ _)
+    have hlt : ‖B a a + B b b‖ < ‖B a b‖ := lt_of_le_of_lt (show ‖B a a + B b b‖ ≤ max ‖B a a‖ ‖B b b‖ by first | exact Padic.nonarchimedean _ _)
       (max_lt (lt_of_le_of_ne (hbound a haL a haL) haa) (lt_of_le_of_ne (hbound b hbL b hbL) hbb))
     have h2ab : ‖2 * B a b‖ = ‖B a b‖ := by rw [norm_mul, norm_two_eq_one hp2, one_mul]
     rw [e, (show ‖2 * B a b + (B a a + B b b)‖ = max ‖2 * B a b‖ ‖B a a + B b b‖ by
       first
-        | exact Padic.add_eq_max_of_ne (by rw [h2ab]; exact hlt.ne')
-        | exact IsUltrametricDist.norm_add_eq_max_of_norm_ne_norm (by rw [h2ab]; exact hlt.ne')), h2ab]
+        | exact Padic.add_eq_max_of_ne (by rw [h2ab]; exact hlt.ne')), h2ab]
     exact max_eq_left hlt.le
   obtain ⟨x, hxL, hxn⟩ := hx
   have hxx : B x x ≠ 0 := fun h => by rw [h, norm_zero] at hxn; linarith
@@ -1642,7 +1634,6 @@ theorem orthSplit_of (hM : OrthMin) (hR : SplitRank) : OrthSplit := by
     have h2 : (c : ℚ_[p]) = 0 := (mul_eq_zero.mp h1).resolve_right hxx
     first
     | exact PadicInt.coe_eq_zero.mp h2
-    | exact Subtype.ext h2
   have hsup : Submodule.span ℤ_[p] {x} ⊔ K = L := by
     apply le_antisymm
     · exact sup_le ((Submodule.span_le).mpr (Set.singleton_subset_iff.mpr hxL)) hKL
@@ -1667,7 +1658,6 @@ theorem splitRank_proved : SplitRank := by
     · left
       first
       | exact PadicInt.coe_eq_zero.mp h
-      | exact Subtype.ext h
     · right
       exact h
   haveI : Module.Finite ℤ_[p] L := Module.Finite.iff_fg.mpr hfg

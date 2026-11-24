@@ -240,8 +240,6 @@ theorem jf_hasDerivAt (D : B.RealPlaceData k r Wp Wq) (G G' : ℂ → B.Mat k r 
     convert h3 using 1
     all_goals first
       | rfl
-      | (funext s'; simp [B.rho, B.sgs])
-      | simp [B.rho, B.sgs]
 
 end core
 
@@ -253,20 +251,12 @@ open Formalism.REAL Formalism.QuantumDeterminants Formalism.FourierDecayAlt Form
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
-private theorem gN_pos_of_mem_GV {k r : ℕ} {g : B.Mat k r} (hg : g ∈ B.GV k r) : 0 < B.gN g := by
-  have h1 : g⁻¹ * g = 1 := ReciprocityTheory.ChartRestriction.DS.Xi.StepA.UH_inv_mul k r hg
-  have hne : g ≠ 0 := by
-    rintro rfl
-    rw [mul_zero] at h1
-    exact zero_ne_one h1
-  exact lt_of_lt_of_le (norm_pos_iff.mpr hne) (WeakDominationMajorants.Asm.sup_le_gN g)
-
 private theorem exists_bound_gN_rpow_on_compact {k r : ℕ} {S : Set (B.Mat k r)} (hS : IsCompact S) (A : ℝ) :
     ∃ R, ∀ g ∈ S ∩ B.GV k r, B.gN g ^ A ≤ R := by
   have hc : Continuous fun g : B.Mat k r => B.gN g := WeakDominationMajorants.NInt.gN_cont k r
   obtain ⟨R, hR⟩ := (hS.inter_right B5.GV_closed).exists_bound_of_continuousOn
     (f := fun g : B.Mat k r => B.gN g ^ A) (fun g hg =>
-      ((Real.continuousAt_rpow_const _ _ (Or.inl (gN_pos_of_mem_GV hg.2).ne')).comp
+      ((Real.continuousAt_rpow_const _ _ (Or.inl (_root_.Formalism.FourierDecayAlt.P.Ux1.gN_pos hg.2).ne')).comp
         hc.continuousAt).continuousWithinAt)
   exact ⟨R, fun g hg => (le_abs_self _).trans (by simpa using hR g hg)⟩
 
@@ -406,11 +396,9 @@ theorem family_orbital_derivative : CutSH.FamJFDeriv := by
   have hJ := jf_hasDerivAt (T.bs (j + 1)) G (famP j G v) t v hδ hγ hGcc hG'cc hd Φ hΦcc c hdom
   first
     | exact ((hasDerivAt_const (0 : ℝ) (_ : ℂ)).smul hJ).congr_deriv (by simp)
-    | exact ((hasDerivAt_const (0 : ℝ) (_ : ℝ)).smul hJ).congr_deriv (by simp)
 
 end Formalism.FourierDecayAlt.P.CutSHD
 
-theorem Formalism.FourierDecayAlt.P.family_orbital_derivative_identity : Formalism.FourierDecayAlt.P.CutSH.FamJFDeriv := Formalism.FourierDecayAlt.P.CutSHD.family_orbital_derivative
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -448,9 +436,9 @@ theorem opc_cc_line (j : ℕ) (hj : j + 1 ≤ P.r) (t v : ℂ) (s : ℝ) (c : Fi
   unfold cc consC
   by_cases hl : (l : ℕ) = 0
   · have e : l = ⟨0, by omega⟩ := Fin.ext hl
-    simp [hl, Pi.single_apply, e, Complex.real_smul]
+    simp [e, Complex.real_smul]
   · have hne : l ≠ ⟨0, by omega⟩ := fun h => hl (by rw [h])
-    simp [hl, Pi.single_apply, hne]
+    simp [hl, hne]
 
 theorem opc_mul (h2 : FamAlg) (h4 : RepLin) {T : D.LevTower P.k P.r Wp Wq}
     (hP : IsPlace P T.base.z T.base.z' T.base.π T.base.π') (hT : D.TowerNormalised T) {j : ℕ} {hj : j + 1 ≤ P.r}
@@ -612,7 +600,7 @@ theorem Formalism.FourierDecayAlt.P.cutSH_opClosed_of_famJFDeriv (h5 : Formalism
     Formalism.FourierDecayAlt.P.CutSH.representation_linear h5 Formalism.FourierDecayAlt.P.CutSH.cell_compatibility
 
 theorem Formalism.FourierDecayAlt.P.operator_class_closed : Formalism.FourierDecayAlt.P.CutSH.OpClosed :=
-  Formalism.FourierDecayAlt.P.cutSH_opClosed_of_famJFDeriv Formalism.FourierDecayAlt.P.family_orbital_derivative_identity
+  Formalism.FourierDecayAlt.P.cutSH_opClosed_of_famJFDeriv _root_.Formalism.FourierDecayAlt.P.CutSHD.family_orbital_derivative
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto

@@ -906,7 +906,7 @@ theorem UpperTheory.Gal.KunnethLefschetz.Di.pBQOf_holds :
       if h0 : (j : ℕ) = 0 then tr (by rw [h0]; norm_num) u
       else if h1 : (j : ℕ) = 1 then tr (by rw [h1]; norm_num) v else 0
     have ha0 : a 0 = tr (by simp) u := by simp [a]
-    have ha1 : a 1 = tr (by norm_num [Fin.val_one]) v := by simp [a, Fin.val_one]
+    have ha1 : a 1 = tr (by norm_num [Fin.val_one]) v := by simp [a]
     have hzero : a = 0 := by
       apply (hPBV 2).1
       beta_reduce
@@ -1010,7 +1010,7 @@ theorem UpperTheory.Gal.KunnethLefschetz.Di.rootNat_holds :
   intro q _ i V U g ζ
   have hroot := (GlobalTheory.T.tateTwistUnitClass_rootClass_spec q).2.2.2
   have hnat := (_root_.GlobalTheory.EtC.secClass_props (ZMod q) (tw q i) U).2.2.2.1 g (twGen i ζ)
-  have hres := (GlobalTheory.T.tateTwist_sections_locally_generated q i).2.2.2.1 V U g ζ
+  have hres := (_root_.GlobalTheory.EtC.twist_sections q i).2.2.2.1 V U g ζ
   rw [hroot i U ζ, hroot i V (ζ.map g.appTop.hom), ← hres]
   exact hnat
 end -- clump:auto

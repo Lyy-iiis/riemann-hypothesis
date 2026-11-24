@@ -119,15 +119,6 @@ theorem span_mul {E κ ι : Type} [Field E] [Fintype κ] [DecidableEq κ]
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 
-theorem ccT_ccT' {α β : Type} (A : Matrix α β E) : ccT (ccT A) = A := by
-  ext i j
-  simp [ccT, cc]
-
-theorem ccT_mul' {α β δ : Type} [Fintype β] (A : Matrix α β E) (B : Matrix β δ E) :
-    ccT (A * B) = ccT B * ccT A := by
-  ext i j
-  simp [ccT, cc, Matrix.mul_apply, mul_comm]
-
 theorem lower_rows {N : ℕ} (γ : M2 E N) (hγ : γ ∈ UU E N) :
     LinearIndependent E (fun i => (γ.submatrix Sum.inr id) i) ∧
       γ.submatrix Sum.inr id * Matrix.J (Fin N) E * ccT (γ.submatrix Sum.inr id) = 0 := by
@@ -138,7 +129,7 @@ theorem lower_rows {N : ℕ} (γ : M2 E N) (hγ : γ ∈ UU E N) :
     exact h.comp Sum.inr Sum.inr_injective
   · have h : γ * Matrix.J (Fin N) E * ccT γ = Matrix.J (Fin N) E := by
       have : ccT (ccT γ) * Matrix.J (Fin N) E * ccT γ = Matrix.J (Fin N) E := hc
-      rwa [ccT_ccT'] at this
+      rwa [_root_.GlobalTheory.SW.Base.ccT_ccT] at this
     ext i j
     have h' : (γ * Matrix.J (Fin N) E * ccT γ) (Sum.inr i) (Sum.inr j) = 0 := by
       rw [h]
@@ -172,7 +163,7 @@ theorem exists_rep_den : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] 
     (by
       have : a * (D * W₀) * Matrix.J (Fin N) E * ccT (a * (D * W₀)) =
           a * D * (W₀ * Matrix.J (Fin N) E * ccT W₀) * (ccT D * ccT a) := by
-        simp only [ccT_mul', Matrix.mul_assoc]
+        simp only [_root_.GlobalTheory.SW.Base.ccT_mul, Matrix.mul_assoc]
       rw [this, hiso, Matrix.mul_zero, Matrix.zero_mul]) hap
   refine ⟨γ, hγ, hden, ?_⟩
   show botSpan γ = botSpan γ₀
@@ -519,7 +510,7 @@ theorem theta_bdd (hΨ : IsType Ψ) {R : ℕ} {δ : ℝ} (hR : 0 < R) (hδ : 0 <
     refine ⟨R, hR, fun x hx => by_contra fun h => hx (if_neg h), fun x y hy => ?_⟩
     refine if_congr (forall_congr' fun k => forall_congr' fun a => ?_) rfl rfl
     have hz : IsIntegral ℤ ((R : E) * ((R : E) * y k a)) := (c R).mul ((c R).mul (hy k a))
-    simp only [smul_add, Matrix.add_apply, Matrix.smul_apply, smul_eq_mul, mul_add]
+    simp only [Matrix.add_apply, Matrix.smul_apply, smul_eq_mul, mul_add]
     exact ⟨fun h => by simpa using h.sub hz, fun h => h.add hz⟩
   let Z₀ : CM Ψ N N := fun _ => (I * δ) • (1 : Matrix (Fin N) (Fin N) ℂ)
   have hZ₀ : Z₀ ∈ Hn Ψ N := fun τ => by
@@ -557,7 +548,7 @@ theorem transl_mem {β : Matrix (Fin N) (Fin N) E} (h : ccT β = β) :
   have e : ccT (fromBlocks 1 β 0 1 : M2 E N) = fromBlocks 1 0 β 1 := by
     conv_rhs => rw [← h]
     ext (i | i) (j | j) <;> by_cases hij : i = j <;>
-      simp [ccT, cc, Matrix.one_apply, hij, eq_comm]
+      simp [ccT, cc, hij, eq_comm]
   change ccT _ * _ * _ = _
   rw [e, Matrix.J, fromBlocks_multiply, fromBlocks_multiply]
   simp

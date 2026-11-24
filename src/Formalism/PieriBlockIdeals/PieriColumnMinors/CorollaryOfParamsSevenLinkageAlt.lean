@@ -192,7 +192,7 @@ theorem dyadic (k : ℕ) : ∫ t in (2 : ℝ)..2 ^ (k + 1), phi t ≤
       rw [show (4 : ℝ) = 2 ^ 2 by norm_num, Real.log_pow]; norm_num
     have heq : log 4 / (((k : ℝ) + 1) * log 2) ^ 2 * (2 ^ (k + 1 + 1) - 2 ^ (k + 1)) =
         2 / log 2 * ((2 : ℝ) ^ (k + 1) / ((k : ℝ) + 1) ^ 2) := by
-      rw [h4]; first | (field_simp; ring) | field_simp
+      rw [h4]; first | (field_simp; ring)
     rw [← hsplit, Finset.sum_range_succ, mul_add]
     linarith
 
@@ -224,7 +224,7 @@ theorem gg_hasDerivAt {t : ℝ} (ht : 1 < t) : HasDerivAt gg (gg' t) t := by
   have hd : 1.56 * ((1 * (log t * log t) - t * (t⁻¹ * log t + log t * t⁻¹)) / (log t * log t) ^ 2)
       + 0.7 * t⁻¹ = gg' t := by
     show _ = 1.56 * (1 / log t ^ 2 - 2 / log t ^ 3) + 0.7 / t
-    first | (field_simp; ring) | field_simp
+    first | (field_simp; ring)
   rw [hfun]
   exact h.congr_deriv hd
 
@@ -284,7 +284,7 @@ theorem gg_1024_nonneg : 0 ≤ gg 1024 := by
 theorem card_pr (y : ℝ) : (pr y).card = Nat.primeCounting ⌊y⌋₊ := by
   simp only [PI.pr, Nat.primeCounting, Nat.primeCounting',
     Nat.count_eq_card_filter_range]
-  try (congr 1; ext p; simp)
+  try (congr 1; ext p)
 
 theorem log_131072_eq_seventeen_mul_log_two : log 131072 = 17 * log 2 := by
   rw [show (131072 : ℝ) = 2 ^ 17 by norm_num, Real.log_pow]; norm_num
@@ -296,7 +296,7 @@ theorem log_sq_le {x : ℝ} (hx : 131072 ≤ x) : log x ^ 2 ≤ 0.00106 * x := b
     rw [hsdef]
     calc (1 : ℝ) = Real.sqrt 1 := Real.sqrt_one.symm
       _ ≤ Real.sqrt (x / 131072) := by
-        first | exact Real.sqrt_le_sqrt hq | exact Real.sqrt_le_sqrt (by exact hq) | gcongr
+        first | exact Real.sqrt_le_sqrt hq
   have hss : s ^ 2 = x / 131072 := by rw [hsdef]; exact Real.sq_sqrt (by linarith)
   have hxs : x = 131072 * s ^ 2 := by rw [hss]; ring
   have hlogs : log s ≤ s - 1 := Real.log_le_sub_one_of_pos (by linarith)
@@ -342,7 +342,7 @@ theorem pcLarge_of (hU : CHUpper) : PCLarge 131072 := by
   have hθ : Chebyshev.theta y ≤ 1.1056 * y + 0.7 * log y ^ 2 :=
     (Chebyshev.theta_le_psi y).trans (hU y (by linarith))
   have hdl : y / log y ^ 2 * log y = y / log y := by
-    first | rw [pow_two, div_mul_eq_mul_div, mul_div_mul_right _ _ hLne] | (field_simp; ring) | field_simp
+    first | rw [pow_two, div_mul_eq_mul_div, mul_div_mul_right _ _ hLne]
   have e : (61 + (1.56 * (y / log y ^ 2) + 0.7 * log y)) * log y =
       61 * log y + 1.56 * (y / log y) + 0.7 * log y ^ 2 := by
     rw [← hdl]; ring
@@ -355,7 +355,7 @@ theorem pcLarge_of (hU : CHUpper) : PCLarge 131072 := by
     nlinarith [e, hθ, hv, hLle, hL2, hy0]
   have hfin : Chebyshev.theta y / log y + (61 + (1.56 * (y / log y ^ 2) + 0.7 * log y)) < 1.26 * y / log y := by
     rw [div_add' _ _ _ hLne]
-    first | exact div_lt_div_of_pos_right key hLpos | exact (div_lt_div_iff_of_pos_right hLpos).mpr key | gcongr
+    first | exact div_lt_div_of_pos_right key hLpos
   rw [card_pr, Chebyshev.primeCounting_eq_theta_div_log_add_integral (by linarith)]
   show Chebyshev.theta y / log y + ∫ t in (2 : ℝ)..y, phi t < 1.26 * y / log y
   linarith
@@ -374,12 +374,15 @@ section -- clump:auto
 namespace PI.PC
 
 def tst (n c : Nat) : Bool :=
-  Nat.blt (n ^ 256) (2 ^ ((3225600000000 * n - 1) / (c * 6931471808)))
+  -- Use the Nat primitives directly: the kernel reduces this test at every step of loop_run.
+  let numerator := Nat.sub (Nat.mul 3225600000000 n) 1
+  let exponent := Nat.div numerator (Nat.mul c 6931471808)
+  Nat.blt (Nat.pow n 256) (Nat.pow 2 exponent)
 
 def force (x : Nat) (f : Nat → Bool) : Bool :=
   match x with
   | 0 => f 0
-  | k + 1 => f (k + 1)
+  | k + 1 => f k.succ
 
 theorem force_eq (x : Nat) (f : Nat → Bool) : force x f = f x := by
   cases x <;> rfl
@@ -389,8 +392,8 @@ def loop (B : Nat) : Nat → Nat → Nat → Nat → Bool
   | k + 1, n, c, Q =>
     force n fun n => force c fun c => force Q fun Q =>
     if Nat.gcd n Q = 1 then
-      tst n (c + 1) && loop B k (n + 1) (c + 1) (if n ≤ B then Q * n else Q)
-    else tst n c && loop B k (n + 1) c Q
+      tst n c.succ && loop B k n.succ c.succ (if n ≤ B then Q.mul n else Q)
+    else tst n c && loop B k n.succ c Q
 
 theorem loop_run : loop 362 131070 2 0 1 = true := by decide +kernel
 
@@ -410,16 +413,15 @@ open Real
 
 theorem tst_sound {m c c' : ℕ} (h : tst m c = true) (hc : c' ≤ c) (hm : 1 ≤ m) :
     (c' : ℝ) * log m < 1.26 * m := by
-  unfold tst at h
+  let q := (3225600000000 * m - 1) / (c * 6931471808)
+  change Nat.blt (m ^ 256) (2 ^ q) = true at h
   rw [Nat.blt_eq] at h
-  obtain ⟨q, hqdef⟩ : ∃ q, q = (3225600000000 * m - 1) / (c * 6931471808) := ⟨_, rfl⟩
-  rw [← hqdef] at h
   have hm256 : 1 ≤ m ^ 256 := Nat.one_le_pow 256 m hm
   have hcpos : 0 < c := by
     rcases Nat.eq_zero_or_pos c with h0 | h0
     · exfalso
       subst h0
-      have hq0 : q = 0 := by rw [hqdef]; simp
+      have hq0 : q = 0 := by simp [q]
       rw [hq0, pow_zero] at h
       exact absurd h (not_lt.mpr hm256)
     · exact h0
@@ -433,7 +435,7 @@ theorem tst_sound {m c c' : ℕ} (h : tst m c = true) (hc : c' ≤ c) (hm : 1 �
     linarith
   have h2 : (q : ℝ) * c * 6931471808 < 3225600000000 * m := by
     have hN : q * (c * 6931471808) ≤ 3225600000000 * m - 1 := by
-      rw [hqdef]; exact Nat.div_mul_le_self _ _
+      exact Nat.div_mul_le_self _ _
     have hpos : 0 < 3225600000000 * m := by positivity
     have hN' : q * (c * 6931471808) < 3225600000000 * m :=
       Nat.lt_of_le_of_lt hN (Nat.sub_lt hpos one_pos)

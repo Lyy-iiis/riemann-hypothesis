@@ -187,8 +187,8 @@ theorem isCompact_closure_zpowers_conj {G : Type} [Group G] [TopologicalSpace G]
   refine hK.of_isClosed_subset isClosed_closure (closure_minimal ?_ hK.isClosed)
   rintro _ ⟨k, rfl⟩
   refine ⟨t ^ k, subset_closure (Subgroup.zpow_mem_zpowers t k), ?_⟩
-  have e : c⁻¹ * t * c = MulAut.conj c⁻¹ t := by simp [MulAut.conj_apply]
-  have e' : ∀ x : G, c⁻¹ * x * c = MulAut.conj c⁻¹ x := fun x => by simp [MulAut.conj_apply]
+  have e : c⁻¹ * t * c = MulAut.conj c⁻¹ t := by simp
+  have e' : ∀ x : G, c⁻¹ * x * c = MulAut.conj c⁻¹ x := fun x => by simp
   simp only [e', map_zpow]
 
 theorem main : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (n : ℕ) (b : GLw n w), IsWitt n w b → ∀ (ϖ : (w.adicCompletion E)ˣ), IsUnifAt ϖ → ∀ (l : Fin (n / 2) → ℤ), Cone l → (∀ (y : Fin n → ℤ), StrictAnti y → ∀ δ : GLw n w, dcos n w (tdiag ϖ y) δ ≠ 0 → ∃ m ∈ iwGL n w, ∃ τ : GLw n w, ((∀ i j : Fin n, i ≠ j → τ.val i j = 0) ∧ ∀ i, Valued.v (τ.val i i) = 1) ∧ m⁻¹ * δ * m = tdiag ϖ y * τ) → ∀ γ : UL n w, (∃ p : UL n w, fU n w b ϖ l (p⁻¹ * γ * p) ≠ 0) → ∃ (p₀ : UL n w) (u : Fin n → (w.adicCompletion E)ˣ), (∀ i, ordL (u i : w.adicCompletion E) = wexp n l i) ∧ (p₀⁻¹ * γ * p₀).1 = b * GlobalTheory.SmGL.diagT (w.adicCompletion E) (Fin n) u * b⁻¹ ∧ (∀ p : UL n w, fU n w b ϖ l (p⁻¹ * γ * p) ≠ 0 ↔ ∃ z ∈ twCent (MonoidHom.id (UL n w)) γ, ∃ i ∈ iwU n w b, p = z * p₀ * i) ∧ cptPart (twCent (MonoidHom.id (UL n w)) γ) = twCent (MonoidHom.id (UL n w)) γ ⊓ (iwU n w b).map (MulAut.conj p₀).toMonoidHom := by
@@ -281,7 +281,7 @@ open scoped Classical
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.dominant_coset_twisted_conjugacy : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (w : Pl E), ¬ IsSplitAt w → ∀ (n : ℕ) (b : GLw n w), IsWitt n w b → ∀ (ϖ : (w.adicCompletion E)ˣ), IsUnifAt ϖ → ∀ (l : Fin (n / 2) → ℤ), Cone l → (∀ (y : Fin n → ℤ), StrictAnti y → ∀ δ : GLw n w, dcos n w (tdiag ϖ y) δ ≠ 0 → ∃ m ∈ iwGL n w, ∃ τ : GLw n w, ((∀ i j : Fin n, i ≠ j → τ.val i j = 0) ∧ ∀ i, Valued.v (τ.val i i) = 1) ∧ m⁻¹ * δ * m = tdiag ϖ y * τ) → ∀ γ : UL n w, (∃ p : UL n w, fU n w b ϖ l (p⁻¹ * γ * p) ≠ 0) → ∃ (p₀ : UL n w) (u : Fin n → (w.adicCompletion E)ˣ), (∀ i, ordL (u i : w.adicCompletion E) = wexp n l i) ∧ (p₀⁻¹ * γ * p₀).1 = b * GlobalTheory.SmGL.diagT (w.adicCompletion E) (Fin n) u * b⁻¹ ∧ (∀ p : UL n w, fU n w b ϖ l (p⁻¹ * γ * p) ≠ 0 ↔ ∃ z ∈ twCent (MonoidHom.id (UL n w)) γ, ∃ i ∈ iwU n w b, p = z * p₀ * i) ∧ cptPart (twCent (MonoidHom.id (UL n w)) γ) = twCent (MonoidHom.id (UL n w)) γ ⊓ (iwU n w b).map (MulAut.conj p₀).toMonoidHom := by
-  first | exact @GlobalTheory.CompanionTheory.SuppCent.main | exact GlobalTheory.CompanionTheory.SuppCent.main | (intros; apply GlobalTheory.CompanionTheory.SuppCent.main <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.SuppCent.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.DominantCosetTwistedConjugacyStatement =====
@@ -328,35 +328,12 @@ private theorem apply_eq_zero_of_mem_tor_of_ne {k : Type} [Field k] (N : ℕ) (x
     simpa using congrArg (GlobalTheory.SmGL.stdBlocks (PositivityTheory.Lbc.ones N) (PositivityTheory.Lbc.sum_ones N)) hs
   convert Matrix.blockDiagonal'_apply_ne (fun (a : Fin N) ↦ (s a).val) _ _ hne
 
-private theorem mem_TO_of_mem_iwGL_inf_tor (w : Pl E) (n : ℕ) (κ : GLw n w)
-    (hκ : κ ∈ iwGL n w ⊓ PositivityTheory.Lbc.Tor (w.adicCompletion E) n) : κ ∈ TO n w := by
-  refine ⟨fun i j hij => apply_eq_zero_of_mem_tor_of_ne n κ hκ.2 i j hij, fun i => ?_⟩
-  have hmul : κ.val i i * (κ⁻¹ : GLw n w).val i i = 1 := by
-    have h1 : (κ * κ⁻¹ : GLw n w).val i i = 1 := by simp
-    rw [Units.val_mul, Matrix.mul_apply, Finset.sum_eq_single i] at h1
-    · exact h1
-    · intro b _ hb
-      rw [apply_eq_zero_of_mem_tor_of_ne n κ hκ.2 i b (Ne.symm hb), zero_mul]
-    · intro hi; exact absurd (Finset.mem_univ i) hi
-  have ha := iw_entry_le hκ.1 i i
-  have hb := iw_entry_le (inv_mem hκ.1) i i
-  have hv : ValuativeRel.valuation _ (κ.val i i) = 1 := by
-    have hm := congrArg (ValuativeRel.valuation (w.adicCompletion E)) hmul
-    rw [map_mul, map_one] at hm
-    refine le_antisymm ha ?_
-    calc (1 : ValuativeRel.ValueGroupWithZero _) = _ := hm.symm
-      _ ≤ _ * 1 := by gcongr
-      _ = _ := mul_one _
-  haveI := Valuation.Compatible.ofValuation (Valued.v : Valuation (w.adicCompletion E) _)
-  exact (ValuativeRel.isEquiv (Valued.v : Valuation (w.adicCompletion E) _)
-    (ValuativeRel.valuation _)).eq_one_iff_eq_one.2 hv
-
 theorem contr_id_pf (w : Pl E) (ϖ : (w.adicCompletion E)ˣ) (hϖ : IsUnifAt ϖ) (n : ℕ) (y : Fin n → ℤ)
     (hy : StrictAnti y) (δ : GLw n w) (hδ : dcos n w (tdiag ϖ y) δ ≠ 0) :
     ∃ m ∈ iwGL n w, ∃ τ ∈ TO n w, m⁻¹ * δ * m = tdiag ϖ y * τ := by
   obtain ⟨j, hj, κ, hκ, he⟩ := _root_.GlobalTheory.CompanionTheory.Lbc.Contraction.e1 n (iwGL n w) 1 1 (tdiag ϖ y) (iwahori_GL_trivial_admissible w n)
     (goodT_id w ϖ hϖ n y hy) δ (mem_dcos_of_ne w n _ δ hδ)
-  refine ⟨j⁻¹, inv_mem hj, κ, mem_TO_of_mem_iwGL_inf_tor w n κ hκ, ?_⟩
+  refine ⟨j⁻¹, inv_mem hj, κ, _root_.PositivityTheory.Rg.Bc.ArchbcB.B.M4.iw_tor_TO w n κ hκ, ?_⟩
   simp only [inv_inv, MulAut.one_apply] at he ⊢
   rw [he]
   group

@@ -179,7 +179,7 @@ open Formalism.BasicNotions NumberField IsDedekindDomain Formalism.MainNotions.G
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.oddTwistedFrameDetFunction_mul_det_pow_polynomial : ∀ {p : ℕ} [Fact p.Prime] (X : Sys p) (D : D7) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau) {n : ℕ}, 0 < n → ∀ (ν : D.what₂.Tau → Fin n → ℕ) (c : D.what₂.Tau → ℤ), (∀ τ r, (ν τ r : ℤ) ≤ c τ) → ∀ Q : MvPolynomial (GL3Theta.FrV D n) ℂ, Q ∈ WtPol ℂ ν → ∃ (K : D.what₂.Tau → ℕ) (P : MvPolynomial (GL3Theta.FrV D n) ℂ), ∀ x : D.what₂.Tau → Matrix (Fin n) (Fin n) ℂ, (∀ τ, (x τ).det ≠ 0) → MvPolynomial.eval (fun k : GL3Theta.FrV D n => x k.1 k.2.1 k.2.2) P = twF X D pos c Q x * ∏ τ, (x τ).det ^ K τ := by
-  first | exact @GlobalTheory.TwV.DelA.twF_mul_det_poly | exact GlobalTheory.TwV.DelA.twF_mul_det_poly | (intros; apply GlobalTheory.TwV.DelA.twF_mul_det_poly <;> assumption)
+  first | exact @GlobalTheory.TwV.DelA.twF_mul_det_poly
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.OddTwistedFrameDetFunctionMulDetPowPolynomialStatement =====
@@ -308,7 +308,7 @@ open Formalism.BasicNotions NumberField IsDedekindDomain Formalism.MainNotions.G
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.oddTwistedFrameDetFunction_mul_upper_triangular : ∀ {p : ℕ} [Fact p.Prime] (X : Sys p) (D : D7) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau) {n : ℕ} (ν : D.what₂.Tau → Fin n → ℕ) (c : D.what₂.Tau → ℤ), (∀ τ r, (ν τ r : ℤ) ≤ c τ) → ∀ Q : MvPolynomial (GL3Theta.FrV D n) ℂ, Q ∈ WtPol ℂ ν → ∀ (x β : D.what₂.Tau → Matrix (Fin n) (Fin n) ℂ), (∀ τ, (x τ).det ≠ 0) → IsBor β → twF X D pos c Q (fun τ => x τ * β τ) = (∏ τ, ∏ r, β τ r r ^ (if IsOddPos (pos.symm τ).2 then (c τ - (ν τ (Fin.rev r) : ℤ)).toNat else ν τ r)) * twF X D pos c Q x := by
-  first | exact @GlobalTheory.TwV.DelA.twF_mul_bor | exact GlobalTheory.TwV.DelA.twF_mul_bor | (intros; apply GlobalTheory.TwV.DelA.twF_mul_bor <;> assumption)
+  first | exact @GlobalTheory.TwV.DelA.twF_mul_bor
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.OddTwistedFrameDetFunctionMulUpperTriangularStatement =====
@@ -362,7 +362,7 @@ open Formalism.BasicNotions NumberField IsDedekindDomain Formalism.MainNotions.G
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.weightPolynomial_div_detPow_eq_poly_of_blockMatrices : ∀ {p : ℕ} [Fact p.Prime] (X : Sys p) (D : D7) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau) {n : ℕ} (ν : D.what₂.Tau → Fin n → ℕ) (c : D.what₂.Tau → ℤ), (∀ τ r, (ν τ r : ℤ) ≤ c τ) → ∀ Q : MvPolynomial (GL3Theta.FrV D n) ℂ, Q ∈ WtPol ℂ ν → ∃ R : MvPolynomial (GL3Theta.FrV D n) ℂ, ∀ f : D.what₂.Tau → Matrix (Fin n) (Fin n) ℂ, (∀ τ, (f τ).det ≠ 0) → GL3Theta.evFr D R (zT X D pos f) = (∏ τ, if IsOddPos (pos.symm τ).2 then (f τ).det ^ (-(c τ)) else 1) * GL3Theta.evFr D Q f := by
-  first | exact @GlobalTheory.TwV.DelA.twPoly_main | exact GlobalTheory.TwV.DelA.twPoly_main | (intros; apply GlobalTheory.TwV.DelA.twPoly_main <;> assumption)
+  first | exact @GlobalTheory.TwV.DelA.twPoly_main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.WeightPolynomialDivDetPowEqPolyOfBlockMatricesStatement =====
@@ -377,12 +377,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 noncomputable section
 namespace GlobalTheory.TwV.DelA
-
-theorem sgRev_mul_self_eq_one (n : ℕ) : sgRev n * sgRev n = 1 := by
-  unfold sgRev
-  rcases Int.units_eq_one_or (Equiv.Perm.sign (Fin.revPerm : Equiv.Perm (Fin n))) with h | h <;> rw [h] <;> norm_num
-
-theorem sgRev_ne_zero_of_sq (n : ℕ) : sgRev n ≠ 0 := fun h => by simpa [h] using sgRev_mul_self_eq_one n
 
 variable {p : ℕ} [Fact p.Prime] (X : Sys p) (D : D7) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau)
 
@@ -442,7 +436,7 @@ theorem realises_of_wtPol : ∀ {p : ℕ} [Fact p.Prime] (X : Sys p) (D : D7) (p
     · simp only [if_pos ho]
       rw [det_zT_of_odd X D pos f.1 τ ho, mul_zpow, inv_zpow']
       have hs : sgRev n ^ (wT X D pos j τ - cT1 X D pos j τ) * sgRev n ^ (-(wT X D pos j τ - cT1 X D pos j τ)) = 1 := by
-        rw [← zpow_add₀ (sgRev_ne_zero_of_sq n), add_neg_cancel, zpow_zero]
+        rw [← zpow_add₀ (_root_.GlobalTheory.TwV.DelA.sgRev_ne_zero n), add_neg_cancel, zpow_zero]
       have hdd : (f.1 τ).det ^ (-(wT X D pos j τ - cT1 X D pos j τ)) * (f.1 τ).det ^ (-(cT1 X D pos j τ)) =
           (f.1 τ).det ^ (-(wT X D pos j τ)) := by
         rw [← zpow_add₀ (hd τ)]; congr 1; ring
@@ -469,7 +463,7 @@ open Formalism.BasicNotions NumberField IsDedekindDomain Formalism.MainNotions.G
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.frame_polynomials_weight_realised_next_level : ∀ {p : ℕ} [Fact p.Prime] (X : Sys p) (D : D7) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau) (j : ℕ) {n : ℕ} (h : (X.Pj (j + 1)).m + 1 = n) (ν : D.what₂.Tau → Fin n → ℕ), (∀ τ r, (ν τ r : ℤ) ≤ cT1 X D pos j τ) → ∀ Q : MvPolynomial (GL3Theta.FrV D n) ℂ, Q ∈ WtPol ℂ ν → ∃ R, Realises X D pos (j + 1) h (wT X D pos j) Q R := by
-  first | exact @GlobalTheory.TwV.DelA.realises_of_wtPol | exact GlobalTheory.TwV.DelA.realises_of_wtPol | (intros; apply GlobalTheory.TwV.DelA.realises_of_wtPol <;> assumption)
+  first | exact @GlobalTheory.TwV.DelA.realises_of_wtPol
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.FramePolynomialsWeightRealisedNextLevelStatement =====

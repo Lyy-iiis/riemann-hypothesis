@@ -114,8 +114,6 @@ open GlobalTheory.UPel GlobalTheory.UPel.Sm GlobalTheory.Cris GlobalTheory.DeRha
 open scoped TensorProduct
 attribute [local instance] Over.cartesianMonoidalCategory
 
-theorem _root_.GlobalTheory.T.crystal_finite_free_reduces_to_deRham : ∀ (F : Type) [Field F] [NumberField F] (Λ : Type) [CommRing Λ] (k : Type) [Field k] (π : Λ →+* k) (hπ : Function.Surjective π) (hI : RingHom.ker π ^ 2 = 0) (A₀ : Over (Sp k)) [GrpObj A₀] [IsCommMonObj A₀], IsAbelianScheme A₀ → ∀ a : OAct (𝓞 F) A₀, letI := tensorModule (divided₂ hI) (spMap π) a; letI := tensorModule (dp0 k) (𝟙 _) a; Module.Finite Λ (Crys (divided₂ hI) (spMap π) A₀) ∧ Module.Free Λ (Crys (divided₂ hI) (spMap π) A₀) ∧ ∃ f : Crys (divided₂ hI) (spMap π) A₀ →ₛₗ[(Algebra.TensorProduct.map π.toIntAlgHom (AlgHom.id ℤ (𝓞 F))).toRingHom] HdR A₀, Function.Surjective f ∧ ∀ m, f m = 0 → m ∈ (RingHom.ker π) • (⊤ : Submodule Λ (Crys (divided₂ hI) (spMap π) A₀)) := by
-  first | exact @GlobalTheory.CrysFree.crys_free_and_red | exact GlobalTheory.CrysFree.crys_free_and_red | (intros; apply GlobalTheory.CrysFree.crys_free_and_red <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.CrystalFiniteFreeReducesToDeRhamStatement =====
@@ -231,7 +229,7 @@ theorem baseChange_equiv :
     rw [hr, ← TensorProduct.smul_tmul, Algebra.smul_def]
     congr 1
     change _ = f (r ⊗ₜ 1) * _
-    simp only [hf, Algebra.TensorProduct.tmul_mul_tmul, _root_.mul_one, Algebra.smul_def])
+    simp only [hf, Algebra.TensorProduct.tmul_mul_tmul, _root_.mul_one])
   have h1 : ∀ y, Φ (ψ y) = e y := by
     intro y
     induction y using TensorProduct.induction_on with
@@ -427,8 +425,6 @@ open GlobalTheory.UPel GlobalTheory.UPel.Sm GlobalTheory.Cris GlobalTheory.DeRha
 open scoped TensorProduct
 attribute [local instance] Over.cartesianMonoidalCategory
 
-theorem _root_.GlobalTheory.T.de_rham_cohomology_projective_module : ∀ (F : Type) [Field F] [NumberField F] (k : Type) [Field k], (∀ (B₀ : Over (Sp (AlgebraicClosure k))) [GrpObj B₀] [IsCommMonObj B₀], IsAbelianScheme B₀ → ∀ b : OAct (𝓞 F) B₀, letI := tensorModule (dp0 (AlgebraicClosure k)) (𝟙 _) b; Module.Projective (AlgebraicClosure k ⊗[ℤ] 𝓞 F) (HdR B₀)) → ∀ (A₀ : Over (Sp k)) [GrpObj A₀] [IsCommMonObj A₀], IsAbelianScheme A₀ → ∀ a : OAct (𝓞 F) A₀, letI := tensorModule (dp0 k) (𝟙 _) a; Module.Projective (k ⊗[ℤ] 𝓞 F) (HdR A₀) := by
-  first | exact @GlobalTheory.HdRDescent.projective_of_algebraicClosure | exact GlobalTheory.HdRDescent.projective_of_algebraicClosure | (intros; apply GlobalTheory.HdRDescent.projective_of_algebraicClosure <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DeRhamCohomologyProjectiveModuleStatement =====
@@ -639,7 +635,7 @@ open NumberField
 open scoped TensorProduct
 
 theorem _root_.GlobalTheory.T.annihilator_lift_of_mul_eq_p_alt : ∀ (p : ℕ) (O : Type) [CommRing O] (Λ : Type) [CommRing Λ] (k : Type) [Field k] (π : Λ →+* k), (p : k) = 0 → (p : Λ) ^ 2 = 0 → ∀ (M : Type 1) [AddCommGroup M] [Module Λ M] [Module (Λ ⊗[ℤ] O) M] [IsScalarTower Λ (Λ ⊗[ℤ] O) M], (∀ m : M, (p : Λ) • m = 0 → m ∈ Ideal.span {(p : Λ)} • (⊤ : Submodule Λ M)) → ∀ (N : Type 1) [AddCommGroup N] [Module (k ⊗[ℤ] O) N] (f : M →ₛₗ[(Algebra.TensorProduct.map π.toIntAlgHom (AlgHom.id ℤ O)).toRingHom] N), Function.Surjective f → (∀ m, f m = 0 → m ∈ Ideal.span {(p : Λ)} • (⊤ : Submodule Λ M)) → ∀ ϖ z : O, ϖ * z - (p : O) ∈ Ideal.span {(p : O) ^ 2} → ∀ n : N, ((1 : k) ⊗ₜ[ℤ] ϖ) • n = 0 → n ∈ Ideal.span {a : k ⊗[ℤ] O | ((1 : k) ⊗ₜ[ℤ] ϖ) * a = 0} • (⊤ : Submodule (k ⊗[ℤ] O) N) := by
-  first | (exact @GlobalTheory.annihilator_lift_of_mul_eq_p) | (exact GlobalTheory.annihilator_lift_of_mul_eq_p) | (intros; apply GlobalTheory.annihilator_lift_of_mul_eq_p  <;> assumption)
+  first | (exact @GlobalTheory.annihilator_lift_of_mul_eq_p)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AnnihilatorLiftOfMulEqPStatement =====
@@ -1081,7 +1077,7 @@ theorem projective_reduction_of_flat_lift : ∀ (p : ℕ) [Fact p.Prime] (F : Ty
       TensorProduct.zero_tmul]
   have hfinQ : Finite (𝓞 F ⧸ Ideal.span {(p : 𝓞 F), ϖ}) := by
     have hne : Ideal.span {(p : 𝓞 F)} ≠ ⊥ := by
-      simp [Ideal.span_singleton_eq_bot, (Fact.out : p.Prime).ne_zero]
+      simp [(Fact.out : p.Prime).ne_zero]
     haveI : Finite (𝓞 F ⧸ Ideal.span {(p : 𝓞 F)}) := Ideal.finiteQuotientOfFreeOfNeBot _ hne
     exact Finite.of_surjective _ (Ideal.Quotient.factor_surjective
       (Ideal.span_mono (by simp : ({(p : 𝓞 F)} : Set (𝓞 F)) ⊆ {(p : 𝓞 F), ϖ})))
@@ -1112,14 +1108,14 @@ theorem hdR_projective : ∀ (F : Type) [Field F] [NumberField F] (k : Type) [Fi
   intro F _ _ k _ A₀ _ _ hA a
   rcases CharP.char_is_prime_or_zero k (ringChar k) with hp | hp
   · haveI : Fact (ringChar k).Prime := ⟨hp⟩
-    refine GlobalTheory.T.de_rham_cohomology_projective_module F k ?_ A₀ hA a
+    refine _root_.GlobalTheory.HdRDescent.projective_of_algebraicClosure F k ?_ A₀ hA a
     intro B₀ _ _ hB b
     set K := AlgebraicClosure k
     haveI : CharP K (ringChar k) := charP_of_injective_algebraMap (algebraMap k K).injective _
     obtain ⟨Λ, _, π, hπ, hker, hp2, hann⟩ := _root_.GlobalTheory.exists_flat_lift_mod_p_sq (ringChar k) K
     have hI : RingHom.ker π ^ 2 = 0 := by
       rw [hker, Ideal.span_singleton_pow, hp2, Ideal.span_singleton_eq_bot.2 rfl]; rfl
-    obtain ⟨hfin, hfree, f, hf, hk⟩ := GlobalTheory.T.crystal_finite_free_reduces_to_deRham F Λ K π hπ hI B₀ hB b
+    obtain ⟨hfin, hfree, f, hf, hk⟩ := _root_.GlobalTheory.CrysFree.crys_free_and_red F Λ K π hπ hI B₀ hB b
     letI := tensorModule (divided₂ hI) (spMap π) b
     haveI := isScalarTower_tensorModule (divided₂ hI) (spMap π) b
     letI := tensorModule (dp0 K) (𝟙 _) b

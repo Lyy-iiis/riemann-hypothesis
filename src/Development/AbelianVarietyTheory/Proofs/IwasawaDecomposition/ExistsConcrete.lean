@@ -18,6 +18,7 @@ public import Formalism.LocalToGlobal.GroupLattices.FockModels.Cartan
 public import Formalism.LocalToGlobal.GroupLattices.TiedFamilies.SelfDualAtColLevel
 public import Formalism.SharpRestriction.GrowthBounds.DualFockLinear.TestSideCounting
 public import Formalism.PolynomialDimension.WeylDim
+public import Mathlib.RingTheory.MvPolynomial
 public import Development.AbelianVarietyTheory.Proofs.SatakeParameters.ExistsPlTieOfInertCore
 public import Formalism.LocalToGlobal.HermitianColumns.InLocalDiscriminantKernel
 public import Development.AbelianVarietyTheory.Proofs.AdelicLatticeProofs.ExistsUniqueIdeleOfLinearEquivQuotientLocal
@@ -332,7 +333,6 @@ theorem pack_eq (D : D7) (u : D.what₂.Word)
     (ψ : Formalism.L2.Herm.awayFrom₂ Lc (D.what₂.places.resChar w) →* (ORec D w (nFr D (D.what₂.places.resChar w)))ˣ) :
     pack D u Lc w h5 h2 he I ψ = locPackC D u Lc w h5 h2 he I ψ := by
   first
-    | with_reducible rfl
     | (delta pack locPackC frobOrder nFr; with_reducible rfl)
 
 end Bridge
@@ -412,7 +412,7 @@ theorem natAct_mul (A B : ∀ v, GL (Fin (P.m + 1)) (P.Qq v)) (F : P.Xsp) :
   simp only [AlgHom.comp_apply] at h
   simp only [Places.natAct, LinearMap.smul_apply, AlgHom.toLinearMap_apply, map_smul, smul_smul, h,
     mul_inv_rev, Units.val_mul, gPos_mul, Matrix.det_mul, mul_zpow, Finset.prod_mul_distrib]
-  first | rfl | (congr 1; exact mul_comm _ _)
+  first | (congr 1; exact mul_comm _ _)
 
 theorem natAct_one (F : P.Xsp) : P.natAct (fun _ => 1) F = F := by
   simp only [Places.natAct, inv_one, Units.val_one, gPos_one, Matrix.det_one, one_zpow, Finset.prod_const_one,
@@ -561,7 +561,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.EvalRepsSurjective =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.CharZeroOfSetting =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.CharZeroOfSetting", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.FrobOrderSpec\npublic import Formalism.LocalToGlobal.GroupLattices.DownNaturalLevelZero\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.EvalRepsSurjective\nimport Formalism.GradedWeylDivisibility.FinalD\npublic import Formalism.GradedWeylDivisibility.FockSpaceTableaux.LClosedeqLemmas\npublic import Formalism.LocalRingCardinality.SpanPowerMembership.NZLevB\npublic import Formalism.LocalToGlobal.GlobalTheory.CoordinateLengths.DuCount\nimport Formalism.LocalToGlobal.GlobalTheory.GL6.WeylLengthDiagonalUnitUniformiser\npublic import Formalism.LocalToGlobal.GroupLattices.ComparisonMaps.ClsRec\npublic import Formalism.LocalToGlobal.GroupLattices.ComparisonMaps.DeterminantTwistRowActionMem\npublic import Formalism.LocalToGlobal.GroupLattices.FockModels.Cartan\nimport Formalism.LocalToGlobal.GroupLattices.FockModels.SwRowGenMonomial\nimport Formalism.LocalToGlobal.GroupLattices.LevelGatherings.GramDetIsUnit\npublic import Formalism.LocalToGlobal.GroupLattices.TiedFamilies.SelfDualAtColLevel\nimport Formalism.LocalToGlobal.GroupLattices.TrivialTransfer.GramTotallyDefinite\npublic import Formalism.SharpRestriction.GrowthBounds.DualFockLinear.TestSideCounting\nimport Formalism.SharpRestriction.GrowthBounds.ScaleEdges.WeylDimShift\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\npublic import Formalism.PolynomialDimension.WeylDim\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.CharZeroOfSetting", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.FrobOrderSpec\npublic import Formalism.LocalToGlobal.GroupLattices.DownNaturalLevelZero\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.EvalRepsSurjective\nimport Formalism.GradedWeylDivisibility.FinalD\npublic import Formalism.GradedWeylDivisibility.FockSpaceTableaux.LClosedeqLemmas\npublic import Formalism.LocalRingCardinality.SpanPowerMembership.NZLevB\npublic import Formalism.LocalToGlobal.GlobalTheory.CoordinateLengths.DuCount\nimport Formalism.LocalToGlobal.GlobalTheory.GL6.WeylLengthDiagonalUnitUniformiser\npublic import Formalism.LocalToGlobal.GroupLattices.ComparisonMaps.ClsRec\npublic import Formalism.LocalToGlobal.GroupLattices.ComparisonMaps.DeterminantTwistRowActionMem\npublic import Formalism.LocalToGlobal.GroupLattices.FockModels.Cartan\nimport Formalism.LocalToGlobal.GroupLattices.FockModels.SwRowGenMonomial\nimport Formalism.LocalToGlobal.GroupLattices.LevelGatherings.GramDetIsUnit\npublic import Formalism.LocalToGlobal.GroupLattices.TiedFamilies.SelfDualAtColLevel\nimport Formalism.LocalToGlobal.GroupLattices.TrivialTransfer.GramTotallyDefinite\npublic import Formalism.SharpRestriction.GrowthBounds.DualFockLinear.TestSideCounting\nimport Formalism.SharpRestriction.GrowthBounds.ScaleEdges.WeylDimShift\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\npublic import Formalism.PolynomialDimension.WeylDim\npublic import Mathlib.RingTheory.MvPolynomial\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -722,7 +722,7 @@ theorem exists_basis_HtupW (G : GAtP p) [IsFractionRing G.O G.Kf] [CharZero G.Kf
   · unfold Places.HtupW Places.tenV
     rw [Submodule.span_le]
     rintro _ ⟨F, hF, rfl⟩
-    refine Formalism.BasicNotions.Examples₂.NZ.prod_mem_of_span (R := G.O) (fun v => (G.P.vEmb v).toLinearMap.restrictScalars G.O) _ _
+    refine _root_.Bl.general_b_fact_right_bis_form.goal1 (R := G.O) (fun v => (G.P.vEmb v).toLinearMap.restrictScalars G.O) _ _
       (fun f hf => ?_) F (fun v => (hloc v).ge (hF v))
     choose I hI using hf
     refine Submodule.subset_span ⟨fun x => I x.1 x.2, ?_⟩
@@ -1138,17 +1138,13 @@ theorem sigmaOf_inj : Function.Injective H.sigmaOf := (H.gal).symm.injective
 
 theorem sigmaOf_surj : Function.Surjective H.sigmaOf := (H.gal).symm.surjective
 
-theorem cc_mul_cc (e : Formalism.HC.Frame) : e.cc * e.cc = 1 := e.cc_mul_cc
-
 theorem cc_pow (e : Formalism.HC.Frame) (m : ℕ) : e.cc ^ m = 1 ∨ e.cc ^ m = e.cc := by
   induction m with
   | zero => simp
-  | succ m ih => rcases ih with h | h <;> simp [pow_succ, h, cc_mul_cc]
-
-theorem cc_notMem (e : Formalism.HC.Frame) : e.cc ∉ e.Psi := e.cc_notMem_Psi
+  | succ m ih => rcases ih with h | h <;> simp [pow_succ, h, _root_.Formalism.HC.Frame.cc_mul_cc]
 
 theorem frob_eq_mul (h : R.MA) : ((c0, h) : R.GG) = (zPsi R.toFrame h : R.GG) * R.cc := by
-  rw [zPsi_eq, mul_assoc, cc_mul_cc, mul_one]
+  rw [zPsi_eq, mul_assoc, _root_.Formalism.HC.Frame.cc_mul_cc, mul_one]
 
 
 variable (H) in
@@ -1181,7 +1177,7 @@ theorem mem_plc_tw_cc (i : H.E →+* Qn p n) (g : R.GG) (x : 𝓞 H.E) :
 theorem conj_conj (x : 𝓞 H.E) : H.conj • H.conj • x = x := by
   have : H.conj * H.conj = 1 := by
     unfold Formalism.HC.HostRaw.conj
-    rw [← map_mul, cc_mul_cc, map_one]
+    rw [← map_mul, _root_.Formalism.HC.Frame.cc_mul_cc, map_one]
   rw [smul_smul, this, one_smul]
 
 theorem exists_real (x : 𝓞 H.E) (hx : H.conj • x = x) : ∃ z : 𝓞 H.F, algebraMap (𝓞 H.F) (𝓞 H.E) z = x := by
@@ -1294,7 +1290,7 @@ theorem place_injective : Function.Injective fun v : Fin (nOrb (zPsi R.toFrame h
       exact ⟨s, s + 1, by rw [hs, frob_eq_mul, mul_pow, pow_succ (R.cc)]; ac_rfl⟩
   intro v v' e
   obtain ⟨s, m, hs⟩ := key _ _ e.symm
-  have h1 : R.cc ^ m = 1 := (cc_pow R.toFrame m).resolve_right fun e' => cc_notMem R.toFrame (by
+  have h1 : R.cc ^ m = 1 := (cc_pow R.toFrame m).resolve_right fun e' => _root_.Formalism.HC.Frame.cc_notMem_Psi R.toFrame (by
     rw [e'] at hs
     rw [← inv_mul_eq_of_eq_mul hs]
     exact mul_mem (inv_mem (mul_mem (orbRep _ v).2 (pow_mem (zPsi R.toFrame h).2 s))) (orbRep _ v').2)
@@ -1326,8 +1322,8 @@ theorem place_surjective (w : HeightOneSpectrum (𝓞 H.F)) (hw : (p : 𝓞 H.F)
   obtain ⟨g₀, t, rfl⟩ : ∃ (g₀ : R.Psi) (t : ℕ), g = g₀ * R.cc ^ t := by
     by_cases hg : g ∈ R.Psi
     · exact ⟨⟨g, hg⟩, 0, by simp⟩
-    · exact ⟨⟨g * R.cc, (Subgroup.mul_mem_iff_of_index_two R.toFrame.index_Psi).2 (iff_of_false hg (cc_notMem _))⟩, 1,
-        by rw [pow_one, mul_assoc, cc_mul_cc, mul_one]⟩
+    · exact ⟨⟨g * R.cc, (Subgroup.mul_mem_iff_of_index_two R.toFrame.index_Psi).2 (iff_of_false hg (_root_.Formalism.HC.Frame.cc_notMem_Psi _))⟩, 1,
+        by rw [pow_one, mul_assoc, _root_.Formalism.HC.Frame.cc_mul_cc, mul_one]⟩
   obtain ⟨⟨v, s⟩, rfl⟩ := (posG (zPsi R.toFrame h)).surjective g₀
   refine ⟨v, ?_⟩
   rw [← hwg, twF_cc_pow, ← twF_cc_pow i ((posG (zPsi R.toFrame h) ⟨v, s⟩ : R.Psi) : R.GG) s.val, posG_apply, Subgroup.coe_mul, Subgroup.coe_pow, mul_assoc, ← mul_pow,

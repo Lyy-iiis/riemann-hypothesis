@@ -79,7 +79,7 @@ theorem update_add_single (i : Fin r) (m : Fin r → ℕ) (n k : ℕ) :
   by_cases hj : j = i
   · subst hj
     simp
-  · simp [Function.update_apply, hj, Pi.single_apply]
+  · simp [hj]
 
 theorem update_self_add (i : Fin r) (m : Fin r → ℕ) (e : ℕ) :
     Function.update m i (m i + e) = m + (Pi.single i e : Fin r → ℕ) := by
@@ -87,7 +87,7 @@ theorem update_self_add (i : Fin r) (m : Fin r → ℕ) (e : ℕ) :
   by_cases hj : j = i
   · subst hj
     simp
-  · simp [Function.update_apply, hj, Pi.single_apply]
+  · simp [hj]
 
 theorem partialSum_succ (i : Fin r) (v : (Fin r → ℕ) → ℚ) (m : Fin r → ℕ) :
     partialSum i v (m + Pi.single i 1) = partialSum i v m + v m := by
@@ -134,7 +134,7 @@ theorem partialSum_bound {l : ℕ} {i : Fin r} {v : (Fin r → ℕ) → ℚ} (hl
           · subst hj
             simp only [Pi.add_apply, Function.update_self, Pi.single_eq_same]
             omega
-          · simp [Function.update_apply, hj, Pi.single_apply]
+          · simp [hj]
         rw [hmm, partialSum_period h]
         exact ih (n - l) (by omega) _ (by simp)
   exact fun m => key (m i) m rfl
@@ -156,7 +156,6 @@ theorem summable_cast_mul {α : Type*} (w : α → ℚ) (K : ℝ) (hw : ∀ m, |
   have hn : Summable (fun m => ‖g m‖) := by
     first
       | exact hg.norm
-      | exact summable_norm_iff.mpr hg
   refine Summable.of_norm_bounded (hn.mul_left K) (fun m => ?_)
   rw [norm_mul, ← Complex.ofReal_ratCast, Complex.norm_real, Real.norm_eq_abs]
   exact mul_le_mul_of_nonneg_right (hw m) (norm_nonneg _)
@@ -230,7 +229,7 @@ theorem stepIdentity (r l : ℕ) (i : Fin r) (v : (Fin r → ℕ) → ℚ) (g : 
     · subst hj
       simp only [Pi.add_apply, Pi.sub_apply, δ, Pi.single_eq_same]
       omega
-    · simp [δ, Pi.single_apply, hj]
+    · simp [δ, hj]
   calc ∑' m, (v m : ℂ) * g m
       = ∑' m, (((Bop l i v m : ℂ) * g m - (Aop l i v m : ℂ) * fd i g m) + (T (m + δ) - T m)) :=
         tsum_congr hpt
@@ -289,7 +288,7 @@ theorem iterate_good_other {r l : ℕ} {i k : Fin r} {v : (Fin r → ℕ) → �
   | zero => exact hg
   | succ c ih =>
     rw [Function.iterate_succ_apply']
-    exact (((@GlobalTheory.CompanionTheory.Hypotheses₂.Shintani.Abel.OtherVar.otherVar_main r l i k _ hk).1 ih).1)
+    exact (((@_root_.GlobalTheory.CompanionTheory.Hypotheses₂.Shintani.Abel.OtherVar.good_support_other r l i k _ hk).1 ih).1)
 
 theorem iterate_supp_other {r l : ℕ} {i k : Fin r} {v : (Fin r → ℕ) → ℚ} (hk : k ≠ i)
     (hs : ∀ m, m k ≠ 0 → v m = 0) (c : ℕ) : ∀ m, m k ≠ 0 → (Aop l i)^[c] v m = 0 := by
@@ -297,7 +296,7 @@ theorem iterate_supp_other {r l : ℕ} {i k : Fin r} {v : (Fin r → ℕ) → �
   | zero => exact hs
   | succ c ih =>
     rw [Function.iterate_succ_apply']
-    exact (((@GlobalTheory.CompanionTheory.Hypotheses₂.Shintani.Abel.OtherVar.otherVar_main r l i k _ hk).2 ih).1)
+    exact (((@_root_.GlobalTheory.CompanionTheory.Hypotheses₂.Shintani.Abel.OtherVar.good_support_other r l i k _ hk).2 ih).1)
 
 theorem DL_replicate_succ {r : ℕ} (i : Fin r) (c : ℕ) (g : (Fin r → ℕ) → ℂ) :
     DL (List.replicate (c + 1) i) g = fd i (DL (List.replicate c i) g) := by
@@ -345,13 +344,13 @@ theorem abel_oneVar : ∀ (r l N : ℕ) (i : Fin r) (v : (Fin r → ℕ) → ℚ
   · unfold uW
     beta_reduce
     split_ifs with h
-    · exact goodAt_smul _ ((@GlobalTheory.CompanionTheory.Hypotheses₂.Shintani.Abel.OtherVar.otherVar_main r l i k _ hk).1 (iterate_good_other hk hgk c)).2
+    · exact goodAt_smul _ ((@_root_.GlobalTheory.CompanionTheory.Hypotheses₂.Shintani.Abel.OtherVar.good_support_other r l i k _ hk).1 (iterate_good_other hk hgk c)).2
     · exact goodAt_smul _ (iterate_good_other hk hgk N)
   · intro m hm
     unfold uW
     beta_reduce
     split_ifs with h
-    · simp [((@GlobalTheory.CompanionTheory.Hypotheses₂.Shintani.Abel.OtherVar.otherVar_main r l i k _ hk).2 (iterate_supp_other hk hsk c)).2 m hm]
+    · simp [((@_root_.GlobalTheory.CompanionTheory.Hypotheses₂.Shintani.Abel.OtherVar.good_support_other r l i k _ hk).2 (iterate_supp_other hk hsk c)).2 m hm]
     · simp [iterate_supp_other hk hsk N m hm]
   · rw [tsum_iterate hl hg hb hs N, Fin.sum_univ_castSucc, Finset.sum_range]
     congr 1

@@ -387,18 +387,6 @@ noncomputable section
 
 namespace GlobalTheory
 
-theorem subIner_component_mem {L Y I α : Type} [Field L] [AddCommGroup Y] [Module L Y]
-    (T : I → Y →ₗ[L] Y) (χ : α → I → L) (hχ : Function.Injective χ) (U : Submodule L Y)
-    (hU : ∀ g, ∀ y ∈ U, T g y ∈ U) (S : Finset α) :
-    ∀ y : α → Y, (∀ a ∈ S, ∀ g, T g (y a) = χ a g • y a) → ∑ a ∈ S, y a ∈ U → ∀ a ∈ S, y a ∈ U := by
-  first
-  | exact @_root_.GlobalTheory.EigenvectorOfSum.eigenvector_mem_of_sum_mem
-  | exact _root_.GlobalTheory.EigenvectorOfSum.eigenvector_mem_of_sum_mem
-  | (apply _root_.GlobalTheory.EigenvectorOfSum.eigenvector_mem_of_sum_mem <;> assumption)
-  | (intros; apply _root_.GlobalTheory.EigenvectorOfSum.eigenvector_mem_of_sum_mem <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.EigenvectorOfSum.eigenvector_mem_of_sum_mem <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.EigenvectorOfSum.eigenvector_mem_of_sum_mem ..)
-
 theorem subIner_pullback {L X Y I α J : Type} [Field L] [AddCommGroup X] [Module L X]
     [AddCommGroup Y] [Module L Y] (T : I → X →ₗ[L] X) (T' : J → I → Y →ₗ[L] Y)
     (m : J → X →ₗ[L] Y) (hm : ∀ j g x, m j (T g x) = T' j g (m j x))
@@ -409,7 +397,7 @@ theorem subIner_pullback {L X Y I α J : Type} [Field L] [AddCommGroup X] [Modul
     (hs : ∀ j, ∑ a ∈ S, y j a = m j d) :
     ∃ x : α → X, (∀ a ∈ S, x a ∈ D ∧ ∀ g, T g (x a) = χ a g • x a) ∧ ∑ a ∈ S, x a = d := by
   classical
-  have key := subIner_component_mem (Y := J → Y)
+  have key := _root_.GlobalTheory.EigenvectorOfSum.eigenvector_mem_of_sum_mem (Y := J → Y)
     (fun g => LinearMap.pi fun j => (T' j g).comp (LinearMap.proj j)) χ hχ (D.map (LinearMap.pi m))
     (by
       rintro g _ ⟨x, hx, rfl⟩
@@ -1025,7 +1013,7 @@ section
 open Formalism Formalism.MainNotions Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.MainNotions.N Formalism.WeaklyAdmissibleFiltrations NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.Gal Module GlobalTheory.Pass
 
 theorem _root_.GlobalTheory.T.globalPass_of_globalArtinReciprocity : GlobalTheory.Published.GlobalArtinReciprocity → _root_.GlobalTheory.Pass.GlobalStatement := by
-  first | exact @_root_.GlobalTheory.StepGlobalPf.main_alt_alt | exact _root_.GlobalTheory.StepGlobalPf.main_alt_alt | (intros; apply _root_.GlobalTheory.StepGlobalPf.main_alt_alt <;> assumption)
+  first | exact @_root_.GlobalTheory.StepGlobalPf.main_alt_alt
 end
 end -- clump:auto
 end -- clump:auto
@@ -1064,7 +1052,6 @@ theorem main_alt_alt : _root_.GlobalTheory.Pass.ResidueStatement := by
   funext g
   first
     | rfl
-    | (ext a b; simp [mapM, rhoO, redRep, mapRep])
 end GlobalTheory.Pass.ResidualSpan
 end
 end -- clump:auto

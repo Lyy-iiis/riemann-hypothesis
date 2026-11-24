@@ -189,7 +189,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Formalism.MainNotions.S.Loc Formalism.MainNotions.S.LocNG
 
 theorem _root_.GlobalTheory.T.frameStandardLattice_hermitian_integral : ∀ {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F] {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E] {M : Model F E} {V : Type} [AddCommGroup V] [Module E V] (H : HermSp M V) {r : ℕ} (Fr : FrameD H r) (L : Submodule M.L.O (H.Wb Fr.f)) (hL : Fr.IsInner L), ∀ x ∈ Fr.LamStd L, ∀ y ∈ Fr.LamStd L, H.h x y ∈ M.L.O := by
-  first | exact @GlobalTheory.LocStdInt.lamStd_integral | exact GlobalTheory.LocStdInt.lamStd_integral | (intros; apply GlobalTheory.LocStdInt.lamStd_integral <;> assumption)
+  first | exact @GlobalTheory.LocStdInt.lamStd_integral
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.FrameStandardLatticeHermitianIntegralStatement =====
@@ -293,7 +293,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Formalism.MainNotions.S.Loc Formalism.MainNotions.S.LocNG
 
 theorem _root_.GlobalTheory.T.gramDet_joinedFamily_eq_pm_norm_difference : ∀ {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F] {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E] {M : Model F E} {V : Type} [AddCommGroup V] [Module E V] (H : HermSp M V) {r : ℕ} (f f' : Fin (r + 1) → V) (T T' : F) (hf : ∀ a b, H.h (f a) (f b) = if a = Fin.last r ∧ b = Fin.last r then -(algebraMap F E T) else 0) (hf' : ∀ a b, H.h (f' a) (f' b) = if a = Fin.last r ∧ b = Fin.last r then -(algebraMap F E T') else 0) (hD : IsUnit (H.Dl f f' (r + 1))), (H.gram (Sum.elim f f')).det = H.Gdet f f' T T' ∨ (H.gram (Sum.elim f f')).det = -H.Gdet f f' T T' := by
-  first | exact @GlobalTheory.GramDet.det_gram_sum_elim | exact GlobalTheory.GramDet.det_gram_sum_elim | (intros; apply GlobalTheory.GramDet.det_gram_sum_elim <;> assumption)
+  first | exact @GlobalTheory.GramDet.det_gram_sum_elim
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.GramDetJoinedFamilyEqPmNormDifferenceStatement =====
@@ -463,8 +463,6 @@ open scoped Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Formalism.MainNotions.S.Loc Formalism.MainNotions.S.LocNG
 
-theorem _root_.GlobalTheory.T.isFamilyUnitriangularChange_of_mem_frameUnipotent : ∀ {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F] {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E] {M : Model F E} {V : Type} [AddCommGroup V] [Module E V] (H : HermSp M V) {r : ℕ} (Fr : FrameD H r), ∀ n ∈ Fr.N, Tri E Fr.f (fun b => n (Fr.f b)) := by
-  first | exact @GlobalTheory.NFrameTri.tri_of_mem_N | exact GlobalTheory.NFrameTri.tri_of_mem_N | (intros; apply GlobalTheory.NFrameTri.tri_of_mem_N <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.IsFamilyUnitriangularChangeOfMemFrameUnipotentStatement =====
@@ -579,8 +577,6 @@ open scoped Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Formalism.MainNotions.S.Loc Formalism.MainNotions.S.LocNG
 
-theorem _root_.GlobalTheory.T.pairingLeadingMinor_eq_of_unitriangular_changes : ∀ {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F] {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E] {M : Model F E} {V : Type} [AddCommGroup V] [Module E V] (H : HermSp M V) {r : ℕ} (f f' g g' : Fin (r + 1) → V) (hg : Tri E f g) (hg' : Tri E f' g') (l : ℕ), H.Dl g g' l = H.Dl f f' l := by
-  first | exact @GlobalTheory.MinorTri.Dl_eq_of_tri | exact GlobalTheory.MinorTri.Dl_eq_of_tri | (intros; apply GlobalTheory.MinorTri.Dl_eq_of_tri <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.PairingLeadingMinorEqOfUnitriangularChangesStatement =====
@@ -666,7 +662,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Formalism.MainNotions.S.Loc Formalism.MainNotions.S.LocNG
 
 theorem _root_.GlobalTheory.T.saturated_span_of_gramDet_isUnit_integralLattice : ∀ {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F] {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E] {M : Model F E} {V : Type} [AddCommGroup V] [Module E V] (H : HermSp M V) {ι : Type} [Fintype ι] [DecidableEq ι] (Λ : Submodule M.L.O V) (hΛ : ∀ x ∈ Λ, ∀ y ∈ Λ, H.h x y ∈ M.L.O) (m : ι → V) (hm : ∀ i, m i ∈ Λ) (hdet : IsUnitO M (H.gram m).det), ∀ v ∈ Λ, v ∈ Submodule.span E (Set.range m) → v ∈ Submodule.span M.L.O (Set.range m) := by
-  first | exact @GlobalTheory.satur_of_gram_det_unit | exact GlobalTheory.satur_of_gram_det_unit | (intros; apply GlobalTheory.satur_of_gram_det_unit <;> assumption)
+  first | exact @GlobalTheory.satur_of_gram_det_unit
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.SaturatedSpanOfGramDetIsUnitIntegralLatticeStatement =====
@@ -757,7 +753,7 @@ theorem noDefect_gen (H : HermSp M V) {r : ℕ} (P : FPair H r) (hR : P.RelG (th
   have hDl : ∀ l, H.Dl t.f t.f' l = H.Dl P.A.f P.B.f l := by
     intro l
     rw [hf, hf']
-    exact GlobalTheory.T.pairingLeadingMinor_eq_of_unitriangular_changes H _ _ _ _ (GlobalTheory.T.isFamilyUnitriangularChange_of_mem_frameUnipotent H P.A n hn) (GlobalTheory.T.isFamilyUnitriangularChange_of_mem_frameUnipotent H P.B n' hn') l
+    exact _root_.GlobalTheory.MinorTri.Dl_eq_of_tri H _ _ _ _ (_root_.GlobalTheory.NFrameTri.tri_of_mem_N H P.A n hn) (_root_.GlobalTheory.NFrameTri.tri_of_mem_N H P.B n' hn') l
   have hG : H.Gdet t.f t.f' t.T t.T' = P.Gv := by
     simp only [HermSp.Gdet, hDl, hT, hT', FPair.Gv]
   have hfr : ∀ (Fr : FrameD H r) (g : V ≃ₗ[E] V), IsUnitary H g → ∀ a b,
@@ -804,8 +800,6 @@ open NumberField Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNo
 open scoped Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.localTerm_noDefect_primeTo_invariants : ∀ (D : D7) (Z : LocDat D) (FP : ∀ p : PlF D, LocNG.FPair (locH Z p) D.R.rS) (p : PlF D), (FP p).RelG (LocNG.theta (Z.M p)) → (FP p).PrimeTo → ∀ (d : LocNG.Datum (FP p)) (t : Loc.Term (Vp D p) (Z.M p) D.R.rS), LocNG.IsTermOver (FP p) d t → ¬ LocNG.BBne (H := locH Z p) t := by
-  first | exact @GlobalTheory.LocNoDef.noDefect | exact GlobalTheory.LocNoDef.noDefect | (intros; apply GlobalTheory.LocNoDef.noDefect <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.LocalTermNoDefectPrimeToInvariantsStatement =====
@@ -839,8 +833,6 @@ theorem theta_eq_one {D : D7} {Z : LocDat D} {FP : ∀ p : PlF D, LocNG.FPair (l
   rw [h.1]
 
 theorem isLat : ∀ (D : D7) (Z : LocDat D) (FP : ∀ p : PlF D, LocNG.FPair (locH Z p) D.R.rS) (p : PlF D) (d : LocNG.Datum (FP p)) (t : Loc.Term (Vp D p) (Z.M p) D.R.rS), LocNG.IsTermOver (FP p) d t → t.abelian₂.FG ∧ Submodule.span (D.s.atP p).Ep (t.abelian₂ : Set (Vp D p)) = ⊤ := GlobalTheory.T.localTermLattice_over_innerDatum_fg_span
-
-theorem noDefect : ∀ (D : D7) (Z : LocDat D) (FP : ∀ p : PlF D, LocNG.FPair (locH Z p) D.R.rS) (p : PlF D), (FP p).RelG (LocNG.theta (Z.M p)) → (FP p).PrimeTo → ∀ (d : LocNG.Datum (FP p)) (t : Loc.Term (Vp D p) (Z.M p) D.R.rS), LocNG.IsTermOver (FP p) d t → ¬ LocNG.BBne (H := locH Z p) t := GlobalTheory.T.localTerm_noDefect_primeTo_invariants
 
 theorem full_of_local_span {D : D7} (Z : LocDat D) (Λ : LV D)
     (hΛ : Submodule.IsLattice D.host.E Λ) (p : PlF D)
@@ -928,11 +920,8 @@ theorem fibre : ∀ (D : D7) (Z : LocDat D) (FP : ∀ p : PlF D, LocNG.FPair (lo
           refine Submodule.mem_span_singleton.2 ⟨⟨A a b - A' a b, (Z.M p).L.O.sub_mem (hint a b).1 (hint a b).2⟩, ?_⟩
           first
             | (rw [Algebra.smul_def, mul_one]; rfl)
-            | (rw [Submodule.smul_def]; simp)
-            | (simp [Algebra.smul_def])
-            | (erw [smul_eq_mul, mul_one])
             | (change (A a b - A' a b) * 1 = _; rw [mul_one])⟩) hc hc'
-    exact ⟨hT, noDefect D Z FP p (hRelG p) (hPrime p hp) (d0 p) _ hT⟩
+    exact ⟨hT, _root_.GlobalTheory.LocNoDef.noDefect D Z FP p (hRelG p) (hPrime p hp) (d0 p) _ hT⟩
 
   let Φ : LV D → ∀ q : P, Submodule (Z.M q).L.O (Vp D q) := fun Λ q => lattice₂ D Z.M q Λ
   have hinj : Set.InjOn Φ (globSet G G' y) := by
@@ -955,7 +944,7 @@ theorem fibre : ∀ (D : D7) (Z : LocDat D) (FP : ∀ p : PlF D, LocNG.FPair (lo
         · simp only [Lp, dif_pos h]; exact hg ⟨p, h⟩ (Set.mem_univ _)
         · simp only [Lp, dif_neg h]; exact (single p h).exists.choose_spec
       have hlat : ∀ p, (Lp p).FG ∧ Submodule.span (D.s.atP p).Ep (Lp p : Set (Vp D p)) = ⊤ :=
-        fun p => isLat D Z FP p (y p) (tm FP G G' p (Lp p)) (hLp p).1
+        fun p => _root_.GlobalTheory.GenMass.Fibre.termLat D Z FP p (y p) (tm FP G G' p (Lp p)) (hLp p).1
       have hfin' : {p | Lp p ≠ lattice₂ D Z.M p Λ₀}.Finite := by
         refine ((P.finite_toSet).union hfin).subset fun p hp => ?_
         by_contra hn
@@ -990,7 +979,7 @@ open scoped Classical ENNReal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.globalLattices_count_eq_prod_localCounts_badPlaces : ∀ (D : D7) (Z : LocDat D) (FP : ∀ p : PlF D, LocNG.FPair (locH Z p) D.R.rS) (u u' : D.what₂.Word) (F G : LFlag (D.sp.Y 0) D.R.rS (((D.mem u).A.T : ℕ) : D.host.E)) (F' G' : LFlag (D.sp.Y 0) D.R.rS (((D.mem u').A.T : ℕ) : D.host.E)) (P : Finset (PlF D)) (d0 : Dat Z FP), 4 * D.R.rS + 7 ≤ D.R.k → BaseOK (Tu D u) (Tu D u') F F' P d0 → StdOff Z P F G F' G' → ∀ y : Dat Z FP, (∀ p, p ∉ P → LocNG.Datum.Rel (d0 p) (y p)) → {p | y p ≠ d0 p}.Finite → ((globSet G G' y).encard : ℝ≥0∞) = ∏ p ∈ P, ((locSet G G' p (y p)).encard : ℝ≥0∞) := by
-  first | exact @GlobalTheory.GenMass.Fibre.fibre | exact GlobalTheory.GenMass.Fibre.fibre | (intros; apply GlobalTheory.GenMass.Fibre.fibre <;> assumption)
+  first | exact @GlobalTheory.GenMass.Fibre.fibre
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.GlobalLatticesCountEqProdLocalCountsBadPlacesStatement =====

@@ -730,7 +730,7 @@ theorem arMono_add_single (Ψ : Type) [Fintype Ψ] [DecidableEq Ψ] (N : ℕ) (M
     refine Fin.lastCases ?_ (fun k => ?_) j
     · intro hj
       have : ((Finsupp.toMultiset (m.mapDomain some)).toList ++ [some r])[((Fin.last (dimFl Ψ N) : Fin _) : ℕ)] = some r := by
-        simp [List.getElem_append, hlen₀]
+        simp [hlen₀]
       rw [this, hL, Fin.snoc_last]
       rfl
     · intro hj
@@ -820,7 +820,6 @@ theorem exists_eq_mul_mult_of_units (F : Type) [Field F] [NumberField F]
           have hm : (mult v.1 : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr mult_ne_zero
           simp only [a]
           field_simp
-          try ring
       _ = 0 := by
           rw [Finset.sum_sub_distrib, ← Finset.mul_sum, e1, e2]
           field_simp
@@ -1361,19 +1360,6 @@ open MvPolynomial NumberField Filter Topology ReciprocityTheory.ChartRestriction
 
 namespace GlobalTheory.CompanionTheory.Ar.Flat.RootSum
 
-theorem mono_smooth {Ψ : Type} [Fintype Ψ] {N : ℕ} (M : RootModel Ψ N) (t : ℝ)
-    (m : Option (Ψ × Fin N) →₀ ℕ) (d : ℕ) (j : Fin d) : IsSmoothHerm (monoLines (M.line t) m d j) := by
-  unfold monoLines
-  split_ifs
-  · rename_i h
-    generalize (Finsupp.toMultiset m).toList.get ⟨j, h⟩ = o
-    cases o with
-    | none => exact M.A_smooth
-    | some r => exact M.x_smooth t r
-  · unfold IsSmoothHerm
-    simp only [trivLine]
-    exact contDiffOn_const
-
 theorem PP_monomial {Ψ : Type} [Fintype Ψ] {N : ℕ} (M : RootModel Ψ N) (II : IntersectionSystem)
     (m : Option (Ψ × Fin N) →₀ ℕ) :
     M.PP II (monomial m 1) = limUnder (𝓝[>] 0) fun t => M.arMono II t m := by
@@ -1401,7 +1387,7 @@ theorem sum_arMono (hP : PtsIntegrableStatement) (hM : MetricLocalStatement) (hD
   have h1 := _root_.GlobalTheory.CompanionTheory.Ar.Flat.sum_roots_eq hP hM M.K M.ι M.Ω R.F M.y R.φ (II M.K M.ι) M.P (dimFl Ψ N)
     (monoLines (M.line t) (m.mapDomain some) (dimFl Ψ N)) R.A R.S (dimFl Ψ N + 1) N
     (fun i => M.x t (τ, i)) (R.v t) (hII M.K M.ι) M.arith R.overInt le_rfl M.arith
-    (mono_smooth M t _ _) R.A_smooth (fun i => M.x_smooth t _) (R.v_inv t) (R.v_smooth t)
+    (_root_.GlobalTheory.CompanionTheory.Ar.Flat.monoLines_line_smooth M t _ _) R.A_smooth (fun i => M.x_smooth t _) (R.v_inv t) (R.v_smooth t)
     (by simp only [M.x_deg]; exact R.deg) (R.prod t ht)
   rw [Finset.sum_congr rfl fun i _ => arMono_add_single Ψ N M II t m (τ, i) hII hm, ← Finset.sum_div, h1,
     ← geoMono_eq hD Ψ N M t m hm, RootFlat.ht]

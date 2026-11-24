@@ -120,6 +120,7 @@ import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsGaloisEl
 import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsHodgeBasisDeRhamLatticeStatement
 import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsDeRhamOfIsSemistable
 import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PeriodRingCoreCrystallineDeRhamInvariants
+import Mathlib.Algebra.Azumaya.Basic
 import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.FiniteDimensionalFilDR
 import Mathlib.FieldTheory.Galois.Profinite
 import Mathlib.Topology.Connected.Separation
@@ -155,7 +156,7 @@ theorem exists_read_map {Γ : Type} [Group Γ] {a d : ℕ} (ρ : Γ →* GL (Fin
   let w : Fin a → Om l := fun k => (v k : Om l)
   have hΦs : ∀ (c : ℚ_[l]) x, Φ (c • x) = c • Φ x := by
     intro c x
-    simp only [Φ, Finset.smul_sum, Pi.smul_apply, smul_eq_mul, map_mul, mul_smul, algebraMap_smul]
+    simp only [Φ, Finset.smul_sum, Pi.smul_apply, smul_eq_mul, mul_smul, algebraMap_smul]
   have hΦa : ∀ x y, Φ (x + y) = Φ x + Φ y := by
     intro x y
     simp only [Φ, Pi.add_apply, map_add (f := _), add_smul, Finset.sum_add_distrib]
@@ -388,7 +389,7 @@ theorem card_eq_of_indep_spans_dR : ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l
       ext k
       by_cases h : k = j
       · subst h; simp
-      · simp [Pi.single_apply, h]
+      · simp [h]
     rw [← Finset.univ_sum_single x]
     exact Submodule.sum_mem _ fun j _ => hj j
   have h2 : a ≤ m := by
@@ -504,8 +505,6 @@ open scoped Formalism.Per NNReal
 open GlobalTheory.HodgeAt
 
 
-theorem _root_.GlobalTheory.T.hodge_basis_of_adapted_invariant_family : ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l) (AI : LocAinf l P) (T : LocTied l P AI) (C : Core l), Fits T C → ∀ (ξ : Ainf l), Ideal.span {ξ} = RingHom.ker (Per.θ l) → ∀ (K K' : FinExt l) (a : ℕ) (ρ : ↥(GK K) → Matrix (Fin a) (Fin a) (Om l)) (w : Fin a → Fin a → P.R.BdR) (k : Fin a → ℤ), (∀ i j, w i j ∈ (P.PD K).Fil (k i)) → (∀ j, ∃ u : Fin a → P.R.BdR, (∀ i, u i ∈ (P.PD K).Fil (-k i)) ∧ ∑ i, u i • w i = Pi.single j 1) → (∀ g : ↥(GK K), (g : GQ l) ∈ GK K' → ∀ i, (ρ g).map (algebraMap (Om l) P.R.BdR) *ᵥ (fun j => P.actQdR (g : GQ l) (w i j)) = w i) → ∃ H : Hodge C ξ ρ K', ∀ n : ℤ, ((Finset.univ.filter fun i => (H.p i : ℤ) - H.q = n).card : ℤ) = ∑ i, if k i = n then 1 else 0 := by
-  first | (exact @GlobalTheory.HodgeAt.hodge_of_adapted) | (exact GlobalTheory.HodgeAt.hodge_of_adapted) | (intros; apply GlobalTheory.HodgeAt.hodge_of_adapted  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HodgeBasisOfAdaptedInvariantFamilyStatement =====
@@ -599,8 +598,6 @@ open scoped Formalism.Per NNReal
 open GlobalTheory.HodgeAt
 
 
-theorem _root_.GlobalTheory.T.exists_bdR_element_normalized_killing_phi_kernel : ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l) (σ : GQ l) (L : FinExt l) [FiniteDimensional ℚ_[l] ↥L.1] (a : ℕ), ∃ e : ↥L.1 ⊗[ℚ_[l]] P.R.BdR, phiS P σ L e = 1 ∧ ∀ x : (Fin a → ↥L.1) ⊗[ℚ_[l]] P.R.BdR, PhiS P σ L a x = 0 → GlobalTheory.DRFil.sm ℚ_[l] P.R.BdR ↥L.1 (Fin a → ↥L.1) e x = 0 := by
-  first | (exact @GlobalTheory.HodgeAt.exists_idem_phiS_ker) | (exact GlobalTheory.HodgeAt.exists_idem_phiS_ker) | (intros; apply GlobalTheory.HodgeAt.exists_idem_phiS_ker  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PhiKernelKillingElementStatement =====
@@ -663,7 +660,7 @@ theorem exists_hodge_at_embedding : ∀ (l : ℕ) [Fact l.Prime] (K L : FinExt l
   obtain ⟨m, d, k, hA⟩ := GlobalTheory.DRFil.exists_adapted (P.PD K) (GlobalTheory.DRFil.isField_dR T) R
     (GlobalTheory.DRFil.filSpans T K L R hDR) τ
   obtain ⟨K', hKK', hK'⟩ := exists_ext_fixing l K L σ
-  obtain ⟨e, he1, he0⟩ := GlobalTheory.T.exists_bdR_element_normalized_killing_phi_kernel l P σ L a
+  obtain ⟨e, he1, he0⟩ := _root_.GlobalTheory.HodgeAt.exists_idem_phiS_ker l P σ L a
   have hid := phiS_idem l P K L τ σ hσ
   set w : Fin m → Fin a → P.R.BdR := fun i => PhiS P σ L a (d i) with hw
   have hfil : ∀ i j, w i j ∈ (P.PD K).Fil (k i) := fun i j =>
@@ -707,7 +704,7 @@ theorem exists_hodge_at_embedding : ∀ (l : ℕ) [Fact l.Prime] (K L : FinExt l
     exact h1.symm
   have hma := _root_.GlobalTheory.card_eq_of_indep_spans_dR l P AI T a m w hind (fun j => (hspan j).imp fun u hu => hu.2)
   subst hma
-  obtain ⟨H, hH⟩ := GlobalTheory.T.hodge_basis_of_adapted_invariant_family l P AI T C hC ξ hξ K K' m _ w k hfil hspan hinv
+  obtain ⟨H, hH⟩ := _root_.GlobalTheory.HodgeAt.hodge_of_adapted l P AI T C hC ξ hξ K K' m _ w k hfil hspan hinv
   exact ⟨K', H, hKK', fun n => by rw [hH n, hA.multV_eq]⟩
 
 end GlobalTheory.HodgeAt
@@ -723,8 +720,6 @@ section -- clump:auto
 open Formalism Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.WeaklyAdmissibleFiltrations Formalism.MainNotions.N TensorProduct PowerSeries GlobalTheory.Prism GlobalTheory.BKReal GlobalTheory.Per GlobalTheory.BSP GlobalTheory.MemLoc GlobalTheory.Pst GlobalTheory.BKLim GlobalTheory.Cong Matrix
 open scoped Formalism.Per NNReal
 
-theorem _root_.GlobalTheory.T.exists_hodge_basis_at_embedding : ∀ (l : ℕ) [Fact l.Prime] (K L : FinExt l) (P : LocPrime l) (AI : LocAinf l P) (T : LocTied l P AI) (C : Core l), Fits T C → ∀ (ξ : Ainf l), Ideal.span {ξ} = RingHom.ker (Per.θ l) → ∀ (a : ℕ) (r : ↥(GK K) →* GL (Fin a) ↥L.1) (R : Representation ↥L.1 ↥(GK K) (Fin a → ↥L.1)), (∀ g v, R g v = (r g).val *ᵥ v) → Formalism.MainNotions.N.IsDR (P.PD K) R → ∀ (τ : ↥K.1 →ₐ[ℚ_[l]] ↥L.1) (σ : GQ l), (∀ x : ↥K.1, σ ((τ x : ↥L.1) : Om l) = (x : Om l)) → ∃ (K' : FinExt l) (H : Hodge C ξ (fun g => (r g).val.map fun x => σ (x : Om l)) K'), K.1 ≤ K'.1 ∧ ∀ n : ℤ, ((Finset.univ.filter fun i => (H.p i : ℤ) - H.q = n).card : ℤ) = multV (P.PD K) R τ n := by
-  first | (exact @GlobalTheory.HodgeAt.exists_hodge_at_embedding) | (exact GlobalTheory.HodgeAt.exists_hodge_at_embedding) | (intros; apply GlobalTheory.HodgeAt.exists_hodge_at_embedding  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsHodgeBasisAtEmbeddingStatement =====
@@ -862,7 +857,7 @@ open Formalism Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.Weakl
 open scoped Formalism.Per NNReal
 
 theorem _root_.GlobalTheory.T.isCrys_of_crystallineBreuilKisinFrame : ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (bk : BK K) (τ : Ainf l), bk.IsPer τ → ∀ (P : LocPrime l) (AI : LocAinf l P) (T : LocTied l P AI) (N : ℕ) (d : ℕ) (ρ : ↥(GK K) →* GL (Fin d) ℤ_[l]) (F : Frame bk N d fun g => (ρ g).val), F.IsCr → IsCrys (P.PD K) (qRep ρ) := by
-  first | (exact @GlobalTheory.CrTop.crys_of_frame) | (exact GlobalTheory.CrTop.crys_of_frame) | (intros; apply GlobalTheory.CrTop.crys_of_frame  <;> assumption)
+  first | (exact @GlobalTheory.CrTop.crys_of_frame)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsCrysOfCrystallineBreuilKisinFrameStatement =====
@@ -893,8 +888,7 @@ theorem isDR_of_frame_isDR : ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (bk : B
   rw [LinearMap.toMatrix_eq_toMatrix']
 
   simp only [qRep, Matrix.mul_apply, Matrix.map_apply, map_sum, map_mul, RingEquiv.mapMatrix_apply] at hij ⊢
-  simp only [MonoidHom.comp_apply, MonoidHom.coe_coe, Units.coeHom_apply, RingHom.mapMatrix_apply, AlgEquiv.coe_toAlgHom, Matrix.toLinAlgEquiv'_apply, LinearMap.toMatrix'_toLin',
-    Matrix.map_apply, T.actD, RingEquiv.apply_symm_apply] at ⊢
+  simp only [MonoidHom.comp_apply, MonoidHom.coe_coe, Units.coeHom_apply, T.actD, RingEquiv.apply_symm_apply] at ⊢
   rw [← hij]
   refine Finset.sum_congr rfl fun x _ => ?_
   congr 1
@@ -1061,7 +1055,6 @@ theorem GlobalTheory.BKLim.isHT_iff_diag : ∀ (l : ℕ) [Fact l.Prime] (K K' : 
             have : c k = 0 := by
               first
                 | exact (algebraMap (Om l) ℂ_[l]).injective (by simpa using h0)
-                | exact UniformSpace.Completion.coe_injective _ (by simpa using h0)
             rw [this, map_zero]
           · intro hn; apply hk; omega
         rw [hz, mul_zero, mul_zero]
@@ -1428,7 +1421,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.TracePowEqAlongLatticeTowerCover =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ClosedOfCover =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ClosedOfCover", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.TrivIsCr\npublic import Development.AbelianVarietyTheory.PublishedTheorems.AutomorphicForms₂.DeRhamPotSemistable\npublic import Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.MkMemAdmissibleAtIffCocycle\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.AdaptedBasisThetaGaloisFixedPolesStatement\npublic import Formalism.SharpRestriction.LevelLetterCocycles.LocCoh\npublic import Formalism.LocalRingCardinality.AdicCompletionLocal.LocTied\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.DeRhamCrystallineOfLatticeReads\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsBreuilKisinFrameSemistableBoundedJumpsStatement\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsDeRhamFrameLimitLatticeBreuilKisinTowerStatement\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsHodgeBasisAtEmbeddingStatement\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HodgeTateOperatorPowEqSum\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsCrysOfCrystallineBreuilKisinFrameStatement\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsDeRhamOfBreuilKisinFrameIsDeRham\npublic import Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.AcrisTorsionFreeComplete\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsHodgeTateIffDiagonalAdaptedBasis\npublic import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.EqOfPowEqOneOfNormSubLt\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsSemistableLatticeInMatrixAlgebraLayer\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LayerDdRBounds\npublic import Mathlib.Algebra.BigOperators.Group.Multiset.Defs\npublic import Mathlib.Algebra.CharZero.Defs\npublic import Mathlib.Algebra.Field.Defs\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.MultisetEqOfPowerSumsZpowEq\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.NonemptyBreuilKisinDatum\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ThetaConjBoundedCompatibleBreuilKisinFrames\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.TracePowEqAlongLatticeTowerCover\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.BreuilKisinPreframeBoundedPoles\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsBreuilKisinFrobeniusPeriod\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsFinExt\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsGaloisElemCyclotomicPeriodNotRootOfUnity\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsHodgeBasisDeRhamLatticeStatement\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsDeRhamOfIsSemistable\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PeriodRingCoreCrystallineDeRhamInvariants\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Definitions.GaloisGeometry.PolyApproxZeroPadic\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ClosedOfCover", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.TrivIsCr\npublic import Development.AbelianVarietyTheory.PublishedTheorems.AutomorphicForms₂.DeRhamPotSemistable\npublic import Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.MkMemAdmissibleAtIffCocycle\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.AdaptedBasisThetaGaloisFixedPolesStatement\npublic import Formalism.SharpRestriction.LevelLetterCocycles.LocCoh\npublic import Formalism.LocalRingCardinality.AdicCompletionLocal.LocTied\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.DeRhamCrystallineOfLatticeReads\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsBreuilKisinFrameSemistableBoundedJumpsStatement\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsDeRhamFrameLimitLatticeBreuilKisinTowerStatement\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsHodgeBasisAtEmbeddingStatement\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HodgeTateOperatorPowEqSum\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsCrysOfCrystallineBreuilKisinFrameStatement\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsDeRhamOfBreuilKisinFrameIsDeRham\npublic import Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.AcrisTorsionFreeComplete\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsHodgeTateIffDiagonalAdaptedBasis\npublic import Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.EqOfPowEqOneOfNormSubLt\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsSemistableLatticeInMatrixAlgebraLayer\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LayerDdRBounds\npublic import Mathlib.Algebra.BigOperators.Group.Multiset.Defs\npublic import Mathlib.Algebra.CharZero.Defs\npublic import Mathlib.Algebra.Field.Defs\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.MultisetEqOfPowerSumsZpowEq\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.NonemptyBreuilKisinDatum\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ThetaConjBoundedCompatibleBreuilKisinFrames\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.TracePowEqAlongLatticeTowerCover\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.BreuilKisinPreframeBoundedPoles\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsBreuilKisinFrobeniusPeriod\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsFinExt\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsGaloisElemCyclotomicPeriodNotRootOfUnity\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsHodgeBasisDeRhamLatticeStatement\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsDeRhamOfIsSemistable\nimport Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PeriodRingCoreCrystallineDeRhamInvariants\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Definitions.GaloisGeometry.PolyApproxZeroPadic\nimport Mathlib.Algebra.Azumaya.Basic\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1476,25 +1469,12 @@ theorem repOf_apply {Γ : Type} [Group Γ] {a : ℕ} {L : FinExt l} (r : Γ →*
     repOf r g v = (r g).val *ᵥ v := by
   simp [repOf, Matrix.toLinAlgEquiv'_apply]
 
-theorem isSst_resQ' (P : LocPrime l) {K : FinExt l} {LL : Type} [Field LL] [Algebra ℚ_[l] LL]
-    [FiniteDimensional ℚ_[l] LL] {V : Type} [AddCommGroup V] [Module LL V] [Module ℚ_[l] V] [IsScalarTower ℚ_[l] LL V]
-    (ρ : Representation LL ↥(GK K) V) (h : IsSst P ρ) : IsSst P (GlobalTheory.PstCoeff.resQ ρ) := by
-  have hD : Dst P (GlobalTheory.PstCoeff.resQ ρ) = (Dst P ρ).restrictScalars ℚ_[l] := by
-    ext x
-    simp [mem_Dst, GlobalTheory.PstCoeff.stRep_resQ]
-  have e : Module.finrank ℚ_[l] ↥(Dst P (GlobalTheory.PstCoeff.resQ ρ)) =
-      Module.finrank ℚ_[l] LL * Module.finrank LL ↥(Dst P ρ) := by
-    rw [hD, Module.finrank_mul_finrank]
-    rfl
-  rw [IsSst, e, h, ← Module.finrank_mul_finrank ℚ_[l] LL V]
-  ring
-
 theorem isDR_of_isSst (P : LocPrime l) (AI : LocAinf l P) (T : LocTied l P AI) {K L : FinExt l} {a : ℕ}
     (R : Representation ↥L.1 ↥(GK K) (Fin a → ↥L.1)) (h : IsSst P R) : Formalism.MainNotions.N.IsDR (P.PD K) R := by
   haveI := L.2
   haveI : FiniteDimensional ℚ_[l] (Fin a → ↥L.1) := Module.Finite.trans ↥L.1 _
   exact (GlobalTheory.PstCoeff.isDR_resQ_iff P R).mp
-    (GlobalTheory.sst_isDR l P AI T K _ (GlobalTheory.PstCoeff.resQ R) (isSst_resQ' P R h))
+    (GlobalTheory.sst_isDR l P AI T K _ (GlobalTheory.PstCoeff.resQ R) (_root_.GlobalTheory.LayerSst.isSst_resQ P R h))
 
 theorem conj_diag {k : Type} [Field k] {a : ℕ} (W : Matrix (Fin a) (Fin a) k) (hW : IsUnit W) (d : Fin a → k) :
     (W * diagonal d * W⁻¹) * W = W * diagonal d ∧
@@ -1588,7 +1568,7 @@ theorem closed_of_cover : ∀ (l : ℕ) [Fact l.Prime] (K L₀ : FinExt l) (P : 
     (_root_.GlobalTheory.LayerSst.main l K L₀ P AI T a Cl _ (Cv.tw.ρ' m) (Cv.lay m)).1 hsstCl
   have hfr : ∀ m, ∃ F : Frame bk N (Cv.tw.d' m) (fun g => (Cv.tw.ρ' m g).val),
       F.IsDR ∧ (IsCrys (P.PD K) (qRep (Cv.tw.ρ' m)) → F.IsCr) := fun m =>
-    GlobalTheory.T.exists_breuilKisinFrame_semistable_boundedJumps l K bk τp hτp P AI T N _ (Cv.tw.ρ' m) (Cv.cont' m) (hsst m)
+    _root_.GlobalTheory.BKLim.exists_frame_sst l K bk τp hτp P AI T N _ (Cv.tw.ρ' m) (Cv.cont' m) (hsst m)
       (_root_.GlobalTheory.LayerJumps.layer_DdR_bounds l K L₀ P AI T a Cl J N hL₀ hN _ (Cv.tw.ρ' m) (Cv.lay m) hCl)
   choose F hFdr hFcr using hfr
   obtain ⟨F₀, hF₀dr, hF₀cr, rr, hlink⟩ := GlobalTheory.T.exists_deRhamFrame_limitLattice_breuilKisinTower l K bk τp hτp Cv.d N Cv.ρ Cv.tw F hFdr
@@ -1614,7 +1594,7 @@ theorem closed_of_cover : ∀ (l : ℕ) [Fact l.Prime] (K L₀ : FinExt l) (P : 
       U' * Y.map ((Per.θD l).comp (aDp l)) = Y.map ((Per.θD l).comp (aDp l)) * ((F m).ε g).map ((Per.θD l).comp (aDp l)) ∧
       U' * H.V.map (Per.θD l) = H.V.map (Per.θD l) * Matrix.diagonal fun i => z ^ ((H.p i : ℤ) - H.q) := by
     intro m
-    obtain ⟨H, -⟩ := GlobalTheory.T.exists_hodge_basis_deRham_lattice l K P AI T C hC (bk.ev bk.E) hξ _ (Cv.tw.ρ' m)
+    obtain ⟨H, -⟩ := _root_.GlobalTheory.HodgeEx.exists_hodge l K P AI T C hC (bk.ev bk.E) hξ _ (Cv.tw.ρ' m)
       (GlobalTheory.sst_isDR l P AI T K _ (qRep (Cv.tw.ρ' m)) (hsst m))
     obtain ⟨Y, -, hY, -⟩ := _root_.GlobalTheory.BKLim.pre_bounded_poles l K bk τp hτp N _ _ (F m).toPre
     obtain ⟨U', h1, h2⟩ := (GlobalTheory.T.adaptedBasis_theta_galoisFixed_poles l K bk τp hτp C hCd N _ _ (F m) Y (hFdr m) hY H).1 g z hz
@@ -1648,7 +1628,7 @@ theorem closed_of_cover : ∀ (l : ℕ) [Fact l.Prime] (K L₀ : FinExt l) (P : 
     let τk : ↥K.1 →ₐ[ℚ_[l]] ↥((Cv.lay m).L k).1 :=
       (L.1.val.comp τK).codRestrict ((Cv.lay m).L k).1.toSubalgebra (fun x => (Cv.lay m).le k (hL₀ _ x))
     have hσk : ∀ x : ↥K.1, σ ((τk x : ↥((Cv.lay m).L k).1) : Om l) = (x : Om l) := hσ
-    obtain ⟨K', Hk, hKK', hcard⟩ := GlobalTheory.T.exists_hodge_basis_at_embedding l K ((Cv.lay m).L k) P AI T C hC (bk.ev bk.E) hξ a rk (repOf rk)
+    obtain ⟨K', Hk, hKK', hcard⟩ := _root_.GlobalTheory.HodgeAt.exists_hodge_at_embedding l K ((Cv.lay m).L k) P AI T C hC (bk.ev bk.E) hξ a rk (repOf rk)
       (repOf_apply rk) (isDR_of_isSst P AI T _ hsk) τk σ hσk
     have hcτ : ((Cv.lay m).L k).1.val.comp τk = L.1.val.comp τK := AlgHom.ext fun _ => rfl
     have hms : Finset.univ.val.map (fun i => (Hk.p i : ℤ) - Hk.q) = J (L.1.val.comp τK) :=
@@ -1678,7 +1658,7 @@ theorem closed_of_cover : ∀ (l : ℕ) [Fact l.Prime] (K L₀ : FinExt l) (P : 
     exact (hu n).1.trans (hu n).2
   have hcov := _root_.GlobalTheory.CoverTrace.trace_pow_eq l (↥(GK K)) L₀ a ha r Cl Cv σ U U' Bd S hS0 hUb hU'b hcomp hlayS
 
-  obtain ⟨K', HR, hKK', hcard⟩ := GlobalTheory.T.exists_hodge_basis_at_embedding l K L P AI T C hC (bk.ev bk.E) hξ a r' R hR hdrR τK σ hσ'
+  obtain ⟨K', HR, hKK', hcard⟩ := _root_.GlobalTheory.HodgeAt.exists_hodge_at_embedding l K L P AI T C hC (bk.ev bk.E) hξ a r' R hR hdrR τK σ hσ'
   have hW : IsUnit (HR.V.map (Per.θD l)) := HR.unit.map (Per.θD l).mapMatrix
   obtain ⟨huW, htr⟩ := conj_diag _ hW fun i => z ^ ((HR.p i : ℤ) - HR.q)
   have hHT := (_root_.GlobalTheory.BKLim.isHT_iff_diag l K K' C hCd (bk.ev bk.E) hξ a _ HR z _ hKK').1 huW
@@ -1783,7 +1763,7 @@ theorem cover_exists : ∀ (l : ℕ) [Fact l.Prime] (Γ : Type) [Group Γ] [Topo
           rw [pow_add, inv_pow, inv_pow, mul_assoc, inv_mul_cancel₀ (by positivity), mul_one]
   have hlay : ∀ n, ∃ M₀ : ℕ, ∀ M, M₀ ≤ M → ∃ (d' : ℕ) (ρ' : Γ →* GL (Fin d') ℤ_[l]) (bb : Fin d' → Fin (m n) → Matrix (Fin a) (Fin a) (Om l)) (e' : Fin d' → ℤ_[l]) (P : Matrix (Fin d) (Fin d') ℤ_[l]), Continuous ρ' ∧ (∀ s k i j, bb s k i j ∈ (Lf (ρs n k)).1) ∧ LinearIndependent ℚ_[l] bb ∧ (∀ x : Fin (m n) → Matrix (Fin a) (Fin a) (Om l), (∀ k i j, x k i j ∈ (Lf (ρs n k)).1) → x ∈ Submodule.span ℚ_[l] (Set.range bb)) ∧ (∀ k, Reads ρ' (ρs n k) (fun s => bb s k) e') ∧ (∀ s, bb s ∈ latT (ρs n) (fun k => tf (ρs n k)) M) ∧ (∀ x ∈ latT (ρs n) (fun k => tf (ρs n k)) M, ∃ z : Fin d' → ℤ_[l], x = ∑ s, zOm l (z s) • bb s) ∧ Carries r b (ρs n) (fun k => tf (ρs n k)) M bb P (n + K) ∧ Onto (fun g => ((ρ g : GL (Fin d) ℤ_[l]) : Matrix (Fin d) (Fin d) ℤ_[l])) (fun g => ((ρ' g : GL (Fin d') ℤ_[l]) : Matrix (Fin d') (Fin d') ℤ_[l])) P n ∧ (∀ i, (l : ℤ_[l]) ^ n ∣ (P *ᵥ e' - e) i) ∧ ∀ s, ‖(∑ i, zOm l (P i s) • b i).trace - ∑ k, cs n k * (bb s k).trace‖ ≤ ((l : ℝ) ^ n)⁻¹ := by
     intro n
-    exact GlobalTheory.T.exists_lattice_layer_cover_basis_mod_pow l Γ a r d ρ b e hreads hind hbr c hc n (n + K) (by omega) (hK' n) (m n) (ρs n)
+    exact _root_.GlobalTheory.CovLayer.layer l Γ a r d ρ b e hreads hind hbr c hc n (n + K) (by omega) (hK' n) (m n) (ρs n)
       (fun k => Lf (ρs n k)) (fun k => tf (ρs n k)) (hρsC n) (fun k => (htf _ (hρsC n k)).2.1)
       (fun k => (htf _ (hρsC n k)).2.2.1) (fun k => (htf _ (hρsC n k)).2.2.2.1)
       (fun k => (htf _ (hρsC n k)).2.2.2.2.1) (fun k => (htf _ (hρsC n k)).2.2.2.2.2) (cs n)
@@ -1805,7 +1785,7 @@ theorem cover_exists : ∀ (l : ℕ) [Fact l.Prime] (Γ : Type) [Group Γ] [Topo
     simp [ρs, ι]
   have htrans : ∀ n, ∃ f : Matrix (Fin (d' n)) (Fin (d' (n + 1))) ℤ_[l], (∀ g, f * ((ρ' (n + 1) g : GL (Fin (d' (n + 1))) ℤ_[l]) : Matrix (Fin (d' (n + 1))) (Fin (d' (n + 1))) ℤ_[l]) = ((ρ' n g : GL (Fin (d' n)) ℤ_[l]) : Matrix (Fin (d' n)) (Fin (d' n)) ℤ_[l]) * f) ∧ ∀ i j, (l : ℤ_[l]) ^ n ∣ (P n * f - P (n + 1)) i j := by
     intro n
-    exact GlobalTheory.T.exists_equivariant_transition_matrix_cover l Γ a r d b hind (m n) (m (n + 1)) (ρs n) (ρs (n + 1)) (ι n) (hι n)
+    exact _root_.GlobalTheory.CovTrans.transition l Γ a r d b hind (m n) (m (n + 1)) (ρs n) (ρs (n + 1)) (ι n) (hι n)
       (fun k => tf (ρs n k)) (fun k => tf (ρs (n + 1) k)) (fun k => by rw [hι n k]) (M n) (M (n + 1)) (hMmono n)
       (d' n) (d' (n + 1)) (ρ' n) (ρ' (n + 1)) (bb n) (bb (n + 1)) (e' n) (e' (n + 1)) (hind' n) (hreads' n)
       (hreads' (n + 1)) (hmem (n + 1)) (hcoord n) (P n) (P (n + 1)) n (n + K) (n + 1 + K) (by omega) (by omega)
@@ -1868,7 +1848,7 @@ theorem closedAtL : ClosedAtL := by
       simpa [jl, mapRep] using this
     · refine MonoidHom.ext fun g => LinearMap.ext fun v => ?_
       rw [hR]
-      simp [LocBridge.repE, Matrix.toLin'_apply]
+      simp [LocBridge.repE]
 
   have hCl : ∀ ρ₁ ∈ (fun ρ => ρ.comp jl) '' C, ∀ (L : FinExt l) (r' : ↥(GK Bw.Kw) →* GL (Fin a) ↥L.1)
       (R : Representation ↥L.1 ↥(GK Bw.Kw) (Fin a → ↥L.1)), Bw.LL.1 ≤ L.1 → (∀ g v, R g v = (r' g).val *ᵥ v) →

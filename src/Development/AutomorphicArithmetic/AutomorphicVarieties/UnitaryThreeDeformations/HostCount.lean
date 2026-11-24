@@ -299,10 +299,7 @@ theorem UpperTheory.finrank_gradedPiece_and_complexConjugation_invariants :
       have hZ : ∀ a b, wt a b ≠ -1 → X a b = 0 := hX
       fin_cases a <;> fin_cases b <;> simp <;> first
         | exact (hZ _ _ (by decide)).symm
-        | exact (half h2 (hXa 1 1)).symm
         | exact (hXa 2 1).symm
-        | exact (hXa 2 2).symm
-        | exact (hXa 1 2).symm
   · rw [if_pos (by norm_num)]
     refine ker_one _ _ hK (!![1, 0, 0; 0, 0, 0; 0, 0, -1]) ?_ ?_ 0 0 (by simp) ?_
     · show ∀ a b, wt a b ≠ 0 → _ = 0
@@ -317,9 +314,7 @@ theorem UpperTheory.finrank_gradedPiece_and_complexConjugation_invariants :
       fin_cases a <;> fin_cases b <;> simp <;> first
         | exact (hZ _ _ (by decide)).symm
         | exact (half h2 (hXa 1 1)).symm
-        | exact (hXa 2 1).symm
         | exact (hXa 2 2).symm
-        | exact (hXa 1 2).symm
   · rw [if_pos (by norm_num)]
     refine ker_one _ _ hK (!![0, 1, 0; 0, 0, -1; 0, 0, 0]) ?_ ?_ 0 1 (by simp) ?_
     · show ∀ a b, wt a b ≠ 1 → _ = 0
@@ -333,9 +328,6 @@ theorem UpperTheory.finrank_gradedPiece_and_complexConjugation_invariants :
       have hZ : ∀ a b, wt a b ≠ 1 → X a b = 0 := hX
       fin_cases a <;> fin_cases b <;> simp <;> first
         | exact (hZ _ _ (by decide)).symm
-        | exact (half h2 (hXa 1 1)).symm
-        | exact (hXa 2 1).symm
-        | exact (hXa 2 2).symm
         | exact (hXa 1 2).symm
   · rw [if_neg (by norm_num)]
     apply zero_case
@@ -952,11 +944,6 @@ private theorem invariants_zero_of_scalar {x : D} {a : k} (hx : ∀ m, ρ x m = 
 
 end Abs
 
-private theorem hc_avg {k D M : Type} [Field k] [Group D] [AddCommGroup M] [Module k M] (ρ : Representation k D M)
-    (N : Subgroup D) (hN : ((N.index : ℕ) : k) ≠ 0) (z : D → M) (hz : ∀ g h, z (g * h) = z g + ρ g (z h))
-    (h0 : ∀ s ∈ N, z s = 0) : ∃ m, ∀ g, z g = ρ g m - m :=
-  _root_.UpperTheory.Reformulated.B.Qe18.hc_avg ρ N hN z hz h0
-
 private theorem hc_tame :
     ∀ {k D M : Type} [Field k] [Group D] [TopologicalSpace D] [IsTopologicalGroup D] [AddCommGroup M] [Module k M] [Finite M] [TopologicalSpace M] [DiscreteTopology M] (ρ : Representation k D M) (I N : Subgroup D) (W : Submodule k (D → M)), ContAction ρ → I.Normal → (∃ φ : D, (I ⊔ Subgroup.zpowers φ).topologicalClosure = ⊤ ∧ ∀ n : ℕ, 0 < n → ∃ d : D →* Multiplicative (ZMod n), IsLocallyConstant d ∧ (∀ s ∈ I, d s = 1) ∧ d φ = Multiplicative.ofAdd 1) →
     N ≤ I → (N.subgroupOf I).Normal → ((N.relIndex I : ℕ) : k) ≠ 0 → (∀ s ∈ N, ∀ m, ρ s m = m) →
@@ -968,7 +955,7 @@ private theorem hc_tame :
     constructor
     · rintro ⟨z, rfl⟩
       obtain ⟨z1, z2⟩ := (hW _).1 z.2
-      exact (mem_coboundaries1 _ _).2 (hc_avg (ρ.comp I.subtype) (N.subgroupOf I) hidx _ (fun g h => z1.2 g h) fun s hs => z2 s hs)
+      exact (mem_coboundaries1 _ _).2 (_root_.UpperTheory.Reformulated.B.Qe18.hc_avg (ρ.comp I.subtype) (N.subgroupOf I) hidx _ (fun g h => z1.2 g h) fun s hs => z2 s hs)
     · rintro ⟨m, rfl⟩
       exact ⟨⟨d0 ρ m, (hW _).2 ⟨coboundaries_le_cocycles ρ hρ ⟨m, rfl⟩, fun s hs => by rw [amitsur_d0_apply, hN s hs, sub_self]⟩⟩, rfl⟩
   have hk := UpperTheory.finrank_unramified_cocycles_eq_finrank_invariants ρ I ((LinearMap.ker r).map W.subtype) hρ hI hφ fun y =>

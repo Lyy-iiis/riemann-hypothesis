@@ -263,7 +263,6 @@ theorem valuation_uniformiser_le {E Ω : Type} [Field E] [NumberField E] [Field 
     le_antisymm (valuation_algebraMap_int_le_one A s) (not_lt.1 fun h => hsP ((hP s).1 h))
   have e : algebraMap E Ω (a : E) * algebraMap E Ω (ϖ : E) = algebraMap E Ω (ϖ' : E) * algebraMap E Ω (s : E) := by
     rw [← map_mul, ← map_mul]
-    congr 1
     exact_mod_cast ha
   have hv := congrArg A.valuation e
   rw [map_mul, map_mul, hs1, mul_one] at hv
@@ -311,7 +310,7 @@ theorem tame_quot_indep : ∀ {E Ω : Type} [Field E] [NumberField E] [Field Ω]
     have e : σ ρ / ρ - 1 = (σ ρ - ρ) / ρ := by field_simp
     rw [e, map_div₀, hvρ, div_one]
     exact hσ.2 ρ hvρ.le
-  have hfix : σ ρ / ρ = 1 := root_eq_of_close A m hσρm (one_pow m) hmv hclose
+  have hfix : σ ρ / ρ = 1 := _root_.GlobalTheory.PowEqOneValuation.eq_of_pow_eq_one_of_valuation_sub_lt_one A m hσρm (one_pow m) hmv hclose
   have hfix' : σ ρ = ρ := (div_eq_one_iff_eq hρ0).1 hfix
   have eπ' : π' = ρ * π := by rw [hρ]; field_simp
   rw [eπ', map_mul, hfix', mul_div_mul_left _ _ hρ0]
@@ -425,7 +424,7 @@ theorem char_eq_of_tameRep_congr : ∀ {E Ω : Type} [Field E] [NumberField E] [
     have := (hlt (u - u')).2 huu
     simpa using this
   have heq : s π / π = s' π / π := by
-    refine root_eq_of_close A m (hroot s) (hroot s') hmv ?_
+    refine _root_.GlobalTheory.PowEqOneValuation.eq_of_pow_eq_one_of_valuation_sub_lt_one A m (hroot s) (hroot s') hmv ?_
     have e : s π / π - s' π / π = (s π / π - algebraMap E Ω (u : E))
         + (algebraMap E Ω (u : E) - algebraMap E Ω (u' : E)) - (s' π / π - algebraMap E Ω (u' : E)) := by ring
     rw [e]

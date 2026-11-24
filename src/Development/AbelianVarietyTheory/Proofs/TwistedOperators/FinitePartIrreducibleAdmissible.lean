@@ -164,8 +164,8 @@ theorem finiteDimensional_homPi_of_le [Finite κ] (hδ : ∀ i, IsIrrUnitary (δ
     FiniteDimensional ℂ (homPi e δ ρ X) := by
   let L : homPi e δ ρ X →ₗ[ℂ] (κ → ℂ) :=
     { toFun := fun Φ k => bePi Φ.1 (Ψ k)
-      map_add' := fun Φ Φ' => funext fun k => by simp [bePi, inner_add_right]
-      map_smul' := fun c Φ => funext fun k => by simp [bePi, inner_smul_right] }
+      map_add' := fun Φ Φ' => funext fun k => by simp [bePi]
+      map_smul' := fun c Φ => funext fun k => by simp [bePi] }
   refine Module.Finite.of_injective L ((injective_iff_map_eq_zero L).2 fun Φ hΦ => ?_)
   refine Subtype.ext (ContinuousMultilinearMap.ext fun y => ?_)
   have hle : (Submodule.span ℂ {v | ∃ k y, v = Ψ k y}).topologicalClosure ≤ (ℂ ∙ Φ.1 y)ᗮ :=
@@ -422,7 +422,7 @@ open scoped InnerProductSpace
 open Formalism.MainNotions.KudlaSiegelWeil (Restr)
 
 theorem _root_.GlobalTheory.T.finiteDimensional_homDS_closure_span_restricted : ∀ (D : D7) (V : HSp D) (S : D.what₂.Tau → SPar) (M : DSModel V S) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (π : GA D V →* (H →L[ℂ] H)), IsIrrUnitary π → HasDSComp M π → ∀ (R : ∀ v, IrrU (GPl D.sp.cm.sig V.gram v)) (ξ : ∀ v, (R v).H) (B : (∀ v, (R v).H) → H), IsFactorisation D.sp.cm.sig V.gram (fun v => (R v).π) ξ π B → ∀ (Q : ∀ v : HeightOneSpectrum (𝓞 D.host.F), Submodule ℂ (R (.inr v)).H), (∀ v, FiniteDimensional ℂ (Q v)) → (∀ᶠ v in cofinite, Q v ≤ ℂ ∙ ξ (.inr v)) → FiniteDimensional ℂ (homDS M π (Submodule.span ℂ {z | ∃ y, Restr ξ y ∧ (∀ v, y (.inr v) ∈ Q v) ∧ z = B y}).topologicalClosure) := by
-  first | exact @GlobalTheory.PureDS.finiteDimensional_homDS_closure_span | exact GlobalTheory.PureDS.finiteDimensional_homDS_closure_span | (intros; apply GlobalTheory.PureDS.finiteDimensional_homDS_closure_span <;> assumption)
+  first | exact @GlobalTheory.PureDS.finiteDimensional_homDS_closure_span
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.DiscreteSeriesFactorLocalStableStatement =====
@@ -527,8 +527,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open scoped InnerProductSpace
 open Formalism.MainNotions.KudlaSiegelWeil (Restr)
 
-theorem _root_.GlobalTheory.T.exists_finsetSum_translates_fixed_compactSubgroup : ∀ {G X : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [AddCommGroup X] [Module ℂ X] (ρ : Representation ℂ G X) (K : Subgroup G), IsCompact (K : Set G) → ∀ x : X, IsOpen {g | ρ g x = x} → ∃ s : Finset G, (∀ g ∈ s, g ∈ K) ∧ s.Nonempty ∧ ∀ k ∈ K, ρ k (∑ g ∈ s, ρ g x) = ∑ g ∈ s, ρ g x := by
-  first | exact @GlobalTheory.exists_finset_sum_translate_fixed | exact GlobalTheory.exists_finset_sum_translate_fixed | (intros; apply GlobalTheory.exists_finset_sum_translate_fixed <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsFinsetSumTranslatesFixedCompactSubgroupStatement =====
@@ -700,7 +698,7 @@ open scoped InnerProductSpace
 open Formalism.MainNotions.KudlaSiegelWeil (Restr)
 
 theorem _root_.GlobalTheory.T.factorisable_restricted_tensor_level : ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (n : ℕ) (J : Matrix (Fin n) (Fin n) E) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (π : GAd σ J →* (H →L[ℂ] H)), IsIrrUnitary π → ∀ (R : ∀ v, IrrU (GPl σ J v)) (ξ : ∀ v, (R v).H) (B : (∀ v, (R v).H) → H), IsFactorisation σ J (fun v => (R v).π) ξ π B → ∀ (Kp : ∀ v : HeightOneSpectrum (𝓞 F), Subgroup (GLoc σ J v)), (∀ᶠ v in cofinite, ∀ k ∈ Kp v, (R (.inr v)).π k (ξ (.inr v)) = ξ (.inr v)) → ∀ x : H, (∀ v, ∀ k ∈ Kp v, π (emb σ J v k) x = x) → x ∈ (Submodule.span ℂ {z | ∃ y, Restr ξ y ∧ (∀ v, ∀ k ∈ Kp v, (R (.inr v)).π k (y (.inr v)) = y (.inr v)) ∧ z = B y}).topologicalClosure := by
-  first | exact @GlobalTheory.FixedSpan.mem_closure_span_fixed | exact GlobalTheory.FixedSpan.mem_closure_span_fixed | (intros; apply GlobalTheory.FixedSpan.mem_closure_span_fixed <;> assumption)
+  first | exact @GlobalTheory.FixedSpan.mem_closure_span_fixed
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.FactorisableRestrictedTensorLevelStatement =====
@@ -800,7 +798,7 @@ open scoped InnerProductSpace
 open Formalism.MainNotions.KudlaSiegelWeil (Restr)
 
 theorem _root_.GlobalTheory.T.span_values_dense_finitePartSubrep : ∀ (D : D7) (V : HSp D) (S : D.what₂.Tau → SPar) (M : DSModel V S) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (π : GA D V →* (H →L[ℂ] H)), IsIrrUnitary π → ∀ hU : IsSubrep π ⊤, ∀ N : Subrepresentation (finPartDSSm M hU), N ≠ ⊥ → (Submodule.span ℂ {z | ∃ Φ ∈ N.toSubmodule, ∃ y, z = ((Φ : homDS M π ⊤) : ContinuousMultilinearMap ℂ M.H H) y}).topologicalClosure = ⊤ := by
-  first | exact @GlobalTheory.TrFinDense.span_values_dense | exact GlobalTheory.TrFinDense.span_values_dense | (intros; apply GlobalTheory.TrFinDense.span_values_dense <;> assumption)
+  first | exact @GlobalTheory.TrFinDense.span_values_dense
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SpanValuesDenseFinitePartSubrepStatement =====
@@ -825,9 +823,7 @@ namespace GlobalTheory.FinPartIrrAdm
 
 open GlobalTheory.PRep (fixed smoothPart smoothRep IsSmooth)
 
-theorem mem_fixed_iff {G X : Type} [Group G] [AddCommGroup X] [Module ℂ X] {ρ : Representation ℂ G X}
-    {K : Subgroup G} {x : X} : x ∈ fixed ρ K ↔ ∀ g ∈ K, ρ g x = x :=
-  ⟨fun h g hg => by simpa using h ⟨g, hg⟩, fun h g => by simpa using h g g.2⟩
+alias mem_fixed_iff := _root_.GlobalTheory.LGrp.mem_fixed
 
 def stabGroup {G X : Type} [Group G] [AddCommGroup X] [Module ℂ X] (ρ : Representation ℂ G X) (x : X) :
     Subgroup G :=
@@ -1019,7 +1015,7 @@ theorem irreducible [CompleteSpace H] (hπ : IsIrrUnitary π) (hD : HasDSComp M 
     exact inner_map_map hunit _ _ _
   have hall : ∀ n ∈ N.toSubmodule, ⟪ev n, ev (Φ - n0)⟫_ℂ = 0 := by
     intro n hn
-    obtain ⟨s, hsK, hsne, hsfix⟩ := GlobalTheory.T.exists_finsetSum_translates_fixed_compactSubgroup (finPartDSSm M hU) K hKc n (isSmooth_smoothRep _ n)
+    obtain ⟨s, hsK, hsne, hsfix⟩ := _root_.GlobalTheory.exists_finset_sum_translate_fixed (finPartDSSm M hU) K hKc n (isSmooth_smoothRep _ n)
     have hmem : ∑ g ∈ s, finPartDSSm M hU g n ∈ E :=
       hEmem _ (Submodule.sum_mem _ fun g _ => N.apply_mem_toSubmodule g hn) (mem_fixed_iff.2 hsfix)
     have h1 := (Submodule.mem_orthogonal _ _).1 horth (ev (∑ g ∈ s, finPartDSSm M hU g n))

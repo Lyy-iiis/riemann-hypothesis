@@ -77,7 +77,7 @@ theorem hc_u_step {R : Ranks} (h : HCParam R) (i : ℕ) (hi : i + 1 < R.k) :
 theorem lamCol_eq (D : D7) (u : D.what₂.Word) (τ : D.what₂.Tau) (i : ℕ) (hi : i < D.R.k) :
     lamCol D u τ i = (D.hcW u τ).u ⟨i, hi⟩ - (((D.R.k : ℚ) - 1) / 2 - i) := by
   rw [lamCol, dite_eq_left hi]
-  simp only [hcToWeightQ, rhoVec, Fin.val_mk]
+  simp only [hcToWeightQ, rhoVec]
 
 theorem wJ_eq (D : D7) (u : D.what₂.Word) (τ : D.what₂.Tau) (j : ℕ) (hj : j < D.R.m) :
     wJ D u τ j = (D.hc τ).e ⟨j, hj⟩ - (D.R.k : ℚ) / 2 - (2 * ((j : ℚ) + 1) - 1) * ((D.R.t : ℚ) + 1) / 2 := by
@@ -168,10 +168,7 @@ theorem top_is_tau_one_place (D : D7) (τ : D.what₂.Tau) (h : IsTop D τ) :
   obtain ⟨t0, ht0, ht0e⟩ := Finset.mem_image.mp h
   exact ⟨⟨t0, ht0⟩, ht0e.symm⟩
 
-theorem five_le_k (R : Ranks) : 5 ≤ R.k := by
-  have h1 := R.m_add_three_le_k
-  have h2 := R.two_le_m
-  omega
+alias five_le_k := _root_.Formalism.BasicNotions.Ranks.k_ge
 
 theorem lamCol_real (D : D7) (u : D.what₂.Word) (τ : D.what₂.Tau) (i : ℕ) (hi : i < D.R.k) :
     ((lamCol D u τ i : ℚ) : ℝ) = (((D.hcW u τ).u ⟨i, hi⟩ : ℚ) : ℝ) - (((D.R.k : ℝ) - 1) / 2 - i) := by

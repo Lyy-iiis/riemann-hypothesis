@@ -294,7 +294,7 @@ theorem core_expand {K B : Type} [Field K] [CommRing B] [Algebra K B] {I : Ideal
   have h1 : (fun i => ∑ t, n i t ⊗ₜ[K] e i (b t)) =
       ∑ t, ∑ i, (Pi.single i (n i t ⊗ₜ[K] e i (b t)) : ∀ i, S.N i ⊗[K] M i) := by
     funext i
-    simp only [Finset.sum_apply, Pi.single_apply]
+    simp only [Finset.sum_apply]
     simp
 
   rw [h1, map_sum]
@@ -385,20 +385,6 @@ theorem transport_gen {R : Type} [CommRing R] {C : Type 1} [Category.{0} C] {A :
   subst e
   exact ⟨AddEquiv.refl _, fun _ => rfl⟩
 
-theorem toSq_bij_bot' {R : Type} [CommRing R] {C : Type 1} [Category.{0} C] {A : C ⥤ CommAlgCat.{0} R}
-    (a₀ b : IdF A) (h0 : ∀ T, a₀.S T = ⊤) (hb : ∀ T, b.S T = ⊥) (j : ℕ) :
-    Function.Bijective ((toSq a₀ b h0).pull j) := by
-  refine CrystallineSemistableComparison.P.mapH_bij (toSq a₀ b h0).hom (fun n => ⟨fun f f' h => ?_, fun y => ?_⟩) j
-  · funext s
-    have h1 := congrArg Subtype.val (congrFun h s)
-    have h2 := Ideal.Quotient.eq.1 h1
-    rw [hb] at h2
-    exact sub_eq_zero.1 h2
-  · have hm : ∀ s : ComposableArrows C n, ∃ t : A.obj (s.obj (Fin.last n)),
-        Ideal.Quotient.mk _ t = (show sqM a₀ b _ from y s).1 := fun s => Ideal.Quotient.mk_surjective _
-    choose t ht using hm
-    exact ⟨t, funext fun s => Subtype.ext (ht s)⟩
-
 theorem zK_transport {K : Type} [CommRing K] {X : Scheme.{0}} (q : X ⟶ Spec (CommRingCat.of K))
     (Q : ObjectProperty (Thick (smFun X q))) (t u : ℤ) (ht : t ≤ 0) (j : ℕ) :
     ∃ E : HQ Q t u j ≃+ HQ Q 0 u j, ∀ x, E (zK q Q t u ht j x) = quoK q Q u j x := by
@@ -415,7 +401,7 @@ theorem zK_transport {K : Type} [CommRing K] {X : Scheme.{0}} (q : X ⟶ Spec (C
 
 theorem quoM_bij {b : Base} {L : b.Fun} (Q : ObjectProperty (Thick L)) (s : ℕ) (h : ∀ T, Q T → T.pdPow s = ⊥) (j : ℕ) :
     Function.Bijective (quoM Q s j) := by
-  refine toSq_bij_bot' _ _ _ (fun T => ?_) j
+  refine _root_.GlobalTheory.CompanionTheory.QuoK.toSq_bijective_of_bot _ _ _ (fun T => ?_) j
   change T.obj.pdPow ((s : ℤ).toNat) = ⊥
   simpa using h _ T.property
 
@@ -501,8 +487,6 @@ theorem main : BcOn False → KH.KIso → BasisB := by
       exact E.toAddMonoidHom.map_zero
     have h1 := ((hK q U s hd 𝒱 h𝒱 j).2 (r - i) (by omega) x).2 h0
     exact GlobalTheory.LogCris.fil_anti _ _ (by omega) h1
-
-theorem basisB_of_bcOn : BcOn False → KH.KIso → BasisB := main
 
 end GlobalTheory.CompanionTheory.BasisBase
 end -- clump:auto
@@ -682,8 +666,8 @@ theorem van_coord (hLoc : KH.LocGr) (hPoly : KH.PolyTf) (l s : ℕ) (hb : TFBase
     (q : X ⟶ Spec (CommRingCat.of O)) {W : X.Opens} {d : ℕ} (c : Coord q W d) (r : ℕ) (hr : r < s) (b : ℕ) (hne : b ≠ r) :
     Subsingleton (HU (sq (thFil (smFun X q) r) (thFil (smFun X q) ((r : ℤ) + 1)))
       (St (γ := dividedPowersBot O) (p := 0) (q := q) (κ := Ideal.Quotient.mk ⊥) (TF l s) {W}) b) := by
-  obtain ⟨c', e, hTF, -, -, -⟩ := GlobalTheory.T.exists_chart_from_coordinates (dividedPowersBot O) l s hb q (Ideal.Quotient.mk ⊥) (fun _ => rfl) c
-  have hg := GlobalTheory.T.chart_is_good c'
+  obtain ⟨c', e, hTF, -, -, -⟩ := _root_.GlobalTheory.CompanionTheory.ChartAlg.chart_exists (dividedPowersBot O) l s hb q (Ideal.Quotient.mk ⊥) (fun _ => rfl) c
+  have hg := _root_.GlobalTheory.CompanionTheory.ChartMaps.good c'
   let Q : ObjectProperty (Thick (nlFun (dividedPowersBot O) 0 X q (Ideal.Quotient.mk ⊥))) := St (TF l s) {W}
   have hQ : ∀ T, Q T → InU W T := fun T hT => by
     obtain ⟨_, V, hV, h⟩ := hT
@@ -1103,7 +1087,7 @@ theorem exists_section (M' : Submodule O M) (c : O) (hc : c ≠ 0)
     simp
   refine ⟨M'.liftQ (LinearMap.id - M'.subtype ∘ₗ ρ) ?_, fun n => ?_⟩
   · intro x hx
-    simp [LinearMap.mem_ker, hker x hx, sub_eq_zero]
+    simp [LinearMap.mem_ker, hker x hx]
   · obtain ⟨x, rfl⟩ := M'.mkQ_surjective n
     have h4 : M'.mkQ ((ρ x : M') : M) = 0 := (Submodule.Quotient.mk_eq_zero _).2 (ρ x).2
     simp only [Submodule.mkQ_apply, Submodule.liftQ_apply, LinearMap.sub_apply, LinearMap.id_apply,
@@ -1449,7 +1433,6 @@ theorem comm_top (𝒱 : Set X.Opens) (r r' : ℤ) (j : ℕ) (i : Fin m) (n : S.
   obtain ⟨z, rfl⟩ := Ideal.Quotient.mk_surjective y
   first
     | rfl
-    | (simp only [NatTrans.id_app, CategoryTheory.Functor.map_id]; rfl)
 
 theorem used_TF {R : Type} [CommRing R] {J : Ideal R} {δ : DividedPowers J} {κ : O →+* R ⧸ J} (l s : ℕ) :
     Used (TF l s : ObjectProperty (Thick (nlFun δ 0 X q κ))) :=
@@ -1553,24 +1536,9 @@ open CategoryTheory AlgebraicGeometry TensorProduct GlobalTheory.LogCris Divided
 
 namespace CrystallineSemistableComparison.Pb
 
-theorem split_field : ∀ {K B : Type} [Field K] [CommRing B] [Algebra K B] {I : Ideal B} (γ : DividedPowers I) (m : ℕ),
-    pdP γ m = ⊥ → Nonempty (GrSplit K γ m) := @GlobalTheory.CompanionTheory.GrSplitField.nonempty_grSplit
+alias split_field := _root_.GlobalTheory.CompanionTheory.GrSplitField.nonempty_grSplit
 
-theorem leC_shift : ∀ {O A : Type} [CommRing O] [CommRing A] [Algebra O A] {I : Ideal A} (γ : DividedPowers I) {X : Scheme.{0}}
-    (q : X ⟶ Spec (CommRingCat.of O)) (l s : ℕ) (𝒱 : Set X.Opens) (i : ℕ) (a : A), a ∈ pdP γ i → ∀ r : ℤ,
-    (smO γ q l s 𝒱).LeC a (sFil _ (r - i)) (sFil _ r) := @GlobalTheory.CompanionTheory.LecShift.leC_shift
-
-theorem bc_loc : KH.LocBc → KH.PolyTf → BcOn True := @GlobalTheory.CompanionTheory.BcLoc.bc_single
-
-theorem bc_glob : KH.GlobBcSt → BcOn True → BcOn False := @GlobalTheory.CompanionTheory.GlobBc.main
-
-theorem fin_o : KH.LocGr → KH.PolyTf → KH.GlobSerreSt → KH.GrCechFin → FinO := @GlobalTheory.CompanionTheory.FinOverO.finO
-
-theorem afg_a : BcOn False → FinO → AfgA := @GlobalTheory.CompanionTheory.LatticeFinite.afgA_of_bcOn_finO
-
-theorem lift_a : AfgA → LiftA := @GlobalTheory.CompanionTheory.LiftLat.liftA_of_afgA
-
-theorem basis_b : BcOn False → KH.KIso → BasisB := @GlobalTheory.CompanionTheory.BasisBase.basisB_of_bcOn
+alias leC_shift := _root_.GlobalTheory.CompanionTheory.LecShift.leC_shift
 
 end CrystallineSemistableComparison.Pb
 end -- clump:auto

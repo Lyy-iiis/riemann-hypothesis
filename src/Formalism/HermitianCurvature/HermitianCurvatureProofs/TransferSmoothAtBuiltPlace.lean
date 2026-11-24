@@ -72,6 +72,7 @@ import Formalism.HermitianCurvature.HermitianCurvatureProofs.RegularisedPairingV
 import Mathlib.Order.CompletePartialOrder
 import Mathlib.RingTheory.SimpleRing.Principal
 import Std.Tactic.BVDecide.Normalize.BitVec
+import Formalism.HermitianCurvature.HermitianCurvatureProofs.CutNFLeib
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJAPRCPDecompPS, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJAPRCPDecompDec, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJAPRCPDecompLie, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJAPRCPDecomp, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJAPRCPWordAsm, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJAPRFinal, Formalism.HermitianCurvature.HermitianCurvatureProofs.CutJAPRSSnRep, Formalism.HermitianCurvature.HermitianCurvatureProofs.ModelPlaceBuilt2OfPublished, Formalism.HermitianCurvature.HermitianCurvatureProofs.ModelPlaceBuilt2OfChartEqs, Formalism.HermitianCurvature.HermitianCurvatureProofs.SinglePairFinsuppEqIff, Formalism.HermitianCurvature.HermitianCurvatureProofs.TransferSmoothAtBuiltPlace
@@ -98,7 +99,7 @@ lemma gg_eval (ζ : ℂ) : gg TT ζ = MvPolynomial.eval ![ζ, conj ζ, sig TT ζ
     (MvPolynomial.X 0 * MvPolynomial.X 1 - MvPolynomial.C (TT : ℂ)) := by
   unfold Formalism.FourierDecayAlt.P.CutMP.JA.SSn.Rep.Core.TC.PR.gg
   simp only [MvPolynomial.eval_sub, MvPolynomial.eval_mul, MvPolynomial.eval_X, MvPolynomial.eval_C,
-    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Complex.mul_conj]
+    Matrix.cons_val_zero, Matrix.cons_val_one, Complex.mul_conj]
   push_cast
   ring
 
@@ -446,7 +447,7 @@ private lemma Hpk_apply_wI_right_eq_ite (i : Fin (2 * r + k + 1)) (m : Fin (k + 
     Hpk k r i (wI k r m) = if i = wI k r m then Hb k m m else 0 := by
   have hm := m.isLt
   simp only [Formalism.QuantumDeterminants.Hpk, Formalism.QuantumDeterminants.Hb, Matrix.diagonal_apply_eq, wI, Fin.ext_iff, Fin.val_mk, Fin.val_last]
-  split_ifs <;> first | rfl | omega | (exfalso; omega)
+  split_ifs <;> first | rfl | omega
 
 private lemma Hpk_wI_apply_left_eq_ite (j : Fin (2 * r + k + 1)) (m : Fin (k + 1)) :
     Hpk k r (wI k r m) j = if j = wI k r m then Hb k m m else 0 := by
@@ -524,7 +525,7 @@ lemma wbPart_e (a : Fin r) : wbPart k r (bvec (eI k r a)) = 0 := by
   simp only [wbPart, bvec, Pi.zero_apply]
   rw [Pi.single_eq_of_ne]
   intro h
-  simp only [wI, eI, Fin.ext_iff, Fin.val_mk] at h
+  simp only [wI, eI, Fin.ext_iff] at h
   omega
 
 lemma wbPart_es (a : Fin r) : wbPart k r (bvec (esI k r a)) = 0 := by
@@ -534,7 +535,7 @@ lemma wbPart_es (a : Fin r) : wbPart k r (bvec (esI k r a)) = 0 := by
   simp only [wbPart, bvec, Pi.zero_apply]
   rw [Pi.single_eq_of_ne]
   intro h
-  simp only [wI, esI, Fin.ext_iff, Fin.val_mk] at h
+  simp only [wI, esI, Fin.ext_iff] at h
   omega
 
 lemma embed_mem_unitary_lie_algebra (z : Fin (2 * r + k + 1) → ℂ) (Y : Mb k) (hY : Yᴴ * Hb k + Hb k * Y = 0)
@@ -1434,7 +1435,7 @@ end -- clump:auto
 -- ===== end clump member: Formalism.HermitianCurvature.HermitianCurvatureProofs.ModelPlaceBuilt2OfChartEqs =====
 
 -- ===== clump member: Formalism.HermitianCurvature.HermitianCurvatureProofs.SinglePairFinsuppEqIff =====
--- clump-header: {"m": "Formalism.HermitianCurvature.HermitianCurvatureProofs.SinglePairFinsuppEqIff", "h": "module\n\npublic import Formalism.HermitianCurvature.HermitianCurvatureProofs.CapRWordsOfParts\nimport Formalism.HermitianCurvature.HermitianCurvatureProofs.ActualAdjointnessFromHermitian\nimport Formalism.HermitianCurvature.HermitianCurvatureProofs.RegularisedPairingViaPhase\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.Order.CompletePartialOrder\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\nimport Std.Tactic.BVDecide.Normalize.BitVec\nimport Std.Tactic.BVDecide.Normalize.Prop\npublic import Mathlib.Algebra.MvPolynomial.Funext\n\n"}
+-- clump-header: {"m": "Formalism.HermitianCurvature.HermitianCurvatureProofs.SinglePairFinsuppEqIff", "h": "module\n\npublic import Formalism.HermitianCurvature.HermitianCurvatureProofs.CapRWordsOfParts\nimport Formalism.HermitianCurvature.HermitianCurvatureProofs.ActualAdjointnessFromHermitian\nimport Formalism.HermitianCurvature.HermitianCurvatureProofs.RegularisedPairingViaPhase\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.Order.CompletePartialOrder\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\nimport Std.Tactic.BVDecide.Normalize.BitVec\nimport Std.Tactic.BVDecide.Normalize.Prop\npublic import Mathlib.Algebra.MvPolynomial.Funext\nimport Formalism.HermitianCurvature.HermitianCurvatureProofs.CutNFLeib\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1448,12 +1449,6 @@ noncomputable section
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 namespace CapWP
-
-theorem sum_flatMap' {α β M : Type*} [AddCommMonoid M] (l : List α) (f : α → List β) (φ : β → M) :
-    ((l.flatMap f).map φ).sum = (l.map fun a => ((f a).map φ).sum).sum := by
-  induction l with
-  | nil => simp
-  | cons a l ih => simp [List.flatMap_cons, List.sum_append, ih]
 
 theorem sum_filter' {α M : Type*} [AddCommMonoid M] (l : List α) (p : α → Bool) (φ : α → M) :
     ((l.filter p).map φ).sum = (l.map fun a => if p a then φ a else 0).sum := by
@@ -1475,7 +1470,7 @@ theorem coeff_listSum {σ' : Type*} {α : Type*} (m : σ' →₀ ℕ) (l : List 
     AddMonoidAlgebra.coeff ((l.map F).sum) m = (l.map fun a => AddMonoidAlgebra.coeff (F a) m).sum := by
   induction l with
   | nil => simp
-  | cons a l ih => simp [MvPolynomial.coeff_add, ih]
+  | cons a l ih => simp [ih]
 
 theorem eval_listSum {σ' : Type*} {α : Type*} (x : σ' → ℂ) (l : List α) (F : α → MvPolynomial σ' ℂ) :
     MvPolynomial.eval x ((l.map F).sum) = (l.map fun a => MvPolynomial.eval x (F a)).sum := by
@@ -1536,7 +1531,7 @@ theorem core_eval (hD : FExpDeg) (hlen : ∀ σ, (G σ).length = t)
         ((fexp (G σ)).map fun tm => tm.1.eval ((Ys i : ℂ) + c) • W tm.2).sum =
       ((Lw G Ys lam c j).map fun tm => tm.1 • W tm.2).sum := by
   unfold Lw
-  rw [sum_flatMap', sum_toList_map]
+  rw [_root_.Formalism.FourierDecayAlt.P.ListSumInequalities.list_sum_flatMap, sum_toList_map]
   simp_rw [Finset.smul_sum]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun σ _ => ?_
@@ -1621,7 +1616,7 @@ theorem core_symb (hD : FExpDeg) (hS : FExpSymb) (hDet : DetShiftCoeff) (hlen : 
   rw [← hDdef, ← hPD, hP, MvPolynomial.coeff_sum] at hcoef
   rw [← hcoef]
   unfold Lw
-  rw [sum_flatMap', sum_toList_map]
+  rw [_root_.Formalism.FourierDecayAlt.P.ListSumInequalities.list_sum_flatMap, sum_toList_map]
   refine Finset.sum_congr rfl fun σ _ => ?_
   rw [← map_intCast (MvPolynomial.C : ℂ →+* MvPolynomial (Fin 2) ℂ), MvPolynomial.coeff_C_mul, coeff_listSum,
     List.map_map, sum_filter', ← List.sum_map_mul_left]

@@ -330,14 +330,14 @@ theorem exp_trace_eq_brk : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : I
   have hz : ∀ (γ : Matrix (Fin T.rank) (Fin S.rank) D.host.E) τ i j,
       embH (tauE D) δ (Matrix.toLin' γ) τ i j = δ * tauE D τ (γ i j) := by
     intro γ τ i j
-    simp [embH, Matrix.toLin'_apply, Matrix.mulVec_single_one]
+    simp [embH, Matrix.toLin'_apply]
   have hδ : δ * starRingEnd ℂ δ = ((‖δ‖ ^ 2 : ℝ) : ℂ) := by
     rw [Complex.mul_conj, Complex.normSq_eq_norm_sq]
   have hHV : HV sc (embH (tauE D) δ (Matrix.toLin' M)) (embH (tauE D) δ (Matrix.toLin' Y)) =
       ((sc * ‖δ‖ ^ 2 : ℝ) : ℂ) * ∑ τ, tauE D τ (GlobalTheory.LatVac.hRat S T M Y) := by
     rw [GlobalTheory.LatSign.hRat_one S T h.gS h.gT]
 
-    simp only [HV, LinearMap.mk₂'ₛₗ_apply, hz, map_sum, map_mul, GlobalTheory.LatSign.tauE_star']
+    simp only [HV, LinearMap.mk₂'ₛₗ_apply, hz, map_sum, map_mul, _root_.GlobalTheory.FockCompare.tauE_star]
     rw [Complex.ofReal_mul, ← hδ, mul_assoc]
     congr 1
     simp only [Finset.mul_sum]
@@ -466,7 +466,7 @@ open scoped TensorProduct Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.idempotentHalf_mem_completedHomLattice_iff_local : ∀ (D : D7) (S T : HSp D), D.host.ccK = ⊤ → ∀ (e : AE D) (SS : Finset (Formalism.L2.DIV.Pl D.host.E)), IsIdemSum e SS → ∀ (N : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)) (N' : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E)), IsSelfDualC S N → IsSelfDualC T N' → ∀ x : Formalism.L2.Col.HomE D.host.E S.rank T.rank, (((LinearMap.toMatrix' x).map fun r => e * incA D r : WO S T) ∈ (latO S T (N : Set (Fin S.rank → D.host.E)) (N' : Set (Fin T.rank → D.host.E)) fun _ => True) ↔ ∀ P ∈ SS, x ∈ Formalism.HermitianLatticesTheory.localization₂ P.asIdeal (perO (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) N N')) := by
-  first | exact @GlobalTheory.AdForm.HalfLat.half_mem_latO_iff | exact GlobalTheory.AdForm.HalfLat.half_mem_latO_iff | (intros; apply GlobalTheory.AdForm.HalfLat.half_mem_latO_iff <;> assumption)
+  first | exact @GlobalTheory.AdForm.HalfLat.half_mem_latO_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.IdempotentHalfMemCompletedHomLatticeIffLocalStatement =====
@@ -494,7 +494,6 @@ theorem conjPl_eq_conjP {E : Type} [Field E] [NumberField E] [StarRing E] (P : H
   have : Formalism.L2.DIV.starOHom r = Formalism.L2.Col.cO E r := by
     first
       | rfl
-      | (apply RingOfIntegers.ext; simp [Formalism.L2.DIV.starOHom, Formalism.L2.DIV.starO_coe, Formalism.L2.Col.cO])
   rw [this]
 
 
@@ -732,30 +731,8 @@ open Formalism.L2.Col Formalism.HermitianLatticesTheory Formalism.L2.Th1.H
 
 variable {E : Type} [Field E] [NumberField E] [StarRing E] {ι : Type} [Fintype ι] {a b : ℕ}
 
-theorem hv_apply' (sc : ℝ) (z w : VV ι a b) :
-    HV sc z w = (sc : ℂ) * ∑ τ, ∑ i, ∑ j, z τ i j * (starRingEnd ℂ) (w τ i j) := rfl
-
 theorem embH_apply' (emb : ι → E →+* ℂ) (δ : ℂ) (x : HomE E a b) (τ : ι) (i : Fin b) (j : Fin a) :
     embH emb δ x τ i j = δ * emb τ (x (Pi.single j 1) i) := rfl
-
-theorem hv_smul_emb (emb : ι → E →+* ℂ) (δ : ℂ) (sc : ℝ)
-    (hst : ∀ (τ : ι) (x : E), emb τ (star x) = starRingEnd ℂ (emb τ x)) (r : E) (x y : HomE E a b) :
-    HV sc (embH emb δ (r • x)) (embH emb δ y) = HV sc (embH emb δ x) (embH emb δ (star r • y)) := by
-  rw [hv_apply', hv_apply']
-  congr 1
-  refine Finset.sum_congr rfl fun τ _ => Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-  simp only [embH_apply', LinearMap.smul_apply, Pi.smul_apply, smul_eq_mul, map_mul, hst, Complex.conj_conj]
-  ring
-
-theorem embH_injective' [Nonempty ι] (emb : ι → E →+* ℂ) {δ : ℂ} (hδ : δ ≠ 0) :
-    Function.Injective (embH emb δ : HomE E a b → VV ι a b) := by
-  intro x y h
-  obtain ⟨τ⟩ := ‹Nonempty ι›
-  refine LinearMap.pi_ext' fun j => LinearMap.ext_ring ?_
-  funext i
-  have := congrFun (congrFun (congrFun h τ) i) j
-  rw [embH_apply', embH_apply'] at this
-  simpa using (emb τ).injective (mul_left_cancel₀ hδ this)
 
 theorem altE_nsmul_left {V : Type} [AddCommGroup V] [Module ℂ V] (H : Sesq V) (n : ℕ) (v w : V) :
     altE H (n • v) w = altE H v (n • w) := by
@@ -789,7 +766,7 @@ theorem twO_selfDual : ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (ι
       exact hz y hy
     rw [hSD'] at h1
     obtain ⟨z', hz', e'⟩ := h1
-    rwa [← embH_injective' emb hδ e']
+    rwa [← _root_.Formalism.L2.Ker.embH_inj emb hδ e']
   have hcM : ∀ y ∈ M, (c : E) • y ∈ twist₂ M c e := by
     intro y hy
     rw [mem_twO]
@@ -852,7 +829,7 @@ theorem twO_selfDual : ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (ι
     apply hdualM
     intro y hy
     unfold altE
-    rw [hv_smul_emb emb δ sc hst, star_mul', algebraMap_cO, star_star, star_inv₀, hstk, hxv]
+    rw [_root_.GlobalTheory.CocIntLoc.hv_smul emb δ sc hst, star_mul', algebraMap_cO, star_star, star_inv₀, hstk, hxv]
     exact hv _ ⟨_, hT y hy, rfl⟩
   · rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩
     refine (_root_.GlobalTheory.CocIntLoc.integral_of_local E ι a b emb δ d sc M hδ hst hSD hSC x y fun Q =>
@@ -1151,9 +1128,9 @@ theorem four_expand : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam
   have heX : ∀ x, IsHalf e (eXm S T e x) := fun x i j => by
     simp only [eXm, Matrix.map_apply, ← mul_assoc, hee]
   have heX_add : ∀ x y, eXm S T e (x + y) = eXm S T e x + eXm S T e y := fun x y => by
-    ext i j; simp only [eXm, map_add (f := _), Matrix.map_apply, Matrix.add_apply, RingHom.map_add (f := _), mul_add]
+    ext i j; simp only [eXm, map_add (f := _), Matrix.map_apply, Matrix.add_apply, mul_add]
   have heX_sub : ∀ x y, eXm S T e (x - y) = eXm S T e x - eXm S T e y := fun x y => by
-    ext i j; simp only [eXm, map_sub, Matrix.map_apply, Matrix.sub_apply, RingHom.map_sub, mul_sub]
+    ext i j; simp only [eXm, map_sub, Matrix.map_apply, Matrix.sub_apply, mul_sub]
   have heF : ∀ M : Matrix (Fin T.rank) (Fin S.rank) D.host.E, e • GlobalTheory.LatVac.finTens 1 M = eXm S T e (Matrix.toLin' M) := fun M => by
     ext i j
     simp only [eXm, LinearMap.toMatrix'_toLin', Matrix.smul_apply, smul_eq_mul, Matrix.map_apply]
@@ -1316,7 +1293,6 @@ theorem four_expand : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam
     (fun y => ψ (symplO S T (t + eXm S T e (px x0)) (eXm S T (cA D e) (py y)))) hv hRA
     (fun w hw => GlobalTheory.brk_sum_reps_orth _ _ _ _ _ _ hSplit SB hRB w hw) hcard hSBne hY
   refine hΦt.trans (Eq.trans ?_ hsum.symm)
-  beta_reduce
   refine (mem_BC hvs0).elim fun β hβ => ?_
   have hβ' := hβ.1
   have hβe := hβ.2
@@ -1340,7 +1316,7 @@ open scoped TensorProduct Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.finite_fourier_expansion_half_split_places : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) (a b : ℕ) (hS : S.rank = a) (hT : T.rank = b) (δ : ℂ) (sc : ℝ), StdPair θ S T δ sc ψ → ∀ (e : AE D) (SS : Finset (Formalism.L2.DIV.Pl D.host.E)), IsIdemSum e SS → ∀ (N : Submodule (𝓞 D.host.E) (Fin a → D.host.E)) (N' : Submodule (𝓞 D.host.E) (Fin b → D.host.E)) (c : ℕ), 0 < c → Odd c → (∀ Q ∈ SS, ((D.host.QS * D.host.q * D.host.d : ℕ) : 𝓞 D.host.E) ∉ Q.asIdeal) → LaFacts (tauE D) δ D.host.d sc (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) N N' → (∃ ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E), IsSelfDualC S ΛS ∧ (ΛS : Set (Fin S.rank → D.host.E)) = latFr S hS N) → (∃ ΛT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E), IsSelfDualC T ΛT ∧ (ΛT : Set (Fin T.rank → D.host.E)) = latFr T hT N') → ∀ (Φ : WO S T → ℂ) (Ξ : Formalism.L2.Col.HomE D.host.E a b → ℂ), IsSBHalf e (latO S T (latFr S hS N) (latFr T hT N') fun _ => True) Φ → (∀ γ, Φ (γ.map fun r => e * incA D r) = Ξ (toHom S T hS hT γ)) → (∀ x, Ξ x ≠ 0 → (c : D.host.E) • x ∈ Formalism.L2.Col.homAt SS N N') → (∀ x, ∀ y ∈ Formalism.L2.Col.homAt SS N N', Ξ (x + (c : D.host.E) • y) = Ξ x) → ∀ (SX SA SB : Finset (VV D.what₂.Tau a b)), Formalism.L2.Th1.H.IsReps (LamC (tauE D) δ (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) N N') (AC (tauE D) δ (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) SS N N' c) SX → Formalism.L2.Th1.H.IsReps (BC (tauE D) δ (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) SS N N' c) ((LamC (tauE D) δ (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) N N') ⊓ (AC (tauE D) δ (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) SS N N' c)) SA → Formalism.L2.Th1.H.IsReps (LamC (tauE D) δ (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) N N') (BC (tauE D) δ (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) SS N N' c) SB → ∀ (px py : VV D.what₂.Tau a b → Formalism.L2.Col.HomE D.host.E a b), (∀ x ∈ SX, px x ∈ halfAO SS (perO (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) N N') c ∧ embH (tauE D) δ (px x) = x) → (∀ y ∈ SB, py y ∈ halfBO SS (perO (D.host.AA0 : Submodule (𝓞 D.host.E) D.host.E) N N') c ∧ embH (tauE D) δ (py y) = y) → ∀ t, Φ t = ∑ x ∈ SX, ∑ y ∈ SB, (((SA.card : ℂ))⁻¹ * ∑ s ∈ SA, onV (tauE D) δ Ξ (s - x) * (brk (HV sc) y s)⁻¹) * (ψ (symplO S T (t + ((LinearMap.toMatrix' (px x)).reindex (finCongr hT.symm) (finCongr hS.symm)).map fun r => e * incA D r) (((LinearMap.toMatrix' (py y)).reindex (finCongr hT.symm) (finCongr hS.symm)).map fun r => cA D e * incA D r)) * halfInd e (latO S T (latFr S hS N) (latFr T hT N') fun _ => True) (t + ((LinearMap.toMatrix' (px x)).reindex (finCongr hT.symm) (finCongr hS.symm)).map fun r => e * incA D r)) := by
-  first | exact @GlobalTheory.AdForm.DatumFour.four_expand | exact GlobalTheory.AdForm.DatumFour.four_expand | (intros; apply GlobalTheory.AdForm.DatumFour.four_expand <;> assumption)
+  first | exact @GlobalTheory.AdForm.DatumFour.four_expand
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.FiniteFourierExpansionHalfSplitPlacesStatement =====

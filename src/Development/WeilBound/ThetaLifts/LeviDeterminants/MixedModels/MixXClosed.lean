@@ -89,13 +89,6 @@ open NumberField IsDedekindDomain MeasureTheory Filter Topology Formalism.MainNo
 open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK
 open GlobalTheory.Doubling (absE)
 
-theorem _root_.PositivityTheory.Mix.T.adapted_plane_pair_local_factor : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ) (X : Spc F E n) (W : Spc F E d)
-    (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), IsPair B M χX χW om r s r' s' →
-    ∀ (n₁ : ℕ) (X₁ : Spc F E n₁) (H : Plane E n n₁) (j₀ j₁ : ℕ) (M₁ : Model σ X₁ W) (om₁ : Rep σ X₁ W) (r₁ s₁ : ℕ),
-      H.IsAdapted σ B X X₁ j₀ j₁ → IsPair B M₁ χX χW om₁ r₁ s₁ r' s' →
-      ∀ e, IsEv B M M₁ H.ι 1 {u | ∃ z, u = Matrix.vecMulVec (incV F H.x) z} e →
-      ∀ (h : UA σ W.J), ∀ Φ ∈ schA F (Fin n × Fin d), e (om (1, h) Φ) = om₁ (1, h) (e Φ) := by
-  first | exact @PositivityTheory.Mix.theta_tower_hermitian_first_holds | exact @PositivityTheory.Mix.theta_tower_hermitian_first_holds | exact PositivityTheory.Mix.theta_tower_hermitian_first_holds | exact @PositivityTheory.Mix.theta_tower_hermitian_first_holds trivial
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.WeilBound.ThetaLifts.LeviDeterminants.MixedModels.MixedModelPlanes.AdaptedPlanePairLocalFactor =====
@@ -623,18 +616,18 @@ theorem exists_isEv_mixedX_m : ∀ (F E : Type) [Field F] [NumberField F] [Field
       simp
     rw [h1]
     funext y
-    simp only [LinearMap.smul_apply, LinearMap.comp_apply, LinearMap.funLeft_apply, Function.comp_apply, Pi.smul_apply,
+    simp only [LinearMap.smul_apply, LinearMap.comp_apply, LinearMap.funLeft_apply, Pi.smul_apply,
       smul_eq_mul]
     rw [hheis _ Φ hΦ]
     have hi : co.e (incM F H.ι * z) =
         (Function.extend j (M₁.co.e z).1 0, Function.extend j (M₁.co.e z).2 0) := hι z
-    simp only [Darboux.rho, schr, hi, Prod.fst, Prod.snd, extend_dot_m hj, ← extend_add_m hj, Pi.smul_apply, smul_eq_mul,
-      LinearMap.smul_apply, LinearMap.comp_apply, LinearMap.funLeft_apply, Function.comp_apply]
+    simp only [Darboux.rho, schr, hi, extend_dot_m hj, ← extend_add_m hj, Pi.smul_apply, smul_eq_mul,
+      LinearMap.funLeft_apply]
     ring
   · intro u hu Φ hΦ
     obtain ⟨z, rfl⟩ := hu
     funext y
-    simp only [LinearMap.smul_apply, LinearMap.comp_apply, LinearMap.funLeft_apply, Function.comp_apply, Pi.smul_apply,
+    simp only [LinearMap.smul_apply, LinearMap.comp_apply, LinearMap.funLeft_apply, Pi.smul_apply,
       smul_eq_mul]
     rw [hheis _ Φ hΦ]
     obtain ⟨h1, h2⟩ := hx z
@@ -653,8 +646,7 @@ theorem exists_isEv_mixedX_m : ∀ (F E : Type) [Field F] [NumberField F] [Field
       (LinearMap.funLeft ℂ ℂ (fun y : Fin n₁ × Fin d → Fv F v => Function.extend j y 0) ∘ₗ ev₁ v), ?_, ?_, ?_⟩
     · intro h
       have := congrArg (fun T : SInf F (Fin n × Fin d) →L[ℂ] SInf F (Fin n₁ × Fin d) => T f₀ 0) h
-      simp only [ContinuousLinearMap.comp_apply, hR, hf₀, extend_zero'_m hj, ContinuousLinearMap.zero_apply,
-        SchwartzMap.zero_apply] at this
+      simp only [ContinuousLinearMap.comp_apply, hR, hf₀, extend_zero'_m hj, ContinuousLinearMap.zero_apply] at this
       exact hb0 this
     · intro v
       refine ⟨?_, ?_⟩
@@ -665,7 +657,7 @@ theorem exists_isEv_mixedX_m : ∀ (F E : Type) [Field F] [NumberField F] [Field
     · intro f φ hφ hφv
       funext y
       rw [LinearMap.smul_apply, LinearMap.comp_apply, hpure f φ hφ hφv]
-      simp only [LinearMap.funLeft_apply, Function.comp_apply, Pi.smul_apply, smul_eq_mul, GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.pure,
+      simp only [LinearMap.funLeft_apply, Pi.smul_apply, smul_eq_mul, GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.pure,
         ContinuousLinearMap.comp_apply, hR, LinearMap.smul_apply, LinearMap.comp_apply]
       have hI : (fun i => evI F (Function.extend j y 0 i)) = Function.extend j (fun i => evI F (y i)) 0 :=
         extend_map_m hj (evI F) (by unfold evI; exact map_zero _) y
@@ -702,12 +694,6 @@ open NumberField IsDedekindDomain MeasureTheory Filter Topology Formalism.MainNo
 open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK
 open GlobalTheory.Doubling (absE)
 
-theorem _root_.PositivityTheory.Mix.T.adapted_plane_pair_restriction : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ) (X : Spc F E n) (W : Spc F E d)
-    (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), IsPair B M χX χW om r s r' s' →
-    ∀ (n₁ : ℕ) (X₁ : Spc F E n₁) (H : Plane E n n₁) (j₀ j₁ : ℕ) (M₁ : Model σ X₁ W) (om₁ : Rep σ X₁ W) (r₁ s₁ : ℕ),
-      H.IsAdapted σ B X X₁ j₀ j₁ → IsPair B M₁ χX χW om₁ r₁ s₁ r' s' →
-      ∃ e, IsEv B M M₁ H.ι 1 {u | ∃ z, u = Matrix.vecMulVec (incV F H.x) z} e := by
-  first | exact @GlobalTheory.ThKMixXEx.exists_isEv_mixedX_m | exact fun _ => @GlobalTheory.ThKMixXEx.exists_isEv_mixedX_m | exact GlobalTheory.ThKMixXEx.exists_isEv_mixedX_m | exact @GlobalTheory.ThKMixXEx.exists_isEv_mixedX_m trivial
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.WeilBound.ThetaLifts.LeviDeterminants.MixedModels.MixedModelPlanes.AdaptedPlanePairRestrictionStatement =====
@@ -722,14 +708,6 @@ open NumberField IsDedekindDomain MeasureTheory Filter Topology Formalism.MainNo
 open GlobalTheory.WeilM GlobalTheory.AdelicU GlobalTheory.LFun GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels GlobalTheory.ThK
 open GlobalTheory.Doubling (absE)
 
-theorem _root_.PositivityTheory.Mix.T.adapted_plane_pair_seesaw_identity : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ) (X : Spc F E n) (W : Spc F E d)
-    (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), IsPair B M χX χW om r s r' s' →
-    ∀ (n₁ : ℕ) (X₁ : Spc F E n₁) (H : Plane E n n₁) (j₀ j₁ : ℕ) (M₁ : Model σ X₁ W) (om₁ : Rep σ X₁ W) (r₁ s₁ : ℕ),
-      H.IsAdapted σ B X X₁ j₀ j₁ → IsPair B M₁ χX χW om₁ r₁ s₁ r' s' →
-      ∀ e, IsEv B M M₁ H.ι 1 {u | ∃ z, u = Matrix.vecMulVec (incV F H.x) z} e →
-      ∀ (t : (_root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.AE (F := F) (E := E))ˣ) (g₁ : UA σ X₁.J) (m : UA σ X.J), IsLevi H t g₁ m → ∀ Φ ∈ schA F (Fin n × Fin d),
-        e (om (m, 1) Φ) = ((χW t : ℂ) * (((absE F E t : ℝ) ^ ((d : ℝ) / 2) : ℝ) : ℂ)) • om₁ (g₁, 1) (e Φ) := by
-  first | exact @PositivityTheory.Mix.theta_tower_hermitian_second_holds | exact @PositivityTheory.Mix.theta_tower_hermitian_second_holds | exact PositivityTheory.Mix.theta_tower_hermitian_second_holds | exact @PositivityTheory.Mix.theta_tower_hermitian_second_holds trivial
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.WeilBound.ThetaLifts.LeviDeterminants.MixedModels.MixedModelPlanes.AdaptedPlanePairSeesawIdentity =====
@@ -803,7 +781,7 @@ theorem twist_heis_inv : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [N
   have hcol : ∀ m, ∑ i, ∑ k, H.ι i m * (X.J i k * σ (H.x k)) = 0 := by
     intro m
     have h := (hH.orth (Pi.single m 1)).1
-    simp only [form, Matrix.mulVec_single_one, dotProduct, Matrix.mulVec] at h
+    simp only [form, dotProduct, Matrix.mulVec] at h
     simpa [Finset.mul_sum, Pi.single_apply, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.sum_mul] using h
   have hperp : ∀ (z : Matrix (Fin n₁) (Fin d) (_root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.AE (F := F) (E := E))) (q : Fin d → _root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.AE (F := F) (E := E)),
       symp (cA σ) (-1) (incM F X.J) (incM F W.J) (incM F H.ι * z) (Matrix.vecMulVec (incV F H.x) q) = 0 := by
@@ -983,7 +961,7 @@ theorem PositivityTheory.Mix.unitary_fixing_isotropic_complement : ∀ (F E : Ty
     have e2 : (2 : AE F E) • (mat m *ᵥ (mat u *ᵥ vy)) = (2 * s₀ * 2) • vx + (2 : AE F E) • (ιM *ᵥ z₀) + vy := by
       simp only [huy, hr, Matrix.mulVec_add, Matrix.mulVec_smul, hmx, hmι, one_smul, smul_add, hmy]
       funext i
-      simp only [Pi.add_apply, Pi.sub_apply, Pi.smul_apply, smul_eq_mul]
+      simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
       ring
     rw [e, ← Matrix.mulVec_smul, ← Matrix.mulVec_smul, e2]
     simp only [Matrix.mulVec_add, Matrix.mulVec_sub, Matrix.mulVec_smul, hUiι, hUix, hUiy]
@@ -1019,7 +997,7 @@ theorem PositivityTheory.Mix.unitary_fixing_isotropic_complement : ∀ (F E : Ty
       · rw [pow_succ, ← Matrix.mulVec_mulVec, hAy, Matrix.mulVec_add, Matrix.mulVec_smul, h3, h1]
         push_cast
         funext i
-        simp only [Pi.add_apply, Pi.sub_apply, Pi.smul_apply, smul_eq_mul]
+        simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
         ring
   have hext : ∀ P Q : Matrix (Fin n) (Fin n) (AE F E), (∀ v, P *ᵥ v = Q *ᵥ v) → P = Q := by
     intro P Q h
@@ -1037,7 +1015,7 @@ theorem PositivityTheory.Mix.unitary_fixing_isotropic_complement : ∀ (F E : Ty
       have hL : (t : AE F E) • ((mat m' * Am) *ᵥ vy) = vy + ((t : AE F E) * t * c₀) • vx := by
         rw [← Matrix.mulVec_mulVec, hAy, Matrix.mulVec_add, Matrix.mulVec_smul, hm'x, smul_add, hm'y]
         funext i
-        simp only [Pi.add_apply, Pi.sub_apply, Pi.smul_apply, smul_eq_mul]
+        simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
         ring
       have hR : (t : AE F E) • ((Am ^ (t ^ 2) * mat m') *ᵥ vy) = vy + ((t : AE F E) * t * c₀) • vx := by
         rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_smul, hm'y, (hpow _).2.2]
@@ -1190,15 +1168,15 @@ theorem mixed_model_plane_X_m : ∀ (F E : Type) [Field F] [NumberField F] [Fiel
       ∀ h t g₁ m, IsLevi H t g₁ m → ∀ u ∈ unip σ X H, ∀ Φ ∈ schA F (Fin n × Fin d),
         e (om (u * m, h) Φ) = ((χW t : ℂ) * (((absE F E t : ℝ) ^ ((d : ℝ) / 2) : ℝ) : ℂ)) • om₁ (g₁, h) (e Φ) := by
   intro F E _ _ _ _ _ σ B n d X W M χX χW om r s r' s' hP n₁ X₁ H j₀ j₁ M₁ om₁ r₁ s₁ hH hP₁
-  refine ⟨PositivityTheory.Mix.T.adapted_plane_pair_restriction F E σ B n d X W M χX χW om r s r' s' hP n₁ X₁ H j₀ j₁ M₁ om₁ r₁ s₁ hH hP₁, ?_⟩
+  refine ⟨_root_.GlobalTheory.ThKMixXEx.exists_isEv_mixedX_m F E σ B n d X W M χX χW om r s r' s' hP n₁ X₁ H j₀ j₁ M₁ om₁ r₁ s₁ hH hP₁, ?_⟩
   intro e he h t g₁ m hm u hu Φ hΦ
   have pres : ∀ x, ∀ Φ ∈ schA F (Fin n × Fin d), om x Φ ∈ schA F (Fin n × Fin d) :=
     fun x Φ hΦ => hP.weil.isUSplitting.pres x Φ hΦ
   have hsplit : ((u * m, h) : UA σ X.J × UA σ W.J) = ((u, 1) * (m, 1)) * (1, h) := by simp
   rw [hsplit, map_mul, map_mul, Module.End.mul_apply, Module.End.mul_apply,
     _root_.GlobalTheory.MixXUnip.unip_trivial_m F E σ B n d X W M χX χW om r s r' s' hP n₁ X₁ H j₀ j₁ M₁ om₁ r₁ s₁ hH hP₁ e he u hu _ (pres _ _ (pres _ _ hΦ)),
-    PositivityTheory.Mix.T.adapted_plane_pair_seesaw_identity F E σ B n d X W M χX χW om r s r' s' hP n₁ X₁ H j₀ j₁ M₁ om₁ r₁ s₁ hH hP₁ e he t g₁ m hm _ (pres _ _ hΦ),
-    PositivityTheory.Mix.T.adapted_plane_pair_local_factor F E σ B n d X W M χX χW om r s r' s' hP n₁ X₁ H j₀ j₁ M₁ om₁ r₁ s₁ hH hP₁ e he h Φ hΦ,
+    _root_.PositivityTheory.Mix.theta_tower_hermitian_second_holds F E σ B n d X W M χX χW om r s r' s' hP n₁ X₁ H j₀ j₁ M₁ om₁ r₁ s₁ hH hP₁ e he t g₁ m hm _ (pres _ _ hΦ),
+    _root_.PositivityTheory.Mix.theta_tower_hermitian_first_holds F E σ B n d X W M χX χW om r s r' s' hP n₁ X₁ H j₀ j₁ M₁ om₁ r₁ s₁ hH hP₁ e he h Φ hΦ,
     ← Module.End.mul_apply, ← map_mul]
   simp
 

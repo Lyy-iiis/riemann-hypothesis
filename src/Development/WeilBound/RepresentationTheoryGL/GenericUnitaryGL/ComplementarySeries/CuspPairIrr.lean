@@ -239,7 +239,7 @@ def jacTheta {h N : ℕ} (d : Fin h → ℕ) (hd : ∑ a, d a = N) (hd' : ∑ a,
     refine Submodule.linearMap_qext _ (LinearMap.ext fun v => ?_)
     obtain ⟨u, hu, hm⟩ := leviProj_thetaW_leviEmb (k := k) d hd hd' m
     simp only [LinearMap.comp_apply, Submodule.mkQ_apply, LinearEquiv.coe_coe, MonoidHom.comp_apply, jac, jacU,
-      twist_apply, LinearMap.smul_apply, jacquet_mk, LinearEquiv.map_smul, Submodule.quotEquivOfEq_mk,
+      twist_apply, jacquet_mk, LinearEquiv.map_smul, Submodule.quotEquivOfEq_mk,
       deltaHalf_thetaL, MonoidHom.inv_apply]
     congr 1
     rw [hm, map_mul, Module.End.mul_apply]
@@ -312,15 +312,7 @@ theorem nontrivial_of_irr {G : Type} [Group G] [TopologicalSpace G] (τ : IrrRep
   rw [Subsingleton.elim x 0]
   exact ⟨fun _ => zero_mem _, fun _ => zero_mem _⟩
 
-theorem nontrivial_of_isIrreducible {G V : Type} [Group G] [AddCommGroup V] [Module ℂ V]
-    {π : Representation ℂ G V} (hi : π.IsIrreducible) : Nontrivial V := by
-  by_contra hs
-  rw [not_nontrivial_iff_subsingleton] at hs
-  apply (bot_ne_top : (⊥ : Subrepresentation π) ≠ ⊤)
-  apply Subrepresentation.ext
-  ext x
-  rw [Subsingleton.elim x 0]
-  exact ⟨fun _ => zero_mem _, fun _ => zero_mem _⟩
+alias nontrivial_of_isIrreducible := _root_.GlobalTheory.JacFactor.nontrivial_of_isIrreducible
 
 theorem continuous_inv_addChar (ψ : AddChar k Circle) (hc : Continuous ψ) : Continuous (ψ⁻¹ : AddChar k Circle) := by
   have : (⇑(ψ⁻¹ : AddChar k Circle)) = fun a => ψ (-a) := funext fun a => AddChar.inv_apply ψ a

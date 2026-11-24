@@ -100,24 +100,11 @@ open GlobalTheory.SplitScalar
 
 variable {D : D7}
 
-theorem symplO_add_right' (V W : HSp D) (x y y' : WO V W) :
-    symplO V W x (y + y') = symplO V W x y + symplO V W x y' := by
-  rw [← symplOH_add_self V W x (y + y'), ← symplOH_add_self V W x y, ← symplOH_add_self V W x y',
-    symplOH_add_right]
-  abel
-
 theorem symplO_nsmul_right (V W : HSp D) (x y : WO V W) (k : ℕ) :
     symplO V W x (k • y) = k • symplO V W x y := by
   induction k with
   | zero => rw [zero_nsmul, zero_nsmul, symplO_zero_right]
-  | succ k ih => rw [succ_nsmul, symplO_add_right', ih, succ_nsmul]
-
-theorem cA_invol (x : AE D) : cA D (cA D x) = x := by
-  induction x using TensorProduct.inductionOn with
-  | add x y hx hy => rw [RingHom.map_add (f := _), RingHom.map_add (f := _), hx, hy]
-  | tmul a x =>
-    change a ⊗ₜ[D.host.F] star (star x) = _
-    rw [star_star]
+  | succ k ih => rw [succ_nsmul, _root_.GlobalTheory.LatVac.symplO_add_right, ih, succ_nsmul]
 
 theorem flipElt_mul_of_half {e eT x : AE D} (m : ℕ) (hx : e * x = x) (h1 : e * eT = eT) (h3 : e * e = e)
     (h5 : e * cA D eT = 0) : flipElt eT m * x = (e - eT) * x + (m : AE D) * (eT * x) := by
@@ -182,7 +169,7 @@ theorem flip_translates : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : In
       _ = 0 := by rw [h, zero_mul]
   have h6 : cA D eT * cA D eT = cA D eT := by rw [← map_mul, h2]
   have hm0 : m ≠ 0 := hm.pos.ne'
-  have hcc : cA D (cA D eT) = eT := GlobalTheory.FlipTranslates.cA_invol eT
+  have hcc : cA D (cA D eT) = eT := _root_.Formalism.L2.Theta.cA_cA eT
   have hst : ∀ a : AE D, a * a = a → ∀ w ∈ latO V W (ΛV : Set (Fin V.rank → D.host.E))
       (ΛW : Set (Fin W.rank → D.host.E)) (fun _ => True), a • w ∈ latO V W (ΛV : Set (Fin V.rank → D.host.E))
       (ΛW : Set (Fin W.rank → D.host.E)) (fun _ => True) := fun a ha w hw => idem_smul_mem ha w hw
@@ -363,7 +350,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.centralFlip_maps_halfTranslates_span : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ΛV : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (ΛW : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E)) (sW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ) (f₀ : WO V W → ℂ), VacPair ψ θ V W χV χW om ΛV ΛW sW f₀ → ∀ (T : Finset (Formalism.L2.DIV.Pl D.host.E)) (m : ℕ) (eT : AE D) (z : GA D V) (s : ℂ) (Y : Finset (WO V W)), IsIdemSum eT T → Odd m → Nat.Coprime m (GlobalTheory.Tow.badN D) → (∀ PP ∈ T, ((m : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal) → Formalism.L2.Theta.mt V z = flipElt eT m • (1 : Matrix (Fin V.rank) (Fin V.rank) (AE D)) → s ≠ 0 → (∀ y ∈ Y, IsHalf (cA D eT) y ∧ m • y ∈ latO V W (ΛV : Set (Fin V.rank → D.host.E)) (ΛW : Set (Fin W.rank → D.host.E)) (fun _ => True)) → om (z⁻¹, 1) f₀ = s • ∑ y ∈ Y, heisO ψ V W y f₀ → ∀ (M u : ℕ) (e e' : AE D) (P : Finset (Formalism.L2.DIV.Pl D.host.E)) (O : Subring ℂ), M = m * u → (∀ PP ∈ T, ((u : ℕ) : 𝓞 D.host.E) ∉ PP.asIdeal) → IsIdemSum e P → T ⊆ P → e' = e - eT + cA D eT → zeta M ∈ O → ∀ f ∈ trSp ψ V W ΛV ΛW f₀ e M O, ∃ F ∈ trSp ψ V W ΛV ΛW f₀ e' M O, om (z, 1) (s • F) = f := by
-  first | exact @GlobalTheory.FlipTranslates.flip_translates | exact GlobalTheory.FlipTranslates.flip_translates | (intros; apply GlobalTheory.FlipTranslates.flip_translates <;> assumption)
+  first | exact @GlobalTheory.FlipTranslates.flip_translates
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.CentralFlipMapsHalfTranslatesSpanStatement =====
@@ -386,7 +373,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.centralFlip_vacuum_eq_multiple_of_translate_mean : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ΛV : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (ΛW : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E)) (sW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ) (f₀ : WO V W → ℂ), VacPair ψ θ V W χV χW om ΛV ΛW sW f₀ → ∀ (T : Finset (Formalism.L2.DIV.Pl D.host.E)) (m : ℕ) (eT : AE D) (z : GA D V), IsIdemSum eT T → Odd m → Nat.Coprime m (GlobalTheory.Tow.badN D) → (∀ PP ∈ T, ((m : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal) → z ∈ GfC V → Formalism.L2.Theta.mt V z = flipElt eT m • (1 : Matrix (Fin V.rank) (Fin V.rank) (AE D)) → ∃ (lam : ℂ) (Y : Finset (WO V W)), (∀ y ∈ Y, IsHalf (cA D eT) y ∧ m • y ∈ latO V W (ΛV : Set (Fin V.rank → D.host.E)) (ΛW : Set (Fin W.rank → D.host.E)) (fun _ => True)) ∧ (∀ y ∈ Y, ∀ y' ∈ Y, y - y' ∈ latO V W (ΛV : Set (Fin V.rank → D.host.E)) (ΛW : Set (Fin W.rank → D.host.E)) (fun _ => True) → y = y') ∧ Y.card = flipIdx V W T m ∧ om (z⁻¹, 1) f₀ = lam • ∑ y ∈ Y, heisO ψ V W y f₀ := by
-  first | exact @GlobalTheory.LevelSeries.moved_vacuum_eq_mean | exact GlobalTheory.LevelSeries.moved_vacuum_eq_mean | (intros; apply GlobalTheory.LevelSeries.moved_vacuum_eq_mean <;> assumption)
+  first | exact @GlobalTheory.LevelSeries.moved_vacuum_eq_mean
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.CentralFlipVacuumEqMultipleOfTranslateMeanStatement =====
@@ -478,7 +465,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.isIdemSum_conjugatePlaces_subset_eq_flip : ∀ (D : D7) (e eT e' : AE D) (P T : Finset (Formalism.L2.DIV.Pl D.host.E)), IsIdemSum e P → IsIdemSum eT T → T ⊆ P → IsIdemSum e' ((P \ T) ∪ T.image Formalism.L2.DIV.conjPl) → e' = e - eT + cA D eT := by
-  first | exact @GlobalTheory.FlipIdemSum.idemSum_flip_subset | exact GlobalTheory.FlipIdemSum.idemSum_flip_subset | (intros; apply GlobalTheory.FlipIdemSum.idemSum_flip_subset <;> assumption)
+  first | exact @GlobalTheory.FlipIdemSum.idemSum_flip_subset
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsIdemSumConjugatePlacesSubsetEqFlipStatement =====
@@ -615,7 +602,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.weilOperator_inv_centralFlip_invariantForm_eq : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χV χW om → ∀ (P : Formalism.L2.DIV.Pl D.host.E) (e : AE D) (m : ℕ) (g : GA D V) (x : (AE D)ˣ) (ℓ : (WO V W → ℂ) →ₗ[ℂ] ℂ), Formalism.L2.NTheta.IsIdemAt e P → m ≠ 0 → Formalism.L2.Theta.mt V g = flipElt e m • (1 : Matrix (Fin V.rank) (Fin V.rank) (AE D)) → IsFlipDet V e m x → (∀ y : WO V W, IsHalf (cA D e) y → ∀ φ : WO V W → ℂ, IsThetaFunO ψ V W φ → ℓ (heisO ψ V W y φ) = ℓ φ) → ∃ r : ℝ, 0 < r ∧ ∀ f : WO V W → ℂ, IsThetaFunO ψ V W f → ℓ (om (g⁻¹, 1) f) = (r : ℂ) * ((χW x : Circle) : ℂ)⁻¹ * ℓ f := by
-  first | exact @GlobalTheory.LevelSeries.FlipScalStep.om_inv_flip_eq | exact GlobalTheory.LevelSeries.FlipScalStep.om_inv_flip_eq | (intros; apply GlobalTheory.LevelSeries.FlipScalStep.om_inv_flip_eq <;> assumption)
+  first | exact @GlobalTheory.LevelSeries.FlipScalStep.om_inv_flip_eq
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.WeilOperatorInvCentralFlipInvariantFormEqStatement =====
@@ -784,7 +771,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.centralFlip_splitPlaces_invariantForm_phase : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χV χW om → ∀ (T : Finset (Formalism.L2.DIV.Pl D.host.E)) (eT : AE D) (m : ℕ) (z : GA D V) (x : (AE D)ˣ) (ℓ : (WO V W → ℂ) →ₗ[ℂ] ℂ), IsIdemSum eT T → m ≠ 0 → Formalism.L2.Theta.mt V z = flipElt eT m • (1 : Matrix (Fin V.rank) (Fin V.rank) (AE D)) → IsFlipDet V eT m x → (∀ y : WO V W, IsHalf (cA D eT) y → ∀ φ : WO V W → ℂ, IsThetaFunO ψ V W φ → ℓ (heisO ψ V W y φ) = ℓ φ) → ∃ r : ℝ, 0 < r ∧ ∀ f : WO V W → ℂ, IsThetaFunO ψ V W f → ℓ (om (z⁻¹, 1) f) = (r : ℂ) * ((χW x : Circle) : ℂ)⁻¹ * ℓ f := by
-  first | exact @GlobalTheory.LevelSeries.centralFlip_phase | exact GlobalTheory.LevelSeries.centralFlip_phase | (intros; apply GlobalTheory.LevelSeries.centralFlip_phase <;> assumption)
+  first | exact @GlobalTheory.LevelSeries.centralFlip_phase
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.CentralFlipSplitPlacesInvariantFormPhaseStatement =====
@@ -807,7 +794,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.exists_conjHalfInvariant_form_idemSum_vacuum_ne_zero : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ΛV : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (ΛW : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E)) (sW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ) (f₀ : WO V W → ℂ), VacPair ψ θ V W χV χW om ΛV ΛW sW f₀ → ∀ (T : Finset (Formalism.L2.DIV.Pl D.host.E)) (eT : AE D), IsIdemSum eT T → ∃ ℓ : (WO V W → ℂ) →ₗ[ℂ] ℂ, ℓ f₀ ≠ 0 ∧ ∀ y : WO V W, IsHalf (cA D eT) y → ∀ φ : WO V W → ℂ, IsThetaFunO ψ V W φ → ℓ (heisO ψ V W y φ) = ℓ φ := by
-  first | exact @GlobalTheory.LevelSeries.exists_invariant_form_idemSum | exact GlobalTheory.LevelSeries.exists_invariant_form_idemSum | (intros; apply GlobalTheory.LevelSeries.exists_invariant_form_idemSum <;> assumption)
+  first | exact @GlobalTheory.LevelSeries.exists_invariant_form_idemSum
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsConjHalfInvariantFormIdemSumVacuumNeZeroStatement =====
@@ -830,7 +817,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.vacuumTranslates_conjHalf_sq_norm_eq_card : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ΛV : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (ΛW : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E)) (sW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ) (f₀ : WO V W → ℂ), VacPair ψ θ V W χV χW om ΛV ΛW sW f₀ → ∀ (T : Finset (Formalism.L2.DIV.Pl D.host.E)) (eT : AE D), IsIdemSum eT T → ∀ (Y : Finset (WO V W)), (∀ y ∈ Y, IsHalf (cA D eT) y) → (∀ y ∈ Y, ∀ y' ∈ Y, y - y' ∈ latO V W (ΛV : Set (Fin V.rank → D.host.E)) (ΛW : Set (Fin W.rank → D.host.E)) (fun _ => True) → y = y') → ∀ (μ : MeasureTheory.Measure (WO V W)) (𝓕 : Set (WO V W)), IsCovolOne (ratL W V) μ 𝓕 → nrm2 μ 𝓕 (∑ y ∈ Y, heisO ψ V W y f₀) = Y.card := by
-  first | exact @GlobalTheory.VacTransOrth.vacuumTranslates_conjHalf_sq_norm_eq_card_alt | exact GlobalTheory.VacTransOrth.vacuumTranslates_conjHalf_sq_norm_eq_card_alt | (intros; apply GlobalTheory.VacTransOrth.vacuumTranslates_conjHalf_sq_norm_eq_card_alt <;> assumption)
+  first | exact @GlobalTheory.VacTransOrth.vacuumTranslates_conjHalf_sq_norm_eq_card_alt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.VacuumTranslatesConjHalfSqNormEqCardStatement =====
@@ -896,7 +883,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.weil_representation_preserves_norm : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (χS χT : (AE D)ˣ →* Circle) (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)), IsWeilDatumO ψ S T χS χT om → ∀ (μ : MeasureTheory.Measure (WO S T)) (𝓕 : Set (WO S T)), IsCovolOne (ratL T S) μ 𝓕 → ∀ (p : GA D S × GA D T) (f : WO S T → ℂ), IsThetaFunO ψ S T f → nrm2 μ 𝓕 f = 1 → nrm2 μ 𝓕 (om p f) = 1 := by
-  first | exact @GlobalTheory.WeilUnitNorm.weil_norm_one_of_unit_norm | exact GlobalTheory.WeilUnitNorm.weil_norm_one_of_unit_norm | (intros; apply GlobalTheory.WeilUnitNorm.weil_norm_one_of_unit_norm <;> assumption)
+  first | exact @GlobalTheory.WeilUnitNorm.weil_norm_one_of_unit_norm
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.WeilRepresentationPreservesNormStatement =====
@@ -1001,7 +988,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.movedVacuum_translateSum_flipScalar : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ΛV : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (ΛW : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E)) (sW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ) (f₀ : WO V W → ℂ), VacPair ψ θ V W χV χW om ΛV ΛW sW f₀ → ∀ (T : Finset (Formalism.L2.DIV.Pl D.host.E)) (m : ℕ) (eT : AE D) (z : GA D V) (x : (AE D)ˣ) (lam : ℂ) (Y : Finset (WO V W)), IsIdemSum eT T → Odd m → Nat.Coprime m (GlobalTheory.Tow.badN D) → (∀ PP ∈ T, ((m : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal) → z ∈ GfC V → Formalism.L2.Theta.mt V z = flipElt eT m • (1 : Matrix (Fin V.rank) (Fin V.rank) (AE D)) → IsFlipDet V eT m x → (∀ y ∈ Y, IsHalf (cA D eT) y ∧ m • y ∈ latO V W (ΛV : Set (Fin V.rank → D.host.E)) (ΛW : Set (Fin W.rank → D.host.E)) (fun _ => True)) → (∀ y ∈ Y, ∀ y' ∈ Y, y - y' ∈ latO V W (ΛV : Set (Fin V.rank → D.host.E)) (ΛW : Set (Fin W.rank → D.host.E)) (fun _ => True) → y = y') → Y.card = flipIdx V W T m → om (z⁻¹, 1) f₀ = lam • ∑ y ∈ Y, heisO ψ V W y f₀ → lam = flipScal χW V W T m x := by
-  first | exact @GlobalTheory.FlipScal.moved_vacuum_factor | exact GlobalTheory.FlipScal.moved_vacuum_factor | (intros; apply GlobalTheory.FlipScal.moved_vacuum_factor <;> assumption)
+  first | exact @GlobalTheory.FlipScal.moved_vacuum_factor
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.MovedVacuumTranslateSumFlipScalarStatement =====
@@ -1087,7 +1074,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.exists_central_flip_translate_halfPlaces_thetaPair : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ΛV : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (ΛW : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E)) (sW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ) (f₀ : WO V W → ℂ), VacPair ψ θ V W χV χW om ΛV ΛW sW f₀ → ∀ (T : Finset (Formalism.L2.DIV.Pl D.host.E)) (m : ℕ), ∃ z : GA D V, z ∈ GfC V ∧ (∀ l : ℕ, (∀ PP ∈ T, ((l : ℕ) : 𝓞 D.host.E) ∉ PP.asIdeal) → OneAt V l z) ∧ ∀ eT : AE D, IsIdemSum eT T → Odd m → Nat.Coprime m (GlobalTheory.Tow.badN D) → (∀ PP ∈ T, ((m : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal) → ∃ x : (AE D)ˣ, IsFlipDet V eT m x ∧ ∀ (M u : ℕ) (e e' : AE D) (P : Finset (Formalism.L2.DIV.Pl D.host.E)) (O : Subring ℂ), M = m * u → (∀ PP ∈ T, ((u : ℕ) : 𝓞 D.host.E) ∉ PP.asIdeal) → IsIdemSum e P → T ⊆ P → IsIdemSum e' ((P \ T) ∪ T.image Formalism.L2.DIV.conjPl) → zeta M ∈ O → ∀ f ∈ trSp ψ V W ΛV ΛW f₀ e M O, ∃ F ∈ trSp ψ V W ΛV ΛW f₀ e' M O, om (z, 1) (flipScal χW V W T m x • F) = f := by
-  first | exact @GlobalTheory.LevelSeries.exists_central_flip_step | exact GlobalTheory.LevelSeries.exists_central_flip_step | (intros; apply GlobalTheory.LevelSeries.exists_central_flip_step <;> assumption)
+  first | exact @GlobalTheory.LevelSeries.exists_central_flip_step
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsCentralFlipTranslateHalfPlacesThetaPairStatement =====

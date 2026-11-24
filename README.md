@@ -70,7 +70,7 @@ Compiling the submission runs its code, so you may want to do it in a VM or your
 
 ```bash
 export LEAN_ABORT_ON_PANIC=1        # as Comparator does
-export LAKE_ARTIFACT_CACHE=false    # in case cache-env.sh was sourced
+export LAKE_ARTIFACT_CACHE=false    # compile everything; read nothing from a Lake cache
 
 # in a clone where the submission has not been compiled
 lake build Challenge

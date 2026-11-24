@@ -524,8 +524,8 @@ theorem w_symm (x : Fin (r + 1)) : (W).symm x = W x := wPt_symm pN x
 
 def sw (q : Formalism.FourierDecayAlt.C2.Lstidx W) : Formalism.FourierDecayAlt.C2.Lstidx W :=
   ⟨(W q.1.2, W q.1.1), by
-    exact ⟨by simpa only [w_symm] using q.2.2,
-      by simpa only [w_symm, wPt_invol] using q.2.1⟩⟩
+    exact ⟨by simpa only [_root_.Formalism.MainNotions.BigCellDensity.wPt_symm] using q.2.2,
+      by simpa only [_root_.Formalism.MainNotions.BigCellDensity.wPt_symm, wPt_invol] using q.2.1⟩⟩
 
 variable (d : Fin (r + 1) → ℂ)
 
@@ -567,12 +567,12 @@ theorem low_R_mono (hd : ∀ a, d a ≠ 0) (x' : Formalism.FourierDecayAlt.C2.Ls
   rw [low_apply', low_apply']
   by_cases h1 : i = (wPt pN) b
   · subst h1
-    simp [wPt_invol, w_symm]
+    simp [wPt_invol, _root_.Formalism.MainNotions.BigCellDensity.wPt_symm]
   · have h1' : b ≠ (wPt pN) i := fun h => h1 (by rw [h, wPt_invol])
     rw [ite_eq_right h1, ite_eq_right h1', zero_add, zero_add]
     have key : ((wPt pN) b < i ∧ (wPt pN).symm i < (wPt pN).symm ((wPt pN) b)) ↔
         ((wPt pN) i < b ∧ (wPt pN).symm b < (wPt pN).symm ((wPt pN) i)) := by
-      rw [Equiv.symm_apply_apply, Equiv.symm_apply_apply, w_symm, w_symm]
+      rw [Equiv.symm_apply_apply, Equiv.symm_apply_apply, _root_.Formalism.MainNotions.BigCellDensity.wPt_symm, _root_.Formalism.MainNotions.BigCellDensity.wPt_symm]
       exact And.comm
     by_cases h2 : (wPt pN) b < i ∧ (wPt pN).symm i < (wPt pN).symm ((wPt pN) b)
     · have h3 := key.1 h2
@@ -1627,7 +1627,7 @@ theorem measPinAt_of (sc : ℝ) (hsc : 0 < sc) (i0 i0' : ∀ _ : InfinitePlace X
     refine Equiv.ext fun x => Fin.ext ?_
     calc ((hloc.2 ▸ Formalism.FourierDecayAlt.D.ptPerm p' : Equiv.Perm (Fin (D.R.rS + 1))) x).val
         = (Formalism.FourierDecayAlt.D.ptPerm p' ⟨x.val, by rw [hloc.2]; exact x.isLt⟩).val := Formalism.MainNotions.BigCellDensity.cast_perm_val _ _ _
-      _ = Formalism.FourierDecayAlt.D.ptPartner p' x.val := (Formalism.FourierDecayAlt.P.ptPerm_spec p' (D.R.rS + 1) hloc).1 _
+      _ = Formalism.FourierDecayAlt.D.ptPartner p' x.val := (_root_.Formalism.FourierDecayAlt.P.Dx1.d_ptPermSpec p' (D.R.rS + 1) hloc).1 _
       _ = Formalism.FourierDecayAlt.D.ptPartner (pN.1.map Prod.swap) x.val := by rw [hswap]
       _ = (Formalism.MainNotions.BigCellDensity.wPt pN x).val := (Formalism.MainNotions.BigCellDensity.wPt_val pN x).symm
   have hdm : ∀ q : Formalism.FourierDecayAlt.C2.Lstidx (Formalism.MainNotions.BigCellDensity.wPt pN),
@@ -1662,7 +1662,7 @@ theorem measPinAt_of (sc : ℝ) (hsc : 0 < sc) (i0 i0' : ∀ _ : InfinitePlace X
         (trG ((PP).Q v) ((PP).Qi v) ((h v)⁻¹ * (gamW X u u' w) v * h' v))} = 0 := by
     have hS : IsClosed {x : Formalism.QuantumDeterminants.Mt D.R.k D.R.rS | Matrix.of x ∈ Formalism.FourierDecayAlt.C6.Rset
         (trG ((PP).Q v) ((PP).Qi v) ((h v)⁻¹ * (gamW X u u' w) v * h' v))} :=
-      (Formalism.FourierDecayAlt.P.Dx2.OrbJ.closedR (Formalism.FourierDecayAlt.P.Dx2.Rad.isUnit_G hδG)).closed
+      (Formalism.FourierDecayAlt.P.Dx2.OrbJ.closedR (_root_.PI.StabPairsW.isUnit_det_of_mem_GV hδG)).closed
     rw [Measure.map_map hΦ2 hΦ1]
     refine (Measure.map_apply (hΦ2.comp hΦ1) ?_).trans ?_
     · exact hS.measurableSet.compl
@@ -1766,7 +1766,7 @@ theorem measPinAt_of (sc : ℝ) (hsc : 0 < sc) (i0 i0' : ∀ _ : InfinitePlace X
       simp only [Formalism.BasicNotions.Host.ka, Formalism.BasicNotions.Host.v]
       have hπ := Real.pi_ne_zero
       have := hpos_rd.ne'
-      first | (field_simp; done) | (field_simp; ring)
+      first | (field_simp; done)
     have hgX : (X.B.g : ℝ) = ((PP).S.g : ℝ) := by
       show (X.B.g : ℝ) = ((D.host.g 0 * D.host.g 1 : ℕ) : ℝ)
       rw [X.g_eq]
@@ -1780,7 +1780,7 @@ theorem measPinAt_of (sc : ℝ) (hsc : 0 < sc) (i0 i0' : ∀ _ : InfinitePlace X
       rw [← Formalism.L2.SG.BlockScaling.rdE_eq_rd', hy]
       unfold Formalism.FourierDecayAlt.D.kapG
       have := Real.pi_pos
-      first | (field_simp; done) | (field_simp; ring)
+      first | (field_simp; done)
     set F : ℕ → ℝ := fun m => Formalism.FourierDecayAlt.D.kapG ((PP).S.g : ℝ) (Formalism.FourierDecayAlt.S6.rd D.host.E) ^ (1 - 2 * (m : ℤ)) / Real.pi
       with hF
     have hF0 : ∀ m, 0 ≤ F m := fun m => div_nonneg (zpow_nonneg (by rw [hkap]; positivity) _) Real.pi_pos.le
@@ -1797,7 +1797,7 @@ theorem measPinAt_of (sc : ℝ) (hsc : 0 < sc) (i0 i0' : ∀ _ : InfinitePlace X
       rw [e, pow_add, _root_.inv_zpow', neg_sub, zpow_sub₀ hy0.ne', zpow_one, show (2 * ((q.2.val - q.1.val : ℕ) : ℤ)) =
         ((2 * (q.2.val - q.1.val) : ℕ) : ℤ) by push_cast; ring, zpow_natCast, pow_mul, hy]
       have h1 : (D.host.rdE * ((PP).S.g : ℝ) / (2 * Real.pi)) ≠ 0 := hy0.ne'
-      first | (field_simp; done) | (field_simp; ring)
+      first | (field_simp; done)
     rw [Finset.prod_coe_sort (Formalism.MainNotions.S.rootPat pN) (fun q => ENNReal.ofReal (D.host.ka / X.B.g / Real.pi) *
       ENNReal.ofReal (Complex.normSq (sP q))⁻¹), Finset.prod_congr rfl hterm,
       ← ENNReal.ofReal_prod_of_nonneg (fun q _ => hF0 _), Formalism.L2.SG.TriangularProducts.prod_rootPat pN F]

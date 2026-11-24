@@ -416,7 +416,7 @@ theorem _root_.GlobalTheory.T.complexHecke_conjugatePlace_petersson_adjoint : �
         (Rl.HW i (Formalism.IndefR.Links.sg0 D A3.A)).e y' =
           Formalism.IndefR.Mult.heckeOn (Rl.MW i (Formalism.IndefR.Links.sg0 D A3.A)) R' ((Rl.HW i (Formalism.IndefR.Links.sg0 D A3.A)).e y) →
         ⟪x', y⟫_ℂ = ⟪x, y'⟫_ℂ := by
-  first | exact @GlobalTheory.CxHeckeAdj.hecke_adjoint | exact GlobalTheory.CxHeckeAdj.hecke_adjoint | (intros; apply GlobalTheory.CxHeckeAdj.hecke_adjoint <;> assumption)
+  first | exact @GlobalTheory.CxHeckeAdj.hecke_adjoint
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ComplexHeckeConjugatePlacePeterssonAdjointStatement =====
@@ -430,14 +430,6 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.Integral
 open scoped TensorProduct InnerProductSpace
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.exists_conjugate_splitPlace_off_stableSet : ∀ (D : D7) (S0 : Finset (PlE D.host)) (Sb : Finset (Formalism.L2.DIV.Pl D.host.E)) (P : PlE D.host),
-    (∀ P1 P2, P1 ∈ S0 → IsConjPl D.host P1 P2 → P2 ∈ S0) → placesOver D.host.E 2 ⊆ (S0 : Set (PlE D.host)) →
-    (∀ Q ∈ Sb, Q ∈ S0) → IsSplitPl D.host P → P ∉ S0 →
-    ∃ P' : PlE D.host, IsConjPl D.host P P' ∧ IsSplitPl D.host P' ∧ P' ∉ S0 ∧
-      Formalism.IndefR.Bridge.SplitOff P (Sb : Set (Formalism.L2.DIV.Pl D.host.E)) ∧
-      Formalism.IndefR.Bridge.SplitOff P' (Sb : Set (Formalism.L2.DIV.Pl D.host.E)) ∧
-      ((2 : ℕ) : 𝓞 D.host.E) ∉ P.asIdeal ∧ ((2 : ℕ) : 𝓞 D.host.E) ∉ P'.asIdeal := by
-  first | exact @GlobalTheory.ConjPlaceOff.exists_conj_off | exact GlobalTheory.ConjPlaceOff.exists_conj_off | (intros; apply GlobalTheory.ConjPlaceOff.exists_conj_off <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsConjugateSplitPlaceOffStableSetStatement =====
@@ -478,7 +470,7 @@ theorem goodProjW_idem : ∀ (D : D7) (S : RatDat D.ntw) (j : ℕ), D.ntw.Tw →
       by_contra h
       exact hg (hsupp g h))
   have heL : ∀ g, eL.coeff g = D.nexp.eLL0 g := fun g => by
-    simp only [eL, MonoidAlgebra.coeff_ofCoeff, Finsupp.onFinset_apply]
+    simp only [eL, Finsupp.onFinset_apply]
   have hmap : MonoidAlgebra.mapRingHom (G0g D.nd) rd eL = D.nexp.eAlg i true := by
     apply MonoidAlgebra.ext
     apply Finsupp.ext
@@ -640,7 +632,7 @@ theorem _root_.GlobalTheory.T.heckeOperatorsRationalForms_commute : ∀ {D : D7}
           GlobalTheory.GoodSS.opK S j (H.hL j k P) (fun x hx => H.hs j h1 h2 k P x hx) ∧
       ∀ g : S.G, GlobalTheory.GoodSS.opK S j (H.hL j k P) (fun x hx => H.hs j h1 h2 k P x hx) * rhoKG S j (Y.rho j h1 h2) g =
         rhoKG S j (Y.rho j h1 h2) g * GlobalTheory.GoodSS.opK S j (H.hL j k P) (fun x hx => H.hs j h1 h2 k P x hx) := by
-  first | exact @GlobalTheory.HkKs.opK_comm | exact GlobalTheory.HkKs.opK_comm | (intros; apply GlobalTheory.HkKs.opK_comm <;> assumption)
+  first | exact @GlobalTheory.HkKs.opK_comm
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HeckeOperatorsRationalFormsCommuteStatement =====
@@ -741,7 +733,7 @@ theorem aeval_adj (U : Submodule ℂ H) (S S' : Module.End ℂ H) (hS : ∀ u �
       = inner ℂ u (Polynomial.aeval S' (q.map (starRingEnd ℂ)) v) := by
   refine Polynomial.induction_on q ?_ ?_ ?_
   · intro a u hu v hv
-    simp [Module.algebraMap_end_apply, inner_smul_left, inner_smul_right, mul_comm]
+    simp [Module.algebraMap_end_apply, mul_comm]
   · intro p r hp hr u hu v hv
     simp only [map_add (f := _), Polynomial.map_add (f := _), LinearMap.add_apply, inner_add_left, inner_add_right,
       hp u hu v hv, hr u hu v hv]
@@ -880,17 +872,6 @@ noncomputable section
 
 namespace GlobalTheory.GoodSS.Heart
 
-theorem aeval_map_of_comm {K M N : Type} [Field K] [AddCommGroup M] [Module K M] [AddCommGroup N] [Module K N]
-    (f : M →ₗ[K] N) (A : Module.End K M) (B : Module.End K N) (h : ∀ x, f (A x) = B (f x)) (p : K[X]) (x : M) :
-    f (Polynomial.aeval A p x) = Polynomial.aeval B p (f x) := by
-  first
-  | exact @_root_.GlobalTheory.AevalIntertwine.aeval_intertwine
-  | exact _root_.GlobalTheory.AevalIntertwine.aeval_intertwine
-  | (apply _root_.GlobalTheory.AevalIntertwine.aeval_intertwine <;> assumption)
-  | (intros; apply _root_.GlobalTheory.AevalIntertwine.aeval_intertwine <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.AevalIntertwine.aeval_intertwine <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.AevalIntertwine.aeval_intertwine ..)
-
 theorem exists_lift_end {H X : Type} [AddCommGroup H] [Module ℂ H] [AddCommGroup X] [Module ℂ X]
     (e : H →ₗ[ℂ] X) (he : Function.Injective e) (A : X →ₗ[ℂ] X) (h : ∀ x, ∃ x', e x' = A (e x)) :
     ∃ S : Module.End ℂ H, ∀ x, e (S x) = A (e x) := by
@@ -995,7 +976,7 @@ theorem hL_separable_good : ∀ {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 I
   obtain ⟨i0, rfl⟩ : ∃ i0 : Fin D.R.m, j = (i0 : ℕ) + 1 := ⟨⟨j - 1, by omega⟩, by simp only; omega⟩
   obtain ⟨hk1, hk2, hPs, hP0⟩ := hk
   obtain ⟨P', hPP', hP's, hP'0, hoffP, hoffP', h2P, h2P'⟩ :=
-    GlobalTheory.T.exists_conjugate_splitPlace_off_stableSet D (D.ntw.S0 i) Rl.Sb P (fun P1 P2 h h' => hS0c i P1 P2 h h') (hS02 i) (hS0b i) hPs hP0
+    _root_.GlobalTheory.ConjPlaceOff.exists_conj_off D (D.ntw.S0 i) Rl.Sb P (fun P1 P2 h h' => hS0c i P1 P2 h h') (hS02 i) (hS0b i) hPs hP0
   obtain ⟨α, α', R, R', hα, hRd, hα', hRd', hxR, hyR, hadj⟩ :=
     GlobalTheory.T.complexHecke_conjugatePlace_petersson_adjoint Rl F hR i0 k P P' hPs hPP' hoffP hoffP' h2P h2P' hk1 hk2
   have hkP : HkIdx i k P := ⟨hk1, hk2, hPs, hP0⟩
@@ -1141,7 +1122,7 @@ theorem hL_separable_good : ∀ {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 I
       hadj u v (S0 u) (S1 v) (hS0 u) (hS1 v)]
   have hsep := _root_.GlobalTheory.NormalSeparable.minpoly_separable_of_normal ↥D.LL0 ↥V (Rl.HW i0 σ0).H φ jm T SS SS' hind (fun z => (hSj z).symm) hkeep hadj' hcomm
   refine ⟨minpoly ↥D.LL0 T, hsep, fun z hz => ?_⟩
-  have h := aeval_map_of_comm V.subtype T T0 (fun _ => rfl) (minpoly ↥D.LL0 T) ⟨z, hz⟩
+  have h := _root_.GlobalTheory.AevalIntertwine.aeval_intertwine V.subtype T T0 (fun _ => rfl) (minpoly ↥D.LL0 T) ⟨z, hz⟩
   rw [minpoly.aeval, LinearMap.zero_apply, map_zero] at h
   exact h.symm
 
@@ -1173,7 +1154,7 @@ theorem _root_.GlobalTheory.T.hecke_commutation_real_expansion : ∀ {D : D7} {G
         ∀ z ∈ LinearMap.range (GlobalTheory.GoodSS.goodProjectorBaseChangeForms S j (Y.rho j h1 h2) (Y.chi j h1 h2) D.nexp.eLL0),
           Polynomial.aeval (LinearMap.baseChange ↥D.LL0
             (GlobalTheory.GoodSS.opK S j (H.hL j k P) (fun x hx => H.hs j h1 h2 k P x hx))) q z = 0 := by
-  first | exact @GlobalTheory.GoodSS.Heart.hL_separable_good | exact GlobalTheory.GoodSS.Heart.hL_separable_good | (intros; apply GlobalTheory.GoodSS.Heart.hL_separable_good <;> assumption)
+  first | exact @GlobalTheory.GoodSS.Heart.hL_separable_good
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HeckeCommutationRealExpansionStatement =====

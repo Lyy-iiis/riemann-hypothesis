@@ -109,7 +109,7 @@ theorem exists_quat (n : ℕ) : ∃ α : Matrix (Fin 4) (Fin 4) ℤ,
   · rw [hn]
     ext i j
     fin_cases i <;> fin_cases j <;>
-      simp [Matrix.mul_apply, Fin.sum_univ_four, Matrix.one_apply] <;> ring
+      simp [Matrix.mul_apply, Fin.sum_univ_four] <;> ring
 
 end PositivityTheory.PrwZar
 end -- clump:auto
@@ -257,7 +257,7 @@ theorem relAmple_lPart (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) (mu : B
   rw [one_smul, cls_pull hboxLB, GlobalTheory.PosDefAmple.pull_cls_boxLB p.pr hL']
   simp only [lPart]
   simp only [cls_linComb hL, Fintype.sum_prod_type, Fin.sum_univ_four, Fin.sum_univ_eight, Fin.sum_univ_two,
-    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, one_smul, map_add, Over.id_left, pull_id]
+    Matrix.cons_val_zero, Matrix.cons_val_one, one_smul, map_add, pull_id]
   simp only [p, ← Functor.map_comp, XB.pr8]
   simp only [← Category.assoc, hq]
   simp only [Category.assoc, tensorHom_fst, tensorHom_snd, Category.comp_id, phiL]
@@ -290,17 +290,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.ZeroSectionBase (IsPrincipalPol sqT
 attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace PositivityTheory.PrwZar
-
-variable {S : Scheme.{0}} {A B : Over S} [GrpObj A] [GrpObj B] [IsCommMonObj A] [IsCommMonObj B]
-
-variable {Ω : Type} [Field Ω] [IsAlgClosed Ω]
-
-theorem isFinite_mu_fibre (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) (g : ℕ)
-    (hgA : SmoothOfRelativeDimension g A.hom) (hgB : SmoothOfRelativeDimension g B.hom) (l : A ⟶ B) [IsMonHom l]
-    (mu : B ⟶ A) [IsMonHom mu] (m : ℕ) (hm : 1 ≤ m) (h₁ : l ≫ mu = 𝟙 A ^ m) (h₂ : mu ≫ l = 𝟙 B ^ m)
-    (s : Sp Ω ⟶ S) (L : LB ((Over.pullback s).obj A).left) (hL : L.IsLB)
-    (ha : Out.RelAmple ((Over.pullback s).obj A) L) : IsFinite ((Over.pullback s).map mu).left :=
-  Z2.isFinite_mu_fibre hA hB g hgA hgB l mu m hm h₁ h₂ s L hL ha
 
 end PositivityTheory.PrwZar
 end -- clump:auto
@@ -415,15 +404,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.ZeroSectionBase (IsPrincipalPol sqT
 attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace PositivityTheory.PrwZar
-
-variable {S : Scheme.{0}} {A B : Over S} [GrpObj A] [GrpObj B] [IsCommMonObj A] [IsCommMonObj B]
-
-variable {Ω : Type} [Field Ω] [IsAlgClosed Ω]
-
-theorem relAmple_of_two_smul {G : Over (Sp Ω)} [GrpObj G] (hG : IsAbelianScheme G) {M N : LB G.left}
-    (hM : M.IsLB) (hN : N.IsLB) (d : ℕ) (hd : 1 ≤ d) (e : d • cls M hM = d • cls N hN) (h : Out.RelAmple G N) :
-    Out.RelAmple G M :=
-  Z2.relAmple_of_two_smul hG hM hN d hd e h
 
 end PositivityTheory.PrwZar
 end -- clump:auto
@@ -573,7 +553,7 @@ theorem ceLam_zb_pt (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) {P : LB (A
     simp only [← pull_comp, hφP]
     change evc hD.isLB _ _ - evc hD.isLB _ _ - evc hD.isLB _ _ + evc hD.isLB _ _ = _
     simp only [toBase_mul, toBase_one, MonObj.mul_comp, MonObj.one_comp, evc_mul_left hD,
-      evc_mul_right hD hD', hl1, hr1]
+      evc_mul_right hD hD', hl1]
     abel
   have hA0 : ∀ i, lam (pull (pA (B := B) s i).left (cls L hL)) a u =
       evc hD.isLB (toBase _ s a ≫ prj _ i ≫ fst A B) (toBase _ s u ≫ prj _ i ≫ fst A B ≫ l) := by
@@ -656,12 +636,12 @@ theorem ceEMap_fst (mu : B ⟶ A) [IsMonHom mu] (α : Matrix (Fin 4) (Fin 4) ℤ
     a ≫ eMap mu α m ≫ prj _ i ≫ fst A B =
       (a ≫ prj _ i ≫ fst A B) * (∏ j, (a ≫ prj _ j ≫ snd A B ≫ mu) ^ (α i j))⁻¹ := by
   simp only [eMap, g4lift_prj'_assoc, lift_fst, MonObj.comp_mul, GrpObj.comp_inv, Fin.prod_univ_four,
-    GrpObj.comp_zpow, Category.assoc]
+    GrpObj.comp_zpow]
 
 theorem ceEMap_snd (mu : B ⟶ A) (α : Matrix (Fin 4) (Fin 4) ℤ) (m : ℕ) {Y : Over S}
     (a : Y ⟶ G4 (A ⊗ B)) (i : Fin 4) :
     a ≫ eMap mu α m ≫ prj _ i ≫ snd A B = (a ≫ prj _ i ≫ snd A B) ^ (2 * m) := by
-  simp only [eMap, g4lift_prj'_assoc, lift_snd, MonObj.comp_pow, Category.assoc]
+  simp only [eMap, g4lift_prj'_assoc, lift_snd, MonObj.comp_pow]
 
 theorem ceEMap_mul (mu : B ⟶ A) [IsMonHom mu] (α : Matrix (Fin 4) (Fin 4) ℤ) (m : ℕ) {Y : Over S}
     (a b : Y ⟶ G4 (A ⊗ B)) : (a * b) ≫ eMap mu α m = (a ≫ eMap mu α m) * (b ≫ eMap mu α m) := by
@@ -730,7 +710,7 @@ private theorem ceZc_alg_lemma {GA GB Q : Type*} [AddCommGroup GA] [AddCommGroup
     intro j k hne
     simpa [Matrix.one_apply, hne] using hjk j k
 
-  simp only [map_sub, map_sum, map_zsmul, map_nsmul, AddMonoidHom.sub_apply, Finset.sum_apply,
+  simp only [map_sub, map_zsmul, map_nsmul, AddMonoidHom.sub_apply, Finset.sum_apply,
   AddMonoidHom.smul_apply, hml, hs, Fin.sum_univ_four, map_add, AddMonoidHom.add_apply]
   linear_combination (norm := module)
       ((-2 : ℤ) * (m : ℤ)) • ((hd 0) • E (mu (z' 0)) (z 0)) +
@@ -917,7 +897,7 @@ theorem two_cls_eMap {Ω : Type} [Field Ω] [IsAlgClosed Ω] (hA : IsAbelianSche
       ceZcPair_eMap hD hD' l mu α m hm h₂ hα (fun x y => ceEvc_sym hA hD.isLB l s L hL e x y), hLsum,
       lam_eq_lamHom]
 
-    simp only [map_sum, map_zsmul, one_smul, ← lam_eq_lamHom]
+    simp only [map_sum, one_smul, ← lam_eq_lamHom]
     rw [Fintype.sum_prod_type]
     simp only [Fin.sum_univ_four, line_bundle_pairing_zeroth hD l mu s L hL e, line_bundle_pairing_first hD hD' l mu s L hL e,
       line_bundle_pairing_second hD l mu s L hL e, line_bundle_pairing_third hD hD' l mu s L hL e, two_nsmul]
@@ -954,18 +934,6 @@ namespace PositivityTheory.PrwZar
 variable {S : Scheme.{0}} {A B : Over S} [GrpObj A] [GrpObj B] [IsCommMonObj A] [IsCommMonObj B]
 
 variable {Ω : Type} [Field Ω] [IsAlgClosed Ω]
-
-theorem two_cls_eMap (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) {P : LB (A ⊗ B).left} (hD : IsDual A B P)
-    (hD' : IsDual B A (swap P)) (l : A ⟶ B) [IsMonHom l] (mu : B ⟶ A) [IsMonHom mu] (α : Matrix (Fin 4) (Fin 4) ℤ)
-    (s : Sp Ω ⟶ S) (L : LB ((Over.pullback s).obj A).left) (hL : L.IsLB)
-    (e : LBIso ((ev P (fst A A) (snd A A ≫ l)).pull (sqToBase A s)) (abelian₂ ((Over.pullback s).obj A) L))
-    (m : ℕ) (hm : 1 ≤ m) (h₁ : l ≫ mu = 𝟙 A ^ m) (h₂ : mu ≫ l = 𝟙 B ^ m)
-    (hα : α.transpose * α = ((4 * m ^ 2 - 1 : ℕ) : ℤ) • (1 : Matrix (Fin 4) (Fin 4) ℤ))
-    (hα' : α * α.transpose = ((4 * m ^ 2 - 1 : ℕ) : ℤ) • (1 : Matrix (Fin 4) (Fin 4) ℤ))
-    (h₁' : ((zb mu α s P L).pull ((Over.pullback s).map (eMap mu α m)).left).IsLB)
-    (h₂' : (lPart mu s L).IsLB) :
-    2 • cls _ h₁' = 2 • cls _ h₂' :=
-  Z2.two_cls_eMap hA hB hD hD' l mu α s L hL e m hm h₁ h₂ hα hα' h₁' h₂'
 
 theorem two_cls_pow (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) {P : LB (A ⊗ B).left} (hD : IsDual A B P)
     (hD' : IsDual B A (swap P)) (l : A ⟶ B) [IsMonHom l] (mu : B ⟶ A) [IsMonHom mu] (α : Matrix (Fin 4) (Fin 4) ℤ)
@@ -1037,8 +1005,8 @@ theorem relAmple_zb (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) {P : LB (A
   have h4 : IsAbelianScheme (G4 (A ⊗ B)) :=
     AbelianSchemeGerms.isAbelianScheme_tensor _ _ hAB
       (AbelianSchemeGerms.isAbelianScheme_tensor _ _ hAB (AbelianSchemeGerms.isAbelianScheme_tensor _ _ hAB hAB))
-  have hG : IsAbelianScheme ((Over.pullback s).obj (G4 (A ⊗ B))) := Z2.isAbelianScheme_pb s _ h4
-  have hfin := isFinite_mu_fibre hA hB g hgA hgB l mu m hm h₁ h₂ s L hL ha
+  have hG : IsAbelianScheme ((Over.pullback s).obj (G4 (A ⊗ B))) := _root_.GlobalTheory.isAbelianScheme_pullback_obj s _ h4
+  have hfin := _root_.PositivityTheory.PrwZar.Z2.isFinite_mu_fibre hA hB g hgA hgB l mu m hm h₁ h₂ s L hL ha
   have hlp := relAmple_lPart hA hB mu s L hL ha hfin
   have hlpLB : (lPart mu s L).IsLB := LB.isLB_linComb hL _ _
   have hzb : (zb mu α s P L).IsLB := isLB_zb mu α s hP hL
@@ -1050,8 +1018,8 @@ theorem relAmple_zb (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) {P : LB (A
     rw [← Functor.map_comp, eMap_comp_eMap'_eq_id_pow, Z2.pb_map_id_pow]
   have hE1 : ((zb mu α s P L).pull (Over.Hom.left ((Over.pullback s).map (eMap mu α m)))).IsLB :=
     LB.isLB_pull hzb _
-  have hE := two_cls_eMap hA hB hD hD' l mu α s L hL e m hm h₁ h₂ hα hα' hE1 hlpLB
-  have hEa := relAmple_of_two_smul hG hE1 hlpLB 2 (by norm_num) hE hlp
+  have hE := _root_.PositivityTheory.PrwZar.Z2.two_cls_eMap hA hB hD hD' l mu α s L hL e m hm h₁ h₂ hα hα' hE1 hlpLB
+  have hEa := _root_.PositivityTheory.PrwZar.Z2.relAmple_of_two_smul hG hE1 hlpLB 2 (by norm_num) hE hlp
   obtain ⟨hE'fin, -, -, -⟩ := Z2.fin_surj_core hG hG ((Over.pullback s).map (eMap' mu α m))
     ((Over.pullback s).map (eMap mu α m)) (2 * m) (by omega) c1 c2 hlpLB hlp
   haveI := hE'fin
@@ -1066,7 +1034,7 @@ theorem relAmple_zb (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) {P : LB (A
   have hM : (lbPow (zb mu α s P L) ((2 * m) ^ 2)).IsLB := GlobalTheory.isLB_lbPow hzb _
   have key : 2 • cls _ hM = 2 • cls _ hNLB := by
     rw [hN, hpow, cls_lbPow hzb, smul_smul]
-  have h3 := relAmple_of_two_smul hG hM hNLB 2 (by norm_num) key h2
+  have h3 := _root_.PositivityTheory.PrwZar.Z2.relAmple_of_two_smul hG hM hNLB 2 (by norm_num) key h2
   exact relAmple_of_lbPow hG hzb ((2 * m) ^ 2) (Nat.one_le_pow _ _ (by omega)) h3
 
 end PositivityTheory.PrwZar
@@ -1232,7 +1200,7 @@ theorem zcPair_positionA (hD : IsDual A B P) (l : A ⟶ B) [IsMonHom l] (mu : B 
   have e : ∀ k : Fin 4, (if k = i then x' else (1 : Y ⟶ A)) ≫ l = if k = i then x' ≫ l else 1 := by
     intro k; split_ifs <;> simp [c1]
   simp only [zcPair, eightfold_fst, eightfold_snd, eightfold_fst_assoc, eightfold_snd_assoc, e, c2, r1, add_zero, smul_zero,
-    Finset.sum_const_zero, apply_ite (evc hD.isLB _), l1]
+    Finset.sum_const_zero, apply_ite (evc hD.isLB _)]
   simp
   rw [Finset.sum_eq_single i (fun k _ hk => by simp [hk, l1]) (by simp)]
   simp
@@ -1255,7 +1223,7 @@ theorem zcPair_positionB (hD : IsDual A B P) (l : A ⟶ B) [IsMonHom l] (mu : B 
   simp only [zcPair, eightfold_fst, eightfold_snd, eightfold_fst_assoc, eightfold_snd_assoc, c1, r1, l1, add_zero, zero_add, smul_zero,
     Finset.sum_const_zero]
   rw [Finset.sum_comm]
-  simp only [apply_ite (evc hD.isLB _), r1, smul_ite, smul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  simp only [apply_ite (evc hD.isLB _), r1, smul_ite, smul_zero]
   congr 1
   · rw [Finset.sum_eq_single j (fun k _ hk => by simp [hk, e, e', r1]) (by simp)]
     simp
@@ -1264,13 +1232,6 @@ theorem zcPair_positionB (hD : IsDual A B P) (l : A ⟶ B) [IsMonHom l] (mu : B 
 
 end Slots
 
-
-omit [GrpObj A] [GrpObj B] in
-theorem zcPair_pull {P : LB (A ⊗ B).left} (hP : P.IsLB) (l : A ⟶ B) (mu : B ⟶ A) (α : Matrix (Fin 4) (Fin 4) ℤ)
-    {Y Y' : Over S} (h : Y' ⟶ Y) (u u' : Y ⟶ G4 (A ⊗ B)) :
-    pull h.left (zcPair hP l mu α u u') = zcPair hP l mu α (h ≫ u) (h ≫ u') := by
-  set_option synthInstance.maxHeartbeats 100000 in
-    simp only [zcPair, map_add (f := _), map_sum, map_zsmul, map_nsmul, pull_evc, Category.assoc]
 
 private theorem zpow_fin_sum_eq_prod_zpow {M : Type*} [CommGroup M] (a : M) (f : Fin 4 → ℤ) :
     a ^ (∑ k, f k) = ∏ k, a ^ f k := by
@@ -1452,23 +1413,10 @@ theorem kToBase_liftPt (G : Over S) {Y : Over (Sp Ω)} (v : Over.mk (Y.hom ≫ s
     toBase G s (kLiftPt s G v) = v :=
   Over.OverMorphism.ext (pullback.lift_fst _ _ _)
 
-theorem kToBase_inj (G : Over S) {Y : Over (Sp Ω)} {a b : Y ⟶ (Over.pullback s).obj G}
-    (h : toBase G s a = toBase G s b) : a = b := by
-  ext1
-  apply pullback.hom_ext
-  · simpa [toBase] using congrArg Over.Hom.left h
-  · exact (Over.w a).trans (Over.w b).symm
-
 theorem kToBase_comp (G : Over S) {Y Y' : Over (Sp Ω)} (h : Y' ⟶ Y) (a : Y ⟶ (Over.pullback s).obj G) :
     toBase G s (h ≫ a) = (Over.homMk h.left (by simp only [Over.mk_hom]; rw [← Category.assoc, Over.w h]) :
       Over.mk (Y'.hom ≫ s) ⟶ Over.mk (Y.hom ≫ s)) ≫ toBase G s a :=
   Over.OverMorphism.ext (Category.assoc _ _ _)
-
-theorem kToBase_one (G : Over S) [GrpObj G] {Y : Over (Sp Ω)} :
-    toBase G s (1 : Y ⟶ (Over.pullback s).obj G) = 1 := by
-  apply Over.OverMorphism.ext
-  simp only [toBase, Hom.one_def]
-  simp
 
 theorem kLift_sqToBase (G : Over S) {Y : Over (Sp Ω)} (a u : Y ⟶ (Over.pullback s).obj G) :
     (lift a u).left ≫ sqToBase G s = (lift (toBase G s a) (toBase G s u)).left := by
@@ -1498,7 +1446,7 @@ theorem kLam_zb_pt (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) {P : LB (A 
   rw [pull_lam, lift_fst, lift_snd] at k2
   rw [← k2, ← pull_comp, kLift_sqToBase]
   unfold zc
-  rw [zcPair_pull, lift_fst, lift_snd]
+  rw [_root_.PositivityTheory.PrwZar.pull_zcPair, lift_fst, lift_snd]
 
 theorem kEvc_sym (hA : IsAbelianScheme A) {P : LB (A ⊗ B).left} (hP : P.IsLB) (l : A ⟶ B) (s : Sp Ω ⟶ S)
     (L : LB ((Over.pullback s).obj A).left) (hL : L.IsLB)
@@ -1566,8 +1514,8 @@ theorem kTriv_zb' (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) {P : LB (A �
     let Z : Over (Sp Ω) := Over.mk (V.ι ≫ t)
     let j : Z ⟶ Over.mk t := Over.homMk V.ι rfl
     have hxV : j ≫ x = 1 := by
-      apply kToBase_inj s
-      rw [kToBase_one]
+      apply _root_.PositivityTheory.PrwZar.toBase_injective s
+      rw [_root_.PositivityTheory.PrwZar.toBase_one]
       refine zcPair_eq_one hA hB hD hD' l mu α m hm h₁ h₂ hα hα' (toBase _ s (j ≫ x)) ?_ ?_
       · intro Y w a b
         let Z' : Over (Sp Ω) := Over.mk (w.left ≫ Z.hom)
@@ -1599,7 +1547,7 @@ theorem kTriv_zb' (hA : IsAbelianScheme A) (hB : IsAbelianScheme B) {P : LB (A �
             = zcPair hD.isLB l mu α (ε.hom ≫ (ε.inv ≫ w ≫ toBase _ s (j ≫ x))) (ε.hom ≫ (ε.inv ≫ v)) := by
               simp
           _ = pull ε.hom.left (zcPair hD.isLB l mu α (ε.inv ≫ w ≫ toBase _ s (j ≫ x)) (ε.inv ≫ v)) :=
-              (zcPair_pull _ _ _ _ _ _ _).symm
+              (_root_.PositivityTheory.PrwZar.pull_zcPair _ _ _ _ _ _ _).symm
           _ = 0 := by
             rw [← Category.assoc, hk, ← kToBase_comp, ← kToBase_liftPt s _ (ε.inv ≫ v),
               ← kLam_zb_pt hA hB hD hD' l mu α s L hL e, ← Category.assoc,
@@ -1676,7 +1624,7 @@ theorem zc_rigid {P : LB (A ⊗ B).left} (hD : IsDual A B P) (l : A ⟶ B) [IsMo
   constructor <;>
   set_option synthInstance.maxHeartbeats 100000 in
     · simp only [zc, zcPair, map_add (f := _), map_sum, map_nsmul, map_zsmul, pull_evc, lift_fst_assoc, lift_snd_assoc,
-      Category.id_comp, o1, o2, e1, e2, smul_zero, add_zero, zero_add, Finset.sum_const_zero]
+      Category.id_comp, o1, o2, e1, e2, smul_zero, add_zero, Finset.sum_const_zero]
 
 end PositivityTheory.PrwZar
 end -- clump:auto

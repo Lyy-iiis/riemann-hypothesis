@@ -329,7 +329,7 @@ theorem exists_finite_homogeneous_generators : ∀ (K : Type) [CommRing K] (D c 
     exact Submodule.span_mono (by
       intro p hp; simp only [Finset.coe_biUnion, Set.mem_iUnion, Finset.mem_coe]; exact ⟨s, hs, hp⟩) (hsT s hs)
   have h := (hgood _ hmem).2 q
-  simp only [v, Polynomial.coeff_C_mul_X_pow, if_pos rfl] at h
+  simp only [v, Polynomial.coeff_C_mul_X_pow] at h
   exact h
 
 end GlobalTheory.HSAmpGen
@@ -358,9 +358,6 @@ variable {k : Type} [CommRing k] {X : Scheme.{0}} [IsIntegral X] {p : X ⟶ Sp k
 theorem mem_H_of_eq (P : Pair p) {a a' b b' : ℤ} {f : X.functionField} (ha : a = a') (hb : b = b')
     (h : f ∈ P.H a b) : f ∈ P.H a' b' := by
   subst ha hb; exact h
-
-theorem nu_nonneg (P : Pair p) (a b : ℤ) (σ : k →+* ℂ) (y : CxPts p σ) (f : X.functionField) : 0 ≤ P.nu a b σ y f := by
-  rw [Pair.nu]; positivity
 
 theorem mono_mem {D : ℕ} (P : Pair p) (e : ℕ) (x : Fin (D + 1) → X.functionField) (hx : ∀ l, x l ∈ P.H e 0)
     (a b : ℤ) (g : X.functionField) (hg : g ∈ P.H a b) (α : Fin (D + 1) → ℕ) (S : Finset (Fin (D + 1))) :
@@ -483,13 +480,13 @@ theorem goodFam_H : GlobalTheory.Published.ArCalc → ∀ (k : Type) [CommRing k
     rw [ea] at h1 h2
     refine ⟨h1, fun σ y => ?_⟩
     rw [h2]
-    have hnu0 : ∀ l, 0 ≤ P.nu e 0 σ y (x l) := fun l => nu_nonneg P _ _ σ y _
+    have hnu0 : ∀ l, 0 ≤ P.nu e 0 σ y (x l) := fun l => _root_.GlobalTheory.HSAmp.FLower.nu_nonneg P _ _ σ y _
     have hqe : q ≤ e * q := Nat.le_mul_of_pos_left q he
     have hsum : ∑ l, α l ≤ e * q + s := by omega
     calc (∏ l, P.nu e 0 σ y (x l) ^ α l) * P.nu ((e : ℤ) * (g.1 : ℤ) + s) 1 σ y g.2
         ≤ (∏ l, (1 + ∑ l, Cx l) ^ α l) * (1 + ∑ g ∈ G, Cg g) :=
           mul_le_mul (Finset.prod_le_prod₀ (fun l _ => pow_nonneg (hnu0 l) _)
-            fun l _ => pow_le_pow_left₀ (hnu0 l) (hxl l σ y) _) (hgl g hg σ y) (nu_nonneg P _ _ σ y _)
+            fun l _ => pow_le_pow_left₀ (hnu0 l) (hxl l σ y) _) (hgl g hg σ y) (_root_.GlobalTheory.HSAmp.FLower.nu_nonneg P _ _ σ y _)
             (Finset.prod_nonneg fun _ _ => pow_nonneg (by linarith) _)
       _ = (1 + ∑ l, Cx l) ^ (∑ l, α l) * (1 + ∑ g ∈ G, Cg g) := by rw [Finset.prod_pow_eq_pow_sum]
       _ ≤ (1 + ∑ l, Cx l) ^ (e * q + s) * (1 + ∑ g ∈ G, Cg g) ^ (e * q + s) :=

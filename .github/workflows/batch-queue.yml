@@ -1,10 +1,10 @@
 name: batch queue
 
-# A maintainer queues a pull request for a batch build by commenting `batch` on it. This records
-# the commit that was the pull request's head when the comment was posted, adds the `batch queue`
-# label, and merges that commit into the batch being assembled: a branch `batch/...` with its
-# own pull request, which the workflow opens and keeps described. `batch <commit>`, with the
-# full id of the head commit, names the commit outright. A batch takes only recorded commits.
+# A maintainer queues a pull request for a batch build by commenting `batch`, or just `b`, on it.
+# This records the commit that was the pull request's head when the comment was posted, adds the
+# `batch queue` label, and merges that commit into the batch being assembled: a branch `batch/...`
+# with its own pull request, which the workflow opens and keeps described. `batch <commit>`, with
+# the full id of the head commit, names the commit outright. A batch takes only recorded commits.
 # The label on its own queues nothing, and commits pushed later wait for another `batch`.
 #
 # A batch stops growing when it is frozen. That happens when a maintainer comments `freeze` on
@@ -17,6 +17,9 @@ name: batch queue
 # commit and removes the `batch queue` label, and nothing else. Commits already merged into a
 # batch stay there, and no batch is rebuilt, so a build that is under way is never disturbed.
 #
+# Commenting `aa` hands a pull request back to its author: it adds the `awaiting-author` label and
+# nothing else. The inbox workflow takes a pull request with that label out of the inbox.
+#
 # A pull request that is closed, merged or not, loses `batch queue` and `building`. Reopened, it
 # gets `batch queue` back if this workflow took the label off and nobody commented `-batch` on
 # it meanwhile. A label a person took off stays off.
@@ -26,12 +29,12 @@ name: batch queue
 # branch under another name, such as one a maintainer assembled by hand, is left alone: nothing
 # is merged into it, its pull request cannot be frozen and its text is not rewritten.
 #
-# Only a comment whose whole text is `batch`, `batch <commit>`, `-batch` or `freeze` counts,
-# letter case and surrounding blank space aside, and only from someone with write access to this
-# repository. Every other comment is ignored. GitHub runs this workflow from the default branch
-# for every event below, so a pull request cannot change what it does. Nothing from a pull
-# request is checked out or run: GitHub performs the merges, and comparisons read git objects
-# only.
+# Only a comment whose whole text is one of these counts, letter case and surrounding blank space
+# aside: `batch` or `b`, `batch <commit>` or `b <commit>`, `-batch` or `-b`, `freeze`, and `aa`.
+# `aa` needs triage access to this repository and the others need write access. Every other
+# comment is ignored. GitHub runs this workflow from the default branch for every event below, so
+# a pull request cannot change what it does. Nothing from a pull request is checked out or run:
+# GitHub performs the merges, and comparisons read git objects only.
 #
 # Queuing also compares the pull request with the others labelled `building` or `batch queue`
 # and comments if git cannot merge it with one of them, or if one deletes a Lean file the other
@@ -59,12 +62,16 @@ permissions: {}
 
 jobs:
   label:
-    name: Act on a maintainer's `batch`, `-batch` or `freeze` comment
+    name: Act on a maintainer's `batch`, `-batch`, `freeze` or `aa` comment
     # A first filter, so that most comments start no runner: pull requests only, and the comment
-    # has to contain one of the words. The step below makes the exact comparison.
+    # has to contain one of the words. `b`, `-b` and `aa` are too short to look for anywhere in a
+    # comment, so they are only noticed at its very start. startsWith ignores letter case. The
+    # step below makes the exact comparison.
     if: >-
       ${{ github.event_name == 'issue_comment' && github.event.issue.pull_request &&
-          (contains(github.event.comment.body, 'batch') || contains(github.event.comment.body, 'freeze')) }}
+          (contains(github.event.comment.body, 'batch') || contains(github.event.comment.body, 'freeze') ||
+           startsWith(github.event.comment.body, 'b') || startsWith(github.event.comment.body, '-b') ||
+           startsWith(github.event.comment.body, 'aa')) }}
     runs-on: ubuntu-latest
     # `contents: read` is for the log of pushes to a branch of this repository.
     permissions:
@@ -87,6 +94,7 @@ jobs:
           WHEN: ${{ github.event.comment.created_at }}
           LABEL: batch queue
           FROZEN: building
+          WAITING: awaiting-author
         run: |
           # The comment text arrives in an environment variable. It is compared and never run.
           text=$(printf '%s' "$BODY" | tr -d '\r' | tr '[:upper:]' '[:lower:]')
@@ -95,35 +103,60 @@ jobs:
           text="${text%"${text##*[![:space:]]}"}"
           # `batch <commit>` names the commit to queue.
           named=''
-          with_commit='^batch[[:space:]]+([0-9a-f]{7,40})$'
+          with_commit='^(batch|b)[[:space:]]+([0-9a-f]{7,40})$'
           if [[ "$text" =~ $with_commit ]]; then
-            named=${BASH_REMATCH[1]}
+            named=${BASH_REMATCH[2]}
             text=batch
           fi
           case "$text" in
-            batch | -batch | freeze) ;;
+            b) text=batch ;;
+            -b) text=-batch ;;
+          esac
+          case "$text" in
+            batch | -batch | freeze | aa) ;;
             *)
-              echo "The comment is not just 'batch', '-batch' or 'freeze': nothing to do."
+              echo "The comment is not just 'batch', '-batch', 'freeze' or 'aa', or 'b' or '-b': nothing to do."
               exit 0
               ;;
           esac
 
-          # Write access or higher. The API reports the maintain role as write and triage as read.
-          if ! permission=$(gh api "repos/$REPO/collaborators/$AUTHOR/permission" --jq .permission); then
+          # Write access or higher, or triage access for `aa`. The API reports the maintain role
+          # as write and triage as read under `permission`, so triage is told apart by `role_name`.
+          if ! access=$(gh api "repos/$REPO/collaborators/$AUTHOR/permission" --jq '.permission + " " + (.role_name // "")'); then
             echo "::error::Could not read the access $AUTHOR has to $REPO."
             exit 1
           fi
+          read -r permission role <<< "$access"
           case "$permission" in
             admin | write) ;;
             *)
-              echo "$AUTHOR has '$permission' access. Queuing, unqueuing or freezing needs write access."
-              exit 0
+              if [ "$text" = aa ] && [ "$role" = triage ]; then
+                :
+              elif [ "$text" = aa ]; then
+                echo "$AUTHOR has '${role:-$permission}' access. Labelling a pull request '$WAITING' needs triage access."
+                exit 0
+              else
+                echo "$AUTHOR has '${role:-$permission}' access. Queuing, unqueuing or freezing needs write access."
+                exit 0
+              fi
               ;;
           esac
 
           say() {
             gh api -X POST "repos/$REPO/issues/$PR/comments" -f "body=$1" --silent
           }
+
+          if [ "$text" = aa ]; then
+            # Back to the author. The label is all this does. Adding a label that does not exist
+            # creates it, so a renamed `awaiting-author` should fail here instead.
+            if ! gh api "repos/$REPO/labels/$(jq -rn --arg label "$WAITING" '$label | @uri')" --silent; then
+              echo "::error::There is no '$WAITING' label in $REPO. Was it renamed?"
+              exit 1
+            fi
+            gh api -X POST "repos/$REPO/issues/$PR/labels" -f "labels[]=$WAITING" --silent
+            echo "Added '$WAITING' to pull request $PR, as $AUTHOR asked."
+            exit 0
+          fi
 
           if [ "$text" = freeze ]; then
             # Only a batch can be frozen: an open pull request from a branch of this repository
@@ -359,8 +392,10 @@ jobs:
     steps:
       - name: Check out this workflow's own copy of the scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        # No `ref`: the default is the commit GitHub runs this workflow from. When a pull request
+        # from a fork is merged, that commit is also its merge commit, and checkout refuses it
+        # when it is passed as `ref`.
         with:
-          ref: ${{ github.workflow_sha }}
           persist-credentials: false
           sparse-checkout: scripts
       # GitHub performs each merge through its API. No pull request file is checked out or run.

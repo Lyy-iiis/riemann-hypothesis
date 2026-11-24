@@ -244,7 +244,7 @@ open GlobalTheory.TwistChoice (Reading ReadsAt)
 
 
 theorem _root_.GlobalTheory.T.exists_complexEmbedding_readingFractionRing_over_coeffField : ∀ (D : D7) (F : TwFrameC D) (i : D.ntw.Tw) (k : ℕ) (b : Bool) (v : D.what₂.places.Pl) (ρ : Reading i k b v), ∃ ι : FractionRing ρ.Oe →+* ℂ, ∀ x, ι (ρ.emb x) = D.what₂.embLL x := by
-  first | exact @GlobalTheory.ReadingEmb.exists_complex_emb | exact GlobalTheory.ReadingEmb.exists_complex_emb | (intros; apply GlobalTheory.ReadingEmb.exists_complex_emb <;> assumption)
+  first | exact @GlobalTheory.ReadingEmb.exists_complex_emb
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsComplexEmbeddingReadingFractionRingOverCoeStatement =====
@@ -348,7 +348,7 @@ open GlobalTheory.TwistChoice (Reading ReadsAt)
 
 
 theorem _root_.GlobalTheory.T.exists_galoisCharacter_of_finiteOrder_heckeCharacter : GlobalTheory.Published.GlobalArtinReciprocity → ∀ (D : D7) (χ : HChar D.host.E) (n : ℕ), 0 < n → χ.OrderDvd n → (∃ z : D.what₂.LL, IsPrimitiveRoot z n) → ∃ ψ₀, GalOf D χ ψ₀ ∧ ∀ g, ψ₀ g ^ n = 1 := by
-  first | exact @GlobalTheory.LevCmp.galOf_of_orderDvd | exact GlobalTheory.LevCmp.galOf_of_orderDvd | (intros; apply GlobalTheory.LevCmp.galOf_of_orderDvd <;> assumption)
+  first | exact @GlobalTheory.LevCmp.galOf_of_orderDvd
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsGaloisCharacterOfFiniteOrderHeckeCharacterStatement =====
@@ -375,13 +375,6 @@ namespace GlobalTheory.CompRamified
 section Gen
 
 variable {L : Type} [Field L] [NumberField L] [IsCMField L]
-
-theorem le_exp_neg_one_of_lt_one' {x : WithZero (Multiplicative ℤ)} (h : x < 1) : x ≤ WithZero.exp (-((1 : ℕ) : ℤ)) := by
-  rcases eq_or_ne x 0 with rfl | hx0
-  · exact zero_le'
-  · rw [← WithZero.exp_log hx0] at h ⊢
-    rw [← WithZero.exp_zero, WithZero.exp_lt_exp] at h
-    rw [WithZero.exp_le_exp]; omega
 
 theorem exists_int_locK_ne (χ : HChar L) (t : SplitPlace L) (ht : χ.TameAt t.w) (hr : ¬ χ.UnrAt t.w) :
     ∃ b : 𝓞 (maximalRealSubfield L), b ∉ t.v.asIdeal ∧ ∃ k : Lˣ,
@@ -446,7 +439,7 @@ theorem exists_int_locK_ne (χ : HChar L) (t : SplitPlace L) (ht : χ.TameAt t.w
       field_simp
       ring
     rw [e, map_mul, Valuation.map_neg, map_inv₀, hx', inv_one, mul_one]
-    exact le_exp_neg_one_of_lt_one' hxc
+    exact _root_.GlobalTheory.Mem.KerDet.le_exp_neg_one hxc
   have h2 := ht (y * x⁻¹) hu hsub
   rw [map_mul, map_inv, mul_inv_eq_one] at h2
   rw [← h2]
@@ -545,7 +538,7 @@ open GlobalTheory.TwistChoice (Reading ReadsAt)
 
 
 theorem _root_.GlobalTheory.T.exists_local_unit_character_nontrivial : ∀ (D : D7) (cf : CharFrame D) (j : Fin D.R.m) (ξH : HChar D.host.E) (s : SplitPlace D.host.E) (ξ : (s.v.adicCompletion (maximalRealSubfield D.host.E))ˣ →* ℂˣ), ξH.TrivOn D.host.F → (∀ u, ξH.TameAt u) → s.v ∈ qPl D (cf.mu0 j * ξH) → NG.IsCompAt (cf.mu0 j * ξH) s ξ → ∃ a : (s.v.adicCompletion (maximalRealSubfield D.host.E))ˣ, Valued.v (a : s.v.adicCompletion (maximalRealSubfield D.host.E)) = 1 ∧ ξ a ≠ 1 := by
-  first | exact @GlobalTheory.CompRamified.exists_unit_ne_one | exact GlobalTheory.CompRamified.exists_unit_ne_one | (intros; apply GlobalTheory.CompRamified.exists_unit_ne_one <;> assumption)
+  first | exact @GlobalTheory.CompRamified.exists_unit_ne_one
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsLocalUnitCharacterNontrivialStatement =====
@@ -699,7 +692,7 @@ open GlobalTheory.TwistChoice (Reading ReadsAt)
 
 
 theorem _root_.GlobalTheory.T.exists_ringClassGroup_descent_of_coeffFieldTwist : ∀ (D : D7) (i : D.ntw.Tw) (k : ℕ) (b : Bool) (v : D.what₂.places.Pl) (ρ : Reading i k b v) (Q : Finset (PlE D.host)) (ψ₀ : G D.host.E D.nd.Om →* (D.what₂.LL)ˣ), (∀ u ∈ Q, IsSplitPl D.host u) → Disjoint Q (D.ntw.S0 i) → IsOpen (ψ₀.ker : Set (G D.host.E D.nd.Om)) → AntiHom D.ntw.cc ψ₀ → (∀ g, ψ₀ g ^ (D.ntw.l i ^ k) = 1) → RamExactly ψ₀ (↑Q : Set (PlE D.host)) → BlochKatoReduction.Gen.TrivAbove ψ₀ (D.ntw.l i) → (∃ ψ : D.ntw.RCG i Q →* (D.ntw.Ok i k)ˣ, ρ.Pulls ψ ψ₀) ∧ ∀ ψ : D.ntw.RCG i Q →* (D.ntw.Ok i k)ˣ, ρ.Pulls ψ ψ₀ → IntegralHeckeForms.TwOK i k Q (ψ.comp (D.ntw.art i Q)) := by
-  first | exact @GlobalTheory.TwistDescent.exists_pulls_twOK | exact GlobalTheory.TwistDescent.exists_pulls_twOK | (intros; apply GlobalTheory.TwistDescent.exists_pulls_twOK <;> assumption)
+  first | exact @GlobalTheory.TwistDescent.exists_pulls_twOK
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsRingClassGroupDescentOfCoeffFieldTwistStatement =====
@@ -798,7 +791,7 @@ open GlobalTheory.TwistChoice (Reading ReadsAt)
 
 
 theorem _root_.GlobalTheory.T.twistConductors_avoid_excludedPrimes : AllSt fun _ _ _ T _ _ x => ∀ v, ∀ u ∈ T.Q v, ∀ p ∈ lowAll (Dof x), u ∉ placesOver (Dof x).host.E p := by
-  first | exact @GlobalTheory.LowAvoid.conductors_avoid_lowAll | exact GlobalTheory.LowAvoid.conductors_avoid_lowAll | (intros; apply GlobalTheory.LowAvoid.conductors_avoid_lowAll <;> assumption)
+  first | exact @GlobalTheory.LowAvoid.conductors_avoid_lowAll
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.TwistConductorsAvoidExcludedPrimesStatement =====
@@ -874,7 +867,7 @@ open GlobalTheory.LevCmp
 open GlobalTheory.TwistChoice (Reading ReadsAt)
 
 theorem _root_.GlobalTheory.T.badV_subset_gPl_union_qPl_of_admTw : _root_.GlobalTheory.HeightCounting.Up.PublishedInputsThirdLayerAlt → ∀ hL : _root_.UpperTheory.Zero.LLC.RecTExists, AllSt fun _ B _ T w P x => ∀ (l : _root_.GlobalTheory.HeightCounting.Up.ThirdIntermediateLevel hL x) (v : B.places.Pl) (i : (Dof x).ntw.Tw) (b : Bool) (ψ : G (Dof x).host.E (Dof x).nd.Om →* ((Dof x).ntw.Ok i (T.k v))ˣ) (hA : NX.AdmTw (Dof x) i (T.k v) (QOf P v) ψ) (j : Fin (Dof x).R.m), TwistedAt (Dof x) v → (Dof x).ntw.l i = B.places.resChar v → IntegralHeckeForms.TwOK i (T.k v) (QOf P v) ψ → NX.badV (Dof x) i (QOf P v) ⊆ gPl (Dof x) ∪ qPl (Dof x) (eta (D := Dof x) (cfOf x) w.I.xi v j) := by
-  first | exact @_root_.GlobalTheory.LevCmp.BadV.bad_places_subset_ramified_places_alt | exact _root_.GlobalTheory.LevCmp.BadV.bad_places_subset_ramified_places_alt | (intros; apply _root_.GlobalTheory.LevCmp.BadV.bad_places_subset_ramified_places_alt <;> assumption)
+  first | exact @_root_.GlobalTheory.LevCmp.BadV.bad_places_subset_ramified_places_alt
 end
 end
 end -- clump:auto
@@ -995,7 +988,7 @@ open Formalism.L2.DIV GlobalTheory.CoefModel
 
 
 theorem _root_.GlobalTheory.T.matchingMatrices_of_baseChange_representation : ∀ {L : Type} [Field L] [NumberField L] [IsCMField L] {n : ℕ} {K K' : Type} [Field K] [Field K'] (f : K →+* K') (e : K' →+* ℂ) {W₀ W W' : Type} [AddCommGroup W₀] [Module K W₀] [AddCommGroup W] [Module K' W] [AddCommGroup W'] [Module ℂ W'] (ρ₀ : Representation K (GQ L n) W₀) (ρ : Representation K' (GQ L n) W) (ρ' : Representation ℂ (GQ L n) W'), (∃ (ι : Type) (_ : Fintype ι) (_ : DecidableEq ι) (b₀ : Module.Basis ι K W₀) (b₁ : Module.Basis ι K' W), ∀ γ, LinearMap.toMatrix b₁ b₁ (ρ γ) = (LinearMap.toMatrix b₀ b₀ (ρ₀ γ)).map f) → GlobalTheory.LevCmp.WtMatch (e.comp f) ρ₀ ρ' → GlobalTheory.LevCmp.WtMatch e ρ ρ' := by
-  first | exact @GlobalTheory.BcMatch.bcmatch_main | exact GlobalTheory.BcMatch.bcmatch_main | (intros; apply GlobalTheory.BcMatch.bcmatch_main <;> assumption)
+  first | exact @GlobalTheory.BcMatch.bcmatch_main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.MatchingMatricesOfBaseChangeRepresentationStatement =====
@@ -1149,7 +1142,7 @@ theorem cellWt_of_sideRead_of_admTw : _root_.GlobalTheory.HeightCounting.Up.Publ
     have h1 := hSR (NX.embEL0 (Dof x) (((Dof x).host.sigmaOf ((Dof x).eTau t : (Dof x).R.GG)) y))
     refine Eq.trans ?_ (h1.trans (NX.embLL_embEL0 (Dof x) t y))
     rfl
-  obtain ⟨lamC, T', hT'⟩ := GlobalTheory.T.algebraic_weight_dominant_iso_exists (Dof x).host.E (Dof x).R.nV (Dof x).what₂.Tau (Formalism.L2.embT (Dof x)) hinj hcm hcov
+  obtain ⟨lamC, T', hT'⟩ := _root_.GlobalTheory.WtClass.exists_equiv_VV (Dof x).host.E (Dof x).R.nV (Dof x).what₂.Tau (Formalism.L2.embT (Dof x)) hinj hcm hcov
     (mtAt l.mt.M v j).wt
   have hT'r : ∀ γ y, T' ((mtAt l.mt.M v j).wt.ρ γ y) =
       rhoVr (Formalism.L2.embT (Dof x)) lamC (Formalism.L2.Col.mtwRat.toFun γ) (T' y) :=
@@ -1224,7 +1217,7 @@ open GlobalTheory.LevCmp
 open GlobalTheory.TwistChoice (Reading ReadsAt)
 
 theorem _root_.GlobalTheory.T.cellWt_of_sideRead_of_twOK : _root_.GlobalTheory.HeightCounting.Up.PublishedInputsThirdLayerAlt → ∀ hL : _root_.UpperTheory.Zero.LLC.RecTExists, AllSt fun _ B _ T w P x => ∀ (l : _root_.GlobalTheory.HeightCounting.Up.ThirdIntermediateLevel hL x) (v : B.places.Pl) (i : (Dof x).ntw.Tw) (b : Bool) (ψ : G (Dof x).host.E (Dof x).nd.Om →* ((Dof x).ntw.Ok i (T.k v))ˣ) (hA : NX.AdmTw (Dof x) i (T.k v) (QOf P v) ψ) (j : Fin (Dof x).R.m), TwistedAt (Dof x) v → (Dof x).ntw.l i = B.places.resChar v → IntegralHeckeForms.TwOK i (T.k v) (QOf P v) ψ → ∀ e, SideRead i b (T.k v) e → CellWt (D := Dof x) (mtAt (D := Dof x) l.mt.M v j) l.b.Bs.exp b hA j e := by
-  first | exact @_root_.GlobalTheory.LevCmp.cellWt_of_sideRead_of_admTw | exact _root_.GlobalTheory.LevCmp.cellWt_of_sideRead_of_admTw | (intros; apply _root_.GlobalTheory.LevCmp.cellWt_of_sideRead_of_admTw <;> assumption)
+  first | exact @_root_.GlobalTheory.LevCmp.cellWt_of_sideRead_of_admTw
 end
 end
 end -- clump:auto
@@ -1334,7 +1327,7 @@ open GlobalTheory.LevCmp
 open GlobalTheory.TwistChoice (Reading ReadsAt)
 
 theorem _root_.GlobalTheory.T.exists_galoisRep_of_twist_of_prime : _root_.GlobalTheory.HeightCounting.Up.PublishedInputsThirdLayerAlt → ∀ (D : D7) (l : ℕ) (Q : Finset (PlE D.host)) (χ : HChar D.host.E) (ψ₀ : Formalism.ConjugateSelfDual.G D.host.E D.nd.Om →* (D.what₂.LL)ˣ), l.Prime → IsPsi (H := D.host) l Q χ → GalOf D χ ψ₀ → AntiHom D.ntw.cc ψ₀ ∧ RamExactly ψ₀ (↑Q : Set (PlE D.host)) ∧ BlochKatoReduction.Gen.TrivAbove ψ₀ l := by
-  first | exact @_root_.GlobalTheory.GalTwist.galoisRep_of_twist_properties_alt | exact _root_.GlobalTheory.GalTwist.galoisRep_of_twist_properties_alt | (intros; apply _root_.GlobalTheory.GalTwist.galoisRep_of_twist_properties_alt <;> assumption)
+  first | exact @_root_.GlobalTheory.GalTwist.galoisRep_of_twist_properties_alt
 end
 end
 end -- clump:auto
@@ -1385,11 +1378,6 @@ theorem comap_conjPlE (P : PlE D.host) :
   ext a
   rw [Ideal.mem_comap, Ideal.mem_comap, GlobalTheory.SplitConjPlace.mem_conjPlE (D := D), GlobalTheory.SplitConjPlace.cO_algebraMap (D := D)]
 
-theorem finrank_E (D : D7) : Module.finrank ℚ D.host.E = 2 * D.R.f := by
-  have h1 : Module.finrank ℚ D.host.E = 4 * D.R.ord := D.host.finrank_cmField
-  have h5 : D.R.f = 2 * D.R.ord := rfl
-  rw [h1, h5]; ring
-
 theorem cover (k : Fin 2) (w : PlE D.host) (hw : ((D.host.g k : ℕ) : 𝓞 D.host.E) ∈ w.asIdeal) :
     ∃ v, w = D.naut.plGw k v ∨ w = GlobalTheory.SplitConjPlace.conjPlE (D := D) (D.naut.plGw k v) := by
   let T : Set (PlE D.host) := {u | ((D.host.g k : ℕ) : 𝓞 D.host.E) ∈ u.asIdeal}
@@ -1409,7 +1397,7 @@ theorem cover (k : Fin 2) (w : PlE D.host) (hw : ((D.host.g k : ℕ) : 𝓞 D.ho
       simp only [f, Sum.elim_inr, conjPlE_conjPlE] at this
       exact congrArg Sum.inr (D.naut.plGw_inj k this)
   have hT : T.ncard = 2 * D.R.f := by
-    rw [← finrank_E D]; exact D.nd.g_split k
+    rw [← _root_.Formalism.MainNotions.StandardLattice.finrank_host D]; exact D.nd.g_split k
   have hc : Nat.card T = Nat.card (D.nd.PlG k ⊕ D.nd.PlG k) := by
     rw [Nat.card_coe_set_eq, hT, Nat.card_sum, Nat.card_eq_fintype_card, D.nd.card_PlG k, two_mul]
   haveI : Finite T := by
@@ -1569,13 +1557,13 @@ theorem exists_level_comparison_choice_alt (hP : _root_.GlobalTheory.HeightCount
   obtain ⟨tp, t1, t2⟩ := htp C rfl
   refine ⟨C, tp, t1, t2, rfl, rfl, ⟨⟨fun a => hE.elim a, fun a => hE.elim a, fun a => hE.elim a,
     ⟨ψ₀, c4, hp, fun a => hE.elim a⟩, fun v x y z _ hx => (ρ v).emb_side x y z hx⟩,
-    ⟨c1, fun v _ => (GlobalTheory.T.twistReading_induces_sideEmbedding_fixedField D _ _ _ _ (ρ v)).1, fun v _ x => (GlobalTheory.T.twistReading_induces_sideEmbedding_fixedField D _ _ _ _ (ρ v)).2.2 _ x, fun v _ => hb v,
+    ⟨c1, fun v _ => (_root_.GlobalTheory.LevCmp.reading_sidePl_emb D _ _ _ _ (ρ v)).1, fun v _ x => (_root_.GlobalTheory.LevCmp.reading_sidePl_emb D _ _ _ _ (ρ v)).2.2 _ x, fun v _ => hb v,
       fun v v' _ _ e => ?_, fun v _ => hc v⟩, h4, fun v _ => GlobalTheory.MtRead.admissible_twist_of_twisting_character (hok v), ?_, ?_⟩, hok, rfl⟩
   · have e' : s v' = s v := e
     have key : k v' = k v ∧ χ v' = χ v := by
-      have a1 := (GlobalTheory.T.twistReading_induces_sideEmbedding_fixedField D _ _ _ _ (ρ v)).1
-      have a2 := (GlobalTheory.T.twistReading_induces_sideEmbedding_fixedField D _ _ _ _ (ρ v')).1
-      have a3 := (GlobalTheory.T.twistReading_induces_sideEmbedding_fixedField D _ _ _ _ ((ρ v').conj hG)).1
+      have a1 := (_root_.GlobalTheory.LevCmp.reading_sidePl_emb D _ _ _ _ (ρ v)).1
+      have a2 := (_root_.GlobalTheory.LevCmp.reading_sidePl_emb D _ _ _ _ (ρ v')).1
+      have a3 := (_root_.GlobalTheory.LevCmp.reading_sidePl_emb D _ _ _ _ ((ρ v').conj hG)).1
       rw [e'] at a2 a3
       by_cases hbb : b v' = b v
       · rw [hbb] at a2
@@ -1623,7 +1611,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.stageCExists_of_casselmanWallach : GlobalTheory.Published.DiscreteSeriesCover → GlobalTheory.Published.CasselmanWallach → GlobalTheory.Published.HarishChandraModules → _root_.GlobalTheory.HeightCounting.Up.PublishedInputsThirdLayerAlt → SerN → ∀ hL : _root_.UpperTheory.Zero.LLC.RecTExists, _root_.GlobalTheory.HeightCounting.Up.ThirdStageExists hL := by
-  first | exact @_root_.GlobalTheory.LevCmp.stageCExists_of_harishChandra_serN | exact _root_.GlobalTheory.LevCmp.stageCExists_of_harishChandra_serN | (intros; apply _root_.GlobalTheory.LevCmp.stageCExists_of_harishChandra_serN <;> assumption)
+  first | exact @_root_.GlobalTheory.LevCmp.stageCExists_of_harishChandra_serN
 end
 end
 end -- clump:auto

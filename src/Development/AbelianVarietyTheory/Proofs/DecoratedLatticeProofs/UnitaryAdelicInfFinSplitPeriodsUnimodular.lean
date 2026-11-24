@@ -135,7 +135,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.besselGroup_haar_isMulRightInvariant : ∀ (D : D7) (V V₀ A L : HSp D) (ρ : ℕ) (d : HypDec V V₀ ρ) (o : OrthDec V₀ A L) (μ : Measure (besGrp d o)), μ.IsHaarMeasure → μ.IsMulRightInvariant := by
-  first | exact @GlobalTheory.BesUnimod.besGrp_isMulRightInvariant | exact GlobalTheory.BesUnimod.besGrp_isMulRightInvariant | (intros; apply GlobalTheory.BesUnimod.besGrp_isMulRightInvariant <;> assumption)
+  first | exact @GlobalTheory.BesUnimod.besGrp_isMulRightInvariant
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.BesselGroupHaarIsMulRightInvariantStatement =====
@@ -322,7 +322,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.fourierJacobiGroup_haar_isMulRightInvariant : ∀ (D : D7) (V V₀ : HSp D) (ρ : ℕ) (d : HypDec V V₀ ρ) (μ : Measure (jacGrp d)), μ.IsHaarMeasure → μ.IsMulRightInvariant := by
-  first | exact @GlobalTheory.JacUnimod.jacGrp_rightInv | exact GlobalTheory.JacUnimod.jacGrp_rightInv | (intros; apply GlobalTheory.JacUnimod.jacGrp_rightInv <;> assumption)
+  first | exact @GlobalTheory.JacUnimod.jacGrp_rightInv
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.FourierJacobiGroupHaarIsMulRightInvariantStatement =====
@@ -451,7 +451,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.fourierJacobiGroup_split_real_finite : ∀ (D : D7) (V V₀ : HSp D) (ρ : ℕ) (d : HypDec V V₀ ρ), ∀ a ∈ GinfC V, ∀ b ∈ GfC V, a * b ∈ jacGrp d → a ∈ jacGrp d ∧ b ∈ jacGrp d := by
-  first | exact @GlobalTheory.jacGrp_split_inf_fin | exact GlobalTheory.jacGrp_split_inf_fin | (intros; apply GlobalTheory.jacGrp_split_inf_fin <;> assumption)
+  first | exact @GlobalTheory.jacGrp_split_inf_fin
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.FourierJacobiGroupSplitRealFiniteStatement =====
@@ -609,7 +609,7 @@ theorem adelic_split : ∀ (D : D7) (V : HSp D), IsClosed (GinfC V : Set (GA D V
   have hf := isClosed_GfC' V
   haveI : LocallyCompactSpace (GinfC V) := hi.locallyCompactSpace
   haveI : LocallyCompactSpace (GfC V) := hf.locallyCompactSpace
-  refine ⟨hi, hf, fun a ha b hb => commute_GinfC_GfC V ha hb, ⟨(splitEquiv V).toHomeomorph, fun p => rfl⟩,
+  refine ⟨hi, hf, fun a ha b hb => _root_.GlobalTheory.PointAtPlaceHom.comm_of_mem V ha hb, ⟨(splitEquiv V).toHomeomorph, fun p => rfl⟩,
     fun μ hμ => rightInv_of_prod (A := GinfC V) (fun m hm => ?_) μ hμ, fun V₀ ρ d => ?_⟩
   · haveI := hm
     exact GlobalTheory.UpqUnimodular.isMulRightInvariant_of_continuousMulEquiv (splitEquiv V) m

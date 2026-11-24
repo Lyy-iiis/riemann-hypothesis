@@ -621,7 +621,7 @@ theorem exists_etale_of_isEtaleCompletion (A R : Type) [CommRing A] [IsLocalRing
   let D := AdicCompletion (maximalIdeal A) A
   haveI : IsNoetherianRing D := AdicNoeth.isNoetherianRing_adicCompletion A _
   haveI : IsAdicComplete ((maximalIdeal A).map h) R := by rw [hmap]; infer_instance
-  obtain ⟨g, hg⟩ := exists_adicCompletion_ringHom_extend (maximalIdeal A) h
+  obtain ⟨g, hg⟩ := _root_.GlobalTheory.PowerExtensionEvaluation.exists_extension (maximalIdeal A) h
   letI : Algebra D R := g.toAlgebra
   have hgA : ∀ a, g (algebraMap A D a) = h a := fun a => RingHom.congr_fun hg a
   have hmA : (maximalIdeal D).map (algebraMap D R) = maximalIdeal R := by
@@ -805,11 +805,11 @@ theorem compl_equiv (R S : Type) [CommRing R] [CommRing S] (e : R ≃+* S) (I : 
     ?_ ?_, complMap_algebraMap _ I J h1⟩
   · refine RingHom.ext fun x => ?_
     rw [RingHom.comp_apply, complMap_comp]
-    simp only [RingEquiv.toRingHom_eq_coe, RingEquiv.comp_symm, RingHom.id_apply]
+    simp only [RingEquiv.comp_symm, RingHom.id_apply]
     exact complMap_id J _ x
   · refine RingHom.ext fun x => ?_
     rw [RingHom.comp_apply, complMap_comp]
-    simp only [RingEquiv.toRingHom_eq_coe, RingEquiv.symm_comp, RingHom.id_apply]
+    simp only [RingEquiv.symm_comp, RingHom.id_apply]
     exact complMap_id I _ x
 
 theorem fg_top_transfer {F F' K : Type} [Field F] [Field F'] [Field K] [Algebra F K] [Algebra F' K]

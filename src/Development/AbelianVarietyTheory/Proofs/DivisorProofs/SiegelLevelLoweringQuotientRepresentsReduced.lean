@@ -48,6 +48,7 @@ import Mathlib.Tactic.NormNum.Ordinal
 import Mathlib.Tactic.NormNum.Parity
 import Mathlib.Tactic.NormNum.Prime
 import Mathlib.Tactic.NormNum.RealSqrt
+import Mathlib.CategoryTheory.Monoidal.Opposite.Mon
 
 @[expose] public section
 
@@ -60,7 +61,7 @@ noncomputable section
 
 namespace GlobalTheory.QuotFamRep
 
-theorem spMap_rid (R : Type) [CommRing R] : spMap (RingHom.id R) = 𝟙 _ := Spec.map_id _
+alias spMap_rid := _root_.GlobalTheory.LevelFibre.spMap_id'
 
 section Calc
 

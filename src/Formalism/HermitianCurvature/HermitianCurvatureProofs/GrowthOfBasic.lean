@@ -113,7 +113,6 @@ theorem t_GGNumeric : GGNumeric := by
   calc (∏ i ∈ Icc 1 k, (1 - g⁻¹ ^ i))⁻¹ ≤ (1 - 3 / 2 * g⁻¹)⁻¹ := by
         first
           | exact inv_anti₀ hpos hP
-          | exact inv_le_inv_of_le hpos hP
     _ = (1 - 3 / 2 * g⁻¹)⁻¹ * 1 := (mul_one _).symm
     _ ≤ (1 - 3 / 2 * g⁻¹)⁻¹ * ((1 - 3 / 2 * g⁻¹) * (1 + 3 * g⁻¹)) :=
         mul_le_mul_of_nonneg_left hab (inv_nonneg.mpr hpos.le)
@@ -239,7 +238,6 @@ lemma price_exponential_bound (f k : ℕ) (b g : ℝ) (hb : 1 ≤ b) (hk : 1 ≤
   have hdiv : (f:ℝ) / g ≤ (b ^ 7)⁻¹ := by
     first
       | exact (div_le_iff₀ hg0).mpr hfb
-      | exact (div_le_iff hg0).mpr hfb
   have hpos0 : 0 ≤ 1 + 3 / g := by
     have := div_pos (show (0:ℝ) < 3 by norm_num) hg0
     linarith
@@ -300,13 +298,12 @@ theorem t_EtaZero : SqrtSumSqLeOneAddInvPowSix := by
     exact one_div_le_one_div_of_le (by norm_num) hb7
   have hw : (0:ℝ) ≤ 1 / 1000 - u := by linarith
   have h14 : (b ^ 14)⁻¹ = u ^ 2 := by
-    rw [hu, inv_pow, ← pow_mul] <;> norm_num
+    rw [hu, inv_pow, ← pow_mul]
   have h6 : 16 * u ≤ (b ^ 6)⁻¹ := by
     have e : (b ^ 6)⁻¹ = b * u := by
       have hbne : b ≠ 0 := hb0.ne'
       rw [hu]
       field_simp
-      try ring
     rw [e]
     exact mul_le_mul_of_nonneg_right (by linarith) hu0.le
   rw [← hu] at hPg hA
@@ -361,12 +358,6 @@ theorem t_EtaZero : SqrtSumSqLeOneAddInvPowSix := by
     _ ≤ 1 + (b ^ 6)⁻¹ := by linarith
 
 end Num3
-
-section Num4
-
-open Formalism.FourierDecayAlt.PB
-
-end Num4
 
 section Hil1
 
@@ -438,11 +429,8 @@ theorem t_SubFamily : SubFamily := by
     · rw [Set.indicator_of_mem hp, Set.indicator_of_mem hp, Real.norm_eq_abs]
       first
           | exact Complex.abs_re_le_norm _
-          | exact Complex.abs_re_le_abs _
-          | exact RCLike.abs_re_le_norm _
     · first
         | rw [Set.indicator_of_notMem hp, Set.indicator_of_notMem hp]
-        | rw [Set.indicator_of_not_mem hp, Set.indicator_of_not_mem hp]
       simp
   have hsr : Summable (fun p : τ × τ =>
       ‖Q.indicator (fun p : τ × τ => (inner ℂ (X.vec p.1) (X.vec p.2)).re) p‖) :=
@@ -455,7 +443,6 @@ theorem t_SubFamily : SubFamily := by
       fun p => Set.indicator_le_indicator_of_subset hQ (fun _ => norm_nonneg _) p
     first
       | exact Summable.tsum_le_tsum hle (hs.indicator Q) (hs.indicator Q')
-      | exact tsum_le_tsum hle (hs.indicator Q) (hs.indicator Q')
   · show |X.Gam1 * _| ≤ X.Gam1 * _
     rw [abs_mul, abs_of_pos hA'.2.2]
     refine mul_le_mul_of_nonneg_left ?_ hG
@@ -467,7 +454,6 @@ theorem t_SubFamily : SubFamily := by
       _ ≤ ∑' p, Q.indicator (fun p : τ × τ => ‖inner ℂ (X.vec p.1) (X.vec p.2)‖) p := by
           first
             | exact Summable.tsum_le_tsum hb hsr (hs.indicator Q)
-            | exact tsum_le_tsum hb hsr (hs.indicator Q)
 
 theorem t_PairBoundAbstract : PairBoundAbstract := by
   intro hPI hEI hPS hSF τ Rw I H H₁ _ _ _ _ _ _ X Pg A ε ε' dd hPg hdd hA hNX hGG hRO hCP hIZ
@@ -633,8 +619,6 @@ theorem summable_re (f : τ → H₁) (hf : Summable (fun t => ‖f t‖)) :
         rw [Real.norm_eq_abs]
         first
           | exact Complex.abs_re_le_norm _
-          | exact Complex.abs_re_le_abs _
-          | exact RCLike.abs_re_le_norm _
     _ ≤ ‖f p.1‖ * ‖f p.2‖ := norm_inner_le_norm _ _
 
 theorem norm_sq_tsum [CompleteSpace H₁] (f : τ → H₁) (hf : Summable (fun t => ‖f t‖)) :
@@ -643,7 +627,6 @@ theorem norm_sq_tsum [CompleteSpace H₁] (f : τ → H₁) (hf : Summable (fun 
   have h1 : ‖∑' t, f t‖ ^ 2 = (inner ℂ (∑' t, f t) (∑' t, f t)).re := by
     first
       | exact norm_sq_eq_re_inner (𝕜 := ℂ) _
-      | exact (inner_self_eq_norm_sq (𝕜 := ℂ) _).symm
   have h2 : ∀ b, (inner ℂ (∑' t, f t) (f b)).re = ∑' a, (inner ℂ (f b) (f a)).re := by
     intro b
     rw [← inner_conj_symm, Complex.conj_re]
@@ -653,8 +636,6 @@ theorem norm_sq_tsum [CompleteSpace H₁] (f : τ → H₁) (hf : Summable (fun 
   have hg := summable_re f hf
   first
     | exact (Summable.tsum_prod hg).symm
-    | exact (tsum_prod' hg (fun b => hg.prod_factor b)).symm
-    | exact (Summable.tsum_prod' hg (fun b => hg.prod_factor b)).symm
 
 end
 
@@ -724,37 +705,13 @@ theorem t_PairSplit : PairSplit := by
 
 end Hil5
 
-section Hil6
-
-open Formalism.FourierDecayAlt.PB
-
-end Hil6
-
 section LocA
 
 open Finset NumberField Formalism.FourierDecayAlt Formalism.FourierDecayAlt.PB
 open scoped ComplexOrder ComplexConjugate
 open Classical
 
-theorem psd_congr {α : Type} {Y : Finset α} {k k' : α → α → ℂ}
-    (h : ∀ x ∈ Y, ∀ y ∈ Y, k x y = k' x y) (hk : TB.PSDOn Y k) : TB.PSDOn Y k' := by
-  have e : (Matrix.of fun x y : Y => k' x y) = Matrix.of fun x y : Y => k x y := by
-    ext x y
-    simp only [Matrix.of_apply]
-    exact (h x x.2 y y.2).symm
-  show Matrix.PosSemidef (Matrix.of fun x y : Y => k' x y)
-  rw [e]
-  exact hk
-
-theorem psd_add {α : Type} {Y : Finset α} {k k' : α → α → ℂ}
-    (hk : TB.PSDOn Y k) (hk' : TB.PSDOn Y k') : TB.PSDOn Y (fun x y => k x y + k' x y) := by
-  have e : (Matrix.of fun x y : Y => k x y + k' x y) =
-      (Matrix.of fun x y : Y => k x y) + Matrix.of fun x y : Y => k' x y := by
-    ext x y
-    simp [Matrix.of_apply]
-  show Matrix.PosSemidef (Matrix.of fun x y : Y => k x y + k' x y)
-  rw [e]
-  exact Matrix.PosSemidef.add hk hk'
+alias psd_congr := _root_.Formalism.FourierDecayAlt.P.Jx7.psd_congr
 
 theorem psd_one (hS : J.SchurProduct) {α : Type} (Y : Finset α) : TB.PSDOn Y (fun _ _ => (1 : ℂ)) := by
   have h := hS α Empty Y (fun p => p.elim) (fun p => p.elim)
@@ -868,7 +825,7 @@ theorem outOk (hA : J.PSDAgree) (hA2 : A5.A2) (hLP : J.LocalPullback) (hPh : J.P
       intro x hx y hy
       simp only [hin, hS, if_true, hN x hx y hy]
     · by_cases hS : t ∈ S.L
-      · have := psd_add (psd_one hSch Y) key
+      · have := _root_.Formalism.FourierDecayAlt.P.Jx7.psd_add (psd_one hSch Y) key
         refine psd_congr ?_ this
         intro x hx y hy
         simp only [hin, hS, if_true, if_false, hN x hx y hy]
@@ -980,12 +937,12 @@ theorem t_PullLatticeOrdinary : PullLatticeOrdinary := by
     unfold S6.perLat
     rw [Formalism.FourierDecayAlt.P.localTwistedLattice E _ _ s P hP t, Formalism.FourierDecayAlt.P.localAwayFromLevel E g 1 ν P hP hgP,
       Formalism.FourierDecayAlt.P.localAwayFromLevel E g 2 ν P hP hgP]
-    exact ⟨fun h => h.1, fun h => ⟨h, key _ (Formalism.FourierDecayAlt.P.different_power_conj_stable E g 0 ν) t h⟩⟩
+    exact ⟨fun h => h.1, fun h => ⟨h, key _ (_root_.Formalism.FourierDecayAlt.P.S6x2.powConjStable E g 0 ν) t h⟩⟩
   have hLift : t ∈ S6.locAt E P (S6.liftLat E g ν s) ↔
       t ∈ S6.locAt E P (S6.zsub E (S6.idl E g 0 (-ν))) := by
     unfold S6.liftLat
     rw [Formalism.FourierDecayAlt.P.localTwistedLattice E _ _ s P hP t, Formalism.FourierDecayAlt.P.localAwayFromLevel E g (-1) (-ν) P hP hgP]
-    exact ⟨fun h => h.1, fun h => ⟨h, key _ (Formalism.FourierDecayAlt.P.different_power_conj_stable E g 0 (-ν)) t h⟩⟩
+    exact ⟨fun h => h.1, fun h => ⟨h, key _ (_root_.Formalism.FourierDecayAlt.P.S6x2.powConjStable E g 0 (-ν)) t h⟩⟩
   have hinv : ((u⁻¹ : Kˣ) : K) = σ ω⁻¹ := by
     by_cases hω0 : ω = 0
     · have h0 : (u : K) = 0 := by rw [hu, hω0, map_zero]
@@ -1217,19 +1174,5 @@ end From
 end Formalism.FourierDecayAlt.P.GrowthPolynomialOperator
 
 namespace Formalism.FourierDecayAlt.P
-
-theorem equal_index : Formalism.FourierDecayAlt.PB.GramSumLeOfPosSemidef := GrowthPolynomialOperator.t_EqualIota
-
-theorem price_of_index : Formalism.FourierDecayAlt.PB.NormSqBoundOfEqualIota := GrowthPolynomialOperator.t_PriceOfIota
-
-theorem pair_split_alt : Formalism.FourierDecayAlt.PB.PairSplit := GrowthPolynomialOperator.t_PairSplit
-
-theorem subfamilyAlt : Formalism.FourierDecayAlt.PB.SubFamily := GrowthPolynomialOperator.t_SubFamily
-
-theorem loops_give_series : Formalism.FourierDecayAlt.PB.LoopsGiveRows := GrowthPolynomialOperator.t_LoopsGiveRows
-
-theorem pair_bound_abstract : Formalism.FourierDecayAlt.PB.PairBoundAbstract := GrowthPolynomialOperator.t_PairBoundAbstract
-
-theorem loops_joint : Formalism.FourierDecayAlt.PB.LoopsJoint := GrowthPolynomialOperator.t_LoopsJoint
 
 end Formalism.FourierDecayAlt.P

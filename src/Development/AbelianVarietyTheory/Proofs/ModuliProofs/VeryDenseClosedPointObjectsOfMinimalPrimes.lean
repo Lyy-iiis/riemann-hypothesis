@@ -236,9 +236,7 @@ def GrpModel {R : Type} [CommRing R] (ψ : R →+* K) (A : Over (Sp R)) [GrpObj 
 
 variable {P}
 
-theorem spMap_comp {R R' R'' : Type} [CommRing R] [CommRing R'] [CommRing R''] (g : R →+* R') (ψ : R' →+* R'') :
-    spMap (ψ.comp g) = spMap ψ ≫ spMap g := by
-  rw [← Spec.map_comp]; rfl
+alias spMap_comp := _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp
 
 theorem GrpModel.baseChange {R R' : Type} [CommRing R] [CommRing R'] {ψ₀ : R →+* K} {A : Over (Sp R)} [GrpObj A]
     {φ : P.A.left ⟶ A.left} (h : GrpModel P ψ₀ A φ) {g : R →+* R'} {ψ : R' →+* K} (e : ψ.comp g = ψ₀) :
@@ -416,7 +414,7 @@ open scoped CategoryTheory.Obj TensorProduct
 open GlobalTheory.ZM
 
 theorem _root_.GlobalTheory.T.exists_thetaPoint_shape_primitivity_near_generic : Out.Laws → Out.Laws2 → ∀ (o : Type) [CommRing o] (g N' : ℕ) (J : Type) (b : TBase o (N' ^ 2)) Mat κ (w w' : J) (R K : Type) [CommRing R] [IsDomain R] [IsNoetherianRing R] [Field K] [Algebra R K] [IsFractionRing R K] (s : Sp R ⟶ Sp o) (s' : Sp K ⟶ Sp o) (t' : TObj g (N' ^ 2) J b s) (t : TObj g (N' ^ 2) J b s') (v : Ix g (N' ^ 2) → R), TMap t t' (spMap (algebraMap R K)) → t.HasTh (𝟙 _) (fun a => algebraMap R K (v a)) → t.Shape Mat κ → t.Prim w w' → ∃ f : R, f ≠ 0 ∧ ∀ (R' : Type) [CommRing R'] (φ : R →+* R') (s'' : Sp R' ⟶ Sp o) (t'' : TObj g (N' ^ 2) J b s''), IsUnit (φ f) → TMap t'' t' (spMap φ) → t''.HasTh (𝟙 _) (fun a => φ (v a)) ∧ t''.Shape Mat κ ∧ t''.Prim w w' := by
-  first | exact @GlobalTheory.GenericSpread.exists_ne_zero_hasTh_shape_prim | exact GlobalTheory.GenericSpread.exists_ne_zero_hasTh_shape_prim | (intros; apply GlobalTheory.GenericSpread.exists_ne_zero_hasTh_shape_prim <;> assumption)
+  first | exact @GlobalTheory.GenericSpread.exists_ne_zero_hasTh_shape_prim
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.ExistsThetaPointShapePrimitivityNearGenericStatement =====
@@ -570,7 +568,7 @@ open scoped CategoryTheory.Obj TensorProduct
 open GlobalTheory.ZM
 
 theorem _root_.GlobalTheory.T.exists_spread_theta_level_abelian_scheme_away : Out.Laws → Out.Laws2 → ∀ (o : Type) [CommRing o] (g N' : ℕ) (J : Type) (b : TBase o (N' ^ 2)) Mat κ (w w' : J) [Finite J] (R K : Type) [CommRing R] [IsDomain R] [IsNoetherianRing R] [Field K] [Algebra R K] [IsFractionRing R K] (β : o →+* R) (v : Ix g (N' ^ 2) → R) (t : TObj g (N' ^ 2) J b (spMap (algebraMap R K) ≫ spMap β)), t.HasTh (𝟙 _) (fun a => algebraMap R K (v a)) → t.Shape Mat κ → t.Prim w w' → ∃ (f : R) (_ : f ≠ 0) (t' : TObj g (N' ^ 2) J b (spMap (algebraMap R (Localization.Away f)) ≫ spMap β)) (ψ : Localization.Away f →+* K), ψ.comp (algebraMap R _) = algebraMap R K ∧ TMap t t' (spMap ψ) ∧ t'.HasTh (𝟙 _) (fun a => algebraMap R _ (v a)) ∧ t'.Shape Mat κ ∧ t'.Prim w w' := by
-  first | exact @GlobalTheory.SpreadGeneric.exists_spread | exact GlobalTheory.SpreadGeneric.exists_spread | (intros; apply GlobalTheory.SpreadGeneric.exists_spread <;> assumption)
+  first | exact @GlobalTheory.SpreadGeneric.exists_spread
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.ExistsSpreadThetaLevelAbelianSchemeAwayStatement =====
@@ -646,7 +644,7 @@ open scoped CategoryTheory.Obj TensorProduct
 open GlobalTheory.ZM
 
 theorem _root_.GlobalTheory.T.exists_thetaObject_over_complete_dvr_specialisation : Out.Laws → Out.Laws2 → ∀ (o : Type) [CommRing o] (g N' : ℕ) (J : Type) (b : TBase o (N' ^ 2)) Mat κ (w w' : J) [Finite J] (R K : Type) [CommRing R] [IsDomain R] [CharZero R] [Algebra.FiniteType ℤ R] [Field K] [Algebra R K] [IsFractionRing R K] (β : o →+* R) (v : Ix g (N' ^ 2) → R) (t : TObj g (N' ^ 2) J b (spMap (algebraMap R K) ≫ spMap β)) (𝔪 : Ideal R), 𝔪.IsMaximal → t.HasTh (𝟙 _) (fun a => algebraMap R K (v a)) → t.Shape Mat κ → t.Prim w w' → ∃ (V F : Type) (_ : CommRing V) (_ : IsDomain V) (_ : IsDiscreteValuationRing V) (_ : IsAdicComplete (IsLocalRing.maximalIdeal V) V) (_ : Finite (IsLocalRing.ResidueField V)) (_ : Field F) (_ : CharZero F) (_ : Algebra V F) (_ : IsFractionRing V F) (y : R →+* V) (tF : TObj g (N' ^ 2) J b (spMap (algebraMap V F) ≫ spMap (y.comp β))), (IsLocalRing.maximalIdeal V).comap y = 𝔪 ∧ tF.Shape Mat κ ∧ tF.Prim w w' ∧ tF.HasTh (𝟙 _) (fun a => algebraMap V F (y (v a))) := by
-  first | exact @GlobalTheory.ZM.exists_obj_over_complete_dvr | exact GlobalTheory.ZM.exists_obj_over_complete_dvr | (intros; apply GlobalTheory.ZM.exists_obj_over_complete_dvr <;> assumption)
+  first | exact @GlobalTheory.ZM.exists_obj_over_complete_dvr
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.ExistsThetaObjectOverCompleteDvrSpecialisationStatement =====
@@ -664,24 +662,9 @@ open GlobalTheory.ZM
 namespace GlobalTheory
 namespace ClosedPts
 
-theorem spMap_spMap {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B) (g : B →+* C) :
-    spMap g ≫ spMap f = spMap (g.comp f) := by
-  rw [← Spec.map_comp]
-  rfl
+alias spMap_spMap := _root_.GlobalTheory.spMap_comp_ring
 
-theorem jacobson_int : IsJacobsonRing ℤ := by
-  rw [isJacobsonRing_iff_prime_eq]
-  intro P hP
-  by_cases h : P = ⊥
-  · subst h
-    refine le_antisymm (fun x hx => ?_) Ideal.le_jacobson
-    rw [Ideal.mem_bot]
-    by_contra h0
-    have h1 := Ideal.mem_jacobson_bot.1 hx x
-    have h2 : 0 < x * x := mul_self_pos.2 h0
-    rcases Int.isUnit_iff.1 h1 with h3 | h3 <;> omega
-  · have := Ring.DimensionLEOne.maximalOfPrime h hP
-    exact Ideal.jacobson_eq_self_of_isMaximal
+alias jacobson_int := _root_.ReciprocityTheory.AnForm.R.IntegerToRational.isJacobsonRing_int
 
 theorem exists_maximal_notMem {R : Type} [CommRing R] [IsJacobsonRing R] (q : Ideal R) (f : R) (hq : q.IsPrime)
     (hf : f ∉ q) : ∃ m : Ideal R, m.IsMaximal ∧ q ≤ m ∧ f ∉ m := by
@@ -710,21 +693,7 @@ theorem finiteType_int_of_surjective {A B : Type} [CommRing A] [CommRing B] [Alg
     (hf : Function.Surjective f) : Algebra.FiniteType ℤ B :=
   Algebra.FiniteType.of_surjective f.toIntAlgHom hf
 
-theorem range_spMap_fraction (V K : Type) [CommRing V] [IsDomain V] [Field K] [Algebra V K] [IsFractionRing V K] :
-    Set.range (spMap (algebraMap V K)) = {genericPoint (Sp V)} := by
-  rw [genericPoint_eq_bot_of_affine]
-  have key : ∀ y : Sp K, spMap (algebraMap V K) y = (⊥ : PrimeSpectrum V) := fun y => by
-    refine PrimeSpectrum.ext ?_
-    change Ideal.comap (algebraMap V K) y.asIdeal = ⊥
-    have hy : y.asIdeal = (⊥ : Ideal K) := Ideal.eq_bot_of_prime (K := K) y.asIdeal (h := y.isPrime)
-    rw [hy]
-    exact Ideal.comap_bot_of_injective _ (IsFractionRing.injective V K)
-  ext z
-  constructor
-  · rintro ⟨y, rfl⟩
-    exact key y
-  · rintro rfl
-    exact ⟨(⊥ : PrimeSpectrum K), key _⟩
+alias range_spMap_fraction := _root_.GlobalTheory.GenericSpread.range_spMap_fractionRing
 
 theorem exists_pull (h2 : Out.Laws2) {o : Type} [CommRing o] {g N' : ℕ} {J : Type} {b : TBase o (N' ^ 2)}
     (Mat : J → Matrix (Fin (2 * g)) (Fin (2 * g)) ℤ) (κ : ℕ) {A B : Type} [CommRing A] [CommRing B] (e : A →+* B)

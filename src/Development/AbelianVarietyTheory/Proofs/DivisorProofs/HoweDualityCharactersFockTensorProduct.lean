@@ -68,6 +68,7 @@ import Mathlib.Tactic.Basify
 import Mathlib.Tactic.ENatToNat
 import Std.Tactic.BVDecide.Normalize.Prop
 import Mathlib.LinearAlgebra.PiTensorProduct.Finite
+import Development.WeilBound.CoreStatements.GaussianSeminormBounds.RealSeminormFiltration.KRealAsm
 import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MemTensSpanOfKilled
 import Mathlib.Tactic.ReduceModChar
 import Mathlib.RingTheory.Coalgebra.IsFrobenius
@@ -118,7 +119,7 @@ theorem atPl_mul (w : T) (L₁ L₂ : Module.End ℂ (V w)) : atPl w (L₁ * L�
   apply PiTensorProduct.ext
   apply MultilinearMap.ext
   intro f
-  simp [atPl_tprod, Module.End.mul_apply]
+  simp [atPl_tprod]
 
 theorem atPl_one (w : T) : atPl w (1 : Module.End ℂ (V w)) = 1 := by
   apply PiTensorProduct.ext
@@ -376,7 +377,7 @@ theorem mem_tensAll_of_killed : ∀ (T : Type) [Fintype T] [DecidableEq T] (V : 
         by_cases hw : w = a
         · subst hw
           simp [ha]
-        · simp [hw, Function.update_of_ne hw]
+        · simp [hw]
       rw [e, PiTensorProduct.map_comp, LinearMap.comp_apply, ih]
       exact hfix a
   have hy' : PiTensorProduct.map p y = y := by
@@ -537,7 +538,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TprodCyclicModuloSpanSomeFactor =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HoweFiniteLengthTensorProductFactors =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.HoweFiniteLengthTensorProductFactors", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.ActAtApply\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.GlActionQuadraticRelationModuloPiTensorAtFactor\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HoweFiniteLengthUniqueMaximalOfCyclic\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsGoodGlRepPiTensorActionAtFactorAndCommute\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MemPiTensorSpanAllFactorsOfJointKernel\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PiTensorSpanAllFactorsSupFiniteSingleton\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.TprodCyclicModuloSpanSomeFactor\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.HoweFiniteLengthTensorProductFactors", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.ActAtApply\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.GlActionQuadraticRelationModuloPiTensorAtFactor\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HoweFiniteLengthUniqueMaximalOfCyclic\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsGoodGlRepPiTensorActionAtFactorAndCommute\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MemPiTensorSpanAllFactorsOfJointKernel\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PiTensorSpanAllFactorsSupFiniteSingleton\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.TprodCyclicModuloSpanSomeFactor\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\nimport Development.WeilBound.CoreStatements.GaussianSeminormBounds.RealSeminormFiltration.KRealAsm\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -553,33 +554,14 @@ variable {T : Type} [Fintype T] [DecidableEq T] {V : T → Type} [∀ w, AddComm
 theorem atPl_eq_toLinearMap (w : T) (L : Module.End ℂ (V w)) :
     atPl w L = (PiTensorProduct.mapMultilinear ℂ V V).toLinearMap (fun i => (LinearMap.id : V i →ₗ[ℂ] V i)) w L := rfl
 
-theorem atPl_one (w : T) : atPl w (1 : Module.End ℂ (V w)) = 1 := by
-  unfold atPl
-  have h : Function.update (fun i => (LinearMap.id : V i →ₗ[ℂ] V i)) w 1 = fun i => LinearMap.id := by
-    funext i
-    by_cases hi : i = w
-    · subst hi; simp; rfl
-    · simp [hi]
-  rw [h]; exact PiTensorProduct.map_id
-
 theorem atPl_sub_smul (w : T) (L : Module.End ℂ (V w)) (c : ℂ) (y : ⨂[ℂ] i, V i) :
     atPl w (L - c • 1) y = atPl w L y - c • y := by
-  rw [atPl_eq_toLinearMap, map_sub, map_smul, ← atPl_eq_toLinearMap, ← atPl_eq_toLinearMap, atPl_one]
+  rw [atPl_eq_toLinearMap, map_sub, map_smul, ← atPl_eq_toLinearMap, ← atPl_eq_toLinearMap, _root_.GlobalTheory.TensIrr.atPl_one]
   simp
-
-theorem atPl_tprod (w : T) (L : Module.End ℂ (V w)) (v : ∀ i, V i) :
-    atPl w L (PiTensorProduct.tprod ℂ v) = PiTensorProduct.tprod ℂ (Function.update v w (L (v w))) := by
-  unfold atPl
-  rw [PiTensorProduct.map_tprod]
-  congr 1
-  funext i
-  by_cases hi : i = w
-  · subst hi; simp
-  · simp [hi]
 
 theorem atPl_tprod_eq_zero (w : T) (L : Module.End ℂ (V w)) (v : ∀ i, V i) (h : L (v w) = 0) :
     atPl w L (PiTensorProduct.tprod ℂ v) = 0 := by
-  rw [atPl_tprod, h]
+  rw [_root_.GlobalTheory.RealLift.atPl_tprod, h]
   exact MultilinearMap.map_update_zero _ _ _
 
 theorem tensAll_mono {H H' : ∀ w, Submodule ℂ (V w)} (h : ∀ w, H w ≤ H' w) : tensAll H ≤ tensAll H' := by
@@ -855,7 +837,7 @@ abbrev chMod (p q : ℕ) (x : ℚ) : GKMod p q where
   lie := by
     intro X Y
     ext
-    simp [chAct_apply, Matrix.trace_sub, Matrix.trace_mul_comm X Y]
+    simp [chAct_apply, Matrix.trace_mul_comm X Y]
     ring
   kfin := fun _ => ⟨⊤, inferInstance, Submodule.mem_top, fun _ _ _ _ => Submodule.mem_top⟩
   wts := fun v => by
@@ -874,7 +856,7 @@ abbrev shiftMod {r s : ℕ} (M : GKMod r s) (t : ℚ) : GKMod r s where
     have h := LinearMap.congr_fun (M.lie X Y) v
     simp only [LinearMap.sub_apply, LinearMap.smulRight_apply, LinearMap.smul_apply,
       Matrix.traceLinearMap_apply, Module.End.mul_apply, LinearMap.id_apply, map_sub, map_smul,
-      Matrix.trace_sub, Matrix.trace_mul_comm X Y, sub_self, smul_zero, zero_smul, sub_zero] at h ⊢
+      Matrix.trace_mul_comm X Y] at h ⊢
     linear_combination (norm := module) h
   kfin := fun v => by
     obtain ⟨W, fW, hv, sW⟩ := M.kfin v
@@ -1197,69 +1179,10 @@ theorem comm_parts {Y : Mat p q} (hY : IsKC Y) {Z : Mat r s} (hZ : IsPC Z) {d : 
     omega
   exact ⟨sub_eq_zero.1 h0, (sub_eq_zero.1 (e ▸ h0)).symm⟩
 
-theorem upOp_mem_charSub {x : ℚ} {Z : Mat r s} (hZ : IsPC Z) {d : ℕ} {v : Pol p q r s}
-    (hv : v ∈ homog (Ln p q r s) d) (hc : v ∈ charSub p q r s x) :
-    upOp (kron2 p q Z) v ∈ charSub p q r s x := fun Y hY => by
-  rw [(comm_parts hY hZ hv).1, hc Y hY, map_smul]
-
 theorem dnOp_mem_charSub {x : ℚ} {Z : Mat r s} (hZ : IsPC Z) {d : ℕ} {v : Pol p q r s}
     (hv : v ∈ homog (Ln p q r s) d) (hc : v ∈ charSub p q r s x) :
     dnOp (kron2 p q Z) v ∈ charSub p q r s x := fun Y hY => by
   rw [(comm_parts hY hZ hv).2, hc Y hY, map_smul]
-
-theorem eq_zero_of_lowering {x : ℚ} {e e₀ : ℕ} {g v : Pol p q r s} (hg0 : g ≠ 0)
-    (hg : g ∈ homog (Ln p q r s) e₀) (hgc : g ∈ charSub p q r s x) (he : e₀ < e)
-    (hv : v ∈ homog (Ln p q r s) e) (hvc : v ∈ charSub p q r s x)
-    (hd : ∀ Z : Mat r s, IsPC Z → dnOp (kron2 p q Z) v = 0) : v = 0 := by
-  by_contra h0
-  have h1 := isSide_one.degW_le Function.bijective_id hg (isHW_of_mem hg0 hgc)
-  obtain ⟨d, hd1, hd2⟩ := isSide_one.homog_of_hw Function.bijective_id (isHW_of_mem h0 hvc)
-    ((mem_harm1 v).1 fun Z hZ => by
-      rw [fockAct2_eq, (parts_omAct (odd_kron2 hZ) v).2, hd Z hZ])
-  obtain rfl : d = e := IsHomogeneous.inj_right hd2 hv h0
-  rw [← hd1, Nat.cast_le] at h1
-  omega
-
-theorem mem_span_raising : ∀ (P Q R S : ℕ) (x : ℚ) (e e₀ : ℕ) (f g : Pol P Q R S),
-    f ∈ homog (Ln P Q R S) e →
-    (∀ Y : Mat P Q, IsKC Y → fockAct1 P Q R S Y f = ((x : ℂ) * Y.trace) • f) →
-    g ≠ 0 → g ∈ homog (Ln P Q R S) e₀ →
-    (∀ Y : Mat P Q, IsKC Y → fockAct1 P Q R S Y g = ((x : ℂ) * Y.trace) • g) →
-    e₀ < e →
-    f ∈ Submodule.span ℂ {f' | ∃ Z : Mat R S, IsPC Z ∧
-      ∃ g' ∈ homog (Ln P Q R S) (e - 2),
-        (∀ Y : Mat P Q, IsKC Y → fockAct1 P Q R S Y g' = ((x : ℂ) * Y.trace) • g') ∧
-        f' = plusPart (fockAct2 P Q R S Z) g'} := by
-  intro p q r s x e e₀ f g hf hfc hg0 hg hgc he
-  by_cases h2 : e < 2
-  · rw [eq_zero_of_lowering hg0 hg hgc he hf hfc fun Z _ => dnOp_low _ e h2 f hf]
-    exact Submodule.zero_mem _
-  have hι := GlobalTheory.FockAlg.Model.isFockIsometry_fockEmb (Ln p q r s)
-  have hinj := injective_of_isFockIP hι
-  set U := Submodule.span ℂ {f' | ∃ Z : Mat r s, IsPC Z ∧
-      ∃ g' ∈ homog (Ln p q r s) (e - 2),
-        (∀ Y : Mat p q, IsKC Y → fockAct1 p q r s Y g' = ((x : ℂ) * Y.trace) • g') ∧
-        f' = plusPart (fockAct2 p q r s Z) g'} with hU
-  have hle : U ≤ homog (Ln p q r s) e ⊓ charSub p q r s x := by
-    refine Submodule.span_le.2 ?_
-    rintro _ ⟨Z, hZ, g', h1, h3, rfl⟩
-    rw [fockAct2_eq, (parts_omAct (odd_kron2 hZ) g').1]
-    refine ⟨?_, upOp_mem_charSub hZ h1 h3⟩
-    have := upOp_homog (kron2 p q Z) _ g' h1
-    rwa [show e - 2 + 2 = e by omega] at this
-  have := Submodule.finiteDimensional_of_le (hle.trans inf_le_left)
-  obtain ⟨u, hu, ho⟩ := exists_orth (GlobalTheory.FockAlg.Model.fockEmb (Ln p q r s)) U f
-  have hh := Submodule.sub_mem _ hf (hle hu).1
-  have hc : f - u ∈ charSub p q r s x := Submodule.sub_mem _ hfc (hle hu).2
-  have h0 : f - u = 0 := eq_zero_of_lowering hg0 hg hgc he hh hc fun Z hZ => by
-    have hZ' := isPC_conjTranspose hZ
-    have h1 := ho _ (Submodule.subset_span ⟨_, hZ', _, dnOp_homog (kron2 p q Z) e _ hh,
-      dnOp_mem_charSub hZ hh hc, rfl⟩)
-    rw [fockAct2_eq, (parts_omAct (odd_kron2 hZ') _).1, inner_upOp hι (odd_kron2 hZ'),
-      ← lineKroneckerRightMatrix_conjTranspose, neg_eq_zero, inner_self_eq_zero] at h1
-    exact hinj (h1.trans (map_zero _).symm)
-  rw [sub_eq_zero.1 h0]
-  exact hu
 
 end GlobalTheory.FockScalarType
 end -- clump:auto
@@ -1337,13 +1260,13 @@ theorem hw_le_span_sup_coinv : ∀ (P Q R S : ℕ) (x : ℚ) (μ' : Ix R S → �
     exact (hker _).2 (coinv_stable2 _ Y ((hker _).1 h))
   have hPC : ∀ Z : Mat P Q, IsPC Z → ∀ f, pr (fockAct1 P Q R S Z f) = 0 := by
     intro Z hZ f; rw [hpr1, GlobalTheory.HarmLift.trace_PC hZ, mul_zero, zero_smul]
-  obtain ⟨h, hh, hprh⟩ := GlobalTheory.HarmLift.lemA P Q R S _ pr hPC g
-  obtain ⟨H0, hfin, hH0, hharm, hs1, hs2⟩ := GlobalTheory.HarmLift.lemB P Q R S h hh
+  obtain ⟨h, hh, hprh⟩ := _root_.GlobalTheory.FockAlg.HarmLift.exists_harm2_rep P Q R S _ pr hPC g
+  obtain ⟨H0, hfin, hH0, hharm, hs1, hs2⟩ := _root_.GlobalTheory.FockAlg.fin_harm P Q R S h hh
   obtain ⟨ι, hιIP, hιinj⟩ := GlobalTheory.FischerParts.exists_fockIP (Ln P Q R S)
   let A : Set (Module.End ℂ (Pol P Q R S)) :=
     {a | (∃ X, IsKC X ∧ a = fockAct1 P Q R S X) ∨ ∃ Y, IsKC Y ∧ a = fockAct2 P Q R S Y}
   have hadj := GlobalTheory.FockAdj.fock_adjoints P Q R S _ ι hιIP
-  obtain ⟨c, hc, hcpr, hceig⟩ := GlobalTheory.HarmLift.lemC (Pol P Q R S) (Pol P Q R S ⧸ C) _ ι hιinj pr H0 hfin A
+  obtain ⟨c, hc, hcpr, hceig⟩ := _root_.GlobalTheory.stable_complement_of_kernel_exists (Pol P Q R S) (Pol P Q R S ⧸ C) _ ι hιinj pr H0 hfin A
     (by
       rintro a (⟨X, hX, rfl⟩ | ⟨Y, hY, rfl⟩) w hw
       exacts [hs1 X hX w hw, hs2 Y hY w hw])
@@ -1572,7 +1495,7 @@ theorem left_expand (hlu : ∀ i j, l i * u j = u j * l i + if i = j then 1 else
     rw [this, h]
     by_cases hab : a = b
     · subst hab; simp [mul_add, add_mul, mul_assoc]
-    · simp [hab, mul_add, add_mul, mul_assoc]
+    · simp [hab, mul_assoc]
   simp only [Finset.sum_mul_sum, h1, Finset.sum_add_distrib, Finset.sum_ite_eq, Finset.mem_univ, if_true,
     Finset.sum_const, Finset.card_univ]
 
@@ -1590,7 +1513,7 @@ theorem right_expand (hlu : ∀ i j, l i * u j = u j * l i + if i = j then 1 els
     rw [this, h]
     by_cases hdc : d = c
     · subst hdc; simp [mul_add, add_mul, mul_assoc]
-    · simp [hdc, mul_add, add_mul, mul_assoc]
+    · simp [hdc, mul_assoc]
   simp only [Finset.sum_mul, h1, Finset.sum_add_distrib, Finset.sum_ite_eq', Finset.mem_univ, if_true,
     Finset.sum_const, Finset.card_univ]
 
@@ -1618,7 +1541,7 @@ theorem raiB_comm (l m : Ln P Q R S) : raiB l * raiB m = raiB m * raiB l := by
   · rw [hlm]
   refine LinearMap.ext fun f => ?_
   cases hl : linePos l <;> cases hm : linePos m <;>
-    simp [raiB, hl, hm, MvPolynomial.pderiv_X, Pi.single_apply, hlm, Ne.symm hlm,
+    simp [raiB, hl, hm, MvPolynomial.pderiv_X, hlm, Ne.symm hlm,
       GlobalTheory.FockCasimir.pderiv_pderiv_comm l m, mul_left_comm]
 
 theorem fockSecondAction_matrixUnit_eq (c d : Ix R S) :
@@ -1627,7 +1550,7 @@ theorem fockSecondAction_matrixUnit_eq (c d : Ix R S) :
   rw [fockAct2_Eab]
   simp only [omE, Finset.sum_add_distrib, Prod.mk.injEq, true_and]
   by_cases hcd : c = d
-  · simp [hcd, Finset.sum_const, Finset.card_univ, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul, div_eq_mul_inv, mul_comm]
+  · simp [hcd, Finset.sum_const, Finset.card_univ, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul, div_eq_mul_inv]
   · simp [hcd]
 
 theorem fockFirstAction_matrixUnit_eq (b a : Ix P Q) :
@@ -1636,13 +1559,13 @@ theorem fockFirstAction_matrixUnit_eq (b a : Ix P Q) :
   rw [fockAct1_Eab]
   simp only [omE, Finset.sum_add_distrib, Prod.mk.injEq, and_true]
   by_cases hba : b = a
-  · simp [hba, Finset.sum_const, Finset.card_univ, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul, div_eq_mul_inv, mul_comm]
+  · simp [hba, Finset.sum_const, Finset.card_univ, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul, div_eq_mul_inv]
   · simp [hba]
 
 theorem trace_Eab (b a : Ix P Q) : (Eab b a).trace = if b = a then 1 else 0 := by
   by_cases h : b = a
-  · subst h; simp [Eab, Matrix.trace, Matrix.single_apply]
-  · simp [Eab, Matrix.trace, Matrix.single_apply, h]
+  · subst h; simp [Eab, Matrix.trace]
+  · simp [Eab, Matrix.trace, h]
 
 section Alg
 
@@ -1653,7 +1576,7 @@ theorem sq_shift (X : J → J → A) (k : ℂ) (c e : J) :
       ∑ d, X c d * X d e + (2 * k) • X c e + if c = e then (k * k) • (1 : A) else 0 := by
   simp only [mul_add, add_mul, Finset.sum_add_distrib, ite_mul, mul_ite, zero_mul, mul_zero,
     smul_mul_assoc, one_mul, mul_smul_comm, mul_one, Finset.sum_ite_eq, Finset.sum_ite_eq',
-    Finset.mem_univ, if_true, smul_smul]
+    Finset.mem_univ, if_true]
   by_cases hce : c = e
   · subst hce; simp only [if_true]; module
   · simp only [hce, if_false]; module
@@ -1702,7 +1625,7 @@ theorem qop_mem_coinv (P Q R S : ℕ) (x : ℂ) :
   rw [LinearMap.sum_apply]
   refine Submodule.sum_mem _ fun b _ => ?_
   refine Submodule.subset_span ⟨Eab b a, (raiB (a, c) * lowB (b, e)) f, ?_⟩
-  simp [Module.End.mul_apply, LinearMap.sub_apply]
+  simp [LinearMap.sub_apply]
 
 end GlobalTheory.HoweR.SecondQuad
 
@@ -1786,7 +1709,7 @@ theorem quad_main (h : ∀ b c e, l b c * u b e = u b e * l b c + if c = e then 
         (if a = b then (Fintype.card κ : ℂ) / 2 - x else 0) • (l a i * u b j) := by
     intro a b
     rw [hE]
-    split_ifs <;> simp [add_mul, sub_mul, sub_smul, smul_mul_assoc, add_sub_assoc]
+    split_ifs <;> simp [add_mul, sub_mul, sub_smul, add_sub_assoc]
   simp only [hR, Finset.sum_add_distrib]
   have hD : ∑ a, ∑ b, (if a = b then (Fintype.card κ : ℂ) / 2 - x else 0) • (l a i * u b j) =
       ((Fintype.card κ : ℂ) / 2 - x) • ∑ a, l a i * u a j := by
@@ -1796,7 +1719,7 @@ theorem quad_main (h : ∀ b c e, l b c * u b e = u b e * l b c + if c = e then 
   rw [hD, core2 u l h, ← h1]
   simp only [qop, hG]
   simp only [neg_mul_neg, add_mul, mul_add, smul_mul_assoc, mul_smul_comm, one_mul, mul_one,
-    smul_smul, Finset.sum_add_distrib, ite_smul, zero_smul, ite_mul, zero_mul, mul_ite, mul_zero, Finset.sum_ite_eq,
+    Finset.sum_add_distrib, ite_smul, zero_smul, ite_mul, zero_mul, mul_ite, mul_zero, Finset.sum_ite_eq,
     Finset.sum_ite_eq', Finset.mem_univ, if_true]
   by_cases hij : i = j
   · subst hij

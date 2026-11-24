@@ -159,7 +159,6 @@ variable {k r : ℕ}
 theorem inv_eq_ring_inverse (A : Q.Mx k r) : A⁻¹ = Ring.inverse A := by
   first
     | exact Matrix.nonsing_inv_eq_ringInverse A
-    | exact Matrix.nonsing_inv_eq_ring_inverse A
 
 def lieU (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) : Submodule ℝ (Q.Mx k r) where
   carrier := {X | InLieW k r z X}
@@ -423,8 +422,6 @@ end Formalism.FourierDecayAlt.P.RadicalReductionOperator
 
 namespace Formalism.FourierDecayAlt.P
 
-theorem local_logarithm_unitary : NFRadRedR.LocLog := RadicalReductionOperator.locLog
-
 end Formalism.FourierDecayAlt.P
 end -- clump:auto
 end -- clump:auto
@@ -438,10 +435,10 @@ section -- clump:auto
 
 namespace Formalism.FourierDecayAlt.P
 
-theorem representation_smooth : NFRadRedS.RepSmooth := representation_smooth_of_log local_logarithm_unitary
+theorem representation_smooth : NFRadRedS.RepSmooth := _root_.Formalism.FourierDecayAlt.P.NFRadRedR.repSmooth_of _root_.Formalism.FourierDecayAlt.P.RadicalReductionOperator.locLog
 
 theorem radical_reduction_surjective : Formalism.FourierDecayAlt.NF.RadRedSurj :=
-  radical_surjective_of_parts local_smooth_section representation_smooth
+  _root_.Formalism.FourierDecayAlt.P.NFRadRedS.radRedSurj_of _root_.Formalism.FourierDecayAlt.P.NFRadRedLocSec.locSec representation_smooth
 
 end Formalism.FourierDecayAlt.P
 end -- clump:auto

@@ -413,7 +413,7 @@ theorem UpperTheory.exists_mem_KO_eq_stdFrame_mul_of_isPrimFrame_fin :
   have hYrank : Y.rank = a' := by
     have hY0 : Y0 k σ * (Y0 k σ).transpose = 1 := by
       ext i j
-      simp [Y0, Matrix.mul_apply, Matrix.one_apply, Finset.sum_ite_eq']
+      simp [Y0, Matrix.mul_apply, Matrix.one_apply]
     have hW : Y * (((h⁻¹ : GL D k) : Matrix D D k) * (Y0 k σ).transpose) = 1 := by
       rw [hYeq, Matrix.mul_assoc, ← Matrix.mul_assoc (h : Matrix D D k), ← Units.val_mul,
         mul_inv_cancel, Units.val_one, Matrix.one_mul, hY0]
@@ -639,15 +639,6 @@ section -- clump:auto
 
 open MeasureTheory GlobalTheory.SplitFlip GlobalTheory.SplitWeil ValuativeRel GlobalTheory.ConjSize
 
-open scoped Pointwise in
-private theorem sum_rightInv {G : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
-    [MeasurableSpace G] [BorelSpace G] (μ : Measure G) [μ.IsMulLeftInvariant] (K : Subgroup G)
-    (hKo : IsOpen (K : Set G)) (hKt : μ K ≠ ⊤) {S : Set G} (hS : IsCompact S)
-    (hSK : ∀ s ∈ S, ∀ k ∈ K, s * k ∈ S) :
-    ∃ t : Finset (G ⧸ K), (∀ Q ∈ t, Q.out ∈ S) ∧ ∀ f : G → ℂ, (∀ s ∈ S, ∀ k ∈ K, f (s * k) = f s) →
-      ∫ g in S, f g ∂μ = ∑ Q ∈ t, f Q.out * μ.real K :=
-  _root_.UpperTheory.Reformulated.B.SumRightInverse.sum_rightInv μ K hKo hKt hS hSK
-
 section
 variable {k : Type} [Field k] [ValuativeRel k] {A : Type} [Fintype A] [DecidableEq A]
 
@@ -723,7 +714,7 @@ theorem UpperTheory.unramified_character_invariant :
       GlobalTheory.FunObj.GivenAdm.gdet_mem_unitCong (Subgroup.mem_inf.1 (Subgroup.mem_inf.1 hk).1).2
     rw [gdet_mul, map_mul, Units.val_mul, apow_mul, hcond _ hu, apow_of_valuation_eq_one hu.1]
     simp
-  obtain ⟨t, htS, ht⟩ := sum_rightInv (haarVol J) K' hKo hKt hSc
+  obtain ⟨t, htS, ht⟩ := _root_.UpperTheory.Reformulated.B.SumRightInverse.sum_rightInv (haarVol J) K' hKo hKt hSc
     (fun s hs k' hk => ((Subgroup.mem_inf.1 hk).2 s).1 hs)
   rw [ht (fun g => (ν (gdet g) : ℂ) * apow (gdet g) ((n : ℂ) / 2)) hinv]
   have h1 := ht (fun _ => (1 : ℂ)) (fun _ _ _ _ => rfl)
@@ -1279,7 +1270,7 @@ private theorem local_grid_entries_unitary {K : Type} [Field K] {ι τ : K →+*
     {i j : ℕ} (hi : i < D.R.m) (hj : j < D.R.m) (u : (Kw w)ˣ) : Un ι τ ((locGrid G t w).nu i j u : ℂ) := by
   have e1 : (((locGrid G t w).nu i j u : ℂˣ) : ℂ) =
       ((L.C.mu0 ⟨j, hj⟩).loc w u : ℂ) * ((L.xiH t).loc w u : ℂ) * (((G.ch.chiH (D.R.m - i)).loc w u : ℂ))⁻¹ := by
-    simp only [Grid.nu, locGrid, muBase, dif_pos hj, MonoidHom.div_apply, Units.val_div_eq_div_val, div_eq_mul_inv]
+    simp only [Grid.nu, locGrid, muBase, dif_pos hj, div_eq_mul_inv]
     simp [HChar.loc]
   rw [e1]
   exact ((hmu _ _).mul (hxi _)).mul (hchi _ (by omega) (by omega) _).inv
@@ -1323,7 +1314,7 @@ theorem _root_.GlobalTheory.T.local_character_power_conductor_bound : _root_.Glo
   have hchi : ∀ i, 1 ≤ i → i ≤ D.R.m → ∀ x, Un D.what₂.embLL σ ((ch.G.ch.chiH i).loc w x : ℂ) :=
     fun i a b x => UpperTheory.conjSize_heckeChar_local_of_mem_range_embedding _ _ _ _ (ch.G.ch.inf i a b) _ _ _ _ (hF.chars.chi i a b w x)
   have habs : ∀ u : (Kw w)ˣ, apow u (1 / 2) ∈ Set.range D.what₂.embLL := fun u =>
-    RingHom.mem_fieldRange.1 (GlobalTheory.TflipField.apow_half_mem D.what₂.embLL.fieldRange w
+    RingHom.mem_fieldRange.1 (_root_.GlobalTheory.HalfPowField.apow_half_mem_of_sqrt D.what₂.embLL.fieldRange w
       (RingHom.mem_fieldRange.2 (hF.sqrt w (.inr ⟨A.μ0, hw⟩))) u)
   have hq0 : Ideal.absNorm w.asIdeal ≠ 0 := fun h => w.ne_bot (Ideal.absNorm_eq_zero_iff.1 h)
   have hψ := fun x hx => (fun h => Un.of_pow_eq_one (τ := σ) (hF.roots A.μ0 w hw _ h) (pow_ne_zero _ hq0) h)

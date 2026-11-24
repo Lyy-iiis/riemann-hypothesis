@@ -243,7 +243,7 @@ open GroundTheory.Heights₂.Heights TensorProduct
 open GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.Sl
 
 theorem _root_.GlobalTheory.T.exists_archimedean_frame : ∀ (S : Scheme.{0}) (G : Over S) [GrpObj G] [IsCommMonObj G] (P : RigLB G) (z : Sp ℂ ⟶ S) (A : Over (Sp ℂ)) [GrpObj A] (φ : A.left ⟶ G.left) (g : ℕ) (u : HolUnif A (P.L.pull φ) g) (Hm : Matrix (Fin g) (Fin g) ℂ) (χ : u.Λ → ℂ), IsGrpPullback A G z φ → u.IsAH Hm χ → Nonempty (ArchFrame P z g) := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Sl.exists_archFrame_of_isAH | exact GlobalTheory.CompanionTheory.Ar.Sl.exists_archFrame_of_isAH | (intros; apply GlobalTheory.CompanionTheory.Ar.Sl.exists_archFrame_of_isAH <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Sl.exists_archFrame_of_isAH
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.ExistsArchimedeanFrameStatement =====
@@ -328,10 +328,6 @@ namespace GlobalTheory.CompanionTheory.Ar.Sl.FrameVec
 
 open GlobalTheory.CompanionTheory.Ar.LieSigma
 
-theorem one_left_over {S : Scheme.{0}} {X M : Over S} [GrpObj M] : (1 : X ⟶ M).left = X.hom ≫ η[M].left := by
-  rw [Hom.one_def, Over.comp_left]
-  congr 1
-
 theorem isVec_existsUnique : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (L : Type) [Field L] [NumberField L] (D : PPData H L) (σ : L →+* ℂ) (a : D.Frame σ), (∀ v, IsTangent v → ∃! w, a.u.IsDiff w v) → (∀ w, ∃! v, IsTangent v ∧ a.u.IsDiff w v) → ∀ x : D.B.carrier, ∃! c, D.IsVec a x c := by
   intro E _ _ _ H L _ _ D σ a h1 h2 x
   have hw : (spMap (GlobalTheory.CompanionTheory.Ar.dualMap (σ.comp (algebraMap (𝓞 L) L))) ≫ (D.MB.pt x).left) ≫ D.t.G.hom
@@ -362,7 +358,7 @@ theorem isVec_existsUnique : ∀ (E : Type) [Field E] [NumberField E] [IsCMField
           ext t <;> simp [GlobalTheory.CompanionTheory.Ar.dualMap, TrivSqZeroExt.algebraMap_eq_inl]
         rw [key, Category.assoc]
         exact congrArg (fun f => spMap (σ.comp (algebraMap (𝓞 L) L)) ≫ f) (D.MB.tan x)
-      rw [Category.assoc, hφ, ReciprocityTheory.ChartRestriction.G.Out.PullGtPf.IsGrpPullback.one_left a.cart, h3, one_left_over]
+      rw [Category.assoc, hφ, ReciprocityTheory.ChartRestriction.G.Out.PullGtPf.IsGrpPullback.one_left a.cart, h3, _root_.ReciprocityTheory.ChartRestriction.G.Chart.one_left']
       simp
     · have e : spMap (TrivSqZeroExt.fstHom ℂ ℂ ℂ).toRingHom ≫ (epsR ℂ).hom = 𝟙 _ := by
         show Spec.map _ ≫ Spec.map _ = _
@@ -404,7 +400,7 @@ open GroundTheory.Heights₂.Heights TensorProduct
 open GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.Sl
 
 theorem _root_.GlobalTheory.T.frame_coordinates_unique : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (L : Type) [Field L] [NumberField L] (D : PPData H L) (σ : L →+* ℂ) (a : D.Frame σ), (∀ v, IsTangent v → ∃! w, a.u.IsDiff w v) → (∀ w, ∃! v, IsTangent v ∧ a.u.IsDiff w v) → ∀ x : D.B.carrier, ∃! c, D.IsVec a x c := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Sl.FrameVec.isVec_existsUnique | exact GlobalTheory.CompanionTheory.Ar.Sl.FrameVec.isVec_existsUnique | (intros; apply GlobalTheory.CompanionTheory.Ar.Sl.FrameVec.isVec_existsUnique <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Sl.FrameVec.isVec_existsUnique
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.FrameCoordinatesUniqueStatement =====
@@ -525,7 +521,7 @@ open GroundTheory.Heights₂.Heights TensorProduct
 open GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.Sl
 
 theorem _root_.GlobalTheory.T.theta_function_differentiable : ∀ (S : Scheme.{0}) (G : Over S) [GrpObj G] [IsCommMonObj G] (P : RigLB G) (z : Sp ℂ ⟶ S) (g : ℕ) (a : ArchFrame P z g) (n : ℕ) (s : Out.H0 P.L n) (θ : (Fin g → ℂ) → ℂ), a.IsFn s θ → Differentiable ℂ θ := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Sl.isFn_differentiable | exact GlobalTheory.CompanionTheory.Ar.Sl.isFn_differentiable | (intros; apply GlobalTheory.CompanionTheory.Ar.Sl.isFn_differentiable <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Sl.isFn_differentiable
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.ThetaFunctionDifferentiableStatement =====

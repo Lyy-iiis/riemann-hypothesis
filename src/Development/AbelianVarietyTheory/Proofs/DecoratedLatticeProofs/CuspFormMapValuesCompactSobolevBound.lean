@@ -70,7 +70,7 @@ section -- clump:auto
 
 
 theorem _root_.GlobalTheory.T.smoothVec_head_of_derivative_family : ∀ (n : ℕ) (ε : Fin n → Bool) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), Formalism.MainNotions.S.IsURepOn (Formalism.MainNotions.S.UJset ε) σ → ∀ v ∈ GlobalTheory.TypeSum.Fam ε σ, Formalism.L2.Theta.SmoothVec (GlobalTheory.SmoothGlob.lieSet ε) σ (v []) := by
-  first | exact @GlobalTheory.FamSmooth.famSmooth | exact GlobalTheory.FamSmooth.famSmooth | (intros; apply GlobalTheory.FamSmooth.famSmooth <;> assumption)
+  first | exact @GlobalTheory.FamSmooth.famSmooth
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.SmoothVecHeadOfDerivativeFamilyStatement =====
@@ -163,7 +163,7 @@ theorem fam_baire [CompleteSpace H] {σ : Mx n → (H →L[ℂ] H)} (hσ : IsURe
     exact ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun v => by rw [hσ.2.1 g hg v, one_mul]⟩
   obtain ⟨d, b, φ, hb⟩ := exists_frame ε
   haveI : IsUniformAddGroup (Fam ε σ) := (Fam ε σ).toAddSubgroup.isUniformAddGroup
-  haveI : CompleteSpace (Fam ε σ) := (GlobalTheory.T.isClosed_derivativeFamilies_moderateGrowth n ε H σ hρ).completeSpace_coe
+  haveI : CompleteSpace (Fam ε σ) := (_root_.GlobalTheory.TypeSum.isClosed_fam n ε H σ hρ).completeSpace_coe
   haveI := (withSeminorms_sn (ρ := σ) hb).firstCountableTopology
   haveI : (_root_.uniformity (Fam ε σ)).IsCountablyGenerated := IsUniformAddGroup.uniformity_countably_generated
   letI := UniformSpace.pseudoMetricSpace (Fam ε σ)

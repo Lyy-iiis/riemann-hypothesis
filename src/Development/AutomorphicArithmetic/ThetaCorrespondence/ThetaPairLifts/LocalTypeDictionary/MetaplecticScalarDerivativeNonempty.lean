@@ -140,7 +140,7 @@ theorem metaplectic_scalar_derivative_nonempty (hP : _root_.GlobalTheory.FunPr.T
     rw [← hγpr t, Matrix.mulVec_mulVec, e', Matrix.one_mulVec]
   have hU : ∀ t, ∃ a : ℂ, ‖a‖ = 1 ∧ ∀ h, (T t ∘ₗ (omS (γ (-t)) : Sch l →ₗ[ℂ] Sch l)) h = a • h := by
     intro t
-    refine _root_.GlobalTheory.T.real_weil_representation_schur_scalar hP l _ (fun w h h₁ hh => ?_) (fun h => ?_)
+    refine _root_.GlobalTheory.RealWeil.SchurSchwartz.weil_schwartz_schur_lemma hP l _ (fun w h h₁ hh => ?_) (fun h => ?_)
     · simp only [LinearMap.comp_apply, ContinuousLinearMap.coe_coe]
       rw [hTrho t _ _ _ (intertwine_fun l _ (om (γ (-t))) (omS (γ (-t))) (h3 _) (h4 _) w h h₁ hh), hmat]
     · simp only [LinearMap.comp_apply, ContinuousLinearMap.coe_coe]
@@ -231,7 +231,7 @@ theorem _root_.GlobalTheory.T.metaplectic_lift_scalar_derivative_eq : _root_.Glo
     (∀ (h : GlobalTheory.RealWeil.Sch l) (x : EuclideanSpace ℝ l), Continuous fun t => T t h x) →
     ∃ a : ℂ, ∀ f : GlobalTheory.RealWeil.Sch l,
       Filter.Tendsto (fun t : ℝ => t⁻¹ • (T t f - f)) (nhdsWithin 0 {0}ᶜ) (nhds (a • f + GlobalTheory.RealWeil.quad Z f)) := by
-  first | exact @_root_.GlobalTheory.MetaplecticScalarDeriv.lift_splits_locally | exact _root_.GlobalTheory.MetaplecticScalarDeriv.lift_splits_locally | (intros; apply _root_.GlobalTheory.MetaplecticScalarDeriv.lift_splits_locally <;> assumption)
+  first | exact @_root_.GlobalTheory.MetaplecticScalarDeriv.lift_splits_locally
 end
 end -- clump:auto
 end -- clump:auto

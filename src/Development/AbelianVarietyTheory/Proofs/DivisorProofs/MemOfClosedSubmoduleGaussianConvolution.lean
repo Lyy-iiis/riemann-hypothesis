@@ -113,8 +113,6 @@ theorem gauss_mul_diag_mem : ∀ (E : Type) [NormedAddCommGroup E] [InnerProduct
   have hin : ∀ x : E, innerSL ℝ x x = ‖x‖ ^ 2 := fun x => by
     first
     | rw [innerSL_apply_apply, real_inner_self_eq_norm_sq]
-    | simp [real_inner_self_eq_norm_sq]
-    | exact real_inner_self_eq_norm_sq x
   obtain ⟨G, hG⟩ := GlobalTheory.GaussSchwartz.exists_schwartz_exp_diag (-c • innerSL ℝ : E →L[ℝ] E →L[ℝ] ℝ)
     (fun x hx => by
       simp only [ContinuousLinearMap.smul_apply, smul_eq_mul]; rw [hin]
@@ -647,25 +645,15 @@ theorem norm_iteratedFDeriv_rexp' (i : ℕ) (y : ℝ) : ‖iteratedFDeriv ℝ i 
   rw [show (fun s => Real.exp s) = Real.exp from rfl] at h
   rw [h, Real.norm_eq_abs, abs_of_pos (Real.exp_pos y)]
 
-theorem exists_bound_poly_mul_exp' (c : ℝ) (hc : 0 < c) (N : ℕ) :
-    ∃ C, ∀ r : ℝ, 0 ≤ r → (1 + r) ^ N * Real.exp (-(c * r ^ 2)) ≤ C := by
-  first
-  | exact @_root_.GlobalTheory.PolynomialGaussianBounded.poly_mul_gaussian_bounded
-  | exact _root_.GlobalTheory.PolynomialGaussianBounded.poly_mul_gaussian_bounded
-  | (apply _root_.GlobalTheory.PolynomialGaussianBounded.poly_mul_gaussian_bounded <;> assumption)
-  | (intros; apply _root_.GlobalTheory.PolynomialGaussianBounded.poly_mul_gaussian_bounded <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.PolynomialGaussianBounded.poly_mul_gaussian_bounded <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.PolynomialGaussianBounded.poly_mul_gaussian_bounded ..)
-
 theorem weighted_bound : ∀ (E : Type) [NormedAddCommGroup E] [InnerProductSpace ℝ E] (c α : ℝ), 0 < c → α < 1 → ∀ (k m : ℕ),
     ∃ K : ℝ, ∀ y : E, ‖y‖ ^ k * ‖iteratedFDeriv ℝ m (fun y : E => Complex.exp (-((c * ‖y‖ ^ 2 : ℝ) : ℂ))) y‖ *
       Real.exp (c * α * ‖y‖ ^ 2) ≤ K := by
   intro E _ _ c α hc hα k m
   set B : E →L[ℝ] E →L[ℝ] ℝ := (-c) • innerSL ℝ with hBdef
   have hBy : ∀ y : E, B y y = -(c * ‖y‖ ^ 2) := fun y => by
-    simp [hBdef, real_inner_self_eq_norm_sq]
+    simp [hBdef]
     left
-    first | exact real_inner_self_eq_norm_sq y | simp [innerSL_apply, real_inner_self_eq_norm_sq] | rfl
+    first | exact real_inner_self_eq_norm_sq y
   have hfun : (fun y : E => Complex.exp (-((c * ‖y‖ ^ 2 : ℝ) : ℂ))) =
       Complex.ofRealLI ∘ (Real.exp ∘ fun y : E => B y y) := by
     funext y
@@ -673,7 +661,7 @@ theorem weighted_bound : ∀ (E : Type) [NormedAddCommGroup E] [InnerProductSpac
   have hq : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun y : E => B y y) := B.contDiff.clm_apply contDiff_id
   have hg : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (Real.exp ∘ fun y : E => B y y) := Real.contDiff_exp.comp hq
   have hc' : 0 < c * (1 - α) := mul_pos hc (by linarith)
-  obtain ⟨C, hC⟩ := exists_bound_poly_mul_exp' (c * (1 - α)) hc' (k + 2 * m)
+  obtain ⟨C, hC⟩ := _root_.GlobalTheory.PolynomialGaussianBounded.poly_mul_gaussian_bounded (c * (1 - α)) hc' (k + 2 * m)
   refine ⟨m ! * (2 * (‖B‖ + 1)) ^ m * C, fun x => ?_⟩
   have hn : ((m : ℕ∞) : WithTop ℕ∞) ≤ ((⊤ : ℕ∞) : WithTop ℕ∞) := by exact_mod_cast le_top
   rw [hfun, LinearIsometry.norm_iteratedFDeriv_comp_left _ hg.contDiffAt hn]

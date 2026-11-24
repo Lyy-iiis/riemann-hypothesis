@@ -449,7 +449,6 @@ theorem goodBound_ev : ∀ (ι : Type) [Fintype ι] (m : ι → ℕ) (ρ : PolyR
     fun τ ξ => (hG τ).conn (hu τ) (by norm_num) ξ
   refine ⟨?_, ?_, ?_, ?_, ?_⟩
   · intro i j
-    change ‖ρ.ev (G v) i j‖ ≤ _
     have := h1 B hB1 (fun w : EntIx m => G v w.1 w.2.1 w.2.2) hx (i, j)
     refine le_mul_pow_of_le (K := C1 * max c 1 ^ d1) (e := N * d1) ?_ (by linarith) hK1 hL (by omega)
     refine this.trans_eq ?_
@@ -488,7 +487,6 @@ theorem goodBound_ev : ∀ (ι : Type) [Fintype ι] (m : ι → ℕ) (ρ : PolyR
     refine hd2.trans_eq ?_
     rw [hBdef, mul_pow, mul_pow, mul_pow, ← pow_mul, ← pow_mul, ← pow_mul]; ring
   · intro a i j
-    change ‖conn (fun u => ρ.ev (G u)) v (coordVec a) i j‖ * poinWt S v a ≤ _
     have e := (hcvE (coordVec a)).self_of_nhds
     simp only at e
     rw [e]
@@ -812,14 +810,14 @@ theorem kron_left_pow (L : Matrix (Fin M) (Fin M) R) (m : ℕ) :
     (Matrix.kroneckerMap (· * ·) L (1 : Matrix (Fin M) (Fin M) R)) ^ m =
       Matrix.kroneckerMap (· * ·) (L ^ m) (1 : Matrix (Fin M) (Fin M) R) := by
   induction m with
-  | zero => simp [Matrix.one_kronecker_one]
+  | zero => simp
   | succ m ih => rw [pow_succ, ih, ← Matrix.mul_kronecker_mul, Matrix.mul_one, pow_succ]
 
 theorem kron_right_pow (L : Matrix (Fin M) (Fin M) R) (m : ℕ) :
     (Matrix.kroneckerMap (· * ·) (1 : Matrix (Fin M) (Fin M) R) L) ^ m =
       Matrix.kroneckerMap (· * ·) (1 : Matrix (Fin M) (Fin M) R) (L ^ m) := by
   induction m with
-  | zero => simp [Matrix.one_kronecker_one]
+  | zero => simp
   | succ m ih => rw [pow_succ, ih, ← Matrix.mul_kronecker_mul, Matrix.mul_one, pow_succ]
 
 theorem sum_tensorLie_pow_swap (L : Matrix (Fin M) (Fin M) R) (n : ℕ) :
@@ -1007,7 +1005,7 @@ theorem lie_sum {ι : Type} [Fintype ι] {m : ι → ℕ} (ρ σ : PolyRep m) {R
       (pderiv v (blockSum ρ.ent σ.ent i j)) * A v.1 v.2.1 v.2.2 = _
   obtain ⟨x, rfl⟩ := finSumFinEquiv.surjective i
   obtain ⟨y, rfl⟩ := finSumFinEquiv.surjective j
-  rcases x with x | x <;> rcases y with y | y <;> simp [lie, sum, blockSum]
+  rcases x with x | x <;> rcases y with y | y <;> simp [blockSum]
 
 end GlobalTheory.GoodMetric.PolyRep
 end -- clump:auto
@@ -1533,26 +1531,6 @@ namespace GlobalTheory.GoodMetric
 
 variable {F : Type} [Field F] {X : Var F} {σ : F →+* ℂ}
 
-theorem eventually_regAt_under {y : CxPts X.str σ} {g : X.Fn} (hg : RegAt (under y) g) :
-    ∀ᶠ z in 𝓝 y, RegAt (under z) g := by
-  obtain ⟨W, hW, a, rfl⟩ := hg.exists_fnOf
-  filter_upwards [(isOpen_ptsIn W).mem_nhds (mem_ptsIn.2 hW)] with z hz
-  exact regAt_fnOf (mem_ptsIn.1 hz) _ a
-
-theorem eventually_mem_frames {ι : Type} [Finite ι] {m : ι → ℕ} {S : Fr (ratOf X) m 0} {y : CxPts X.str σ}
-    {A : Mat m X.Fn} (hA : A ∈ S.S (under y)) : ∀ᶠ z in 𝓝 y, A ∈ S.S (under z) := by
-  obtain ⟨U, B, hU, hB, hS⟩ := S.loc (under y)
-  have hP := (hS _ hU A).1 hA
-  have hU' : ∀ᶠ z in 𝓝 y, under z ∈ U := by
-    filter_upwards [(isOpen_ptsIn U).mem_nhds (mem_ptsIn.2 hU)] with z hz
-    exact mem_ptsIn.1 hz
-  have h1 : ∀ᶠ z in 𝓝 y, ∀ τ, (∀ i j, RegAt (under z) ((A * B⁻¹) τ i j)) ∧ RegAt (under z) ((A * B⁻¹) τ).det⁻¹ :=
-    Filter.eventually_all.2 fun τ => (Filter.eventually_all.2 fun i => Filter.eventually_all.2 fun j =>
-      eventually_regAt_under (mem_O_ratOf.1 ((hP τ).1 i j))).and (eventually_regAt_under (mem_O_ratOf.1 (hP τ).2.2.1))
-  filter_upwards [hU', h1] with z hz hz1
-  exact (hS _ hz A).2 fun τ => ⟨fun i j => mem_O_ratOf.2 ((hz1 τ).1 i j), (hP τ).2.1, mem_O_ratOf.2 (hz1 τ).2,
-    fun i j hi => absurd hi (by simp)⟩
-
 theorem CInfAt.contDiffAt_holoChart {f : CxPts X.str σ → ℝ} {y : CxPts X.str σ} (h : CInfAt f y)
     {e : OpenPartialHomeomorph (CxPts X.str σ) (V X.dim)} (he : IsHoloChart e) (hy : y ∈ e.source) :
     ContDiffAt ℝ ∞ (fun v => f (e.symm v)) (e y) := by
@@ -1602,7 +1580,7 @@ theorem curvPoly_polyRep {ι : Type} [Fintype ι] {m : ι → ℕ} (ρ : PolyRep
     have := e.continuousAt_symm (e.map_source hye)
     rwa [ContinuousAt, e.left_inv hye] at this
   have heq : (fun v => H' (fun _ => ρ.ev A) (e.symm v) ()) =ᶠ[𝓝 (e y)] fun v => ρ.ev (H A (e.symm v)) := by
-    filter_upwards [ht.eventually ((isOpen_ptsIn O).mem_nhds hy), ht.eventually (eventually_mem_frames hA)] with v h1 h2
+    filter_upwards [ht.eventually ((isOpen_ptsIn O).mem_nhds hy), ht.eventually (_root_.GlobalTheory.FrameLift.eventually_mem hA)] with v h1 h2
     exact hρ _ h1 A h2
   simp only [curvPoly, curv_congr heq]
 
@@ -1634,7 +1612,7 @@ theorem _root_.GlobalTheory.GoodMetric.isGood_polyRep : ∀ (F : Type) [Field F]
       rwa [ha₀] at this
     exact h0.norm.eventually (gt_mem_nhds (by rw [norm_zero]; positivity))
   filter_upwards [hev, self_mem_nhdsWithin, nhdsWithin_le_nhds (e.open_source.mem_nhds hye),
-    nhdsWithin_le_nhds (eventually_mem_frames hA), nhdsWithin_le_nhds hsmall] with z hz hzO hzs hzA hzsm
+    nhdsWithin_le_nhds (_root_.GlobalTheory.FrameLift.eventually_mem hA), nhdsWithin_le_nhds hsmall] with z hz hzO hzs hzA hzsm
   rintro ⟨⟩
   have hz2 : ∀ τ, MContDiffAt 2 (fun v => H A (e.symm v) τ) (e z) := hH.mContDiffAt_two hzO hzA he hzs
   have hdet : ∀ τ, (H A (e.symm (e z)) τ).det ≠ 0 := fun τ => by
@@ -1651,7 +1629,7 @@ theorem _root_.GlobalTheory.GoodMetric.isGood_polyRep : ∀ (F : Type) [Field F]
   have ht : Tendsto e.symm (𝓝 (e z)) (𝓝 z) := by
     have := e.continuousAt_symm (e.map_source hzs)
     rwa [ContinuousAt, e.left_inv hzs] at this
-  filter_upwards [ht.eventually ((isOpen_ptsIn O).mem_nhds hzO), ht.eventually (eventually_mem_frames hzA)]
+  filter_upwards [ht.eventually ((isOpen_ptsIn O).mem_nhds hzO), ht.eventually (_root_.GlobalTheory.FrameLift.eventually_mem hzA)]
     with v h1 h2
   exact (hρ _ h1 A h2).symm
 

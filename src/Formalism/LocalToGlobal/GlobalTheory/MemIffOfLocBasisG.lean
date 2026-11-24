@@ -153,7 +153,7 @@ theorem wO_stable [IsLocalRing O] {n : ℕ} (ν : Fin n → ℕ) (g : Matrix (Fi
     rw [e, ← Formalism.UG.P.wlocal_map_rowAct]
     apply map_subtype_mem_wO_of_mem_weyl
     have hw1 := Formalism.UG.P.wlocal_map_weyl (Int.castRingHom O) le_rfl ν h hh
-    have hst := Formalism.UG.Final.WeylGLStableLocal O n n le_rfl ν (Matrix.nonsingInvUnit g hg)⁻¹ _ hw1
+    have hst := _root_.Formalism.UG.P.wlocal_local O n n le_rfl ν (Matrix.nonsingInvUnit g hg)⁻¹ _ hw1
     unfold Formalism.UG.dwAct at hst
     rw [inv_inv] at hst
     exact hst
@@ -280,7 +280,6 @@ theorem actAll_mem_intSpanAtG (k : Tau → Matrix (Fin n) (Fin n) (intW Pl w))
       rw [hd, ← hu]
       first
         | exact zpow_mem_intW Pl w u _
-        | exact pow_mem (u : intW Pl w).2 _
     have e : Formalism.MainNotions.flipTwoThree.actAll lam (fun τ => (k τ).map (intW Pl w).subtype)
         (r • Formalism.MainNotions.flipTwoThree.ten (fun τ => MvPolynomial.map (Int.castRingHom LL) (f τ))) =
         (∏ τ, ((k τ).map (intW Pl w).subtype).det ^ (lam τ).detShift) • r •
@@ -343,7 +342,7 @@ theorem subAll_comp {K : Type} [Field K] {ι : Type} {n : ℕ} (g h : ι → Mat
     Matrix.mul_apply, Finset.mul_sum, Finset.sum_mul]
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl (fun d _ => Finset.sum_congr rfl (fun b _ => ?_))
-    first | ring | (rw [C_mul]; ring)
+    first | ring
   exact congrArg (fun φ => φ p) this
 
 theorem actAll_comp {K : Type} [Field K] {ι : Type} [Fintype ι] {n : ℕ} (lam : ι → DomWeight n)

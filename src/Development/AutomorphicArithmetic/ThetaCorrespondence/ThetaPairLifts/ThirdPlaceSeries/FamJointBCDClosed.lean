@@ -266,7 +266,6 @@ end
 
 theorem inert_iff (D : D7) (p : ℕ) : InertUnr D p ↔ TwistedPlaces.InertK D p := by
   unfold InertUnr TwistedPlaces.InertK
-  change _ ↔ D.host.cls p = _ ∨ D.host.cls p = _
   unfold Host.cls primeClass
   split_ifs <;> simp_all
 
@@ -498,7 +497,7 @@ section -- clump:auto
 open GlobalTheory.HTW Formalism.BasicNotions Formalism.FrobeniusOrbits
 
 theorem _root_.GlobalTheory.T.cyclicWord_markedClusters_of_atMostTwoInWindow : ∀ {n : ℕ} (th : ZMod n → Prop) (L j : ℕ), 1 ≤ j → 2 * j + 1 ≤ L → 2 * j < n → WindowTwo th L → Clusters th j := by
-  first | exact @GlobalTheory.HTW.winClusters | exact GlobalTheory.HTW.winClusters | (intros; apply GlobalTheory.HTW.winClusters <;> assumption)
+  first | exact @GlobalTheory.HTW.winClusters
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.CyclicWordMarkedClustersOfAtMostTwoInWindowStatement =====
@@ -1285,7 +1284,7 @@ section -- clump:auto
 open NumberField IsDedekindDomain Formalism Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.MainNotions Formalism.MainNotions.N Formalism.WeaklyAdmissibleFiltrations Formalism.ConjugateSelfDual ReciprocityTheory.Gal
 
 theorem _root_.GlobalTheory.T.inert_prime_ne_typePrime : ∀ (D : D7) (l : ℕ) (k : Fin 2), TwistedPlaces.InertK D l → l ≠ D.host.g k := by
-  first | exact @GlobalTheory.InertNotType.main | exact GlobalTheory.InertNotType.main | (intros; apply GlobalTheory.InertNotType.main <;> assumption)
+  first | exact @GlobalTheory.InertNotType.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.InertPrimeNeTypePrimeStatement =====
@@ -1306,7 +1305,7 @@ theorem fam_jointBCD_closed_alt : GlobalTheory.Published.FontaineBcris → (∀ 
   intro hF h7 hFo hJ eps Fm R
   obtain ⟨x0, h⟩ := GlobalTheory.HTW.RecS.fam_jointBCD Fm R h7 hFo
   refine ⟨x0, fun x hx h1 j HW X hA hX => h x hx h1 j HW X (hJ _ _ hA).1 fun i _ hi π hπ => ?_⟩
-  refine _root_.GlobalTheory.T.ptIn_of_ptFam_deRham_away hF _ X hX hA.1 i ?_ π hπ
+  refine _root_.GlobalTheory.pointInputAwayFromTypePrimes_alt hF _ X hX hA.1 i ?_ π hπ
   simp only [TwistedPlaces.gset, Finset.mem_insert, Finset.mem_singleton, not_or]
   exact ⟨GlobalTheory.T.inert_prime_ne_typePrime _ _ 0 hi, GlobalTheory.T.inert_prime_ne_typePrime _ _ 1 hi⟩
 end GlobalTheory.HTW.RecS

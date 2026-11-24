@@ -342,8 +342,7 @@ theorem rec_stepc (t : ℂ) (N : ℕ) : detD (Hc (N + 1) t) = (t + N) * detD (Hc
   rw [detD_fin (N + 1) _ (analyticAt_determinant_power_zero (N + 1) t), detD_fin N _ (analyticAt_determinant_power_zero N t),
     ← Equiv.sum_comp Equiv.Perm.decomposeFin.symm, Fintype.sum_prod_type, Fin.sum_univ_succ]
   simp only [Equiv.Perm.decomposeFin.symm_sign, h0, h1, Fin.succ_ne_zero, if_true, if_false,
-    Units.val_mul, Units.val_neg, Units.val_one, Int.cast_mul, Int.cast_neg, Int.cast_one,
-    one_mul, neg_one_mul, mul_neg, neg_neg, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
+    Units.val_neg, Int.cast_neg, one_mul, neg_one_mul, mul_neg, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
     nsmul_eq_mul]
   rw [add_mul, Finset.mul_sum, Finset.mul_sum, Finset.mul_sum, ← Finset.sum_add_distrib,
     ← Finset.sum_add_distrib]
@@ -445,27 +444,17 @@ theorem ev_small {E : Type} [NormedAddCommGroup E] [NormedSpace ℂ E] {c : E �
   refine ⟨h1, ?_⟩
   simpa [Metric.mem_ball, Real.dist_eq] using h2
 
-private theorem mul_toBlocks₂₁' (A B : M2 n) :
-    (A * B).toBlocks₂₁ = A.toBlocks₂₁ * B.toBlocks₁₁ + A.toBlocks₂₂ * B.toBlocks₂₁ := by
-  ext i j
-  simp [Matrix.toBlocks₂₁, Matrix.toBlocks₁₁, Matrix.toBlocks₂₂, Matrix.mul_apply, Fintype.sum_sum_type]
-
-private theorem mul_toBlocks₂₂ (A B : M2 n) :
-    (A * B).toBlocks₂₂ = A.toBlocks₂₁ * B.toBlocks₁₂ + A.toBlocks₂₂ * B.toBlocks₂₂ := by
-  ext i j
-  simp [Matrix.toBlocks₂₁, Matrix.toBlocks₁₂, Matrix.toBlocks₂₂, Matrix.mul_apply, Fintype.sum_sum_type]
-
 private theorem u1_mul_mX_one_eq_add (x : M2 n) (Q R : Matrix (Fin n) (Fin n) ℂ) :
     u1 (x * mX 1 Q R 1) = u1 x + u2 x * R := by
   have hinv : (Cm n)⁻¹ = Cmi n := Matrix.inv_eq_left_inv cmi_mul_cm
   have hxc21 : (x * Cm n).toBlocks₂₁ = u1 x := by
-    rw [mul_toBlocks₂₁', Cm, toBlocks_fromBlocks₁₁, toBlocks_fromBlocks₂₁, u1]
-    simp [Matrix.mul_smul]
+    rw [_root_.PositivityTheory.Rg.Sw.LVs.toBlocks₂₁_mul, Cm, toBlocks_fromBlocks₁₁, toBlocks_fromBlocks₂₁, u1]
+    simp
   have hxc22 : (x * Cm n).toBlocks₂₂ = u2 x := by
-    rw [mul_toBlocks₂₂, Cm, toBlocks_fromBlocks₁₂, toBlocks_fromBlocks₂₂, u2]
-    simp [Matrix.mul_smul]
+    rw [_root_.PositivityTheory.Rg.Sw.LVs.toBlocks₂₂_mul, Cm, toBlocks_fromBlocks₁₂, toBlocks_fromBlocks₂₂, u2]
+    simp
   rw [mX, hinv, show x * (Cm n * fromBlocks 1 Q R 1 * Cmi n) = (x * Cm n * fromBlocks 1 Q R 1) * Cmi n by
-    simp only [Matrix.mul_assoc], first_cayley_block_mul_inverse_cayley, mul_toBlocks₂₁', toBlocks_fromBlocks₁₁, toBlocks_fromBlocks₂₁,
+    simp only [Matrix.mul_assoc], first_cayley_block_mul_inverse_cayley, _root_.PositivityTheory.Rg.Sw.LVs.toBlocks₂₁_mul, toBlocks_fromBlocks₁₁, toBlocks_fromBlocks₂₁,
     Matrix.mul_one, hxc21, hxc22]
 
 theorem fz_mX {m : ℕ} {e : ℤ} {z : ℂ} {j : ℕ} {x : M2 n} (hx : x ∈ DomZ n)

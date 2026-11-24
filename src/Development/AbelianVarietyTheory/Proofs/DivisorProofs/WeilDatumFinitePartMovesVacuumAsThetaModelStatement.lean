@@ -212,7 +212,7 @@ theorem phase_eq : ∀ D : D7, ∃ w : 𝓞 D.host.E, w + GlobalTheory.FinWeil.s
     have hR : GlobalTheory.LatVac.hRat S T X X = n := by
       rw [GlobalTheory.LatVac.hRat, hset.gS, hset.gT, inv_one]
       simp only [Matrix.one_apply, ite_mul, one_mul, zero_mul, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq,
-        Finset.sum_ite_eq', Finset.mem_univ, if_true]
+        Finset.mem_univ, if_true]
       have e : ∀ x, (∑ x_1, ∑ x_2, if x = x_1 then star (X x_2 x_1) * X x_2 x else 0) =
           ∑ x_2, star (X x_2 x) * X x_2 x := fun x => by
         rw [Finset.sum_comm]
@@ -311,12 +311,6 @@ open GlobalTheory.BotClassDict (finQ)
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
-theorem _root_.GlobalTheory.T.finitePartQuadraticPhase_eq_cmTheta_exp : ∀ D : D7, ∃ w : 𝓞 D.host.E, w + GlobalTheory.FinWeil.sgO D w = 1 ∧
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (r : D.host.E),
-  Setup ψ θ S T cc δ r → ∀ z : Matrix (Fin T.rank) (Fin S.rank) D.host.E,
-  ψ (-symplOH S T (GlobalTheory.FinWeilO.intA D w • finPt (S := S) (T := T) rfl rfl r z) (finPt (S := S) (T := T) rfl rfl r z)) =
-    Formalism.MainNotions.StandardLatticesGL3.wdPh D (tor0 D cc δ) (pt D (tor0 D cc δ) δ z) := by
-  first | exact @GlobalTheory.SplitPhase.phase_eq | exact GlobalTheory.SplitPhase.phase_eq | (intros; apply GlobalTheory.SplitPhase.phase_eq <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FinitePartQuadraticPhaseEqCmThetaExpStatement =====
@@ -346,11 +340,7 @@ open Filter Topology GlobalTheory.IdemSupport
 
 variable {D : D7}
 
-theorem cA_cA (z : AE D) : cA D (cA D z) = z := by
-  induction z using TensorProduct.induction_on with
-  | zero => rw [RingHom.map_zero, RingHom.map_zero]
-  | tmul a x => exact congrArg (fun y : D.host.E => a ⊗ₜ[D.host.F] y) (star_star x)
-  | add a b ha hb => rw [RingHom.map_add (f := _), RingHom.map_add (f := _), ha, hb]
+alias cA_cA := _root_.Formalism.L2.Theta.cA_cA
 
 def spl (ε : AE D) : AE D := ε + cA D ε
 
@@ -707,7 +697,7 @@ theorem _root_.GlobalTheory.T.weilDatum_splitSupported_eq_intertwiner_mul_halfDe
   ∀ (g : GA D S) (h : GA D T), SuppAt ε S g → SuppAt ε T h → ∀ x y : (AE D)ˣ, IsDetAt ε S g x → IsDetAt ε T h y →
   ∀ f : GlobalTheory.FinWeilO.thetaSub ψ S T,
     om (g, h) f = ((splitFacO χS χT x y : Circle) : ℂ) • (Om (g, h) f : WO S T → ℂ) := by
-  first | exact @GlobalTheory.SplitWeilDict.splitWeil_eq | exact GlobalTheory.SplitWeilDict.splitWeil_eq | (intros; apply GlobalTheory.SplitWeilDict.splitWeil_eq <;> assumption)
+  first | exact @GlobalTheory.SplitWeilDict.splitWeil_eq
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilDatumSplitSupportedEqIntertwinerMulHalfDetChStatement =====
@@ -948,14 +938,6 @@ theorem exists_prime_mem {R : Type} [CommRing R] {P : Ideal R} (hP : P.IsPrime) 
     rw [Nat.cast_mul] at h
     exact (hP.mem_or_mem h).elim (fun h => ⟨p, hp, h⟩) (ih (right_ne_zero_of_mul h0))
 
-theorem cA_cA' (a : AE D) : cA D (cA D a) = a := by
-  induction a using TensorProduct.induction_on with
-  | zero => rw [RingHom.map_zero, RingHom.map_zero]
-  | tmul x e =>
-    show TensorProduct.tmul D.host.F x (star (star e)) = _
-    rw [star_star]
-  | add a b ha hb => rw [RingHom.map_add (f := _), RingHom.map_add (f := _), ha, hb]
-
 theorem zeroAt_half {ε : AE D} (hε : GlobalTheory.RatAut.IsHalfIdem D ε) {q : ℕ} (hq : q.Prime) (hi : Formalism.MainNotions.StandardLatticesGL3.InertQ D q)
     (b : AE D) : Formalism.MainNotions.StandardLatticesGL3.ZeroAt D q (finQ D (ε * b)) :=
   (GlobalTheory.T.finitePartRationalTensor_zeroAtPrime_iff_placeIdem D q hq _).2 fun v η hv hqv => by
@@ -980,12 +962,12 @@ theorem half_supp {ε : AE D} (hε : GlobalTheory.RatAut.IsHalfIdem D ε) {a : A
       · have h3 := congrArg (cA D) h1
         have h4 := congrArg (cA D) h2
         rw [RingHom.map_mul] at h3
-        rw [RingHom.map_mul, cA_cA', RingHom.map_zero] at h4
+        rw [RingHom.map_mul, _root_.Formalism.L2.Theta.cA_cA, RingHom.map_zero] at h4
         linear_combination a * (h1 + h2 + h3 + h4)
       · have h3 := congrArg (cA D) h1
         have h4 := congrArg (cA D) h2
         rw [RingHom.map_mul, RingHom.map_zero] at h3
-        rw [RingHom.map_mul, cA_cA'] at h4
+        rw [RingHom.map_mul, _root_.Formalism.L2.Theta.cA_cA] at h4
         linear_combination a * (h1 + h2 + h3 + h4)
   have h1 := congrArg (fun z => Φ z Q) key
   simp only [GlobalTheory.IdemSupport.ev_mul (Φ := Φ) (algebraMap (AF D.host.F) (AE D) η),
@@ -1068,7 +1050,7 @@ theorem reads_om_split : ∀ {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (θ : Inf
   Reads ψ θ hS hT cc δ r (W.Om x y e0) (om (g, h) f₀) := by
   intro D ψ θ S T a d hS hT cc δ r hset e0 W χS χT om hom _ t0 _ _ hodd cS cT f₀ hf x y g h hg hh sx sy
   subst hS hT
-  obtain ⟨w, hw, hph⟩ := GlobalTheory.T.finitePartQuadraticPhase_eq_cmTheta_exp D
+  obtain ⟨w, hw, hph⟩ := _root_.GlobalTheory.SplitPhase.phase_eq D
   obtain ⟨lam, hlam, hsq⟩ := exists_goodNorm D
   obtain ⟨ε, hε⟩ := GlobalTheory.RatAut.exists_isHalfIdem D
   have dS := isSelfDualC_of_sd S hset.gS (_root_.GlobalTheory.VacRead.lsB_selfDual D cc r S.rank hset.crv.1.1 hset.scale)
@@ -1528,7 +1510,7 @@ theorem _root_.GlobalTheory.T.inertIntegralPoints_fix_adelic_classical_vacuum : 
   Formalism.MainNotions.StandardLatticesGL3.SuppInert D (x : GL (Fin a) (Formalism.MainNotions.StandardLatticesGL3.AE D)) → Formalism.MainNotions.StandardLatticesGL3.SuppInert D (y : GL (Fin d) (Formalism.MainNotions.StandardLatticesGL3.AE D)) →
   Formalism.MainNotions.StandardLatticesGL3.IntG D (x : GL (Fin a) (Formalism.MainNotions.StandardLatticesGL3.AE D)) → Formalism.MainNotions.StandardLatticesGL3.IntG D (y : GL (Fin d) (Formalism.MainNotions.StandardLatticesGL3.AE D)) →
   Reads ψ θ hS hT cc δ r (W.Om x y e0) (om (g, h) f₀) := by
-  first | exact @GlobalTheory.VacInertMove.inert_vacuum_reads | exact GlobalTheory.VacInertMove.inert_vacuum_reads | (intros; apply GlobalTheory.VacInertMove.inert_vacuum_reads <;> assumption)
+  first | exact @GlobalTheory.VacInertMove.inert_vacuum_reads
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.InertIntegralPointsFixAdelicClassicalVacuumStatement =====
@@ -1620,7 +1602,7 @@ theorem _root_.GlobalTheory.T.weil_datum_finite_part_moves_vacuum_as_theta_model
   HasFinPart χS W.chV W.ep → HasFinPart χT W.chV' (-W.ep') →
   ∀ (x : Formalism.MainNotions.StandardLatticesGL3.GA D a) (y : Formalism.MainNotions.StandardLatticesGL3.GA D d) (g : GA D S) (h : GA D T), IsFinPt S g x → IsFinPt T h y →
   ∀ f₀ : WO S T → ℂ, Reads ψ θ hS hT cc δ r e0 f₀ → Reads ψ θ hS hT cc δ r (W.Om x y e0) (om (g, h) f₀) := by
-  first | exact @GlobalTheory.VacMoveFin.vacuum_move_reads | exact GlobalTheory.VacMoveFin.vacuum_move_reads | (intros; apply GlobalTheory.VacMoveFin.vacuum_move_reads <;> assumption)
+  first | exact @GlobalTheory.VacMoveFin.vacuum_move_reads
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.WeilDatumFinitePartMovesVacuumAsThetaModelStatement =====

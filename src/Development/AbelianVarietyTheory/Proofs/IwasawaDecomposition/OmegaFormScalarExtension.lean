@@ -113,6 +113,7 @@ import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Tactic.ReduceModChar
 import Std.Tactic.BVDecide.Normalize.Prop
 import Development.AbelianVarietyTheory.Definitions.SpanningFamilies.DatEqZero
+import Mathlib.MeasureTheory.Measure.HasOuterApproxClosedProd
 import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.ThetaFunctionSpaceHeisenbergLaws
 import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.AdelicZakThetaExistsUniqueStatement
 import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.DblZMemHn
@@ -383,7 +384,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsConstOrtho =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.NormSqGaussProd =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.NormSqGaussProd", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.FibExtMarked\npublic import Formalism.LocalToGlobal.ProjectiveLattices.HalfOneAddSqrtNegIsIntegral\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsConjugateModelSameThetaFunctions\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.AdelicZakThetaExistsUnique\nimport Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.HermitianFormAtFrameLaws\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.LatOEqHatA\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.LatticeVacuaTensorCorrespondLine\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.ProdLevelOneThetaEqVacuumTheta\nimport Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.RealPeriodMapHomeomorphRiemannFormDensity\nimport Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.TensorLatticeSelfDualSemicharacterIndex\nimport Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.TensorLatticeVacuaExistUnique\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.ThetaInnerProductEqRealTorusMean\nimport Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.ThetaKernelOrthonormalFrameInDomainPeriodLinear\nimport Development.AbelianVarietyTheory.Proofs.TorusHaarMeasure.ExistsIntMulIntegral\nimport Mathlib.Algebra.Order.Archimedean.Real.Hom\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.MeasureTheory.Integral.Pi\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Std.Tactic.BVDecide.Normalize.Prop\nimport Development.AbelianVarietyTheory.Definitions.Divisors.IsUnitaryOnTheta\nimport Development.AbelianVarietyTheory.Definitions.SpanningFamilies.DatEqZero\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.NormSqGaussProd", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.FibExtMarked\npublic import Formalism.LocalToGlobal.ProjectiveLattices.HalfOneAddSqrtNegIsIntegral\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ExistsConjugateModelSameThetaFunctions\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.AdelicZakThetaExistsUnique\nimport Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.HermitianFormAtFrameLaws\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.LatOEqHatA\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.LatticeVacuaTensorCorrespondLine\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.ProdLevelOneThetaEqVacuumTheta\nimport Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.RealPeriodMapHomeomorphRiemannFormDensity\nimport Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.TensorLatticeSelfDualSemicharacterIndex\nimport Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.TensorLatticeVacuaExistUnique\npublic import Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.ThetaInnerProductEqRealTorusMean\nimport Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.ThetaKernelOrthonormalFrameInDomainPeriodLinear\nimport Development.AbelianVarietyTheory.Proofs.TorusHaarMeasure.ExistsIntMulIntegral\nimport Mathlib.Algebra.Order.Archimedean.Real.Hom\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.MeasureTheory.Integral.Pi\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Std.Tactic.BVDecide.Normalize.Prop\nimport Development.AbelianVarietyTheory.Definitions.Divisors.IsUnitaryOnTheta\nimport Development.AbelianVarietyTheory.Definitions.SpanningFamilies.DatEqZero\nimport Mathlib.MeasureTheory.Measure.HasOuterApproxClosedProd\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -863,8 +864,7 @@ theorem blocks {r p : ℕ} (G B k : Matrix (Fin r) (Fin r) ℂ) (S : Matrix (Fin
     exact (Matrix.isUnit_det_of_left_inverse hm).map _
   · rw [← hPc, ← Matrix.map_mul, ← Matrix.map_mul, h1]
   · rw [d1, d2, ← h2, ← h3, detNeg, detPos, detPos]
-    simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_add, Matrix.add_mul, Matrix.sub_mul, Matrix.mul_sub, Matrix.mul_neg,
-      Matrix.neg_mul, Matrix.mul_one, Matrix.one_mul, hc, sub_neg_eq_add, ← sub_eq_add_neg]
+    simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_add, Matrix.add_mul, Matrix.sub_mul, Matrix.mul_sub, Matrix.mul_one, Matrix.one_mul, hc, sub_neg_eq_add, ← sub_eq_add_neg]
     rw [div_eq_mul_inv, inv_inv, mul_comm]
 
 theorem Th_mvB (D : D7) (S T : HSp D) (C : GlobalTheory.Ker.Ctx S T) (B : C.Bas) (hB : C.IsB B) (k : GA D T)
@@ -1217,7 +1217,7 @@ open GlobalTheory.OneMapRef GlobalTheory.WeilParts
 
 
 theorem _root_.GlobalTheory.T.real_point_moves_adelic_theta_by_det_character : ∀ (D : D7) (S T : HSp D) (r g : ℕ) (hr : T.rank = r) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (X : Data D.host.E r) (eT : D.what₂.Tau ≃ X.Ψ) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (idx : Fin g ≃ X.Ψ × Fin r) (hS : IsSet ψ θ S T hr X eT bas), ∀ (χS χT : (AE D)ˣ →* Circle) (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)), IsWeilDatumO ψ S T χS χT om → (∃ η, IsEtaTilde D η) → ∀ Z : Fam T, IsONeg T X.p0 Z → ∀ a ∈ GinfC T, ∀ y : (AE D)ˣ, IsDetRoot T a y → ∀ φ : TF S.rank g, GlobalTheory.SW.IsSB φ → ∀ f, Zak ψ θ hr eT bas idx (frOf hr eT Z) φ f → Zak ψ θ hr eT bas idx (frOf hr eT (mvZ θ a Z)) (((χS y : Circle) : ℂ) • φ) (om (1, a) f) := by
-  first | exact @GlobalTheory.OneMapRef.RealMove.zak_om_real | exact GlobalTheory.OneMapRef.RealMove.zak_om_real | (intros; apply GlobalTheory.OneMapRef.RealMove.zak_om_real <;> assumption)
+  first | exact @GlobalTheory.OneMapRef.RealMove.zak_om_real
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.RealPointMovesAdelicThetaByDetCharacterStatement =====
@@ -1331,16 +1331,10 @@ theorem thR_smul {E : Type} [Field E] [NumberField E] [IsCMField E] {r g n : ℕ
   simp only [GlobalTheory.Ker.thR, thA, SW.thS, show ∀ y, (a • φ) y = a * φ y from fun _ => rfl, _root_.mul_assoc, tsum_mul_left]
   ring
 
-theorem hostHalfRoot_add_conj_eq_one {E : Type} [Field E] [NumberField E] [IsCMField E] (H : Geo.Tor.Host E) :
-    (H.w0 : E) + cc (H.w0 : E) = 1 := by
-  have := congrArg (algebraMap (𝓞 E) E) (PullbackSections.CVA.cmHostUnit_add_conj_eq_one H)
-  rw [map_add (f := _), map_one] at this
-  exact (congrArg _ (H.bar_eq _).symm).trans this
-
 theorem isRelTraceOneIdempotentModTwo_hostElement {E : Type} [Field E] [NumberField E] [IsCMField E] (H : Geo.Tor.Host E) :
     GlobalTheory.Ker.IdemTwo (H.w0 : E) := by
   obtain ⟨k, hk⟩ : ∃ k, H.d = 16 * k + 7 := ⟨H.d / 16, by have := H.d_mod; omega⟩
-  have h1 := hostHalfRoot_add_conj_eq_one H
+  have h1 := _root_.GlobalTheory.Dict.ThRead.cmHost_idempotent_trace_eq_one H
   have h2 : 2 * (H.w0 : E) = 1 + (H.rt : E) := by
     have := congrArg (algebraMap (𝓞 E) E) H.two_weight_eq_one_add_root
     rwa [map_mul, map_add, map_one, map_ofNat] at this
@@ -1426,7 +1420,7 @@ theorem exists_const (U : Unf Xo c σ r) (hσ : GoodEmb c σ) (hU : IsUnf U) (hr
         A.Reads 1 (ptC U k ⟨x, hx⟩).s th → ∀ p : GlobalTheory.Ker.WR (U.X k) n,
           GlobalTheory.Ker.gaussR (U.X k) bas' idx' x (GlobalTheory.Ker.zR (U.X k) idx' x p) * ∏ b, th (GlobalTheory.Ker.zR (U.X k) idx' x p b) =
             GlobalTheory.Ker.thR (U.X k) bas idx φ x p := by
-  obtain ⟨v, hv⟩ := (TensVac.vacua _ _ _ _ bas idx n hs hn _ H.w0.isIntegral_coe (hostHalfRoot_add_conj_eq_one H) _ hsd 1 _
+  obtain ⟨v, hv⟩ := (TensVac.vacua _ _ _ _ bas idx n hs hn _ H.w0.isIntegral_coe (_root_.GlobalTheory.Dict.ThRead.cmHost_idempotent_trace_eq_one H) _ hsd 1 _
     (Base.stdL_mem_Vset n 1)).1
   obtain ⟨C, hC⟩ := exists_const_ortho D H Dw l Xo c σ r U hσ hU hr1 hA k t ht n hn g bas idx e hs hm v hv
   refine ⟨C • v, TensVac.sb_smul _ hv.1, fun x hx ho g' bas' idx' e' hs' hm' A th hth p => ?_⟩
@@ -1489,7 +1483,7 @@ theorem exists_frConst {hr : T.rank = r} {ψ : AddChar (AF D.host.F) ℂ} {θ : 
     obtain ⟨L₀, a₀, m₀, l₀⟩ := hlat (γ₀ * h₀)
     have hv := GlobalTheory.WeilVacMove.isVacO_om D ψ θ S T χS χT om hW hS.2.1 (fun _ => 1) (fun _ => 1) _ _ _ _ _ _ 1 (γ₀ * h₀)
       (fun τ => by rw [Matrix.one_mul, Matrix.mul_one]) (hF _).2.1 l₀ f₀ hf
-    obtain ⟨a, ha, hval⟩ := VacUnit.vac_eq_unit_mul D S T r g₀ hr ψ θ _ eT bas₀ idx₀ hS _ H.w0.isIntegral_coe (hostHalfRoot_add_conj_eq_one H)
+    obtain ⟨a, ha, hval⟩ := VacUnit.vac_eq_unit_mul D S T r g₀ hr ψ θ _ eT bas₀ idx₀ hS _ H.w0.isIntegral_coe (_root_.GlobalTheory.Dict.ThRead.cmHost_idempotent_trace_eq_one H)
       (isRelTraceOneIdempotentModTwo_hostElement H) _ (hF (γ₀ * h₀)).1 L₀ _ hsd (hL₀ ▸ a₀) _ hv th₀
       (isTheta1_of_reads_generator _ H Dw l Xo c r g₀ _ bas₀ idx₀ e₀ _ _ _ A₀ hs₀ hx₀ hsd th₀ hr₀) hmean
     obtain ⟨φ, hφ, hall⟩ := exists_const U hσ hU hr1 hA k (ht k) hsd hS.2.2.2.1 bas₀ idx₀ e₀ hs₀ hm₀

@@ -212,7 +212,7 @@ open GlobalTheory.AdelicU
 
 
 theorem _root_.GlobalTheory.T.localLatticeIndex_cartanDecomposition_eq_normPow : ∀ (D : D7) (T : HSp D) (v : HeightOneSpectrum (𝓞 D.host.F)) (w : HeightOneSpectrum (𝓞 D.host.E)) (h : w.under (𝓞 D.host.F) = v) (a : GL (Fin T.rank) (w.adicCompletion D.host.E)), GlobalTheory.LFun.IsFrameAt w (frameLat T) a → ∀ ϖ, IsUnifV D.host.E w ϖ → ∀ (d : Fin T.rank → ℤ) (t : GL (Fin T.rank) (w.adicCompletion D.host.E)), t.1 = Matrix.diagonal (fun i => ϖ ^ d i) → ∀ k₁ ∈ KGL w (n := T.rank), ∀ k₂ ∈ KGL w (n := T.rank), ∀ g : GlobalTheory.FinZeta.Gv T v, GlobalTheory.LFun.locMat D.sp.cm.sig T.gram h g = a * (k₁ * t * k₂) * a⁻¹ → GlobalTheory.LocKerMod.idxAt T w h g = qV D.host.E w ^ (∑ i, max (d i) 0).toNat := by
-  first | exact @GlobalTheory.LocKerMod.FrameIdx.idxAt_eq_pow | exact GlobalTheory.LocKerMod.FrameIdx.idxAt_eq_pow | (intros; apply GlobalTheory.LocKerMod.FrameIdx.idxAt_eq_pow <;> assumption)
+  first | exact @GlobalTheory.LocKerMod.FrameIdx.idxAt_eq_pow
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LocalLatticeIndexCartanDecompositionEqNormPowStatement =====
@@ -367,7 +367,7 @@ open GlobalTheory.AdelicU
 
 
 theorem _root_.GlobalTheory.T.selfDualLatticeIndex_inertPlace_eq_localIndex : ∀ (D : D7) (T : HSp D) (v : HeightOneSpectrum (𝓞 D.host.F)) (w : HeightOneSpectrum (𝓞 D.host.E)) (h : w.under (𝓞 D.host.F) = v), IsInertAt D.host.F D.host.E v w → ∀ g : GlobalTheory.FinZeta.Gv T v, latIndex T (GlobalTheory.FinZeta.embV T v g) = GlobalTheory.LocKerMod.idxAt T w h g := by
-  first | exact @GlobalTheory.LocKerMod.latIndex_embV_inert | exact GlobalTheory.LocKerMod.latIndex_embV_inert | (intros; apply GlobalTheory.LocKerMod.latIndex_embV_inert <;> assumption)
+  first | exact @GlobalTheory.LocKerMod.latIndex_embV_inert
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.SelfDualLatticeIndexInertPlaceEqLocalIndexStatement =====
@@ -581,8 +581,6 @@ open GlobalTheory.LFun (IsSplitChart IsInertChart KGL)
 open GlobalTheory.AdelicU
 
 
-theorem _root_.GlobalTheory.T.selfDualLatticeIndex_splitPlace_eq_mul : ∀ (D : D7) (T : HSp D) (v : HeightOneSpectrum (𝓞 D.host.F)) (w w' : HeightOneSpectrum (𝓞 D.host.E)) (h : w.under (𝓞 D.host.F) = v) (h' : w'.under (𝓞 D.host.F) = v), IsSplit (E := D.host.E) v → w ≠ w' → ∀ g : GlobalTheory.FinZeta.Gv T v, latIndex T (GlobalTheory.FinZeta.embV T v g) = GlobalTheory.LocKerMod.idxAt T w h g * GlobalTheory.LocKerMod.idxAt T w' h' g := by
-  first | exact @GlobalTheory.SplitLatIdx.latIndex_split | exact GlobalTheory.SplitLatIdx.latIndex_split | (intros; apply GlobalTheory.SplitLatIdx.latIndex_split <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.SelfDualLatticeIndexSplitPlaceEqMulStatement =====
@@ -610,7 +608,6 @@ theorem idxAt_frame : ∀ (D : D7) (T : HSp D) (v : HeightOneSpectrum (𝓞 D.ho
 
 theorem latIndex_inert : ∀ (D : D7) (T : HSp D) (v : HeightOneSpectrum (𝓞 D.host.F)) (w : HeightOneSpectrum (𝓞 D.host.E)) (h : w.under (𝓞 D.host.F) = v), IsInertAt D.host.F D.host.E v w → ∀ g : GlobalTheory.FinZeta.Gv T v, latIndex T (GlobalTheory.FinZeta.embV T v g) = idxAt T w h g := GlobalTheory.T.selfDualLatticeIndex_inertPlace_eq_localIndex
 
-theorem latIndex_split : ∀ (D : D7) (T : HSp D) (v : HeightOneSpectrum (𝓞 D.host.F)) (w w' : HeightOneSpectrum (𝓞 D.host.E)) (h : w.under (𝓞 D.host.F) = v) (h' : w'.under (𝓞 D.host.F) = v), IsSplit (E := D.host.E) v → w ≠ w' → ∀ g : GlobalTheory.FinZeta.Gv T v, latIndex T (GlobalTheory.FinZeta.embV T v g) = idxAt T w h g * idxAt T w' h' g := GlobalTheory.T.selfDualLatticeIndex_splitPlace_eq_mul
 end GlobalTheory.LocKerMod
 
 namespace GlobalTheory.LocKerMod
@@ -622,8 +619,8 @@ theorem idx_inert : ∀ (D : D7) (T : HSp D) (v : HeightOneSpectrum (𝓞 D.host
   have hϖ : IsUnifV D.host.E w ϖ := hU.2.2.2.1
   have hK : ∀ k ∈ KU c T.rank, (k : GL (Fin T.rank) (w.adicCompletion D.host.E)) ∈ KGL w (n := T.rank) :=
     fun k hk => (Subgroup.mem_subgroupOf.1 hk).2
-  rw [latIndex_inert D T v w h hw]
-  refine idxAt_frame D T v w h a ha ϖ hϖ d (t : GL (Fin T.rank) (w.adicCompletion D.host.E)) ht _ (hK k₁ hk₁) _
+  rw [_root_.GlobalTheory.LocKerMod.latIndex_embV_inert D T v w h hw]
+  refine _root_.GlobalTheory.LocKerMod.FrameIdx.idxAt_eq_pow D T v w h a ha ϖ hϖ d (t : GL (Fin T.rank) (w.adicCompletion D.host.E)) ht _ (hK k₁ hk₁) _
     (hK k₂ hk₂) _ ?_
   have h1 := hea (e.symm (k₁ * t * k₂))
   rw [MulEquiv.apply_symm_apply] at h1
@@ -699,7 +696,7 @@ theorem idx_split : ∀ (D : D7) (T : HSp D) (v : HeightOneSpectrum (𝓞 D.host
   have hK : ∀ k ∈ KGL w (n := T.rank), invT c T.rank k ∈ KGL w' (n := T.rank) := fun k hk => (mem_iff_invT c hO k).1 hk
   obtain ⟨⟨a, ha, hea⟩, -⟩ := he
   obtain ⟨⟨a', ha', hea'⟩, -⟩ := he'
-  rw [latIndex_split D T v w w' h h' hv hne]
+  rw [_root_.GlobalTheory.SplitLatIdx.latIndex_split D T v w w' h h' hv hne]
   have e1 : GlobalTheory.LFun.locMat D.sp.cm.sig T.gram h (e.symm (k₁ * t * k₂)) = a * (k₁ * t * k₂) * a⁻¹ := by
     have := hea (e.symm (k₁ * t * k₂))
     rw [MulEquiv.apply_symm_apply] at this
@@ -717,8 +714,8 @@ theorem idx_split : ∀ (D : D7) (T : HSp D) (v : HeightOneSpectrum (𝓞 D.host
     rcases le_total 0 (d i) with hd | hd
     · rw [abs_of_nonneg hd, max_eq_left hd, max_eq_right (by omega), add_zero]
     · rw [abs_of_nonpos hd, max_eq_right hd, max_eq_left (by omega), zero_add]
-  rw [idxAt_frame D T v w h a ha ϖ hϖ d t ht k₁ hk₁ k₂ hk₂ _ e1,
-    idxAt_frame D T v w' h' a' ha' (c ϖ) hunif (fun i => -d i) _ hdiag _ (hK k₁ hk₁) _ (hK k₂ hk₂) _ e2, hqc,
+  rw [_root_.GlobalTheory.LocKerMod.FrameIdx.idxAt_eq_pow D T v w h a ha ϖ hϖ d t ht k₁ hk₁ k₂ hk₂ _ e1,
+    _root_.GlobalTheory.LocKerMod.FrameIdx.idxAt_eq_pow D T v w' h' a' ha' (c ϖ) hunif (fun i => -d i) _ hdiag _ (hK k₁ hk₁) _ (hK k₂ hk₂) _ e2, hqc,
     ← pow_add, hs, Int.toNat_add (Finset.sum_nonneg fun i _ => le_max_right _ _) (Finset.sum_nonneg fun i _ => le_max_right _ _)]
 end GlobalTheory.LocKerMod
 
@@ -818,7 +815,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.RawLift
 
 theorem _root_.GlobalTheory.T.sphericalKernel_normSq_mul_latticeIndex_eq_one : ∀ (D : D7) (T : HSp D) (N : ℕ) (χ : (AE D)ˣ →* Circle) (v : HeightOneSpectrum (𝓞 D.host.F)) (φ : GlobalTheory.FinZeta.Gv T v → ℂ), GlobalTheory.FinZeta.IsLocKer T N (GlobalTheory.LFun.val χ) v φ → (∀ w : HeightOneSpectrum (𝓞 D.host.E), w.under (𝓞 D.host.F) = v → GlobalTheory.LFun.UnrAt χ w) → ∀ a : GlobalTheory.FinZeta.Gv T v, ‖φ a‖ ^ 2 * (latIndex T (GlobalTheory.FinZeta.embV T v a) : ℝ) ^ N = 1 := by
-  first | exact @GlobalTheory.LocKerMod.sq_norm_mul_latIndex | exact GlobalTheory.LocKerMod.sq_norm_mul_latIndex | (intros; apply GlobalTheory.LocKerMod.sq_norm_mul_latIndex <;> assumption)
+  first | exact @GlobalTheory.LocKerMod.sq_norm_mul_latIndex
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.SphericalKernelNormSqMulLatticeIndexEqOneStatement =====

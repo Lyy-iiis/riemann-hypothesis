@@ -197,15 +197,6 @@ def invAdjoint (T : V ≃ₗ[𝕜] W) : V ≃ₗ[𝕜] W :=
   LinearEquiv.ofLinearMap (LinearMap.adjoint (T.symm : W →ₗ[𝕜] V)) (LinearMap.adjoint (T : V →ₗ[𝕜] W))
     (by rw [← LinearMap.adjoint_comp]; simp) (by rw [← LinearMap.adjoint_comp]; simp)
 
-theorem inner_invAdjoint_apply (T : V ≃ₗ[𝕜] W) (x y : V) :
-    ⟪invAdjoint T x, T y⟫_𝕜 = ⟪x, y⟫_𝕜 := by
-  change ⟪LinearMap.adjoint (T.symm : W →ₗ[𝕜] V) x, T y⟫_𝕜 = _
-  rw [LinearMap.adjoint_inner_left]; simp
-
-theorem detNorm_invAdjoint (T : V ≃ₗ[𝕜] W) : detNorm (invAdjoint T) = (detNorm T)⁻¹ :=
-  eq_inv_of_mul_eq_one_left
-    (normDet_mul_normDet_of_inner_eq T.finrank_eq (inner_invAdjoint_apply T))
-
 end NormDet
 
 section Dual
@@ -299,8 +290,7 @@ theorem skew_family_inner_re_split : ∀ {ι : Type} [Fintype ι] {r : ℕ} (s :
   have key : ∀ τ a b, F τ b a = F τ a b := by
     intro τ a b
     have h2 : (s a * s b) * (s a * s b) = 1 := by rw [mul_mul_mul_comm, hs, hs, one_mul]
-    simp only [hF, hY τ a b, hY' τ a b, map_mul, map_neg, Complex.conj_conj, Complex.conj_ofReal,
-      Complex.mul_re, Complex.neg_re, Complex.ofReal_re, Complex.ofReal_im, Complex.conj_re,
+    simp only [hF, hY τ a b, hY' τ a b, Complex.mul_re, Complex.neg_re, Complex.ofReal_re, Complex.ofReal_im, Complex.conj_re,
       Complex.conj_im, Complex.mul_im, Complex.neg_im]
     linear_combination ((Y (τ, a, b)).re * (Y' (τ, a, b)).re + (Y (τ, a, b)).im * (Y' (τ, a, b)).im) * h2
   have diag : ∀ τ a, F τ a a = (Y (τ, a, a)).im * (Y' (τ, a, a)).im := by
@@ -473,12 +463,6 @@ theorem addHaar_eq_gram {ι ι' F G : Type} [Fintype ι] [DecidableEq ι] [Finty
 
 open scoped ComplexConjugate
 
-theorem skew_of_mem {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ} (X : Data E r)
-    (x : Frame X.Ψ r) (hx : IsOrth X x) (Y : EuclideanSpace ℂ (X.Ψ × Fin r × Fin r))
-    (hY : fromFrame x Y ∈ realLie X.Ψ X.Gm) :
-    (∀ τ a b, Y (τ, b, a) = -((sgn X.p0 a * sgn X.p0 b : ℝ) : ℂ) * conj (Y (τ, a, b))) ∧
-      ∀ τ, ∑ a, Y (τ, a, a) = 0 := _root_.GlobalTheory.SUVol.FrameSkew.entries_of_mem X x hx Y hY
-
 theorem re_inner_skew {ι : Type} [Fintype ι] {r : ℕ} (s : Fin r → ℝ) (hs : ∀ a, s a * s a = 1)
     (Y Y' : ι × Fin r × Fin r → ℂ)
     (hY : ∀ τ a b, Y (τ, b, a) = -((s a * s b : ℝ) : ℂ) * conj (Y (τ, a, b)))
@@ -487,16 +471,6 @@ theorem re_inner_skew {ι : Type} [Fintype ι] {r : ℕ} (s : Fin r → ℝ) (hs
       2 * ∑ q : ι × {p : Fin r × Fin r // p.2 < p.1},
         (conj (Y (q.1, q.2.1.1, q.2.1.2)) * Y' (q.1, q.2.1.1, q.2.1.2)).re +
       ∑ τ, ∑ a, (Y (τ, a, a)).im * (Y' (τ, a, a)).im := _root_.GlobalTheory.skew_family_inner_re_split s hs Y Y' hY hY'
-
-theorem eq_of_skew {ι : Type} [Fintype ι] {r : ℕ} (s : Fin r → ℝ) (hs : ∀ a, s a * s a = 1)
-    (Y Y' : ι × Fin r × Fin r → ℂ)
-    (hY : ∀ τ a b, Y (τ, b, a) = -((s a * s b : ℝ) : ℂ) * conj (Y (τ, a, b)))
-    (htY : ∀ τ, ∑ a, Y (τ, a, a) = 0)
-    (hY' : ∀ τ a b, Y' (τ, b, a) = -((s a * s b : ℝ) : ℂ) * conj (Y' (τ, a, b)))
-    (htY' : ∀ τ, ∑ a, Y' (τ, a, a) = 0)
-    (hlow : ∀ τ a b, b < a → Y (τ, a, b) = Y' (τ, a, b))
-    (hdiag : ∀ τ (a : Fin r), (a : ℕ) + 1 < r → (Y (τ, a, a)).im = (Y' (τ, a, a)).im) : Y = Y' :=
-  _root_.GlobalTheory.skewFamily_eq_of_strictLower_of_diagIm s hs Y Y' hY htY hY' htY' hlow hdiag
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ}
 
@@ -520,11 +494,11 @@ def frameL {Ψ : Finset (E →+* ℂ)} (x : Frame Ψ r) :
   map_add' Z Z' := by
     ext p
     have e : Matrix.of ((Z + Z') p.1) = Matrix.of (Z p.1) + Matrix.of (Z' p.1) := rfl
-    simp only [inFrame, PiLp.toLp_apply, PiLp.add_apply, e, Matrix.mul_add, Matrix.add_mul]; rfl
+    simp only [inFrame, PiLp.add_apply, e, Matrix.mul_add, Matrix.add_mul]; rfl
   map_smul' c Z := by
     ext p
     have e : Matrix.of ((c • Z) p.1) = (c : ℂ) • Matrix.of (Z p.1) := rfl
-    simp only [inFrame, PiLp.toLp_apply, PiLp.smul_apply, e, Matrix.mul_smul, Matrix.smul_mul,
+    simp only [inFrame, PiLp.smul_apply, e, Matrix.mul_smul, Matrix.smul_mul,
       RingHom.id_apply]
     rfl
 
@@ -557,8 +531,8 @@ theorem gram_angles {r : ℕ} {Ψ : Type} [Fintype Ψ] [DecidableEq Ψ] (hr : 1 
   by_cases hτ : τ = τ'
   · subst hτ
     by_cases hk : k = k'
-    · subst hk; simp [Finset.sum_add_distrib, Matrix.one_apply, Matrix.mul_apply, Matrix.replicateCol_apply, Matrix.replicateRow_apply]
-    · simp [Finset.sum_add_distrib, Matrix.one_apply, Matrix.mul_apply, Matrix.replicateCol_apply, Matrix.replicateRow_apply, hk, Ne.symm hk]
+    · subst hk; simp [Finset.sum_add_distrib, Matrix.mul_apply, Matrix.replicateCol_apply, Matrix.replicateRow_apply]
+    · simp [Matrix.mul_apply, Matrix.replicateCol_apply, Matrix.replicateRow_apply, hk, Ne.symm hk]
   · simp [Finset.sum_add_distrib, Matrix.one_apply, Matrix.mul_apply, Matrix.replicateCol_apply, Matrix.replicateRow_apply, hτ, Ne.symm hτ]
 
 theorem angles_zero (a : Fin r) : angles (0 : Fin (r - 1) → ℝ) a = 0 := by
@@ -614,7 +588,7 @@ theorem riemLie_eq_smul_map (E : Type) [Field E] [NumberField E] [IsCMField E] (
   have hT0 : ∀ w, (T0 w : EuclideanSpace ℂ (X.Ψ × Fin r × Fin r)) = frameL x (D w) := fun w => rfl
   have hskw : ∀ w, (∀ τ a b, frameL x (D w) (τ, b, a) = -((s a * s b : ℝ) : ℂ) * conj (frameL x (D w) (τ, a, b))) ∧
       ∀ τ, ∑ a, frameL x (D w) (τ, a, a) = 0 := fun w =>
-    skew_of_mem X x hx _ (by rw [hfv]; exact (hD w).1)
+    _root_.GlobalTheory.SUVol.FrameSkew.entries_of_mem X x hx _ (by rw [hfv]; exact (hD w).1)
   have hT0inj : Function.Injective T0 := by
     intro w w' h
     apply hinj
@@ -622,13 +596,13 @@ theorem riemLie_eq_smul_map (E : Type) [Field E] [NumberField E] [IsCMField E] (
     simpa only [hT0, hfv] using this
   have hT0surj : Function.Surjective T0 := by
     intro Y
-    have hY := skew_of_mem X x hx Y.1 Y.2
+    have hY := _root_.GlobalTheory.SUVol.FrameSkew.entries_of_mem X x hx Y.1 Y.2
     let w : ChartSp X := (WithLp.toLp 2 fun j => Y.1 (((Fintype.equivFin (Ent X)).symm j).1,
         ((Fintype.equivFin (Ent X)).symm j).2.1.1, ((Fintype.equivFin (Ent X)).symm j).2.1.2),
       fun τ k => (Y.1 (τ, ⟨k, by omega⟩, ⟨k, by omega⟩)).im)
     refine ⟨w, Subtype.ext ?_⟩
     rw [hT0]
-    have key := eq_of_skew s hs (fun p => frameL x (D w) p) (fun p => Y.1 p) (hskw w).1 (hskw w).2 hY.1 hY.2
+    have key := _root_.GlobalTheory.skewFamily_eq_of_strictLower_of_diagIm s hs (fun p => frameL x (D w) p) (fun p => Y.1 p) (hskw w).1 (hskw w).2 hY.1 hY.2
       (fun τ a b hab => by
         simp only [frameL_apply, (hD w).2.1 τ a b hab, nmat, dif_pos hab, w, PiLp.toLp_apply, Equiv.symm_apply_apply])
       (fun τ a ha => by
@@ -644,7 +618,7 @@ theorem riemLie_eq_smul_map (E : Type) [Field E] [NumberField E] [IsCMField E] (
     intro w w'
     rw [Submodule.coe_inner, hTw, hTw, PiLp.inner_apply, PiLp.inner_apply]
     simp only [Complex.inner]
-    have hre := re_inner_skew s hs (fun p => frameL x (D w) p) (fun p => frameL x (D w') p) (hskw w).1 (hskw w').1
+    have hre := _root_.GlobalTheory.skew_family_inner_re_split s hs (fun p => frameL x (D w) p) (fun p => frameL x (D w') p) (hskw w).1 (hskw w').1
     have hlow : ∀ (v : ChartSp X) (q : Ent X), frameL x (D v) (q.1, q.2.1.1, q.2.1.2) =
         v.1 (Fintype.equivFin (Ent X) q) := by
       intro v q

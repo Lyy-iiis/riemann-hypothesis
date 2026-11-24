@@ -63,7 +63,7 @@ theorem UpperTheory.Reformulated.B.LocallyConstantFunctions.locConst :
   intro x
   refine ⟨(fun y => x⁻¹ * y) ⁻¹' (↑ψ.ker : Set Γ),
     h.preimage (continuous_const.mul continuous_id), ?_, ?_⟩
-  · simp [MonoidHom.mem_ker]
+  · simp
   · intro y hy
     have hk : ψ (x⁻¹ * y) = 1 := MonoidHom.mem_ker.mp hy
     rw [map_mul, map_inv, inv_mul_eq_one] at hk
@@ -96,9 +96,7 @@ private theorem cont_smul (l : ℕ) [Fact l.Prime] (O : Type) [CommRing O] [Alge
   · intro x y hx hy
     exact (hx.add hy).congr fun g => (smul_add _ _ _).symm
 
-private theorem locConst {Γ A : Type} [Group Γ] [TopologicalSpace Γ] [IsTopologicalGroup Γ] [Group A] (ψ : Γ →* A)
-    (h : IsOpen (ψ.ker : Set Γ)) : IsLocallyConstant ψ :=
-  _root_.UpperTheory.Reformulated.B.LocallyConstantFunctions.locConst ψ h
+private alias locConst := _root_.UpperTheory.Reformulated.B.LocallyConstantFunctions.locConst
 
 theorem UpperTheory.V.Base.contTw :
     ∀ (k Ω : Type) [Field k] [NumberField k] [Field Ω] [Algebra k Ω] [IsAlgClosure k Ω] (l : ℕ) [Fact l.Prime],

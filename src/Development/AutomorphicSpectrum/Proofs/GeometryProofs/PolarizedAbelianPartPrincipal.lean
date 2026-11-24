@@ -163,7 +163,7 @@ open GlobalTheory.CechPic
 theorem pic : ∀ (Q : Out.PolAV (Sp ℂ)) (M : LB Q.A.left), M.IsLB → (∃ u : LB.Gen (abelian₂ Q.A (LB.div M Q.L)), u.IsGen) → ∃ x : 𝟙_ (Over (Sp ℂ)) ⟶ Q.A, LBIso M (Q.L.pull ((toUnit Q.A ≫ x) * 𝟙 Q.A).left) := by
   intro Q M hM hu
   have hO : (LB.div M Q.L).IsLB := LB.isLB_div hM Q.isLB
-  obtain ⟨x, hx⟩ := GlobalTheory.T.exists_section_primitiveBundle_translate_localRing GlobalTheory.abelianSchemeLaws_all.1 GlobalTheory.abelianSchemeLaws_all.2 ℂ Q _ hO hu
+  obtain ⟨x, hx⟩ := _root_.GlobalTheory.PrimitiveOverLocalRing.exists_section_translate GlobalTheory.abelianSchemeLaws_all.1 GlobalTheory.abelianSchemeLaws_all.2 ℂ Q _ hO hu
   refine ⟨x, ?_⟩
   have e := (cls_eq_iff hO (LB.isLB_linComb Q.isLB _ _)).2 hx
   rw [cls_div hM Q.isLB, cls_linComb Q.isLB, Fin.sum_univ_two] at e
@@ -728,7 +728,7 @@ open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalC
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi GlobalTheory.CompanionTheory.Ar
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.polarized_abelian_part_principal : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (V : Type) [CommRing V] [IsDomain V] [IsLocalRing V] (r : V →+* ℂ) (tV : SAB H (Sp V)), GlobalTheory.LN.CDvr V → Function.Surjective r → RingHom.ker r = IsLocalRing.maximalIdeal V → GlobalTheory.LN.PolAt tV (Out.jK V) → ∀ P : AbPart tV (spMap r), IsPrincipal P.tB := by
-  first | exact @PositivityTheory.HtPt.Ppic.dvr | exact PositivityTheory.HtPt.Ppic.dvr
+  first | exact @PositivityTheory.HtPt.Ppic.dvr
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.PolarizedAbelianPartPrincipal =====

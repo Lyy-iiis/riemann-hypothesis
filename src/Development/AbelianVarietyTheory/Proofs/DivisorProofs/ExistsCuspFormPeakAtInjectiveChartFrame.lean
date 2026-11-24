@@ -410,7 +410,6 @@ theorem exists_tendstoLocallyUniformlyOn_ultrafilter {E : Type*} [NormedAddCommG
       rw [dist_eq_norm]
       linarith [hM k w hw, hM k c (mem_ball_self hr)]
     first
-      | exact mem_ball.2 h2
       | exact mem_closedBall.2 h2.le
   have hlipf : ∀ z ∈ ball c r, dist (f z) (f c) ≤ L * dist z c := fun z hz =>
     le_of_tendsto ((hf z (hrU hz)).dist (hf c hc)) (Eventually.of_forall fun k => hlip k z hz)
@@ -439,7 +438,7 @@ theorem enorm_sq_le_lintegral {n : ℕ} {g : V n → ℂ} {c : V n} {r : ℝ} (h
     (MeasurableEquiv.addLeft c).measurableEmbedding (fun z => ‖g z‖ₑ ^ 2) (closedBall c r)
   have h3 : (fun z => c + z) ⁻¹' closedBall c r = closedBall 0 r := by
     ext z
-    simp [mem_closedBall_iff_norm]
+    simp
   rw [h3] at h2
   rw [← h2]
   simpa using h1
@@ -1678,17 +1677,11 @@ open scoped ENNReal
 
 namespace GlobalTheory.PoincareL2
 
-theorem nfac_pos' {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ} (X : Data E r) (la : Wt X.Ψ r)
-    {y : Frame X.Ψ r} (hy : y ∈ X.dom) : 0 < X.nfac la y := by
-  unfold Data.nfac
-  refine Finset.prod_pos fun τ _ => Finset.prod_pos fun i _ => Real.rpow_pos_of_pos ?_ _
-  exact norm_pos_iff.mpr (div_ne_zero (PoinPf.dmin_ne X hy τ _) (PoinPf.dmin_ne X hy τ _))
-
 theorem poincareNorm_sq_eq_weight_mul_norm_sq {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ} (X : Data E r) (la : Wt X.Ψ r)
     (P : Frame X.Ψ r → ℂ) {y : Frame X.Ψ r} (hy : y ∈ X.dom) :
     ENNReal.ofReal (X.pnorm la P y ^ 2) = ENNReal.ofReal (‖P y‖ ^ 2) * IW.Wpsi X la (fun _ => 0) y := by
   have h1 : X.pnorm la P y ^ 2 = ‖P y‖ ^ 2 * Real.exp (-phla X la y) := by
-    rw [PoinPf.exp_neg_phla X la (nfac_pos' X la hy)]
+    rw [PoinPf.exp_neg_phla X la (_root_.ReciprocityTheory.ChartRestriction.G.FD.MinimumGrowthBounds.nfac_pos X la hy)]
     change (‖P y‖ * X.nfac la y) ^ 2 = _
     ring
   have h2 : IW.Wpsi X la (fun _ => 0) y = ENNReal.ofReal (Real.exp (-(phla X la y + 0))) := by

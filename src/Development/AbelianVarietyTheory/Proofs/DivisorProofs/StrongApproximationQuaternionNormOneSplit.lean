@@ -419,15 +419,15 @@ theorem continuous_ofCoords : Continuous (ofCoords : (Fin 4 → R) → ℍ[R, a,
 
 theorem continuous_star' : Continuous (star : ℍ[R, a, b] → ℍ[R, a, b]) := by
   refine continuous_induced_rng.2 (continuous_pi fun i => ?_)
-  fin_cases i <;> simp [coords, Function.comp_def] <;> fun_prop
+  fin_cases i <;> simp [coords] <;> fun_prop
 
 theorem continuous_star_mul : Continuous fun p : ℍ[R, a, b] × ℍ[R, a, b] => star p.1 * p.2 := by
   refine continuous_induced_rng.2 (continuous_pi fun i => ?_)
-  fin_cases i <;> simp [coords, Function.comp_def] <;> fun_prop
+  fin_cases i <;> simp [coords] <;> fun_prop
 
 theorem continuous_const_mul' (c : ℍ[R, a, b]) : Continuous fun u : ℍ[R, a, b] => c * u := by
   refine continuous_induced_rng.2 (continuous_pi fun i => ?_)
-  fin_cases i <;> simp [coords, Function.comp_def] <;> fun_prop
+  fin_cases i <;> simp [coords] <;> fun_prop
 
 end GlobalTheory.QSA.FujisakiQ
 
@@ -612,7 +612,7 @@ theorem ci_sglI_self (w : InfinitePlace F) (c : w.Completion) : ci w (sglI w c) 
 
 theorem ci_sglI_ne {w u : InfinitePlace F} (h : u ≠ w) (c : w.Completion) : ci u (sglI w c) = 0 := by
   classical
-  rw [ci_apply]; simp [sglI, Pi.single_apply, h]
+  rw [ci_apply]; simp [sglI, h]
 
 theorem cf_sglI (w : InfinitePlace F) (c : w.Completion) (v : HeightOneSpectrum (𝓞 F)) :
     cf v (sglI w c) = 0 := by
@@ -778,27 +778,15 @@ section Top
 
 variable {R : Type*} [CommRing R] [TopologicalSpace R] [IsTopologicalRing R] {a b : R}
 
-theorem continuous_re : Continuous (fun x : ℍ[R, a, b] => x.re) :=
-  (continuous_apply 0).comp (continuous_induced_dom (f := (coords : ℍ[R, a, b] → Fin 4 → R)))
+alias continuous_re := _root_.GlobalTheory.QSA.Grp.cont_re
 
-theorem continuous_imI : Continuous (fun x : ℍ[R, a, b] => x.imI) :=
-  (continuous_apply 1).comp (continuous_induced_dom (f := (coords : ℍ[R, a, b] → Fin 4 → R)))
+alias continuous_imI := _root_.GlobalTheory.QSA.Grp.cont_imI
 
-theorem continuous_imJ : Continuous (fun x : ℍ[R, a, b] => x.imJ) :=
-  (continuous_apply 2).comp (continuous_induced_dom (f := (coords : ℍ[R, a, b] → Fin 4 → R)))
+alias continuous_imJ := _root_.GlobalTheory.QSA.Grp.cont_imJ
 
-theorem continuous_imK : Continuous (fun x : ℍ[R, a, b] => x.imK) :=
-  (continuous_apply 3).comp (continuous_induced_dom (f := (coords : ℍ[R, a, b] → Fin 4 → R)))
+alias continuous_imK := _root_.GlobalTheory.QSA.Grp.cont_imK
 
-theorem continuous_of_coords {X : Type*} [TopologicalSpace X] {f : X → ℍ[R, a, b]}
-    (h0 : Continuous fun x => (f x).re) (h1 : Continuous fun x => (f x).imI)
-    (h2 : Continuous fun x => (f x).imJ) (h3 : Continuous fun x => (f x).imK) : Continuous f := by
-  refine continuous_induced_rng.2 (continuous_pi fun i => ?_)
-  fin_cases i
-  · exact h0
-  · exact h1
-  · exact h2
-  · exact h3
+alias continuous_of_coords := _root_.GlobalTheory.QSA.Grp.cont_of
 
 attribute [local fun_prop] continuous_re continuous_imI continuous_imJ continuous_imK
 
@@ -847,15 +835,6 @@ theorem isPlacesIdem_mul_self {S₁ : Finset (InfinitePlace F)} {S₂ : Finset (
     (hη : IsPlacesIdem S₁ S₂ η) : η * η = η := by
   apply GlobalTheory.StrongApproximationSL2.idem_of_isPlacesIdem <;> assumption
 
-theorem rat_mul {a b : F} (x y : ℍ[F, a, b]) : rat (x * y) = rat x * rat y := by
-  ext <;> simp [rat] <;> ring
-
-theorem rat_one {a b : F} : rat (1 : ℍ[F, a, b]) = 1 := by
-  ext <;> simp [rat]
-
-theorem rat_star {a b : F} (x : ℍ[F, a, b]) : rat (star x) = star (rat x) := by
-  ext <;> simp [rat]
-
 theorem rat_smul {a b : F} (t : F) (x : ℍ[F, a, b]) : rat (t • x) = algebraMap F (AF F) t • rat x := by
   ext <;> simp [rat, Algebra.smul_def]
 
@@ -865,7 +844,7 @@ theorem nrm_smul {R : Type*} [CommRing R] {a b : R} (s : R) (x : ℍ[R, a, b]) :
   ring
 
 theorem star_smul' {R : Type*} [CommRing R] {a b : R} (s : R) (x : ℍ[R, a, b]) : star (s • x) = s • star x := by
-  ext <;> simp <;> ring
+  ext <;> simp
 
 end GlobalTheory.QSA.Unconj
 
@@ -961,11 +940,11 @@ theorem conj_mem_closure_normOne_of_idempotent : ∀ (F : Type) [Field F] [Numbe
       rw [mul_sub, sub_mul, mul_one, hcc']
       abel
     have hr : rat δ * (c * g * c') * rat δ' = 1 + rat δ * (c * (g - 1) * c') * rat δ' := by
-      rw [hcg, mul_add, add_mul, mul_one, ← rat_mul, hδδ', rat_one]
+      rw [hcg, mul_add, add_mul, mul_one, ← _root_.GlobalTheory.QSA.Grp.rat_mul, hδδ', _root_.GlobalTheory.QSA.Grp.rat_one]
     rw [hr]
     show 1 + ((η • rat δ) * c) * (g - 1) * (c' * ((η * algebraMap F (AF F) (nrm δ)⁻¹) • star (η • rat δ))) = _
     refine congrArg (fun z => 1 + z) ?_
-    rw [hδ', rat_smul, rat_star]
+    rw [hδ', rat_smul, _root_.GlobalTheory.QSA.Grp.rat_star]
     exact conj_core η _ hηη (rat δ) c c' (g - 1) hgη
   rw [← hval]
   exact hmem
@@ -1077,14 +1056,6 @@ section Ring
 
 variable {R : Type*} [CommRing R] {a b : R}
 
-theorem nrm_one' : nrm (1 : ℍ[R, a, b]) = 1 := by simp [nrm]
-
-theorem nrm_star' (x : ℍ[R, a, b]) : nrm (star x) = nrm x := by simp [nrm]
-
-theorem star_mul_eq' (x : ℍ[R, a, b]) : star x * x = algebraMap R ℍ[R, a, b] (nrm x) := by
-  have h := mul_star_eq (star x)
-  rwa [star_star, nrm_star'] at h
-
 theorem nrm_trunc (e : R) (he : e * e = e) (g : ℍ[R, a, b]) :
     nrm (e • (g - 1) + 1) = e * nrm g + (1 - e) := by
   simp only [nrm, QuaternionAlgebra.re_add, QuaternionAlgebra.imI_add, QuaternionAlgebra.imJ_add,
@@ -1125,16 +1096,10 @@ theorem isPlacesIdem_idem {S₁ : Finset (InfinitePlace F)} {S₂ : Finset (Heig
     · rw [h.2.2.1 u hu, one_mul]
     · rw [h.2.2.2 u hu, zero_mul]
 
-theorem rat_mul' {a b : F} (x y : ℍ[F, a, b]) : rat (x * y) = rat x * rat y := by
-  ext <;> simp [rat]
-
-theorem rat_one' {a b : F} : rat (1 : ℍ[F, a, b]) = 1 := by
-  ext <;> simp [rat]
-
 theorem continuous_smul_const {R : Type*} [CommRing R] [TopologicalSpace R] [IsTopologicalRing R] {a b : R}
     (x : ℍ[R, a, b]) : Continuous fun t : R => t • x := by
   refine continuous_induced_rng.2 (continuous_pi fun i => ?_)
-  fin_cases i <;> simp [coords, Function.comp_def] <;> fun_prop
+  fin_cases i <;> simp [coords] <;> fun_prop
 
 end GlobalTheory.QSA.DivAssembly
 
@@ -1148,26 +1113,26 @@ theorem conj_mem_normOneIdempotentSubgroup_of_rational_relation {a b : F} (ε : 
     (hyw : l • (rat δ * c) * w = rat γ * l • (rat δ * c) * h) : c * w * c' ∈ H0 ε := by
   set δ' : ℍ[F, a, b] := (nrm δ)⁻¹ • star δ with hδ'
   have hδδ : δ' * δ = 1 := by
-    rw [hδ', smul_mul_assoc, star_mul_eq', Algebra.smul_def, ← map_mul, inv_mul_cancel₀ hδ, map_one]
+    rw [hδ', smul_mul_assoc, _root_.GlobalTheory.QSA.Grp.star_mul_eq, Algebra.smul_def, ← map_mul, inv_mul_cancel₀ hδ, map_one]
   have E1 : rat δ * c * w = rat γ * rat δ * c * h := by
     have h2 : l • (rat δ * c * w) = l • (rat γ * rat δ * c * h) := by
       rw [← smul_mul_assoc, hyw, mul_smul_comm, smul_mul_assoc, mul_assoc (rat γ), mul_assoc (rat γ)]
       simp only [mul_assoc]
     exact hl.smul_left_cancel.1 h2
   refine ⟨δ' * γ * δ, ?_, c * h * c', ?_, ?_, ?_⟩
-  · rw [nrm_mul, nrm_mul, hγ, mul_one, ← nrm_mul, hδδ, nrm_one']
-  · rw [nrm_mul, nrm_mul, hh, mul_one, ← nrm_mul, hcc', nrm_one']
+  · rw [nrm_mul, nrm_mul, hγ, mul_one, ← nrm_mul, hδδ, _root_.GlobalTheory.QSA.Grp.nrm_one']
+  · rw [nrm_mul, nrm_mul, hh, mul_one, ← nrm_mul, hcc', _root_.GlobalTheory.QSA.Grp.nrm_one']
   · have e1 : c * h * c' - 1 = c * (h - 1) * c' := by
       rw [mul_sub, sub_mul, mul_one, hcc']
     rw [e1, ← smul_mul_assoc, ← mul_smul_comm, hhε]
-  · calc c * w * c' = (rat δ' * rat δ) * c * w * c' := by rw [← rat_mul', hδδ, rat_one', one_mul]
+  · calc c * w * c' = (rat δ' * rat δ) * c * w * c' := by rw [← _root_.GlobalTheory.QSA.Grp.rat_mul, hδδ, _root_.GlobalTheory.QSA.Grp.rat_one, one_mul]
       _ = rat δ' * (rat δ * c * w) * c' := by simp only [mul_assoc]
       _ = rat δ' * (rat γ * rat δ * c * h) * c' := by rw [E1]
-      _ = rat (δ' * γ * δ) * (c * h * c') := by simp only [rat_mul', mul_assoc]
+      _ = rat (δ' * γ * δ) * (c * h * c') := by simp only [_root_.GlobalTheory.QSA.Grp.rat_mul, mul_assoc]
 
 theorem strongApproximation_normOne_divisionQuaternion : ∀ (F : Type) [Field F] [NumberField F] (a b : F), a ≠ 0 → b ≠ 0 → (∀ x : ℍ[F, a, b], nrm x = 0 → x = 0) → ∀ (S₁ : Finset (InfinitePlace F)) (S₂ : Finset (HeightOneSpectrum (𝓞 F))) (ε : AF F), IsPlacesIdem S₁ S₂ ε → (S₁.Nonempty ∨ S₂.Nonempty) → (∀ t : AF F, ∃ h : DA F a b, nrm h = 1 ∧ ε * h.re = ε * t) → ∀ g : DA F a b, nrm g = 1 → g ∈ closure (H0 (a := a) (b := b) ε) := by
   intro F _ _ a b ha hb hdiv S₁ S₂ ε hε hS hsurj g hg
-  have hee : ε * ε = ε := isPlacesIdem_idem hε
+  have hee : ε * ε = ε := _root_.GlobalTheory.QSA.Unconj.isPlacesIdem_mul_self hε
   obtain ⟨hmul, -, -, -⟩ := _root_.GlobalTheory.QSA.Grp.closure_normOneProducts_subgroup_properties F a b ε hee
   obtain ⟨htr, -, -, hT2⟩ := _root_.GlobalTheory.quaternion_isTopologicalRing_nrm_re_t2 (AF F) (algebraMap F (AF F) a) (algebraMap F (AF F) b)
   haveI : IsTopologicalRing (DA F a b) := htr
@@ -1188,7 +1153,7 @@ theorem strongApproximation_normOne_divisionQuaternion : ∀ (F : Type) [Field F
     set gN : DA F a b := (1 - ε) • (g - 1) + 1 with hgNdef
     have hprod : gN * gS = g := prod_decomp ε hee g
     have hgS : gS ∈ H0 (a := a) (b := b) ε := by
-      refine ⟨1, nrm_one', gS, ?_, ?_, by rw [rat_one', one_mul]⟩
+      refine ⟨1, _root_.GlobalTheory.QSA.Grp.nrm_one', gS, ?_, ?_, by rw [_root_.GlobalTheory.QSA.Grp.rat_one, one_mul]⟩
       · rw [hgSdef, nrm_trunc ε hee, hg]; ring
       · rw [hgSdef, add_sub_cancel_right, smul_smul, hee]
     have hgN1 : nrm gN = 1 := by rw [hgNdef, nrm_trunc (1 - ε) hee', hg]; ring
@@ -1370,10 +1335,6 @@ theorem quaternion_split_of_isotropic : ∀ (F : Type) [Field F] [NumberField F]
     ∃ φ : ℍ[F, a, b] ≃ₐ[F] Matrix (Fin 2) (Fin 2) F, ∀ x, (φ x).det = nrm x := by
   first
   | exact @_root_.GlobalTheory.MatrixHomBijective.split_of_isotropic
-  | exact _root_.GlobalTheory.MatrixHomBijective.split_of_isotropic
-  | (apply _root_.GlobalTheory.MatrixHomBijective.split_of_isotropic <;> assumption)
-  | (intros; apply _root_.GlobalTheory.MatrixHomBijective.split_of_isotropic <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.MatrixHomBijective.split_of_isotropic <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.MatrixHomBijective.split_of_isotropic ..)
 
 end GlobalTheory
@@ -1479,7 +1440,7 @@ theorem Ψ_one : Ψ φ 1 = 1 := by
 
 theorem Φ_rat (y : ℍ[F, a, b]) : Φ φ (rat y) = (φ y).map (algebraMap F (AF F)) := by
   conv_rhs => rw [decomp y]
-  simp only [Φ_apply, map_add (f := _), map_smul, map_one, Matrix.map_add (f := _), map_smul_F, Matrix.map_one _ (map_zero _) (map_one (algebraMap F (AF F)))]
+  simp only [Φ_apply, map_add (f := _), map_smul, map_one]
   ext i j
   simp only [Matrix.add_apply, Matrix.smul_apply, Matrix.map_apply, Matrix.one_apply, smul_eq_mul, map_add (f := _), map_mul, rat]
   split_ifs <;> simp

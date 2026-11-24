@@ -120,7 +120,7 @@ theorem continuous_comp_of_isOpen_ker [TopologicalSpace D] [IsTopologicalGroup D
     (F : Multiplicative (ZMod N) → X) : Continuous fun g => F (d g) := by
   refine IsLocallyConstant.continuous ((IsLocallyConstant.iff_exists_open _).2 fun g => ?_)
   refine ⟨(fun x => g⁻¹ * x) ⁻¹' (d.ker : Set D), hd.preimage (continuous_const_mul _), ?_, ?_⟩
-  · simp [MonoidHom.mem_ker]
+  · simp
   · intro x hx
     have hx' : d (g⁻¹ * x) = 1 := hx
     rw [map_mul, map_inv, inv_mul_eq_one] at hx'
@@ -664,9 +664,6 @@ section -- clump:auto
 @[expose] public section
 
 namespace GlobalTheory
-
-theorem unramifiedOrthogonality_holds : ReciprocityTheory.Gal.UnramifiedOrthogonality :=
-  GlobalTheory.CompanionTheory.Hypotheses₂.unramifiedOrthogonality
 
 end GlobalTheory
 end -- clump:auto

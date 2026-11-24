@@ -584,8 +584,7 @@ theorem UpperTheory.RealTr.chEv :
     intro μ
     have hr : (σ k * B).restrict (hfW μ) = evT θ (ex μ) • B.restrict (hBW μ) := by
       ext v
-      simp only [LinearMap.restrict_coe_apply, LinearMap.smul_apply, Module.End.mul_apply,
-        Submodule.coe_smul]
+      simp only [LinearMap.restrict_coe_apply, LinearMap.smul_apply, Submodule.coe_smul]
       exact hσW μ _ (hBW μ v v.2)
     rw [hr, map_smul, smul_eq_mul, hc μ]
     unfold trOn
@@ -1233,7 +1232,7 @@ private theorem harm_of (lam : Fin n → ℤ) (hl : Antitone lam) {ν : Fin n �
     have := hν hab
     simpa [wtR] using this
   rw [harmSet_eq]
-  refine Finset.mem_image_of_mem _ (GlobalTheory.T.harmonic_of_norm_bound lam hl z hz hle
+  refine Finset.mem_image_of_mem _ (_root_.GlobalTheory.CompanionTheory.RealCountG.mem_harmZ_of_norm_ge lam hl z hz hle
     (Tuple.sort fun a => -(wtR z - rhoV n) a) (((rearr n).2.1 (wtR z - rhoV n)).1) ?_)
   refine le_of_eq_of_le ?_ hd
   unfold LSq nsq m0 rhoV

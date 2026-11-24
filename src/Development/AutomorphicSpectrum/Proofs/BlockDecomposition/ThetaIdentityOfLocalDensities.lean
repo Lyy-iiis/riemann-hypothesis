@@ -166,15 +166,12 @@ theorem repr_one_tmul (b : Module.Basis (Fin d) F E) (R : Type) [CommRing R] [Al
     (Algebra.TensorProduct.basis R b).repr ((1 : R) ⊗ₜ[F] e) k = algebraMap F R (b.repr e k) := by
   simp [Algebra.TensorProduct.basis_repr_tmul]
 
-theorem ev_int (c : F) : ∀ᶠ v : HeightOneSpectrum (𝓞 F) in cofinite,
-    algebraMap F (Fv F v) c ∈ v.adicCompletionIntegers F := (algebraMap F (Af F) c).2
-
 def GoodV (b : Module.Basis (Fin d) F E) (v : HeightOneSpectrum (𝓞 F)) : Prop :=
   ∀ k l m, algebraMap F (Fv F v) (b.repr (b k * b l) m) ∈ v.adicCompletionIntegers F
 
 theorem eventually_goodV (b : Module.Basis (Fin d) F E) : ∀ᶠ v : HeightOneSpectrum (𝓞 F) in cofinite, GoodV b v := by
   simp only [GoodV, eventually_all]
-  exact fun k l m => ev_int _
+  exact fun k l m => _root_.GlobalTheory.CompanionTheory.SW.LatRat.eventually_integral _
 
 def IntE (b : Module.Basis (Fin d) F E) (v : HeightOneSpectrum (𝓞 F)) (y : Fv F v ⊗[F] E) : Prop :=
   ∀ k, (Algebra.TensorProduct.basis (Fv F v) b).repr y k ∈ v.adicCompletionIntegers F
@@ -254,7 +251,7 @@ theorem tprod_split {ι : Type} (S : Finset ι) (f : ι → ℝ) (hf : (Function
     ← finprod_mem_mul_diff' (Set.subset_univ (S : Set ι)) (by simpa using hf), finprod_mem_coe_finset]
   congr 1
   refine finprod_congr fun v => ?_
-  simp [Set.mem_diff]
+  simp
 
 theorem ne_zero_of_finprod {ι : Type} (f : ι → ℝ) (hf : (Function.mulSupport f).Finite) (h : ∏ᶠ v, f v ≠ 0) (i : ι) :
     f i ≠ 0 := by
@@ -505,7 +502,7 @@ theorem gramR_one (R : Type) [CommRing R] [Algebra F R] {j : F} (hj : J = fun _ 
     (X : Fin 1 → Fin 1 → R ⊗[F] E) :
     gramR R σ J X 0 0 = sigR R σ (X 0 0) * ((1 : R) ⊗ₜ[F] algebraMap F E j) * X 0 0 := by
   subst hj
-  simp [gramR, hR, hform, JR, inclR, Matrix.map_apply]
+  simp [gramR, hR, hform, JR, inclR]
   rfl
 
 theorem mem_H (hcm : IsCMExt F E σ) (hJ : IsHermND σ J)

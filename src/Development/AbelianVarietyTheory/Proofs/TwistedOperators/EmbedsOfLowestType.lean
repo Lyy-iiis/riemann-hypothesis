@@ -675,8 +675,7 @@ theorem Ph_inv (h : Rep E) (hU : KSt E U) (hπ : IsPr π U) {a b : Ix p q} (hab 
       ((if a = c then Nc E b d y else 0) - (if d = b then Nc E c a y else 0)) := fun c d => by
         rw [h.EN (sb_symm hab)]; abel
     simp only [e1, e2, map_sub, inner_sub_left, inner_sub_right, Ph_inv h hU hπ hab k,
-      Finset.sum_sub_distrib, apply_ite (Ph E π k), map_zero,
-      apply_ite (fun z => ⟪z, _⟫_ℂ), apply_ite (fun z => ⟪_, z⟫_ℂ)]
+      Finset.sum_sub_distrib, apply_ite (Ph E π k), map_zero]
     have i1 : ∀ (P : Prop) [Decidable P] (u v : PiLp 2 (fun _ : Fin k → Ix p q × Ix p q => V)),
       ⟪(if P then u else 0), v⟫_ℂ = if P then ⟪u, v⟫_ℂ else 0 := by
         intro P _ u v; split_ifs <;> simp
@@ -1223,7 +1222,7 @@ theorem adj_Eab (a b : Ix p q) : adjZ (Eab a b) = if sameBlock a b then Eab b a 
   · obtain ⟨rfl, rfl⟩ := h
     cases a <;> cases b <;> simp [Eab, sameBlock]
   · have h' : ¬ (b = i ∧ a = j) := fun k => h k.symm
-    split_ifs <;> simp [Eab, Matrix.single_apply, h, h']
+    split_ifs <;> simp [Eab, h, h']
 
 theorem Eab_mul (a b c d : Ix p q) : Eab a b * Eab c d = if b = c then Eab a d else 0 := by
   split_ifs with h
@@ -1405,25 +1404,6 @@ theorem genSub_le {V : Type} [AddCommGroup V] [Module ℂ V] {act : Mat p q →�
     {u : V} {N : Submodule ℂ V} (hu : u ∈ N) (hN : ∀ Z, ∀ y ∈ N, act Z y ∈ N) : genSub act {u} ≤ N :=
   sInf_le ⟨Set.singleton_subset_iff.2 hu, hN⟩
 
-theorem gen_irred_adm {V : Type} [AddCommGroup V] [Module ℂ V]
-    (act : Mat p q →ₗ[ℂ] Module.End ℂ V) (hlie : IsLieAct act) (ip : V →ₗ⋆[ℂ] V →ₗ[ℂ] ℂ)
-    (herm : ∀ x y, star (ip x y) = ip y x) (pos : ∀ x, x ≠ 0 → 0 < (ip x x).re)
-    (hadj : ∀ Z x y, ip (act Z x) y = ip x (act (adjZ Z) y))
-    {lam : Ix p q → ℚ} (hl : IsParam lam) (hg1 : GapGt lam (((p + q : ℕ) : ℝ) ^ 3 / 24 + 1))
-    (hg2 : GapGt lam (((p + q : ℕ) : ℝ) - 1)) (u : V)
-    (hfin : ∃ W : Submodule ℂ V, FiniteDimensional ℂ W ∧ u ∈ W ∧ KStable act W)
-    (hu : u ∈ hwSub act (blattner lam))
-    (hc : casimir act u = ((normSq lam - rhoSq (p + q) : ℚ) : ℂ) • u) :
-    (∀ Q : Submodule ℂ V, Q ≤ genSub act {u} → (∀ Z, ∀ y ∈ Q, act Z y ∈ Q) → u ∉ Q → Q = ⊥) ∧
-    ∀ μ, ∃ S : Submodule ℂ V, FiniteDimensional ℂ S ∧ ∀ x ∈ genSub act {u}, x ∈ hwSub act μ → x ∈ S := by
-  first
-  | exact @_root_.GlobalTheory.FiltrationEquivalenceRelation.main
-  | exact _root_.GlobalTheory.FiltrationEquivalenceRelation.main
-  | (apply _root_.GlobalTheory.FiltrationEquivalenceRelation.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.FiltrationEquivalenceRelation.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.FiltrationEquivalenceRelation.main <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.FiltrationEquivalenceRelation.main ..)
-
 def prodAct {V V' : Type} [AddCommGroup V] [Module ℂ V] [AddCommGroup V'] [Module ℂ V']
     (a : Mat p q →ₗ[ℂ] Module.End ℂ V) (a' : Mat p q →ₗ[ℂ] Module.End ℂ V') :
     Mat p q →ₗ[ℂ] Module.End ℂ (V × V') where
@@ -1457,7 +1437,7 @@ theorem diag_irred {lam : Ix p q → ℚ} (hl : IsParam lam) (hg1 : GapGt lam ((
     (hc' : casimir M'.M.act u' = ((normSq lam - rhoSq (p + q) : ℚ) : ℂ) • u') :
     ∀ Q : Submodule ℂ (M.M.V × M'.M.V), Q ≤ genSub (prodAct M.M.act M'.M.act) {(u, u')} →
       (∀ Z, ∀ y ∈ Q, prodAct M.M.act M'.M.act Z y ∈ Q) → (u, u') ∉ Q → Q = ⊥ := by
-  refine (gen_irred_adm (prodAct M.M.act M'.M.act) ?_ (prodForm M.ip M'.ip) ?_ ?_ ?_ hl hg1 hg2 (u, u')
+  refine (_root_.GlobalTheory.FiltrationEquivalenceRelation.main (prodAct M.M.act M'.M.act) ?_ (prodForm M.ip M'.ip) ?_ ?_ ?_ hl hg1 hg2 (u, u')
     ?_ ?_ ?_).1
   · intro X Y
     refine LinearMap.ext fun x => ?_
@@ -1541,7 +1521,7 @@ theorem gen_iso_of_lowest_type : admQ7 → admQ8 → ∀ (p q : ℕ) (lam : Ix p
     · rintro Z _ ⟨x, rfl⟩
       exact ⟨_, heZ Z x⟩
   · intro μ
-    obtain ⟨S, hS, hS'⟩ := (gen_irred_adm M'.M.act M'.M.lie M'.ip M'.herm M'.pos M'.adj hl hg1 hg2 u'
+    obtain ⟨S, hS, hS'⟩ := (_root_.GlobalTheory.FiltrationEquivalenceRelation.main M'.M.act M'.M.lie M'.ip M'.herm M'.pos M'.adj hl hg1 hg2 u'
       (M'.M.kfin u') hu'.2 hc').2 μ
     have htop : genSub M'.M.act {u'} = ⊤ := by
       rcases hirr.2 _ (genSub_stable M'.M.act {u'}) with h | h

@@ -82,7 +82,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.TypeRec.factG
 
 theorem _root_.GlobalTheory.T.seriesIdempotentStarCompatible_of_labelling_agree : Green → ∀ (D : D7) (L : ∀ k, LabelDatum (D.host.g k)), LabTie D L → GlobalTheory.GoodTypes.SeriesConj D := by
-  first | exact @GlobalTheory.GoodTypes.seriesConj_of_labTie | exact GlobalTheory.GoodTypes.seriesConj_of_labTie | (intros; apply GlobalTheory.GoodTypes.seriesConj_of_labTie <;> assumption)
+  first | exact @GlobalTheory.GoodTypes.seriesConj_of_labTie
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.SeriesIdempotentStarCompatibleOfLabellingAgreeStatement =====
@@ -141,7 +141,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.TypeRec.factG
 
 theorem _root_.GlobalTheory.T.exists_isRc_classMap_correspondence : ∀ (hL : _root_.UpperTheory.Zero.LLC.RecTExists) (D : D7) (T : GlobalTheory.RowTie.WDTie D.nd D.naut) (I : Ident D), ∃ rc : GlobalTheory.SerSys.Corr D, _root_.GlobalTheory.TypeRec.IsSeriesCorrespondence hL T I rc ∧ ∀ k v, _root_.GlobalTheory.SerSys.IsClassMapD D.naut.lpDim (rc k v) := by
-  first | exact @_root_.UpperTheory.One.M.exists_isRc_isClassMapD_alt | exact _root_.UpperTheory.One.M.exists_isRc_isClassMapD_alt | (intros; apply _root_.UpperTheory.One.M.exists_isRc_isClassMapD_alt <;> assumption)
+  first | exact @_root_.UpperTheory.One.M.exists_isRc_isClassMapD_alt
 end
 end -- clump:auto
 end -- clump:auto
@@ -162,7 +162,7 @@ theorem goodFTAll_of_local_alt : Green → GlobalTheory.Published.ZelevinskyPoly
   intro hG hZ hL D T Rw rep L hRow hDep hLT hDZ hTP hVec σ
   obtain ⟨I⟩ := GlobalTheory.T.nonempty_typePlaceCompletionIdent D
   obtain ⟨rc, hrc, hcls⟩ := _root_.GlobalTheory.T.exists_isRc_classMap_correspondence hL D T I
-  obtain ⟨cp, hcomp, hcp⟩ := _root_.GlobalTheory.T.exists_comp_irrSm_locR_eq_rc hL D T I rc hrc Rw rep hRow hDep
+  obtain ⟨cp, hcomp, hcp⟩ := _root_.GlobalTheory.TypeRec.exists_comp_irrSm_param_alt hL D T I rc hrc Rw rep hRow hDep
   have hP : DiscreteGroups.sglob.DzType.Rt.LabParamLe D.R.nV D L rc :=
     DiscreteGroups.sglob.DzType.Rt.labParamLe_of D L rc hG (_root_.GlobalTheory.T.tame_gen_support_compat_of_is_rc hZ hL D T I rc hrc) hDZ (hTP I rc hrc)
   have hSC := GlobalTheory.T.seriesIdempotentStarCompatible_of_labelling_agree hG D L hLT

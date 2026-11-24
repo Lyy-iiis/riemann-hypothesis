@@ -77,11 +77,6 @@ theorem countable_matrix (E : Type) [Field E] [NumberField E] (m n : ℕ) :
   haveI := GlobalTheory.CompanionTheory.NumberFieldMatrix.countable_of_numberField E
   exact inferInstanceAs (Countable (Fin m → Fin n → E))
 
-theorem matrix_countable :
-    ∀ (E : Type) [Field E] [NumberField E] (m n : ℕ),
-      Countable (Matrix (Fin m) (Fin n) E) :=
-  fun E _ _ m n => countable_matrix E m n
-
 end GlobalTheory.CompanionTheory.NumberFieldMatrix
 end -- clump:auto
 end -- clump:auto
@@ -164,7 +159,7 @@ theorem det_lower_I_ne (y : GR n) :
   have hEE : (C + Complex.I • D) * (C + Complex.I • D)ᴴ = fromCols C D * (fromCols C D)ᴴ := by
     rw [conjTranspose_fromCols_eq_fromRows_conjTranspose, fromCols_mul_fromRows]
     simp only [conjTranspose_add, conjTranspose_smul, Matrix.add_mul, Matrix.mul_add,
-      Matrix.smul_mul, Matrix.mul_smul, hs, smul_smul, Complex.star_def, Complex.conj_I]
+      Matrix.smul_mul, Matrix.mul_smul, hs, Complex.star_def, Complex.conj_I]
     simp
     abel_nf
     simp [smul_smul]
@@ -350,7 +345,7 @@ theorem derCont : DerCont := GlobalTheory.CompanionTheory.HolFamily.continuousOn
 
 theorem stripOK : StripOK := GlobalTheory.CompanionTheory.Strip.strip_open_real_discs
 
-theorem matCount : MatCount := GlobalTheory.CompanionTheory.NumberFieldMatrix.matrix_countable
+theorem matCount : MatCount := _root_.GlobalTheory.CompanionTheory.NumberFieldMatrix.countable_matrix
 
 theorem holMean : HolMean := GlobalTheory.CompanionTheory.HolMean.holomorphic_mean
 

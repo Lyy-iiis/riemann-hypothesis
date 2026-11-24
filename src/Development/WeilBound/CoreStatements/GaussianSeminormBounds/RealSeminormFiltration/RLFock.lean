@@ -144,10 +144,6 @@ theorem norm_iteratedFDeriv_rexp (i : ℕ) (y : ℝ) : ‖iteratedFDeriv ℝ i R
   rw [show (fun s => Real.exp s) = Real.exp from rfl] at h
   rw [h, Real.norm_eq_abs, abs_of_pos (Real.exp_pos y)]
 
-theorem exists_bound_poly_mul_exp (c : ℝ) (hc : 0 < c) (N : ℕ) :
-    ∃ C, ∀ r : ℝ, 0 ≤ r → (1 + r) ^ N * Real.exp (-(c * r ^ 2)) ≤ C :=
-  _root_.UpperTheory.Reformulated.B.Rc4.exists_bound_poly_mul_exp c hc N
-
 theorem exists_coercive [FiniteDimensional ℝ E] (B : E →L[ℝ] E →L[ℝ] ℝ) (hB : ∀ x, x ≠ 0 → B x x < 0) :
     ∃ c > 0, ∀ x, B x x ≤ -(c * ‖x‖ ^ 2) := by
   rcases subsingleton_or_nontrivial E with hE | hE
@@ -182,7 +178,7 @@ theorem exists_schwartz_exp_diag [FiniteDimensional ℝ E] (B : E →L[ℝ] E �
   refine ⟨⟨Complex.ofRealLI ∘ (Real.exp ∘ fun y : E => B y y),
     Complex.ofRealLI.toContinuousLinearMap.contDiff.comp hg, ?_⟩, fun x => rfl⟩
   intro k n
-  obtain ⟨C, hC⟩ := exists_bound_poly_mul_exp c hc (k + 2 * n)
+  obtain ⟨C, hC⟩ := _root_.UpperTheory.Reformulated.B.Rc4.exists_bound_poly_mul_exp c hc (k + 2 * n)
   refine ⟨n ! * (2 * (‖B‖ + 1)) ^ n * C, fun x => ?_⟩
   have hn : ((n : ℕ∞) : WithTop ℕ∞) ≤ ((⊤ : ℕ∞) : WithTop ℕ∞) := by exact_mod_cast le_top
   rw [LinearIsometry.norm_iteratedFDeriv_comp_left _ hg.contDiffAt hn]
@@ -398,13 +394,13 @@ variable {V : Type} [NormedAddCommGroup V] [NormedSpace ℝ V] {L : Type} [Finty
 
 theorem D_add (c c' : L → ℂ) (f : 𝓢(V, ℂ)) : H.D (c + c') f = H.D c f + H.D c' f := by
   ext x
-  simp only [SchwartzMap.add_apply, H.hD, map_add (f := _), ContinuousLinearMap.add_apply]
+  simp only [SchwartzMap.add_apply, H.hD, map_add (f := _)]
   push_cast
   ring
 
 theorem D_smul (t : ℝ) (c : L → ℂ) (f : 𝓢(V, ℂ)) : H.D (t • c) f = (t : ℂ) • H.D c f := by
   ext x
-  simp only [SchwartzMap.smul_apply, H.hD, map_smul, ContinuousLinearMap.smul_apply, smul_eq_mul, real_smul]
+  simp only [SchwartzMap.smul_apply, H.hD, map_smul, smul_eq_mul, real_smul]
   push_cast
   ring
 
@@ -653,9 +649,9 @@ theorem exists_fockMap : ∃ φ : MvPolynomial L ℂ →ₗ[ℂ] 𝓢(V, ℂ), F
   have haa : ∀ l l', a l * a l' = a l' * a l := fun l l' => by
     rw [hc]; by_cases h : l = l' <;> simp [Pi.single_apply, h, @eq_comm _ l' l, a]
   have hbb : ∀ l l', b l * b l' = b l' * b l := fun l l' => by
-    rw [hc]; by_cases h : l = l' <;> simp [Pi.single_apply, h, @eq_comm _ l' l, b]
+    rw [hc]; by_cases h : l = l' <;> simp [Pi.single_apply, h, b]
   have hab : ∀ l l', a l * b l' = b l' * a l + (-4 * Real.pi * I * if l = l' then 1 else 0 : ℂ) • 1 := fun l l' => by
-    rw [hc]; by_cases h : l = l' <;> simp [Pi.single_apply, h, @eq_comm _ l' l, a, b]
+    rw [hc]; by_cases h : l = l' <;> simp [Pi.single_apply, h, a, b]
   have hba : ∀ l l', b l * a l' = a l' * b l + (4 * Real.pi * I * if l = l' then 1 else 0 : ℂ) • 1 := fun l l' => by
     rw [hc]; by_cases h : l = l' <;> simp [Pi.single_apply, h, @eq_comm _ l' l, a, b]
   obtain ⟨φ, h1, h2, h3⟩ := exists_fock (fun l => (2 * r)⁻¹ • (a l - I • b l)) (fun l => (2 * r)⁻¹ • (-a l - I • b l))
@@ -672,7 +668,7 @@ theorem exists_fockMap : ∃ φ : MvPolynomial L ℂ →ₗ[ℂ] 𝓢(V, ℂ), F
             field_simp; linear_combination (-4) * hr2, one_smul]
         · simp
       rw [e]
-      simp only [smul_mul_smul_comm, sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, neg_mul, mul_neg]
+      simp only [sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, neg_mul, mul_neg]
       rw [haa l l', hbb l l', hab l l', hba l l']
       module)
     G hG (fun l => by
@@ -724,17 +720,7 @@ section Adele
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
 
-theorem exists_moved {σ : E →ₐ[F] E} (h : IsCMExt F E σ) : ∃ β : E, σ β ≠ β := by
-  by_contra hne
-  push Not at hne
-  have := h.2.1
-  obtain ⟨τ⟩ : Nonempty (E →+* ℂ) := inferInstance
-  refine IsTotallyComplex.complexEmbedding_not_isReal τ ?_
-  rw [ComplexEmbedding.isReal_iff]
-  ext y
-  have := h.2.2.2 τ y
-  rw [hne y] at this
-  simpa using this.symm
+alias exists_moved := _root_.GlobalTheory.AdelicU.exists_cm_conj_ne
 
 theorem im_ne_zero {σ : E →ₐ[F] E} (h : IsCMExt F E σ) {β : E} (hβ : σ β ≠ β) (τ : E →+* ℂ) : (τ β).im ≠ 0 := by
   intro h0

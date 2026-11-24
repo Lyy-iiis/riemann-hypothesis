@@ -214,8 +214,7 @@ theorem psiM_local (T : KType ε (lowK ε lam)) (μ : Fin n → ℤ) (hμ : IsMu
                  | rw [← Rat.norm_cast_real, Real.norm_eq_abs]
                  | rfl }
          first
-           | exact @NormedSpace.exp_continuous _ _ _ (FiniteDimensional.complete ℂ _)
-           | exact @NormedSpace.exp_continuous _ _ _ _ (FiniteDimensional.complete ℂ _))
+           | exact @NormedSpace.exp_continuous _ _ _ (FiniteDimensional.complete ℂ _))
   have hnegP : ∀ X : Matrix (Fin n) (Fin n) ℂ, inP ε X → inP ε (-X) := by
     intro X hX
     obtain ⟨h1, h2⟩ := hX
@@ -298,7 +297,6 @@ theorem psiM_local (T : KType ε (lowK ε lam)) (μ : Fin n → ℤ) (hμ : IsMu
       (𝓝 (NormedSpace.exp (-PolarDecomposition.polar_L g₀), (0 : Matrix (Fin n) (Fin n) ℂ))) := by
     first
       | exact hEt.prodMk_nhds hℓt
-      | exact hEt.prod_mk_nhds hℓt
   have hev2 := hPt.eventually hcpt
   obtain ⟨O, hOo, hg₀O, hOsub⟩ := mem_nhdsWithin.1 (hev1.and hev2)
   have hdetO : IsOpen {g : Matrix (Fin n) (Fin n) ℂ | g.det ≠ 0} :=
@@ -311,8 +309,6 @@ theorem psiM_local (T : KType ε (lowK ε lam)) (μ : Fin n → ℤ) (hμ : IsMu
       refine continuousAt_matrix_inv g ?_
       first
         | (rw [Ring.inverse_eq_inv']; exact continuousAt_inv₀ hg')
-        | (simp only [show (Ring.inverse : ℂ → ℂ) = Inv.inv from funext Ring.inverse_eq_inv]
-           exact continuousAt_inv₀ hg')
     exact (h1.mul continuousAt_const).continuousWithinAt
   have hO₂ : IsOpen ({g : Matrix (Fin n) (Fin n) ℂ | g.det ≠ 0} ∩
       (fun g : Matrix (Fin n) (Fin n) ℂ => g⁻¹ * toMK k₀) ⁻¹' V) :=
@@ -335,7 +331,7 @@ theorem psiM_local (T : KType ε (lowK ε lam)) (μ : Fin n → ℤ) (hμ : IsMu
     obtain ⟨γ, -, hγ, hmul⟩ := exists_oneParam ε hY
     have hid : ∀ z ∈ U, fderiv ℂ (psM T μ) z (z * ℓ ((K g)ᴴ * K g₀)) =
         -(T.dτ (ℓ ((K g)ᴴ * K g₀)) * psM T μ z) :=
-      fun z hz => (hU z hz _ ((inK_iff ε _).1 hY).2).1
+      fun z hz => (hU z hz _ ((_root_.ReciprocityTheory.ChartRestriction.DS.S7.kfa_inK_iff ε _).1 hY).2).1
     have hc := lcB_const T μ hUo hdiff hid hY γ hγ hmul
       (NormedSpace.exp (-PolarDecomposition.polar_L g)) hq2
     have hγ1 : toMK (γ 1) = (K g)ᴴ * K g₀ := by

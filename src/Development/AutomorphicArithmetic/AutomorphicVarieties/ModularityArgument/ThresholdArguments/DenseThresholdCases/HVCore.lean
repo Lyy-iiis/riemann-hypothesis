@@ -467,7 +467,6 @@ theorem UpperTheory.V.Win.abiso :
   haveI : IsGalois ℚ (AlgebraicClosure ℚ) := by
     first
       | exact @IsAlgClosure.isGalois ℚ (AlgebraicClosure ℚ) _ _ (AlgebraicClosure.instAlgebra ℚ) _ _
-      | convert @IsAlgClosure.isGalois ℚ (AlgebraicClosure ℚ) _ _ (AlgebraicClosure.instAlgebra ℚ) _ _
   let f : CyclotomicField N ℚ →ₐ[ℚ] AlgebraicClosure ℚ := (by
     refine @_root_.IsAlgClosed.lift _ _ _ _ _ _ _ _ _ _ _ ?_ ?_ ?_
     solve_by_elim* (maxDepth := 2) only [*,
@@ -925,7 +924,7 @@ theorem UpperTheory.V.Hi.hida_unitary_of_printed_hida :
   have := coef_isCoef l c
   exact ⟨J, ⟨_root_.UpperTheory.V.Hi.ring_props_of_is_j_unitary_hecke_data P l L Ω s n hn V _ c r ι B Λ R K hS J hJ, _root_.UpperTheory.V.Hi.dense_of_is_j_unitary_hecke_data P l L Ω s n hn V _ c r ι B Λ R K hS J hJ,
     _root_.UpperTheory.V.Hi.hecke_ideal_point_properties P l L Ω s n hn V _ c r ι B Λ R K hS J hJ, hE.1, hE.2, _root_.UpperTheory.V.Z.Desc.W.twistOk_of_isJ P l L Ω s n hn V _ c r ι B Λ R K hS J hJ⟩,
-    _root_.UpperTheory.V.Pa.has_automorphy_of_statement (locP_of P.litN) l L Ω s V c.O n r B J hS (_root_.UpperTheory.V.Hi.level_of_is_j_unitary_hecke_data P l L Ω s n hn V _ c r ι B Λ R K hS J hJ)⟩
+    _root_.UpperTheory.V.Pa.has_automorphy_of_statement (locP_of P.litN) l L Ω s V c.O n r B J hS (_root_.UpperTheory.V.Hi.level_of_isJ_unitaryHeckeData P l L Ω s n hn V _ c r ι B Λ R K hS J hJ)⟩
 end
 end -- clump:auto
 end -- clump:auto

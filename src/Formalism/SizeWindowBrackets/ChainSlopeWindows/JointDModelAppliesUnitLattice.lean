@@ -194,10 +194,8 @@ lemma hsSq_one (n : ℕ) : hsSq (1 : Matrix (Fin n) (Fin n) ℂ) = n := by
 
 end CS
 
-private theorem re_le_norm' (z : ℂ) : z.re ≤ ‖z‖ := Complex.re_le_norm z
-
 private theorem neg_re_le_norm' (z : ℂ) : -z.re ≤ ‖z‖ := by
-  have h := re_le_norm' (-z)
+  have h := _root_.Complex.re_le_norm (-z)
   rwa [Complex.neg_re, norm_neg] at h
 
 theorem traceLowerBound : TraceLower := by
@@ -305,8 +303,6 @@ lemma trQsq_upper (B : ∀ u, Matrix (Fin D) (Fin (d u)) ℂ) (ga : ι → ℝ) 
         ≤ ((1 + Real.sqrt e0) * Real.sqrt (d u : ℝ)) ^ 2 := by
       first
       | exact pow_le_pow_left₀ h4 h3 2
-      | exact pow_le_pow_left h4 h3 2
-      | nlinarith
     have h6 : ((1 + Real.sqrt e0) * Real.sqrt (d u : ℝ)) ^ 2 = (1 + Real.sqrt e0) ^ 2 * (d u : ℝ) := by
       rw [mul_pow, Real.sq_sqrt (Nat.cast_nonneg _)]
     show hsSq (Kd B ga u) ≤ _
@@ -336,7 +332,6 @@ lemma trQsq_upper (B : ∀ u, Matrix (Fin D) (Fin (d u)) ℂ) (ga : ι → ℝ) 
     refine Finset.sum_congr rfl fun u _ => ?_
     first
     | (rw [Finset.sum_ite_eq]; simp)
-    | simp
   rw [trace_Qm_sq B ga hga, Complex.ofReal_re]
   calc ∑ u, ∑ u', hsSq (Kp B ga u u')
       ≤ ∑ u, ∑ u', ((1 + η0) * (d u : ℝ) * (d u' : ℝ) / Dstar
@@ -455,7 +450,7 @@ lemma ram_gap (n k : ℕ) (K : Matrix (Fin n) (Fin n) ℂ) (V : Matrix (Fin n) (
       = ((n : ℝ) - k) + ((K - 1) * (1 - V * Vᴴ)).trace.re := by
     rw [htr, Complex.add_re, trace_proj n k V hV, Complex.ofReal_re]
   rw [Complex.sub_re] at hre
-  have habs := re_le_norm' (((K - 1) * (1 - V * Vᴴ)).trace)
+  have habs := _root_.Complex.re_le_norm (((K - 1) * (1 - V * Vᴴ)).trace)
   have hs := Real.sqrt_nonneg ((n : ℝ) - k)
   have hm := mul_le_mul_of_nonneg_left hNK hs
   linarith

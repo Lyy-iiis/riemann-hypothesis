@@ -285,7 +285,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.ZM
 
 theorem _root_.GlobalTheory.T.torsion_eq_one_of_translDiff_trivial_model : Laws → Laws2 → ∀ (V K : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] [Field K] [Algebra V K] [IsFractionRing V K] (P : PolAV (Sp K)) (B : Over (Sp V)) [GrpObj B] [IsCommMonObj B] (M : GlobalTheory.UU.CP B) (φ : P.A.left ⟶ B.left), IsAbelianScheme B → IsGrpPullback P.A B (spMap (algebraMap V K)) φ → LBIso P.L (M.L.L.pull φ) → IsAdicComplete (IsLocalRing.maximalIdeal V) V → ∀ (Ω : Type) [Field Ω] [IsAlgClosed Ω] (f : V →+* Ω), IsLocalHom f → ∀ n : ℕ, (n : Ω) ≠ 0 → ∀ x : Over.mk (spMap f) ⟶ B, x ^ n = 1 → GlobalTheory.AbLaw.Triv (translDiff B M.L.L x) → x = 1 := by
-  first | exact @GlobalTheory.PrincipalModel.torsion_eq_one_of_triv | exact GlobalTheory.PrincipalModel.torsion_eq_one_of_triv | (intros; apply GlobalTheory.PrincipalModel.torsion_eq_one_of_triv <;> assumption)
+  first | exact @GlobalTheory.PrincipalModel.torsion_eq_one_of_triv
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.TorsionEqOneOfTranslDiffTrivialModelStatement =====
@@ -344,16 +344,6 @@ theorem exists_sec_pull {X Y Y' : Scheme.{0}} {N : LB X} (hN : N.IsLB) {a : Y �
     (LBIso.chartPull (chartPullSame N _ _ _ u fun _ => hu.symm) (Geo.Tor.chartPullPull _ u u rfl)
       ⟨_, CubePf.idIsoL_isGen (pull_isLB hN a)⟩) hs
 
-theorem lbIso_pw {Y : Scheme.{0}} {A B : LB Y} (h : LBIso A B) (t : ℤ) :
-    LBIso (AbLaw.pw A t) (AbLaw.pw B t) := by
-  obtain ⟨w, hw⟩ := h
-  refine ⟨⟨fun p => w.s p ^ t⟩, fun p q => ?_⟩
-  have e := congrArg (· ^ t) (hw p q)
-  simp only [mul_zpow, ← map_zpow] at e
-  refine e.trans (congrArg₂ (· * ·) ?_ rfl)
-  exact (mul_zpow _ _ t).trans (congrArg₂ (· * ·) (map_zpow _ _ t).symm
-    ((inv_zpow _ t).trans (congrArg (·⁻¹) (map_zpow _ _ t).symm)))
-
 theorem isIso_spMap {R R' : Type} [CommRing R] [CommRing R'] (e : R ≃+* R') : IsIso (spMap e.toRingHom) :=
   inferInstanceAs (IsIso (Spec.map e.toCommRingCatIso.hom))
 
@@ -400,7 +390,7 @@ theorem relAmple_special_fibre : Laws → Laws2 → ∀ (V K : Type) [CommRing V
     refine exists_sec_ne_zero (𝟙 _) (isLB_pw P.isLB d) (pull_isLB hN φ) ?_ h₀
     refine LBIso.chartPull (chartPullId _) (Geo.Tor.chartPullPull _ (𝟙 _) (𝟙 _) rfl) ?_
     rw [AmpleCrit.pull_pw_eq]
-    exact lbIso_pw hiso.symm d
+    exact _root_.GlobalTheory.UU.TorsionCount.lbIso_pw hiso.symm d
   have h₂ : ∃ s : LB.Sec ((AbLaw.pw M.L.L d).pull (pullback.fst B.hom (jK V))), ∃ j, s.f j ≠ 0 := by
     let e : K ≃+* FractionRing V := (FractionRing.algEquiv V K).symm.toRingEquiv
     have := isIso_spMap e
@@ -467,7 +457,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.ZM
 
 theorem _root_.GlobalTheory.T.relAmple_specialFibre_extended_principalPolarisation : Laws → Laws2 → ∀ (V K : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] [Field K] [Algebra V K] [IsFractionRing V K] (P : PolAV (Sp K)) (B : Over (Sp V)) [GrpObj B] [IsCommMonObj B] (M : GlobalTheory.UU.CP B) (φ : P.A.left ⟶ B.left), IsAbelianScheme B → IsGrpPullback P.A B (spMap (algebraMap V K)) φ → LBIso P.L (M.L.L.pull φ) → IsAdicComplete (IsLocalRing.maximalIdeal V) V → RelAmple ((Over.pullback (spMap (IsLocalRing.residue V))).obj B) (M.L.L.pull (pullback.fst B.hom (spMap (IsLocalRing.residue V)))) := by
-  first | exact @GlobalTheory.SpecialAmple.relAmple_special_fibre | exact GlobalTheory.SpecialAmple.relAmple_special_fibre | (intros; apply GlobalTheory.SpecialAmple.relAmple_special_fibre <;> assumption)
+  first | exact @GlobalTheory.SpecialAmple.relAmple_special_fibre
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.RelAmpleSpecialFibreExtendedPrincipalPolarisatioStatement =====
@@ -487,15 +477,7 @@ noncomputable section
 
 namespace GlobalTheory.ExtAmple
 
-theorem lbIso_self {X : Scheme.{0}} {L : LB X} (hL : L.IsLB) : LBIso L L := by
-  refine ⟨⟨fun p => L.g p.1 p.2⟩, fun p q => unit_ext fun y hy => ?_⟩
-  refine (gm_res _ y _ hy _).trans (Eq.symm ((map_mul _ _ _).trans ((congrArg₂ (· * ·)
-    (gm_div L L (𝟙 X) y p q hy) (gm_res _ y _ hy _)).trans ?_)))
-  have a := gm_cocycle hL (𝟙 X) y hy.1.1 hy.2.1 hy.2.2
-  have b := gm_cocycle hL (𝟙 X) y hy.1.1 hy.1.2 hy.2.2
-  show gm (𝟙 X) y _ (L.g p.1 q.1) * (gm (𝟙 X) y _ (L.g p.2 q.2))⁻¹ * gm (𝟙 X) y _ (L.g q.1 q.2) =
-    gm (𝟙 X) y _ (L.g p.1 p.2)
-  rw [mul_right_comm, a, ← b, mul_inv_cancel_right]
+alias lbIso_self := _root_.GlobalTheory.lbIso_refl
 
 theorem relAmple_pullback_of_fac {S S₀ T : Scheme.{0}} [IsAffine S₀] {B : Over S} {A : Over S₀} {L : LB B.left}
     {L₀ : LB A.left} (hL : L.IsLB) (hL₀ : L₀.IsLB) {g : S₀ ⟶ S} {φ : A.left ⟶ B.left}
@@ -560,7 +542,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.ZM
 
 theorem _root_.GlobalTheory.T.relAmple_extended_principalPolarisation_dvr : Laws → Laws2 → ∀ (V K : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] [Field K] [Algebra V K] [IsFractionRing V K] (P : PolAV (Sp K)) (B : Over (Sp V)) [GrpObj B] [IsCommMonObj B] (M : GlobalTheory.UU.CP B) (φ : P.A.left ⟶ B.left), IsAbelianScheme B → IsGrpPullback P.A B (spMap (algebraMap V K)) φ → LBIso P.L (M.L.L.pull φ) → IsAdicComplete (IsLocalRing.maximalIdeal V) V → RelAmple B M.L.L := by
-  first | exact @GlobalTheory.ExtAmple.relAmple_extension | exact GlobalTheory.ExtAmple.relAmple_extension | (intros; apply GlobalTheory.ExtAmple.relAmple_extension <;> assumption)
+  first | exact @GlobalTheory.ExtAmple.relAmple_extension
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.RelAmpleExtendedPrincipalPolarisationDvrStatement =====

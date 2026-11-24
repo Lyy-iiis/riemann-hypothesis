@@ -150,8 +150,7 @@ theorem surj_key {T T' : C} (l : T ⟶ T') (c : TrivSqZeroExt (F.obj T) (F.obj T
     linear_combination (mp F l c.fst) ^ (k₂ + 1) * ha
   · rw [TrivSqZeroExt.snd_mul, TrivSqZeroExt.snd_pow_of_smul_comm _ _ (op_smul_eq_smul _ _),
       TrivSqZeroExt.fst_pow, snd_tenMap, fst_tenMap, snd_tenMap]
-    simp only [TrivSqZeroExt.fst_add, TrivSqZeroExt.fst_inl, TrivSqZeroExt.fst_inr, add_zero,
-      TrivSqZeroExt.snd_add, TrivSqZeroExt.snd_inl, TrivSqZeroExt.snd_inr, zero_add, map_add, map_nsmul,
+    simp only [TrivSqZeroExt.snd_add, TrivSqZeroExt.snd_inl, TrivSqZeroExt.snd_inr, zero_add, map_add, map_nsmul,
       rTensor_smul, map_mul, map_pow, op_smul_eq_smul, Nat.pred_succ] at ha hη ⊢
     rw [← hη, ← ha]
     module
@@ -462,7 +461,7 @@ theorem restrict_ext_bijective : ∀ (R₀ R₁ : Type) [CommRing R₀] [CommRin
         fun i S' u hu ↦ h i S' u (unitE u _ hu)⟩
   have hsE := _root_.GlobalTheory.sep_of_factoring_cover (TenExt.tenExt R₁ (OAff s)) G HE hcovE
   have hgE := _root_.GlobalTheory.CatCoh.Desc.glue_comma_of_basis (TenExt.tenExt R₁ (OAff s)) G HE hcovE hdirE
-  have hvE := _root_.GlobalTheory.CatCoh.Desc.Basis.oneCocycle_vanishing_comma_of_basis (TenExt.tenExt R₁ (OAff s)) G HE hcovE hdirE
+  have hvE := _root_.GlobalTheory.CatCoh.Desc.Basis.oneCocycle_coboundary_comma_localBasis (TenExt.tenExt R₁ (OAff s)) G HE hcovE hdirE
   have hv2E := _root_.GlobalTheory.CatCoh.Desc.VandermondeTwoBasis.twoCocycle_coboundary_of_basisFunctor_alt (TenExt.tenExt R₁ (OAff s)) G HE hcovE hdirE
   have hs := sep_of_retract (ext R₁ (OAff s)) (TenExt.tenExt R₁ (OAff s)) G (incl R₁ (OAff s))
     (proj R₁ (OAff s)) (proj_incl R₁ (OAff s)) (incl_mp R₁ (OAff s)) hsE

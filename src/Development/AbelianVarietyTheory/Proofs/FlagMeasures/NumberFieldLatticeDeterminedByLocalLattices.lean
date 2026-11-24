@@ -93,21 +93,10 @@ namespace GlobalTheory.HL.PlacesRec
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
   {sig : E →ₐ[F] E} {n : ℕ}
 
-theorem exists_smul_mem (Λ : Submodule (𝓞 E) (Fin n → E))
-    (hs : Submodule.span E (Λ : Set (Fin n → E)) = ⊤) (v : Fin n → E) :
-    ∃ D : 𝓞 E, D ≠ 0 ∧ D • v ∈ Λ := by
-  first
-  | exact @_root_.GlobalTheory.SaturatedSublattice.main
-  | exact _root_.GlobalTheory.SaturatedSublattice.main
-  | (apply _root_.GlobalTheory.SaturatedSublattice.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.SaturatedSublattice.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.SaturatedSublattice.main <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.SaturatedSublattice.main ..)
-
 theorem exists_common (Λ : Submodule (𝓞 E) (Fin n → E))
     (hs : Submodule.span E (Λ : Set (Fin n → E)) = ⊤) :
     ∃ D : 𝓞 E, D ≠ 0 ∧ ∀ k, D • (Pi.single k 1 : Fin n → E) ∈ Λ := by
-  choose Dk h m using fun k => exists_smul_mem Λ hs (Pi.single k 1 : Fin n → E)
+  choose Dk h m using fun k => _root_.GlobalTheory.SaturatedSublattice.main Λ hs (Pi.single k 1 : Fin n → E)
   refine ⟨∏ k, Dk k, Finset.prod_ne_zero_iff.2 fun k _ => h k, fun k => ?_⟩
   rw [← Finset.mul_prod_erase _ _ (Finset.mem_univ k), mul_comm, mul_smul]
   exact Λ.smul_mem _ (m k)
@@ -133,7 +122,7 @@ theorem exists_coeffs (Λ : Submodule (𝓞 E) (Fin n → E))
     apply Subtype.ext
     ext i
     simp only [Submodule.coe_smul, Submodule.coe_sum, Finset.sum_apply, Pi.smul_apply,
-      smul_eq_mul, Algebra.smul_def (R := 𝓞 E) (A := E), Pi.single_apply]
+      Algebra.smul_def (R := 𝓞 E) (A := E), Pi.single_apply]
     have h4 : ∀ x, algebraMap (𝓞 E) E (b x) * (algebraMap (𝓞 E) E D * if i = x then 1 else 0) =
         if i = x then algebraMap (𝓞 E) E (b x) * algebraMap (𝓞 E) E D else 0 := by
       intro x
@@ -192,7 +181,7 @@ theorem bc_single (p : HeightOneSpectrum (𝓞 F)) (i : Fin n) :
   ext j
   by_cases h : j = i
   · subst h; simp [Places.bc]
-  · simp [Places.bc, Pi.single_apply, h]
+  · simp [Places.bc, h]
 
 theorem int_mem (p : HeightOneSpectrum (𝓞 F)) (o : 𝓞 E) : (A.loc p).ιE (o : E) ∈ (A.L p).O :=
   ((PlacesInt.integers_local A).1 (o : E)).2 ⟨o, rfl⟩ p
@@ -261,7 +250,7 @@ theorem mem_of_forall_lat (Λ : Submodule (𝓞 E) (Fin n → E)) (h : Submodule
     rw [map_sum]
     simpa [Places.bc] using this
   choose o ho using hint
-  obtain ⟨D, hD, hDx⟩ := exists_smul_mem Λ h.span_eq_top x
+  obtain ⟨D, hD, hDx⟩ := _root_.GlobalTheory.SaturatedSublattice.main Λ h.span_eq_top x
   have hDE : (D : E) ≠ 0 := by simpa using hD
   have h1 : x = ∑ i, o i • (g i : Fin n → E) := by
     have h2 := congrArg (Subtype.val) (hφ ⟨D • x, hDx⟩)

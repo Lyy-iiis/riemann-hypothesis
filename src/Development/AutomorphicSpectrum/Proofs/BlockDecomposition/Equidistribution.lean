@@ -188,7 +188,6 @@ theorem mem_ballV_iff (v : HeightOneSpectrum (𝓞 F)) (k : ℕ) (t : F) :
   show Valued.v (algebraMap F (Fv F v) t) ≤ _ ↔ _
   rw [show Valued.v (algebraMap F (Fv F v) t) = v.valuation F t by
     first
-      | exact HeightOneSpectrum.valuedAdicCompletion_eq_valuation v t
       | exact HeightOneSpectrum.valuedAdicCompletion_eq_valuation' v t
       | rfl]
 
@@ -266,9 +265,7 @@ theorem exists_near (v : HeightOneSpectrum (𝓞 F)) (k : ℕ) (c : Fv F v) :
   have hd : DenseRange (algebraMap F (Fv F v)) := HeightOneSpectrum.denseRange_algebraMap F v
   have hval : ∀ t : F, Valued.v (algebraMap F (Fv F v) t) = v.valuation F t := fun t => by
     first
-      | exact HeightOneSpectrum.valuedAdicCompletion_eq_valuation v t
       | exact HeightOneSpectrum.valuedAdicCompletion_eq_valuation' v t
-      | rfl
   obtain ⟨π, hπ⟩ := HeightOneSpectrum.valuation_exists_uniformizer (K := F) v
   have hvp : Valued.v (algebraMap F (Fv F v) (π ^ k)) = WithZero.exp (-(k : ℤ)) := by
     rw [hval, map_pow, hπ, ← WithZero.exp_nsmul, nsmul_eq_mul, mul_neg, mul_one]
@@ -1441,11 +1438,6 @@ theorem exists_k_unif (v : HeightOneSpectrum (𝓞 F)) (ι : Type) [Fintype ι]
   rw [Real.dist_eq, abs_sub_comm] at h4
   exact h4.le
 
-theorem exists_reps {α : Type} (r : α → α → Prop) (hs : ∀ a b, r a b → r b a)
-    (ht : ∀ a b c, r a b → r b c → r a c) (t : Finset α) :
-    ∃ C ⊆ t, (∀ a ∈ C, ∀ b ∈ C, r a b → a = b) ∧ ∀ x ∈ t, x ∈ C ∨ ∃ c ∈ C, r x c :=
-  _root_.UpperTheory.Reformulated.B.Rc5.exists_reps r hs ht t
-
 theorem exists_centres (v : HeightOneSpectrum (𝓞 F)) (ι : Type) [Fintype ι] (k : ℕ)
     {K : Set (ι → Fv F v)} (hK : IsCompact K) :
     ∃ C : Finset (ι → Fv F v), (∀ c ∈ C, c ∈ K) ∧
@@ -1462,7 +1454,7 @@ theorem exists_centres (v : HeightOneSpectrum (𝓞 F)) (ι : Type) [Fintype ι]
       exact (continuous_apply i).sub continuous_const
     · intro i; simpa using zero_mem_ball v k
   obtain ⟨t, hcov⟩ := hK.elim_nhdsWithin_subcover' _ hnh
-  obtain ⟨C, hCt, hC, hCc⟩ := exists_reps (fun a b : ι → Fv F v => ∀ i, a i - b i ∈ ballV v k)
+  obtain ⟨C, hCt, hC, hCc⟩ := _root_.UpperTheory.Reformulated.B.Rc5.exists_reps (fun a b : ι → Fv F v => ∀ i, a i - b i ∈ ballV v k)
     (fun a b h i => by simpa using neg_mem_ball v k (h i))
     (fun a b c h h' i => by simpa using add_mem_ball v k (h i) (h' i)) (t.image Subtype.val)
   refine ⟨C, ?_, hC, ?_⟩
@@ -1725,7 +1717,7 @@ abbrev yV {ι : Type} (v : HeightOneSpectrum (𝓞 F)) (x : ι → F) : ι → F
 theorem term_insert {ι : Type} (θ : ℝ →+* Ainf F) {S : Finset (HeightOneSpectrum (𝓞 F))} {v : HeightOneSpectrum (𝓞 F)} (hv : v ∉ S)
     (φ : (ι → Ainf F) → ℝ) (ψ : ∀ v : HeightOneSpectrum (𝓞 F), (ι → Fv F v) → ℝ) (ε : ℝ) (x : ι → F) :
     term θ (insert v S) φ ψ ε x = ψ v (yV v x) * term θ S φ ψ ε x := by
-  simp only [term, Finset.prod_insert hv, yV]
+  simp only [term, Finset.prod_insert hv]
   ring
 
 theorem term_abs {ι : Type} (θ : ℝ →+* Ainf F) (S : Finset (HeightOneSpectrum (𝓞 F)))

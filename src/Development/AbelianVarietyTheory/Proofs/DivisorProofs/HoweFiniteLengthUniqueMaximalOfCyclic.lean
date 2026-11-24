@@ -564,7 +564,6 @@ theorem re_inner_apply_le_of_eigen {E : Type*} [NormedAddCommGroup E] [InnerProd
     rw [← inner_conj_symm (b i) y, Complex.norm_conj]
     first
       | (rw [Complex.mul_conj']; push_cast; rfl)
-      | (rw [mul_comm, Complex.conj_mul']; push_cast; rfl)
   have h1 : inner ℂ y (T y) = ∑ i, ((ev i * ‖inner ℂ (b i) y‖ ^ 2 : ℝ) : ℂ) := by
     rw [← b.sum_inner_mul_inner y (T y)]
     refine Finset.sum_congr rfl fun i _ => ?_
@@ -1288,24 +1287,6 @@ open Formalism.BasicNotions.TH GlobalTheory.FockAlg GlobalTheory.RealLift Global
 
 namespace GlobalTheory.HoweR.Places
 
-section One
-
-variable {p q : ℕ} {V : Type} [AddCommGroup V] [Module ℂ V]
-
-theorem mem_hwSub_iff (a : Mat p q →ₗ[ℂ] Module.End ℂ V) (μ : Ix p q → ℚ) (v : V) :
-    v ∈ hwSub a μ ↔ (∀ c, a (Eab c c) v = ((μ c : ℚ) : ℂ) • v) ∧ ∀ c d, posC c d → a (Eab c d) v = 0 := by
-  simp only [hwSub, wtSub, Submodule.mem_inf, Submodule.mem_iInf, LinearMap.mem_ker, LinearMap.sub_apply,
-    LinearMap.smul_apply, LinearMap.id_apply, sub_eq_zero]
-
-theorem hw_comm {a : Mat p q →ₗ[ℂ] Module.End ℂ V} {L : Module.End ℂ V} (h : ∀ Z v, L (a Z v) = a Z (L v))
-    {μ : Ix p q → ℚ} {v : V} (hv : v ∈ hwSub a μ) : L v ∈ hwSub a μ := by
-  rw [mem_hwSub_iff] at hv ⊢
-  refine ⟨fun c => ?_, fun c d hcd => ?_⟩
-  · rw [← h, hv.1 c, map_smul]
-  · rw [← h, hv.2 c d hcd, map_zero]
-
-end One
-
 section Quad
 
 variable {ι M : Type} [Fintype ι] [DecidableEq ι] [AddCommGroup M] [Module ℂ M]
@@ -1354,7 +1335,7 @@ theorem multi_place_step : ∀ (T : Type) [Fintype T] [DecidableEq T] (R S : T �
       have sH : ∀ Z, ∀ u ∈ H, a w Z u ∈ H := fun Z u hu => by
         rw [memH] at hu ⊢
         intro w' hw'
-        exact hw_comm (fun Z' x => hc w w' (fun e => hws (e ▸ hw')) Z Z' x) (hu w' hw')
+        exact _root_.GlobalTheory.DegKeep.hw_of_comm (fun Z' x => hc w w' (fun e => hws (e ▸ hw')) Z Z' x) (hu w' hw')
       have sU : ∀ c d, ∀ u ∈ H, units (a w) c d u ∈ H := fun c d u hu => sH _ u hu
       have hlt : N ⊓ H < N' ⊓ H := by
         refine lt_of_le_of_ne (inf_le_inf_right _ hNN'.le) fun e => hvN ?_

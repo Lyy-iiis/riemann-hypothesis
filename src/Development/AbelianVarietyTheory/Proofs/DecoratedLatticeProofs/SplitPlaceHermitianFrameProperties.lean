@@ -75,13 +75,10 @@ theorem eq_of_parts {A : Type*} [CommRing A] {e f m m' o : A} (k1 : (e + f) * (m
     (k2 : (e + f) * (m' - o) = m' - o) (k3 : e * m = e * m') (k4 : f * m' = f * m) : m = m' := by
   linear_combination (-1 : A) * k1 + k2 + k3 - k4
 
-theorem mt_unit (S : HSp D) (g : GA D S) :
-    ((mt S g).map (cA D)).transpose * (HSpace.gram S).map (incA D) * mt S g = (HSpace.gram S).map (incA D) := g.2
-
 theorem gram_mul_conj_inv (S : HSp D) (e : AE D) (g : GA D S) :
     (HSpace.gram S).map (incA D) * (cA D e • mt S g⁻¹) =
       ((e • mt S g).map (cA D)).transpose * (HSpace.gram S).map (incA D) := by
-  have hu := mt_unit S g
+  have hu := _root_.Formalism.L2.Theta.mt_rel S g
   have h1 : mt S g * mt S g⁻¹ = 1 := by rw [← mt_mul, mul_inv_cancel, mt_one]
   have hmap : (e • mt S g).map (cA D) = cA D e • (mt S g).map (cA D) := by
     ext i j; simp [Matrix.map_apply, map_mul]
@@ -210,7 +207,7 @@ theorem det_at (β : Frame p S n) (g : GL n k) :
   refine ⟨⟨p.e * a + (1 - p.e), p.e * c + (1 - p.e), ?_, ?_⟩, rfl, ?_⟩
   · linear_combination (2 - a - c) * hee + p.e * p.e * hac
   · linear_combination (2 - a - c) * hee + p.e * p.e * hac
-  · simp only [Units.val_mk, map_add (f := _), map_mul, map_sub, map_one, pr_e p, one_mul, sub_self, add_zero]
+  · simp only [map_add (f := _), map_mul, map_sub, map_one, pr_e p, one_mul, sub_self, add_zero]
     simp only [a]
     rw [RingHom.map_det, RingHom.mapMatrix_apply, gl_map, Matrix.mul_assoc, Matrix.det_comm' β.bb' β.b'b, Matrix.mul_assoc, β.b'b,
       Matrix.mul_one]
@@ -254,7 +251,6 @@ theorem mem_grpAt_iff (β : Frame p S n) (h : GA D S) : h ∈ grpAt S (· = p.v)
     simp only [Matrix.map_apply] at this
     rw [this]
     show M i j = (β.b * (β.b' * M * β.b) * β.b') i j
-    congr 1
     simp only [Matrix.mul_assoc]
     rw [← Matrix.mul_assoc β.b β.b', β.bb', Matrix.one_mul, Matrix.mul_one]
   · rintro ⟨g, rfl⟩ i j

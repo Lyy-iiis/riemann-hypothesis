@@ -73,7 +73,7 @@ open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.continuous_theta_kernel_components : ∀ {D : D7} {t ρ : ℕ} {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsCharAF D.host.F ψ) (V : HSp D) (b₀ : HermE D ρ) (b : hermA D t), Continuous (fun z : Mx D V.rank ρ × Mx D V.rank t => pch ψ b.1 (ip V z.2 z.2)) ∧ Continuous (fun z : Mx D V.rank ρ × Mx D V.rank t => yv V b₀ z) ∧ Continuous (fun q : Mx D ρ t × (Mx D V.rank ρ × Mx D V.rank t) => ψ (trA (Matrix.trace (pr b₀ q.1 (yv V b₀ q.2))))) ∧ Continuous (fun z : Mx D V.rank ρ × Mx D V.rank t => pch ψ b.1 (qv V b₀ z)) ∧ (∀ T, ‖pch ψ b.1 T‖ = 1) ∧ ∀ u, ‖ψ u‖ = 1 := by
-  first | exact @GlobalTheory.CompanionTheory.RCellCont.continuity_characters_projection | exact GlobalTheory.CompanionTheory.RCellCont.continuity_characters_projection | (intros; apply GlobalTheory.CompanionTheory.RCellCont.continuity_characters_projection <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.RCellCont.continuity_characters_projection
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ContinuousThetaKernelComponentsStatement =====
@@ -190,7 +190,7 @@ open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.integrable_schwartz_restriction_columns : ∀ {D : D7} {n r t : ℕ} {θ : InfFam D} (hθ : IsInfFam θ) {a : ℕ} (hn : r + t = n) (μt : Measure (Mx D a t)) [μt.IsAddHaarMeasure] (Φ : schwartzA θ a n) (x : Mx D a r), Integrable (fun v => Φ.1 (jn hn x v)) μt := by
-  first | exact @GlobalTheory.CompanionTheory.ColSlice.integrable_slice | exact GlobalTheory.CompanionTheory.ColSlice.integrable_slice | (intros; apply GlobalTheory.CompanionTheory.ColSlice.integrable_slice <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.ColSlice.integrable_slice
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.IntegrableSchwartzRestrictionColumnsStatement =====
@@ -244,10 +244,6 @@ theorem block_matrix_mul {n : ℕ} (a b c d a' b' c' d' : Mx D n n) :
 theorem mat_mul_mat {n : ℕ} (g h : G D n) : mat (g * h) = mat g * mat h := by
   simp only [mat, map_mul, Units.val_mul]
 
-theorem trace_adj_eq {n : ℕ} (M : Mx D n n) : Matrix.trace (adj M) = cA D (Matrix.trace M) := by
-  rw [adj, Matrix.trace_transpose]
-  exact (AddMonoidHom.map_trace (cA D).toAddMonoidHom M).symm
-
 theorem adj_gram (b₀ : HermE D ρ) : adj (b₀.1.map (incA D)) = b₀.1.map (incA D) := by
   ext i j
   have h := congrFun (congrFun b₀.2 i) j
@@ -267,7 +263,7 @@ theorem pr_neg_left (b₀ : HermE D ρ) (x y : Mx D ρ t) : pr b₀ (-x) y = -pr
 
 theorem trA_trace_pr_swap (b₀ : HermE D ρ) (x y : Mx D ρ t) :
     trA (Matrix.trace (pr b₀ y x)) = trA (Matrix.trace (pr b₀ x y)) := by
-  rw [← adj_pr b₀ x y, trace_adj_eq]
+  rw [← adj_pr b₀ x y, _root_.GlobalTheory.MixModel.trace_adj]
   exact GlobalTheory.DualPairCheck.trace_cA _
 
 theorem conj_char {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsCharAF D.host.F ψ) (u : AF D.host.F) :
@@ -340,7 +336,7 @@ open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.theta_fourier_coefficient_weyl_integral : ∀ {D : D7} {t ρ : ℕ} {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsCharAF D.host.F ψ) {χ : (AE D)ˣ →* Circle} (hχ : IsHeckeChar D χ) {θ : InfFam D} {b₀ : HermE D ρ} {μ : Measure (Mx D ρ t)} {Ω : G D t → Mx D ρ t → ℂ} (hΩ : IsTh ψ χ θ b₀ μ Ω) {nb : hermA D t → G D t} (hnb : IsNMap nb) {w : G D t} (hw : IsW w) (b : hermA D t) (y₀ : Mx D ρ t), ∫ y, ψ (trA (Matrix.trace (pr b₀ y y₀))) * conj (Ω (w * nb b) y) ∂μ = conj (ψ (halfTr (Matrix.trace (mm b.1 (pr b₀ y₀ y₀)))) * Ω 1 y₀) := by
-  first | exact @GlobalTheory.CompanionTheory.RCellInv.fourier_inv | exact GlobalTheory.CompanionTheory.RCellInv.fourier_inv | (intros; apply GlobalTheory.CompanionTheory.RCellInv.fourier_inv <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.RCellInv.fourier_inv
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ThetaFourierCoefficientWeylIntegralStatement =====
@@ -499,7 +495,7 @@ open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.weil_representation_fourier_coefficient : ∀ {D : D7} {n r t : ℕ} (hP : PartFT) {hn : r + t = n} (M : Maps D hn) (V : HSp D) {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsCharAF D.host.F ψ) {χ : (AE D)ˣ →* Circle} (hχ : IsHeckeChar D χ) (hη : ResEta D χ V.rank) {θ : InfFam D} (hθ : IsInfFam θ) {μ : Measure (Mx D V.rank n)} (hμ : ∃ 𝓕, IsCovolOne (ratMx D V.rank n) μ 𝓕) {ω : G D n →* Module.End ℂ (schwartzA θ V.rank n)} (hω : IsWeilSch ψ χ θ V μ ω) {μr : Measure (Mx D V.rank r)} (hμr : ∃ 𝓕, IsCovolOne (ratMx D V.rank r) μr 𝓕) {μt : Measure (Mx D V.rank t)} (hμt : ∃ 𝓕, IsCovolOne (ratMx D V.rank t) μt 𝓕) (Φ : schwartzA θ V.rank n) {nb : hermA D t → G D t} (hnb : IsNMap nb) {w : G D t} (hw : IsW w) (b : hermA D t) (y : Mx D r t) (x : Mx D V.rank r), (ω (M.sh y * M.emb (w * nb b) * 1) Φ).1 (jn hn x 0) = ∫ v, pch ψ b.1 (ip V v v) * Φ.1 (jn hn x v) * ψ (trA (Matrix.trace (ip V (mm x y) v))) ∂μt := by
-  first | exact @GlobalTheory.CompanionTheory.CellVal.weil_translate_frame | exact GlobalTheory.CompanionTheory.CellVal.weil_translate_frame | (intros; apply GlobalTheory.CompanionTheory.CellVal.weil_translate_frame <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.CellVal.weil_translate_frame
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.WeilRepresentationFourierCoefficientStatement =====
@@ -612,7 +608,7 @@ open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.weil_representation_theta_integral : ∀ {D : D7} {n r t : ℕ} (hP : PartFT) {hn : r + t = n} (M : Maps D hn) (m : Meas D r t) (V : HSp D) {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsCharAF D.host.F ψ) {χ : (AE D)ˣ →* Circle} (hχ : IsHeckeChar D χ) (hη : ResEta D χ V.rank) {θ : InfFam D} (hθ : IsInfFam θ) {μ : Measure (Mx D V.rank n)} (hμ : ∃ 𝓕, IsCovolOne (ratMx D V.rank n) μ 𝓕) {ω : G D n →* Module.End ℂ (schwartzA θ V.rank n)} (hω : IsWeilSch ψ χ θ V μ ω) {μr : Measure (Mx D V.rank r)} (hμr : ∃ 𝓕, IsCovolOne (ratMx D V.rank r) μr 𝓕) {μt : Measure (Mx D V.rank t)} (hμt : ∃ 𝓕, IsCovolOne (ratMx D V.rank t) μt 𝓕) (b₀ : HermE D r) {fib : Measure (Mx D V.rank r)} (hfib : IsFib ψ θ V b₀ μr m.lz fib) (Φ : schwartzA θ V.rank n) (g : G D n), Wz M m ψ b₀ (fun g => (ω g Φ).1 0) g = ∫ x, (ω g Φ).1 (jn hn x 0) ∂fib := by
-  first | exact @GlobalTheory.CompanionTheory.WzFib.wz_eq_fib | exact GlobalTheory.CompanionTheory.WzFib.wz_eq_fib | (intros; apply GlobalTheory.CompanionTheory.WzFib.wz_eq_fib <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WzFib.wz_eq_fib
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.WeilRepresentationThetaIntegralStatement =====
@@ -686,19 +682,10 @@ theorem inner_product_mul_eq_pairing (V : HSp D) (b₀ : HermE D r) (hb : b₀.1
   simp only [ip, pr, yv, mm, adj_mul]
   rw [← Matrix.mul_assoc (b₀.1.map (incA D)), h1, Matrix.one_mul, Matrix.mul_assoc]
 
-theorem conj_psi {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsCharAF D.host.F ψ) (u : AF D.host.F) : conj (ψ u) = ψ (-u) := by
-  have h1 : ψ u * conj (ψ u) = 1 := by
-    rw [Complex.mul_conj, Complex.normSq_eq_norm_sq, hψ.2.1 u]
-    simp
-  have h2 : ψ u * ψ (-u) = 1 := by
-    rw [← AddChar.map_add_eq_mul, add_neg_cancel, AddChar.map_zero_eq_one]
-  have h0 : ψ u ≠ 0 := fun h => by simp [h] at h1
-  exact mul_left_cancel₀ h0 (h1.trans h2.symm)
-
 theorem character_quadratic_form_identity (V : HSp D) {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsCharAF D.host.F ψ) (b₀ : HermE D r) (b : hermA D t)
     (z : Mx D V.rank r × Mx D V.rank t) :
     pch ψ b.1 (ip V z.2 z.2) * conj (ψ (halfTr (Matrix.trace (mm b.1 (pr b₀ (yv V b₀ z) (yv V b₀ z)))))) = pch ψ b.1 (qv V b₀ z) := by
-  rw [conj_psi hψ]
+  rw [_root_.GlobalTheory.CompanionTheory.RCellInv.conj_char hψ]
   simp only [pch, qv, mm]
   rw [← AddChar.map_add_eq_mul, Matrix.mul_sub, Matrix.trace_sub]
   congr 1
@@ -764,7 +751,7 @@ theorem integrable_fib (hP : PartFT) {hn : r + t = n} (M : Maps D hn) (m : Meas 
   have hcΦ : Continuous fun z : Mx D V.rank r × Mx D V.rank t => Φ.1 (jn hn z.1 z.2) :=
     (GlobalTheory.RegSch.CentreWeilComm.continuous_of_mem hθ Φ).comp (c_jn_cont hn)
   have hIF : Integrable (fun z : Mx D V.rank r × Mx D V.rank t => F.1 (jn hn z.1 z.2)) (fib.prod μt) := by
-    refine (integrable_prod_iff hcF.aestronglyMeasurable).2 ⟨ae_of_all _ fun x => integrable_schwartz_slice hθ hn μt F x, ?_⟩
+    refine (integrable_prod_iff hcF.aestronglyMeasurable).2 ⟨ae_of_all _ fun x => _root_.GlobalTheory.CompanionTheory.ColSlice.integrable_slice hθ hn μt F x, ?_⟩
     refine (hint.re).congr (ae_of_all _ fun x => ?_)
     have e1 : ∀ v, ‖F.1 (jn hn x v)‖ = (F.1 (jn hn x v)).re := by
       intro v
@@ -775,7 +762,7 @@ theorem integrable_fib (hP : PartFT) {hn : r + t = n} (M : Maps D hn) (m : Meas 
     simp only [e1]
     show (RCLike.re ((ω (M.emb w) F).1 (jn hn x 0))) = _
     rw [← hm x]
-    exact (integral_re (integrable_schwartz_slice hθ hn μt F x)).symm
+    exact (integral_re (_root_.GlobalTheory.CompanionTheory.ColSlice.integrable_slice hθ hn μt F x)).symm
   exact hIF.mono hcΦ.aestronglyMeasurable (ae_of_all _ fun z =>
     (hF _).2.trans ((le_abs_self _).trans (Complex.abs_re_le_norm _)))
 

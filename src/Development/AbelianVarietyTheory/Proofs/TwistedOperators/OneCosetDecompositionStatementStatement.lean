@@ -406,20 +406,11 @@ open ValuativeRel
 
 namespace GlobalTheory.StairFrameFJ
 
-private theorem isIntegral_sqrtMinusD' (D : D7) : IsIntegral ℤ D.host.sqrtMinusD := by
-  refine IsIntegral.of_pow (n := 2) two_pos ?_
-  have hsq : D.host.sqrtMinusD ^ 2 = -(D.host.d : D.host.E) := by
-    unfold Host.sqrtMinusD
-    exact D.host.sqd_sq
-  rw [hsq]
-  refine IsIntegral.neg ?_
-  simpa using (isIntegral_algebraMap (R := ℤ) (A := D.host.E) (x := (D.host.d : ℤ)))
-
 theorem isIntegral_inv_neg_xi0 (D : D7) : IsIntegral ℤ (-D.host.xi0)⁻¹ := by
 
   unfold Host.xi0
   rw [neg_div, neg_neg, one_div, inv_inv]
-  refine IsIntegral.mul ?_ (isIntegral_sqrtMinusD' D)
+  refine IsIntegral.mul ?_ (_root_.Formalism.L2.Pj.sqrtMinusD_isIntegral D)
   simpa using (isIntegral_algebraMap (R := ℤ) (A := D.host.E) (x := ((Ideal.absNorm D.host.ccK : ℕ) : ℤ)))
 
 private theorem mem_integer_of_isIntegral_int {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k]
@@ -495,14 +486,6 @@ namespace GlobalTheory.DepthColumn
 
 variable {D : D7} {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
 
-theorem sec_mul_right (p : GlobalTheory.FinPl.SplitPt D k) (x : k) (b : AE D) : p.sec x * b = p.sec (x * p.pr b) := by
-  have h1 : p.sec x = p.e * p.sec x := by
-    have := p.sec_pr (p.sec x)
-    rwa [p.pr_sec] at this
-  have h2 := p.sec_pr (p.sec x * b)
-  rw [map_mul, p.pr_sec, ← mul_assoc, ← h1] at h2
-  exact h2.symm
-
 theorem sec_mem_idV (p : GlobalTheory.FinPl.SplitPt D k) {I : GlobalTheory.SeeSaw.FI D} {a : D.host.E} (ha : a ∈ I) (ha0 : a ≠ 0) {c : k}
     (hc : valuation k c ≤ valuation k (p.pr (incA D a))) : p.sec c ∈ GlobalTheory.SeeSaw.idV I p.v := by
   have h0 : p.pr (incA D a) ≠ 0 := (map_ne_zero_iff (p.pr.comp (incA D)) (p.pr.comp (incA D)).injective).2 ha0
@@ -522,7 +505,7 @@ theorem sec_mem_idV (p : GlobalTheory.FinPl.SplitPt D k) {I : GlobalTheory.SeeSa
     rw [Valuation.mem_integer_iff, map_div₀]
     exact div_le_one_of_le₀ hc zero_le'
   have h1 := key _ ((GlobalTheory.SeeSaw.idV_one_eq_intAt D p.v _).2 ⟨p.sec_mem_idAt _, (p.int_iff _).1 hint⟩)
-  rwa [mul_comm, sec_mul_right, div_mul_cancel₀ _ h0] at h1
+  rwa [mul_comm, _root_.GlobalTheory.FinPl.FrameLat.sec_mul_right, div_mul_cancel₀ _ h0] at h1
 
 def prInt (p : GlobalTheory.FinPl.SplitPt D k) {PP : HeightOneSpectrum (𝓞 D.host.E)} (he : Formalism.L2.NTheta.IsIdemAt p.e PP) :
     𝓞 D.host.E →+* 𝒪[k] :=
@@ -724,7 +707,7 @@ theorem col_mem_depth : OnStd fun {D} _ _ {sc} {G} W F => ∀ σ (h : 2 * (σ + 
         incA D ((G.colDec (2 * (σ + 1) + 1) (by omega) (by omega)).a j ⟨q.1, by omega⟩) := by
     funext j
     have e1 : p.sec s * incA D ((-D.host.xi0) ^ (q.1 + 1)) = p.sec ((ϖ : k) ^ (G.pl.depth sc v * (q.1 + 1))) := by
-      rw [sec_mul_right, map_pow, map_pow, hs, mul_assoc, ← mul_pow, inv_mul_cancel₀ hξ, one_pow, mul_one]
+      rw [_root_.GlobalTheory.FinPl.FrameLat.sec_mul_right, map_pow, map_pow, hs, mul_assoc, ← mul_pow, inv_mul_cancel₀ hξ, one_pow, mul_one]
     simp only [Pi.smul_apply, smul_eq_mul, HypDec.jX, GlobalTheory.MixModel.rat, hJ, colsOf, Matrix.map_apply, map_mul]
     rw [← mul_assoc, e1]
     rfl
@@ -786,7 +769,7 @@ theorem _root_.GlobalTheory.T.split_frame_lattice_functional : OnStd fun {D} _ _
   ∀ a ∈ (pcFB W F σ h h').A₁, ∀ (q : Fin (σ + 1)) i, ∃ z ∈ IsLocalRing.maximalIdeal 𝒪[k] ^ G.pl.depth sc v,
     (z : k) = (ϖ : k) ^ (G.pl.depth sc v * (q.1 + 1)) * (p.pr (incA D (-D.host.xi0)))⁻¹ ^ (q.1 + 1) *
       (β.b' *ᵥ fun j => p.pr (a j q)) i := by
-  first | exact @GlobalTheory.DepthColumn.col_mem_depth | exact GlobalTheory.DepthColumn.col_mem_depth | (intros; apply GlobalTheory.DepthColumn.col_mem_depth <;> assumption)
+  first | exact @GlobalTheory.DepthColumn.col_mem_depth
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SplitFrameLatticeFunctionalStatement =====
@@ -863,7 +846,7 @@ theorem GlobalTheory.FrameScale.clauses : OnStd fun {D} _ _ {sc} {G} W F => ∀ 
         fun i => p.pr (incA D (star ((G.colDec (2 * σ + 2) (by omega) h').a i ⟨q.1, by omega⟩))) := by
       funext i
       rw [hcol]
-      simp only [map_mul, GlobalTheory.DualPairCheck.cA_incA, star_pow, map_pow, Pi.smul_apply, smul_eq_mul]
+      simp only [map_mul, GlobalTheory.DualPairCheck.cA_incA, map_pow, Pi.smul_apply, smul_eq_mul]
     have hsm : ∀ (x : k) (u : Fin (G.V (.grid (2 * σ + 2) 0)).rank → k)
         (M : Matrix (Fin (G.V (.grid (2 * σ + 2) 0)).rank) (Fin (G.V (.grid (2 * σ + 2) 0)).rank) k),
         (x • u) ᵥ* M = x • (u ᵥ* M) := by
@@ -1003,7 +986,7 @@ theorem _root_.GlobalTheory.T.split_local_frame_diagonal : OnStd fun {D} _ _ {sc
     (∀ q i, ∃ z ∈ IsLocalRing.maximalIdeal 𝒪[k] ^ G.pl.depth sc v, (z : k) = s q * (β.b' *ᵥ fun j => p.pr (a j q)) i) ∧
     (∀ q i, ∃ z ∈ IsLocalRing.maximalIdeal 𝒪[k] ^ G.pl.depth sc v, (z : k) = t q * ((fun j => p.pr (cA D (a j q))) ᵥ*
       ((G.V (.grid (2 * σ + 2) 0)).gram.map (fun c => p.pr (incA D c)) * β.b)) i) := by
-  first | exact @GlobalTheory.FrameFB.frame_fb | exact GlobalTheory.FrameFB.frame_fb | (intros; apply GlobalTheory.FrameFB.frame_fb <;> assumption)
+  first | exact @GlobalTheory.FrameFB.frame_fb
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SplitLocalFrameDiagonalStatement =====
@@ -1056,7 +1039,7 @@ open scoped nonZeroDivisors ContDiff
 open GlobalTheory.AscFin
 
 theorem _root_.GlobalTheory.T.exists_level_element_off_place : OnStd fun {D} _ _ {sc} {G} W F => ∀ σ (h : 2 * (σ + 1) + 2 ≤ D.R.m) (h' : 2 * σ + 2 ≤ D.R.m), ∀ v ∈ G.pl.S0, ∀ g ∈ grpAt (G.V (.grid (2 * σ + 2) 0)) (· = v), ∀ (u : UX D (σ + 1)), ∀ a ∈ (pcFB W F σ h h').A₁, MxOff (· = v) (mt (G.V (.grid (2 * σ + 2) 0)) g⁻¹ ⬝ (xFB F σ h' ⬝ u.1.1) - xFB F σ h' - a) → ∃ k ∈ lev G (.grid (2 * σ + 2) 0), k ∈ grpAt (G.V (.grid (2 * σ + 2) 0)) (· = v) ∧ MxOff (· = v) (mt (G.V (.grid (2 * σ + 2) 0)) k ⬝ xFB F σ h' - mt (G.V (.grid (2 * σ + 2) 0)) g⁻¹ ⬝ (xFB F σ h' ⬝ u.1.1)) := by
-  first | exact @GlobalTheory.CosetFJ.besselOrbit_at_badPlace_eq_congruenceTranslate | exact GlobalTheory.CosetFJ.besselOrbit_at_badPlace_eq_congruenceTranslate | (intros; apply GlobalTheory.CosetFJ.besselOrbit_at_badPlace_eq_congruenceTranslate <;> assumption)
+  first | exact @GlobalTheory.CosetFJ.besselOrbit_at_badPlace_eq_congruenceTranslate
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsLevelElementOffPlaceStatement =====
@@ -1168,7 +1151,7 @@ open scoped nonZeroDivisors ContDiff
 open GlobalTheory.AscFin
 
 theorem _root_.GlobalTheory.T.of_mul_trivialAtPlaces_subset : ∀ {D : D7} {V₀ W W₀ : HSp D} {ρ σ : ℕ} (dW : HypDec W W₀ σ) (p : Pieces V₀ W W₀ ρ σ) (x : Mx D W.rank ρ) (y : Mx D V₀.rank σ) (ψ : AddChar (AF D.host.F) ℂ) (P Q : GlobalTheory.FinPl.Pl D → Prop) (g₁ g₂ : GA D W), (∀ v, Q v → P v) → g₁ ∈ grpAt W Q → g₂ ∈ grpOff W Q → g₁ * g₂ = g₂ * g₁ → Cond dW p x y ψ P (g₁ * g₂) → Cond dW p x y ψ Q g₁ := by
-  first | exact @GlobalTheory.AscFin.Cond.of_mul_grpOff | exact GlobalTheory.AscFin.Cond.of_mul_grpOff | (intros; apply GlobalTheory.AscFin.Cond.of_mul_grpOff <;> assumption)
+  first | exact @GlobalTheory.AscFin.Cond.of_mul_grpOff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.OfMulTrivialAtPlacesSubsetStatement =====
@@ -1260,7 +1243,7 @@ open scoped nonZeroDivisors ContDiff
 open GlobalTheory.AscFin
 
 theorem _root_.GlobalTheory.T.one_coset_decomposition_statement : OnStd fun {D} _ _ {sc} {G} W F => ∀ σ (h : 2 * (σ + 1) + 2 ≤ D.R.m) (h' : 2 * σ + 2 ≤ D.R.m), ∀ g ∈ grpAt _ (fun v => v ∈ G.pl.S0), Cond (F.dB σ h') (pcFB W F σ h h') (xFB F σ h') 0 W.ψ (fun v => v ∈ G.pl.S0) g → ∃ r ∈ Rgrp _ (xFB F σ h'), r ∈ grpAt _ (fun v => v ∈ G.pl.S0) ∧ ∃ k ∈ lev G (.grid (2 * σ + 2) 0), k ∈ grpAt _ (fun v => v ∈ G.pl.S0) ∧ g = r * k := by
-  first | exact @GlobalTheory.CosetFJ.one_coset_decomposition_base | exact GlobalTheory.CosetFJ.one_coset_decomposition_base | (intros; apply GlobalTheory.CosetFJ.one_coset_decomposition_base <;> assumption)
+  first | exact @GlobalTheory.CosetFJ.one_coset_decomposition_base
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.OneCosetDecompositionStatementStatement =====

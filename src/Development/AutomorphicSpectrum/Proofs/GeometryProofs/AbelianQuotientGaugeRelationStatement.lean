@@ -234,13 +234,6 @@ theorem actComm_aug_X {R : Type} [CommRing R] {κ : Type} (m : ℕ) (q : κ) :
   show MvPolynomial.aeval (fun _ : κ => (0 : R)) (MvPolynomial.X q) = 0
   simp
 
-theorem actComm_homAt_comp {X : Scheme.{0}} {S : Type} [CommRing S] (x0 : Sp S ⟶ X) {A B C : Type} [CommRing A]
-    [Algebra S A] [CommRing B] [Algebra S B] [CommRing C] [Algebra S C] (f : A →ₐ[S] B) (g : B →ₐ[S] C) :
-    homAt x0 g ≫ homAt x0 f = homAt x0 (g.comp f) := by
-  apply Over.OverMorphism.ext
-  simp only [homAt, Over.comp_left, Over.homMk_left, spMap, ← Spec.map_comp, ← CommRingCat.ofHom_comp]
-  rfl
-
 section Fib
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {X : Scheme.{0}} (t : SAB H X)
@@ -283,11 +276,11 @@ theorem substitution_action_commutes : ∀ (E : Type) [Field E] [NumberField E] 
   set B := jetSubstP (S := k) m fun p : Fin 1 × Fin d' => psTrunc m (gB.B.A.act a p.2) with hB
   have h1 : homAt (𝟙 (Sp k)) (A.comp (sub1 Qs m)) ≫ gB.x m =
       fibPt t x (g.x m) ≫ (Over.pullback x).map (t.act.act a) ≫ Q.q := by
-    rw [← actComm_homAt_comp, Category.assoc, ← hQ m, ← Category.assoc, homAt_fibPt, ← g.chart.act m a,
+    rw [← _root_.Formalism.MainNotions.ModuliIntegralCharts.H1.GermD.homAt_comp, Category.assoc, ← hQ m, ← Category.assoc, homAt_fibPt, ← g.chart.act m a,
       ← fibPt_map, Category.assoc]
   have h2 : homAt (𝟙 (Sp k)) ((sub1 Qs m).comp B) ≫ gB.x m =
       fibPt t x (g.x m) ≫ (Over.pullback x).map (t.act.act a) ≫ Q.q := by
-    rw [← actComm_homAt_comp, Category.assoc, ← gB.chart.act m a, Q.act_q, ← Category.assoc, ← Category.assoc, ← hQ m]
+    rw [← _root_.Formalism.MainNotions.ModuliIntegralCharts.H1.GermD.homAt_comp, Category.assoc, ← gB.chart.act m a, Q.act_q, ← Category.assoc, ← Category.assoc, ← hQ m]
   have haug : ∀ χ : Jet k (Fin 1 × Fin d') m →ₐ[k] Jet k (Fin 1 × Fin d) m,
       (jetAug : Jet k (Fin 1 × Fin d) m →ₐ[k] k).comp χ = jetAug →
       ∀ q, (jetAug : Jet k (Fin 1 × Fin d) m →ₐ[k] k) (χ (Ideal.Quotient.mk _ (MvPolynomial.X q))) = 0 := by
@@ -299,7 +292,7 @@ theorem substitution_action_commutes : ∀ (E : Type) [Field E] [NumberField E] 
     rw [← AlgHom.comp_assoc, sub1, actComm_aug_subst, hB, actComm_aug_subst]
   have hz : homAt (𝟙 (Sp k)) (jetAug : Jet k (Fin 1 × Fin d) m →ₐ[k] k) ≫
       (homAt (𝟙 (Sp k)) (A.comp (sub1 Qs m)) ≫ gB.x m) = 1 := by
-    rw [← Category.assoc, actComm_homAt_comp, a1]
+    rw [← Category.assoc, _root_.Formalism.MainNotions.ModuliIntegralCharts.H1.GermD.homAt_comp, a1]
     exact gB.chart.zero m
   exact ((GlobalTheory.T.formal_germ_dimension_unique E H hst (Sp k) Q.tB k (𝟙 (Sp k)) d' gB).2 (Fin 1 × Fin d) m _ hz).unique
     ⟨haug _ a1, rfl⟩ ⟨haug _ a2, h1.trans h2.symm⟩
@@ -322,7 +315,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.abelian_quotient_germ_substitution : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (X : Scheme.{0}) (t : SAB H X) (k : Type) [Field k] [IsAlgClosed k] (p : ℕ) [Fact p.Prime] [CharP k p] (x : Sp k ⟶ X) (Q : AbQuot t x) (d d' : ℕ) (g : GermAt t x d) (gB : GermAt Q.tB (𝟙 (Sp k)) d'), ∀ Qs : Fin d' → PS k 1 d, (∀ i, MvPowerSeries.constantCoeff (Qs i) = 0) → (∀ m, fibPt t x (g.x m) ≫ Q.q = homAt (𝟙 (Sp k)) (sub1 Qs m) ≫ gB.x m) → ∀ (m : ℕ) (a : 𝓞 E), (jetSubstP m fun p : Fin 1 × Fin d => psTrunc m (g.B.A.act a p.2)).comp (sub1 Qs m) = (sub1 Qs m).comp (jetSubstP m fun p : Fin 1 × Fin d' => psTrunc m (gB.B.A.act a p.2)) := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.substitution_action_commutes | exact GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.substitution_action_commutes | (intros; apply GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.substitution_action_commutes <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.substitution_action_commutes
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.AbelianQuotientGermSubstitutionStatement =====
@@ -475,16 +468,6 @@ theorem fib_ext {T : Over (Sp k)} {p p' : T ⟶ GF t x}
     (h : p.left ≫ pullback.fst t.G.hom x = p'.left ≫ pullback.fst t.G.hom x) : p = p' :=
   Over.OverMorphism.ext (pullback.hom_ext h ((Over.w p).trans (Over.w p').symm))
 
-theorem fibPt_fst {A : Type} [CommRing A] [Algebra k A] (y : overAt x A ⟶ t.G) :
-    (fibPt t x y).left ≫ pullback.fst t.G.hom x = y.left :=
-  pullback.lift_fst _ _ _
-
-theorem homAt_fib {A B : Type} [CommRing A] [Algebra k A] [CommRing B] [Algebra k B] (f : A →ₐ[k] B)
-    (y : overAt x A ⟶ t.G) : homAt (𝟙 (Sp k)) f ≫ fibPt t x y = fibPt t x (homAt x f ≫ y) := by
-  refine fib_ext t x ?_
-  rw [Over.comp_left, Category.assoc, fibPt_fst, fibPt_fst, Over.comp_left]
-  rfl
-
 def jr (xm : ∀ m, jOG x d m 1 ⟶ t.G) (m : ℕ) :
     overAt (𝟙 (Sp k)) (Jet k (Fin 2 × Fin d) m) ⟶ GF t x ⊗ GF t x :=
   lift (fibPt t x (jptG t x d xm m (0 : Fin 2))) (fibPt t x (jptG t x d xm m (1 : Fin 2)))
@@ -506,17 +489,17 @@ theorem jr_sq (xm : ∀ m, jOG x d m 1 ⟶ t.G) (m : ℕ) :
     congr 1
     · apply Over.OverMorphism.ext
       show (jr t x xm m).left ≫ (fst (GF t x) (GF t x)).left ≫ pullback.fst t.G.hom x = _
-      rw [← Category.assoc, ← Over.comp_left, jr, lift_fst, fibPt_fst]
+      rw [← Category.assoc, ← Over.comp_left, jr, lift_fst, _root_.GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.fibPt_fst]
     · apply Over.OverMorphism.ext
       show (jr t x xm m).left ≫ (snd (GF t x) (GF t x)).left ≫ pullback.fst t.G.hom x = _
-      rw [← Category.assoc, ← Over.comp_left, jr, lift_snd, fibPt_fst]
+      rw [← Category.assoc, ← Over.comp_left, jr, lift_snd, _root_.GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.fibPt_fst]
   exact congrArg (fun f => f.left) h
 
 theorem jr_sqPt (xm : ∀ m, jOG x d m 1 ⟶ t.G) (m : ℕ) (a : t.G ⊗ t.G ⟶ t.G) :
     jr t x xm m ≫ sqPt t x a =
       fibPt t x (lift (jptG t x d xm m (0 : Fin 2)) (jptG t x d xm m (1 : Fin 2)) ≫ a) := by
   refine fib_ext t x ?_
-  rw [fibPt_fst, Over.comp_left, Over.comp_left, Category.assoc, ← jr_sq]
+  rw [_root_.GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.fibPt_fst, Over.comp_left, Over.comp_left, Category.assoc, ← jr_sq]
   show _ ≫ (toF t x _ _).left ≫ _ = _
   rw [Category.assoc]
   congr 1
@@ -549,7 +532,7 @@ theorem jr_right {f : Fin d → PS k 1 d} {m : ℕ} {b : t.G ⟶ t.G} (h : xm m 
     (I : Finset (Fin 2)) :
     jr t x xm m ≫ sqPt t x (psum t.G ![fst t.G t.G, snd t.G t.G ≫ b] I) =
       homAt (𝟙 (Sp k)) (sgR f m) ≫ fibPt t x (psum t.G ![jptG t x d xm m (0 : Fin 2), jptG t x d xm m (1 : Fin 2)] I) := by
-  rw [jr_sqPt, homAt_fib]
+  rw [jr_sqPt, _root_.GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.homAt_fibPt]
   congr 1
   refine (psum_hom (preHom _) _ I).trans (Eq.trans ?_ (psum_hom (preHom _) _ I).symm)
   refine congrArg (fun z => psum t.G z I) (funext fun i => ?_)
@@ -561,7 +544,7 @@ theorem jr_left {f : Fin d → PS k 1 d} {m : ℕ} {b : t.G ⟶ t.G} (h : xm m �
     (I : Finset (Fin 2)) :
     jr t x xm m ≫ sqPt t x (psum t.G ![fst t.G t.G ≫ b, snd t.G t.G] I) =
       homAt (𝟙 (Sp k)) (sgL f m) ≫ fibPt t x (psum t.G ![jptG t x d xm m (0 : Fin 2), jptG t x d xm m (1 : Fin 2)] I) := by
-  rw [jr_sqPt, homAt_fib]
+  rw [jr_sqPt, _root_.GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.homAt_fibPt]
   congr 1
   refine (psum_hom (preHom _) _ I).trans (Eq.trans ?_ (psum_hom (preHom _) _ I).symm)
   refine congrArg (fun z => psum t.G z I) (funext fun i => ?_)
@@ -580,7 +563,7 @@ theorem pt_q (Q : AbQuot t x) (xm : ∀ m, jOG x d m 1 ⟶ t.G) (xB : ∀ m, jOG
     (Qs : Fin d' → PS k 1 d) (hq : ∀ m, fibPt t x (xm m) ≫ Q.q = homAt (𝟙 (Sp k)) (sub1 Qs m) ≫ xB m) (m : ℕ)
     (i : Fin 2) : fibPt t x (jptG t x d xm m i) ≫ Q.q =
       homAt (𝟙 (Sp k)) (sub2 Qs m) ≫ jptG Q.tB (𝟙 (Sp k)) d' xB m i := by
-  rw [jptG, jptG, ← homAt_fib, Category.assoc, hq, ← Category.assoc, homAt_comp, ← double_substitution_jet_inclusion, ← homAt_comp,
+  rw [jptG, jptG, ← _root_.GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.homAt_fibPt, Category.assoc, hq, ← Category.assoc, homAt_comp, ← double_substitution_jet_inclusion, ← homAt_comp,
     Category.assoc]
 
 theorem jr_qq (Q : AbQuot t x) (xm : ∀ m, jOG x d m 1 ⟶ t.G) (xB : ∀ m, jOG (𝟙 (Sp k)) d' m 1 ⟶ Q.tB.G)
@@ -694,7 +677,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.abelian_quotient_gauge_relation : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (X : Scheme.{0}) (t : SAB H X) (k : Type) [Field k] [IsAlgClosed k] (p : ℕ) [Fact p.Prime] [CharP k p] (x : Sp k ⟶ X) (Q : AbQuot t x) (d d' : ℕ) (g : GermAt t x d) (gB : GermAt Q.tB (𝟙 (Sp k)) d'), ∀ (w : LB.Iso (t.PP.L.pull (pullback.fst t.G.hom x)) (Q.tB.PP.L.pull Q.q.left)), w.IsGen → ∀ Qs : Fin d' → PS k 1 d, (∀ i, MvPowerSeries.constantCoeff (Qs i) = 0) → (∀ m, fibPt t x (g.x m) ≫ Q.q = homAt (𝟙 (Sp k)) (sub1 Qs m) ≫ gB.x m) → ∀ lam : PS k 2 d, (∀ m, ∃ U : (Jet k (Fin 2 × Fin d) m)ˣ, (U : Jet k (Fin 2 × Fin d) m) = psJet m lam ∧ Tr w (cubeF t x ![jptG t x d g.x m (0 : Fin 2), jptG t x d g.x m (1 : Fin 2)]) (cφG t ![jptG t x d g.x m (0 : Fin 2), jptG t x d g.x m (1 : Fin 2)]) (fun I => (homAt (𝟙 (Sp k)) (sub2 Qs m)).left ≫ cφG Q.tB ![jptG Q.tB (𝟙 (Sp k)) d' gB.x m (0 : Fin 2), jptG Q.tB (𝟙 (Sp k)) d' gB.x m (1 : Fin 2)] I) (cε 2) (g.e m) (LB.pullGen Q.tB.PP.L (cφG Q.tB ![jptG Q.tB (𝟙 (Sp k)) d' gB.x m (0 : Fin 2), jptG Q.tB (𝟙 (Sp k)) d' gB.x m (1 : Fin 2)]) (cε 2) (gB.e m) (homAt (𝟙 (Sp k)) (sub2 Qs m)).left) (unitΓ U⁻¹)) → ∀ (a : 𝓞 E) (wL : AdTy t a) (wB : AdTy Q.tB a), wL.IsGen → wB.IsGen → AdRel t x d g.x g.B.A.act g.B.ad g.e a wL → AdRel Q.tB (𝟙 (Sp k)) d' gB.x gB.B.A.act gB.B.ad gB.e a wB → Tr w (adF t x a) (fun i => sqMap t x ≫ Sum.elim (cφG t ![fst t.G t.G, snd t.G t.G ≫ t.act.act (H.bar a)]) (cφG t ![fst t.G t.G ≫ t.act.act a, snd t.G t.G]) i) (fun i => qq Q ≫ Sum.elim (cφG Q.tB ![fst Q.tB.G Q.tB.G, snd Q.tB.G Q.tB.G ≫ Q.tB.act.act (H.bar a)]) (cφG Q.tB ![fst Q.tB.G Q.tB.G ≫ Q.tB.act.act a, snd Q.tB.G Q.tB.G]) i) (Sum.elim (cε 2) fun I => -cε 2 I) (LB.pullGen t.PP.L _ _ wL (sqMap t x)) (LB.pullGen Q.tB.PP.L _ _ wB (qq Q)) 1 → subQ Qs (gB.B.ad a) * ev (n := 2) ![pt k d 0, comp1 (g.B.A.act (H.bar a)) (pt k d 1)] lam = ev (n := 2) ![comp1 (g.B.A.act a) (pt k d 0), pt k d 1] lam * g.B.ad a := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.AdRelPf.adRel_series | exact GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.AdRelPf.adRel_series | (intros; apply GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.AdRelPf.adRel_series <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Flat.FrGauge.AdRelPf.adRel_series
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.AbelianQuotientGaugeRelationStatement =====

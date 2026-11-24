@@ -337,7 +337,7 @@ open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalC
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.SncBase
 
 theorem _root_.GlobalTheory.T.boundary_points_coords : ∀ (Ω : Type) [Field Ω] (X : Scheme.{0}) (ξ : Sp Ω ⟶ X) (N : ℕ) (x : Fin (N + 1) → Ω) (B : Set (Cpt ξ)), IsCptGen ξ → (∀ c (p : Cpt ξ), Char0 ξ p → InChart ξ x c p → p ∉ B → ∃ G ∈ Mdl.bdGens ξ x B, unitAt ξ p (Mdl.ratEval x c G)) → ∀ (z : Spec (CommRingCat.of ℂ) ⟶ X) w, CoordsAt ξ (fun p : (Σ _ : Unit, Fin (N + 1)) => x p.2) z w → (w ∈ mcPts (Ideal.span (Mdl.bdGens ξ x B)) ↔ ∃ h : genPt ξ ⤳ centre z, (⟨centre z, h⟩ : Cpt ξ) ∈ B) := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.SncBase.Mdl.mem_mcPts_span_bdGens_iff | exact GlobalTheory.CompanionTheory.Ar.SncBase.Mdl.mem_mcPts_span_bdGens_iff | (intros; apply GlobalTheory.CompanionTheory.Ar.SncBase.Mdl.mem_mcPts_span_bdGens_iff <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.SncBase.Mdl.mem_mcPts_span_bdGens_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.BoundaryPointsCoordsStatement =====
@@ -885,15 +885,6 @@ noncomputable section
 
 namespace GlobalTheory.CompanionTheory.Ar.SncBase.Mdl
 
-theorem ratEval_mem {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ : Sp Ω ⟶ X} {N : ℕ} {x : Fin (N + 1) → Ω}
-    {c : Fin (N + 1)} {p : Cpt ξ} (hc : InChart ξ x c p) (g : MRing (fun _ : Unit => Fin (N + 1))) :
-    ratEval x c g ∈ regAt ξ p := by
-  induction g using MvPolynomial.induction_on with
-  | C a => simpa using intCast_mem (regAt ξ p) a
-  | add a b ha hb => simpa using (regAt ξ p).add_mem ha hb
-  | mul_X a i ha =>
-    simpa using (regAt ξ p).mul_mem ha (hc.2 i.2)
-
 theorem not_unitAt_of_mem_span {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ : Sp Ω ⟶ X} {N : ℕ}
     {x : Fin (N + 1) → Ω} {B : Set (Cpt ξ)} (hξ : IsCptGen ξ) {c : Fin (N + 1)} {p : Cpt ξ} (hp : p ∈ B)
     (hc : InChart ξ x c p) {g : MRing (fun _ : Unit => Fin (N + 1))} (hg : g ∈ Ideal.span (bdGens ξ x B)) :
@@ -904,13 +895,13 @@ theorem not_unitAt_of_mem_span {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ : Sp 
     exact h c p hp hc
   | zero => simpa [unitAt] using fun h : (0 : Ω) ≠ 0 => absurd rfl h
   | add a b _ _ ha hb =>
-    have := not_unitAt_add hξ (ratEval_mem hc a) (ratEval_mem hc b) ha hb
+    have := not_unitAt_add hξ (_root_.GlobalTheory.CompanionTheory.Ar.SncBase.Mdl.Sep.ratEval_regular hc a) (_root_.GlobalTheory.CompanionTheory.Ar.SncBase.Mdl.Sep.ratEval_regular hc b) ha hb
     simpa using this
   | smul a b _ hb =>
     intro h
     have e : ratEval x c (a • b) = ratEval x c a * ratEval x c b := by simp
     rw [e] at h
-    exact hb (unitAt_of_mul_right h (ratEval_mem hc a) (ratEval_mem hc b))
+    exact hb (unitAt_of_mul_right h (_root_.GlobalTheory.CompanionTheory.Ar.SncBase.Mdl.Sep.ratEval_regular hc a) (_root_.GlobalTheory.CompanionTheory.Ar.SncBase.Mdl.Sep.ratEval_regular hc b))
 
 theorem patch_invAdj {Ω : Type} [Field Ω] [Algebra ℚ Ω] {Pt Bd : Set (Subring Ω)} {e : ℕ} {A : Subalgebra ℚ Ω}
     {z : Fin e → A} {n : ℕ} (hA : IsSncPatch Pt Bd e A z n) {g : Ω} (hg : g ∈ A) (h0 : g ≠ 0) :

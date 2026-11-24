@@ -328,15 +328,7 @@ section Tri
 
 variable {K : Type*} [Field K] {n : ℕ}
 
-theorem loUni_block {L : Matrix (Fin n) (Fin n) K} (h : Formalism.MainNotions.S.IsLoUni L) : L.BlockTriangular OrderDual.toDual :=
-  fun i j hij => (h i j).1 hij
-
-theorem det_loUni {L : Matrix (Fin n) (Fin n) K} (h : Formalism.MainNotions.S.IsLoUni L) : L.det = 1 := by
-  rw [Matrix.det_of_lowerTriangular L (loUni_block h)]
-  exact Finset.prod_eq_one fun i _ => (h i i).2 rfl
-
-theorem loUni_inv {L : Matrix (Fin n) (Fin n) K} (h : Formalism.MainNotions.S.IsLoUni L) : Formalism.MainNotions.S.IsLoUni L⁻¹ := by
-  apply Formalism.L2.SG.Pf.StabilizerIndexVolumes.lo_inv <;> assumption
+alias loUni_inv := _root_.Formalism.L2.SG.Pf.StabilizerIndexVolumes.lo_inv
 
 theorem up_conjT {E : Type} [Field E] [StarRing E] {M : Matrix (Fin n) (Fin n) E}
     (h : Formalism.MainNotions.S.IsLoUni M) : Formalism.MainNotions.S.IsUpUni M.conjTranspose := by
@@ -471,9 +463,9 @@ theorem sL_frame (hG : IsUnit (gramOf (gg F F')).det) (P P' : Matrix (Fin (r + 1
   simp only [UU_mulVec_inl, UU_mulVec_inr, hc] at h
   have e1 : (fun k : Fin (r + 1) => (Pi.single (Sum.inl b) (1 : E) : Fin (r + 1) ⊕ Fin (r + 1) → E) (Sum.inl k)) =
       Pi.single b 1 := by
-    ext k; by_cases hk : k = b <;> simp [Pi.single_apply, hk]
+    ext k; by_cases hk : k = b <;> simp [hk]
   have e2 : (fun k : Fin (r + 1) => (Pi.single (Sum.inl b) (1 : E) : Fin (r + 1) ⊕ Fin (r + 1) → E) (Sum.inr k)) = 0 := by
-    ext k; simp [Pi.single_apply]
+    ext k; simp
   rw [e1, e2, Matrix.mulVec_zero] at h
   simp only [Pi.zero_apply, zero_smul, Finset.sum_const_zero, add_zero] at h
   have hcol : ∀ x, ((P - 1) *ᵥ Pi.single b (1 : E)) x = P x b - (1 : Matrix (Fin (r + 1)) (Fin (r + 1)) E) x b := by
@@ -481,7 +473,7 @@ theorem sL_frame (hG : IsUnit (gramOf (gg F F')).det) (P P' : Matrix (Fin (r + 1
   rw [← sub_add_cancel (sL (gg F F') (UU P P') (F.fvec b)) (F.fvec b), h,
     Finset.sum_congr rfl (fun x _ => by rw [hcol x])]
   simp only [sub_smul, Finset.sum_sub_distrib, Matrix.one_apply, ite_smul, one_smul, zero_smul,
-    Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+    Finset.sum_ite_eq', Finset.mem_univ, if_true]
   abel
 
 theorem sL_frame' (hG : IsUnit (gramOf (gg F F')).det) (P P' : Matrix (Fin (r + 1)) (Fin (r + 1)) E)
@@ -491,9 +483,9 @@ theorem sL_frame' (hG : IsUnit (gramOf (gg F F')).det) (P P' : Matrix (Fin (r + 
   simp only [UU_mulVec_inl, UU_mulVec_inr, hc] at h
   have e1 : (fun k : Fin (r + 1) => (Pi.single (Sum.inr b) (1 : E) : Fin (r + 1) ⊕ Fin (r + 1) → E) (Sum.inr k)) =
       Pi.single b 1 := by
-    ext k; by_cases hk : k = b <;> simp [Pi.single_apply, hk]
+    ext k; by_cases hk : k = b <;> simp [hk]
   have e2 : (fun k : Fin (r + 1) => (Pi.single (Sum.inr b) (1 : E) : Fin (r + 1) ⊕ Fin (r + 1) → E) (Sum.inl k)) = 0 := by
-    ext k; simp [Pi.single_apply]
+    ext k; simp
   rw [e1, e2, Matrix.mulVec_zero] at h
   simp only [Pi.zero_apply, zero_smul, Finset.sum_const_zero, zero_add] at h
   have hcol : ∀ x, ((P' - 1) *ᵥ Pi.single b (1 : E)) x = P' x b - (1 : Matrix (Fin (r + 1)) (Fin (r + 1)) E) x b := by
@@ -501,7 +493,7 @@ theorem sL_frame' (hG : IsUnit (gramOf (gg F F')).det) (P P' : Matrix (Fin (r + 
   rw [← sub_add_cancel (sL (gg F F') (UU P P') (F'.fvec b)) (F'.fvec b), h,
     Finset.sum_congr rfl (fun x _ => by rw [hcol x])]
   simp only [sub_smul, Finset.sum_sub_distrib, Matrix.one_apply, ite_smul, one_smul, zero_smul,
-    Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+    Finset.sum_ite_eq', Finset.mem_univ, if_true]
   abel
 
 end Act
@@ -534,7 +526,7 @@ theorem kill_single {Z Q : Matrix (Fin (r + 1)) (Fin (r + 1)) E} (hQ : Formalism
   rw [← Matrix.mulVec_mulVec, hv, ← Matrix.mulVec_mulVec]
   have : (Pi.single (Fin.last r) ((Z *ᵥ v) (Fin.last r)) : Fin (r + 1) → E) =
       ((Z *ᵥ v) (Fin.last r)) • Pi.single (Fin.last r) 1 := by
-    ext k; by_cases hk : k = Fin.last r <;> simp [Pi.single_apply, hk]
+    ext k; by_cases hk : k = Fin.last r <;> simp [hk]
   rw [this, Matrix.mulVec_smul, strictLo_last hQ, smul_zero, Matrix.mulVec_zero]
 
 theorem sum_last_span {P : Matrix (Fin (r + 1)) (Fin (r + 1)) E} (hP : Formalism.MainNotions.S.IsUpUni P) {T0 : E}

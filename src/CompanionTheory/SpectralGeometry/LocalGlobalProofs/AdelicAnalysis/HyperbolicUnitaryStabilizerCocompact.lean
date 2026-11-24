@@ -841,7 +841,7 @@ variable {L K : Type} [Field L] [CommRing K] [Algebra L K] (B : Module.Basis (Fi
 
 theorem repr_coord (s t : L) :
     B.repr (s • B 0 + t • B 1) 0 = s ∧ B.repr (s • B 0 + t • B 1) 1 = t := by
-  simp [Finsupp.single_apply]
+  simp
 
 variable {B} {Δ : L}
 
@@ -852,7 +852,7 @@ theorem coord_eq (h0 : B 0 = 1) (x : K) :
   exact h
 
 theorem repr_one (h0 : B 0 = 1) : B.repr 1 0 = 1 ∧ B.repr 1 1 = 0 := by
-  rw [← h0]; simp [Finsupp.single_apply]
+  rw [← h0]; simp
 
 theorem repr_mul (h0 : B 0 = 1) (h1 : B 1 * B 1 = algebraMap L K Δ) (x y : K) :
     B.repr (x * y) 0 = B.repr x 0 * B.repr y 0 + Δ * (B.repr x 1 * B.repr y 1) ∧
@@ -958,8 +958,8 @@ theorem inert_case (h0 : B 0 = 1) (h1 : B 1 * B 1 = algebraMap L K Δ)
     · subst hk
       obtain ⟨e0, e1⟩ := repr_one (B := B) h0
       fin_cases l <;> simp [e0, e1]
-    · simp [Pi.single_apply, hk]
-  · simp only [Units.val_mk]
+    · simp [hk]
+  · simp only
     simp [Pi.single_apply, mul_comm x', hx']
 
 theorem mul_ef {e f : K} (he : e * e = e) (hf : f * f = f) (hef : e * f = 0) (α β γ δ : L) :
@@ -1510,7 +1510,7 @@ theorem partner_spec (s : K →+* K) (L Li : Matrix (Fin N) (Fin N) K) (half : K
 
 theorem hform_single (s : K →+* K) (L : Matrix (Fin N) (Fin N) K) (i j : Fin N) :
     hform s L (Pi.single i 1) (Pi.single j 1) = L i j := by
-  simp [hform_eq, Matrix.mulVec_single_one, dotProduct, Pi.single_apply, apply_ite s]
+  simp [hform_eq, dotProduct, Pi.single_apply, apply_ite s]
 
 variable [TopologicalSpace K] [IsTopologicalRing K]
 
@@ -1550,18 +1550,6 @@ theorem sigR_invol (R : Type) [CommRing R] [Algebra F R] (σ : E →ₐ[F] E) (h
   induction a with
   | tmul r e => simp [sigR, hσ]
   | add x y hx hy => simp [map_add (f := _), hx, hy]
-
-theorem sigR_incl (R : Type) [CommRing R] [Algebra F R] (σ : E →ₐ[F] E) (e : E) :
-    sigR R σ (inclR R e) = inclR R (σ e) := by
-  simp [sigR, inclR]
-
-theorem gramR_ratTup (R : Type) [CommRing R] [Algebra F R] (σ : E →ₐ[F] E) {N n : ℕ}
-    (J : Matrix (Fin N) (Fin N) E) (X : Fin n → Fin N → E) :
-    gramR R σ J (ratTup R X) = (gramE σ J X).map (inclR R) := by
-  ext a b
-
-  simp only [gramR, hR, hform, ratTup, JR, sigR_incl, Matrix.map_apply, gramE, hE, map_sum, map_mul]
-  rfl
 
 end Tens
 
@@ -1686,7 +1674,7 @@ theorem iwasawa : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberFi
   obtain ⟨Ω, hΩ, hprim⟩ := _root_.GlobalTheory.CompanionTheory.SW.PrimA.unimodular_compact_mod_units F E σ hCM (M + 2)
   have hLh : ∀ i j, sigR (AF F) σ (JR (F := F) (AF F) (hypJ J) j i) = JR (F := F) (AF F) (hypJ J) i j := by
     intro i j
-    simp only [JR, Matrix.map_apply, sigR_incl, hJ'.1 i j]
+    simp only [JR, Matrix.map_apply, _root_.GlobalTheory.CompanionTheory.SW.TransUC.sigR_inclR, hJ'.1 i j]
   have hLi : ((hypJ J)⁻¹).map (inclR (F := F) (AF F)) * JR (F := F) (AF F) (hypJ J) = 1 := by
     have hu : IsUnit (hypJ J).det := isUnit_iff_ne_zero.mpr hJ'.2
     have h1 : ((hypJ J)⁻¹ * hypJ J).map (inclR (F := F) (AF F)) = 1 := by
@@ -1696,7 +1684,7 @@ theorem iwasawa : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberFi
     rfl
   have hh : sigR (AF F) σ (inclR (F := F) (AF F) (1 / 2 : E)) = inclR (F := F) (AF F) (1 / 2 : E) := by
     have e : σ (1 / 2 : E) = 1 / 2 := by rw [map_div₀, map_one, map_ofNat]
-    rw [sigR_incl, e]
+    rw [_root_.GlobalTheory.CompanionTheory.SW.TransUC.sigR_inclR, e]
   have h2 : 2 * inclR (F := F) (AF F) (1 / 2 : E) = 1 := by
     have h3 : inclR (F := F) (AF F) (2 * (1 / 2 : E)) = 1 := by
       rw [mul_one_div_cancel two_ne_zero, map_one]
@@ -1710,7 +1698,7 @@ theorem iwasawa : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberFi
   have hX : ∀ a b, hform (sigR (AF F) σ) (JR (F := F) (AF F) (hypJ J)) (ratTup (AF F) (frame E M) a)
       (ratTup (AF F) (frame E M) b) = (!![0, 1; 1, 0] : Matrix (Fin 2) (Fin 2) (AF F ⊗[F] E)) a b := by
     intro a b
-    rw [← hmapG, ← gramR_ratTup]
+    rw [← hmapG, ← _root_.GlobalTheory.CompanionTheory.SW.TransUC.gramR_ratTup]
     rfl
   obtain ⟨C, hC, hCh⟩ := iwa_core (H := HA (AF F) σ (hypJ J)) (sigR (AF F) σ) hsc
     (sigR_invol (AF F) σ hσ) (JR (F := F) (AF F) (hypJ J)) _ hLh hLi _ hh h2

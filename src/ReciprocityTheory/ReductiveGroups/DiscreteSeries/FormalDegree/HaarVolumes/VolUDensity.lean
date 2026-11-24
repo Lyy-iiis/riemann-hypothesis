@@ -123,11 +123,11 @@ def upML : (UCo N × TriCo N) →ₗ[ℝ] Matrix (Fin N) (Fin N) ℂ where
   map_add' p q := by
     ext a b
     simp only [upMat, Prod.snd_add, Pi.add_apply, Matrix.add_apply]
-    split_ifs <;> (try simp) <;> (try ring)
+    split_ifs <;> (try simp)
   map_smul' c p := by
     ext a b
     simp only [upMat, Prod.smul_snd, Pi.smul_apply, RingHom.id_apply, Matrix.smul_apply]
-    split_ifs <;> (try simp [Complex.real_smul]) <;> (try ring)
+    split_ifs <;> (try simp [Complex.real_smul])
 
 section Deriv
 
@@ -464,12 +464,6 @@ theorem gaussE_qr_const (μ : Measure (UNgrp N)) [IsProbabilityMeasure μ] (C : 
   rw [← hXdef] at h2
   exact mul_right_cancel₀ hXpos.ne' (h.symm.trans h2.symm)
 
-theorem qr_const (μ : Measure (UNgrp N)) [IsProbabilityMeasure μ] (C : ℝ)
-    (hC : ∀ f : (Fin N → Fin N → ℂ) → ENNReal, Measurable f →
-      ∫⁻ Z, f Z = ENNReal.ofReal C * ∫⁻ k, (∫⁻ t in triPos N, f (qrMap (k, t)) * ENNReal.ofReal (qrWt t)) ∂μ) :
-    C = volU N :=
-  gaussE_qr_const μ C hC
-
 end ReciprocityTheory.ChartRestriction.DS
 end -- clump:auto
 end -- clump:auto
@@ -515,17 +509,9 @@ theorem volume_span_range_eq_zero (n : ℕ) (W : Fin n → Fin (n + 1) → ℂ) 
       Set (Fin (n + 1) → ℂ)) = 0 := by
   have h1 : Module.finrank ℂ (Submodule.span ℂ (Set.range W)) ≤ n := by
     first
-    | simpa using finrank_span_range_le_card (R := ℂ) W
-    | simpa using Submodule.finrank_span_range_le_card (R := ℂ) W
-    | simpa using finrank_range_le_card (R := ℂ) W
     | (have h2 := finrank_range_le_card (R := ℂ) W
        unfold Set.finrank at h2
        simpa using h2)
-    | (have h2 := finrank_range_le_card (K := ℂ) W
-       unfold Set.finrank at h2
-       simpa using h2)
-    | (have h2 := rank_span_le_of_finite (R := ℂ) (Set.finite_range W)
-       exact absurd h2 (by simp))
   have hne : (Submodule.span ℂ (Set.range W)) ≠ ⊤ := by
     intro htop
     rw [htop, finrank_top, Module.finrank_fin_fun] at h1
@@ -535,7 +521,6 @@ theorem volume_span_range_eq_zero (n : ℕ) (W : Fin n → Fin (n + 1) → ℂ) 
     apply hne
     first
     | exact (Submodule.restrictScalars_eq_top_iff ℝ ℂ _).mp h
-    | exact Submodule.restrictScalars_injective ℝ ℂ (Fin (n + 1) → ℂ) (by rw [h]; rfl)
   exact MeasureTheory.Measure.addHaar_submodule volume _ hne'
 
 theorem exists_row_mem_span_of_det_eq_zero {n : ℕ} (Z : Fin (n + 1) → Fin (n + 1) → ℂ)
@@ -550,7 +535,6 @@ theorem exists_row_mem_span_of_det_eq_zero {n : ℕ} (Z : Fin (n + 1) → Fin (n
     push_neg at hno
     apply hli
     first
-    | exact linearIndependent_iff_not_mem_span.mpr hno
     | exact linearIndependent_iff_notMem_span.mpr hno
   obtain ⟨i, hi⟩ := hex
   refine ⟨i, ?_⟩
@@ -788,19 +772,10 @@ variable {N : ℕ}
 
 namespace PositiveTriangularSet
 
-theorem triCoOf_upMat (t : TriCo N) : triCoOf (upMat t) = t := by
-  rcases t with ⟨d, u⟩
-  refine Prod.ext ?_ ?_
-  · funext j; simp [triCoOf, upMat]
-  · funext ab; simp [triCoOf, upMat, ab.2.ne, ab.2]
-
 theorem upMat_up (t : TriCo N) : (upMat t).BlockTriangular id := by
   intro i j h
   have h' : j < i := h
   simp [upMat, h'.ne', not_lt.mpr h'.le]
-
-theorem upMat_diag (t : TriCo N) (j : Fin N) : upMat t j j = ((t.1 j : ℝ) : ℂ) := by
-  simp [upMat]
 
 theorem upMat_triCoOf_of_up (A : Matrix (Fin N) (Fin N) ℂ) (hA : A.BlockTriangular id)
     (hd : ∀ j, (A j j).im = 0) : upMat (triCoOf A) = A := by
@@ -843,7 +818,7 @@ theorem continuous_triCoOf : Continuous (triCoOf : Matrix (Fin N) (Fin N) ℂ �
 
 theorem det_upMat (t : TriCo N) : (upMat t).det = ∏ j, ((t.1 j : ℝ) : ℂ) := by
   rw [det_of_isUpperTriangular (upMat_up t)]
-  simp [upMat_diag]
+  simp [_root_.ReciprocityTheory.ChartRestriction.DS.UpperTriangularMatrices.upMat_diag]
 
 theorem det_upMat_ne (t : TriCo N) (ht : t ∈ triPos N) : IsUnit (upMat t).det := by
   rw [det_upMat, isUnit_iff_ne_zero, Finset.prod_ne_zero_iff]
@@ -857,7 +832,7 @@ theorem inv_up (t : TriCo N) (ht : t ∈ triPos N) : (upMat t)⁻¹.BlockTriangu
 theorem inv_diag (t : TriCo N) (ht : t ∈ triPos N) (j : Fin N) :
     (upMat t)⁻¹ j j = (((t.1 j)⁻¹ : ℝ) : ℂ) := by
   have h1 := congrFun (congrFun (nonsing_inv_mul _ (det_upMat_ne t ht)) j) j
-  rw [diag_mul_of_up (inv_up t ht) (upMat_up t), upMat_diag, Matrix.one_apply_eq] at h1
+  rw [diag_mul_of_up (inv_up t ht) (upMat_up t), _root_.ReciprocityTheory.ChartRestriction.DS.UpperTriangularMatrices.upMat_diag, Matrix.one_apply_eq] at h1
   have h2 : ((t.1 j : ℝ) : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (ht j).ne'
   rw [Complex.ofReal_inv]
   exact eq_inv_of_mul_eq_one_left h1
@@ -867,7 +842,7 @@ theorem upMat_mul_mem (a b : TriCo N) (ha : a ∈ triPos N) (hb : b ∈ triPos N
       triCoOf (upMat a * upMat b) ∈ triPos N := by
   have hu := (upMat_up a).mul (upMat_up b)
   have hd : ∀ j, (upMat a * upMat b) j j = (((a.1 j * b.1 j : ℝ)) : ℂ) := fun j => by
-    rw [diag_mul_of_up (upMat_up a) (upMat_up b), upMat_diag, upMat_diag, Complex.ofReal_mul]
+    rw [diag_mul_of_up (upMat_up a) (upMat_up b), _root_.ReciprocityTheory.ChartRestriction.DS.UpperTriangularMatrices.upMat_diag, _root_.ReciprocityTheory.ChartRestriction.DS.UpperTriangularMatrices.upMat_diag, Complex.ofReal_mul]
   refine ⟨upMat_triCoOf_of_up _ hu (fun j => by rw [hd]; simp), fun j => ?_⟩
   show 0 < ((upMat a * upMat b) j j).re
   rw [hd, Complex.ofReal_re]
@@ -901,7 +876,7 @@ theorem upMat_tg_inv (a : TG N) : upMat a⁻¹.1 = (upMat a.1)⁻¹ := (upMat_in
 
 theorem tg_ext {a b : TG N} (h : upMat a.1 = upMat b.1) : a = b := by
   apply Subtype.ext
-  rw [← triCoOf_upMat a.1, ← triCoOf_upMat b.1, h]
+  rw [← _root_.ReciprocityTheory.ChartRestriction.DS.UpperTriangularMatrices.triCoOf_upMat a.1, ← _root_.ReciprocityTheory.ChartRestriction.DS.UpperTriangularMatrices.triCoOf_upMat b.1, h]
 
 scoped instance : Group (TG N) where
   mul_assoc a b c := tg_ext (by simp only [upMat_tg_mul, Matrix.mul_assoc])
@@ -1055,11 +1030,7 @@ def qrDom (N : ℕ) : Set (UNgrp N × TriCo N) := Set.univ ×ˢ triPos N
 
 def glSet (N : ℕ) : Set (Fin N → Fin N → ℂ) := {Z | (Matrix.of Z).det ≠ 0}
 
-theorem measurableSet_triPos : MeasurableSet (triPos N) := by
-  unfold triPos
-  simp only [Set.ofPred_forall]
-  exact MeasurableSet.iInter fun j =>
-    measurableSet_lt measurable_const ((measurable_pi_apply j).comp measurable_fst)
+alias measurableSet_triPos := _root_.ReciprocityTheory.ChartRestriction.DS.PositiveTriangularSet.ms_triPos
 
 theorem measurableSet_qrDom : MeasurableSet (qrDom N) :=
   MeasurableSet.univ.prod measurableSet_triPos
@@ -1135,31 +1106,9 @@ theorem nuQR_map_eq (φ : UNgrp N × TriCo N → UNgrp N × TriCo N) (hφ : Meas
 theorem det_toM_ne_zero (k : UNgrp N) : (toM k).det ≠ 0 :=
   ((Matrix.isUnit_iff_isUnit_det _).mp (k : (Matrix (Fin N) (Fin N) ℂ)ˣ).isUnit).ne_zero
 
-theorem det_upMat (t : TriCo N) : (upMat t).det = ∏ j, ((t.1 j : ℝ) : ℂ) := by
-  rw [Matrix.det_of_isUpperTriangular]
-  · simp [upMat]
-  · intro a b hba
-    have h1 : a ≠ b := ne_of_gt hba
-    have h2 : ¬ a < b := not_lt.mpr (le_of_lt hba)
-    simp [upMat, h1, h2]
+alias continuous_upMat := _root_.ReciprocityTheory.ChartRestriction.DS.PositiveTriangularSet.continuous_upMat
 
-theorem det_upMat_ne_zero (t : TriCo N) (ht : t ∈ triPos N) : (upMat t).det ≠ 0 := by
-  rw [det_upMat]
-  exact Finset.prod_ne_zero_iff.mpr fun j _ => by
-    exact_mod_cast (ne_of_gt (ht j))
-
-theorem continuous_upMat : Continuous (upMat (N := N)) := by
-  refine continuous_pi fun a => continuous_pi fun b => ?_
-  simp only [upMat]
-  split_ifs with h1 h2
-  · exact Complex.continuous_ofReal.comp ((continuous_apply a).comp continuous_fst)
-  · exact (continuous_apply _).comp continuous_snd
-  · exact continuous_const
-
-theorem continuous_triCoOf : Continuous (triCoOf (N := N)) := by
-  refine Continuous.prodMk (continuous_pi fun j => ?_) (continuous_pi fun ab => ?_)
-  · exact Complex.continuous_re.comp ((continuous_apply j).comp (continuous_apply j))
-  · exact (continuous_apply _).comp (continuous_apply _)
+alias continuous_triCoOf := _root_.ReciprocityTheory.ChartRestriction.DS.PositiveTriangularSet.continuous_triCoOf
 
 def triR (t0 : TriCo N) (t : TriCo N) : TriCo N := triCoOf (upMat t * upMat t0)
 
@@ -1197,20 +1146,20 @@ theorem nuQR_map_right (t0 : TriCo N) (h0 : t0 ∈ triPos N) :
     (nuQR N).map (fun p : UNgrp N × TriCo N => (p.1, triR t0 p.2)) = nuQR N := by
   refine nuQR_map_eq _ (measurable_fst.prodMk ((continuous_triR t0).measurable.comp measurable_snd))
     ?_ (fun Z => Matrix.of.symm (Matrix.of Z * upMat t0))
-    (measurable_mulRight_mat _) (gmMeas_map_mul_right _ (det_upMat_ne_zero t0 h0)) ?_ ?_
+    (measurable_mulRight_mat _) (gmMeas_map_mul_right _ (_root_.ReciprocityTheory.ChartRestriction.DS.qrA_upMat_det_ne t0 h0)) ?_ ?_
   · intro p hp
     refine ⟨trivial, fun j => ?_⟩
     change 0 < (triR t0 p.2).1 j
-    rw [triR, (upMat_triCoOf_mul p.2 t0).2 j]
+    rw [triR, (_root_.ReciprocityTheory.ChartRestriction.DS.UpperTriangularMatrices.upMat_triCoOf_mul' p.2 t0).2 j]
     exact mul_pos (hp.2 j) (h0 j)
   · ext Z
     simp only [glSet, Set.mem_preimage, Set.mem_ofPred_eq]
     change (Matrix.of Z * upMat t0).det ≠ 0 ↔ _
     rw [Matrix.det_mul]
-    exact ⟨fun h => left_ne_zero_of_mul h, fun h => mul_ne_zero h (det_upMat_ne_zero t0 h0)⟩
+    exact ⟨fun h => left_ne_zero_of_mul h, fun h => mul_ne_zero h (_root_.ReciprocityTheory.ChartRestriction.DS.qrA_upMat_det_ne t0 h0)⟩
   · intro p _
     simp only [qrMap, triR]
-    rw [(upMat_triCoOf_mul p.2 t0).1]
+    rw [(_root_.ReciprocityTheory.ChartRestriction.DS.UpperTriangularMatrices.upMat_triCoOf_mul' p.2 t0).1]
     change Matrix.of.symm (toM p.1 * (upMat p.2 * upMat t0)) = Matrix.of.symm ((toM p.1 * upMat p.2) * upMat t0)
     rw [Matrix.mul_assoc]
 
@@ -1333,7 +1282,7 @@ theorem d_qrMap (k : UNgrp N) (t : TriCo N) (ht : t ∈ triPos N) :
   congr 2
   have : Matrix.of (qrMap (k, t)) = toM k * upMat t := by
     exact Matrix.of.apply_symm_apply _
-  rw [this, Matrix.det_mul, norm_mul, norm_det_toM, one_mul, det_upMat, norm_prod]
+  rw [this, Matrix.det_mul, norm_mul, norm_det_toM, one_mul, _root_.ReciprocityTheory.ChartRestriction.DS.PositiveTriangularSet.det_upMat, norm_prod]
   refine Finset.prod_congr rfl fun j _ => ?_
   rw [Complex.norm_real, Real.norm_of_nonneg (ht j).le]
 
@@ -1392,7 +1341,6 @@ theorem qr_lintegral (μ : Measure (UNgrp N)) [μ.IsHaarMeasure] [IsProbabilityM
     unfold triDens
     first
     | fun_prop
-    | measurability
   have key : ∀ f : (Fin N → Fin N → ℂ) → ENNReal, Measurable f →
       ∫⁻ Z, f Z = c * ∫⁻ k, (∫⁻ t in triPos N, f (qrMap (k, t)) * ENNReal.ofReal (qrWt t)) ∂μ := by
     intro f hf
@@ -1422,8 +1370,7 @@ theorem qr_lintegral (μ : Measure (UNgrp N)) [μ.IsHaarMeasure] [IsProbabilityM
     unfold triMeas
     rw [lintegral_withDensity_eq_lintegral_mul _ htd (by
       first
-      | exact hgq.comp measurable_prodMk_left
-      | exact hgq.comp measurable_prod_mk_left)]
+      | exact hgq.comp measurable_prodMk_left)]
     apply setLIntegral_congr_fun measurableSet_triPos
     intro t ht
     simp only [Pi.mul_apply]
@@ -1470,7 +1417,7 @@ theorem volU_density (μ : Measure (UNgrp N)) [μ.IsHaarMeasure] [IsProbabilityM
       μ {k : UNgrp N | ∃ x ∈ B, toM k = NormedSpace.exp (skMat x)} ≤ ENNReal.ofReal ((1 + η) / volU N) * volume B ∧
         ENNReal.ofReal ((1 - η) / volU N) * volume B ≤ μ {k : UNgrp N | ∃ x ∈ B, toM k = NormedSpace.exp (skMat x)} := by
   obtain ⟨C, -, hC⟩ := qr_lintegral μ
-  have hCV : C = volU N := qr_const μ C hC
+  have hCV : C = volU N := _root_.ReciprocityTheory.ChartRestriction.DS.gaussE_qr_const μ C hC
   subst hCV
   have hV := volU_pos' N
   obtain ⟨ε, hε0, hε1, hkey⟩ : ∃ ε : ℝ, 0 < ε ∧ ε < 1 ∧ (1 - ε) * (1 + η) = 1 + ε :=
@@ -1509,14 +1456,14 @@ theorem volU_density (μ : Measure (UNgrp N)) [μ.IsHaarMeasure] [IsProbabilityM
     by_cases hk : k ∈ volUSet B
     · rw [Set.indicator_of_mem hk, hIdef,
         ← Set.inter_eq_left.2 hE'pos, ← setLIntegral_indicator Metric.isOpen_ball.measurableSet]
-      refine setLIntegral_congr_fun volU_measurableSet_triPos (fun t ht => ?_)
+      refine setLIntegral_congr_fun _root_.ReciprocityTheory.ChartRestriction.DS.PositiveTriangularSet.ms_triPos (fun t ht => ?_)
       by_cases ht' : t ∈ Metric.ball (volUOne N) ρ
       · rw [Set.indicator_of_mem ((hmem k t ht).2 ⟨hk, ht'⟩), Set.indicator_of_mem ht', Pi.one_apply,
           one_mul]
       · rw [Set.indicator_of_notMem (fun h => ht' ((hmem k t ht).1 h).2), Set.indicator_of_notMem ht',
           zero_mul]
     · rw [Set.indicator_of_notMem hk]
-      rw [setLIntegral_congr_fun volU_measurableSet_triPos (g := fun _ => 0) (fun t ht => by
+      rw [setLIntegral_congr_fun _root_.ReciprocityTheory.ChartRestriction.DS.PositiveTriangularSet.ms_triPos (g := fun _ => 0) (fun t ht => by
         simp only
         rw [Set.indicator_of_notMem (fun h => hk ((hmem k t ht).1 h).1), zero_mul])]
       simp

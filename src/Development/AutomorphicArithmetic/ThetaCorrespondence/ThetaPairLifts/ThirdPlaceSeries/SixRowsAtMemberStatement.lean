@@ -186,7 +186,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.Inhab Fo
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.goodTwistCores_over_trueColumns : ∀ (𝒮 : Slots) (R : V4.Slot), OverCols (IsGoodE 𝒮) ∧ OverCols (sAnd (IsGoodE 𝒮) R) := by
-  first | exact @GlobalTheory.Fc.Cv.overCols_goodE | exact GlobalTheory.Fc.Cv.overCols_goodE | (intros; apply GlobalTheory.Fc.Cv.overCols_goodE <;> assumption)
+  first | exact @GlobalTheory.Fc.Cv.overCols_goodE
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.GoodTwistCoresOverTrueColumnsStatement =====
@@ -233,7 +233,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.Inhab Fo
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.realSideColumnsCompatible_bundlePoints_overColumns : ∀ (Q : V4.Slot), OverCols Q → ∀ (Bd : BdT) (Lk : LkT Bd), PeriodEntriesOverColumns.Row_tie Q Lk := by
-  first | exact @GlobalTheory.Fc.PeriodEntriesOverColumns.row_tie_of_overCols | exact GlobalTheory.Fc.PeriodEntriesOverColumns.row_tie_of_overCols | (intros; apply GlobalTheory.Fc.PeriodEntriesOverColumns.row_tie_of_overCols <;> assumption)
+  first | exact @GlobalTheory.Fc.PeriodEntriesOverColumns.row_tie_of_overCols
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.RealSideColumnsCompatibleBundlePointsOverColumnsStatement =====
@@ -656,14 +656,6 @@ theorem cols_mulVec {E : Type} [Field E] {N n : ℕ} (hN : n + 1 = N) (A : Matri
   rw [mul_comm (z a)]
   rfl
 
-theorem hform_add_left' {E : Type} [Field E] {n : ℕ} (σ : E →+* E) (J : Matrix (Fin n) (Fin n) E) (x x' y : Fin n → E) :
-    Formalism.UG.hform σ J (x + x') y = Formalism.UG.hform σ J x y + Formalism.UG.hform σ J x' y := by
-  simp only [Formalism.UG.hform, Pi.add_apply, map_add (f := _), add_mul, Finset.sum_add_distrib]
-
-theorem hform_add_right' {E : Type} [Field E] {n : ℕ} (σ : E →+* E) (J : Matrix (Fin n) (Fin n) E) (x y y' : Fin n → E) :
-    Formalism.UG.hform σ J x (y + y') = Formalism.UG.hform σ J x y + Formalism.UG.hform σ J x y' := by
-  simp only [Formalism.UG.hform, Pi.add_apply, mul_add, Finset.sum_add_distrib]
-
 end LocalBases
 
 section Dual
@@ -687,10 +679,10 @@ theorem mem_dual_tilde_iff {D : D7} {u : D.what₂.Word} {Ch : ℕ → Type} {ch
     rw [hb, hform_smul_leftB, hform_zc_iXc, mul_zero]
   have p1 : ∀ x, hform (sigD D : D.host.E →+* D.host.E) (gramN D D.R.m le_rfl) (iXc D x)
       (iXc D a + (t / ((D.mem u).A.T : D.host.E)) • Tf.til.z0) = hform (sigD D : D.host.E →+* D.host.E) (gramP D) x a := fun x => by
-    rw [hform_add_right', hform_smul_rightB, o1, mul_zero, add_zero, hform_iXc]
+    rw [_root_.Formalism.L2.GlobalTheoryTheory.Br.hform_add_right, hform_smul_rightB, o1, mul_zero, add_zero, hform_iXc]
   have p2 : hform (sigD D : D.host.E →+* D.host.E) (gramN D D.R.m le_rfl) Tf.til.z0
       (iXc D a + (t / ((D.mem u).A.T : D.host.E)) • Tf.til.z0) = t := by
-    rw [hform_add_right', hform_smul_rightB, o2, zero_add, hzz, div_mul_cancel₀ _ hT]
+    rw [_root_.Formalism.L2.GlobalTheoryTheory.Br.hform_add_right, hform_smul_rightB, o2, zero_add, hzz, div_mul_cancel₀ _ hT]
   have hSD := (GlobalTheory.ClassLatticeSelfDual.classLattice_selfDual D u Tf.clsP c).2 a
   constructor
   · intro h
@@ -704,7 +696,7 @@ theorem mem_dual_tilde_iff {D : D7} {u : D.what₂.Word} {Ch : ℕ → Type} {ch
     obtain ⟨r, rfl⟩ := Submodule.mem_span_singleton.1 hy2
     have er : r • Tf.til.z0 = (r : D.host.E) • Tf.til.z0 := (algebraMap_smul D.host.E r _).symm
     have ex : ((iXc D).restrictScalars (𝓞 D.host.E)) x = iXc D x := rfl
-    rw [hform_add_left', er, ex, hform_smul_leftB, p1, p2]
+    rw [_root_.Formalism.L2.GlobalTheoryTheory.Br.hform_add_left, er, ex, hform_smul_leftB, p1, p2]
     refine add_mem (hSD.1 ha x hx) (mul_mem ?_ ht)
     exact ⟨⟨_, r.2.map (sigD D : D.host.E →+* D.host.E).toIntAlgHom⟩, rfl⟩
 
@@ -840,19 +832,6 @@ theorem mem_SP_of_coord_integral (D : D7) (u : D.what₂.Word) (Ch : ℕ → Typ
 
 end Localisation
 
-theorem intSpan_smul' (D : D7) {n : ℕ} (w : D.what₂.places.Pl) (lam : D.what₂.Tau → DomWeight n) (r : D.what₂.LL)
-    (hr : r ∈ intW D.what₂.places w) (p : MvPolynomial (D.what₂.Tau × Fin n × Fin n) ℂ)
-    (hp : p ∈ Formalism.MainNotions.product_first_zeroth_parts.IntSpan D w lam) : D.what₂.embLL r • p ∈ Formalism.MainNotions.product_first_zeroth_parts.IntSpan D w lam := by
-  unfold Formalism.MainNotions.product_first_zeroth_parts.IntSpan at *
-  induction hp using AddSubgroup.closure_induction with
-  | mem q hq =>
-    obtain ⟨r', f, hr', hf, rfl⟩ := hq
-    apply AddSubgroup.subset_closure
-    exact ⟨r * r', f, mul_mem hr hr', hf, by rw [map_mul, mul_smul]⟩
-  | zero => rw [smul_zero]; exact zero_mem _
-  | add p q _ _ hp hq => rw [smul_add]; exact add_mem hp hq
-  | neg p _ hp => rw [smul_neg]; exact neg_mem hp
-
 theorem root_mem_intW (D : D7) (w : D.what₂.places.Pl) (r : D.what₂.LL) (n : ℕ) (hn : 0 < n) (h : r ^ n = 1) :
     r ∈ intW D.what₂.places w := by
   show (0 : WithTop ℤ) ≤ D.what₂.places.val w r
@@ -904,13 +883,13 @@ theorem exists_integralPendingObject_symmetricFormsLevel : ∀ (D : D7) (u : D.w
     | mem y hy =>
       obtain ⟨P, hP, hPv⟩ := ((Tf.val D.R.m le_rfl (Or.inr rfl)).lat y).1 hy w ((D.fm u).til c) B' hB'
       rw [GlobalTheory.coMTS_of_gaInv D u Ch chOf Tf Bm w c B' (hBu w c) hB'eq _ P hPv, hχr]
-      exact intSpan_smul' D w _ _ hri P hP
+      exact _root_.GlobalTheory.PtCo.intSpan_smul' D w _ _ hri P hP
     | zero => rw [map_zero, Pi.zero_apply, map_zero]; exact zero_mem _
     | add y z _ _ hy hz => rw [map_add (f := _), Pi.add_apply, map_add (f := _)]; exact add_mem hy hz
     | smul a y _ hy =>
       have e : a • y = (a : D.what₂.LL) • y := rfl
       rw [e, LinearMap.map_smulₛₗ, Pi.smul_apply, map_smul]
-      exact intSpan_smul' D w _ (a : D.what₂.LL) a.2 _ hy
+      exact _root_.GlobalTheory.PtCo.intSpan_smul' D w _ (a : D.what₂.LL) a.2 _ hy
   · intro w z hz
     constructor
     · rintro ⟨y, hy, rfl⟩ c
@@ -980,7 +959,7 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 attribute [local instance] GlobalTheory.Mem.Col2.starE Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.aux_of_ok_of_pins : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)) (u : (I.rec7 l Z).what₂.Word), Formalism.MainNotions.product_first_zeroth_parts.Conclusion6 (I.rec7 l Z) u := by
-  first | exact @GlobalTheory.Mem.Col2.TC.formsMap_at_every_trueColumnMember | exact GlobalTheory.Mem.Col2.TC.formsMap_at_every_trueColumnMember | (intros; apply GlobalTheory.Mem.Col2.TC.formsMap_at_every_trueColumnMember <;> assumption)
+  first | exact @GlobalTheory.Mem.Col2.TC.formsMap_at_every_trueColumnMember
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.FormsMapAtEveryTrueColumnMemberStatement =====
@@ -1023,7 +1002,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.Inhab Fo
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.referenceChainEvaluationAtBundlePoints_of_overCols : ∀ (Q : V4.Slot), OverCols Q → ∀ (Bd : BdT) (Lk : LkT Bd), PeriodEntriesOverColumns.ReferenceChainEvaluationAtBundlePoints Q Lk := by
-  first | exact @GlobalTheory.Fc.PeriodEntriesOverColumns.referenceChainEvaluation_bundlePoints_overColumns | exact GlobalTheory.Fc.PeriodEntriesOverColumns.referenceChainEvaluation_bundlePoints_overColumns | (intros; apply GlobalTheory.Fc.PeriodEntriesOverColumns.referenceChainEvaluation_bundlePoints_overColumns <;> assumption)
+  first | exact @GlobalTheory.Fc.PeriodEntriesOverColumns.referenceChainEvaluation_bundlePoints_overColumns
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.ReferenceChainEvaluationBundlePointsOverColumnsAStatement =====
@@ -1134,7 +1113,7 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 attribute [local instance] GlobalTheory.Mem.Col2.starE Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.periodClassSumWeyl_of_rowInt : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)), GlobalTheory.PerQ.RowInt I l Z → Formalism.MainNotions.WeightDegreeSizes.PeriodClassSumWeyl (I.rec7 l Z) := by
-  first | exact @GlobalTheory.PerAdm0.periodAdmissible_of_integralPeriodRows | exact GlobalTheory.PerAdm0.periodAdmissible_of_integralPeriodRows | (intros; apply GlobalTheory.PerAdm0.periodAdmissible_of_integralPeriodRows <;> assumption)
+  first | exact @GlobalTheory.PerAdm0.periodAdmissible_of_integralPeriodRows
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.PeriodAdmissibleOfIntegralPeriodRowsStatement =====
@@ -1168,7 +1147,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.Inhab Fo
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.referencePeriodIntegral_bundlePoints_of_overColumns : ∀ (Q : V4.Slot), OverCols Q → ∀ (Bd : BdT) (Lk : LkT Bd), PeriodEntriesOverColumns.PeriodAtZeroAtBundlePoints Q Lk := by
-  first | exact @GlobalTheory.Fc.PeriodEntriesOverColumns.row_aPer0_of_overCols | exact GlobalTheory.Fc.PeriodEntriesOverColumns.row_aPer0_of_overCols | (intros; apply GlobalTheory.Fc.PeriodEntriesOverColumns.row_aPer0_of_overCols <;> assumption)
+  first | exact @GlobalTheory.Fc.PeriodEntriesOverColumns.row_aPer0_of_overCols
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.ReferencePeriodIntegralBundlePointsOfOverColumnsStatement =====
@@ -1487,7 +1466,7 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 attribute [local instance] GlobalTheory.Mem.Col2.starE Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.admissible_period_twist_of_integral_rows : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)) (l0 : I.Law0 l), GlobalTheory.PerQ.RowInt I l Z → ∀ (nch : NChoice (I.rec7 l Z)) (tp : Formalism.L2.Host.TupTied (I.rec7 l Z) (I.cf l Z) nch), tp.xi = I.xi → ∀ Y : DivX (I.rec7 l Z), Formalism.L2.G.Adm2InU.TwistedPeriodAdmissible (I.rec7 l Z) Y (I.tw l l0 Z) := by
-  first | exact @GlobalTheory.PerTwClose.twistedPeriodAdmissible_of_rowInt | exact GlobalTheory.PerTwClose.twistedPeriodAdmissible_of_rowInt | (intros; apply GlobalTheory.PerTwClose.twistedPeriodAdmissible_of_rowInt <;> assumption)
+  first | exact @GlobalTheory.PerTwClose.twistedPeriodAdmissible_of_rowInt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.AdmissiblePeriodTwistOfIntegralRowsStatement =====
@@ -1527,7 +1506,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.Inhab Fo
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.twistedPeriods_integral_at_bundlePoints : ∀ (Q : V4.Slot), OverCols Q → ∀ (Bd : BdT) (Lk : LkT Bd), PeriodEntriesOverColumns.TwistedPeriodAtBundlePoints Q Lk := by
-  first | exact @GlobalTheory.Fc.PeriodEntriesOverColumns.row_aPerTw_of_overCols | exact GlobalTheory.Fc.PeriodEntriesOverColumns.row_aPerTw_of_overCols | (intros; apply GlobalTheory.Fc.PeriodEntriesOverColumns.row_aPerTw_of_overCols <;> assumption)
+  first | exact @GlobalTheory.Fc.PeriodEntriesOverColumns.row_aPerTw_of_overCols
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.TwistedPeriodsIntegralAtBundlePointsStatement =====
@@ -1570,13 +1549,6 @@ section -- clump:auto
 
 
 
-section
-open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.Inhab Formalism.L2.Host GlobalTheory.EX GlobalTheory.EX.OB GlobalTheory.Mem GlobalTheory.Mem.Col2 GlobalTheory.Mem.Top GlobalTheory.Mem.Top.Bl GlobalTheory.Fc GlobalTheory.Fc.Cv NumberField
-attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
-theorem _root_.GlobalTheory.T.period_entries_tie_and_level_valuations_at_built : ∀ (𝒮 : Slots) (Lk : LkT _root_.GlobalTheory.Fc.BundleCondition), (Lg1 KPx (IsBuiltE 𝒮) (IsGoodE 𝒮) fun S => PeriodEntriesOverColumns.ReferenceChainEvaluationAtBundlePoints S Lk) ∧ (Lg1 KPx (IsBuiltE 𝒮) (IsGoodE 𝒮) fun S => PeriodEntriesOverColumns.TwistedPointAtBundlePoints S Lk) ∧ (Lg1 KPx (IsBuiltE 𝒮) (IsGoodE 𝒮) fun S => PeriodEntriesOverColumns.PeriodAtZeroAtBundlePoints S Lk) ∧ (Lg1 KPx (IsBuiltE 𝒮) (IsGoodE 𝒮) fun S => PeriodEntriesOverColumns.TwistedPeriodAtBundlePoints S Lk) ∧ (Lg1 KPx (IsBuiltE 𝒮) (IsGoodE 𝒮) fun S => PeriodEntriesOverColumns.Row_tie S Lk) ∧ (Lg1 KPx (IsBuiltE 𝒮) (IsGoodE 𝒮) fun S => AllBundlePointProperties.LevelPrimeColumnValuationsAtBundlePoints S Lk) := by
-  first | exact @_root_.GlobalTheory.Fc.six_rows_at_member_alt | exact _root_.GlobalTheory.Fc.six_rows_at_member_alt | (intros; apply _root_.GlobalTheory.Fc.six_rows_at_member_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.SixRowsAtMemberStatement =====

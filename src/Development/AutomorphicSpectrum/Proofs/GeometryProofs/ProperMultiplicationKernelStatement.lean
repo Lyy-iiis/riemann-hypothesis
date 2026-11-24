@@ -423,7 +423,7 @@ theorem aeval_one {I : Type} [Fintype I] [DecidableEq I] (c : I → R) (hc : ∀
     simp only [smul_mul_assoc, hc, smul_zero, Finset.sum_const_zero, add_zero, coeff_mul_X']
     rw [Finset.sum_eq_single n]
     · simp [Algebra.smul_def]
-    · intro b _ hb; simp [Finsupp.single_apply, hb, hb.symm]
+    · intro b _ hb; simp [hb.symm]
     · simp
 
 theorem aeval_two {d : ℕ} (a b : Fin d → R) (ha : ∀ i j, a i * a j = 0) (hb : ∀ i j, b i * b j = 0)
@@ -446,19 +446,19 @@ theorem aeval_two {d : ℕ} (a b : Fin d → R) (ha : ∀ i j, a i * a j = 0) (h
     · simp only [add_mul, Finset.sum_mul, smul_mul_assoc, ha, h3, smul_zero, Finset.sum_const_zero, add_zero,
         coeff_mul_X', Fin.zero_eta, Matrix.cons_val_zero]
       rw [Finset.sum_eq_single n (f := fun i => _ • a i), Finset.sum_eq_single n (f := fun i => ∑ j, _ • (a i * b j))]
-      · simp [Algebra.smul_def, Finsupp.single_apply, mul_comm]
-      · intro b _ hb; simp [Finsupp.single_apply, hb, hb.symm]
+      · simp [Algebra.smul_def, mul_comm]
+      · intro b _ hb; simp [hb.symm]
       · simp
-      · intro b _ hb; simp [Finsupp.single_apply, hb, hb.symm]
+      · intro b _ hb; simp [hb.symm]
       · simp
     · simp only [add_mul, Finset.sum_mul, smul_mul_assoc, hb, h4, smul_zero, Finset.sum_const_zero, add_zero,
         coeff_mul_X', Fin.mk_one, Matrix.cons_val_one, Matrix.cons_val_zero]
       rw [Finset.sum_comm, Finset.sum_eq_single n (f := fun i => _ • b i),
         Finset.sum_eq_single n (f := fun j => ∑ i, _ • (a i * b j))]
-      · simp [Algebra.smul_def, Finsupp.single_apply, mul_comm]
-      · intro b _ hb; simp [Finsupp.single_apply, hb, hb.symm]
+      · simp [Algebra.smul_def, mul_comm]
+      · intro b _ hb; simp [hb.symm]
       · simp
-      · intro b _ hb; simp [Finsupp.single_apply, hb, hb.symm]
+      · intro b _ hb; simp [hb.symm]
       · simp
 
 theorem span_sq {I : Type} (c : I → R) (hc : ∀ i j, c i * c j = 0) : Ideal.span (Set.range c) ^ 2 = ⊥ := by
@@ -564,7 +564,7 @@ theorem cp_eq (a : Fin d → R) (ha : ∀ i j, a i * a j = 0) : cp g a ha = hm (
 
 theorem jet_inj (hs : ∀ a : 𝓞 E, star a = H.bar a) (a : Fin d → Jet k Unit 1) (ha : ∀ i j, a i * a j = 0)
     (h0 : ∀ i, (jetAug : Jet k Unit 1 →ₐ[k] k) (a i) = 0) (h : cp g a ha = 1) : a = 0 := by
-  have h3 := ((GlobalTheory.CompanionTheory.Ar.GermUniv.germ_chart_universal E H hs _ t k _ d g).2 Unit 1 1 (MonObj.comp_one _)).unique
+  have h3 := ((_root_.PositivityTheory.HtPt.Cd.germ_univ E H hs _ t k _ d g).2 Unit 1 1 (MonObj.comp_one _)).unique
     (y₁ := th1 k 0 a ha) (y₂ := th1 k 0 0 (by simp))
     ⟨fun q => by rw [first_jet_mk, MvPolynomial.aeval_X, h0], h.symm.trans (cp_eq g a ha)⟩
     ⟨fun q => by rw [first_jet_mk, MvPolynomial.aeval_X]; exact map_zero _, (first_jet_zero g 0 _ _ rfl).symm⟩
@@ -1052,17 +1052,6 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 open scoped TensorProduct
 
-theorem _root_.GlobalTheory.T.proper_group_germ_finite_subscheme : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (k : Type) [Field k] [IsAlgClosed k] (p : ℕ) [Fact p.Prime] [CharP k p] (t : SAB H (Sp k)), IsProper t.G.hom → Out.KTriv t.G t.PP.L → ∀ (d : ℕ) (g : GermAt t (𝟙 (Sp k)) d) (a : 𝓞 E) (A : Type) [CommRing A] [Algebra k A] [Module.Finite k A] (i : Sp A ⟶ t.G.left), IsPullback i (spMap (algebraMap k A)) (t.act.act a).left (η[t.G]).left →
-    ∃ (A' : Type) (_ : CommRing A') (_ : HopfAlgebra k A') (_ : Coalgebra.IsCocomm k A') (_ : Module.Finite k A'),
-      Module.finrank k A' = Module.finrank k A ∧
-      ∃ (D : LinearMap.ker (Matrix.toLin' (rho g.B a)) →ₗ[k] (A' →ₗ[k] k))
-        (T : LinearMap.ker (Matrix.toLin' (rho g.B (star a))) →ₗ[k] A'),
-        Function.Injective D ∧ Function.Injective T ∧
-        (∀ u f f', D u (f * f') = D u f * Coalgebra.counit (R := k) f' + Coalgebra.counit (R := k) f * D u f') ∧
-        (∀ z, Coalgebra.comul (R := k) (T z) = T z ⊗ₜ[k] (1 : A') + (1 : A') ⊗ₜ[k] T z) ∧
-        ∀ (u : LinearMap.ker (Matrix.toLin' (rho g.B a))) (z : LinearMap.ker (Matrix.toLin' (rho g.B (star a)))),
-          (z : Fin d → k) ⬝ᵥ (bil (g.B.ad a) 1 1).transpose.mulVec (u : Fin d → k) = 0 → D u (T z) = 0 := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Flat.KerGeom.kerHopf_geom | exact GlobalTheory.CompanionTheory.Ar.Flat.KerGeom.kerHopf_geom | (intros; apply GlobalTheory.CompanionTheory.Ar.Flat.KerGeom.kerHopf_geom <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.ProperGroupGermFiniteSubschemeStatement =====
@@ -1153,7 +1142,7 @@ open GlobalTheory.CompanionTheory.Ar.Flat.KerBd in
 theorem lemF_ker_order_dvd : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (k : Type) [Field k] [IsAlgClosed k] (p : ℕ) [Fact p.Prime] [CharP k p] (t : SAB H (Sp k)), IsProper t.G.hom → Out.KTriv t.G t.PP.L → ∀ (d : ℕ) (g : GermAt t (𝟙 (Sp k)) d) (a : 𝓞 E) (A : Type) [CommRing A] [Algebra k A] [Module.Finite k A] (i : Sp A ⟶ t.G.left), IsPullback i (spMap (algebraMap k A)) (t.act.act a).left (η[t.G]).left → p ^ Module.finrank k (LinearMap.ker (rhoH g.B a)) ∣ Module.finrank k A := by
   intro E _ _ _ H _ hbar k _ _ p _ _ t hprop hK d g a A _ _ _ i hpb
   obtain ⟨A', _, _, _, _, hrk, D, T, hD, hT, hder, hprim, horth⟩ :=
-    GlobalTheory.T.proper_group_germ_finite_subscheme E H hbar k p t hprop hK d g a A i hpb
+    _root_.GlobalTheory.CompanionTheory.Ar.Flat.KerGeom.kerHopf_geom E H hbar k p t hprop hK d g a A i hpb
   let W0 : Submodule k (LinearMap.ker (Matrix.toLin' (rho g.B a))) :=
     (Wd g.B a).comap (LinearMap.ker (Matrix.toLin' (rho g.B a))).subtype
   have hW0 : Module.finrank k W0 = Module.finrank k (Wd g.B a) :=
@@ -1186,7 +1175,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.proper_multiplication_kernel : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) → ∀ (k : Type) [Field k] [IsAlgClosed k] (p : ℕ) [Fact p.Prime] [CharP k p] (t : SAB H (Sp k)), IsProper t.G.hom → Out.KTriv t.G t.PP.L → ∀ (d : ℕ) (g : GermAt t (𝟙 (Sp k)) d) (a : 𝓞 E) (A : Type) [CommRing A] [Algebra k A] [Module.Finite k A] (i : Sp A ⟶ t.G.left), IsPullback i (spMap (algebraMap k A)) (t.act.act a).left (η[t.G]).left → p ^ Module.finrank k (LinearMap.ker (rhoH g.B a)) ∣ Module.finrank k A := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Flat.lemF_ker_order_dvd | exact GlobalTheory.CompanionTheory.Ar.Flat.lemF_ker_order_dvd | (intros; apply GlobalTheory.CompanionTheory.Ar.Flat.lemF_ker_order_dvd <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Flat.lemF_ker_order_dvd
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.ProperMultiplicationKernelStatement =====

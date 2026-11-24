@@ -374,7 +374,7 @@ theorem isTangent_iff_push (y : epsR k ⟶ (Over.pullback (spMap f)).obj G) :
     · rw [Category.assoc, Over.w y, Over.w η[(Over.pullback (spMap f)).obj G]]
       simp only [Over.mk_hom, spMap, ← Spec.map_comp, ← CommRingCat.ofHom_comp]
       have : (TrivSqZeroExt.fstHom k k k).toRingHom.comp (algebraMap k (DualNumber k)) = RingHom.id k := by
-        ext s; simp [TrivSqZeroExt.algebraMap_eq_inl]
+        ext s; simp
       rw [this]
       simp
 
@@ -584,7 +584,7 @@ theorem exists_vecMul_eq_zero {W Ω ι κ : Type} [CommRing W] [IsDomain W] [Fie
     rw [← LinearMap.toMatrix'_mulVec G] at this
     rw [Matrix.mul_apply, Matrix.one_apply,
       show (if i = j then (1:L) else 0) = (Pi.single i (1:L) : ι → L) j by simp [Pi.single_apply, eq_comm], ← this]
-    simp [Matrix.mulVec, dotProduct, P, mul_comm, Matrix.vecMulLinear_apply]
+    simp [Matrix.mulVec, dotProduct, P, mul_comm]
   have hAf : AL.map g = A.map f := by ext i j; simp [AL, hg]
   have hP' : A.map f * (P.transpose.map g) = 1 := by
     rw [← hAf, ← Matrix.map_mul, hP, Matrix.map_one _ (map_zero g) (map_one g)]
@@ -647,7 +647,7 @@ theorem exists_primitive_annihilator : ∀ (F : Type) [Field F] [NumberField F] 
       intro i τ
       have e := congrArg (fun t : 𝓞 F => τ (algebraMap (𝓞 F) F t)) (b.sum_repr (a * b i))
 
-      simp only [map_sum, map_zsmul, map_mul, zsmul_eq_mul] at e
+      simp only [map_sum, map_mul, zsmul_eq_mul] at e
       simpa [hb'] using e
     have := inj (fun j => ∑ i, x i * (b.repr (a * b i) j : Ω) - σ a * x j) (fun τ => by
       have key : ∑ j, (∑ i, x i * (b.repr (a * b i) j : Ω)) * τ (b' j) =
@@ -817,7 +817,7 @@ theorem finrank_eq_zero_of_dual_killed : ∀ (F : Type) [Field F] [NumberField F
       B.repr (ρ (∑ i, e i • b i) χ) r = ∑ i, e i * B.repr (ρ (b i) χ) r := by
     intro e χ r
 
-    simp [map_sum, map_zsmul, LinearMap.sum_apply, Finsupp.finsetSum_apply]
+    simp [map_sum, LinearMap.sum_apply, Finsupp.finsetSum_apply]
   rcases CharP.char_is_prime_or_zero k (ringChar k) with hp | hp
   · set p := ringChar k with hpdef
     haveI : Fact p.Prime := ⟨hp⟩
@@ -838,7 +838,7 @@ theorem finrank_eq_zero_of_dual_killed : ∀ (F : Type) [Field F] [NumberField F
       push_cast
       refine Finset.sum_congr rfl fun i _ => ?_
       rw [map_zsmul, zsmul_eq_mul, hedef]
-      simp [ZMod.natCast_zmod_val, mul_comm]
+      simp [mul_comm]
     have h := GlobalTheory.dvd_coord_of_action_dvd F X ρ ι b p (by exact_mod_cast hp.ne_zero) _ hdiv i0
     rw [Module.Basis.repr_sum_self] at h
     apply hπ
@@ -1152,10 +1152,6 @@ theorem proper_pull {K W L : Type} [Field K] [CommRing W] [Field L] [Algebra K L
   have : IsIso e.hom.left := inferInstanceAs (IsIso ((Over.forget _).map e.hom))
   infer_instance
 
-theorem spMap_comp {R S T : Type} [CommRing R] [CommRing S] [CommRing T] (f : R →+* S) (g : S →+* T) :
-    spMap (g.comp f) = spMap g ≫ spMap f := by
-  simp [spMap, CommRingCat.ofHom_comp, Spec.map_comp]
-
 theorem eq_one_of_lieMult_zero {S : Scheme.{0}} {O : Type} [CommRing O] {G : Over S} [GrpObj G] (a : OAct O G)
     {k : Type} [Field k] (t : Sp k ⟶ S) (τ : O →+* k) (h : LieMult a t τ 0) (w : epsPt t ⟶ G)
     (hw : IsLieEigen a t τ w) : w = 1 := by
@@ -1282,10 +1278,10 @@ theorem potGood_of_lieMult_zero : ∀ (V K : Type) [CommRing V] [IsDomain V] [Is
   let aG : OAct (𝓞 F) G := ⟨actG, g1, g2, g3, g4⟩
   obtain ⟨g', hg'⟩ := lift_ext V K W L Ω hc hfin g
   have e1 := GlobalTheory.LiePull.lieMult_pull (𝓞 F) _ _ A _ _ (pullback.fst _ _) act aL hAL hLc Ω (spMap g') σ 0
-  have hx : spMap g' ≫ spMap (algebraMap K L) = spMap g := by rw [← hg', spMap_comp]
+  have hx : spMap g' ≫ spMap (algebraMap K L) = spMap g := by rw [← hg', _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
   have e2 := GlobalTheory.LiePull.lieMult_pull (𝓞 F) _ _ G _ _ φ aG aL hφ hGc Ω (spMap g') σ 0
   have hG0 : LieMult aG (spMap (g'.comp (algebraMap W L))) σ 0 := by
-    rw [spMap_comp]
+    rw [_root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
     exact e2.1 (e1.2 (hx ▸ hL))
   haveI : CharZero Ω := charZero_of_injective_ringHom g.injective
   have hinj : Function.Injective (g'.comp (algebraMap W L)) :=
@@ -1918,10 +1914,6 @@ open GlobalTheory.UPel.HT
 
 namespace GlobalTheory.UPel.HT
 
-lemma specMap_contravariant_comp_ringHom {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B) (g : B →+* C) :
-    spMap g ≫ spMap f = spMap (g.comp f) := by
-  simp only [spMap, ← Spec.map_comp]; rfl
-
 theorem isProper_model_of_compact (p : ℕ) [Fact p.Prime] (D : Datum p) (R : Type) [CommRing R] [IsDomain R]
     [CharZero R] [IsNoetherianRing R] (b : Base D R) (N : ℕ) (M : Model b N)
     (hc : 2 * D.a < Module.finrank ℚ D.F ∨ (D.IsDivision ∧ D.n < 2 * D.m)) : IsProper M.s := by
@@ -1941,7 +1933,7 @@ theorem isProper_model_of_compact (p : ℕ) [Fact p.Prime] (D : Datum p) (R : Ty
     (spMap (algebraMap K L)) oK
   have hLs : spMap (algebraMap K L) ≫ spMap ((algebraMap V K).comp β) =
       spMap ((algebraMap W L).comp ((algebraMap V W).comp β)) := by
-    rw [specMap_contravariant_comp_ringHom, ← RingHom.comp_assoc, ← RingHom.comp_assoc, hcomp]
+    rw [_root_.GlobalTheory.spMap_comp_ring, ← RingHom.comp_assoc, ← RingHom.comp_assoc, hcomp]
   generalize hs' : spMap (algebraMap K L) ≫ spMap ((algebraMap V K).comp β) = s₁ at oL hL
   obtain rfl : s₁ = spMap ((algebraMap W L).comp ((algebraMap V W).comp β)) := hs'.symm.trans hLs
   obtain ⟨φ, hφ⟩ := _root_.GlobalTheory.SS.exists_isGrpPullback_of_isModel K W L oK.A G hmod oL.A hL.φ hL.cart
@@ -1950,7 +1942,7 @@ theorem isProper_model_of_compact (p : ℕ) [Fact p.Prime] (D : Datum p) (R : Ty
   obtain ⟨h₁⟩ := _root_.GlobalTheory.UPel.HT.objMap_comp p D R b N _ _ _ _ _ _ oL oW M.univ _ _ hW hf
   obtain ⟨h₂⟩ := _root_.GlobalTheory.UPel.HT.objMap_comp p D R b N _ _ _ _ _ _ oL oK M.univ _ _ hL hK
   obtain ⟨g, -, hg⟩ := M.rep (Sp L) _ oL
-  have e₁ : spMap (algebraMap W L) ≫ f = g := hg _ ⟨by rw [Category.assoc, hfs, specMap_contravariant_comp_ringHom], ⟨h₁⟩⟩
+  have e₁ : spMap (algebraMap W L) ≫ f = g := hg _ ⟨by rw [Category.assoc, hfs, _root_.GlobalTheory.spMap_comp_ring], ⟨h₁⟩⟩
   have e₂ : spMap (algebraMap K L) ≫ x = g := hg _ ⟨by rw [Category.assoc, hx, hLs], ⟨h₂⟩⟩
   exact ⟨W, L, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance,
     inferInstance, inferInstance, hcomp, hloc, f, e₂.trans e₁.symm⟩

@@ -118,15 +118,6 @@ theorem diag_conj_weylRep {R : Type} [CommRing R] {n : ℕ} {s : Equiv.Perm (Fin
   · intro b _ hb; rw [hy b i hb, mul_zero]
   · simp
 
-theorem ordL_congr {L : Type} [Field L] [Valued L (WithZero (Multiplicative ℤ))] {x y : L}
-    (h : Valued.v x = Valued.v y) : ordL x = ordL y := by
-  have key : ∀ z : L, ordL z = (fun w : WithZero (Multiplicative ℤ) =>
-      if h : w = 0 then (0 : ℤ) else -Multiplicative.toAdd (WithZero.unzero h)) (Valued.v z) := fun _ => rfl
-  rw [key x, key y, h]
-
-theorem ordL_one' {L : Type} [Field L] [Valued L (WithZero (Multiplicative ℤ))] : ordL (1 : L) = 0 :=
-  Formalism.UG.P.fIwasawa_ordL_unit 1 1 (by simp) (by simp) (by simp)
-
 theorem chiDeltaU_conj_simpleU_long :
     ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicative ℤ))] (ϖ : L) (σ : L →+* L) (q : ℕ),
     IsUnramInv ϖ σ q → ∀ (n : ℕ) (k : Fin (n / 2)), ¬ k.val + 1 < n / 2 → Even n →
@@ -161,7 +152,7 @@ theorem chiDeltaU_conj_simpleU_long :
   have hb0 : σ (T (lo k).rev (lo k).rev) ≠ 0 := left_ne_zero_of_mul_eq_one hprod
   have hord : ordL (T (lo k).rev (lo k).rev) = -ordL (T (lo k) (lo k)) := by
     have h := Formalism.UG.P.fIwasawa_ordL_mul _ _ hb0 ha0
-    rw [hprod, ordL_one', ordL_congr (hσv _)] at h
+    rw [hprod, _root_.Formalism.UG.P.fSatake_ord_one, _root_.Formalism.UG.P.fSatake_ord_of_v (hσv _)] at h
     omega
   unfold chiDeltaU
   rw [← hT]
@@ -719,7 +710,7 @@ theorem integral_geom_on_shells {X : Type} [MeasurableSpace X] (μ : Measure X) 
       funext j
       cases j with
       | zero => simp [shellVal]
-      | succ j => simp [shellVal, norm_pow, norm_div]
+      | succ j => simp [shellVal, norm_pow]
     refine Complex.hasSum_ofReal.1 ?_
     show HasSum (fun j => ((‖shellVal q a j‖ * shellMass q j : ℝ) : ℂ)) ((s : ℝ) : ℂ)
     rw [e, hsC]
@@ -872,12 +863,9 @@ theorem transv_mem_GLint {n : ℕ} (i j : Fin n) (hij : i ≠ j) {c : L} (hc : V
 theorem ordL_neg (x : L) : ordL (-x) = ordL x := by
   simp only [ordL, Valuation.map_neg]
 
-theorem ordL_one' : ordL (1 : L) = 0 :=
-  P.fIwasawa_ordL_unit 1 1 (by rw [map_one]) (by rw [map_one]) (mul_one 1)
-
 theorem ordL_inv {x : L} (hx : x ≠ 0) : ordL x⁻¹ = -ordL x := by
   have h := P.fIwasawa_ordL_mul x x⁻¹ hx (inv_ne_zero hx)
-  rw [mul_inv_cancel₀ hx, ordL_one'] at h
+  rw [mul_inv_cancel₀ hx, _root_.Formalism.UG.P.fSatake_ord_one] at h
   omega
 
 theorem ordL_monomial_entry {n : ℕ} {t : Equiv.Perm (Fin n)} {Y : GL (Fin n) L} (hY : IsWeylRep t Y)
@@ -890,13 +878,13 @@ theorem ordL_monomial_entry {n : ℕ} {t : Equiv.Perm (Fin n)} {Y : GL (Fin n) L
 
 theorem isBorelU_one (σ : L →+* L) (n : ℕ) : IsBorelU (1 : GU σ n) := by
   intro i j h
-  simp [Matrix.one_apply, ne_of_gt h]
+  simp [ne_of_gt h]
 
 theorem chiDeltaU_one (σ : L →+* L) (n m q : ℕ) (α : Fin m → ℂ) : chiDeltaU q α (1 : GU σ n) = 1 := by
   unfold chiDeltaU
   refine Finset.prod_eq_one fun i _ => ?_
   split_ifs
-  · simp [ordL_one']
+  · simp [_root_.Formalism.UG.P.fSatake_ord_one]
   · rfl
 
 end GlobalTheory.GKUnitaryRankOne
@@ -937,7 +925,7 @@ theorem value_rankOne : ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplica
     rw [transv_val]
     by_cases h : i = a ∧ j = a'
     · obtain ⟨rfl, rfl⟩ := h
-      simp [Matrix.single_apply, haa', hb]
+      simp [haa', hb]
     · rw [hu i j h, Matrix.add_apply, Matrix.single_apply, if_neg (fun h' => h ⟨h'.1.symm, h'.2.symm⟩), add_zero]
   have hσb : σ b = -b := by
     have h := (GlobalTheory.LGrp.mem_GU_iff σ n (u : GL (Fin n) L)).1 u.2 a a'
@@ -1006,8 +994,7 @@ theorem value_rankOne : ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplica
       simpa using this
     have hdiag_a : ordL ((((Pb : GU σ n) : GL (Fin n) L) : Matrix (Fin n) (Fin n) L) a a) = -ordL b := by
       rw [hP, Equiv.swap_apply_left, hM]
-      simp only [Matrix.one_apply, if_neg haa'.symm, if_neg (fun h : a = a' ∧ a' = a => haa' h.1),
-        if_pos (⟨rfl, rfl⟩ : a' = a' ∧ a = a), if_neg (fun h : a = a' ∧ a = a => haa' h.1)]
+      simp only [Matrix.one_apply, if_neg haa'.symm, if_neg (fun h : a = a' ∧ a' = a => haa' h.1)]
       have hy0 : (((y : GL (Fin n) L)⁻¹ : GL (Fin n) L) : Matrix (Fin n) (Fin n) L) a a' ≠ 0 := by
         have := monomial_entry_ne_zero hyiw a
         rwa [inv_inv, hs, Equiv.swap_apply_left] at this
@@ -1139,7 +1126,7 @@ theorem heis_mem_GU_iff (σ : L →+* L) {n : ℕ} {i j k : Fin n} (hij : i ≠ 
     have h1 := h i j
     have h2 := h j k
     have h3 := h i k
-    simp [heisM_apply, hij, hjk, hik, hij.symm, hjk.symm, hik.symm] at h1 h2 h3
+    simp [heisM_apply, hij, hjk, hik, hij.symm, hjk.symm] at h1 h2 h3
     exact ⟨h1.symm, h2.symm, h3.symm⟩
   · rintro ⟨h1, h2, h3⟩ s t
     rw [h1, h2, h3]
@@ -1191,12 +1178,9 @@ theorem v_heisM_le {n : ℕ} (i j k : Fin n) {p q r : L} (hp : Valued.v p ≤ 1)
   refine Valuation.map_add_le _ (Valuation.map_add_le _ (Valuation.map_add_le _ ?_ ?_) ?_) ?_ <;>
     split_ifs <;> simp [*]
 
-theorem ordL_one' : ordL (1 : L) = 0 :=
-  P.fIwasawa_ordL_unit 1 1 (by rw [map_one]) (by rw [map_one]) (mul_one 1)
-
 theorem ordL_inv {x : L} (hx : x ≠ 0) : ordL x⁻¹ = -ordL x := by
   have h := P.fIwasawa_ordL_mul x x⁻¹ hx (inv_ne_zero hx)
-  rw [mul_inv_cancel₀ hx, ordL_one'] at h
+  rw [mul_inv_cancel₀ hx, _root_.Formalism.UG.P.fSatake_ord_one] at h
   omega
 
 theorem ordL_monomial_entry {n : ℕ} {t : Equiv.Perm (Fin n)} {Y : GL (Fin n) L} (hY : IsWeylRep t Y)
@@ -1209,13 +1193,13 @@ theorem ordL_monomial_entry {n : ℕ} {t : Equiv.Perm (Fin n)} {Y : GL (Fin n) L
 
 theorem isBorelU_one (σ : L →+* L) (n : ℕ) : IsBorelU (1 : GU σ n) := by
   intro i j h
-  simp [Matrix.one_apply, ne_of_gt h]
+  simp [ne_of_gt h]
 
 theorem chiDeltaU_one (σ : L →+* L) (n m q : ℕ) (α : Fin m → ℂ) : chiDeltaU q α (1 : GU σ n) = 1 := by
   unfold chiDeltaU
   refine Finset.prod_eq_one fun i _ => ?_
   split_ifs
-  · simp [ordL_one']
+  · simp [_root_.Formalism.UG.P.fSatake_ord_one]
   · rfl
 
 theorem v_sq_le {σ : L →+* L} (hσ : ∀ x, Valued.v (σ x) = Valued.v x) {b d c : L} (hb : σ b = -d)

@@ -84,6 +84,7 @@ import Formalism.LocalToGlobal.SiegelLatticeTheory.HaarTransversals.HidaSetting
 import Formalism.SharpRestriction.CuspSpanNormBounds.IsPrimitiveSub
 import Formalism.SharpRestriction.CuspSpanNormBounds.Point
 import Std.Tactic.BVDecide.Normalize.Prop
+import Formalism.LocalToGlobal.SiegelLatticeTheory.CokernelGLCounts.RankPointCounts.HermitianCombinationZ
 import Mathlib.CategoryTheory.Countable
 import Formalism.LocalToGlobal.SiegelLatticeTheory.ClosedLocalOrbits.GaugeLatticeShifts.FormAll
 import Mathlib.Tactic.Linter.HaveILetI
@@ -101,7 +102,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.covolume_integralUnipotentStabilizer_of_term : ∀ Cg cb Cu cT CT C0 A : ℝ, ∃ C : ℝ, 1 ≤ C ∧ ∀ (D : D7) (large₂ : SizeData₂ D) (u u' : D.what₂.Word) (C' Cl : ℝ), 1 ≤ Cl → Hyp D large₂ u u' C' Cl Cg cb Cu cT CT C0 A → ∀ (F0 : Fb D u) (Λ : LatV D), IsBase D u F0 → IsRowLat D F0 Λ → ∀ F' : FlagU D u', IsTermF D Λ (lf D F0) F' → ∀ (p : Point D.host.E (D.R.rS + 1)) (L U : GramM D), IsLoUni L → IsUpUni U → ZhatOM (ZhatL (lf D F0) F') = L * ptMat p * U → ∃ Ω : Set (D.what₂.Tau → GlobalTheory.LoopV.roots (ptMat p) → ℂ), MeasurableSet Ω ∧ MeasureTheory.volume Ω * ENNReal.ofReal (D.host.rdE ^ (2 * D.R.f * (D.R.rS + 1) ^ 3)) ≤ ENNReal.ofReal (HHZ D large₂.sc.b C (ZhatL (lf D F0) F') ^ (C * (D.R.rS : ℝ) ^ 2)) ∧ ∀ c : D.what₂.Tau → GlobalTheory.LoopV.roots (ptMat p) → ℂ, ∃ n ∈ NLam Λ (lf D F0) ∩ NLam Λ F', ∃ a : GramM D, (∀ j : Fin (D.R.rS + 1), n (frame F' j) = ∑ i : Fin (D.R.rS + 1), ((-1) ^ (i.val + j.val) * a i j) • frame F' i) ∧ (fun τ (q : GlobalTheory.LoopV.roots (ptMat p)) => ((U * a * U⁻¹).map (embS D τ) * GlobalTheory.LoopV.ofRoots (GlobalTheory.LoopV.roots (ptMat p)) (c τ) : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ) q.1.1 q.1.2) ∈ Ω := by
-  first | exact @GlobalTheory.LoopC.CovTerm.covolume_term | exact GlobalTheory.LoopC.CovTerm.covolume_term | (intros; apply GlobalTheory.LoopC.CovTerm.covolume_term <;> assumption)
+  first | exact @GlobalTheory.LoopC.CovTerm.covolume_term
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.CovolumeIntegralUnipotentStabilizerOfTermStatement =====
@@ -139,7 +140,7 @@ open Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.leadMinor_gramMatrix_const_doubleCoset : ∀ (D : D7) (Λ : Submodule (NumberField.RingOfIntegers D.host.E) (VS D).V) (T T' : D.host.E) (F : LFlag (D.sp.Y 0) D.R.rS T) (F₁ F₂ : LFlag (D.sp.Y 0) D.R.rS T'), Formalism.L2.SG.TermDef.DCRel Λ F F₁ F₂ → ∀ l : ℕ, leadMinorE (ZhatL F F₂) l = leadMinorE (ZhatL F F₁) l := by
-  first | exact @GlobalTheory.leadMinorE_zhatL_dcrel | exact GlobalTheory.leadMinorE_zhatL_dcrel | (intros; apply GlobalTheory.leadMinorE_zhatL_dcrel <;> assumption)
+  first | exact @GlobalTheory.leadMinorE_zhatL_dcrel
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.LeadMinorGramMatrixConstDoubleCosetStatement =====
@@ -255,7 +256,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Matrix
 
 theorem _root_.GlobalTheory.T.frameGram_mul_eq_conjTranspose_mul_frameMatrices : ∀ (D : D7) (X : HidaSetting D) (u u' : D.what₂.Word) (g γ h : X.B.I.Ginf) (v : NumberField.InfinitePlace X.B.I.F) (C B : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ), GlobalTheory.LoopAct.IsMatOn (uMat (g⁻¹ v)) (Formalism.L2.SG.RealObj.frm X u 1 v) C → GlobalTheory.LoopAct.IsMatOn (uMat (h v)) (Formalism.L2.SG.RealObj.frm X u' 1 v) B → Formalism.L2.SG.RealObj.ZX X u u' 1 (g * γ * h) v = Cᴴ * Formalism.L2.SG.RealObj.ZX X u u' 1 γ v * B := by
-  first | exact @GlobalTheory.ZxMul.zx_mul | exact GlobalTheory.ZxMul.zx_mul | (intros; apply GlobalTheory.ZxMul.zx_mul <;> assumption)
+  first | exact @GlobalTheory.ZxMul.zx_mul
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.FrameGramMulEqConjTransposeMulFrameMatricesStatement =====
@@ -376,7 +377,7 @@ theorem exists_isUpUni_isMatOn {e : Fin r → Fin n → ℂ} {z : Fin n → ℂ}
           rw [hca0 a a (lt_irrefl _), add_zero]
   · rw [Fin.sum_univ_castSucc]
     simp only [Formalism.L2.SG.RealObj.fam, Fin.snoc_castSucc, Fin.snoc_last, Matrix.add_apply, add_smul,
-      Finset.sum_add_distrib, hQl, zero_smul, add_zero]
+      Finset.sum_add_distrib, hQl, add_zero]
     refine Fin.lastCases ?_ (fun a => ?_) b
     · simp only [Fin.snoc_last, hQcl, Matrix.one_apply_eq, one_smul,
         Matrix.one_apply_ne (Fin.castSucc_lt_last _).ne, zero_smul, Finset.sum_const_zero, zero_add]
@@ -425,7 +426,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Matrix
 
 theorem _root_.GlobalTheory.T.frameMatrix_mem_unipotentStabilizer_frameGram : ∀ (D : D7) (X : HidaSetting D) (u u' : D.what₂.Word) (γ y : X.B.I.Ginf) (v : NumberField.InfinitePlace X.B.I.F) (M : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ), y ∈ Formalism.L2.SG.RealObj.StInf X u u' γ → IsUpUni M → GlobalTheory.LoopAct.IsMatOn (uMat ((γ⁻¹ * y * γ) v)) (Formalism.L2.SG.RealObj.frm X u' 1 v) M → IsUnit (Formalism.L2.SG.RealObj.ZX X u u' 1 γ v).det → M ∈ GlobalTheory.LoopV.stabU (Formalism.L2.SG.RealObj.ZX X u u' 1 γ v) := by
-  first | exact @GlobalTheory.FrameStab.frameMat_mem_stabU | exact GlobalTheory.FrameStab.frameMat_mem_stabU | (intros; apply GlobalTheory.FrameStab.frameMat_mem_stabU <;> assumption)
+  first | exact @GlobalTheory.FrameStab.frameMat_mem_stabU
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.FrameMatrixMemUnipotentStabilizerFrameGramStatement =====
@@ -623,7 +624,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Matrix
 
 theorem _root_.GlobalTheory.T.rationalBesselFrame_realPlace_linearIndependent : ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word) (v : NumberField.InfinitePlace X.B.I.F), LinearIndependent ℂ (Formalism.L2.SG.RealObj.frm X u 1 v) := by
-  first | exact @GlobalTheory.RationalFrame.frame_linearIndependent | exact GlobalTheory.RationalFrame.frame_linearIndependent | (intros; apply GlobalTheory.RationalFrame.frame_linearIndependent <;> assumption)
+  first | exact @GlobalTheory.RationalFrame.frame_linearIndependent
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.RationalBesselFrameRealPlaceLinearIndependentStatement =====
@@ -694,7 +695,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Matrix
 
 theorem _root_.GlobalTheory.T.rationalFrameGram_embed_eq_realFrameGram : ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (W : WittDat X) (u u' : D.what₂.Word) (s : TT Y u u') (τ : D.what₂.Tau), (ZhatL (lf D (FlagOfWord W u)) (Formalism.L2.SG.Saturated.mapL (W.δ u) (W.isom u) s.frame)).map (embS D τ) = Formalism.L2.SG.RealObj.ZX X u u' 1 s.pt.1 (X.pl.symm τ) := by
-  first | exact @GlobalTheory.zhatRat_embed | exact GlobalTheory.zhatRat_embed | (intros; apply GlobalTheory.zhatRat_embed <;> assumption)
+  first | exact @GlobalTheory.zhatRat_embed
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.RationalFrameGramEmbedEqRealFrameGramStatement =====
@@ -747,7 +748,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Matrix
 
 theorem _root_.GlobalTheory.T.rationalLink_conjugate_mem_integralRealPoints : ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (W : WittDat X) (u u' : D.what₂.Word) (s : TT Y u u') (n : (VS D).V ≃ₗ[D.host.E] (VS D).V), n ∈ NLam (Formalism.HermitianLatticesTheory.gmap (W.δ u) s.lam) (lf D (FlagOfWord W u)) ∩ NLam (Formalism.HermitianLatticesTheory.gmap (W.δ u) s.lam) (Formalism.L2.SG.Saturated.mapL (W.δ u) (W.isom u) s.frame) → ∃ x : X.B.I.GA, Formalism.L2.SG.TermOp.RatLink X x ((W.δ u)⁻¹ * n * W.δ u) ∧ x.1 ∈ Formalism.L2.SG.TermOp.ROinf s := by
-  first | exact @GlobalTheory.CoverAct.ratLink_mem_ROinf | exact GlobalTheory.CoverAct.ratLink_mem_ROinf | (intros; apply GlobalTheory.CoverAct.ratLink_mem_ROinf <;> assumption)
+  first | exact @GlobalTheory.CoverAct.ratLink_mem_ROinf
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.RationalLinkConjugateMemIntegralRealPointsStatement =====
@@ -804,7 +805,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Matrix
 
 theorem _root_.GlobalTheory.T.rationalRootCoordinates_eq_frameMatrix : ∀ (D : D7) (X : HidaSetting D) (u' : D.what₂.Word) (w : Point D.host.E (D.R.rS + 1)) (γ s y : X.B.I.Ginf) (τ : D.what₂.Tau) (M : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ), GlobalTheory.LoopAct.IsMatOn (uMat ((γ⁻¹ * (s⁻¹ * y * s) * γ) (X.pl.symm τ))) (Formalism.L2.SG.RealObj.frm X u' 1 (X.pl.symm τ)) M → ∀ q : GlobalTheory.LoopV.roots (ptMat w), GlobalTheory.LoopVol.ratCoord X u' w γ s y τ q = M q.1.1 q.1.2 := by
-  first | exact @GlobalTheory.LoopVol.ratCoord_eq_matOn | exact GlobalTheory.LoopVol.ratCoord_eq_matOn | (intros; apply GlobalTheory.LoopVol.ratCoord_eq_matOn <;> assumption)
+  first | exact @GlobalTheory.LoopVol.ratCoord_eq_matOn
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.RationalRootCoordinatesEqFrameMatrixStatement =====
@@ -901,7 +902,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Matrix
 
 theorem _root_.GlobalTheory.T.realBesselSubgroup_acts_frame_upperUnitriangular : ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word) (y : X.B.I.Ginf), y ∈ X.SinfU u → ∀ v : NumberField.InfinitePlace X.B.I.F, ∃ M : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ, IsUpUni M ∧ GlobalTheory.LoopAct.IsMatOn (uMat (y v)) (Formalism.L2.SG.RealObj.frm X u 1 v) M := by
-  first | exact @GlobalTheory.LoopAct.sinfU_frame_upUni | exact GlobalTheory.LoopAct.sinfU_frame_upUni | (intros; apply GlobalTheory.LoopAct.sinfU_frame_upUni <;> assumption)
+  first | exact @GlobalTheory.LoopAct.sinfU_frame_upUni
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.RealBesselSubgroupActsFrameUpperUnitriangularStatement =====
@@ -988,7 +989,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Matrix
 
 theorem _root_.GlobalTheory.T.realPoint_rationalIsometry_acts_frame_matrix : ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.Word) (s : TT Y u u') (n : (VS D).V ≃ₗ[D.host.E] (VS D).V) (x : X.B.I.GA) (A : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) D.host.E), Formalism.L2.SG.TermOp.RatLink X x n → (∀ j, n (frame s.frame j) = ∑ i, A i j • frame s.frame i) → ∀ v : NumberField.InfinitePlace X.B.I.F, GlobalTheory.LoopAct.IsMatOn (uMat (x.1 v)) (fun j => uMat (s.pt.1 v) *ᵥ Formalism.L2.SG.RealObj.frm X u' 1 v j) (A.map (embS D (X.pl v))) := by
-  first | exact @GlobalTheory.realPoint_ratIsom_isMatOn | exact GlobalTheory.realPoint_ratIsom_isMatOn | (intros; apply GlobalTheory.realPoint_ratIsom_isMatOn <;> assumption)
+  first | exact @GlobalTheory.realPoint_ratIsom_isMatOn
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.RealPointRationalIsometryActsFrameMatrixStatement =====
@@ -1058,10 +1059,6 @@ theorem act_isUpUni_map {K : Type} [Field K] {N : ℕ} (ψ : K →+* ℂ) {M : M
 theorem act_isLoUni_map {K : Type} [Field K] {N : ℕ} (ψ : K →+* ℂ) {M : Matrix (Fin N) (Fin N) K}
     (h : IsLoUni M) : IsLoUni (M.map ψ) := fun i j =>
   ⟨fun hij => by simp [(h i j).1 hij], fun hij => by subst hij; simp [(h i i).2 rfl]⟩
-
-theorem act_isLoUni_conjTranspose {N : ℕ} {C : Matrix (Fin N) (Fin N) ℂ} (h : IsUpUni C) : IsLoUni Cᴴ :=
-  fun i j => ⟨fun hij => by simp [Matrix.conjTranspose_apply, (h j i).1 hij],
-    fun hij => by subst hij; simp [Matrix.conjTranspose_apply, (h i i).2 rfl]⟩
 
 theorem act_sgn_mem {r : ℕ} {Z P m : Matrix (Fin (r + 1)) (Fin (r + 1)) ℂ} (hZ : IsUnit Z.det)
     (hP : Z * actSgn r = P) (hm : m ∈ GlobalTheory.LoopV.stabU Z) : actSgn r * m * actSgn r ∈ GlobalTheory.LoopV.stabU P := by
@@ -1148,9 +1145,9 @@ theorem cover_action : ∀ Cg cb Cu cT CT C0 A : ℝ, ∀ (D : D7) (X : HidaSett
   refine ⟨T, ?_, ?_⟩
   · set a : D.what₂.Tau → Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ := fun τ => Uc τ * (sg * (B τ)⁻¹ * sg) with ha
     set b : D.what₂.Tau → Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ := fun τ => sg * B τ * sg * (Uc τ)⁻¹ with hb
-    have hau : ∀ τ, IsUpUni (a τ) := fun τ => Formalism.L2.SG.Pf.ZsVolGrp.isUpUni_mul (hUcu τ)
+    have hau : ∀ τ, IsUpUni (a τ) := fun τ => _root_.GlobalTheory.UpperUnipotentProductInertiaEigenvalues.isUpUni_mul (hUcu τ)
       (act_isUpUni_sgn (Formalism.L2.SG.Pf.ZsVolGrp.isUpUni_inv (hBu τ)).1)
-    have hbu : ∀ τ, IsUpUni (b τ) := fun τ => Formalism.L2.SG.Pf.ZsVolGrp.isUpUni_mul (act_isUpUni_sgn (hBu τ))
+    have hbu : ∀ τ, IsUpUni (b τ) := fun τ => _root_.GlobalTheory.UpperUnipotentProductInertiaEigenvalues.isUpUni_mul (act_isUpUni_sgn (hBu τ))
       (Formalism.L2.SG.Pf.ZsVolGrp.isUpUni_inv (hUcu τ)).1
     have hconj : ∀ τ (M : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ),
         Xm τ * M * (Xm τ)⁻¹ = a τ * (sg * M * sg) * b τ := fun τ M => by
@@ -1276,7 +1273,7 @@ theorem cover_action : ∀ Cg cb Cu cT CT C0 A : ℝ, ∀ (D : D7) (X : HidaSett
       rw [act_zhatOM_map, hzr, hdec, hzm, Matrix.map_mul, Matrix.map_mul, ← hZs] at h
       exact h
     set g0 := B τ * (sg * (Uc τ)⁻¹ * sg) with hg0
-    have hCl := act_isLoUni_conjTranspose (hCu τ)
+    have hCl := _root_.GlobalTheory.FrameStab.isLoUni_conjTranspose (hCu τ)
     have hCli := Formalism.L2.SG.Pf.ZsVolGrp.isLoUni_inv hCl
     have hZg : Zv * g0 * Zv⁻¹ = ((Cm τ)ᴴ)⁻¹ * L.map (embS D τ) := by
       have h1 : (Cm τ)ᴴ * (Zv * g0) = L.map (embS D τ) * Zv := by
@@ -1290,10 +1287,10 @@ theorem cover_action : ∀ Cg cb Cu cT CT C0 A : ℝ, ∀ (D : D7) (X : HidaSett
         rw [← h1, ← Matrix.mul_assoc ((Cm τ)ᴴ)⁻¹, hCli.2.1, Matrix.one_mul]
       rw [h2, Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_nonsing_inv _ hZu, Matrix.mul_one]
     have hg0s : g0 ∈ GlobalTheory.LoopV.stabU Zv := by
-      refine ⟨Formalism.L2.SG.Pf.ZsVolGrp.isUpUni_mul (hBu τ)
+      refine ⟨_root_.GlobalTheory.UpperUnipotentProductInertiaEigenvalues.isUpUni_mul (hBu τ)
         (act_isUpUni_sgn (Formalism.L2.SG.Pf.ZsVolGrp.isUpUni_inv (hUcu τ)).1), ?_⟩
       rw [hZg]
-      exact Formalism.L2.SG.Pf.ZsVolGrp.isLoUni_mul hCli.1 (act_isLoUni_map _ hL)
+      exact _root_.PI.TermAttrConst.UnitaryGroupMassFormula.isLoUni_mul hCli.1 (act_isLoUni_map _ hL)
     have hg0i : g0⁻¹ = sg * Uc τ * sg * (B τ)⁻¹ := by
       refine Matrix.inv_eq_right_inv ?_
       calc g0 * (sg * Uc τ * sg * (B τ)⁻¹) = B τ * (sg * ((Uc τ)⁻¹ * (sg * (sg * (Uc τ * (sg * (B τ)⁻¹)))))) := by
@@ -1340,7 +1337,7 @@ open Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.integerPoints_cover_realPoints_rootCoordinates : ∀ Cg cb Cu cT CT C0 A : ℝ, ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (W : WittDat X) (large₂ : SizeData₂ D) (u u' : D.what₂.Word) (C' Cl : ℝ), Formalism.MainNotions.S.Cnt.Hyp D large₂ u u' C' Cl Cg cb Cu cT CT C0 A → ∀ s : TT Y u u', s.relevant → s.G ≠ 0 → ∀ (w : Point D.host.E (D.R.rS + 1)) (γw sf s' : X.B.I.Ginf), s.toTerm.atPt w → Formalism.L2.SG.RealObj.IsPtRep X u u' w γw → sf ∈ X.SinfU u → s' ∈ X.SinfU u' → s.pt.1 = sf * γw * s'⁻¹ → ∀ (L U : Formalism.MainNotions.S.Cnt.GramM D), IsLoUni L → IsUpUni U → ZhatOM (ZhatL (lf D (FlagOfWord W u)) (Formalism.L2.SG.Saturated.mapL (W.δ u) (W.isom u) s.frame)) = L * ptMat w * U → ∀ Ω : Set (D.what₂.Tau → GlobalTheory.LoopV.roots (ptMat w) → ℂ), (∀ c : D.what₂.Tau → GlobalTheory.LoopV.roots (ptMat w) → ℂ, ∃ n ∈ NLam (Formalism.HermitianLatticesTheory.gmap (W.δ u) s.lam) (lf D (FlagOfWord W u)) ∩ NLam (Formalism.HermitianLatticesTheory.gmap (W.δ u) s.lam) (Formalism.L2.SG.Saturated.mapL (W.δ u) (W.isom u) s.frame), ∃ a : Formalism.MainNotions.S.Cnt.GramM D, (∀ j : Fin (D.R.rS + 1), n (frame (Formalism.L2.SG.Saturated.mapL (W.δ u) (W.isom u) s.frame) j) = ∑ i : Fin (D.R.rS + 1), ((-1) ^ (i.val + j.val) * a i j) • frame (Formalism.L2.SG.Saturated.mapL (W.δ u) (W.isom u) s.frame) i) ∧ (fun τ (q : GlobalTheory.LoopV.roots (ptMat w)) => ((U * a * U⁻¹).map (embS D τ) * GlobalTheory.LoopV.ofRoots (GlobalTheory.LoopV.roots (ptMat w)) (c τ) : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ) q.1.1 q.1.2) ∈ Ω) → ∃ T : (D.what₂.Tau → GlobalTheory.LoopV.roots (ptMat w) → ℂ) → (D.what₂.Tau → GlobalTheory.LoopV.roots (ptMat w) → ℂ), MeasureTheory.MeasurePreserving T MeasureTheory.volume MeasureTheory.volume ∧ ∀ r ∈ Formalism.L2.SG.TermOp.Vanish.Rset s, ∃ q ∈ Formalism.L2.SG.TermOp.ROinf s, T (GlobalTheory.LoopVol.ratCoord X u' w γw sf (q * r)) ∈ Ω := by
-  first | exact @GlobalTheory.LoopVol.cover_action | exact GlobalTheory.LoopVol.cover_action | (intros; apply GlobalTheory.LoopVol.cover_action <;> assumption)
+  first | exact @GlobalTheory.LoopVol.cover_action
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.IntegerPointsCoverRealPointsRootCoordinatesStatement =====
@@ -1479,7 +1476,7 @@ open Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.measure_preimage_reindex_scale_complex_le : ∀ (ι ι' κ κ' : Type) [Fintype ι] [Fintype ι'] [Fintype κ] [Fintype κ'] (e : ι ≃ ι') (f : κ ≃ κ') (ρ c : ℝ) (d : κ → ℕ), 1 ≤ ρ → c ≤ 1 → ∀ A : Set (ι → κ → ℂ), MeasurableSet A → (MeasureTheory.Measure.pi fun _ : ι' => MeasureTheory.Measure.pi fun _ : κ' => ENNReal.ofReal c • (MeasureTheory.volume : MeasureTheory.Measure ℂ)) ((fun (x : ι' → κ' → ℂ) (i : ι) (q : κ) => ((ρ : ℂ) ^ d q)⁻¹ * x (e i) (f q)) ⁻¹' A) ≤ MeasureTheory.volume A * ENNReal.ofReal (ρ ^ (2 * Fintype.card ι * ∑ q, d q)) := by
-  first | exact @GlobalTheory.CoordScale.measure_preimage_reindex_scale_le | exact GlobalTheory.CoordScale.measure_preimage_reindex_scale_le | (intros; apply GlobalTheory.CoordScale.measure_preimage_reindex_scale_le <;> assumption)
+  first | exact @GlobalTheory.CoordScale.measure_preimage_reindex_scale_le
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.MeasurePreimageReindexScaleComplexLeStatement =====
@@ -1581,13 +1578,13 @@ open Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.mem_roots_point_matrix_iff_same_block : ∀ (K : Type) [Field K] (n : ℕ) (w : Point K n) (a b : Fin n), (a, b) ∈ GlobalTheory.LoopV.roots (ptMat w) ↔ a < b ∧ Formalism.L2.SG.RealObj.blkOf w.1 a.1 = Formalism.L2.SG.RealObj.blkOf w.1 b.1 := by
-  first | exact @GlobalTheory.roots_ptMat_iff | exact GlobalTheory.roots_ptMat_iff | (intros; apply GlobalTheory.roots_ptMat_iff <;> assumption)
+  first | exact @GlobalTheory.roots_ptMat_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.MemRootsPointMatrixIffSameBlockStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.RatCoordConjEqStCoord =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FlagMeasures.RatCoordConjEqStCoord", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.RatCoordCont\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsUniquePlace\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.FlagStabilizerTensors.LoopTieOf\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.FlagStabilizerTensors.ParametersTermRelations\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.FlagStabilizerTensors.PoincareConstantEq\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.FlagStabilizerTensors.TermTieOf\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FlagMeasures.RatCoordConjEqStCoord", "h": "module\n\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.RatCoordCont\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.ExistsUniquePlace\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.FlagStabilizerTensors.LoopTieOf\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.FlagStabilizerTensors.ParametersTermRelations\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.FlagStabilizerTensors.PoincareConstantEq\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.FlagStabilizerTensors.TermTieOf\nimport Formalism.LocalToGlobal.SiegelLatticeTheory.CokernelGLCounts.RankPointCounts.HermitianCombinationZ\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1595,11 +1592,6 @@ open Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.LoopVol
-
-private theorem hJ_smul_right_flag_measures {n : ℕ} (ε : Fin n → Bool) (c : ℂ) (x y : Fin n → ℂ) :
-    Formalism.L2.SG.HidaSetting.hJ ε x (c • y) = c * Formalism.L2.SG.HidaSetting.hJ ε x y := by
-  unfold Formalism.L2.SG.HidaSetting.hJ
-  rw [Matrix.mulVec_smul, dotProduct_smul, smul_eq_mul]
 
 theorem ratCoord_conj_eq_stCoord : ∀ (D : D7) (X : HidaSetting D) (u' : D.what₂.Word) (w : Point D.host.E (D.R.rS + 1)) (γ s y : X.B.I.Ginf) (τ : D.what₂.Tau) (q : GlobalTheory.LoopV.roots (ptMat w)) (p : Formalism.L2.SG.RealObj.FreeE w), p.1 = q.1 → GlobalTheory.LoopVol.ratCoord X u' w γ s (s * y * s⁻¹) τ q = ((D.host.rdE : ℂ) ^ (q.1.2.1 - q.1.1.1))⁻¹ * Formalism.L2.SG.RealObj.stCoord X u' w γ y (X.pl.symm τ) p := by
   intro D X u' w γ s y τ q p hpq
@@ -1617,7 +1609,7 @@ theorem ratCoord_conj_eq_stCoord : ∀ (D : D7) (X : HidaSetting D) (u' : D.what
   unfold GlobalTheory.LoopVol.ratCoord Formalism.L2.SG.RealObj.stCoord
   rw [hconj]
   unfold Formalism.L2.SG.RealObj.frm Formalism.L2.SG.RealObj.famSc
-  simp only [Complex.ofReal_one, one_pow, inv_one, one_smul, Matrix.mulVec_smul, hJ_smul_right_flag_measures]
+  simp only [Complex.ofReal_one, one_pow, inv_one, one_smul, Matrix.mulVec_smul, _root_.PI.SchurPlaces.LeviLA.hJ_smul_right]
 
   have hsplit : D.R.rS - pq.1.val = (pq.2.val - pq.1.val) + (D.R.rS - pq.2.val) := by omega
   rw [hsplit, pow_add]
@@ -1700,7 +1692,7 @@ open Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.stabiliserHaar_rootCoordinates_le_lebesgue : ∀ (D : D7) (X : HidaSetting D) (u u' : D.what₂.Word) (w : Point D.host.E (D.R.rS + 1)) (γw sf : X.B.I.Ginf) (μw : MeasureTheory.Measure X.B.I.Ginf), IsHaarOnSet X.B.I (Formalism.L2.SG.RealObj.StInf X u u' γw) μw → μw.map (Formalism.L2.SG.RealObj.stCoord X u' w γw) = Formalism.L2.SG.RealObj.muStab X w → D.host.ka / (X.B.g : ℝ) / Real.pi ≤ 1 → ∀ A : Set (D.what₂.Tau → GlobalTheory.LoopV.roots (ptMat w) → ℂ), MeasurableSet A → (μw.map (fun y => sf * y * sf⁻¹)) (GlobalTheory.LoopVol.ratCoord X u' w γw sf ⁻¹' A) ≤ MeasureTheory.volume A * ENNReal.ofReal (D.host.rdE ^ (2 * D.R.f * (D.R.rS + 1) ^ 3)) := by
-  first | exact @GlobalTheory.LoopVol.pinned_ratCoord_le | exact GlobalTheory.LoopVol.pinned_ratCoord_le | (intros; apply GlobalTheory.LoopVol.pinned_ratCoord_le <;> assumption)
+  first | exact @GlobalTheory.LoopVol.pinned_ratCoord_le
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.StabiliserHaarRootCoordinatesLeLebesgueStatement =====
@@ -1819,7 +1811,7 @@ open Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.stabiliserCovolume_le_rootCoordinateCover : ∀ Cg cb Cu cT CT C0 A : ℝ, ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (W : WittDat X) (large₂ : SizeData₂ D) (u u' : D.what₂.Word) (C' Cl : ℝ), Formalism.MainNotions.S.Cnt.Hyp D large₂ u u' C' Cl Cg cb Cu cT CT C0 A → ∀ s : TT Y u u', s.relevant → s.G ≠ 0 → ∀ (w : Point D.host.E (D.R.rS + 1)) (μR : MeasureTheory.Measure X.B.I.Ginf) (K : Set X.B.I.Ginf), s.toTerm.atPt w → Formalism.L2.SG.VolPin.IsPinnedR s w μR → Formalism.L2.SG.LoopTerm.IsFundR s K → ∀ (L U : Formalism.MainNotions.S.Cnt.GramM D), IsLoUni L → IsUpUni U → ZhatOM (ZhatL (lf D (FlagOfWord W u)) (Formalism.L2.SG.Saturated.mapL (W.δ u) (W.isom u) s.frame)) = L * ptMat w * U → ∀ Ω : Set (D.what₂.Tau → GlobalTheory.LoopV.roots (ptMat w) → ℂ), MeasurableSet Ω → (∀ c : D.what₂.Tau → GlobalTheory.LoopV.roots (ptMat w) → ℂ, ∃ n ∈ NLam (Formalism.HermitianLatticesTheory.gmap (W.δ u) s.lam) (lf D (FlagOfWord W u)) ∩ NLam (Formalism.HermitianLatticesTheory.gmap (W.δ u) s.lam) (Formalism.L2.SG.Saturated.mapL (W.δ u) (W.isom u) s.frame), ∃ a : Formalism.MainNotions.S.Cnt.GramM D, (∀ j : Fin (D.R.rS + 1), n (frame (Formalism.L2.SG.Saturated.mapL (W.δ u) (W.isom u) s.frame) j) = ∑ i : Fin (D.R.rS + 1), ((-1) ^ (i.val + j.val) * a i j) • frame (Formalism.L2.SG.Saturated.mapL (W.δ u) (W.isom u) s.frame) i) ∧ (fun τ (q : GlobalTheory.LoopV.roots (ptMat w)) => ((U * a * U⁻¹).map (embS D τ) * GlobalTheory.LoopV.ofRoots (GlobalTheory.LoopV.roots (ptMat w)) (c τ) : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ) q.1.1 q.1.2) ∈ Ω) → μR K ≤ MeasureTheory.volume Ω * ENNReal.ofReal (D.host.rdE ^ (2 * D.R.f * (D.R.rS + 1) ^ 3)) := by
-  first | exact @GlobalTheory.LoopVol.covolume_le_cover | exact GlobalTheory.LoopVol.covolume_le_cover | (intros; apply GlobalTheory.LoopVol.covolume_le_cover <;> assumption)
+  first | exact @GlobalTheory.LoopVol.covolume_le_cover
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.StabiliserCovolumeLeRootCoordinateCoverStatement =====
@@ -1942,7 +1934,7 @@ open Formalism.BasicNotions Formalism.MainNotions.S Formalism.MainNotions.S.Lat 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.stabiliserCovolume_relevantTerm_le_heightPow : ∀ Cg cb Cu cT CT C0 A : ℝ, ∃ C : ℝ, ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (hF : FinX Y) (hI : SIso D.s (sOf hF)) (W : WittDat X) (H : TieHyp W hI) (Am : AmpDat X) (hV : PvalForm W hI Am) (large₂ : SizeData₂ D) (u u' : D.what₂.Word) (C' Cl : ℝ), 1 ≤ Cl → Formalism.MainNotions.S.Cnt.Hyp D large₂ u u' C' Cl Cg cb Cu cT CT C0 A → ∀ t : D.s.Term u u', D.s.Gterm t ≠ 0 → D.s.relevant t → Formalism.L2.SG.LoopTerm.volRC hI t ≤ Formalism.MainNotions.S.Cnt.HHZ D large₂.sc.b C (ZhatL ((termTieOf W hI H Am hV).fl t) ((termTieOf W hI H Am hV).fl' t)) ^ (C * (D.R.rS : ℝ) ^ 2) := by
-  first | exact @GlobalTheory.LoopVol.volRC_le | exact GlobalTheory.LoopVol.volRC_le | (intros; apply GlobalTheory.LoopVol.volRC_le <;> assumption)
+  first | exact @GlobalTheory.LoopVol.volRC_le
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.StabiliserCovolumeRelevantTermLeHeightPowStatement =====

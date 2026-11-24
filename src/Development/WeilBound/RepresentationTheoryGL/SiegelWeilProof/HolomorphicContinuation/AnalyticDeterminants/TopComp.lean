@@ -417,7 +417,7 @@ theorem rhs_eq (hA : IterAffine) (hS : IterSymm) (hN : IterNested) (j : ℕ) (ψ
     have h1 : ContDiffAt ℂ (Fintype.card (blkA (n := n) j))
         (iteratedFDeriv ℂ (Fintype.card (blkB (n := n) j)) ψ) (embL (blkA (n := n) j) 0) := by
       rw [map_zero]
-      exact hψ0.iteratedFDeriv_right (by first | exact_mod_cast le_top | (norm_cast; exact le_top) | (exact WithTop.coe_le_coe.mpr le_top) | simp [← Nat.cast_add]; exact_mod_cast le_top)
+      exact hψ0.iteratedFDeriv_right (by first | exact_mod_cast le_top | simp [← Nat.cast_add])
     have h2 := h1.comp (0 : Matrix (blkA (n := n) j) (blkA (n := n) j) ℂ) (embL (blkA (n := n) j)).contDiff.contDiffAt
     exact (ContinuousMultilinearMap.apply ℂ _ ℂ (fun i => embL (blkB (n := n) j) (w i))).contDiff.contDiffAt.comp _ h2
   unfold detD
@@ -667,7 +667,7 @@ theorem block_part_diagonal_first (j : ℕ) (c c' : ℂ) (t : Matrix (Fin n) (Fi
     matrixBlockRestriction (blkA j) (blkA j) (bdiag j c c' t) = c • matrixBlockRestriction (blkA j) (blkA j) t := by
   ext a b
   by_cases ha : a ∈ blkA j <;> by_cases hb : b ∈ blkA j <;>
-    simp [matrixBlockRestriction, bdiag, blkB, ha, hb]
+    simp [matrixBlockRestriction, bdiag, ha, hb]
 
 theorem block_part_diagonal_second (j : ℕ) (c c' : ℂ) (t : Matrix (Fin n) (Fin n) ℂ) :
     matrixBlockRestriction (blkB j) (blkB j) (bdiag j c c' t) = c' • matrixBlockRestriction (blkB j) (blkB j) t := by
@@ -779,7 +779,7 @@ end PositivityTheory.Rg.Sw.LVs.TC
 
 namespace PositivityTheory.Rg.Sw.LVs
 
-theorem topComp : TopComp := TC.topComp
+alias topComp := _root_.PositivityTheory.Rg.Sw.LVs.TC.topComp
 
 end PositivityTheory.Rg.Sw.LVs
 end -- clump:auto

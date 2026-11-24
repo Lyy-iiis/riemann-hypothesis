@@ -65,6 +65,7 @@ import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentati
 import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.LinearIndependentOfGramDetNeZero
 import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.VdEqZeroOfNotLe
 import Mathlib.RingTheory.SimpleRing.Principal
+import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.NeZeroOfNotMem
 import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ExistsSqAbsNormOfInert
 import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ExtPPowLeSpanSup
 import Mathlib.RingTheory.Henselian
@@ -228,10 +229,6 @@ variable {V : Type} [AddCommGroup V] [Module K V] [FiniteDimensional K V] [Modul
 
 namespace RedC
 
-theorem index_eq_card {G T : Type*} [Group G] (N : Subgroup G) (f : G → T) (hs : Function.Surjective f)
-    (hf : ∀ a b, f a = f b ↔ a⁻¹ * b ∈ N) : N.index = Nat.card T := by
-  first | exact Bl.general_b_fact_left_rest.goal1 .. | (apply Bl.general_b_fact_left_rest.goal1 <;> assumption) | (intros; apply Bl.general_b_fact_left_rest.goal1 <;> assumption)
-
 def redEnd (A : Submodule (𝓞 K) V) (𝔭 : Ideal (𝓞 F)) (k : ℕ) (X : V ≃ₗ[K] V) (hX : X ∈ glSub A) :
     Module.End (𝓞 K) (↥A ⧸ ((extP K 𝔭) ^ k • ⊤ : Submodule (𝓞 K) ↥A)) :=
   Submodule.mapQ _ _ (((X : V →ₗ[K] V).restrictScalars (𝓞 K)).restrict fun _ hx => apply_mem hX hx)
@@ -388,7 +385,7 @@ theorem exists_redEnd_eq (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (h
       Submodule.Quotient.mk y' = Y (Submodule.Quotient.mk y) →
       CongrP 𝔭 k (h (x' : V) (y' : V)) (h (x : V) (y : V))) :
     ∃ (X : V ≃ₗ[K] V) (hX : X ∈ sSub h (locF 𝔭 A₀) 𝔭 k), redEnd (locF 𝔭 A₀) 𝔭 k X hX.1 = Y := by
-  obtain ⟨g, hg, hgY⟩ := exists_isom_lift hK hF hs hd (by first | exact hA₀ | exact hA₀.toIsLattice) hA₀i h𝔭 hk Y hY
+  obtain ⟨g, hg, hgY⟩ := exists_isom_lift hK hF hs hd (by first | exact hA₀) hA₀i h𝔭 hk Y hY
   have hgA : g ∈ glSub (locF 𝔭 A₀) := hg.2
   obtain ⟨D, hD⟩ := exists_lift hA₀ h𝔭 k Y
   have hle : extP K 𝔭 ^ (k - eA h (locF 𝔭 A₀) 𝔭) • locF 𝔭 A₀ ≤ extP K 𝔭 • locF 𝔭 A₀ :=
@@ -444,7 +441,7 @@ theorem akCount_eq_relIndex (hK : Formalism.HermitianLatticesTheory.IsCMUnram K)
   refine ⟨eA h (locF 𝔭 A₀) 𝔭 + 1, fun k hk => ?_⟩
   symm
   unfold akCount Subgroup.relIndex
-  refine RedC.index_eq_card _
+  refine _root_.Bl.general_b_fact_left_rest.goal1 _
     (fun X : ↥(sSub h (locF 𝔭 A₀) 𝔭 k) => ⟨RedC.redEnd (locF 𝔭 A₀) 𝔭 k X.1 X.2.1,
       RedC.redEnd_cond hF hA₀i h𝔭 X.2⟩) ?_ ?_
   · rintro ⟨Y, hY⟩
@@ -461,7 +458,7 @@ end -- clump:auto
 -- ===== end clump member: Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.MemLocFOfSmulMem =====
 
 -- ===== clump member: Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.MulMemPrimePower =====
--- clump-header: {"m": "Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.MulMemPrimePower", "h": "module\n\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ApplyMemSmul\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.AlgebraMapConjO\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.AlgebraMapIntCastSmul\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ExistsBasisLocF\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ExistsLocalData\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ExistsMulDvdUnif\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ExistsMulEqUnifPow\nimport Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.LinearIndependentOfGramDetNeZero\nimport Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.MemSmulOfMemSmulLocF\nimport Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.VdEqZeroOfNotLe\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.CardQuotExtPPow\n\n"}
+-- clump-header: {"m": "Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.MulMemPrimePower", "h": "module\n\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ApplyMemSmul\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.AlgebraMapConjO\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.AlgebraMapIntCastSmul\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ExistsBasisLocF\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ExistsLocalData\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ExistsMulDvdUnif\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.ExistsMulEqUnifPow\nimport Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.LinearIndependentOfGramDetNeZero\nimport Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.MemSmulOfMemSmulLocF\nimport Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.VdEqZeroOfNotLe\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\npublic import Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.CardQuotExtPPow\nimport Formalism.GL3MeanSquares.GenusMeanAsymptotics.UnimodularClassRepresentatives.NeZeroOfNotMem\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -549,14 +546,6 @@ theorem exists_gram_det (hF : IsFixF K F) {h : V →ₗ⋆[K] V →ₗ[K] K} (hs
 
 theorem coe_ι (x : 𝓞 F) : algebraMap F K (x : F) = algebraMap (𝓞 K) K (ι x) := rfl
 
-theorem cι_ne_zero {x : 𝓞 F} (hx : x ≠ 0) : algebraMap (𝓞 K) K (ι x) ≠ 0 := by
-  intro e
-  apply hx
-  apply idealPowerSpanBounds.ι_inj (K := K)
-  apply RingOfIntegers.coe_injective
-  rw [map_zero]
-  exact e
-
 theorem mem_pK_zero_of_mul {𝔭 : Ideal (𝓞 F)} (h𝔭 : 𝔭.IsMaximal) {t : 𝓞 F} (ht : t ∉ 𝔭) {x : K}
     {z : 𝓞 K} (e : algebraMap (𝓞 K) K z = algebraMap (𝓞 K) K (ι t) * x) : x ∈ pK K 𝔭 0 :=
   (mem_pK h𝔭).2 ⟨t, ht, z, by rw [pow_zero, Ideal.one_eq_top]; trivial, e⟩
@@ -565,7 +554,7 @@ theorem unit_of_notMem {𝔭 : Ideal (𝓞 F)} (h𝔭 : 𝔭.IsMaximal) {s : �
     algebraMap (𝓞 K) K (ι s) ∈ pK K 𝔭 0 ∧ (algebraMap (𝓞 K) K (ι s))⁻¹ ∈ pK K 𝔭 0 ∧
       algebraMap (𝓞 K) K (ι s) ≠ 0 := by
   have hs0 : s ≠ 0 := fun h0 => hs𝔭 (h0 ▸ zero_mem _)
-  have h0 := cι_ne_zero (K := K) hs0
+  have h0 := _root_.Formalism.HermitianLattices.Ext.L3.HU.jι_ne_zero (K := K) hs0
   refine ⟨algebraMap_mem_pK 𝔭 (ι s), ?_, h0⟩
   refine mem_pK_zero_of_mul h𝔭 hs𝔭 (z := 1) ?_
   rw [map_one, mul_inv_cancel₀ h0]
@@ -585,8 +574,8 @@ theorem exists_unit_factor {𝔭 : Ideal (𝓞 F)} (h𝔭 : 𝔭.IsMaximal) {π 
   rw [coe_ι] at ew
   obtain ⟨t1, ht1, r1, er1⟩ := exists_dvd_mul hpr hp0 (Ideal.pow_mem_pow hπ (vF 𝔭 D))
     (localValuationFiltration.notMem_pow_vF h𝔭 hD0)
-  have hP0 : algebraMap (𝓞 K) K (ι π) ^ vF 𝔭 D ≠ 0 := pow_ne_zero _ (cι_ne_zero hπ0)
-  have hDK0 := cι_ne_zero (K := K) hD0
+  have hP0 : algebraMap (𝓞 K) K (ι π) ^ vF 𝔭 D ≠ 0 := pow_ne_zero _ (_root_.Formalism.HermitianLattices.Ext.L3.HU.jι_ne_zero hπ0)
+  have hDK0 := _root_.Formalism.HermitianLattices.Ext.L3.HU.jι_ne_zero (K := K) hD0
   have hw0 : w ≠ 0 := by
     rintro rfl
     rw [mul_zero] at ew
@@ -614,7 +603,7 @@ theorem nO_of_rel (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF : IsF
   have hπ0 : π ≠ 0 := fun h0 => hπ' (h0 ▸ zero_mem _)
   obtain ⟨w, hw, hwi, hw0, ew⟩ := exists_unit_factor (K := K) h𝔭 hπ hπ' hD0
   obtain ⟨hsm, hsi, hsK0⟩ := unit_of_notMem (K := K) h𝔭 hs𝔭
-  have hP0 : algebraMap (𝓞 K) K (ι π) ^ vF 𝔭 D ≠ 0 := pow_ne_zero _ (cι_ne_zero hπ0)
+  have hP0 : algebraMap (𝓞 K) K (ι π) ^ vF 𝔭 D ≠ 0 := pow_ne_zero _ (_root_.Formalism.HermitianLattices.Ext.L3.HU.jι_ne_zero hπ0)
   have hPm : algebraMap (𝓞 K) K (ι π) ^ vF 𝔭 D ∈ pK K 𝔭 0 := by
     rw [← map_pow]
     exact algebraMap_mem_pK 𝔭 _
@@ -654,7 +643,7 @@ theorem nO_gram (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF : IsFix
     ha ▸ LocF.le_locF 𝔭 _ (Submodule.subset_span ⟨i, rfl⟩)
   obtain ⟨t, ht, htL⟩ := localizedQuotients.exists_common h𝔭 A₀ a haL
   have ht0 : t ≠ 0 := fun h0 => ht (h0 ▸ zero_mem _)
-  have hτ0 : algebraMap (𝓞 K) K (ι t) ≠ 0 := cι_ne_zero ht0
+  have hτ0 : algebraMap (𝓞 K) K (ι t) ≠ 0 := _root_.Formalism.HermitianLattices.Ext.L3.HU.jι_ne_zero ht0
   obtain ⟨b, hbi⟩ : ∃ b : Basis (Fin (finrank K V)) K V, ∀ i, b i = ι t • a i :=
     ⟨a.isUnitSMul (w := fun _ => algebraMap (𝓞 K) K (ι t)) (fun _ => hτ0.isUnit), fun i => by
       rw [Basis.isUnitSMul_apply, algebraMap_smul]⟩
@@ -856,11 +845,6 @@ theorem map_smul_hermL (A : Submodule (𝓞 K) V)
 theorem one_mem_pK (𝔭 : Ideal (𝓞 F)) : (1 : K) ∈ pK K 𝔭 0 := by
   simpa using algebraMap_mem_pK (K := K) 𝔭 1
 
-theorem mul_mem_pK_zero {𝔭 : Ideal (𝓞 F)} (h𝔭 : 𝔭.IsMaximal) {x y : K} (hx : x ∈ pK K 𝔭 0)
-    (hy : y ∈ pK K 𝔭 0) : x * y ∈ pK K 𝔭 0 := by
-  have := mul_mem_pK h𝔭 hx hy
-  rwa [add_zero] at this
-
 theorem nO_one {𝔭 : Ideal (𝓞 F)} (h𝔭 : 𝔭.IsMaximal) : nO 𝔭 (1 : K) = 1 :=
   nO_unit h𝔭 (one_mem_pK 𝔭) (by simpa using one_mem_pK (K := K) 𝔭) one_ne_zero
 
@@ -872,7 +856,7 @@ theorem nO_prod {𝔭 : Ideal (𝓞 F)} (h𝔭 : 𝔭.IsMaximal) {ι : Type} (s 
   | empty => simpa using ⟨one_mem_pK (K := K) 𝔭, nO_one (K := K) h𝔭⟩
   | insert i s hi ih =>
     rw [Finset.prod_insert hi, Finset.prod_insert hi]
-    exact ⟨mul_mem_pK_zero h𝔭 (hz i).1 ih.1, by rw [nO_mul h𝔭 (hz i).1 (hz i).2 ih.1, ih.2]⟩
+    exact ⟨_root_.Formalism.HermitianLattices.Ext.L3.D2.mul_mem_prime_power h𝔭 (hz i).1 ih.1, by rw [nO_mul h𝔭 (hz i).1 (hz i).2 ih.1, ih.2]⟩
 
 theorem nO_pow {𝔭 : Ideal (𝓞 F)} (h𝔭 : 𝔭.IsMaximal) {z : K} (hz : z ∈ pK K 𝔭 0) (hz0 : z ≠ 0)
     (n : ℕ) : z ^ n ∈ pK K 𝔭 0 ∧ nO 𝔭 (z ^ n) = nO 𝔭 z ^ n := by
@@ -938,7 +922,7 @@ theorem relIndex_sesqL (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF 
   have hγm : (γ : K) ∈ pK K 𝔭 0 := algebraMap_mem_pK 𝔭 γ
   have hem : ∀ i, (e i : K) ∈ pK K 𝔭 0 := fun i => algebraMap_mem_pK 𝔭 (e i)
   have hγγ : star (γ : K) * γ ∈ pK K 𝔭 0 ∧ star (γ : K) * γ ≠ 0 :=
-    ⟨J.mul_mem_pK_zero h𝔭 (star_mem_pK hF h𝔭 hγm) hγm, mul_ne_zero (star_ne_zero.2 hγK) hγK⟩
+    ⟨_root_.Formalism.HermitianLattices.Ext.L3.D2.mul_mem_prime_power h𝔭 (star_mem_pK hF h𝔭 hγm) hγm, mul_ne_zero (star_ne_zero.2 hγK) hγK⟩
   let Φ : (V →ₗ⋆[K] V →ₗ[K] K) →+ Matrix (Fin (finrank K V)) (Fin (finrank K V)) K :=
     (LinearMap.toMatrix₂ a a).toLinearMap.toAddMonoidHom
   have hΦ : ∀ s i j, Φ s i j = s (a i) (a j) := fun s i j => LinearMap.toMatrix₂_apply a a s i j
@@ -971,7 +955,7 @@ theorem relIndex_sesqL (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF 
     rw [hSA, hSB] at hle
     exact (AddSubgroup.comap_le_comap_of_surjective hΦs).1 hle
   have hf : ∀ i j, f i j ∈ pK K 𝔭 0 ∧ f i j ≠ 0 := fun i j =>
-    ⟨J.mul_mem_pK_zero h𝔭 (star_mem_pK hF h𝔭 (hem i)) (hem j),
+    ⟨_root_.Formalism.HermitianLattices.Ext.L3.D2.mul_mem_prime_power h𝔭 (star_mem_pK hF h𝔭 (hem i)) (hem j),
       mul_ne_zero (star_ne_zero.2 (heK i)) (heK j)⟩
   have H1 := relIndex_matL hK hF h𝔭 f g hf (fun _ _ => hγγ) k c hle'
   have hidx : (sesqL (locF 𝔭 B₀) 𝔭 (k + c)).relIndex (sesqL (locF 𝔭 A₀) 𝔭 k) =
@@ -990,7 +974,7 @@ theorem relIndex_sesqL (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF 
   have hp2 := J.nO_prod h𝔭 Finset.univ (fun i => (e i : K)) (fun i => ⟨hem i, heK i⟩)
   have hp3 := J.nO_pow h𝔭 hγγ.1 hγγ.2 (finrank K V)
   rw [nO_mul h𝔭 hp3.1 (pow_ne_zero _ hγγ.2) hDb, hp3.2, hng, hDbn,
-    nO_mul h𝔭 (J.mul_mem_pK_zero h𝔭 hp1.1 hp2.1)
+    nO_mul h𝔭 (_root_.Formalism.HermitianLattices.Ext.L3.D2.mul_mem_prime_power h𝔭 hp1.1 hp2.1)
       (mul_ne_zero (Finset.prod_ne_zero_iff.2 fun i _ => star_ne_zero.2 (heK i))
         (Finset.prod_ne_zero_iff.2 fun i _ => heK i)) hDa,
     nO_mul h𝔭 hp1.1 (Finset.prod_ne_zero_iff.2 fun i _ => star_ne_zero.2 (heK i)) hp2.1,
@@ -1060,7 +1044,7 @@ theorem relIndex_eq_of_map {G M : Type*} [Group G] [AddCommGroup M] (H G' : Subg
       (-(⟨φ a, h1 a a.2⟩ : P) + ⟨φ b, h1 b b.2⟩ ∈ N.addSubgroupOf P) := by
     intro a b
     rw [Subgroup.mem_subgroupOf, AddSubgroup.mem_addSubgroupOf]
-    simp only [Subgroup.coe_mul, Subgroup.coe_inv, AddSubgroup.coe_add, AddSubgroup.coe_neg, neg_add_eq_sub]
+    simp only [Subgroup.coe_mul, Subgroup.coe_inv, neg_add_eq_sub]
     exact h3 a a.2 b b.2
   let f : G' ⧸ H.subgroupOf G' → P ⧸ N.addSubgroupOf P :=
     Quotient.map' (fun x : G' => (⟨φ x, h1 x x.2⟩ : P)) (fun a b hab => by
@@ -1155,7 +1139,7 @@ theorem relIndex_nSub_eq {A₀ B₀ : Submodule (𝓞 K) V}
       have e2 : x⁻¹ ((((y : V →ₗ[K] V) - LinearMap.id) - ((x : V →ₗ[K] V) - LinearMap.id) :
           V →ₗ[K] V) v) =
           (x⁻¹ * y) v - v := by
-        simp only [LinearMap.sub_apply, LinearEquiv.coe_coe, LinearMap.id_apply, sub_sub_sub_cancel_right,
+        simp only [LinearMap.sub_apply, LinearEquiv.coe_coe, sub_sub_sub_cancel_right,
           map_sub, LinearEquiv.mul_apply]
         rw [← LinearEquiv.mul_apply x⁻¹ x, inv_mul_cancel]
         rfl
@@ -1195,7 +1179,7 @@ theorem relIndex_endL (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF :
     rw [LinearMap.toMatrix_apply b b, hba j, map_smul, h2, map_smul, Finsupp.smul_apply, map_sum,
     Finsupp.finsetSum_apply]
     simp only [map_smul, Basis.repr_self, Finsupp.smul_apply, Finsupp.single_apply, smul_eq_mul, mul_ite,
-      mul_one, mul_zero, Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+      mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true]
     field_simp [heK i, hc0K]
   let φA : (V →ₗ[K] V) →+ Matrix (Fin (finrank K V)) (Fin (finrank K V)) K :=
     (LinearMap.toMatrix a a).toLinearMap.toAddMonoidHom
@@ -1335,11 +1319,7 @@ theorem star_phi {h : V →ₗ⋆[K] V →ₗ[K] K} (hs : h.IsSymm) (X : V ≃�
   have e : ∀ a b, star (h a b) = h b a := fun a b => hs.eq a b
   rw [phi_apply, phi_apply, star_sub, e, e]
 
-theorem unif_ne_zero {𝔭 : Ideal (𝓞 F)} {π : 𝓞 F} (hπ' : π ∉ 𝔭 ^ 2) : algebraMap F K (π : F) ≠ 0 := by
-  intro h0
-  have h1 : (π : F) = 0 := (map_eq_zero (algebraMap F K)).1 h0
-  have h2 : π = 0 := by exact_mod_cast h1
-  exact hπ' (h2 ▸ zero_mem _)
+alias unif_ne_zero := _root_.Formalism.HermitianLattices.Ext.L3.D2.unif_ne_zero
 
 theorem sesq_scale (hF : IsFixF K F) {𝔭 : Ideal (𝓞 F)} (h𝔭 : 𝔭.IsMaximal) {A₀ B₀ : Submodule (𝓞 K) V} {r : ℕ}
     (hr : extP K 𝔭 ^ r • locF 𝔭 A₀ ≤ locF 𝔭 B₀) (s : V →ₗ⋆[K] V →ₗ[K] K) {n m : ℕ} (hnm : n + 2 * r ≤ m)
@@ -1491,7 +1471,7 @@ theorem mul_inv_mem_iff {h : V →ₗ⋆[K] V →ₗ[K] K} (hs : h.IsSymm) {A B 
   · intro hX
     have hX' := (Subgroup.mem_inf.mp hX).1.2
     refine ⟨fun x y => ?_, fun x hx y hy => ?_⟩
-    · simp only [AddSubgroupClass.coe_sub, LinearMap.sub_apply, star_sub, IA.star_phi hs]
+    · simp only [LinearMap.sub_apply, star_sub, IA.star_phi hs]
     · have := hX' (W x) (apply_mem hWB hx) (W y) (apply_mem hWB hy)
       simp only [LinearEquiv.mul_apply, eW'] at this
       simpa only [LinearMap.sub_apply, IA.phi_apply, sub_sub_sub_cancel_right] using this
@@ -1688,8 +1668,8 @@ theorem relIndex_sSub_inf (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (
   obtain ⟨h1, h2, h3⟩ := hk₀ k hk
   refine ⟨h1, ?_⟩
   rw [h3]
-  exact relIndex_hermL hK hF hs hd (by first | exact hA₀ | exact hA₀.toIsLattice) hA₀i
-    (by first | exact hB₀ | exact hB₀.toIsLattice) hB₀i h𝔭 h2
+  exact relIndex_hermL hK hF hs hd (by first | exact hA₀) hA₀i
+    (by first | exact hB₀) hB₀i h𝔭 h2
 
 end Formalism.HermitianLattices.Ext.L3.D2
 
@@ -1716,15 +1696,15 @@ theorem local_density_ratio_holds :
   set c := c₁ + c₂ with hc
   obtain ⟨k₁, hk₁⟩ := hc₁ c (by omega)
   obtain ⟨k₂, hk₂⟩ := hc₂ c (by omega)
-  obtain ⟨k₃, hk₃⟩ := D2.akCount_eq_relIndex hK hF hs hd (by first | exact hA₀ | exact hA₀.toIsLattice) hA₀i h𝔭
-  obtain ⟨k₄, hk₄⟩ := D2.akCount_eq_relIndex hK hF hs hd (by first | exact hB₀ | exact hB₀.toIsLattice) hB₀i h𝔭
+  obtain ⟨k₃, hk₃⟩ := D2.akCount_eq_relIndex hK hF hs hd (by first | exact hA₀) hA₀i h𝔭
+  obtain ⟨k₄, hk₄⟩ := D2.akCount_eq_relIndex hK hF hs hd (by first | exact hB₀) hB₀i h𝔭
   obtain ⟨k₅, hk₅⟩ := D2.relIndex_inf_glSub hK hF hs hd hA₀ hA₀i hB₀ h𝔭
   obtain ⟨k₆, hk₆⟩ := D2.relIndex_inf_glSub hK hF hs hd hB₀ hB₀i hA₀ h𝔭
   obtain ⟨k₇, hk₇⟩ := D2.nSub_le_glSub hB₀ hA₀ h𝔭
   obtain ⟨k₈, hk₈⟩ := D2.alphaL_eq hK hF hs hd
-    (by first | exact hA₀ | exact hA₀.toIsLattice) hA₀i h𝔭
+    (by first | exact hA₀) hA₀i h𝔭
   obtain ⟨k₉, hk₉⟩ := D2.alphaL_eq hK hF hs hd
-    (by first | exact hB₀ | exact hB₀.toIsLattice) hB₀i h𝔭
+    (by first | exact hB₀) hB₀i h𝔭
   set k := k₁ + k₂ + k₃ + k₄ + k₅ + k₆ + k₇ + k₈ + k₉ with hk
   obtain ⟨hJI, hIJ⟩ := hk₁ k (by omega)
   obtain ⟨hNN, hNNi⟩ := hk₂ k (by omega)

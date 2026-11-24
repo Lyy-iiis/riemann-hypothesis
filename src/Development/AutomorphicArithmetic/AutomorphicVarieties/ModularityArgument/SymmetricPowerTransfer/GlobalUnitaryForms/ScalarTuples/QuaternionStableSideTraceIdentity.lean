@@ -117,7 +117,7 @@ theorem UpperTheory.V.Z.Sym.Glob.gqS :
     · intro v jv hjv
       have hgv : HasTr ((ι γ).1 v) (cv v τ) := htr γ v hγ
       have hrv := cv_reg hreg v
-      obtain ⟨z, hz⟩ := zEx hrv
+      obtain ⟨z, hz⟩ := _root_.UpperTheory.V.Z.Sym.Loc.exists_unit_one_add_generator hrv
       refine ⟨emb_comm hjv, ?_⟩
       by_cases hv : v ∈ D.Sg
       · have hS := hD.sig v hv
@@ -374,7 +374,7 @@ theorem UpperTheory.orbitalFiber_det_eq_one :
   rw [← hz, MonoidHom.comp_apply, ← hw]
   apply Units.ext
   ext i j : 1
-  by_cases hij : i = j <;> simp [hij, Matrix.diagonal_apply]
+  by_cases hij : i = j <;> simp [hij]
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.BuildingsResidueChars.OrbitalFiberDetEqOne =====
@@ -1338,7 +1338,6 @@ private theorem glue (hM : Master) (hTr : TrKer) (hPair : Pair)
     apply finsum_congr
     intro γ
     rw [htr i γ]
-    beta_reduce
     congr 2
     simp only [Subgroup.coe_mul, Subgroup.coe_inv, h1]
     group

@@ -169,12 +169,12 @@ theorem eh_inv_entry : ∀ (k r : ℕ) (a b c i : Fin (2 * r + k + 1)), ∀ g �
   have h := Formalism.FourierDecayAlt.P.Qx5.eh_inv (k := k) (r := r) (LinearMap.proj c) (Pi.single i 1) g a b
   have e : (fun y : B.Mat k r => y⁻¹ c i) = fun y : B.Mat k r => (LinearMap.proj c : (Fin (2 * r + k + 1) → ℂ) →ₗ[ℂ] ℂ) (y⁻¹ *ᵥ Pi.single i 1) := by
     funext y
-    simp [Matrix.mulVec_single_one]
+    simp
   rw [e]
   refine h.trans ?_
   by_cases hac : a = c
   · subst hac
-    simp [Matrix.mulVec, dotProduct, Matrix.single, Pi.single_apply]
+    simp [Matrix.mulVec, dotProduct, Matrix.single]
   · simp [Matrix.mulVec, dotProduct, Matrix.single, hac]
 end GlobalTheory
 end -- clump:auto
@@ -400,7 +400,6 @@ theorem conj_entry_smul_eigenSum : ∀ (k r : ℕ) (Wp Wq : Type) [NormedAddComm
       push_cast
       split_ifs <;> ring
   · intro g hg
-    beta_reduce
     rw [hco g hg, hsum g hg, Fintype.sum_prod_type, Finset.smul_sum]
     refine Finset.sum_congr rfl fun x _ => ?_
     rw [Fintype.sum_prod_type, Finset.sum_smul]
@@ -434,10 +433,6 @@ def IsEigenSum (lam : Fin (2 * r + k + 1) → ℝ) (d : ℕ) (A : ℝ) (F : B.Ma
     (∀ i, (∀ Y : ℝ, ∀ g ∈ B.GV k r, Q.CV k r (Y : ℂ) (Fi i) g =
       ((∏ s, (Y + lam s + (ν i s : ℝ)) : ℝ) : ℂ) • (Fi i) g)) ∧
     ∀ g ∈ B.GV k r, (F) g = ∑ i, Fi i g
-
-def entryVar (g : B.Mat k r) :
-    (Fin (2 * r + k + 1) × Fin (2 * r + k + 1)) ⊕ (Fin (2 * r + k + 1) × Fin (2 * r + k + 1)) → ℂ :=
-  Sum.elim (fun x => g x.1 x.2) (fun x => star (g x.1 x.2))
 
 end
 
@@ -599,7 +594,7 @@ private lemma monomial_smul_eigenSum_lemma_3 {k r : ℕ} {Wp Wq : Type} [NormedA
     ∀ (d : ℕ) (A : ℝ) (F : _root_.Formalism.FourierDecayAlt.B.Mat k r → (Wq →L[ℂ] Wp)),
       (∀ s' t, s' ≠ t → 2 * ((d + Multiset.card s : ℕ) : ℝ) < |lam s' - lam t|) → _root_.GlobalTheory.EigenSumPoly.IsEigenSum lam d A F →
       _root_.GlobalTheory.EigenSumPoly.IsEigenSum lam (d + Multiset.card s) (A - Multiset.card s)
-        (fun g => (s.map (_root_.GlobalTheory.EigenSumPoly.entryVar g)).prod • F g) := by
+        (fun g => (s.map (_root_.PI.UnitaryCorollaryDerivatives.pbVar g)).prod • F g) := by
   induction s using Multiset.induction_on with
   | empty =>
     intro d A F _ hF
@@ -614,7 +609,7 @@ private lemma monomial_smul_eigenSum_lemma_3 {k r : ℕ} {Wp Wq : Type} [NormedA
       linarith
     have h1 := ih d A F hgap' hF
     have h2 : _root_.GlobalTheory.EigenSumPoly.IsEigenSum lam (d + Multiset.card s + 1) (A - Multiset.card s - 1)
-        (fun g => _root_.GlobalTheory.EigenSumPoly.entryVar g a • (s.map (_root_.GlobalTheory.EigenSumPoly.entryVar g)).prod • F g) := by
+        (fun g => _root_.PI.UnitaryCorollaryDerivatives.pbVar g a • (s.map (_root_.PI.UnitaryCorollaryDerivatives.pbVar g)).prod • F g) := by
       rcases a with ⟨i, j⟩ | ⟨i, j⟩
       · exact isEigenSum_entry_smul lam _ _ i j _ hgap' h1
       · exact isEigenSum_star_entry_smul lam _ _ i j _ hgap' h1
@@ -637,7 +632,7 @@ private lemma isEigenSum_poly_smul {k r : ℕ} {Wp Wq : Type} [NormedAddCommGrou
   classical
   obtain ⟨q, hq, hcq⟩ := hc
   refine _root_.GlobalTheory.capelli_eigenSum_linearCombination k r Wp Wq lam (d + e) (A - e) _ q.support q.coeff
-    (fun m g => (m.toMultiset.map (_root_.GlobalTheory.EigenSumPoly.entryVar g)).prod • F g) _ (fun m hm => ?_) (fun g _ => ?_)
+    (fun m g => (m.toMultiset.map (_root_.PI.UnitaryCorollaryDerivatives.pbVar g)).prod • F g) _ (fun m hm => ?_) (fun g _ => ?_)
   · have hcard : Multiset.card m.toMultiset ≤ e := by
       rw [Finsupp.card_toMultiset]
       exact (MvPolynomial.le_totalDegree hm).trans hq

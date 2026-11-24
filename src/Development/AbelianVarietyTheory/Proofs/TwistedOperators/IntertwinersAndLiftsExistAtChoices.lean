@@ -117,7 +117,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_innerStepThetaLifts : GlobalTheory.Published.DiscreteSeriesCover → GlobalTheory.Published.HarishChandraModules → GlobalTheory.Published.CuspRapidDecay → GlobalTheory.Published.CasselmanWallach → ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 → R.IsFam → R.IsModels → HostHyp D → R.IsChainW → R.ex_ioY := by
-  first | exact @GlobalTheory.Chain.ExIoY.ex_ioY_holds | exact GlobalTheory.Chain.ExIoY.ex_ioY_holds | (intros; apply GlobalTheory.Chain.ExIoY.ex_ioY_holds <;> assumption)
+  first | exact @GlobalTheory.Chain.ExIoY.ex_ioY_holds
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsInnerStepThetaLiftsStatement =====
@@ -155,7 +155,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_lastStep_thetaLift : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 → R.IsFam → R.IsModels → R.IsChainW → R.ex_ioX := by
-  first | exact @GlobalTheory.Twist.LastStepLift.exists_lastStep_lift | exact GlobalTheory.Twist.LastStepLift.exists_lastStep_lift | (intros; apply GlobalTheory.Twist.LastStepLift.exists_lastStep_lift <;> assumption)
+  first | exact @GlobalTheory.Twist.LastStepLift.exists_lastStep_lift
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsLastStepThetaLiftStatement =====
@@ -172,7 +172,7 @@ namespace GlobalTheory.IndefLinks
 
 theorem exists_ioP_of_realDat : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 → R.IsFam → R.IsModels → R.thP_ωP → R.thP_vP → R.ex_ioP := by
   intro D G _ _ Pl0 T A Ks _ _ _ R h0 hf hm hω hv i
-  obtain ⟨-, io, hio⟩ := GlobalTheory.T.exists_lowestKType_fockMap_thetaVectors D G Pl0 T A Ks R h0 hf hm hω hv
+  obtain ⟨-, io, hio⟩ := _root_.GlobalTheory.JointHarm.exists_ioP D G Pl0 T A Ks R h0 hf hm hω hv
   exact ⟨io i, fun t => hio i t⟩
 
 end GlobalTheory.IndefLinks
@@ -189,7 +189,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.BasicNotions.TH Form
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_lowestKType_coeffSpace_fockMap : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 → R.IsFam → R.IsModels → R.thP_ωP → R.thP_vP → R.ex_ioP := by
-  first | exact @GlobalTheory.IndefLinks.exists_ioP_of_realDat | exact GlobalTheory.IndefLinks.exists_ioP_of_realDat | (intros; apply GlobalTheory.IndefLinks.exists_ioP_of_realDat <;> assumption)
+  first | exact @GlobalTheory.IndefLinks.exists_ioP_of_realDat
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsLowestKTypeCoeffSpaceFockMapStatement =====
@@ -206,7 +206,7 @@ namespace GlobalTheory.DefLift.ThetaMap
 
 theorem ex_thF_of_weak : GlobalTheory.Published.CuspRapidDecay → ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 → R.IsFam → R.IsModels → R.IsThPW → R.ex_ioP → R.ex_thF := by
   intro hP D G _ _ Pl0 T A Ks _ _ _ R h0 hf hm h e i t
-  obtain ⟨th, h1, h2⟩ := GlobalTheory.T.exists_thetaLift_linearMap_cuspFormMultiplicity hP D G Pl0 T A Ks R h0 hf hm h.ωP h.vP h.pt_theta
+  obtain ⟨th, h1, h2⟩ := _root_.GlobalTheory.DefLift.ThetaMap.exists_thetaMap hP D G Pl0 T A Ks R h0 hf hm h.ωP h.vP h.pt_theta
     (fun i t => (h.ioP i).1 (e i) t)
   exact ⟨th i t, h1 i t, h2 i t⟩
 
@@ -224,7 +224,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.BasicNotions.TH Form
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_multiplicitySpaceThetaMap_of_rapidDecay : GlobalTheory.Published.CuspRapidDecay → ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 → R.IsFam → R.IsModels → R.IsThPW → R.ex_ioP → R.ex_thF := by
-  first | exact @GlobalTheory.DefLift.ThetaMap.ex_thF_of_weak | exact GlobalTheory.DefLift.ThetaMap.ex_thF_of_weak | (intros; apply GlobalTheory.DefLift.ThetaMap.ex_thF_of_weak <;> assumption)
+  first | exact @GlobalTheory.DefLift.ThetaMap.ex_thF_of_weak
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsMultiplicitySpaceThetaMapOfRapidDecayStatement =====
@@ -258,7 +258,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.BasicNotions.TH Form
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_thetaLift_goodProjector_models : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 → R.IsFam → R.IsModels → R.tw_thF → R.ex_thF → R.ex_thG := by
-  first | exact @GlobalTheory.Twist.exists_thG_models | exact GlobalTheory.Twist.exists_thG_models | (intros; apply GlobalTheory.Twist.exists_thG_models <;> assumption)
+  first | exact @GlobalTheory.Twist.exists_thG_models
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsThetaLiftGoodProjectorModelsStatement =====

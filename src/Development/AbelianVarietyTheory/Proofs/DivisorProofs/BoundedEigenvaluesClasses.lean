@@ -270,20 +270,6 @@ theorem isRoot_minpoly_of_isRoot_charpoly {k A E : Type} [Field k] [Ring A] [Alg
     minpoly.algHom_eq (Algebra.lmul E (E ⊗[k] A)) (Algebra.lmul_injective (R := E)) _
   rwa [e, minpoly_one_tmul] at hr
 
-theorem isRoot_charpoly_of_isRoot_minpoly {F C E : Type} [Field F] [Ring C] [Algebra F C]
-    [FiniteDimensional F C] [Algebra.IsCentral F C] [IsSimpleRing C] [Field E] (τ : F →+* E) {n : ℕ}
-    (hn : 0 < n) (ρ : C →+* Matrix (Fin n) (Fin n) E)
-    (hρ : ∀ a, ρ (algebraMap F C a) = Matrix.scalar (Fin n) (τ a))
-    (x : C) (μ : E) (hμ : ((minpoly F x).map τ).IsRoot μ) : (ρ x).charpoly.IsRoot μ := by
-  first
-  | (rename_i h_3 h_4 h_5 h_6 h_7 h_8 h_9; revert F C E h_3 h_4 h_5 h_6 h_7 h_8 h_9 τ n hn ρ hρ x μ hμ; exact @_root_.GlobalTheory.SumScalarVanishing.isRoot_charpoly_of_isRoot_minpoly)
-  | exact @_root_.GlobalTheory.SumScalarVanishing.isRoot_charpoly_of_isRoot_minpoly
-  | exact _root_.GlobalTheory.SumScalarVanishing.isRoot_charpoly_of_isRoot_minpoly
-  | (apply _root_.GlobalTheory.SumScalarVanishing.isRoot_charpoly_of_isRoot_minpoly <;> assumption)
-  | (intros; apply _root_.GlobalTheory.SumScalarVanishing.isRoot_charpoly_of_isRoot_minpoly <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.SumScalarVanishing.isRoot_charpoly_of_isRoot_minpoly <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.SumScalarVanishing.isRoot_charpoly_of_isRoot_minpoly ..)
-
 end GlobalTheory.GlobEig
 
 namespace GlobalTheory.GlobEig
@@ -319,7 +305,7 @@ theorem exists_root_rho (G : HTGroup p) (τ : G.F →+* PadicAlgCl p) (hτ : Lie
   refine ⟨i, σ.symm μ, ?_, ?_⟩
   · rw [← norm_aut σ, AlgEquiv.apply_symm_apply]
   · rw [← charpoly_rhoE]
-    refine isRoot_charpoly_of_isRoot_minpoly (G.emb i) G.n_pos (rhoE G i) (rhoE_F G i) x _ ?_
+    refine _root_.GlobalTheory.SumScalarVanishing.isRoot_charpoly_of_isRoot_minpoly (G.emb i) G.n_pos (rhoE G i) (rhoE_F G i) x _ ?_
     have key := Polynomial.hom_eval₂ (minpoly G.F x) (G.emb i)
       ((σ : PadicAlgCl p ≃+* PadicAlgCl p) : PadicAlgCl p →+* PadicAlgCl p) (σ.symm μ)
     rw [← hσ] at key
@@ -477,7 +463,7 @@ theorem isRoot_inv (G : HTGroup p) (i : Fin G.m) (β y : G.Cˣ) (c : ℚˣ)
       _ = rhoE G i ((y⁻¹ : G.Cˣ) : G.C) *ᵥ ((rhoE G i (y : G.C) * rhoE G i (β : G.C) *
             rhoE G i (sh G y)) *ᵥ v) := by
           rw [hM]
-          simp only [hw, Matrix.mulVec_mulVec, mul_assoc]
+          simp only [hw, Matrix.mulVec_mulVec]
       _ = (rhoE G i ((y⁻¹ : G.Cˣ) : G.C) * rhoE G i (y : G.C)) *ᵥ
             (rhoE G i (β : G.C) *ᵥ (rhoE G i (sh G y) *ᵥ v)) := by
           simp only [Matrix.mulVec_mulVec, mul_assoc]

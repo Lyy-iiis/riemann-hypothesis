@@ -411,7 +411,7 @@ theorem placeDecomp_of (hE : InstExpFix) (hAB : InstAdaptBasis) : InstPlaceDecom
     rw [hσdef, Matrix.mulVec_diagonal]
     by_cases hr : r = i
     · subst hr; simp [hi]
-    · simp [Pi.single_apply, hr]
+    · simp [hr]
   have hcol : ∀ i ∈ T, ∀ r, p' r i = if r = i then 1 else 0 := fun i hi r =>
     inst_col_entry p' i (hpfix i hi) r
   have hrow : ∀ i ∈ T, ∀ r, p' i r = if r = i then 1 else 0 := by
@@ -490,7 +490,7 @@ theorem placeDecomp_of (hE : InstExpFix) (hAB : InstAdaptBasis) : InstPlaceDecom
           rw [this]; exact hm2
       rw [hset]
       exact hemb.isCompact_preimage hcomp
-    · obtain ⟨U, hUo, h1U, hU⟩ := Formalism.REAL.ballOpen n R (by rw [hR]; linarith)
+    · obtain ⟨U, hUo, h1U, hU⟩ := _root_.Formalism.REAL.ball_open_holds n R (by rw [hR]; linarith)
       refine mem_interior.mpr ⟨(fun x : Formalism.REAL.UJ ε => Ai * Formalism.MainNotions.S.uMat x * A) ⁻¹' U, ?_, ?_, ?_⟩
       · intro x hx
         exact (hU _ hx).le
@@ -573,8 +573,8 @@ theorem instDecomp_of (hP : InstPlaceDecomp) (hG : InstFrameGram) : InstDecomp :
     ext a b
     by_cases hab : a = b
     · subst hab
-      by_cases hε : I.ε v a <;> simp [Formalism.REAL.Jm, Matrix.diagonal_mul_diagonal, hε]
-    · simp [Formalism.REAL.Jm, Matrix.diagonal_mul_diagonal, Matrix.one_apply, hab]
+      by_cases hε : I.ε v a <;> simp [Formalism.REAL.Jm, hε]
+    · simp [Formalism.REAL.Jm, hab]
   have hU : ∀ v (m : Matrix (Fin I.n) (Fin I.n) ℂ), Formalism.REAL.inUJ (I.ε v) m →
       ∃ u : Formalism.REAL.UJ (I.ε v), (((u : (Matrix (Fin I.n) (Fin I.n) ℂ)ˣ)) : Matrix (Fin I.n) (Fin I.n) ℂ) = m := by
     intro v m hm
@@ -586,7 +586,6 @@ theorem instDecomp_of (hP : InstPlaceDecomp) (hG : InstFrameGram) : InstDecomp :
     have hr : m * (Formalism.REAL.Jm (I.ε v) * mᴴ * Formalism.REAL.Jm (I.ε v)) = 1 := by
       first
       | exact mul_eq_one_comm.1 hl
-      | exact (Matrix.mul_eq_one_comm_of_equiv (Equiv.refl _)).1 hl
     exact ⟨⟨⟨m, _, hr, hl⟩, hm⟩, rfl⟩
   choose ku hku using fun v => hU v (k v) (hk v)
   choose pu hpu using fun v => hU v (p v) (hp v)

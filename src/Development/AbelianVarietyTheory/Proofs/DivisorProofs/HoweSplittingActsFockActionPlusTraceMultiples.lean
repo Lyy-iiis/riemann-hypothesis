@@ -196,13 +196,13 @@ theorem schur : ∀ (F : Type) [Field F] [NumberField F] (κ : Type) [Fintype κ
       · rw [Complex.zero_re, ← RCLike.re_to_complex, ← integral_re hI]
         have e : (fun x => RCLike.re (ψ (x ⬝ᵥ y) * (D x : ℂ))) = fun x => ((1 : ℂ) * ψ (x ⬝ᵥ y)).re * D x := by
           funext x
-          simp [Complex.mul_re]
+          simp
         rw [e]
         exact hre y 1
       · rw [Complex.zero_im, ← RCLike.im_to_complex, ← integral_im hI]
         have e : (fun x => RCLike.im (ψ (x ⬝ᵥ y) * (D x : ℂ))) = fun x => ((-Complex.I) * ψ (x ⬝ᵥ y)).re * D x := by
           funext x
-          simp [Complex.mul_re, Complex.mul_im]
+          simp [Complex.mul_re]
         rw [e]
         exact hre y (-Complex.I)
     have hD0 := GlobalTheory.CharFourierInj.real_eq_zero (G := κ → AF F) (A := κ → AF F) (fun y x => ψ (x ⬝ᵥ y)) hcy
@@ -365,7 +365,7 @@ theorem herm_rot_pos {ι : Type} [Fintype ι] {P Q R S : ι → ℕ} (c : ∀ w,
   have h : ∀ w a b, (lineSign a b * c w a b * star ((fun w => Matrix.of fun a b => lineSign a b * Complex.I * c w a b :
         ∀ w, Matrix (Ix (P w) (Q w)) (Ix (R w) (S w)) ℂ) w a b)).im = -Complex.normSq (c w a b) := by
     intro w a b
-    rcases lineSign_cases a b with h | h <;> simp [h, Complex.normSq_apply] <;> ring
+    rcases lineSign_cases a b with h | h <;> simp [h, Complex.normSq_apply]
   simp only [Complex.im_sum, h, Finset.sum_neg_distrib]
   obtain ⟨w, a, b, hw⟩ : ∃ w a b, c w a b ≠ 0 := by
     by_contra h0
@@ -601,7 +601,7 @@ theorem blockDiagonal'_mulVec_apply {m : (Σ w : ι, Ix (P w) (Q w)) → Type} [
     (b : m o) : (blockDiagonal' M *ᵥ v) ⟨o, b⟩ = ∑ b', M o b b' * v ⟨o, b'⟩ := by
   simp only [mulVec, dotProduct]
   rw [Fintype.sum_sigma, Finset.sum_eq_single o]
-  · simp [blockDiagonal'_apply']
+  · simp
   · intro o' _ h
     simp [blockDiagonal'_apply_ne M b _ (Ne.symm h)]
   · simp
@@ -739,7 +739,7 @@ theorem coordOf_mulVec (k : G →* (∀ w, Mat (R w) (S w)))
   ext a b
   simp only [coordOf, Function.comp_apply, Equiv.symm_symm, Equiv.symm_apply_apply]
   rw [blockDiagonal'_mulVec_apply]
-  simp only [mul_apply, transpose_apply, Finset.mul_sum, Function.comp_apply]
+  simp only [Finset.mul_sum, Function.comp_apply]
   exact Finset.sum_congr rfl fun _ _ => by simp only [coordOf, transpose_apply]; ring
 
 end GlobalTheory.HoweD.Osc
@@ -987,12 +987,12 @@ theorem sum_eS (w : ι) (a : Ix (P w) (Q w)) (b : Ix (R w) (S w)) (x : ℂ) (c :
       lineSign a b * x * star (c w a b) := by
   rw [Finset.sum_eq_single w]
   · rw [eS_same, Finset.sum_eq_single a, Finset.sum_eq_single b]
-    · simp [Matrix.single_apply]
-    · intro y _ hy; simp [Matrix.single_apply, hy, Ne.symm hy]
+    · simp
+    · intro y _ hy; simp [Ne.symm hy]
     · simp
     · intro y _ hy
       refine Finset.sum_eq_zero fun b' _ => ?_
-      simp [Matrix.single_apply, hy, Ne.symm hy]
+      simp [Ne.symm hy]
     · simp
   · intro y _ hy
     simp [eS_ne w a b x hy]
@@ -1009,11 +1009,11 @@ theorem decomp (c : ∀ w, MD P Q R S w) :
     rw [Finset.sum_eq_single a, Finset.sum_eq_single b]
     · simp only [Matrix.single_apply, and_self, if_true, Complex.real_smul, mul_one]
       exact (Complex.re_add_im _).symm
-    · intro y _ hy; simp [Matrix.single_apply, hy, Ne.symm hy]
+    · intro y _ hy; simp [hy]
     · simp
     · intro y _ hy
       refine Finset.sum_eq_zero fun b' _ => ?_
-      simp [Matrix.single_apply, hy, Ne.symm hy]
+      simp [hy]
     · simp
   · intro y _ hy
     refine Finset.sum_eq_zero fun a' _ => Finset.sum_eq_zero fun b' _ => ?_
@@ -1052,7 +1052,7 @@ theorem dual {l : Type} [Fintype l] (φ : (∀ w, MD P Q R S w) ≃ₗ[ℝ] (l �
   congr 2
   · simp [Complex.mul_im, Complex.mul_re]
     linear_combination (c w a b).re * h2
-  · simp [Complex.mul_im, Complex.mul_re]
+  · simp [Complex.mul_im]
     linear_combination (c w a b).im * h2
 
 end GlobalTheory.HoweD.QuadFockD
@@ -1133,7 +1133,7 @@ theorem quad_fockD : ∀ (ι l : Type) [Fintype ι] [DecidableEq ι] [Fintype l]
 
   simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.coe_sum', Finset.sum_apply,
   ContinuousLinearMap.add_apply, ContinuousLinearMap.mul_apply, LinearMap.smul_apply, LinearMap.sum_apply,
-  LinearMap.add_apply, Module.End.mul_apply, map_smul, map_sum, map_add, hΨ, hZ]
+  LinearMap.add_apply, map_smul, map_sum, map_add, hΨ, hZ]
 
 end GlobalTheory.HoweD
 end -- clump:auto
@@ -1453,7 +1453,7 @@ theorem lieScalarD : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [Numbe
       sumPl (fun w => fockAct2 (P w) (Q w) (R w) (S w) (Y w) + (c₀ w * (Y w).trace) • (1 : Module.End ℂ _)) +
         (∑ w, k w * (Y w).trace) • (1 : Module.End ℂ (TensD F P Q R S)) := by
     simp only [add_mul, add_smul, ← add_assoc]
-    exact GlobalTheory.LieScal.sumPl_add_smul
+    exact _root_.GlobalTheory.ArchRep.sumPl_add_smul
       (fun w => fockAct2 (P w) (Q w) (R w) (S w) (Y w) + (c₀ w * (Y w).trace) • (1 : Module.End ℂ _)) _
   rw [e2, LinearMap.add_apply, LinearMap.smul_apply, Module.End.one_apply, map_add (f := _), map_smul]
   have key : ∀ (z : ℂ) (f f' : SInf F κ), pureA F ⇑(f' + z • f) g = z • pureA F ⇑f g + pureA F ⇑f' g := by

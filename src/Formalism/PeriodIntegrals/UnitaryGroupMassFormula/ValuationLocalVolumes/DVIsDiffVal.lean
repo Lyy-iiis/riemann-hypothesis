@@ -66,11 +66,6 @@ theorem val_alg {F : Type} [Field F] [NumberField F] (v : HeightOneSpectrum (�
   first
     | exact (HeightOneSpectrum.valuedAdicCompletion_eq_valuation' v (x : F)).trans
         (HeightOneSpectrum.valuation_of_algebraMap v x)
-    | (rw [HeightOneSpectrum.valuedAdicCompletion_eq_valuation', HeightOneSpectrum.valuation_of_algebraMap]; rfl)
-    | simp [HeightOneSpectrum.valuedAdicCompletion_eq_valuation', HeightOneSpectrum.valuation_of_algebraMap]
-    | simp [HeightOneSpectrum.valuedAdicCompletion_eq_valuation, HeightOneSpectrum.valuation_of_algebraMap]
-    | (rw [HeightOneSpectrum.adicCompletion.algebraMap_eq_coe, HeightOneSpectrum.valuedAdicCompletion_eq_valuation,
-        HeightOneSpectrum.valuation_of_algebraMap])
 
 theorem diffExists_main {F : Type} [Field F] [NumberField F]
     (v : HeightOneSpectrum (𝓞 F)) : DiffExists v := by
@@ -80,9 +75,6 @@ theorem diffExists_main {F : Type} [Field F] [NumberField F]
   have hne : ∀ x : 𝓞 F, x ≠ 0 → v.intValuation x ≠ 0 := fun x hx => by
     first
       | exact v.intValuation_ne_zero x hx
-      | exact v.intValuation_ne_zero' x hx
-      | exact (map_ne_zero _).2 hx
-      | simpa using hx
   let f : 𝓞 F → ℕ := fun x =>
     if hx : x = 0 then 0 else (-(Multiplicative.toAdd (WithZero.unzero (hne x hx)))).toNat
   have hfdef : ∀ z (hz : z ≠ 0), f z = (-(Multiplicative.toAdd (WithZero.unzero (hne z hz)))).toNat :=
@@ -127,8 +119,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-theorem diffExists {F : Type} [Field F] [NumberField F] (v : IsDedekindDomain.HeightOneSpectrum (NumberField.RingOfIntegers F)) : PI.DiffGenLoc.DiffExists v :=
-  PI.DiffGenLoc.UnitaryGroupMassFormula.diffExists_main v
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Formalism.PeriodIntegrals.OrbitalBoundsConclusion.DiffGenLoc =====
@@ -147,7 +137,7 @@ open Formalism.L2.SG.LocVol Formalism.MainNotions.GlobalTheoryTheory.GenusMassVo
 variable {F : Type} [Field F] [NumberField F] (v : HeightOneSpectrum (𝓞 F))
 
 theorem dV_isDiffVal : IsDiffVal v (dV v) := by
-  have h : ∃ d, IsDiffVal v d := diffExists v
+  have h : ∃ d, IsDiffVal v d := _root_.PI.DiffGenLoc.UnitaryGroupMassFormula.diffExists_main v
   unfold dV
   rw [dite_eq_left h]
   exact h.choose_spec

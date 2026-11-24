@@ -539,11 +539,6 @@ theorem sigNeg_card_le {n ι : Type} [Fintype n] [DecidableEq n] [Fintype ι]
     simpa using this
   exact hd0 (funext (Fintype.linearIndependent_iff.1 hu d hsum))
 
-theorem linIndep_map {K L ι n : Type} [Field K] [Field L] [Fintype ι] [Fintype n] [DecidableEq ι]
-    [DecidableEq n] (τ : K →+* L) (c : ι → n → K) (hc : LinearIndependent K c) :
-    LinearIndependent L (fun a => fun i => τ (c a i)) := by
-  first | exact Bl.SecondBlockLemmaJ.goal1 .. | (apply Bl.SecondBlockLemmaJ.goal1 <;> assumption) | (intros; apply Bl.SecondBlockLemmaJ.goal1 <;> assumption) | (apply @Bl.SecondBlockLemmaJ.goal1 <;> assumption) | (intros; apply @Bl.SecondBlockLemmaJ.goal1 <;> assumption) | (apply @Bl.SecondBlockLemmaJ.goal1 <;> first | assumption | infer_instance)
-
 end PI.UnitaryGroupMassFormula.CntFormula.WbDefC
 end -- clump:auto
 end -- clump:auto
@@ -592,7 +587,7 @@ theorem card_le_of_nonpos (S : HSpace E) (τ : E →+* ℂ) (hτ : ∀ a, τ (st
   · have hc : LinearIndependent E (fun a => fun i => S.frame.repr (v a) i) := by
       have := hv.map' S.frame.equivFun.toLinearMap S.frame.equivFun.ker
       simpa [Function.comp_def] using this
-    exact WbDefC.linIndep_map τ _ hc
+    exact _root_.Bl.SecondBlockLemmaJ.goal1 τ _ hc
   · intro d
     have h1 : ∀ a b, star (ctau S τ (v a)) ⬝ᵥ ((S.gram.map τ) *ᵥ ctau S τ (v b)) = τ (S.hT (v a) (v b)) :=
       fun a b => (tau_hT S τ hτ (v a) (v b)).symm
@@ -642,7 +637,6 @@ theorem tau_negT (D : D7) (u : D.what₂.Word) (φ : D.host.E →+* ℂ) : (φ (
   have hT := (D.mem u).A.T_prime.pos
   first
     | simp [Tn, hT]
-    | (unfold Tn; simp; exact hT)
 
 theorem rank_VS (D : D7) : (VS D).rank = D.R.k + D.R.rS + (D.R.rS + 1) := by
   unfold VS
@@ -1266,7 +1260,7 @@ theorem row_unit_condition : RowZUnit := by
 
 end PI.UnitaryGroupMassFormula.CntFormula.RowsMassW.RowZUnitPf
 
-theorem PI.UnitaryGroupMassFormula.CntFormula.RowsMassW.row_unit_condition : PI.UnitaryGroupMassFormula.CntFormula.RowsMassW.RowZUnit := PI.UnitaryGroupMassFormula.CntFormula.RowsMassW.RowZUnitPf.row_unit_condition
+alias PI.UnitaryGroupMassFormula.CntFormula.RowsMassW.row_unit_condition := _root_.PI.UnitaryGroupMassFormula.CntFormula.RowsMassW.RowZUnitPf.row_unit_condition
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto

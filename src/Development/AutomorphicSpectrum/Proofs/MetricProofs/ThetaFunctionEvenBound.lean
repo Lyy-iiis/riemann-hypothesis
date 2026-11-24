@@ -237,11 +237,11 @@ theorem exists_symplectic_basis : ∀ (g : ℕ) (Λ : Submodule ℤ (Fin g → �
   rintro (i | i) (j | j)
   · rw [hval, hee]; simp [Matrix.J]
   · rw [hval, hef]
-    by_cases h : i = j <;> simp [Matrix.J, h, Matrix.one_apply]
+    by_cases h : i = j <;> simp [Matrix.J, h]
   · rw [hval, hanti, hef]
     by_cases h : i = j
     · subst h; simp [Matrix.J]
-    · simp [Matrix.J, h, Ne.symm h, Matrix.one_apply]
+    · simp [Matrix.J, h, Ne.symm h]
   · rw [hval, hff]; simp [Matrix.J]
 
 end GlobalTheory.CompanionTheory.Ar.Sl.SymplecticLattice
@@ -262,14 +262,6 @@ open GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.Sl
 namespace GlobalTheory.CompanionTheory.NForm
 
 open Matrix
-
-private theorem hermForm_cols {g : ℕ} (N P Q : Matrix (Fin g) (Fin g) ℂ) (i j : Fin g) :
-    hermForm N (P *ᵥ Pi.single i 1) (Q *ᵥ Pi.single j 1) =
-      (Pᵀ * N * Q.map (starRingEnd ℂ)) i j := by
-  simp only [mulVec_single_one, hermForm]
-  simp [Matrix.mul_apply, dotProduct, mulVec, Finset.sum_mul, Finset.mul_sum, mul_assoc, col_apply]
-  rw [Finset.sum_comm]
-  exact Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by ring
 
 private theorem re_of_real_add {g : ℕ} (B C : Matrix (Fin g) (Fin g) ℝ) (i j : Fin g) :
     ((B.map (fun x : ℝ => (x : ℂ)) + Complex.I • C.map (fun x : ℝ => (x : ℂ))) i j).re = B i j := by
@@ -312,7 +304,7 @@ theorem gram_eq_siegelGram {g : ℕ} {X Y : Matrix (Fin g) (Fin g) ℝ} (hX : X.
   have mm : ∀ B C, c (B * C) = c B * c C := map_ofReal_mul
   ext α β
   rcases α with i | i <;> rcases β with j | j <;>
-    simp only [of_apply, Sum.elim_inl, Sum.elim_inr, hermForm_cols, imInv_periodMatrix, siegelGram,
+    simp only [of_apply, Sum.elim_inl, Sum.elim_inr, _root_.GlobalTheory.RiemannRel.hermForm_col, imInv_periodMatrix, siegelGram,
       fromBlocks_apply₁₁, fromBlocks_apply₁₂, fromBlocks_apply₂₁, fromBlocks_apply₂₂, transpose_one, h1c, hτt, hτc,
       Matrix.one_mul, Matrix.mul_one]
   · simp
@@ -413,7 +405,7 @@ theorem hermForm_sum_right {κ : Type*} [Fintype κ] (Hm : Matrix (Fin g) (Fin g
     (y : κ → Fin g → ℂ) (z : Fin g → ℂ) :
     hermForm Hm z (∑ j, b j • y j) = ∑ j, (b j : ℂ) * hermForm Hm z (y j) := by
   have hs : star (∑ j, b j • y j) = ∑ j, b j • star (y j) := by
-    simp [star_sum, star_smul]
+    simp [star_sum]
   simp only [hermForm]
   rw [hs, Matrix.mulVec_sum, dotProduct_sum]
   refine Finset.sum_congr rfl fun j _ => ?_
@@ -478,7 +470,7 @@ theorem twist_apply {κ M : Type*} [Fintype κ] [DecidableEq κ] [AddCommGroup M
     twist b P Q h α = ∑ β, P α β • b β := by
   have h1 : b.equivFun (b α) = Pi.single α 1 := by
     ext j
-    simp [Module.Basis.equivFun_apply, Finsupp.single_apply, Pi.single_apply, eq_comm]
+    simp [Pi.single_apply, eq_comm]
   simp only [twist, Module.Basis.map_apply, LinearEquiv.trans_apply, h1,
     Module.Basis.equivFun_symm_apply]
   refine Finset.sum_congr rfl fun β _ => ?_
@@ -488,7 +480,7 @@ theorem twist_apply {κ M : Type*} [Fintype κ] [DecidableEq κ] [AddCommGroup M
 
 theorem coe_sum_smul {n : ℕ} {κ : Type*} [Fintype κ] (Λ : Submodule ℤ (Fin n → ℂ)) (v : κ → ℤ)
     (x : κ → Λ) : ((∑ α, v α • x α : Λ) : Fin n → ℂ) = ∑ α, v α • (x α : Fin n → ℂ) := by
-  simp [Submodule.coe_sum]
+  simp
 
 theorem symplectic_reduction_basis :
     ∀ (g : ℕ) [NeZero g] (Λ : Submodule ℤ (Fin g → ℂ)) (Hm : Matrix (Fin g) (Fin g) ℂ)
@@ -619,14 +611,14 @@ theorem exists_half_canMult : ∀ (g : ℕ) (Λ : Submodule ℤ (Fin g → ℂ))
     intro i
     refine ⟨funext fun k => ?_, funext fun k => ?_, funext fun k => ?_, funext fun k => ?_⟩ <;>
       by_cases hk : k = i
-    · subst hk; simp [hsame]
-    · simp [hsame, Pi.single_apply, hk, Ne.symm hk]
-    · simp [hsame]
-    · simp [hsame]
-    · simp [hsame]
-    · simp [hsame]
-    · subst hk; simp [hsame]
-    · simp [hsame, Pi.single_apply, hk, Ne.symm hk]
+    · subst hk; simp
+    · simp [hk]
+    · simp
+    · simp
+    · simp
+    · simp
+    · subst hk; simp
+    · simp [hk]
   have hdot : ∀ (a : Fin g → ℝ) (i : Fin g),
       (a ⬝ᵥ fun k => (((Pi.single i 1 : Fin g → ℤ) k : ℤ) : ℝ)) = a i := by
     intro a i
@@ -1541,7 +1533,7 @@ theorem nform : ∃ C₀ : ℝ, 0 ≤ C₀ ∧ ∀ {S : Scheme.{0}} {G : Over S}
   obtain ⟨hH, hpos, hχn, -⟩ := a.ah
   obtain ⟨bs, h, X, Y, ρ, hh, hX, hY, hR, hHh, hcoord, him⟩ :=
     exists_reduced g a.u.Λ a.Hm a.u.discrete a.u.full hH hpos hint hdual
-  have hτim : (periodMatrix X Y).map Complex.im = Y := periodMatrix_im X Y
+  have hτim : (periodMatrix X Y).map Complex.im = Y := _root_.GlobalTheory.CompanionTheory.Ar.Nform.periodMatrix_map_im X Y
   have hYs : Y.IsSymm := by
     have := hY.isHermitian
     rwa [Matrix.IsHermitian, Matrix.conjTranspose_eq_transpose_of_trivial] at this

@@ -78,16 +78,11 @@ theorem entry (wf : Fin k → Fin n → ℂ) (M : Matrix (Fin n) (Fin n) ℂ) (a
     ((Wm wf)ᴴ * M * Wm wf) a b = star (wf a) ⬝ᵥ (M *ᵥ wf b) := by
   first
   | (rw [Matrix.mul_assoc]; rfl)
-  | (simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Wm, Matrix.of_apply, dotProduct,
-        Matrix.mulVec, Pi.star_apply, Finset.sum_mul, Finset.mul_sum]
-     rw [Finset.sum_comm]
-     exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring)
 
 private theorem conjTranspose_Wm_mulVec_apply (wf : Fin k → Fin n → ℂ) (y : Fin n → ℂ) (a : Fin k) :
     ((Wm wf)ᴴ *ᵥ y) a = star (wf a) ⬝ᵥ y := by
   first
   | rfl
-  | simp [Matrix.mulVec, dotProduct, Matrix.conjTranspose_apply, Wm]
 
 private theorem conjTranspose_mul_J_one_add_mul_eq_one_add (J : Matrix (Fin n) (Fin n) ℂ) (F : Matrix (Fin n) (Fin k) ℂ)
     (D : Matrix (Fin k) (Fin k) ℂ) (hF : Fᴴ * J * F = 1) :
@@ -96,7 +91,7 @@ private theorem conjTranspose_mul_J_one_add_mul_eq_one_add (J : Matrix (Fin n) (
     intro m _ X
     rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hF, Matrix.one_mul]
   have key2 : Fᴴ * (J * F) = 1 := by rw [← Matrix.mul_assoc, hF]
-  simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_one, Matrix.one_mul, Matrix.mul_assoc, key, key2]
+  simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_one, Matrix.mul_assoc, key, key2]
 
 private theorem conjTranspose_one_add_mul_J_mul_eq_J (J : Matrix (Fin n) (Fin n) ℂ) (F : Matrix (Fin n) (Fin k) ℂ)
     (D : Matrix (Fin k) (Fin k) ℂ) (hJh : Jᴴ = J) (hF : Fᴴ * J * F = 1) (hD : D + Dᴴ + Dᴴ * D = 0) :
@@ -119,7 +114,6 @@ private theorem sub_one_add_conjTranspose_defect_eq_zero_of_unitary (G : Matrix 
   have e : (Gᴴ - 1) * (G - 1) = Gᴴ * G - Gᴴ - G + 1 := by
     first
     | noncomm_ring
-    | (simp only [sub_mul, mul_sub, Matrix.one_mul, Matrix.mul_one]; abel)
   rw [e, hG]
   abel
 
@@ -202,8 +196,7 @@ theorem hJ_symm (x y : Fin n → ℂ) : hJ ε x y = star (hJ ε y x) := by
 theorem hJ_add_right (x y z : Fin n → ℂ) : hJ ε x (y + z) = hJ ε x y + hJ ε x z := by
   simp only [hJ, mulVec_add, dotProduct_add]
 
-theorem hJ_sub_right (x y z : Fin n → ℂ) : hJ ε x (y - z) = hJ ε x y - hJ ε x z := by
-  simp only [hJ, mulVec_sub, dotProduct_sub]
+alias hJ_sub_right := _root_.Formalism.L2.SG.PoincareInHH.Cut.hJ_sub_right
 
 theorem hJ_smul_right (x y : Fin n → ℂ) (c : ℂ) : hJ ε x (c • y) = c * hJ ε x y := by
   simp only [hJ, mulVec_smul, dotProduct_smul, smul_eq_mul]
@@ -220,8 +213,7 @@ theorem hJ_sum_right {ι : Type} (s : Finset ι) (x : Fin n → ℂ) (y : ι →
 theorem hJ_add_left (x y z : Fin n → ℂ) : hJ ε (x + y) z = hJ ε x z + hJ ε y z := by
   simp only [hJ, star_add, add_dotProduct]
 
-theorem hJ_sub_left (x y z : Fin n → ℂ) : hJ ε (x - y) z = hJ ε x z - hJ ε y z := by
-  simp only [hJ, star_sub, sub_dotProduct]
+alias hJ_sub_left := _root_.Formalism.L2.SG.PoincareInHH.Cut.hJ_sub_left
 
 theorem hJ_smul_left (x y : Fin n → ℂ) (c : ℂ) : hJ ε (c • x) y = star c * hJ ε x y := by
   simp only [hJ, star_smul, smul_dotProduct, smul_eq_mul]
@@ -327,8 +319,6 @@ theorem hJ_rvc (v : InfinitePlace X.B.I.F) (p p' : (VS D).V) :
   rw [X.φ_eq, RingEquiv.apply_symm_apply]
   first
   | exact Formalism.L2.SG.PoincareInHH.Cut.hJ_crd X v p p'
-  | exact Formalism.L2.SG.PoincareInHH.Cut.hJ_crd v p p'
-  | exact Formalism.L2.SG.PoincareInHH.Cut.hJ_crd (X := X) v p p'
 
 theorem hJ_rvc_zero (v : InfinitePlace X.B.I.F) {p p' : (VS D).V} (h : (VS D).hT p p' = 0) :
     hJ (X.B.I.ε v) (rvc X v p) (rvc X v p') = 0 := by
@@ -355,11 +345,7 @@ def sUg {n k : ℕ} (ε : Fin n → Bool) (wf : Fin k → Fin n → ℂ)
     smat_inv _ _ (Formalism.REAL.Jm_mul_self _) (Formalism.REAL.Jm_conjTranspose _) G hG hon⟩,
     smat_unitary _ _ hon (Formalism.REAL.Jm_conjTranspose _) G hG⟩
 
-theorem uMat_mul' {n : ℕ} {ε : Fin n → Bool} (a b : Formalism.REAL.UJ ε) : uMat (a * b) = uMat a * uMat b := by
-  rfl
-
-theorem uMat_inv_mul'' {n : ℕ} {ε : Fin n → Bool} (a : Formalism.REAL.UJ ε) : uMat a⁻¹ * uMat a = 1 := by
-  exact Units.inv_mul (a : (Matrix (Fin n) (Fin n) ℂ)ˣ)
+alias uMat_inv_mul'' := _root_.Formalism.L2.SG.PoincareInHH.Cut.uMat_inv_mul
 
 theorem uMat_mul_inv'' {n : ℕ} {ε : Fin n → Bool} (a : Formalism.REAL.UJ ε) : uMat a * uMat a⁻¹ = 1 := by
   exact Units.mul_inv (a : (Matrix (Fin n) (Fin n) ℂ)ˣ)
@@ -616,7 +602,7 @@ theorem geomB_of (hL : LeviTens) (hW : WfrSpan) (hN : CplxNF) : GeomB := by
     have hh' : ∀ v, uMat (h' v) = uMat (q.1.1.1 v)⁻¹ * uMat (h v) * uMat (q.1.1.1 v) := by
       intro v
       show uMat ((q.1.1.1 v)⁻¹ * h v * q.1.1.1 v) = _
-      rw [uMat_mul', uMat_mul']
+      rw [_root_.Formalism.L2.SG.PoincareInHH.Cut.uMat_mul, _root_.Formalism.L2.SG.PoincareInHH.Cut.uMat_mul]
     have hfix' : ∀ v p, q.1.2 p ∈ fixedSubspaceOfRepresentative X q → uMat (h' v) *ᵥ rvc X v p = rvc X v p := by
       intro v p hp
       rw [hh', ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, hγ, hfixV v _ hp, ← hγ, Matrix.mulVec_mulVec,

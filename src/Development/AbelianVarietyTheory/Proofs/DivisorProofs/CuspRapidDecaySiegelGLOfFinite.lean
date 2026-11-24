@@ -240,33 +240,10 @@ open Topology
 
 namespace GlobalTheory.CuspRep
 
-theorem discreteTopology_ratN (E : Type) [Field E] [NumberField E] (a s : ℕ) :
-    DiscreteTopology (ratN E a s) := by
-  refine discreteTopology_of_isOpen_singleton_zero ?_
-  have hU : IsOpen (Set.univ.pi fun _ : BlockIx a s => Formalism.IndefR.Eqv.G5.adlNbhd (F := E)) :=
-    isOpen_set_pi Set.finite_univ fun _ _ => Formalism.IndefR.Eqv.G5.adl_isOpen_nbhd
-  have h : ({0} : Set (ratN E a s)) =
-      Subtype.val ⁻¹' (Set.univ.pi fun _ : BlockIx a s => Formalism.IndefR.Eqv.G5.adlNbhd (F := E)) := by
-    ext ⟨x, q, hq⟩
-    constructor
-    · intro hx p _
-      have : x = 0 := congrArg Subtype.val hx
-      subst this
-      exact Formalism.IndefR.Eqv.G5.adl_zero_mem_nbhd
-    · intro hx
-      subst hq
-      apply Subtype.ext
-      funext p
-      have h0 : q p = 0 := Formalism.IndefR.Eqv.G5.adl_eq_zero_of_mem_nbhd (q p) (hx p (Set.mem_univ _))
-      show algebraMap E (Ad E) (q p) = 0
-      rw [h0, map_zero]
-  rw [h]
-  exact hU.preimage continuous_subtype_val
-
 theorem exists_isAddFundamentalDomain_ratN : ∀ (E : Type) [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] (a : ℕ) (s : ℕ) [MeasurableSpace (BlockIx a s → Ad E)] [BorelSpace (BlockIx a s → Ad E)] (μ : Measure (BlockIx a s → Ad E)) [μ.IsAddHaarMeasure], ∃ 𝓕 : Set (BlockIx a s → Ad E), IsAddFundamentalDomain (ratN E a s) 𝓕 μ ∧ μ 𝓕 ≠ 0 ∧ μ 𝓕 < ⊤ := by
   intro E _ _ _ a s _ _ μ _
   haveI : SecondCountableTopology (Ad E) := GlobalTheory.AdelicUnitaryTop.secondCountable_adele E
-  haveI := discreteTopology_ratN E a s
+  haveI := _root_.GlobalTheory.ConstNotCusp.discreteTopology_ratN E a s
   haveI := countable_ratN (E := E) (a := a) s
   obtain ⟨D, -, -, hD⟩ := GlobalTheory.exists_isAddFundamentalDomain_addSubgroup (ratN E a s)
   haveI : MeasurableConstVAdd (ratN E a s) (BlockIx a s → Ad E) :=
@@ -368,10 +345,9 @@ theorem unip_mul_diag_cone : ∀ (E : Type) [Field E] [NumberField E] [_root_.Nu
     ext k l w
     rw [add_mul, mul_add, one_mul, mul_one, Matrix.add_apply, Matrix.add_apply, Matrix.mul_diagonal,
       Matrix.diagonal_mul]
-    congr 1
     simp only [nilM, Matrix.of_apply]
     split_ifs with h
-    · simp only [Pi.add_apply, Pi.mul_apply, Pi.smul_apply, smul_eq_mul, Complex.real_smul, add_right_inj]
+    · simp only [Pi.add_apply, Pi.mul_apply, Pi.smul_apply, Complex.real_smul, add_right_inj]
       have := hr k
       have hk0 : (r k : ℂ) ≠ 0 := by exact_mod_cast this.ne'
       push_cast
@@ -640,7 +616,7 @@ theorem exists_rat_sub_bounded_small :
         pFin E (x - algebraMap E (Ad E) ξ) ∈ U := by
   intro E _ _ _ U hU
   obtain ⟨C, hC, hcov⟩ := exists_compact_integral E
-  obtain ⟨N, hN, hNU⟩ := GlobalTheory.AdLat.OpenLat.exists_nsmul_adele E U hU
+  obtain ⟨N, hN, hNU⟩ := _root_.GlobalTheory.LocalNormBound.main E U hU
   have hc : Continuous (infEq E).symm := by
     refine continuous_pi fun w => ?_
     exact (InfinitePlace.Completion.isometryEquivComplexOfIsComplex
@@ -782,7 +758,7 @@ theorem iterated_decay : GlobalTheory.Published.AutomorphicFormsFiniteGL → ∀
       obtain ⟨C1, hC1⟩ := htame (l ++ [Y])
       refine ⟨C1, fun y => ?_⟩
       have e : (l.map (lie E a)).prod (lie E a Y ψ) = ((l ++ [Y]).map (lie E a)).prod ψ := by
-        simp [List.map_append, List.prod_append, Module.End.mul_apply]
+        simp [List.map_append, List.prod_append]
       rw [e]
       exact hC1 y
     choose! CY hCY0 hCY using hY
@@ -1301,7 +1277,7 @@ theorem GlobalTheory.upperCone_conj_compact : ∀ (E : Type) [Field E] [NumberFi
       (hAc.prod (hBc.image MulOpposite.continuous_op))
   intro r d hr hcone hd b hb
   have hN : (fun p q : Fin a => if p ≤ q then r q / r p else 0) ∈ K := by
-    simp only [hK, Set.mem_pi]
+    simp only [hK]
     intro p _ q _
     rw [Set.mem_Icc]
     by_cases hpq : p ≤ q
@@ -1315,7 +1291,7 @@ theorem GlobalTheory.upperCone_conj_compact : ∀ (E : Type) [Field E] [NumberFi
     exact Matrix.blockTriangular_inv_of_blockTriangular (htri b hb)
   refine ⟨?_, ?_⟩
   · refine ⟨(_, b), ⟨hN, hb⟩, ?_⟩
-    simp only [Units.val_mul]
+    simp only
     exact (GlobalTheory.upperCone_conj_diag_eq a r hr d hd b.val (htri b hb)).symm
   · refine ⟨(d⁻¹ * b * d)⁻¹.val, ⟨(_, b), ⟨hN, hb⟩, ?_⟩, rfl⟩
     have : (d⁻¹ * b * d)⁻¹ = d⁻¹ * b⁻¹ * d := by group
@@ -1338,14 +1314,6 @@ namespace GlobalTheory.SiegelSetGL
 
 variable (E : Type) [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] (a : ℕ)
 
-theorem continuous_pInfC : Continuous (pInf E) :=
-  continuous_pi fun w =>
-    ((InfinitePlace.Completion.isometryEquivComplexOfIsComplex (IsTotallyComplex.isComplex w)).continuous.comp
-      (continuous_apply w)).comp continuous_fst
-
-theorem continuous_mapInf : Continuous (GeneralLinearGroup.map (n := Fin a) (pInf E)) :=
-  Continuous.units_map _ (continuous_id.matrix_map (continuous_pInfC E))
-
 theorem continuous_mapFin : Continuous (GeneralLinearGroup.map (n := Fin a) (pFin E)) :=
   Continuous.units_map _ (continuous_id.matrix_map (continuous_snd : Continuous (pFin E)))
 
@@ -1359,7 +1327,7 @@ theorem exists_compact_decomp : ∀ (E : Type) [Field E] [NumberField E] [_root_
   intro E _ _ _ a ω hω hωB t ht
   set pI := GeneralLinearGroup.map (n := Fin a) (pInf E)
   set pF := GeneralLinearGroup.map (n := Fin a) (pFin E)
-  have hωI : IsCompact (pI '' ω) := hω.image (continuous_mapInf E a)
+  have hωI : IsCompact (pI '' ω) := hω.image (_root_.GlobalTheory.CuspRep.ContAut.continuous_map_pInf E a)
   have hup : ∀ b ∈ pI '' ω, b.val.BlockTriangular id := by
     rintro _ ⟨b, hb, rfl⟩ i j hij
     have h0 : (b : Matrix (Fin a) (Fin a) (Ad E)) i j = 0 := hωB hb hij
@@ -1369,7 +1337,7 @@ theorem exists_compact_decomp : ∀ (E : Type) [Field E] [NumberField E] [_root_
   have hK := isCompact_maxCompact (K := E) (n := a)
   refine ⟨Ω0 * pI '' (maxCompact (K := E) (n := a) : Set (AdelicGLn.AdelicGL E a)),
     pF '' ω * pF '' (maxCompact (K := E) (n := a) : Set (AdelicGLn.AdelicGL E a)),
-    hΩ0.mul (hK.image (continuous_mapInf E a)),
+    hΩ0.mul (hK.image (_root_.GlobalTheory.CuspRep.ContAut.continuous_map_pInf E a)),
     (hω.image (continuous_mapFin E a)).mul (hK.image (continuous_mapFin E a)), ?_⟩
   intro r d hr hrt hd b hb k hk
   refine ⟨(d⁻¹ * pI b * d) * pI k, Set.mul_mem_mul (hΩ r d hr hrt hd _ ⟨b, hb, rfl⟩) ⟨k, hk, rfl⟩,

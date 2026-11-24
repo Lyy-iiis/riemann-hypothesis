@@ -140,7 +140,7 @@ theorem boost_exists : ∀ (m : ℕ) (ε : Fin m → Bool) (a b : Fin m → ℂ)
   have hAa : A *ᵥ a = S • (a + b) := by
     rw [hmul, haa, hba]
     have e1 : α * (c2 : ℂ) + 1 = S := by rw [hα, ← hSS]; field_simp; try ring
-    have e2 : γ * (c2 : ℂ) = S := by rw [hγ, ← hSS]; field_simp; try ring
+    have e2 : γ * (c2 : ℂ) = S := by rw [hγ, ← hSS]; field_simp
     linear_combination (norm := module) e1 • a + e2 • b
   have hsq : A * A = 1 + (2 * α + α ^ 2 * (c2 : ℂ) + γ ^ 2 * ((c2 : ℂ) - 1)) • vecMulVec a (star a)
       + (2 * β + β ^ 2 * ((c2 : ℂ) - 1) + γ ^ 2 * (c2 : ℂ)) • vecMulVec b (star b)
@@ -249,7 +249,7 @@ theorem exists_unitary_col (m : ℕ) (ε : Fin m → Bool) (z : Fin m) (u : Fin 
     simp only [dotProduct, Pi.star_apply, this]
     rw [← Complex.ofReal_sum, hn]; simp
   have hev : star e ⬝ᵥ v = (t : ℂ) := by
-    simp [he, dotProduct, Pi.single_apply, hv, hφt, hφt']
+    simp [he, dotProduct, Pi.single_apply, hv, hφt']
   have hve : star v ⬝ᵥ e = (t : ℂ) := by
     simp only [he, dotProduct, Pi.star_apply, Pi.single_apply, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true]
     simp only [hv]
@@ -268,7 +268,7 @@ theorem exists_unitary_col (m : ℕ) (ε : Fin m → Bool) (z : Fin m) (u : Fin 
     rw [diagonal_conjTranspose, diagonal_mul_diagonal, ← diagonal_one]
     congr 1; funext i
     by_cases h : i = z
-    · simp [hd, h, hφ, hφ']
+    · simp [hd, h, hφ']
     · simp [hd, h]
   have hku : kᴴ * k = 1 := by
     rw [hk, conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc Tᴴ, hTu, Matrix.one_mul, hdd]
@@ -277,7 +277,7 @@ theorem exists_unitary_col (m : ℕ) (ε : Fin m → Bool) (z : Fin m) (u : Fin 
   have hvneg : ∀ i, ε i = false → v i = 0 := fun i hi => by simp [hv, hneg i hi]
   have heneg : ∀ i, ε i = false → e i = 0 := fun i hi => by
     have : i ≠ z := by rintro rfl; simp [hz] at hi
-    simp [he, Pi.single_apply, this]
+    simp [he, this]
   have hT0 : ∀ i j, ε i ≠ ε j → T i j = 0 := by
     intro i j hij
     have hne : i ≠ j := by rintro rfl; exact hij rfl
@@ -299,7 +299,7 @@ theorem exists_unitary_col (m : ℕ) (ε : Fin m → Bool) (z : Fin m) (u : Fin 
     rw [Matrix.mul_assoc, hcomm, ← Matrix.mul_assoc, hku, Matrix.one_mul]
   · intro i
     have hez : e z = 1 := by simp [he]
-    have hvz : v z = (t : ℂ) := by simp [hv, hφt, hφt']
+    have hvz : v z = (t : ℂ) := by simp [hv, hφt']
     have hTz : T i z = v i := by
       rw [hTe, hez, hvz]
       rw [show star ((1 : ℂ) + (t : ℂ)) = 1 + (t : ℂ) by simp, star_one, mul_one]
@@ -307,7 +307,7 @@ theorem exists_unitary_col (m : ℕ) (ε : Fin m → Bool) (z : Fin m) (u : Fin 
       rw [this]
       by_cases h : i = z
       · subst h; simp [he]; ring
-      · simp [he, Pi.single_apply, h, one_apply_ne h]; ring
+      · simp [he, h, one_apply_ne h]; ring
     simp only [hk, mul_diagonal, hTz, hd, if_true, hv]
     calc star φ * u i * φ = (star φ * φ) * u i := by ring
       _ = u i := by rw [hφ, one_mul]
@@ -326,8 +326,6 @@ section -- clump:auto
 
 open Matrix Finset Formalism.MainNotions.S Formalism.REAL GlobalTheory.SepReal
 
-theorem _root_.GlobalTheory.T.exists_unitary_positiveBlock_column_eq : ∀ (m : ℕ) (ε : Fin m → Bool) (z : Fin m) (u : Fin m → ℂ), ε z = true → (∀ i, ε i = false → u i = 0) → ∑ i, ‖u i‖ ^ 2 = 1 → ∃ k ∈ UJset ε, kᴴ * k = 1 ∧ ∀ i, k i z = u i := by
-  first | exact @GlobalTheory.Twist.Boost.exists_unitary_col | exact GlobalTheory.Twist.Boost.exists_unitary_col | (intros; apply GlobalTheory.Twist.Boost.exists_unitary_col <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsUnitaryPositiveBlockColumnEqStatement =====
@@ -344,8 +342,6 @@ open scoped InnerProductSpace
 open GlobalTheory.SepReal
 
 namespace GlobalTheory.SepReal.BoostHilbertSchmidtTrace
-
-theorem house : ∀ (m : ℕ) (ε : Fin m → Bool) (z : Fin m) (u : Fin m → ℂ), ε z = true → (∀ i, ε i = false → u i = 0) → ∑ i, ‖u i‖ ^ 2 = 1 → ∃ k ∈ UJset ε, kᴴ * k = 1 ∧ ∀ i, k i z = u i := GlobalTheory.T.exists_unitary_positiveBlock_column_eq
 
 theorem boostMat : ∀ (m : ℕ) (ε : Fin m → Bool) (a b : Fin m → ℂ), (∀ i, ε i = false → a i = 0) → (∀ i, ε i = true → b i = 0) → ∑ i, ‖a i‖ ^ 2 = 1 + ∑ i, ‖b i‖ ^ 2 → ∃ A ∈ UJset ε, (∀ i, ∑ j, A i j * a j = (Real.sqrt (∑ j, ‖a j‖ ^ 2) : ℂ) * (a i + b i)) ∧ hsn A ^ 2 ≤ (m : ℝ) + 2 * ∑ i, ‖a i + b i‖ ^ 2 := _root_.GlobalTheory.Boost.boost_exists
 
@@ -430,8 +426,8 @@ theorem transit {m : ℕ} (ε : Fin m → Bool) (z : Fin m) (hz : ε z = true) (
       ← Finset.mul_sum, ← hs, inv_pow]
     field_simp
   have hu0 : ∀ i, ε i = false → u i = 0 := fun i h => by simp [hu, ha0 i h]
-  obtain ⟨k, hk, hkU, hkz⟩ := house m ε z u hz hu0 hu1
-  obtain ⟨A, hA, hAa, hAn⟩ := boostMat m ε a b ha0 hb0 hn
+  obtain ⟨k, hk, hkU, hkz⟩ := _root_.GlobalTheory.Twist.Boost.exists_unitary_col m ε z u hz hu0 hu1
+  obtain ⟨A, hA, hAa, hAn⟩ := _root_.GlobalTheory.Boost.boost_exists m ε a b ha0 hb0 hn
   refine ⟨A * k, mul_mem hA hk, fun i => ?_, ?_⟩
   · rw [Matrix.mul_apply]
     simp only [hkz, hu]

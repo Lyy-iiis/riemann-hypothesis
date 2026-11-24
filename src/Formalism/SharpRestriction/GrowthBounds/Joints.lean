@@ -316,14 +316,7 @@ theorem weight_condition_of_integral_form (D : Formalism.BasicNotions.D7) (X : F
       rw [← algebraMap_smul (KK X.O) c v]
       exact Submodule.smul_mem _ _ hirr.2.2.1.2.1
 
-def PolIsoDecomp : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (ι : Type) [Fintype ι] (LL : Letters ι) (r : ℕ) [NeZero r] (S : Set ι),
-    ∃ e : (Fin r → ℤ) → Module.End K (MvPolynomial (ι × Fin r) K),
-      (∀ mu, IsIsoProj (glOps K r LL S) mu (e mu)) ∧
-      ∀ G : MvPolynomial (ι × Fin r) K, ∃ T : Finset (Fin r → ℤ),
-        G = ∑ mu ∈ T, e mu G ∧ ∀ mu, e mu G ∈ isoSub (glOps K r LL S) mu
-
-theorem isotypic_multiplicity_of_reducibility (D : Formalism.BasicNotions.D7) (hV : Formalism.MainNotions.CovariantDegrees.ValuationLemmaField D) (hdec : PolIsoDecomp) :
+theorem isotypic_multiplicity_of_reducibility (D : Formalism.BasicNotions.D7) (hV : Formalism.MainNotions.CovariantDegrees.ValuationLemmaField D) (hdec : _root_.Formalism.MainNotions.G.Joints.PolIsoDecompB) :
     Formalism.MainNotions.PlaneGramData.adm1 D := by
   intro p O _ _ _ _ _ r _ ι _ LL S
   have : CharZero (KK O) := charZero_of_injective_algebraMap (IsFractionRing.injective O (KK O))
@@ -926,7 +919,7 @@ theorem bad_share_of_extension_proposition (D : Formalism.BasicNotions.D7) (C₀
 
 theorem posAdd_iff {n' : ℕ} (x y : Fin n') (d : ℕ) (hd1 : 1 ≤ d) (hdn : d ≤ n') :
     posAdd x d = y ↔ posAdd y (n' - d) = x := by
-  simp only [posAdd, Fin.ext_iff, Fin.val_mk]
+  simp only [posAdd, Fin.ext_iff]
   constructor
   · intro h
     rw [← h, Nat.mod_add_mod, show x.val + d + (n' - d) = x.val + n' by omega, Nat.add_mod_right,
@@ -1001,17 +994,17 @@ theorem sum_boxLoc {n' : ℕ} (TT : Finset (Fin n')) (W : Finset ℤ) (f : (TT �
   refine Finset.sum_nbij' (fun a => fun t : TT => a t) (fun aa i => if h : i ∈ TT then aa ⟨i, h⟩ else 0)
     ?_ ?_ ?_ ?_ ?_
   · intro a ha
-    simp only [boxLoc, Finset.mem_coe, Fintype.mem_piFinset] at ha ⊢
+    simp only [boxLoc, Fintype.mem_piFinset] at ha ⊢
     intro t
     simpa [t.2] using ha t
   · intro aa haa
-    simp only [boxLoc, Finset.mem_coe, Fintype.mem_piFinset] at haa ⊢
+    simp only [boxLoc, Fintype.mem_piFinset] at haa ⊢
     intro i
     by_cases h : i ∈ TT
     · simpa [h] using haa ⟨i, h⟩
     · simp [h]
   · intro a ha
-    simp only [boxLoc, Finset.mem_coe, Fintype.mem_piFinset] at ha
+    simp only [boxLoc, Fintype.mem_piFinset] at ha
     funext i
     by_cases h : i ∈ TT
     · simp [h]
@@ -1027,8 +1020,7 @@ theorem sum_boxLoc {n' : ℕ} (TT : Finset (Fin n')) (W : Finset ℤ) (f : (TT �
 open Classical in
 theorem card_boxLoc {n' : ℕ} (TT : Finset (Fin n')) (W : Finset ℤ) :
     (boxLoc n' TT W).card = W.card ^ TT.card := by
-  simp [boxLoc, Fintype.card_piFinset, apply_ite Finset.card, Finset.prod_ite,
-    Finset.filter_mem_eq_inter]
+  simp [boxLoc, Fintype.card_piFinset, apply_ite Finset.card]
 
 theorem meanLoc_eq (D : Formalism.BasicNotions.D7) (K : Consts) (s : Formalism.BasicNotions.Scale) {n' : ℕ} (TT : Finset (Fin n')) (m : ℕ)
     (Y a bl bu : ℝ) (κ : (TT → ℤ) → (TT → ℤ) → ℝ) (hA : winA D s = Formalism.MainNotions.flipOneThree.IaZ m Y a)
@@ -1286,7 +1278,6 @@ theorem tI_le_tIf (D : D7) (L : SizeData₂ D) (K : Consts) (C : ℝ) (hK : K.No
       have := mul_le_mul hNp hcl (Nat.cast_nonneg _) hNp0
       linarith
     have e3 := mul_le_mul_of_nonneg_left hcl (by positivity : (0 : ℝ) ≤ 2 * (n' : ℝ))
-    push_cast at e2 e3
     linarith
   have hin2 : (p : ℝ) ^ Gp L.sc * ((((8 * (DIf K L p n' + 1) : ℕ) : ℝ)) + C * (TT.card : ℝ) * (D.R.k : ℝ) *
         Real.logb p L.sc.a + 4 * (TT.card : ℝ) * ((⌊cG L⌋₊ : ℕ) : ℝ) + 2 * (n' : ℝ) * ((⌊cG L⌋₊ : ℕ) : ℝ)) +
@@ -1774,61 +1765,6 @@ theorem LPprime_cast {W Qq O Kf : Type*} [CommRing W] [Field Qq] [Algebra W Qq] 
   subst hm
   exact h
 
-theorem not_split_of_class_zero {D : D7} {p : ℕ} (h : IsResidueClassZero D p) : ¬ IsSg D p := by
-  intro h2
-  unfold IsSg at h2
-  rw [h] at h2
-  cases h2
-
-theorem period_eq_addOrderOf_class_zero {D : D7} {p : ℕ} (h : IsResidueClassZero D p) : nP D p = addOrderOf (hP D p) := by
-  unfold nP
-  rw [if_neg (not_split_of_class_zero h)]
-
-theorem shift_eq_generator_class_zero {D : D7} {p : ℕ} (h : IsResidueClassZero D p) : stepP D p = hP D p := by
-  unfold stepP
-  rw [if_neg (not_split_of_class_zero h)]
-
-theorem bs_add_nsmul {D : D7} {L : SizeData₂ D} (X : Inst D L) (h t : HH D) (i : ℕ) : X.bs h (t + i • h) = X.bs h t := by
-  induction i with
-  | zero => simp only [zero_smul, add_zero]
-  | succ i ih => rw [succ_nsmul, ← add_assoc, X.bs_step, ih]
-
-theorem bs_bs {D : D7} {L : SizeData₂ D} (X : Inst D L) (h t : HH D) : X.bs h (X.bs h t) = X.bs h t := by
-  obtain ⟨i, hi⟩ := X.bs_orb h t
-  calc X.bs h (X.bs h t) = X.bs h (X.bs h t + i • h) := (bs_add_nsmul X h _ i).symm
-    _ = X.bs h t := by rw [hi]
-
-theorem Nv_eq_card {D : D7} {L : SizeData₂ D} (X : Inst D L) {p : ℕ} (hc : IsResidueClassZero D p) {t0 : HH D}
-    (ht0 : t0 ∈ reps X p) : Nv X p t0 = (topsPos D p t0).card := by
-  classical
-  obtain ⟨t1, -, rfl⟩ := Finset.mem_image.1 ht0
-  have hstep := shift_eq_generator_class_zero hc
-  set h := hP D p
-  set t0 := X.bs (stepP D p) t1 with ht0def
-  have hbs : X.bs h t0 = t0 := by rw [ht0def, hstep, bs_bs]
-  unfold Nv topsOn
-  rw [hstep]
-  have hinj : Function.Injective (fun i : Fin (addOrderOf h) => t0 + (i : ℕ) • h) := by
-    intro i j hij
-    simp only [add_right_inj] at hij
-    have hpos : 0 < addOrderOf h := addOrderOf_pos h
-    exact Fin.ext (nsmul_injOn_Iio_addOrderOf i.2 j.2 hij)
-  rw [← Finset.card_map ⟨_, hinj⟩]
-  congr 1
-  ext t
-  simp only [Finset.mem_filter, Finset.mem_map, Function.Embedding.coeFn_mk, topsPos, Finset.mem_univ, true_and]
-  constructor
-  · rintro ⟨htT, hbt⟩
-    obtain ⟨i, hi⟩ := X.bs_orb h t
-    rw [hbt] at hi
-    refine ⟨⟨i % addOrderOf h, Nat.mod_lt _ (addOrderOf_pos h)⟩, ?_, ?_⟩
-    · show t0 + (i % addOrderOf h) • h ∈ D.host.TT
-      rw [mod_addOrderOf_nsmul, hi]; exact htT
-    · show t0 + (i % addOrderOf h) • h = t
-      rw [mod_addOrderOf_nsmul]; exact hi
-  · rintro ⟨i, hiT, rfl⟩
-    exact ⟨hiT, by rw [bs_add_nsmul, hbs]⟩
-
 theorem inBand_of_inBand0 {D : D7} {K : Consts} {s : Scale} {p : ℕ} (h : rho D K s ≤ rhoB D K s)
     (h0 : InBand0 D K s p) : InBand D K s p := by
   obtain ⟨hp0, hX, d, hd, h1, h2⟩ := h0
@@ -1935,8 +1871,8 @@ theorem linear_programming_input_of_hypotheses (D : D7) (L : SizeData₂ D) (X :
     rw [hι, hj, hw, ← hn']; exact (D.gat u w hg).P.setting v
   rw [← hι, ← hw]
   refine hBC _ _ _ _ Os Ks _ _ ιs _ js ws φ φK hcomp hfin hSet.1 hSetR _ _ _ _ _ _ _ ?_
-  have hNv : Nv X (D.what₂.places.resChar w) t0 = (topsPos D (D.what₂.places.resChar w) t0).card := Nv_eq_card X hc0 hrep
-  have hnP : nP D (D.what₂.places.resChar w) = addOrderOf (hP D (D.what₂.places.resChar w)) := period_eq_addOrderOf_class_zero hc0
+  have hNv : Nv X (D.what₂.places.resChar w) t0 = (topsPos D (D.what₂.places.resChar w) t0).card := _root_.Formalism.MainNotions.G.TopChoiceBounds.vertex_count_eq_card_tops X hc0 hrep
+  have hnP : nP D (D.what₂.places.resChar w) = addOrderOf (hP D (D.what₂.places.resChar w)) := _root_.Formalism.MainNotions.G.TopChoiceBounds.period_eq_addOrderOf hc0
   by_cases hp0 : ((D.what₂.places.resChar w : ℕ) : ℝ) < L.sc.p0 D.R.k
   · obtain ⟨h1, h2, h3, h4, hwin, hbnd, h13, hr2, hN1, hrY, hpL, h256, hk3, hkLa, hsz⟩ := hII _ hcand hp0 t0 hgood
     have hrr : (D.gat u w hg).P.r = rG L.sc := by rw [hr, if_pos hp0]

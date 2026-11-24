@@ -565,7 +565,7 @@ theorem hankel_integral : ∀ (O F : Type) [CommRing O] [Field F] (ι : O →+* 
       have hij' : i < j := hij
       have h1 : ¬ j ≤ i := not_le.mpr hij'
       have h2 : ¬ ((j : ℕ) ≤ i) := h1
-      simp [T, h1, h2]
+      simp [T, h1]
   refine ⟨N.det, ?_⟩
   rw [RingHom.map_det, RingHom.mapMatrix_apply, hent, Matrix.det_mul, Matrix.det_mul, Matrix.det_transpose, hT]
   show _ = _ * H.det
@@ -1012,10 +1012,6 @@ open GlobalTheory GlobalTheory.VB GlobalTheory.LieVB GlobalTheory.QCoh GlobalThe
 open GlobalTheory.Twist (resM)
 open scoped CategoryTheory.Obj RatFunc
 
-theorem GlobalTheory.Nef.RatRigidField.spMap_comp {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B)
-    (g : B →+* C) : spMap (g.comp f) = spMap g ≫ spMap f := by
-  rw [← Spec.map_comp]; rfl
-
 namespace GlobalTheory.Nef
 
 theorem isRatPath_map {F Ω : Type} [Field F] [Field Ω] (φ : F →+* Ω) {Y : Scheme.{0}}
@@ -1051,7 +1047,7 @@ theorem isRatPath_map {F Ω : Type} [Field F] [Field Ω] (φ : F →+* Ω) {Y : 
         algebraMap (PowerSeries Ω) (LaurentSeries Ω) (PowerSeries.map φ (p : PowerSeries F)) :=
       congrArg (fun f => f (p : PowerSeries F)) hψ
     have h3 : PowerSeries.map φ (p : PowerSeries F) = ((p.map φ : Polynomial Ω) : PowerSeries Ω) := by
-      ext n; simp [Polynomial.coeff_map]
+      ext n; simp
     have hc : ∀ (K : Type) [Field K] (q : Polynomial K),
         algebraMap (RatFunc K) (LaurentSeries K) (algebraMap (Polynomial K) (RatFunc K) q) =
           algebraMap (PowerSeries K) (LaurentSeries K) (q : PowerSeries K) :=
@@ -1064,10 +1060,10 @@ theorem isRatPath_map {F Ω : Type} [Field F] [Field Ω] (φ : F →+* Ω) {Y : 
   refine ⟨spMap ρ ≫ β, ?_⟩
   have e1 : spMap (algebraMap (RatFunc Ω) (LaurentSeries Ω)) ≫ spMap ρ =
       spMap ψ ≫ spMap (algebraMap (RatFunc F) (LaurentSeries F)) := by
-    rw [← RatRigidField.spMap_comp, ← RatRigidField.spMap_comp, hρ]
+    rw [← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, hρ]
   have e2 : spMap ψ ≫ spMap (algebraMap (PowerSeries F) (LaurentSeries F)) =
       spMap (algebraMap (PowerSeries Ω) (LaurentSeries Ω)) ≫ spMap (PowerSeries.map φ) := by
-    rw [← RatRigidField.spMap_comp, ← RatRigidField.spMap_comp, hψ]
+    rw [← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, hψ]
   rw [← Category.assoc, e1, Category.assoc, hβ, ← Category.assoc, e2, Category.assoc]
 
 end GlobalTheory.Nef
@@ -1084,7 +1080,7 @@ theorem ratRigid_of_field_map (S : Scheme.{0}) (G : Over S) [GrpObj G] (F Ω : T
     ext1 x; simp
   have ht : spMap (PowerSeries.map φ) ≫ triv G b = triv G (spMap φ ≫ b) := by
     simp only [triv]
-    rw [← Category.assoc, ← RatRigidField.spMap_comp, hC, RatRigidField.spMap_comp]
+    rw [← Category.assoc, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, hC, _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
     simp only [Category.assoc]
   exact (_root_.GlobalTheory.Nef.spMap_injective_cancel).1 _ _ (PowerSeries.map φ) (PowerSeries.map_injective φ φ.injective) _ _ _
     (e.trans ht.symm)
@@ -1113,7 +1109,7 @@ theorem polyScale_polyScale (c d : F) (p : F[X]) :
   have : (polyScale d).comp (polyScale c) = polyScale (c * d) := by
     apply Polynomial.algHom_ext
     simp only [polyScale, AlgHom.comp_apply, Polynomial.aeval_X, map_mul, Polynomial.aeval_C,
-      Polynomial.algebraMap_eq, Polynomial.C_mul]
+      Polynomial.algebraMap_eq]
     ring
   exact congrArg (fun φ : F[X] →ₐ[F] F[X] => φ p) this
 
@@ -1222,8 +1218,7 @@ theorem lsScale_rat (c : F) (hc : c ≠ 0) :
   apply ext_rat
   · intro a
     simp only [RingHom.comp_apply, ratScale_C, alg_C, hl, rescale_C']
-  · simp only [RingHom.comp_apply, ratScale_X, map_mul, alg_C, alg_X, hl, PowerSeries.rescale_X,
-      rescale_C']
+  · simp only [RingHom.comp_apply, ratScale_X, map_mul, alg_C, alg_X, hl, PowerSeries.rescale_X]
 
 theorem ratInv_ratScale (c : F) (hc : c ≠ 0) :
     ratInv.comp (ratScale c hc) = (ratScale c⁻¹ (inv_ne_zero hc)).comp ratInv := by
@@ -1288,7 +1283,7 @@ theorem triv_isPath {S : Scheme.{0}} (G : Over S) [GrpObj G] {R : Type} [CommRin
     have : (CommRingCat.ofHom (PowerSeries.C (R := R)) ≫ CommRingCat.ofHom (PowerSeries.rescale c)) = CommRingCat.ofHom (PowerSeries.C (R := R)) := by
       ext x n; simp only [CommRingCat.hom_comp, CommRingCat.hom_ofHom, RingHom.coe_comp, Function.comp_apply, PowerSeries.coeff_rescale, PowerSeries.coeff_C]
       split_ifs with h <;> simp [h]
-    rw [this, Category.assoc, Category.assoc, unitSec_comp_sqr]
+    rw [this, Category.assoc, Category.assoc, _root_.GlobalTheory.Nef.unitSec_sqr]
 
 theorem eq_unitSec_of_sqr_eq {S : Scheme.{0}} (G : Over S) [GrpObj G] {R : Type} [CommRing R] (z : Sp R ⟶ G.left)
     (hz : z ≫ sqr G = z) : z = (z ≫ G.hom) ≫ unitSec G := by
@@ -1832,7 +1827,7 @@ theorem tan_triv_eq_zero : ∀ (k K E : Type) [Field k] [IsAlgClosed k] [CharZer
     exact fun h => hσ (hφ (h.trans (map_zero φ).symm))
   refine Matrix.eq_zero_of_vecMul_eq_zero hA ?_
   funext a
-  simp only [Matrix.vecMul, dotProduct, Matrix.map_apply, Matrix.submatrix_apply, id, Pi.zero_apply, N, φ,
+  simp only [Matrix.vecMul, dotProduct, Matrix.map_apply, Pi.zero_apply, N, φ,
     RingHom.comp_apply]
   exact key2 _
 

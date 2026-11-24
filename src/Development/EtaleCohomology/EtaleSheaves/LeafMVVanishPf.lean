@@ -206,7 +206,6 @@ theorem chase (hI : ∀ n, Injective (I.X n)) {K1 KA KB K3 : Cx R} (φ : K1 ⟶ 
   have hc3' : pc (biprod.desc u v) c3 = _ := hc3
   have hz : pc (biprod.desc u v) (δ n (n + 1) c3 - z.1) = 0 := by
     rw [pc_sub, ← pc_δ]
-    change δ n (n + 1) (pc (biprod.desc u v) c3) - _ = 0
     rw [hc3', δ_sub, δ_sub, δ_δ, hδb2, hb]; simp
   have := (hC (n + 1)).2.2 _ hz
   exact (CohomologyClass.mk_eq_zero_iff _).2 ⟨n, rfl, c3, sub_eq_zero.1 this⟩
@@ -407,11 +406,9 @@ section -- clump:auto
 @[expose] public section
 
 namespace LateralTheory.Fin.EtaleMayerVietorisChainsShortExact
-theorem etale_mayer_vietoris_short_exact_sequence_free_of_components : LateralTheory.EtaleFoundations.EtaleFreePresheafMayerVietorisShortExact := by
-  apply LateralTheory.EtaleFoundations.etale_free_presheaf_mayer_vietoris_short_exact_holds
 theorem etale_mayer_vietoris_short_exact_sequence_of_components : LateralTheory.EtaleFoundations.EtaleMayerVietorisChainsShortExact := by
-  apply LateralTheory.EtaleFoundations.etale_chains_mayer_vietoris_short_exact_of_free <;> first | exact etale_mayer_vietoris_short_exact_sequence_free_of_components
-theorem intersectionNumber_baseChange : LateralTheory.EtaleFoundations.EtaleMayerVietorisChainsShortExact := etale_mayer_vietoris_short_exact_sequence_of_components
+  apply LateralTheory.EtaleFoundations.etale_chains_mayer_vietoris_short_exact_of_free <;> first | exact _root_.LateralTheory.EtaleFoundations.etale_free_presheaf_mayer_vietoris_short_exact_holds
+alias intersectionNumber_baseChange := _root_.LateralTheory.Fin.EtaleMayerVietorisChainsShortExact.etale_mayer_vietoris_short_exact_sequence_of_components
 end LateralTheory.Fin.EtaleMayerVietorisChainsShortExact
 end -- clump:auto
 end -- clump:auto

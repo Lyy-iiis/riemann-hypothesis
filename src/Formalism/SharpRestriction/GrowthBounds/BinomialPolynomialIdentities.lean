@@ -583,16 +583,16 @@ theorem highestWeightSpace_eq_span_highestWeightVector [CharZero (KK O)] {E : GL
     rw [sub_eq_iff_eq_add] at h
     rw [h]
     rcases eq_or_ne c a with rfl | hca <;> rcases eq_or_ne b c with rfl | hbc
-    · simp [Pi.single_apply]
-    · simp only [eq_self_iff_true, if_true, if_neg hbc, LinearMap.zero_apply, sub_zero, Pi.add_apply,
+    · simp
+    · simp only [if_true, if_neg hbc, LinearMap.zero_apply, sub_zero, Pi.add_apply,
         Pi.sub_apply, Pi.single_eq_same, Pi.single_eq_of_ne hbc.symm, Int.cast_add, Int.cast_one, add_smul,
         one_smul]
       abel
-    · simp only [eq_self_iff_true, if_true, if_neg hca, LinearMap.zero_apply, zero_sub, Pi.add_apply,
+    · simp only [if_true, if_neg hca, LinearMap.zero_apply, zero_sub, Pi.add_apply,
         Pi.sub_apply, Pi.single_eq_same, Pi.single_eq_of_ne hca, add_zero, Int.cast_sub, Int.cast_one, sub_smul,
         one_smul]
       abel
-    · simp [Pi.single_apply, hca, hbc, hbc.symm]
+    · simp [hca, hbc, hbc.symm]
   let L : Submonoid (Module.End (KK O) V) := Submonoid.closure {T | ∃ a b, b < a ∧ T = E a b}
   let U : Submodule (KK O) V := Submodule.span (KK O) {y | ∃ u ∈ L, y = u v}
   have hLU : ∀ u ∈ L, ∀ y ∈ U, u y ∈ U := by
@@ -950,12 +950,11 @@ namespace Formalism.MainNotions.G.ColumnFamilies.Top
 
 open Formalism.MainNotions.CovariantDegrees
 
-theorem b9 (D : Formalism.BasicNotions.D7) : GlobalSectionsSchur D := global_sections_schur D
-theorem b10 (D : Formalism.BasicNotions.D7) : BracketPolynomialSpan D := bracket_polynomial_span D
-theorem b11 (D : Formalism.BasicNotions.D7) : GradedLatticeStable D := adm_eleven D
-theorem b15 (D : Formalism.BasicNotions.D7) : SaturatedLowerSetSpan D := admissible_lowerSet_span D
-theorem b19 (D : Formalism.BasicNotions.D7) : WeylDualityLattice D := admissible_lattice_biduality D
-theorem a2 (D : Formalism.BasicNotions.D7) : PathColumnBasis D := admissible_polynomial_basis D
+alias b9 := _root_.Formalism.MainNotions.G.ColumnFamilies.global_sections_schur
+alias b10 := _root_.Formalism.MainNotions.G.ColumnFamilies.bracket_polynomial_span
+alias b11 := _root_.Formalism.MainNotions.G.ColumnFamilies.adm_eleven
+alias b15 := _root_.Formalism.MainNotions.G.ColumnFamilies.admissible_lowerSet_span
+alias a2 := _root_.Formalism.MainNotions.G.ColumnFamilies.admissible_polynomial_basis
 
 end Formalism.MainNotions.G.ColumnFamilies.Top
 end -- clump:auto

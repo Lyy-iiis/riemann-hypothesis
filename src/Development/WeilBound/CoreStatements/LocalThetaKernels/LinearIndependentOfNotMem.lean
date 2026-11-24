@@ -120,10 +120,6 @@ namespace PositivityTheory.ThKH.Locrep
 
 open Filter Topology
 
-theorem eq_one_of_pow_near {R : Type} [NormedRing R] [NormedAlgebra ℂ R] {a : R} (h : ∀ p : ℕ, ‖a ^ p - 1‖ < 1 / 2) :
-    a = 1 :=
-  _root_.UpperTheory.Reformulated.B.Yhd7.main h
-
 theorem linearIndependent_of_notMem {V : Type} [AddCommGroup V] [Module ℂ V] (u : ℕ → V) (T : ℕ → Set V)
     (h1 : ∀ m n, m < n → u m ∈ T n) (h2 : ∀ n, u n ∉ Submodule.span ℂ (T n)) : LinearIndependent ℂ u := by
   classical
@@ -160,7 +156,6 @@ theorem exists_finite_orbit {G V : Type} [Group G] [TopologicalSpace G] [AddComm
   have hli : LinearIndependent ℂ fun n => f (c n (T n)) := by
     refine linearIndependent_of_notMem (fun n => f (c n (T n))) (fun n => (T n : Set V)) (fun m n hmn => ?_)
       fun n => hc' n (T n)
-    beta_reduce
     induction n, hmn using Nat.le_induction with
     | base => rw [Nat.succ_eq_add_one, hT]; exact Finset.mem_coe.2 (Finset.mem_insert_self _ _)
     | succ n _ ih => rw [hT]; exact Finset.mem_coe.2 (Finset.mem_insert_of_mem ih)
@@ -235,7 +230,7 @@ theorem smooth_of_weak {G V : Type} [Group G] [TopologicalSpace G] [AddCommGroup
   refine ⟨max n m, fun k hk => ?_⟩
   have hkn : k ∈ K n := hanti (le_max_left n m) hk
   have hkm : k ∈ K m := hanti (le_max_right n m) hk
-  have hk1 : A k = 1 := eq_one_of_pow_near fun p => by
+  have hk1 : A k = 1 := _root_.UpperTheory.Reformulated.B.Yhd7.main fun p => by
     rw [← hAp k hkn]
     exact hm ((K m).pow_mem hkm p)
   have := hA k (π φ)

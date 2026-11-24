@@ -137,8 +137,8 @@ theorem lifts_basis_mod_fil : GlobalTheory.Published.AbelianDeRham → ∀ {E : 
   have gA := (smoothOfRelativeDimension_isStableUnderBaseChange _).of_isPullback hπ.1
     (ObjDim.smoothOfRelativeDimension Xo.univ)
   have : IsCommMonObj A := hA.comm
-  obtain ⟨a, ha⟩ := GlobalTheory.T.exists_ringAction_of_isGrpPullback Xo.univ.t.act hπ
-  obtain ⟨ub', hub', htan, -, hbasis⟩ := GlobalTheory.T.exists_frame_tangentVectors_of_isGrpPullback y hπ a ha
+  obtain ⟨a, ha⟩ := _root_.GlobalTheory.OActPull.exists_oAct_of_isGrpPullback Xo.univ.t.act hπ
+  obtain ⟨ub', hub', htan, -, hbasis⟩ := _root_.GlobalTheory.KSExist.exists_frame_of_isGrpPullback y hπ a ha
   have e : ub' = ub := funext fun σ => funext fun k => Over.OverMorphism.ext
     (hπ.1.hom_ext ((hub' σ k).trans (hub σ k).symm) ((Over.w (ub' σ k)).trans (Over.w (ub σ k)).symm))
   subst e
@@ -181,7 +181,7 @@ open AlgebraicGeometry CategoryTheory GlobalTheory.DeRham GlobalTheory.Cris
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.frameLifts_basis_deRhamHomology_mod_hodgeFiltration : GlobalTheory.Published.AbelianDeRham → ∀ {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : Datum H} {l : Level H} {Xo : Moduli Dw l} {c : Coeff l} {K : Type} [Field K] [Algebra c.F K] (y : FrPt Xo c K) {A : Over (Sp K)} [GrpObj A] {π : A.left ⟶ Xo.univ.t.G.left}, IsGrpPullback A Xo.univ.t.G y.x π → ∀ (ub : ∀ σ : E →+* ℂ, Fin (Dw.mult σ) → (epsR K ⟶ A)), (∀ σ k, (ub σ k).left ≫ π = y.u σ k) → ∀ (hb : (Σ σ : E →+* ℂ, Fin (Dw.mult σ)) → HdR A), (∀ k, IsLieImage (hb k) (ub k.1 k.2)) → Submodule.span K (Set.range hb) ⊔ Fil A = ⊤ ∧ LinearIndependent K (fun k => (Submodule.Quotient.mk (hb k) : HdR A ⧸ Fil A)) := by
-  first | exact @GlobalTheory.LieBasis.lifts_basis_mod_fil | exact GlobalTheory.LieBasis.lifts_basis_mod_fil | (intros; apply GlobalTheory.LieBasis.lifts_basis_mod_fil <;> assumption)
+  first | exact @GlobalTheory.LieBasis.lifts_basis_mod_fil
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FrameLiftsBasisDeRhamHomologyModHodgeFiltrationStatement =====

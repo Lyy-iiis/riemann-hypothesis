@@ -212,7 +212,7 @@ theorem exists_glued {O E R : Type} [CommRing O] [Field E] [Algebra O E] [CommRi
       change ∑ j, (e • γ.val.map φ + (1 - e) • (1 : Matrix (Fin n) (Fin n) R)) i j * w j = _
       refine Finset.sum_congr rfl fun j _ => ?_
       rw [hef]
-      by_cases h : i = j <;> simp [h, Matrix.one_apply, Pi.single_apply] <;> ring
+      by_cases h : i = j <;> simp [h] <;> ring
     rw [hz']
     refine Submodule.sum_mem _ fun j _ => Submodule.smul_mem _ _ (add_mem ?_ ?_)
     · exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨_, h3 j, rfl⟩)
@@ -229,17 +229,7 @@ theorem exists_nat_multiples {E : Type} [Field E] [NumberField E] (s : Finset E)
     rw [← Int.cast_natCast, h0, Int.cast_mul]
   rw [this, map_mul, map_intCast, hp, zsmul_eq_mul, mul_assoc]
 
-theorem exists_level {E : Type} [Field E] [NumberField E] {n : ℕ} (L : Submodule (𝓞 E) (Fin n → E)) (hfg : L.FG)
-    (hsp : Submodule.span E (L : Set (Fin n → E)) = ⊤) :
-    ∃ N : ℕ, 0 < N ∧ (∀ j, (N : E) • (Pi.single j 1 : Fin n → E) ∈ L) ∧
-      ∀ x ∈ L, ∀ i, ∃ o : 𝓞 E, (N : E) * x i = algebraMap (𝓞 E) E o := by
-  first
-  | exact @_root_.GlobalTheory.CoordinateBasisBounds.main
-  | exact _root_.GlobalTheory.CoordinateBasisBounds.main
-  | (apply _root_.GlobalTheory.CoordinateBasisBounds.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.CoordinateBasisBounds.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.CoordinateBasisBounds.main <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.CoordinateBasisBounds.main ..)
+alias exists_level := _root_.GlobalTheory.CoordinateBasisBounds.main
 
 theorem exists_gl {E : Type} [Field E] [NumberField E] {n : ℕ} (L : Submodule (𝓞 E) (Fin n → E)) (hfg : L.FG)
     (hsp : Submodule.span E (L : Set (Fin n → E)) = ⊤) (N : ℕ) (hN : 0 < N) :

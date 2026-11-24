@@ -69,23 +69,6 @@ theorem ag_nonneg (k r : ℕ) : 0 ≤ AG k r := by unfold AG; positivity
 theorem gap4 {k r : ℕ} {h : ℝ} (hG : GapOK k r h) :
     9 * ((r : ℝ) + 1) * ((2 * r + k + 1 : ℕ) : ℝ) ^ 2 + 3 * AG k r + 3 ≤ aOf r h := hG.2.2.2
 
-theorem thr_of_gapOK {k r : ℕ} {h : ℝ} (hG : GapOK k r h) : JF.TransportedAlt k r (aOf r h) 0 := by
-  have h4' := gap4 hG
-  have h4 : 9 * ((r : ℝ) + 1) * ((2 * r + k + 1 : ℕ) : ℝ) ^ 2 < aOf r h := by
-    linarith [ag_nonneg k r]
-  unfold JF.TransportedAlt
-  have hpos : (0 : ℝ) < 9 * ((r : ℝ) + 1) := by positivity
-  rw [Nat.cast_zero, mul_zero, sub_zero, lt_div_iff₀ hpos]
-  calc ((2 * r + k + 1 : ℕ) : ℝ) ^ 2 * (9 * ((r : ℝ) + 1))
-      = 9 * ((r : ℝ) + 1) * ((2 * r + k + 1 : ℕ) : ℝ) ^ 2 := by ring
-    _ < aOf r h := h4
-
-theorem aOf_pos_of_gapOK {k r : ℕ} {h : ℝ} (hG : GapOK k r h) : 0 < aOf r h := by
-  have h4 := gap4 hG
-  have h5 := ag_nonneg k r
-  have : (0 : ℝ) ≤ 9 * ((r : ℝ) + 1) * ((2 * r + k + 1 : ℕ) : ℝ) ^ 2 := by positivity
-  linarith
-
 theorem rho_triv {k r : ℕ} {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp]
     [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] (D : B.RealPlaceData k r Wp Wq) (p : B.SS k r)
     (F : B.Mat k r → (ℂ →L[ℂ] ℂ)) (g : B.Mat k r) : B.rho (triv D) p F g = F (B.sgs p g) := by

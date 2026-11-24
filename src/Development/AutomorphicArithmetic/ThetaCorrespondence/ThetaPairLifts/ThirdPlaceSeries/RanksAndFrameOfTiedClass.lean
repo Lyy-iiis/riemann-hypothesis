@@ -147,7 +147,7 @@ theorem ncard_primesOver_of_norm {E : Type} [Field E] [NumberField E] {p : ℕ} 
     (Ideal.primesOver (Ideal.span {(p : ℤ)}) (𝓞 E)).ncard = Module.finrank ℚ E := by
   classical
   have hp0 : Ideal.span {(p : ℤ)} ≠ ⊥ := by
-    simp [Ideal.span_singleton_eq_bot, hp.ne_zero]
+    simp [hp.ne_zero]
   haveI := span_prime_isMaximal' hp
   rw [← Ideal.sum_ramification_inertia (R := ℤ) (S := 𝓞 E) ℚ E hp0,
     ← IsDedekindDomain.coe_primesOverFinset hp0 (𝓞 E), Set.ncard_coe_finset, Finset.card_eq_sum_ones]
@@ -191,7 +191,7 @@ theorem splitsF_of_norm : ∀ (D : D7) (p : ℕ), p.Prime →
       left_inv := fun v => rfl
       right_inv := fun P => rfl }
   · have := P.2.2
-    have h0 : Ideal.span {(p : ℤ)} ≠ ⊥ := by simp [Ideal.span_singleton_eq_bot, hp.ne_zero]
+    have h0 : Ideal.span {(p : ℤ)} ≠ ⊥ := by simp [hp.ne_zero]
     exact Ideal.ne_bot_of_liesOver_of_ne_bot h0 P.1
   · have := P.2.2
     have h2 := (Ideal.mem_of_liesOver P.1 (Ideal.span {(p : ℤ)}) (p : ℤ)).mp (Ideal.mem_span_singleton_self _)
@@ -232,8 +232,8 @@ theorem definiteSpaceVolume_eq_mass_of_volumeComparison (hU : ∀ D : D7, Standa
     ∀ D : D7, Formalism.L2.Theta.RealTied D → StandardLattice.volY0 D = StandardLattice.massI D D.R.r := fun D h =>
   have hT : StandardLattice.VolTie D := Formalism.L2.Theta.VolTieG.volTie h.vol
   StandardLattice.volume_eq_mass_at_rank D (StandardLattice.volume_eq_mass_of_definite D (StandardLattice.volumeMass_of_unfolding D (hU D hT))
-    (Formalism.L2.GlobalTheoryTheory.GenusMassVolumes.mass_volume_identity_of_class_decomp D hT (GlobalTheory.genusMassStd_all D)
-      (GlobalTheory.DefiniteDecompObj.doubleCosets_mass D)))
+    (Formalism.L2.GlobalTheoryTheory.GenusMassVolumes.mass_volume_identity_of_class_decomp D hT (_root_.GlobalTheory.genusMassStd D)
+      (_root_.GlobalTheory.DefiniteDecomp.defClassDecomp D)))
 
 end GlobalTheory.RankVolume
 end -- clump:auto

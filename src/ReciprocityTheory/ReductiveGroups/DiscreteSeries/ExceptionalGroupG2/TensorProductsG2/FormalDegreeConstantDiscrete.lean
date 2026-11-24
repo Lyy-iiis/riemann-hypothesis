@@ -74,6 +74,7 @@ import Mathlib.Tactic.ENatToNat
 import Mathlib.Tactic.Linter.Style
 import Mathlib.Tactic.TypeStar
 import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.TensRepB
+import Formalism.RealPlaceAnalysis.RealPlaceTaylor.IsCompactInvariantOrthogonalInf
 import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.PuniqSmoothAddSmul
 import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.Exists
 import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.CartanKType
@@ -369,7 +370,7 @@ end -- clump:auto
 -- ===== end clump member: ReciprocityTheory.ReductiveGroups.DiscreteSeries.ExceptionalGroupG2.TensorProductsG2.ConsumerB =====
 
 -- ===== clump member: ReciprocityTheory.ReductiveGroups.DiscreteSeries.TensorRepresentations.ConsumerC =====
--- clump-header: {"m": "ReciprocityTheory.ReductiveGroups.DiscreteSeries.TensorRepresentations.ConsumerC", "h": "module\n\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.RelevantZeroGramTerms\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.KTypeIntDomStatement\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.TensRepA\npublic import Formalism.RealPlaceAnalysis.QuotientSettingHolds\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.Bridge\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.ContinuousRepresentations.RelOpCurve\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.ContinuousRepresentations.URepCompRed\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.CountNotTwoOfFinrankLeOne\nimport ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.TensRepB\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.Unique\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.ContinuousRepresentations.DerivExistsAllPosStatement\n\n"}
+-- clump-header: {"m": "ReciprocityTheory.ReductiveGroups.DiscreteSeries.TensorRepresentations.ConsumerC", "h": "module\n\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.RelevantZeroGramTerms\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.KTypeIntDomStatement\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.TensRepA\npublic import Formalism.RealPlaceAnalysis.QuotientSettingHolds\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.DiscreteSeriesExistence.Bridge\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.ContinuousRepresentations.RelOpCurve\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.ContinuousRepresentations.URepCompRed\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.CountNotTwoOfFinrankLeOne\nimport ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.PieriRules.TensRepB\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.Unique\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.HighestWeights.ContinuousRepresentations.DerivExistsAllPosStatement\nimport Formalism.RealPlaceAnalysis.RealPlaceTaylor.IsCompactInvariantOrthogonalInf\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -438,11 +439,11 @@ theorem cns_cpt_dec {ε : Fin n → Bool} {Λ : Fin n → ℝ} (T : S7.KType ε 
     intro i i' hii
     by_contra hne
     have hk : x i ∈ HW.khwSub ε (HW.tensAct (HW.kunits T) (fun a b => dρ (Matrix.single a b 1)))
-        (Λ + γw (idx i)) := (HW.count_mem_khwSub_iff _ _ _ _).2 (by rw [← hidx i]; exact (hx i).2)
+        (Λ + γw (idx i)) := (_root_.ReciprocityTheory.ChartRestriction.DS.HW.tensHW_mem_khwSub _ _ _ _).2 (by rw [← hidx i]; exact (hx i).2)
     have hk' : x i' ∈ HW.khwSub ε (HW.tensAct (HW.kunits T) (fun a b => dρ (Matrix.single a b 1)))
-        (Λ + γw (idx i)) := (HW.count_mem_khwSub_iff _ _ _ _).2 (by rw [hii, ← hidx i']; exact (hx i').2)
+        (Λ + γw (idx i)) := (_root_.ReciprocityTheory.ChartRestriction.DS.HW.tensHW_mem_khwSub _ _ _ _).2 (by rw [hii, ← hidx i']; exact (hx i').2)
     exact HW.count_not_two_of_finrank_le_one _ (hP2 (idx i)) hk hk' (hx i).1 (hx i').1
-      (horth i i' hne _ (HW.count_mem_kSpan_self _ _ _) _ (HW.count_mem_kSpan_self _ _ _))
+      (horth i i' hne _ (_root_.Formalism.REAL.mem_compactSpan_self _ _ _) _ (_root_.Formalism.REAL.mem_compactSpan_self _ _ _))
   have hpiece : ∀ (ν : Fin n → ℝ) (y : PiLp 2 (fun _ : Fin n => T.V)), y ≠ 0 →
       Formalism.REAL.KHighest ε (HW.tensAct (HW.kunits T) (fun a b => dρ (Matrix.single a b 1))) ν y →
       ∃ k, μ k = ν := by
@@ -452,7 +453,7 @@ theorem cns_cpt_dec {ε : Fin n → Bool} {Λ : Fin n → ℝ} (T : S7.KType ε 
     apply hy0
     refine HW.count_eq_zero_of_orth _ htop y fun k z hz => ?_
     exact Formalism.REAL.kOrth _ n ε _ ν (μ k) y (x k) hrelR hunitR hy (hx k).2 (hno k).symm y
-      (HW.count_mem_kSpan_self _ _ _) z hz
+      (_root_.Formalism.REAL.mem_compactSpan_self _ _ _) z hz
   have hsurj : ∀ s ∈ Sm, ∃ i, idx i = s := by
     intro s hs
     obtain ⟨y, hy0, hy⟩ := hP3 s ((hSm s).1 hs)
@@ -619,13 +620,11 @@ private theorem term_lemma_3 {ε : Fin n → Bool} {a b : Fin n} (he : ε a = ε
   · have e' : ε c = ε b := e.trans he
     refine ⟨?_, fun _ => ?_⟩
     all_goals
-      simp only [e', he, ne_eq, not_true_eq_false, and_false, and_true, if_false, if_true,
-        Fin.lt_iff_val_lt_val, Fin.le_iff_val_le_val]
+      simp only [e', he, ne_eq, not_true_eq_false, and_false, and_true, if_false, Fin.lt_iff_val_lt_val, Fin.le_iff_val_le_val]
       split_ifs <;> first | (exfalso; omega) | norm_num
   · have e' : ¬ ε c = ε b := fun h => e (h.trans he.symm)
     refine ⟨?_, fun h => absurd h e⟩
-    simp only [e, e', ne_eq, not_false_eq_true, and_false, and_true, if_false, if_true,
-      Fin.lt_iff_val_lt_val, Fin.le_iff_val_le_val]
+    simp only [e, e', ne_eq, not_false_eq_true, and_false, and_true, if_false, Fin.lt_iff_val_lt_val, Fin.le_iff_val_le_val]
     split_ifs <;> first | (exfalso; omega) | norm_num
 
 private theorem sumR_lemma_4 {a b : Fin n} (hab : a < b) :
@@ -761,7 +760,7 @@ theorem cns_zuck_cpt {ε : Fin n → Bool} (hpq : pOf ε = 0 ∨ qOf ε = 0) {μ
     have e2 : lamS s = lamS s' := by
       funext a
       have := congrFun e a
-      simp only [Formalism.QuantumDeterminants.lowK, PI.UpqRep.lowK, lowK, Pi.add_apply, Pi.sub_apply] at this
+      simp only [Formalism.QuantumDeterminants.lowK, Pi.add_apply, Pi.sub_apply] at this
       linarith
     rw [hsh s (mem_filter.1 hs).2, hsh s' (mem_filter.1 hs').2] at e2
     exact cns_shift_inj false μ e2
@@ -775,7 +774,7 @@ theorem cns_zuck_cpt {ε : Fin n → Bool} (hpq : pOf ε = 0 ∨ qOf ε = 0) {μ
     rw [← U0.apply_symm_apply v, ← U0.apply_symm_apply w, ← hU0, LinearIsometryEquiv.inner_map_map,
       cns_coefV (fun _ => T.op k) (S7.toMK k) (U0.symm v) (U0.symm w) x y]
     have h1 := cns_key_std T k (WithLp.toLp 2 (fun d => x d • U0.symm v)) (WithLp.toLp 2 (fun c => y c • U0.symm w))
-    simp only [PiLp.toLp_apply] at h1
+    simp only at h1
 
     rw [← h1, ha, hb, map_sum,
     show (∑ s ∈ univ.filter (fun s => S7.IsHCParam (shiftF false μ s)), HW.tensOp T (HW.stdRho ε) k (j s (a s))) =
@@ -849,7 +848,7 @@ theorem cns_zuckd_cpt {ε : Fin n → Bool} (hpq : pOf ε = 0 ∨ qOf ε = 0) {�
     have e2 : lamS s = lamS s' := by
       funext a
       have := congrFun e a
-      simp only [Formalism.QuantumDeterminants.lowK, PI.UpqRep.lowK, lowK, Pi.add_apply, Pi.sub_apply] at this
+      simp only [Formalism.QuantumDeterminants.lowK, Pi.add_apply, Pi.sub_apply] at this
       linarith
     rw [hsh s (mem_filter.1 hs).2, hsh s' (mem_filter.1 hs').2] at e2
     exact cns_shift_inj true μ e2
@@ -864,7 +863,7 @@ theorem cns_zuckd_cpt {ε : Fin n → Bool} (hpq : pOf ε = 0 ∨ qOf ε = 0) {�
       cns_coefVd (fun _ => T.op k) (S7.toMK k) (U0.symm v) (U0.symm w) x y]
     have h1 := cns_key_dual T k (WithLp.toLp 2 (fun d => star (y d) • U0.symm v))
       (WithLp.toLp 2 (fun c => star (x c) • U0.symm w))
-    simp only [PiLp.toLp_apply] at h1
+    simp only at h1
 
     rw [← h1, ha, hb, map_sum,
     show (∑ s ∈ univ.filter (fun s => S7.IsHCParam (shiftF true μ s)), HW.tensOp T (HW.rhoDual ε) k (j s (a s))) =
@@ -972,15 +971,7 @@ section FdCons
 
 open ReciprocityTheory.ChartRestriction.DS.S7
 
-theorem formal_degree_constant_measure (n : ℕ) (ε : Fin n → Bool) : ∃ c : ℝ, 0 < c ∧
-    ∀ (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-      (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (v : H),
-      Formalism.QuantumDeterminants.IsHCParam lam → Formalism.MainNotions.S.IsDS ε lam σ → ∀ h : ℝ, Formalism.QuantumDeterminants.GapAtLeast ε lam h →
-      thrS ε + 1 < h → 1 ≤ pOf ε → 1 ≤ qOf ε →
-      (∀ μ : Fin n → ℝ, IsHCParam μ → GapAtLeast ε μ h →
-        ∃ (T : KType ε (lowK ε μ)) (Ψ : Matrix (Fin n) (Fin n) ℂ → (T.V →L[ℂ] T.V)), IsPsiFor ε μ T Ψ) →
-      v ≠ 0 → Formalism.MainNotions.S.fdegOf (Formalism.REAL.muG ε) σ v = c * Formalism.QuantumDeterminants.fdegHC lam :=
-  fdCons_muG n ε
+alias formal_degree_constant_measure := _root_.ReciprocityTheory.ChartRestriction.DS.G2.fdCons_muG
 
 end FdCons
 

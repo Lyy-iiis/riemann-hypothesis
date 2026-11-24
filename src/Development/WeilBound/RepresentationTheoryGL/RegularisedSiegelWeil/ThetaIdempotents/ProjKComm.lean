@@ -105,7 +105,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.compactAverageProjection_theta_schrodinger : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (A B : HSp D) (χ : (AE D)ˣ →* Circle) (om : GA D (dblSp A) × GA D B →* Module.End ℂ (WO (dblSp A) B → ℂ)), IsWeilDatumO ψ (dblSp A) B 1 χ om → ∀ (ν : Measure (WO A B)) (𝓨 : Set (WO A B)), IsCovolOne (ratL B A) ν 𝓨 → ∀ K : Subgroup (GA D B), IsCompact (K : Set (GA D B)) → ∀ νK : Measure K, IsProbabilityMeasure νK → ∀ φ, IsThetaFunO ψ (dblSp A) B φ → IsThetaFunO ψ (dblSp A) B (projK om νK φ) ∧ sch ψ A B ν 𝓨 (projK om νK φ) = projS νK (sch ψ A B ν 𝓨 φ) := by
-  first | exact @GlobalTheory.RegSchProj.projK_theta_sch | exact GlobalTheory.RegSchProj.projK_theta_sch | (intros; apply GlobalTheory.RegSchProj.projK_theta_sch <;> assumption)
+  first | exact @GlobalTheory.RegSchProj.projK_theta_sch
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.CompactAverageProjectionThetaSchrodingerStatement =====
@@ -148,11 +148,6 @@ open GlobalTheory.Core.Rk.SWLaw (zeroSp dblDec)
 
 variable {D : D7} {ψ : AddChar (AF D.host.F) ℂ}
 
-theorem trace_incA (x : D.host.E) : Algebra.trace (AF D.host.F) (AE D) (incA D x) =
-    algebraMap D.host.F (AF D.host.F) (Algebra.trace D.host.F D.host.E x) := by
-  show Algebra.trace (AF D.host.F) (AE D) ((1 : AF D.host.F) ⊗ₜ[D.host.F] x) = _
-  rw [Algebra.trace_apply, Algebra.trace_apply, ← Algebra.baseChange_lmul, LinearMap.trace_baseChange]
-
 theorem trace_rat {ρ : ℕ} (M : Matrix (Fin ρ) (Fin ρ) D.host.E) : (rat M : Mx D ρ ρ).trace = incA D M.trace := by
   set_option synthInstance.maxHeartbeats 100000 in
     simp only [Matrix.trace, Matrix.diag, rat, Matrix.map_apply, map_sum]
@@ -165,7 +160,7 @@ theorem chi_add {k ρ : ℕ} (M : Matrix (Fin k) (Fin ρ) D.host.E) (z z' : Mx D
   simp only [chi, adj_add, Matrix.add_mul, Matrix.trace_add, mul_add, map_add (f := _), AddChar.map_add_eq_mul]
 
 theorem chi_rat (hψ : IsCharAF D.host.F ψ) {k ρ : ℕ} (M γ : Matrix (Fin k) (Fin ρ) D.host.E) : chi ψ M (rat γ) = 1 := by
-  rw [chi, ← rat_conjTranspose, ← rat_mul, trace_rat, ← map_mul, trace_incA]
+  rw [chi, ← rat_conjTranspose, ← rat_mul, trace_rat, ← map_mul, _root_.GlobalTheory.BesselChar.trace_incA]
   exact hψ.2.2.1 _
 
 theorem exists_chi_ne (hψ : IsCharAF D.host.F ψ) {k ρ : ℕ} {M : Matrix (Fin k) (Fin ρ) D.host.E} (hM : M ≠ 0) :
@@ -185,7 +180,7 @@ theorem exists_chi_ne (hψ : IsCharAF D.host.F ψ) {k ρ : ℕ} {M : Matrix (Fin
     conv_rhs => rw [← e0, map_mul, map_mul]
     ring
   rw [chi, adj_adj, Matrix.trace_single_mul, smul_eq_mul, show (rat M : Mx D k ρ) i j = incA D (M i j) from rfl, e,
-    map_smul, trace_incA, hz, map_one, smul_eq_mul, mul_one]
+    map_smul, _root_.GlobalTheory.BesselChar.trace_incA, hz, map_one, smul_eq_mul, mul_one]
   exact ha
 
 theorem integral_chi (hψ : IsCharAF D.host.F ψ) {k ρ : ℕ} (M : Matrix (Fin k) (Fin ρ) D.host.E) {μ : Measure (Mx D k ρ)}
@@ -511,7 +506,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.ikedaMap_schrodinger_partialIntegral : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (A T T' : HSp D) (t : ℕ) (d : HypDec T T' t) (ν : Measure (WO A T)) (𝓨 : Set (WO A T)), IsCovolOne (ratL T A) ν 𝓨 → ∀ (ν' : Measure (WO A T')) (𝓨' : Set (WO A T')), IsCovolOne (ratL T' A) ν' 𝓨' → ∀ (μ₁ : Measure (Mx D t (dblSp A).rank)) (𝓕₁ : Set (Mx D t (dblSp A).rank)), IsCovolOne (ratMx D t (dblSp A).rank) μ₁ 𝓕₁ → ∀ (μ₂ : Measure (Mx D t A.rank)) (𝓕₂ : Set (Mx D t A.rank)), IsCovolOne (ratMx D t A.rank) μ₂ 𝓕₂ → ∀ φ, IsThetaFunO ψ (dblSp A) T φ → IsThetaFunO ψ (dblSp A) T' (ikeda ψ d μ₁ 𝓕₁ φ) ∧ sch ψ A T' ν' 𝓨' (ikeda ψ d μ₁ 𝓕₁ φ) = ikS d μ₂ (sch ψ A T ν 𝓨 φ) := by
-  first | exact @GlobalTheory.IkedaSch.sch_ikeda | exact GlobalTheory.IkedaSch.sch_ikeda | (intros; apply GlobalTheory.IkedaSch.sch_ikeda <;> assumption)
+  first | exact @GlobalTheory.IkedaSch.sch_ikeda
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.IkedaMapSchrodingerPartialIntegralStatement =====
@@ -629,7 +624,7 @@ theorem main (D : D7) (A : HSp D) (t : ℕ) (B W : HSp D) (d : HypDec B W t) (ψ
   have hr1 : ResEta D 1 (dblSp A).rank := by
     have := GlobalTheory.Eis.SimplePoleModel.resEta_one_two_mul D A.rank
     convert this using 2
-    simp [GlobalTheory.Doubling.dblSp]
+    simp
     omega
   obtain ⟨omW, homW⟩ := GlobalTheory.weilRepresentationUnitaryPair D ψ₀ (dblSp A) W 1 χ⁻¹ h₀
     ⟨continuous_const, fun _ => rfl⟩ hχi hr1 hri

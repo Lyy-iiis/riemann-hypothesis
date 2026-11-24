@@ -65,8 +65,12 @@ import Mathlib.RingTheory.Coalgebra.IsFrobenius
 import Mathlib.RingTheory.Etale.Weakly
 import Mathlib.RingTheory.HopfAlgebra.Basic
 import Mathlib.RingTheory.TotallySplit
+import Formalism.SatakeDualWeyl.AdelicIwasawaHecke.CsDual
+import Formalism.SatakeDualWeyl.AdelicIwasawaHecke.CsScale
 import Mathlib.RingTheory.PiTensorProduct
+import Formalism.SatakeDualWeyl.DefsCS
 import Formalism.SatakeDualWeyl.KpqSubgroupCompact
+import Formalism.SatakeDualWeyl.AdelicIwasawaHecke.LevelSubgroupFiniteAdelicStandard
 import Formalism.LocalToGlobal.SiegelLatticeTheory.ClosedVolumeStatements.LevelSubgroupProperties
 
 -- This file was produced by scripts/clump.py from the modules listed below.
@@ -98,7 +102,6 @@ theorem σA_ιA (e : I.E) : σA I (ιA I e) = ιA I (starRingEnd I.E e) := by
         (starRingEnd I.E e) ⊗ₜ[I.F] (1 : Formalism.MainNotions.S.Af I.F)
      rw [Algebra.TensorProduct.map_tmul]
      rfl)
-  | (simp [sigR, inclE]; rfl)
 
 theorem cT_map {p q : Type} (M : Matrix p q I.E) :
     cT (σA I) (M.map (ιA I)) = (cT (starRingEnd I.E) M).map (ιA I) := by
@@ -112,16 +115,12 @@ theorem cT_one' {p : Type} [DecidableEq p] {A : Type} [CommRing A] (σ : A →+*
   by_cases hij : i = j
   · subst hij
     simp [cT]
-  · simp [cT, Matrix.one_apply, hij, Ne.symm hij]
+  · simp [cT, hij, Ne.symm hij]
 
 theorem cT_zero' {p q : Type} {A : Type} [CommRing A] (σ : A →+* A) :
     cT σ (0 : Matrix p q A) = 0 := by
   ext i j
   simp [cT]
-
-theorem cT_mulG {A : Type} [CommRing A] (σ : A →+* A) {m p q : Type} [Fintype p]
-    (M : Matrix m p A) (N : Matrix p q A) : cT σ (M * N) = cT σ N * cT σ M := by
-  rw [cT, cT, cT, Matrix.map_mul, Matrix.transpose_mul]
 
 theorem cT_fromBlocks {A : Type} [CommRing A] (σ : A →+* A) {a b c d : Type}
     (P : Matrix a c A) (Q : Matrix a d A) (R : Matrix b c A) (T : Matrix b d A) :
@@ -207,15 +206,15 @@ theorem Frame.MA_11 (h : HfinS I S) : (fr.MA h).toBlocks₁₁ = 1 := by
 
 theorem Frame.MA_21 (h : HfinS I S) : (fr.MA h).toBlocks₂₁ = 0 := by
   ext i j
-  simp [Matrix.toBlocks₂₁, fr.MA_inl, Matrix.one_apply]
+  simp [Matrix.toBlocks₂₁, fr.MA_inl]
 
 theorem Frame.MA_unitary (h : HfinS I S) :
     cT (σA I) (fr.MA h) * fr.Jt.map (ιA I) * fr.MA h = fr.Jt.map (ιA I) := by
   have hu : cT (σA I) (I.fmat (h : I.Gf)) * JA I * I.fmat (h : I.Gf) = JA I :=
     (mem_UPts_iff I.J _).1 (h : I.Gf).2
   have hc : cT (σA I) fr.BiA * cT (σA I) fr.BA = 1 := by
-    rw [← cT_mulG, fr.BA_BiA, cT_one']
-  rw [fr.JtA, Frame.MA, cT_mulG, cT_mulG]
+    rw [← _root_.Formalism.UG.cT_mul, fr.BA_BiA, cT_one']
+  rw [fr.JtA, Frame.MA, _root_.Formalism.UG.cT_mul, _root_.Formalism.UG.cT_mul]
   simp only [Matrix.mul_assoc]
   rw [← Matrix.mul_assoc (cT (σA I) fr.BiA) (cT (σA I) fr.BA), hc, Matrix.one_mul,
     ← Matrix.mul_assoc fr.BA fr.BiA, fr.BA_BiA, Matrix.one_mul,
@@ -233,7 +232,7 @@ theorem Frame.MA_eq (h : HfinS I S) :
     rw [Frame.Jt]
     simp only [Matrix.mul_assoc]
     rw [← Matrix.mul_assoc fr.B fr.Bi, fr.mul_inv, Matrix.one_mul, ← Matrix.mul_assoc I.J,
-      Matrix.mul_nonsing_inv _ hJ, Matrix.one_mul, ← cT_mulG, fr.inv_mul, cT_one']
+      Matrix.mul_nonsing_inv _ hJ, Matrix.one_mul, ← _root_.Formalism.UG.cT_mul, fr.inv_mul, cT_one']
   have hdet : fr.Jt.toBlocks₁₁.det ≠ 0 := by
     have h1 := hJt
     rw [fr.Jt_blocks, Matrix.det_fromBlocks_zero₂₁] at h1
@@ -245,8 +244,7 @@ theorem Frame.MA_eq (h : HfinS I S) :
   rw [fr.JtA_blocks, hM, cT_fromBlocks, cT_one', cT_zero', Matrix.fromBlocks_multiply,
     Matrix.fromBlocks_multiply] at hU
   obtain ⟨-, h12, -, h22⟩ := Matrix.fromBlocks_inj.1 hU
-  simp only [Matrix.one_mul, Matrix.zero_mul, Matrix.mul_zero, add_zero, zero_add,
-    Matrix.mul_one] at h12 h22
+  simp only [Matrix.one_mul, Matrix.zero_mul, Matrix.mul_zero, add_zero, zero_add] at h12 h22
   have hX0 : (fr.MA h).toBlocks₁₂ = 0 := unit_cancel fr fr.Jt.toBlocks₁₁ hdet _ h12
   refine ⟨?_, ?_⟩
   · rw [hM, hX0]
@@ -254,7 +252,7 @@ theorem Frame.MA_eq (h : HfinS I S) :
     simpa [cT_zero'] using h22
 
 theorem Frame.MA_mul (h₁ h₂ : HfinS I S) : fr.MA (h₁ * h₂) = fr.MA h₁ * fr.MA h₂ := by
-  simp only [Frame.MA, Subgroup.coe_mul, Units.val_mul, Matrix.mul_assoc]
+  simp only [Frame.MA, Subgroup.coe_mul, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc fr.BA fr.BiA, fr.BA_BiA, Matrix.one_mul,
     show I.fmat ((h₁ : I.Gf) * (h₂ : I.Gf)) = I.fmat h₁ * I.fmat h₂ from rfl, Matrix.mul_assoc]
 
@@ -317,9 +315,9 @@ theorem Frame.P_unitary (y : UPts I.cm.sig fr.J' (Formalism.MainNotions.S.Af I.F
       Matrix.fromBlocks_multiply]
     simp [hy, cT_zero']
   have h1 : cT (σA I) fr.BiA * cT (σA I) fr.BA = 1 := by
-    rw [← cT_mulG, fr.BA_BiA, cT_one']
+    rw [← _root_.Formalism.UG.cT_mul, fr.BA_BiA, cT_one']
   show cT (σA I) (fr.P _) * JA I * fr.P _ = JA I
-  rw [Frame.P, cT_mulG, cT_mulG]
+  rw [Frame.P, _root_.Formalism.UG.cT_mul, _root_.Formalism.UG.cT_mul]
   simp only [Matrix.mul_assoc]
   rw [← Matrix.mul_assoc (JA I) fr.BA, ← Matrix.mul_assoc (cT (σA I) fr.BA),
     ← Matrix.mul_assoc (cT (σA I) fr.BA) (JA I) fr.BA, ← fr.JtA,
@@ -482,7 +480,7 @@ end -- clump:auto
 -- ===== end clump member: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.ClassSetFinIdx =====
 
 -- ===== clump member: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.FrHformSumLeft =====
--- clump-header: {"m": "Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.FrHformSumLeft", "h": "module\n\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.Development\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.HformSumRight\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Henselian\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.RegularLocalRing.Defs\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.FrHformSumLeft", "h": "module\n\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.Development\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.HformSumRight\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.Etale.Weakly\nimport Mathlib.RingTheory.Henselian\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.RegularLocalRing.Defs\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.RingTheory.TotallySplit\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.SatakeDualWeyl.AdelicIwasawaHecke.CsDual\nimport Formalism.SatakeDualWeyl.AdelicIwasawaHecke.CsScale\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -518,8 +516,8 @@ theorem fr_disj (hS : DefiniteCompl I S) : Disjoint (Submodule.span I.E S) (frW 
     induction hz using Submodule.span_induction with
     | mem z hz => exact hxW z hz
     | zero => simp [hform]
-    | add u v _ _ hu hv => rw [hform_add_left, hu, hv, add_zero]
-    | smul c u _ hu => rw [hform_smul_left, hu, mul_zero]
+    | add u v _ _ hu hv => rw [_root_.Formalism.UG.P.csDual_hform_add_left, hu, hv, add_zero]
+    | smul c u _ hu => rw [_root_.Formalism.UG.P.csDual_hform_smul_left, hu, mul_zero]
   obtain ⟨ι⟩ := fr_real_emb I
   rcases hS ι with h | h
   · obtain ⟨a, ha, hpos⟩ := h x hx0 (fun s hs => hxW s hs)
@@ -538,7 +536,7 @@ theorem fr_hform_sum_left {ι : Type} (s : Finset ι) (x : ι → Fin I.n → I.
   classical
   refine Finset.induction_on s (by simp [hform]) ?_
   intro a s ha ih
-  rw [Finset.sum_insert ha, Finset.sum_insert ha, hform_add_left, ih]
+  rw [Finset.sum_insert ha, Finset.sum_insert ha, _root_.Formalism.UG.P.csDual_hform_add_left, ih]
 
 theorem fr_sup (hS : DefiniteCompl I S) : Submodule.span I.E S ⊔ frW I S = ⊤ := by
   classical
@@ -546,8 +544,8 @@ theorem fr_sup (hS : DefiniteCompl I S) : Submodule.span I.E S ⊔ frW I S = ⊤
   let b := Module.finBasis I.E V
   let T : (Fin I.n → I.E) →ₗ[I.E] (Fin (Module.finrank I.E V) → I.E) :=
     { toFun := fun y k => hform (starRingEnd I.E) I.J (b k : Fin I.n → I.E) y
-      map_add' := by intro x y; funext k; simp [hform_add_right]
-      map_smul' := by intro c x; funext k; simp [hform_smul_right] }
+      map_add' := by intro x y; funext k; simp [_root_.Formalism.UG.P.csScale_hform_add_right]
+      map_smul' := by intro c x; funext k; simp [_root_.Formalism.UG.P.csScale_hform_smul_right] }
 
   have hker : LinearMap.ker T ≤ frW I S := by
     intro y hy s hs
@@ -559,7 +557,7 @@ theorem fr_sup (hS : DefiniteCompl I S) : Submodule.span I.E S ⊔ frW I S = ⊤
       simp only [Submodule.coe_smul] at this
       exact this
     rw [← hexp, fr_hform_sum_left]
-    simp [hform_smul_left, hy']
+    simp [_root_.Formalism.UG.P.csDual_hform_smul_left, hy']
   have hrn := LinearMap.finrank_range_add_finrank_ker T
   have hr : Module.finrank I.E (LinearMap.range T) ≤ Module.finrank I.E V := by
     have := Submodule.finrank_le (LinearMap.range T)
@@ -679,8 +677,7 @@ theorem lvA_princ_form {ι : Type} [Fintype ι] [DecidableEq ι] (d : S) (u : GL
   have hent : ∀ i j, ∃ a : S, a * d = (u' : Matrix ι ι S) i j - (1 : Matrix ι ι S) i j := by
     intro i j
     have h2 := congrArg (fun g : GL ι (S ⧸ Ideal.span {d}) => (g : Matrix ι ι (S ⧸ Ideal.span {d})) i j) h1
-    simp only [Formalism.UG.redGL, Formalism.UG.bc, Units.coe_map, MonoidHom.coe_coe, RingHom.mapMatrix_apply,
-      Matrix.map_apply, Units.val_one] at h2
+    simp only [Formalism.UG.redGL, Formalism.UG.bc, Units.coe_map, Units.val_one] at h2
     have h3 : (u' : Matrix ι ι S) i j - (1 : Matrix ι ι S) i j ∈ Ideal.span {d} := by
       rw [← Ideal.Quotient.eq]
       have h2' : Ideal.Quotient.mk (Ideal.span {d}) ((u' : Matrix ι ι S) i j) =
@@ -707,7 +704,7 @@ end -- clump:auto
 -- ===== end clump member: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelA =====
 
 -- ===== clump member: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelB =====
--- clump-header: {"m": "Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelB", "h": "module\n\npublic import Formalism.SatakeDualWeyl.AdelicIwasawaHecke.Levelaf\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.GlobAut\npublic import Lemmata.IntegerMulIntegral.IntMulIntegral\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.PiTensorProduct\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.PeriodIntegrals.InHHClassFin\n\n"}
+-- clump-header: {"m": "Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelB", "h": "module\n\npublic import Formalism.SatakeDualWeyl.AdelicIwasawaHecke.Levelaf\npublic import Formalism.SharpRestriction.CuspSpanNormBounds.GlobAut\npublic import Lemmata.IntegerMulIntegral.IntMulIntegral\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.PiTensorProduct\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.PeriodIntegrals.InHHClassFin\nimport Formalism.SatakeDualWeyl.DefsCS\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -731,11 +728,6 @@ theorem lvB_denom_fam {ι : Type} [Fintype ι] (f : ι → E ⊗[F] FiniteAdeleR
   rw [← Finset.mul_prod_erase _ _ (Finset.mem_univ i), levelafC_mul,
     mul_comm (levelafC E (d i)), mul_assoc]
   exact mul_mem (levelafC_mem _) (hd i)
-
-theorem lvB_incl_int (a : 𝓞 E) : inclE (F := F) (FiniteAdeleRing (𝓞 F) F) (algebraMap (𝓞 E) E a) ∈
-    tensInt (F := F) (FiniteAdeleRing (𝓞 F) F) (intOE E) (intAd F) := by
-  show algebraMap (𝓞 E) E a ⊗ₜ[F] (1 : FiniteAdeleRing (𝓞 F) F) ∈ _
-  exact levelaf_tmul_mem a (one_mem _)
 
 theorem lvB_C_intCast (M : ℤ) : levelafC E ((M : 𝓞 F)) = ((M : E ⊗[F] FiniteAdeleRing (𝓞 F) F)) := by
   rw [levelafC, map_intCast, ← Algebra.TensorProduct.includeRight_apply, map_intCast]
@@ -767,7 +759,7 @@ theorem lvB_lat_up (L : Submodule (𝓞 E) (Fin n → E)) (hL : L.FG) :
       intro i
       simp only [Pi.smul_apply]
       rw [Algebra.smul_def, map_mul, mul_left_comm]
-      exact mul_mem (lvB_incl_int a) (hx i)
+      exact mul_mem (_root_.Formalism.UG.CS.incl_int a) (hx i)
   intro y hy
   induction hy using Submodule.span_induction with
   | mem y hy =>
@@ -784,10 +776,6 @@ theorem lvB_lat_up (L : Submodule (𝓞 E) (Fin n → E)) (hL : L.FG) :
     rw [mul_left_comm]
     exact mul_mem r.2 (hy i)
 
-theorem lvB_span_int (L : Submodule (𝓞 E) (Fin n → E)) (v : Fin n → E)
-    (hv : v ∈ Submodule.span E (L : Set (Fin n → E))) : ∃ m : ℤ, m ≠ 0 ∧ m • v ∈ L := by
-  first | exact Bl.IntegerMulIntegral.goal1 .. | (apply Bl.IntegerMulIntegral.goal1 <;> assumption) | (intros; apply Bl.IntegerMulIntegral.goal1 <;> assumption) | (apply @Bl.IntegerMulIntegral.goal1 <;> assumption) | (intros; apply @Bl.IntegerMulIntegral.goal1 <;> assumption) | (apply @Bl.IntegerMulIntegral.goal1 <;> first | assumption | infer_instance)
-
 theorem lvB_lat_down (L : Submodule (𝓞 E) (Fin n → E))
     (hspan : Submodule.span E (L : Set (Fin n → E)) = ⊤) :
     ∃ d : 𝓞 F, d ≠ 0 ∧ ∀ y : Fin n → E ⊗[F] FiniteAdeleRing (𝓞 F) F,
@@ -795,7 +783,7 @@ theorem lvB_lat_down (L : Submodule (𝓞 E) (Fin n → E))
       levelafC E d • y ∈ Formalism.MainNotions.S.lamAf (F := F) L := by
   classical
   choose m hm0 hm using fun i : Fin n =>
-    lvB_span_int L (Pi.single i 1) (hspan ▸ Submodule.mem_top)
+    _root_.Bl.IntegerMulIntegral.goal1 L (Pi.single i 1) (hspan ▸ Submodule.mem_top)
   set M : ℤ := ∏ i, m i with hMdef
   have hM : ∀ i, M • (Pi.single i (1 : E) : Fin n → E) ∈ L := fun i => by
     rw [hMdef, ← Finset.mul_prod_erase _ _ (Finset.mem_univ i), mul_comm, mul_smul]
@@ -826,7 +814,7 @@ end -- clump:auto
 -- ===== end clump member: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelB =====
 
 -- ===== clump member: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelStep =====
--- clump-header: {"m": "Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelStep", "h": "module\n\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.Development\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelA\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelB\nimport Formalism.SatakeDualWeyl.KpqSubgroupCompact\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelStep", "h": "module\n\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.Development\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelA\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.HermitianClassFiniteness.LevelB\nimport Formalism.SatakeDualWeyl.KpqSubgroupCompact\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.SatakeDualWeyl.AdelicIwasawaHecke.LevelSubgroupFiniteAdelicStandard\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -861,7 +849,7 @@ theorem levelStep : LevelStep := by
   ·
     rw [Subgroup.inf_relIndex_left, stdLevel, Subgroup.relIndex_subgroupOf]
     swap
-    · rw [Formalism.UG.Final.LevelAfLStd I.F I.E (Fin k) I.cm.sig J']; exact inf_le_left
+    · rw [_root_.Formalism.UG.P.level_subgroup_finite_adelic_standard I.F I.E (Fin k) I.cm.sig J']; exact inf_le_left
     have : Finite (tensInt (F := I.F) (FiniteAdeleRing (𝓞 I.F) I.F) (intOE I.E) (intAd I.F) ⧸
         Ideal.span {cD}) := levelaf_finite_quot D hD cD rfl
     have h0 := levelaf_princ_relIndex_ne_zero (n := Fin k)
@@ -869,7 +857,7 @@ theorem levelStep : LevelStep := by
     have hle : levelAfL I.cm.sig J' (stdLat (n := Fin k) (A := I.E) (𝓞 I.E)) ≤
         (bc (n := Fin k) (tensInt (F := I.F) (FiniteAdeleRing (𝓞 I.F) I.F) (intOE I.E)
           (intAd I.F)).subtype).range := by
-      rw [Formalism.UG.Final.LevelAfLStd I.F I.E (Fin k) I.cm.sig J', levelAf, level]
+      rw [_root_.Formalism.UG.P.level_subgroup_finite_adelic_standard I.F I.E (Fin k) I.cm.sig J', levelAf, level]
       refine inf_le_right.trans ?_
       rw [Formalism.UG.Final.StabStd _ _ (Fin k) Subtype.val_injective]
       exact le_refl _
@@ -1050,30 +1038,19 @@ section
 
 variable {D : D7} (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (u : D.what₂.Word)
 
-theorem WuDefinite_holds : Formalism.L2.SG.PoincareInHH.Cut.WuDefinite X u := by
-  first
-  | exact Formalism.L2.SG.PoincareInHH.Cut.wuDefinite_holds X u
-  | exact Formalism.L2.SG.PoincareInHH.Cut.wuDefinite_holds (X := X) (u := u)
-
 theorem ClassFin_holds (hK : X.LevelSubgroupCharacter) : Formalism.L2.SG.PoincareInHH.Cut.ClassFin X u hK := by
   have hg : 1 ≤ X.B.g := by
     rw [X.g_eq]
     exact Nat.mul_pos (D.host.g_prime 0).pos (D.host.g_prime 1).pos
-  exact stabClassFinite X.B.I (fixSet X u) (WuDefinite_holds X u) (Ku X u hK) X.B.g (X.xu u) hg
+  exact stabClassFinite X.B.I (fixSet X u) (_root_.Formalism.L2.SG.PoincareInHH.Cut.wuDefinite_holds X u) (Ku X u hK) X.B.g (X.xu u) hg
     (fun h hh => ((Formalism.L2.SG.Closed.level_subgroup_properties X).1 _ hh).1)
 
 theorem ColBound_holds (hK : X.LevelSubgroupCharacter) : Formalism.L2.SG.Pf.ColBound X u hK := by
   first
   | exact Formalism.L2.SG.Pf.colBound_of X u hK (ClassFin_holds X u hK)
-  | exact Formalism.L2.SG.Pf.colBound_of (X := X) (u := u) hK (ClassFin_holds X u hK)
-
-theorem OmCover_holds (I : AutInst) : Formalism.L2.SG.Pf.OmCover I := by
-  first
-  | exact Formalism.L2.SG.Pf.omCover_holds I
-  | exact Formalism.L2.SG.Pf.omCover_holds (I := I)
 
 theorem MultPoly_holds : Formalism.L2.SG.PoincareInHH.Cut.MultPoly X :=
-  Formalism.L2.SG.Pf.multPoly_holds_of'' X (OmCover_holds _)
+  Formalism.L2.SG.Pf.multPoly_holds_of'' X (_root_.Formalism.L2.SG.Pf.omCover_holds _)
 
 end
 

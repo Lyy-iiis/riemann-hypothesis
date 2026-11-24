@@ -373,8 +373,8 @@ theorem resIndep : ResIndep := by
   refine core hn D D' R R' hR hR' fun t t' htt x y hx hy => ?_
   have hg := DiscreteGroups.sglob.DzType.natCast_mem_of_normV D.w' g n hn D.card
   have hg' := DiscreteGroups.sglob.DzType.natCast_mem_of_normV D'.w' g n hn D'.card
-  have h1 := tameRecAll D.E' Ω g A D.w' D.h' hg D.unr D.a' D.ha' π (by rw [D.card]; exact hπ) t x hx
-  have h2 := tameRecAll D'.E' Ω g A D'.w' D'.h' hg' D'.unr D'.a' D'.ha' π (by rw [D'.card]; exact hπ) t' y hy
+  have h1 := _root_.UpperTheory.localArtin_inertia_valuation_of_uniformizer_prime D.E' Ω g A D.w' D.h' hg D.unr D.a' D.ha' π (by rw [D.card]; exact hπ) t x hx
+  have h2 := _root_.UpperTheory.localArtin_inertia_valuation_of_uniformizer_prime D'.E' Ω g A D'.w' D'.h' hg' D'.unr D'.a' D'.ha' π (by rw [D'.card]; exact hπ) t' y hy
   rw [← htt] at h2
   have e : algebraMap D.E' Ω (x : D.E') - algebraMap D'.E' Ω (y : D'.E') =
       ((t : G D.E' Ω) π / π - algebraMap D'.E' Ω (y : D'.E')) - ((t : G D.E' Ω) π / π - algebraMap D.E' Ω (x : D.E')) := by ring
@@ -524,17 +524,17 @@ theorem parEx : ParEx := by
       have hred : GlobalTheory.GLp.red g n (GeneralLinearGroup.scalar (Fin n) u) =
           GeneralLinearGroup.scalar (Fin n) (Units.map (PadicInt.toZMod : ℤ_[g] →+* ZMod g).toMonoidHom u) := by
         ext p q
-        by_cases hpq : p = q <;> simp [GlobalTheory.GLp.red, GeneralLinearGroup.scalar, Matrix.diagonal_apply, hpq]
+        by_cases hpq : p = q <;> simp [GlobalTheory.GLp.red, GeneralLinearGroup.scalar, hpq]
       set z : (HeightOneSpectrum.adicCompletion E w)ˣ :=
         Units.map (i.toRingHom.comp PadicInt.Coe.ringHom).toMonoidHom u with hz
       have hinc : GeneralLinearGroup.map i.toRingHom (GlobalTheory.GLp.inc g n (GeneralLinearGroup.scalar (Fin n) u)) =
           GeneralLinearGroup.scalar (Fin n) z := by
         ext p q
-        by_cases hpq : p = q <;> simp [GlobalTheory.GLp.inc, GeneralLinearGroup.scalar, Matrix.diagonal_apply, hpq, z] <;> rfl
+        by_cases hpq : p = q <;> simp [GlobalTheory.GLp.inc, GeneralLinearGroup.scalar, hpq, z]
       rw [hred, MonoidHom.comp_apply, hinc, hNC, map_smul] at key
       rw [hω z (ψ v)] at key
       have heq := smul_left_injective ℂ hv key
-      have hzeq : a (ineIncl h t) = z := Units.ext (by rw [hu1]; simp [z] <;> rfl)
+      have hzeq : a (ineIncl h t) = z := Units.ext (by rw [hu1]; simp [z])
       have hpeq : ∏ j ∈ Finset.range n, R t ^ g ^ j = Units.map (algebraMap (ZMod g) D.K : ZMod g →* D.K)
           (Units.map (PadicInt.toZMod : ℤ_[g] →+* ZMod g).toMonoidHom u) := Units.ext (by simp [hu2])
       rw [hzeq, hpeq]

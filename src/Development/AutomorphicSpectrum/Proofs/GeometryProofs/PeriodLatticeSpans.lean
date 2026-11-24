@@ -189,33 +189,9 @@ theorem ofFibre_one {R : Type} [CommRing R] (G : Over (Sp R)) [GrpObj G] (x : Sp
   rw [_root_.mul_one] at this
   exact left_eq_mul.1 this
 
-theorem isHolTo_slice_at {V V' : Type} [NormedAddCommGroup V] [NormedSpace ℂ V] [NormedAddCommGroup V'] [NormedSpace ℂ V']
-    {X : Scheme.{0}} {B : Set V} {b : V} (hb : b ∈ B) {c : V × V' → (Sp ℂ ⟶ X)}
-    (h : IsHolTo (B ×ˢ Set.univ) c) : IsHolTo Set.univ (fun z => c (b, z)) := by
-  intro U f
-  obtain ⟨h1, h2⟩ := h U f
-  have hj : Differentiable ℂ (fun z : V' => (b, z)) := (differentiable_const _).prodMk differentiable_id
-  refine ⟨?_, ?_⟩
-  · have h3 := h1.preimage hj.continuous
-    simpa only [Set.preimage_setOf_eq, Set.mem_prod, Set.mem_univ, and_true, hb, true_and] using h3
-  · exact h2.comp hj.differentiableOn fun z hz => ⟨⟨hb, trivial⟩, hz.2⟩
+alias isHolTo_ex_slice := _root_.GlobalTheory.CompanionTheory.Ar.Flat.ExpOnto.isHolTo_ex
 
-theorem isHolTo_ex_slice {R : Type} [CommRing R] {G : Over (Sp R)} [GrpObj G] {g n : ℕ}
-    {M : LieModel G (𝟙 (Sp R)) (Fin g → R)} {B : Set (Fin n → ℂ)} {ψ : (Fin n → ℂ) → (R →+* ℂ)}
-    (e : FamExp G M B ψ) {b : Fin n → ℂ} (hb : b ∈ B) :
-    IsHolTo Set.univ (fun z => (e.ex b z).left) :=
-  isHolTo_slice_at (V := Fin n → ℂ) (V' := Fin g → ℂ) (X := G.left) (b := b) (B := B)
-    (c := fun bz => (e.ex bz.1 bz.2).left) hb e.hol
-
-theorem isHolTo_snd {V V' : Type} [NormedAddCommGroup V] [NormedSpace ℂ V] [NormedAddCommGroup V'] [NormedSpace ℂ V']
-    {X : Scheme.{0}} {c : V' → (Sp ℂ ⟶ X)} (h : IsHolTo Set.univ c) :
-    IsHolTo (Set.univ ×ˢ Set.univ) (fun p : V × V' => c p.2) := by
-  intro U f
-  obtain ⟨h1, h2⟩ := h U f
-  refine ⟨?_, ?_⟩
-  · have h3 := h1.preimage (continuous_snd (X := V) (Y := V'))
-    simpa only [Set.preimage_setOf_eq, Set.mem_prod, Set.mem_univ, and_self, true_and] using h3
-  · exact h2.comp differentiable_snd.differentiableOn fun z hz => ⟨trivial, hz.2⟩
+alias isHolTo_snd := _root_.GlobalTheory.CompanionTheory.Ar.Flat.ExpOnto.isHolTo_const_param
 
 def famExpAtPoint {R : Type} [CommRing R] {G : Over (Sp R)} [GrpObj G] {g n : ℕ}
     {M : LieModel G (𝟙 (Sp R)) (Fin g → R)} {B : Set (Fin n → ℂ)} {ψ : (Fin n → ℂ) → (R →+* ℂ)}
@@ -373,7 +349,7 @@ theorem isHolTo_torusExp : IsHolTo Set.univ (fun w => (torusExp (X := X) β w).l
     refine ReciprocityTheory.ChartRestriction.G.PullbackSections.isHolTo_of_affine (T := Spec (torusRing ZU X)) isOpen_univ fun r => ?_
     obtain ⟨α, rfl⟩ : ∃ α, r = (Scheme.ΓSpecIso (torusRing ZU X)).inv.hom α :=
       ⟨(Scheme.ΓSpecIso (torusRing ZU X)).hom.hom r, by simp⟩
-    simp only [valAt'_torusFst]
+    simp only
     exact (differentiable_torusExp_coord β α).differentiableOn.congr fun w _ => valAt'_torusFst _ α
   have h2 : IsHolTo (V := Fin d → ℂ) Set.univ (fun _ => 𝟙 (Sp ℂ)) :=
     fun U f => ⟨by simp only [Set.mem_univ, true_and]; exact isOpen_const, differentiableOn_const _⟩

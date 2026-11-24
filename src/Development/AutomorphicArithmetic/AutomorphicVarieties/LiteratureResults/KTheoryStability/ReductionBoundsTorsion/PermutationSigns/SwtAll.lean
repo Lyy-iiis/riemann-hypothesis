@@ -213,7 +213,7 @@ theorem core (B : V →L[ℝ] V →L[ℝ] V →L[ℝ] V) (e : V) (h1 : B e e = 1
     rw [hee, h1, hcomp1, hLw, map_smul] at hw
     have hX := eq_neg_of_add_eq_zero_right hw
     rw [ContinuousLinearMap.smul_apply, map_smul, ContinuousLinearMap.add_apply, hX, smul_neg, smul_smul]
-    first | norm_num | simp
+    first | norm_num
   have hfd : fderiv ℝ o e = (o e).fderivCompContinuousLinearMap 1 ∘L
       ((-(1/2 : ℝ)) • (B.flip e + B e)) := by
     ext1 w
@@ -351,7 +351,7 @@ section -- clump:auto
 
 namespace PositivityTheory.KB.BlockInvariants
 
-theorem aGood : AGood := TwAG.aGood
+alias aGood := _root_.PositivityTheory.KB.TwAG.aGood
 
 theorem swt_all (hE : SEv) (hS : SStokes) : SWt :=
   swt hE hS (fft_of cplx sw1 sw2) aGood wPad weylTwoBlockMatrix wInv wOne wCyc tStab tBlk pStab blockSum_preserves_cone

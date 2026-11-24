@@ -1679,20 +1679,6 @@ section Abstract
 
 variable {K : Type} [Fintype K] {ι : K → Type} [∀ k, Fintype (ι k)] {Ω : Type} [Field Ω]
 
-theorem isMultiHomog_pow' {f : MRing ι} {a : K → ℕ} (hf : IsMultiHomog f a) (n : ℕ) :
-    IsMultiHomog (f ^ n) (n • a) := by
-  induction n with
-  | zero =>
-    classical
-    intro m hm k
-    rw [pow_zero, show (1 : MRing ι) = MvPolynomial.monomial 0 1 from rfl, MvPolynomial.support_monomial] at hm
-    simp at hm
-    subst hm
-    simp
-  | succ n ih =>
-    rw [pow_succ, succ_nsmul]
-    exact Small.Fund.isMultiHomog_mul ih hf
-
 theorem norm_le_of_small (y : (Σ k, ι k) → Ω) (A : HermLine ι) (a₀ D : K → ℤ) (ε σ : Ω) (τ N : ℕ)
     (hD : ∀ k, D k = τ * A.a k + N * a₀ k) (hS : IsSmallH (mCoordIdeal y) y A τ σ)
     {z : (Σ k, ι k) → ℂ} (hz : z ∈ mcPts (mCoordIdeal y)) {x W : ℂ}
@@ -1701,8 +1687,8 @@ theorem norm_le_of_small (y : (Σ k, ι k) → Ω) (A : HermLine ι) (a₀ D : K
   obtain ⟨dg₀, dh₀, g₀, h₀, mg₀, mh₀, d₀, y₀, n₀, v₀⟩ := hx
   obtain ⟨dg, dh, g, h, mg, mh, d, yy, nz, v⟩ := hW
   have key := hS (dg + N • dh₀) (N • dg₀ + dh) (g * h₀ ^ N) (g₀ ^ N * h) z
-    (Small.Fund.isMultiHomog_mul mg (isMultiHomog_pow' mh₀ N))
-    (Small.Fund.isMultiHomog_mul (isMultiHomog_pow' mg₀ N) mh)
+    (Small.Fund.isMultiHomog_mul mg (_root_.GlobalTheory.CompanionTheory.Ar.Small.RepAt.form_pow mh₀ N))
+    (Small.Fund.isMultiHomog_mul (_root_.GlobalTheory.CompanionTheory.Ar.Small.RepAt.form_pow mg₀ N) mh)
     (fun k => by
       have e1 := d k
       have e2 := d₀ k
@@ -1967,7 +1953,7 @@ open GlobalTheory.CompanionTheory.Ar GlobalTheory.CompanionTheory.Ar.Rec GlobalT
 attribute [-instance] GlobalTheory.CompHt.fintypePsi
 
 theorem _root_.GlobalTheory.T.strict_weight_growth_bound : Top.Given → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l), ∀ (Y : Model Xo c (algebraMap (𝓞 c.F) c.F)) [DecidableEq (CMType H)] (T : Top.RootTower (CMType H) (Dw.p + Dw.q)) (o : Top.GoodOrigin Y T) (B : ℕ) (b : T.Comp) (u : GlobalTheory.AllWt.Weight Dw), (∀ τ, StrictAnti (u τ)) → ∃ (C : ℝ) (s : ℕ → ℝ) (q : ℕ → ℕ) (m : ℕ → Option (RootIx Dw) → ℤ) (θ : ℕ → (T.M B b).Ω), 0 ≤ C ∧ (∀ n, 0 < s n) ∧ Tendsto s atTop (𝓝 0) ∧ (∀ n, 0 < q n ∧ 8 ∣ q n ∧ θ n ≠ 0) ∧ (∀ n j, (m n j : ℝ) = q n * (T.M B b).coef (T.lamS (reW u) (s n)) (s n) j) ∧ ∀ (n τ : ℕ) (t : ℝ), ∀ σ ∈ chartLatNm (T.M B b).y (Top.combLine ((T.M B b).line (Top.scale (s n))) (m n)).a τ, IsSmallH (mCoordIdeal (T.M B b).y) (T.M B b).y (Small.shiftH (Top.combLine ((T.M B b).line (Top.scale (s n))) (m n)) (q n * t)) τ σ → σ * θ n ^ τ ∈ modelSmall (o.toTowerOrigin.Or B b) ((τ * q n) • u) (Real.exp (((τ * q n : ℕ) : ℝ) * (t + C * s n))) := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Plug.Mult.vs_mult | exact GlobalTheory.CompanionTheory.Ar.Plug.Mult.vs_mult | (intros; apply GlobalTheory.CompanionTheory.Ar.Plug.Mult.vs_mult <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.Plug.Mult.vs_mult
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.StrictWeightGrowthBoundStatement =====

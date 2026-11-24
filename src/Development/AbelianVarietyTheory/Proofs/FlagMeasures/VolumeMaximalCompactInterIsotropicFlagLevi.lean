@@ -1422,7 +1422,7 @@ theorem volume_range : ∀ (n : ℕ) (ε : Fin n → Bool) (ι : Type) [Fintype 
   intro n ε ι _ m w Φ hw hc hi hhs μ hμ
   obtain ⟨h0, hinv, hlim⟩ := hμ
   have hcpt : ∀ i, CompactSpace (Formalism.REAL.UJ (allPos (m i))) := fun i => compactSpace_allPos _
-  choose c hcpos hcg _ using fun i => GlobalTheory.GaugeConst.gauge_exists_pos_unique (m i) (allPos (m i))
+  choose c hcpos hcg _ using fun i => _root_.GlobalTheory.GaugeConst.exists_unique_isGauge (m i) (allPos (m i))
   set νi : ∀ i, Measure (Formalism.REAL.UJ (allPos (m i))) :=
     fun i => ENNReal.ofReal (c i) • Formalism.REAL.muG (allPos (m i)) with hνi
   have hfin : ∀ i, IsFiniteMeasure (νi i) := fun i => ⟨by
@@ -1549,8 +1549,7 @@ private theorem levi_lemma {n a p' q' : ℕ} {j : Fin a → ℕ} (J : Matrix (Fi
   have a3 : ∀ {r : ℕ} (X : Matrix (Fin q') (Fin r) ℂ), J * (Q * X) = -(Q * X) := fun X => by
     rw [← Matrix.mul_assoc, hJQ, Matrix.neg_mul]
   simp only [Matrix.conjTranspose_mul, hJH, Matrix.mul_add, Matrix.add_mul, Finset.mul_sum, Finset.sum_mul,
-    Matrix.mul_assoc, a1, a2, a3, e1, e2, hJJ, Matrix.mul_one, Matrix.mul_neg, Matrix.neg_mul,
-    Finset.sum_add_distrib]
+    Matrix.mul_assoc, a1, a2, a3, e1, e2, hJJ, Matrix.mul_one, Matrix.mul_neg]
   abel
 
 

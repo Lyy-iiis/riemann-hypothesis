@@ -158,11 +158,7 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 theorem exists_eq_of_mem_adjoin_quadratic_generator (H : Host E) {a : 𝓞 E} (ha : a ∈ Algebra.adjoin ℤ {H.w0}) :
     ∃ u v : ℤ, a = (u : 𝓞 E) + (v : 𝓞 E) * H.w0 := by
   first
-  | exact @_root_.GlobalTheory.CMGeneratorSquareModuli.main
-  | exact _root_.GlobalTheory.CMGeneratorSquareModuli.main
   | (apply _root_.GlobalTheory.CMGeneratorSquareModuli.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.CMGeneratorSquareModuli.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.CMGeneratorSquareModuli.main <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.CMGeneratorSquareModuli.main ..)
 
 theorem bar_mem_of_mem (H : Host E) {n : ℕ} (hn : AuxiliaryInertOddPrime H n) (P : Ideal (𝓞 E)) (hP : P.IsPrime)
@@ -181,7 +177,7 @@ theorem bar_mem_of_mem (H : Host E) {n : ℕ} (hn : AuxiliaryInertOddPrime H n) 
       exact_mod_cast congrArg (Int.cast : ℤ → 𝓞 E) hst.symm
     rw [this]
     exact P.add_mem (P.mul_mem_left _ hnP) (P.mul_mem_left _ hm)
-  obtain ⟨u, v, rfl⟩ := exists_eq_of_mem_adjoin_quadratic_generator H ha
+  obtain ⟨u, v, rfl⟩ := _root_.GlobalTheory.CMGeneratorSquareModuli.main H ha
   have hN : (n : ℤ) ∣ (2 * u + v) ^ 2 + H.d * v ^ 2 := by
     apply key
     have : (((2 * u + v) ^ 2 + H.d * v ^ 2 : ℤ) : 𝓞 E) =

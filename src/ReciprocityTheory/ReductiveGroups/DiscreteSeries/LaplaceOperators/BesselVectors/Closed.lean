@@ -614,8 +614,8 @@ theorem evalP : EvalPStatement := by
             ((0 : Fin (2 * r + k + 1)).succAbove ∘ Fin.cast hkn) (om - 1) := by
         rw [CapelliMinorRestriction.cminor_reindex _ (capIdx k r) hcapinj]
         congr 1 <;> funext i <;> apply Fin.ext <;> delta capIdx <;>
-          simp only [Function.comp_apply, Fin.succAbove_last, Fin.succAbove_zero, Fin.val_cast,
-            Fin.val_castSucc, Fin.val_succ]
+          simp only [Function.comp_apply, Fin.succAbove_last, Fin.val_cast,
+            Fin.val_castSucc]
       rw [CapelliMinorRestriction.cminor_cast _ hkn] at hcm
       have h1 := LinearMap.congr_fun hB1 ⟨(v : D), hvS⟩
       simp only [LinearMap.comp_apply, LinearMap.smul_apply] at h1
@@ -689,7 +689,7 @@ theorem shifted_weight_parameter {ε : Fin n → Bool} {lam : Fin n → ℝ} {h 
     rw [heq', hγβ]; abel
   have hb0 : ∀ k, 0 ≤ kirrPs k γ := by
     intro k; rw [hγβ, rootCone_entry_int]
-    linarith [(highestWeightVector_lift k s).1, partialSum_single_bounds hcone k]
+    linarith [(highestWeightVector_lift k s).1, _root_.ReciprocityTheory.ChartRestriction.DS.Lap.LemK.partialSum_nonneg_of_rootCone hcone k]
   have hb1 : ∀ k, kirrPs k γ ≤ 1 := by
     intro k; rw [hγ, partialSum_sub]
     have := hbd k; rw [rootCone_entry_int] at this
@@ -934,7 +934,7 @@ theorem k3V (n : ℕ) : QuotientHighestWeightTensorStandard n := by
       rintro _ ⟨z, hz, rfl⟩
       rw [sch_phi_one_apply]
       refine Submodule.sum_mem _ fun p _ => ?_
-      have hzp : z (fun _ => p) ∈ W0 := mem_V_of_mem_ncV (Wm_le_ncV hz) _
+      have hzp : z (fun _ => p) ∈ W0 := _root_.ReciprocityTheory.ChartRestriction.DS.ncV_mem (Wm_le_ncV hz) _
       obtain ⟨f, hf, hfeq⟩ := Submodule.mem_map.1 (hW0S hzp)
       rw [← hfeq, ← hφ p.1 p.2 f ((hX0mem f).1 (hS1X hf)).1]
       exact Submodule.mem_map_of_mem (hmapmem _ _ f hf)
@@ -1158,7 +1158,7 @@ theorem quotP : QuotPStatement := by
   have hbd : ∀ f ∈ G, ∃ C : ℝ, ∀ g ∈ UJset ε, ‖L f g‖ ≤ C * frob g ^ (1 - aExp ε h) := fun f hf => by
     obtain ⟨C, hC⟩ := (hspec f hf).2.2 []
     exact ⟨C, hC⟩
-  have hcont : ∀ f ∈ G, ContinuousOn (L f) (UJset ε) := fun f hf => QuotA.contOn_of_smooth (hsm f hf).1
+  have hcont : ∀ f ∈ G, ContinuousOn (L f) (UJset ε) := fun f hf => _root_.ReciprocityTheory.ChartRestriction.DS.Lap.CurveContinuity.smooth_contOn (hsm f hf).1
   set ψ := Formalism.MainNotions.S.psiGen k r z c with hψdef
   let Z : Submodule ℂ (Fin (2 * r + k + 1) → D) :=
     { carrier := {y | y ∈ X ∧ ∀ g ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk k r), per P μW μN ψ π (L y) ξ g = 0}
@@ -1303,7 +1303,7 @@ theorem stepUp : StepUpStatement := by
     LemK.generated_submodule_stable_under_action V a b hm
   have hkill : ∀ m ∈ genSub E V, Capelli.capelliC E (((-(LemK.thV lam s)) : ℝ) : ℂ) m = 0 := by
     intro m hm
-    rw [capVal (2 * r + k + 1) ε lam h H σ D E V T μ ι hσ hD hV hc hVK hμ hcoef hlam hgl hNeed hq0 _ m hm,
+    rw [_root_.ReciprocityTheory.ChartRestriction.DS.Lap.CapelliClosureMembership.capVal_main (2 * r + k + 1) ε lam h H σ D E V T μ ι hσ hD hV hc hVK hμ hcoef hlam hgl hNeed hq0 _ m hm,
       Finset.prod_eq_zero (Finset.mem_univ s) (by push_cast; ring), zero_smul]
   have hvS : (((ι.symm v₁ : V) : D)) ∈ genSub E V :=
     LemK.le_generatedSubmodule_dual V (ι.symm v₁).2

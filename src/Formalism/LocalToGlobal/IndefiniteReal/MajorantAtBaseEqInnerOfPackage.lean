@@ -349,13 +349,6 @@ theorem blk_transAbs {N M dg db : ℕ} (Hg : Matrix (Fin N) (Fin N) K) (Hb : Mat
       _ = Pg * CK * zb * Pb := by rw [← key]
       _ = J * Pb := by rw [hz]
 
-theorem blk_invAbs {N dg : ℕ} (Hg : Matrix (Fin N) (Fin N) K) (zg : Matrix (Fin N) (Fin dg) K)
-    (Pg : Matrix (Fin dg) (Fin N) K) (hPg : Pg = orthPr Hg zg) (hPgO : IsOrthProj Hg zg Pg)
-    (RK RK' : Matrix (Fin N) (Fin N) K) (hadj : RK'ᴴ * Hg = Hg * RK) (W : Matrix (Fin dg) (Fin dg) K)
-    (hW : RK' * zg = zg * W) (ρ : Matrix (Fin dg) (Fin dg) K) (hzρ : zg * ρ = RK * zg) :
-    Pg * RK = ρ * Pg := by
-  exact orthPr_mul_eq_mul_orthPr_of_adjoint Hg zg Pg hPg hPgO RK RK' hadj W hW ρ hzρ
-
 theorem blk_smulH {a b c : ℕ} (H : Matrix (Fin a) (Fin a) K) (Vg : Matrix (Fin a) (Fin b) K)
     (Vb : Matrix (Fin a) (Fin c) K) (C : Matrix (Fin b) (Fin c) K) (Hg : Matrix (Fin b) (Fin b) K)
     (Hb : Matrix (Fin c) (Fin c) K) (k : K) (hk : k ≠ 0) (hHg : Hg = Vgᴴ * H * Vg)
@@ -412,12 +405,12 @@ theorem blk_HV (B : BlockDat K G Pl0) (X : Finset (G → K)) (P : Subgroup G) (�
 theorem blk_HV_bot (B : BlockDat K G Pl0) (X : Finset (G → K)) :
     B.HV ⟨X, ⊥, 1⟩ = (B.vE ⟨X, ⊥, 1⟩)ᴴ * B.S.H * B.vE ⟨X, ⊥, 1⟩ := by
   rw [blk_HV]
-  simp [Subgroup.card_bot]
+  simp
 
 theorem blk_goodBot (X : Finset (G → K)) : goodAt X (⊥ : Subgroup G) 1 = idemOf X := by
   unfold goodAt
   have hb : lvlIdem (⊥ : Subgroup G) (1 : (⊥ : Subgroup G) →* Kˣ) = 1 := by
-    (simp [lvlIdem, MonoidAlgebra.one_def, Finset.univ_unique, Subgroup.card_bot]) <;> rfl
+    (simp [lvlIdem, MonoidAlgebra.one_def, Finset.univ_unique]) <;> rfl
   rw [hb, mul_one]
 
 theorem blk_gg (B : BlockDat K G Pl0) (X : Finset (G → K)) (hX : ∀ χ ∈ X, IsAbsIrrChar χ) (P : Subgroup G)
@@ -660,7 +653,7 @@ theorem blk_invK (B : BlockDat K G Pl0) {v0 : InfinitePlace K} (hv0 : IsConjAt v
     simp only [Matrix.mulVec_mulVec, Matrix.mul_assoc] at h1 ⊢
     rw [h2]
     exact h1
-  exact ⟨_, _, hvR, hRR, blk_invAbs _ _ _ rfl hPg _ _ hadj W hW ρ hzρ⟩
+  exact ⟨_, _, hvR, hRR, _root_.Formalism.IndefR.CxPass.BlockMetrics.orthPr_mul_eq_mul_orthPr_of_adjoint _ _ _ rfl hPg _ _ hadj W hW ρ hzρ⟩
 
 theorem quot_transfer (hq : QuotThrough) (B : BlockDat K G Pl0) {v0 : InfinitePlace K} (hv0 : IsConjAt v0) {s : ℕ} (h : B.Ok s)
     (X : Finset (G → K)) (hX : ∀ χ ∈ X, IsAbsIrrChar χ) (P : Subgroup G) (ψ : P →* Kˣ) (Z : Submodule K B.S.Forms)

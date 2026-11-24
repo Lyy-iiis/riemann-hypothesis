@@ -138,9 +138,6 @@ open scoped TensorProduct ENNReal NNReal Matrix
 
 namespace GlobalTheory.CompanionTheory.SW.AlgDiag
 
-theorem diag_hermitian : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E), IsCMExt F E σ → ∀ (n : ℕ) (T : Matrix (Fin n) (Fin n) E), IsHermND σ T → ∃ (g : GL (Fin n) E) (D : Fin n → Fˣ), cT (σ : E →+* E) (g : Matrix (Fin n) (Fin n) E) * T * g = Matrix.diagonal fun i => algebraMap F E (D i : F) :=
-  _root_.UpperTheory.Reformulated.B.Gka4.diag_hermitian
-
 end GlobalTheory.CompanionTheory.SW.AlgDiag
 end -- clump:auto
 end -- clump:auto
@@ -179,7 +176,7 @@ theorem gramE_herm (σ : E →ₐ[F] E) (hσ : ∀ x : E, σ (σ x) = x) {M n : 
     (hJ : ∀ i j, σ (J j i) = J i j) (X : Fin n → Fin M → E) (a b : Fin n) :
     σ (gramE σ J X b a) = gramE σ J X a b := by
 
-  simp only [gramE, hE, hform, map_sum, map_mul, RingHom.coe_coe, AlgHom.commutes]
+  simp only [gramE, hE, hform, map_sum, map_mul, RingHom.coe_coe]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
   rw [hσ, hJ]
@@ -206,7 +203,7 @@ theorem trans_uc : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberF
     apply τ.injective
     rw [hCM.2.2.2 τ, hCM.2.2.2 τ, star_star]
   have hT : IsHermND σ (gramE σ J X) := ⟨gramE_herm σ hσ J hJ.1 X, hdet⟩
-  obtain ⟨g, D, hg⟩ := GlobalTheory.CompanionTheory.SW.AlgDiag.diag_hermitian F E σ hCM n _ hT
+  obtain ⟨g, D, hg⟩ := _root_.UpperTheory.Reformulated.B.Gka4.diag_hermitian F E σ hCM n _ hT
   set G : Matrix (Fin n) (Fin n) (R ⊗[F] E) := (g : Matrix (Fin n) (Fin n) E).map (inclR R) with hG
   set G' : Matrix (Fin n) (Fin n) (R ⊗[F] E) :=
     ((g⁻¹ : GL (Fin n) E) : Matrix (Fin n) (Fin n) E).map (inclR R) with hG'
@@ -224,7 +221,7 @@ theorem trans_uc : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberF
     by_cases hab : a = b
     · subst hab
       simp [D', inclR_algebraMap]
-    · simp [Matrix.diagonal_apply_ne _ hab, hab]
+    · simp [hab]
   have P := fun (Z : Fin n → Fin M → R ⊗[F] E) (H H' : Matrix (Fin n) (Fin n) (R ⊗[F] E)) =>
     _root_.GlobalTheory.CompanionTheory.SW.RMulGram.rmul_gram_facts F E σ hCM R M n J Z H H'
   have hX1 : gramR R σ J (rmul R (ratTup R X) G) =

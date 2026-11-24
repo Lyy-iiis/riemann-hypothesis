@@ -109,7 +109,7 @@ theorem twistOf_good {ρ : Setup D.ntw} (hρ : ρ.Good) (i : D.ntw.Tw) (j : Fin 
   refine ⟨?_, ?_⟩
   · show (⟨half (ρ.ch i) Q, charOf ρ.rc f ψ, resOf (charOf ρ.rc f ψ)⟩ : Twist D Circle).Good
     rw [hkey]
-    refine GlobalTheory.T.artinPullback_isGoodTwist_of_anticyclotomic_tame D D.nd D.ntw ρ.rc hρ.rc Circle (g.comp ψ) (D.ntw.l i) (D.ntw.lPrime i).out
+    refine _root_.GlobalTheory.TwistPull.good_pull D D.nd D.ntw ρ.rc hρ.rc Circle (g.comp ψ) (D.ntw.l i) (D.ntw.lPrime i).out
       (fun σ => ⟨k, by rw [MonoidHom.comp_apply, ← map_pow, hpow, map_one]⟩) ?_ ?_ _ ?_ ?_ ?_
     · exact Subgroup.isOpen_mono (H₁ := ψ.ker) (fun x hx => by
         rw [MonoidHom.mem_ker] at hx ⊢
@@ -250,7 +250,7 @@ open GlobalTheory.HeightCounting.Up (PrN)
 theorem _root_.GlobalTheory.T.level_twist_character_mem_coefficientIntegers : ∀ (D : D7) (X : RealSide D) (X0 : BaseLevelRowSide D) (Y : GlobalTheory.Mem.R3.Read (A3 := X.A3) X.R.toRealDat X.F.lv2 X0) (S : NX.RatDat D.ntw) (YS : NX.NExpRealS X.R X.cG S) (Z : ExportTie YS X.geo.v₀) (c : NChoice D) (w : D.what₂.places.Pl) (j : Fin D.R.m) (H : AtPlace Y Z c w j),
   ∀ ι : KE c w →+* ℂ, (∀ x, ι (c.embW w x) = D.what₂.embLL x) →
   ∀ k : (baseOf Z c w j).levJ (twVia Z.ρ ι), (((baseOf Z c w j).levLam (twVia Z.ρ ι) k : ℂˣ) : ℂ) ∈ intLL D := by
-  first | exact @GlobalTheory.PlaceRead.LevVal.levLam_twVia_mem_intLL | exact GlobalTheory.PlaceRead.LevVal.levLam_twVia_mem_intLL | (intros; apply GlobalTheory.PlaceRead.LevVal.levLam_twVia_mem_intLL <;> assumption)
+  first | exact @GlobalTheory.PlaceRead.LevVal.levLam_twVia_mem_intLL
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LevelTwistCharacterMemCoefficientIntegersStatement =====

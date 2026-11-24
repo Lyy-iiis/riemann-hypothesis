@@ -371,9 +371,6 @@ section SquareIntegrability
 variable {n : ℕ} {ε : Fin n → Bool} {lam : Fin n → ℝ} {T : S7.KType ε (lowK ε lam)}
   {Ψ : Matrix (Fin n) (Fin n) ℂ → (T.V →L[ℂ] T.V)}
 
-theorem hq_umem (g : Formalism.REAL.UJ ε) : Formalism.MainNotions.S.umat g ∈ UJset ε :=
-  ReciprocityTheory.ChartRestriction.DS.umat_mem_UJset ε g
-
 theorem hq_one (hrep : IsURepOn (UJset ε) (sigLam ε Ψ T.w)) :
     sigLam ε Ψ T.w (Formalism.MainNotions.S.umat (1 : Formalism.REAL.UJ ε)) = 1 := by
   have e : Formalism.MainNotions.S.umat (1 : Formalism.REAL.UJ ε) = 1 := rfl
@@ -385,11 +382,11 @@ theorem hq_mul (hrep : IsURepOn (UJset ε) (sigLam ε Ψ T.w)) (a b : Formalism.
       (sigLam ε Ψ T.w (Formalism.MainNotions.S.umat a)).comp (sigLam ε Ψ T.w (Formalism.MainNotions.S.umat b)) := by
   have e : Formalism.MainNotions.S.umat (a * b) = Formalism.MainNotions.S.umat a * Formalism.MainNotions.S.umat b := rfl
   rw [e]
-  exact hrep.1.2 _ (hq_umem a) _ (hq_umem b)
+  exact hrep.1.2 _ (_root_.ReciprocityTheory.ChartRestriction.DS.arb_umat_mem a) _ (_root_.ReciprocityTheory.ChartRestriction.DS.arb_umat_mem b)
 
 theorem hq_iso (hrep : IsURepOn (UJset ε) (sigLam ε Ψ T.w)) (g : Formalism.REAL.UJ ε) (v : Hlam ε Ψ T.w) :
     ‖sigLam ε Ψ T.w (Formalism.MainNotions.S.umat g) v‖ = ‖v‖ :=
-  hrep.2.1 _ (hq_umem g) v
+  hrep.2.1 _ (_root_.ReciprocityTheory.ChartRestriction.DS.arb_umat_mem g) v
 
 theorem hq_memLp_of_ne (hrep : IsURepOn (UJset ε) (sigLam ε Ψ T.w))
     (hirr : Formalism.MainNotions.S.IsIrredOn (Formalism.MainNotions.S.UJset ε) (sigLam ε Ψ T.w)) (w₀ x₀ : Hlam ε Ψ T.w) (hx₀ : x₀ ≠ 0)
@@ -404,7 +401,7 @@ theorem hq_inner
     (hcoe : ∀ g ∈ UJset ε, ∀ x : Hlam ε Ψ T.w, ((sigLam ε Ψ T.w g x : Hlam ε Ψ T.w) : L2 ε) = rreg ε g x)
     (y z : Hlam ε Ψ T.w) (g : Formalism.REAL.UJ ε) :
     ⟪y, sigLam ε Ψ T.w (Formalism.MainNotions.S.umat g) z⟫_ℂ = inner ℂ (y : L2 ε) (rreg ε (Formalism.MainNotions.S.umat g) (z : L2 ε)) := by
-  rw [Submodule.coe_inner, hcoe _ (hq_umem g)]
+  rw [Submodule.coe_inner, hcoe _ (_root_.ReciprocityTheory.ChartRestriction.DS.arb_umat_mem g)]
 
 theorem hq_w_ne (hP : IsPsiFor ε lam T Ψ) : uniformisationL2 ε Ψ T.w T.w ≠ 0 := by
   have hw : T.w ≠ 0 := by
@@ -590,9 +587,6 @@ lemma rr_prod_ite {l : ℕ} (w x : Fin l → Fin n × Fin n) :
   · obtain ⟨i, hi⟩ := Function.ne_iff.mp h
     exact Finset.prod_eq_zero (Finset.mem_univ i) (if_neg hi)
 
-lemma rr_op_one {ε : Fin n → Bool} {Λ : Fin n → ℝ} (T : KType ε Λ) : T.op 1 = 1 := by
-  simp [KType.op]
-
 lemma rr_op_mul {ε : Fin n → Bool} {Λ : Fin n → ℝ} (T : KType ε Λ) (k k' : KG ε) (v : T.V) :
     T.op (k * k') v = T.op k (T.op k' v) := by
   simp [KType.op]
@@ -707,11 +701,11 @@ theorem cpart2_Eaa (ε : Fin n → Bool) (a : Fin n) :
   by_cases hi : i = a
   · subst hi
     by_cases hj : j = i
-    · subst hj; simp [single_apply]; ring
-    · simp [single_apply, hj, Ne.symm hj]
+    · subst hj; simp; ring
+    · simp [Ne.symm hj]
   · by_cases hj : j = a
-    · subst hj; simp [single_apply, hi, Ne.symm hi]
-    · simp [single_apply, hi, hj, Ne.symm hi, Ne.symm hj]
+    · subst hj; simp [Ne.symm hi]
+    · simp [Ne.symm hi, Ne.symm hj]
 
 theorem exp_Eaa (a : Fin n) (t : ℝ) :
     NormedSpace.exp ((t : ℂ) • ((-Complex.I) • single a a (1 : ℂ))) =
@@ -720,10 +714,10 @@ theorem exp_Eaa (a : Fin n) (t : ℝ) :
       diagonal (fun c => if c = a then -(Complex.I * t) else 0) := by
     ext i j
     by_cases hi : i = a <;> by_cases hj : j = a
-    · subst hi; subst hj; simp [diagonal_apply, single_apply]; ring
-    · subst hi; simp [diagonal_apply, single_apply, Ne.symm hj]
-    · subst hj; simp [diagonal_apply, single_apply, Ne.symm hi, hi]
-    · simp [diagonal_apply, single_apply, hi, hj, Ne.symm hi, Ne.symm hj]
+    · subst hi; subst hj; simp; ring
+    · subst hi; simp [Ne.symm hj]
+    · subst hj; simp [Ne.symm hi, hi]
+    · simp [diagonal_apply, hi, Ne.symm hi, Ne.symm hj]
   rw [e, Matrix.exp_diagonal]
   congr 1
   funext c
@@ -848,10 +842,6 @@ theorem norm_twChi {ε : Fin n → Bool} (c : ℤ) (k : KG ε) : ‖twChi c k‖
   have h3 : 0 ≤ ‖twChi c k‖ := norm_nonneg _
   nlinarith [h2, h3]
 
-theorem kop_one {ε : Fin n → Bool} {Λ : Fin n → ℝ} (T : KType ε Λ) : T.op 1 = 1 := by
-  show ((T.τ 1 : unitary (T.V →L[ℂ] T.V)) : T.V →L[ℂ] T.V) = 1
-  rw [map_one]; rfl
-
 theorem kop_mul {ε : Fin n → Bool} {Λ : Fin n → ℝ} (T : KType ε Λ) (x y : KG ε) : T.op (x * y) = T.op x * T.op y := by
   show ((T.τ (x * y) : unitary (T.V →L[ℂ] T.V)) : T.V →L[ℂ] T.V) = _
   rw [map_mul]; rfl
@@ -861,7 +851,7 @@ def twTau {ε : Fin n → Bool} {Λ : Fin n → ℝ} (T : KType ε Λ) (c : ℤ)
   map_one' := by
     apply Subtype.ext
     show twChi c 1 • T.op 1 = 1
-    rw [twChi_one, one_smul, kop_one]
+    rw [twChi_one, one_smul, _root_.ReciprocityTheory.ChartRestriction.DS.pdA_op_one]
   map_mul' := by
     intro x y
     apply Subtype.ext

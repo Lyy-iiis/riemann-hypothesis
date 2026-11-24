@@ -103,7 +103,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.AbLaw
 
 theorem _root_.GlobalTheory.T.abelianVarietyTorsionCardEqPow : GlobalTheory.Published.AbMulNSt := by
-  first | exact @GlobalTheory.abMulN_holds | exact GlobalTheory.abMulN_holds | (intros; apply GlobalTheory.abMulN_holds <;> assumption)
+  first | exact @GlobalTheory.abMulN_holds
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.CoherentCohomologyProofs.AbelianVarietyTorsionCardEqPowProofStatement =====
@@ -198,7 +198,7 @@ theorem real_nonneg {d : ℕ} (G : Matrix (Fin d) (Fin d) ℤ)
     have ha' : ∀ i, (a i : ℝ) = ((m : ℤ) : ℝ) * (c i : ℝ) := by
       intro i
       have := ha i
-      simp only [eq_intCast, zsmul_eq_mul, Submonoid.smul_def] at this
+      simp only [eq_intCast, zsmul_eq_mul] at this
       exact_mod_cast this
     have h1 : (0 : ℝ) ≤ ∑ i, ∑ j, (a i : ℝ) * (a j : ℝ) * (G i j : ℝ) := by
       exact_mod_cast hZ a
@@ -255,7 +255,7 @@ theorem gram_pos {Λ : Type} [AddCommGroup Λ] (b : Λ →ₗ[ℤ] Λ →ₗ[ℤ
     0 < c ⬝ᵥ (Matrix.of fun i j : Fin d => b ((φ ^ (i : ℕ)) e) ((φ ^ (j : ℕ)) e)) *ᵥ c := by
   have h1 : aeval φ (∑ i : Fin d, C (c i) * X ^ (i : ℕ)) e = ∑ i : Fin d, c i • (φ ^ (i : ℕ)) e := by
 
-    simp [map_sum, LinearMap.sum_apply, Module.End.intCast_apply]
+    simp [map_sum, LinearMap.sum_apply]
   have h2 : (∑ i : Fin d, C (c i) * X ^ (i : ℕ) : ℤ[X]) ≠ 0 := by
     intro h
     apply hc
@@ -1044,14 +1044,7 @@ private theorem isMonHom_mul_degeneration {S : Scheme.{0}} {M G : Over S} [MonOb
   rw [Hom.mul_def]
   infer_instance
 
-theorem isMonHom_id_pow (G : Over S) [GrpObj G] [IsCommMonObj G] (n : ℕ) : IsMonHom ((𝟙 G) ^ n : G ⟶ G) := by
-  induction n with
-  | zero =>
-    rw [pow_zero, Hom.one_def]
-    infer_instance
-  | succ n ih =>
-    rw [pow_succ]
-    exact isMonHom_mul_degeneration _ _
+alias isMonHom_id_pow := _root_.GlobalTheory.SS.DivSemi.isMonHom_id_pow
 
 theorem norm_lt_of_normSq {β : ℂ} {Q : ℕ} (hQ : 2 ≤ Q) (h : Complex.normSq β = Q) : ‖β‖ < Q := by
   have h1 : ‖β‖ ^ 2 = (Q : ℝ) := by

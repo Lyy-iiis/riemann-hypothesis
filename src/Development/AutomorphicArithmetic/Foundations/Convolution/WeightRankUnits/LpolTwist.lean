@@ -518,17 +518,6 @@ private theorem t_lt_one :
   rw [← WithZero.coe_one, WithZero.coe_lt_coe, ← ofAdd_zero, Multiplicative.ofAdd_lt]
   norm_num
 
-private theorem valuation_lt_one_le_uniformiser {a : WithZero (Multiplicative ℤ)} (h : a < 1) :
-    a ≤ ((Multiplicative.ofAdd (-1 : ℤ) : Multiplicative ℤ) : WithZero (Multiplicative ℤ)) := by
-  rcases eq_or_ne a 0 with rfl | ha
-  · exact zero_le'
-  · obtain ⟨b, rfl⟩ := WithZero.ne_zero_iff_exists.1 ha
-    rw [← WithZero.coe_one, WithZero.coe_lt_coe] at h
-    rw [WithZero.coe_le_coe]
-    have h' : Multiplicative.toAdd b < 0 := h
-    show Multiplicative.toAdd b ≤ -1
-    omega
-
 end Val
 
 section Main
@@ -560,7 +549,7 @@ private theorem span_eq {ϖ : L} (hv : Valued.v ϖ =
       lt_of_le_of_ne x.2 (fun h => hx' ((isUnit_int_iff x).2 h))
     have hle : Valued.v (x : L) ≤ Valued.v (p : L) := by
       rw [hp, hv]
-      exact valuation_lt_one_le_uniformiser hlt
+      exact _root_.Formalism.UG.P.satake_lt_one_le hlt
     refine ⟨⟨(x : L) * (p : L)⁻¹, (le_iff_mul_inv hp0).2 hle⟩, Subtype.ext ?_⟩
     simp only [Subring.coe_mul]
     field_simp
@@ -1089,7 +1078,7 @@ private lemma csr_of_cong {k R : Type} [CommRing k] [CommRing R] [Algebra k R] [
       u.val * ((g⁻¹ : GL (Fin n) R) : Matrix (Fin n) (Fin n) R) * (u⁻¹).val := by
     rw [cong] at h
     nth_rewrite 1 [← h]
-    simp only [mul_assoc, Units.mul_inv_cancel_left, Units.mul_inv, mul_one]
+    simp only [mul_assoc, Units.mul_inv, mul_one]
   have h2 : (cp g).map (c : R →+* R) = cp g⁻¹ := by
     have h3 := congrArg Matrix.charpoly h1
     rw [Matrix.coe_units_inv u, Matrix.charpoly_units_conj, ct, Matrix.charpoly_transpose] at h3

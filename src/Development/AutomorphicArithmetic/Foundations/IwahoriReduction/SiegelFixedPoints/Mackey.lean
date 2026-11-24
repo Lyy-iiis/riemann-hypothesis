@@ -409,18 +409,12 @@ private theorem diag_mul_T_pow_eq_T_pow_mul_mul_diag (D L : ℕ) (hD : 0 < D) :
   ext i j
   fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_two]
 
-private theorem T_mem_Gamma (M : ℕ) : (ModularGroup.T ^ M : SL(2, ℤ)) ∈ CongruenceSubgroup.Gamma M := by
-  have he : ((ModularGroup.T ^ M : SL(2, ℤ)) : Matrix (Fin 2) (Fin 2) ℤ) = !![1, (M : ℤ); 0, 1] := by
-    rw [← ModularGroup.coe_T_zpow, zpow_natCast]
-  rw [CongruenceSubgroup.Gamma_mem]
-  simp [he]
-
 private theorem e_mem_KT (X : Tower Ω ε) {D L : ℕ} (hD : 0 < D) (g : SL(2, ℤ)) {y : X.K} (hy : y ∈ topL X (L * D)) :
     X.sl (toGQ !![(D : ℤ), 0; 0, 1]) (X.sl (ofSL g) y) ∈ KT X L := by
   rw [KT.mem_def]
   rw [mem_lev_iff] at hy
   have hn : g * ModularGroup.T ^ (D * L) * g⁻¹ ∈ CongruenceSubgroup.Gamma (L * D) := by
-    have := (CongruenceSubgroup.Gamma_normal (L * D)).conj_mem _ (T_mem_Gamma (L * D)) g
+    have := (CongruenceSubgroup.Gamma_normal (L * D)).conj_mem _ (_root_.GlobalTheory.Glue.DlUniq.T_pow_mem_Gamma (L * D)) g
     rwa [mul_comm L D] at this ⊢
   have h1 := hy _ hn
   simp only [← X.sl_mul]
@@ -712,7 +706,7 @@ theorem UpperTheory.Kd.L.dlgal :
       (algebraMap Ω (HahnSeries ℚ Ω) c * y).coeff r = c * y.coeff r := by
     intro c y r
     rw [HahnSeries.algebraMap_apply']
-    simp [HahnSeries.C_mul_eq_smul]
+    simp
   have hsκ : s κ ≠ 0 := (map_ne_zero _).2 hκ
   have hc0 : algebraMap Ω X.K (s κ) ≠ 0 := (map_ne_zero _).2 hsκ
   have hexpa : X.exp ((algebraMap Ω X.K (s κ))⁻¹ * X.gal s (algebraMap Ω X.K κ * a)) =
@@ -956,7 +950,7 @@ private lemma FF_eq (X : Tower Ω ε) {l : ℕ} [Fact l.Prime] {n m N : ℕ} [Ne
   have hsl := sl_eq_of_map X hw hmap
   have hex : ex l n w (gm r₀ * liftSL _ (γ * Tm (topMu l n m N) b)) = ex l n w (gm r₀ * liftSL _ γ) := by
     have h00 := congrArg (fun g : SL(2, ZMod (topMu l n m N)) => g.1 0 0) hmap
-    simp only [Matrix.SpecialLinearGroup.map_apply_coe, RingHom.mapMatrix_apply, Matrix.map_apply, eq_intCast] at h00
+    simp only [Matrix.SpecialLinearGroup.map_apply_coe, Matrix.map_apply, eq_intCast] at h00
     have hd : l ^ n ∣ topMu l n m N := by
       unfold topMu
       exact Dvd.dvd.mul_right (pow_dvd_pow l (Nat.le_add_left n m)) _

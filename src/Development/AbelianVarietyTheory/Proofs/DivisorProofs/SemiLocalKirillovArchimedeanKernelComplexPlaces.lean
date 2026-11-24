@@ -152,7 +152,6 @@ theorem isUnit_secMat (ρ j : Fin n) (hj : j ≤ ρ) (v : Fin n → ℂ) (hv : v
       · simp
   intro c d hcd
   have := key (c - d) (by
-    change (c - d) ᵥ* _ = 0
     rw [Matrix.sub_vecMul]
     exact sub_eq_zero.2 hcd)
   exact sub_eq_zero.1 this
@@ -340,8 +339,6 @@ section -- clump:auto
 open NumberField GlobalTheory.CuspRep GlobalTheory.JSW GlobalTheory.JSW.MirCinf MeasureTheory
 open scoped FourierTransform ContDiff
 
-theorem _root_.GlobalTheory.T.archimedeanSectionMatrix_invertible_level_reduction : ∀ (E : Type) [Field E] [NumberField E] (n : ℕ) (ρ : Fin n) (j : InfinitePlace E → Fin n), (∀ w, j w ≤ ρ) → (∀ v : Fin n → Cinf E, (∀ w, v (j w) w ≠ 0) → IsUnit (Matrix.of (secMatInf ρ j v)) ∧ toGLInf (Matrix.of (secMatInf ρ j v)) ∈ levSetInf E n (ρ + 1)) ∧ (∀ g ∈ levSetInf E n (ρ + 1), (∀ w, rowCutInf ρ (g : Matrix (Fin n) (Fin n) (Cinf E)) (j w) w ≠ 0) → g * (toGLInf (Matrix.of (secMatInf ρ j (rowCutInf ρ (g : Matrix (Fin n) (Fin n) (Cinf E))))))⁻¹ ∈ levSetInf E n ρ) ∧ ∃ L : (Fin n → Cinf E) →L[ℝ] (Fin n → Fin n → Cinf E), ∀ v, secMatInf ρ j v = secMatInf ρ j 0 + L v := by
-  first | (exact @GlobalTheory.JSW.MirCinf.secMatInf_main) | (exact GlobalTheory.JSW.MirCinf.secMatInf_main) | (intros; apply GlobalTheory.JSW.MirCinf.secMatInf_main  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ArchimedeanSectionMatrixInvertibleLevelReductionStatement =====
@@ -784,10 +781,10 @@ theorem eq_sum_unitVecInf (v : Fin n → Cinf E) :
     · simp only [Pi.add_apply, Pi.smul_apply, unitVecInf, Pi.single_eq_same, Complex.real_smul, mul_one]
       exact (Complex.re_add_im _).symm
     · intro w _ hw
-      simp [unitVecInf, Pi.single_apply, Ne.symm hw]
+      simp [unitVecInf, Ne.symm hw]
     · simp
   · intro j _ hj
-    simp [Finset.sum_apply, unitVecInf, Pi.single_apply, Ne.symm hj]
+    simp [Finset.sum_apply, unitVecInf, Ne.symm hj]
   · simp
 
 theorem dualVecInf_spec (ζ : (Fin n → Cinf E) →L[ℝ] ℝ) (v : Fin n → Cinf E) :
@@ -995,7 +992,7 @@ open NumberField GlobalTheory.CuspRep GlobalTheory.JSW GlobalTheory.JSW.MirCinf 
 open scoped FourierTransform ContDiff
 
 theorem _root_.GlobalTheory.T.isArchimedeanModerateGrowth_matrixSmoothingIntegral : ∀ (E : Type) [Field E] [NumberField E] (n : ℕ) (α : (Fin n → Fin n → Cinf E) → ℂ), Continuous α → HasCompactSupport α → tsupport α ⊆ {x | IsUnit (Matrix.of x)} → ∀ W : GL (Fin n) (Cinf E) → ℂ, IsModGrowthInf W → IsModGrowthInf (smoothMatInf α W) := by
-  first | (exact @GlobalTheory.JSW.MirCinf.isModGrowthInf_smoothMatInf) | (exact GlobalTheory.JSW.MirCinf.isModGrowthInf_smoothMatInf) | (intros; apply GlobalTheory.JSW.MirCinf.isModGrowthInf_smoothMatInf  <;> assumption)
+  first | (exact @GlobalTheory.JSW.MirCinf.isModGrowthInf_smoothMatInf)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsArchimedeanModerateGrowthMatrixSmoothingIntegrStatement =====
@@ -1008,8 +1005,6 @@ section -- clump:auto
 open NumberField GlobalTheory.CuspRep GlobalTheory.JSW GlobalTheory.JSW.MirCinf MeasureTheory
 open scoped FourierTransform ContDiff
 
-theorem _root_.GlobalTheory.T.isArchimedeanRapidKernelOperator_finset_sum : ∀ (E : Type) [Field E] [NumberField E] (n : ℕ) (Z : Type) [NormedAddCommGroup Z] [NormedSpace ℝ Z] [FiniteDimensional ℝ Z] (ι : Type) [Fintype ι] (T : ι → (GL (Fin n) (Cinf E) → ℂ) → Z → GL (Fin n) (Cinf E) → ℂ), (∀ i, IsKerOpInf (T i)) → IsKerOpInf (fun W z g => ∑ i, T i W z g) := by
-  first | (exact @GlobalTheory.JSW.MirCinf.isKerOpInf_fintype_sum) | (exact GlobalTheory.JSW.MirCinf.isKerOpInf_fintype_sum) | (intros; apply GlobalTheory.JSW.MirCinf.isKerOpInf_fintype_sum  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsArchimedeanRapidKernelOperatorFinsetSumStatement =====
@@ -1024,12 +1019,6 @@ open scoped FourierTransform ContDiff
 
 namespace GlobalTheory.JSW.MirCinf
 
-theorem smoothMatInf_keeps_modGrowth : ∀ (E : Type) [Field E] [NumberField E] (n : ℕ)
-    (α : (Fin n → Fin n → Cinf E) → ℂ), Continuous α → HasCompactSupport α →
-    tsupport α ⊆ {x | IsUnit (Matrix.of x)} → ∀ W : GL (Fin n) (Cinf E) → ℂ, IsModGrowthInf W →
-    IsModGrowthInf (smoothMatInf α W) :=
-  isModGrowthInf_smoothMatInf
-
 end GlobalTheory.JSW.MirCinf
 end -- clump:auto
 end -- clump:auto
@@ -1043,8 +1032,6 @@ section -- clump:auto
 open NumberField GlobalTheory.CuspRep GlobalTheory.JSW GlobalTheory.JSW.MirCinf MeasureTheory
 open scoped FourierTransform ContDiff
 
-theorem _root_.GlobalTheory.T.archimedeanMatrixSmoothing_moderateGrowth : ∀ (E : Type) [Field E] [NumberField E] (n : ℕ) (α : (Fin n → Fin n → Cinf E) → ℂ), Continuous α → HasCompactSupport α → tsupport α ⊆ {x | IsUnit (Matrix.of x)} → ∀ W : GL (Fin n) (Cinf E) → ℂ, IsModGrowthInf W → IsModGrowthInf (smoothMatInf α W) := by
-  first | (exact @GlobalTheory.JSW.MirCinf.smoothMatInf_keeps_modGrowth) | (exact GlobalTheory.JSW.MirCinf.smoothMatInf_keeps_modGrowth) | (intros; apply GlobalTheory.JSW.MirCinf.smoothMatInf_keeps_modGrowth  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ArchimedeanMatrixSmoothingModerateGrowthStatement =====
@@ -1178,7 +1165,7 @@ open NumberField GlobalTheory.CuspRep GlobalTheory.JSW GlobalTheory.JSW.MirCinf 
 open scoped FourierTransform ContDiff
 
 theorem _root_.GlobalTheory.T.archimedeanRapidKernelOperator_comp_rapidFamily : ∀ (E : Type) [Field E] [NumberField E] (n : ℕ) (Z : Type) [NormedAddCommGroup Z] [NormedSpace ℝ Z] [FiniteDimensional ℝ Z] (T : (GL (Fin n) (Cinf E) → ℂ) → Z → GL (Fin n) (Cinf E) → ℂ), IsKerOpInf T → ∀ (X : Type) [MeasurableSpace X] (ν : Measure X) [SFinite ν] (k : GL (Fin n) (Cinf E) → X → ℂ) (γ : X → GL (Fin n) (Cinf E)) (η : GL (Fin n) (Cinf E) → X → Z →L[ℝ] ℝ), IsRapidFamInf ν k γ η → ∀ (S : (GL (Fin n) (Cinf E) → ℂ) → GL (Fin n) (Cinf E) → ℂ) (t : Z → GL (Fin n) (Cinf E)) (χ : Z → ℂ), (∀ W, IsModGrowthInf W → IsModGrowthInf (S W)) → (∀ W, IsModGrowthInf W → ∀ q z g, χ z * S W (g * t z * q) = ∫ x, k q x * (𝐞 (η q x z) : ℂ) * W (g * γ x) ∂ν) → IsKerOpInf (fun W z g => χ z * T (S W) z (g * t z)) := by
-  first | (exact @GlobalTheory.JSW.MirCinf.isKerOpInf_comp_rapidFamInf) | (exact GlobalTheory.JSW.MirCinf.isKerOpInf_comp_rapidFamInf) | (intros; apply GlobalTheory.JSW.MirCinf.isKerOpInf_comp_rapidFamInf  <;> assumption)
+  first | (exact @GlobalTheory.JSW.MirCinf.isKerOpInf_comp_rapidFamInf)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ArchimedeanRapidKernelOperatorCompRapidFamilyStatement =====
@@ -1272,8 +1259,6 @@ section -- clump:auto
 open NumberField GlobalTheory.CuspRep GlobalTheory.JSW GlobalTheory.JSW.MirCinf MeasureTheory
 open scoped FourierTransform ContDiff
 
-theorem _root_.GlobalTheory.T.integral_archimedeanMatrices_leftMul_jacobian : ∀ (E : Type) [Field E] [NumberField E] (n : ℕ) (A : GL (Fin n) (Cinf E)) (F : (Fin n → Fin n → Cinf E) → ℂ), ∫ a, F a = ∫ h : (Fin n → Fin n → Cinf E), ((jacInf (A : Matrix (Fin n) (Fin n) (Cinf E)) : ℝ) : ℂ) * F (fun i j => ((A : Matrix (Fin n) (Fin n) (Cinf E)) * Matrix.of h) i j) := by
-  first | (exact @GlobalTheory.JSW.MirCinf.integral_eq_integral_mulLeft_matrixInf) | (exact GlobalTheory.JSW.MirCinf.integral_eq_integral_mulLeft_matrixInf) | (intros; apply GlobalTheory.JSW.MirCinf.integral_eq_integral_mulLeft_matrixInf  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntegralArchimedeanMatricesLeftMulJacobianStatement =====
@@ -1317,7 +1302,7 @@ theorem smoothMatInf_affine_eq_integral_secKInf : ∀ (E : Type) [Field E] [Numb
     exact ⟨C, fun a ha => (Real.le_norm_self _).trans (hC a ha)⟩
   refine ⟨R1 * R2, ?_⟩
   intro W hW q z g
-  have hfam := GlobalTheory.T.schwartz_integral_bound_smooth E n Z X ν κ τ hκ hτ hmom (R1 * R2) σ₀ L
+  have hfam := _root_.GlobalTheory.JSW.MirCinf.SecFamInf.isRapidFamInf_secKInf E n Z X ν κ τ hκ hτ hmom (R1 * R2) σ₀ L
   have hrap : IsRapidFInf ((volume : Measure (Fin n → Fin n → Cinf E)).prod ν) (secKInf (R1 * R2) σ₀ κ τ q)
       (fun p => toGLInf (Matrix.of p.1)) (secEtaInf L τ q) := by
     obtain ⟨h1, h2, h3⟩ := hfam
@@ -1378,7 +1363,7 @@ theorem smoothMatInf_affine_eq_integral_secKInf : ∀ (E : Type) [Field E] [Numb
   have hu := hσ z hzK
   set σ' := toGLInf (Matrix.of (σ₀ + L z)) with hσ'
   have hσv : (σ' : Matrix (Fin n) (Fin n) (Cinf E)) = Matrix.of (σ₀ + L z) := val_toGLInf hu
-  rw [smoothMatInf, GlobalTheory.T.integral_archimedeanMatrices_leftMul_jacobian E n (q⁻¹ * σ'), ← integral_const_mul]
+  rw [smoothMatInf, _root_.GlobalTheory.JSW.MirCinf.integral_eq_integral_mulLeft_matrixInf E n (q⁻¹ * σ'), ← integral_const_mul]
   refine integral_congr_ae (Filter.Eventually.of_forall fun h => ?_)
   simp only
   have hAh : Matrix.of (fun i j => (((q⁻¹ * σ' : GL (Fin n) (Cinf E)) : Matrix (Fin n) (Fin n) (Cinf E)) * Matrix.of h) i j) =
@@ -1472,7 +1457,7 @@ theorem kerOpInf_section : ∀ (E : Type) [Field E] [NumberField E] (n : ℕ) (Z
   obtain ⟨X, _, ν, _, κ, τ, h1, h2, h3, h4⟩ := _root_.GlobalTheory.JSW.exists_rapid_superposition_characters _ _ hΦ hΦc
   obtain ⟨R, hR⟩ := _root_.GlobalTheory.JSW.MirCinf.smoothMatInf_affine_eq_integral_secKInf E n Z σ₀ L χ α hχc hσ hαc hαs X ν κ τ h1 h2 h3 (fun z a => h4 (z, a))
   exact GlobalTheory.T.archimedeanRapidKernelOperator_comp_rapidFamily E n Z T hT _ _ _ _ _ (GlobalTheory.T.schwartz_integral_bound_smooth E n Z X ν κ τ h1 h2 h3 R σ₀ L) (smoothMatInf α) _ χ
-    (GlobalTheory.T.archimedeanMatrixSmoothing_moderateGrowth E n α hα.continuous hαc hαs) hR
+    (_root_.GlobalTheory.JSW.MirCinf.isModGrowthInf_smoothMatInf E n α hα.continuous hαc hαs) hR
 
 end GlobalTheory.JSW.MirCinf
 end -- clump:auto
@@ -1496,20 +1481,11 @@ open GlobalTheory.JSW
 
 variable {E : Type} [Field E] [NumberField E] {n : ℕ}
 
-theorem isOpenEmbedding_valGLInf :
-    Topology.IsOpenEmbedding (fun g : GL (Fin n) (Cinf E) => fun i j => (g : Matrix (Fin n) (Fin n) (Cinf E)) i j) := by
-  open scoped Matrix.Norms.Operator in exact Units.isOpenEmbedding_val (R := Matrix (Fin n) (Fin n) (Cinf E))
+alias isOpenEmbedding_valGLInf := _root_.GlobalTheory.JSW.MirCinf.SmoothGrowth.isOpenEmbedding_valGLInf
 
-theorem isOpen_isUnit_ofInf : IsOpen {x : Fin n → Fin n → Cinf E | IsUnit (Matrix.of x)} := by
-  have := (isOpenEmbedding_valGLInf (E := E) (n := n)).isOpen_range
-  convert this using 1
-  ext x
-  exact ⟨fun ⟨u, hu⟩ => ⟨u, hu⟩, fun ⟨u, hu⟩ => ⟨u, hu⟩⟩
+alias isOpen_isUnit_ofInf := _root_.GlobalTheory.JSW.MirCinf.SecFamInf.isOpen_isUnit_ofInf
 
-theorem continuousOn_toGLInf :
-    ContinuousOn (fun x : Fin n → Fin n → Cinf E => toGLInf (Matrix.of x)) {x | IsUnit (Matrix.of x)} := by
-  rw [isOpenEmbedding_valGLInf.isInducing.continuousOn_iff]
-  exact continuousOn_id.congr fun x hx => val_toGLInf hx
+alias continuousOn_toGLInf := _root_.GlobalTheory.JSW.MirCinf.SmoothGrowth.continuousOn_toGLInf
 
 theorem isWhitInf_smoothMatInf {W : GL (Fin n) (Cinf E) → ℂ} (hW : IsWhitInf W) (α : (Fin n → Fin n → Cinf E) → ℂ) :
     IsWhitInf (smoothMatInf α W) := by
@@ -1567,7 +1543,7 @@ theorem step_chart (ρ : Fin n) (hρ : (ρ : ℕ) + 1 < n) {lam : (GL (Fin n) (C
       ∀ W, IsModGrowthInf W → IsWhitInf W → ∀ y, ∀ g ∈ levSetInf E n (ρ + 1),
         T W y g = φ (y, rowCutInf ρ (g : Matrix (Fin n) (Fin n) (Cinf E))) * B (y, matInf g) *
           lam (smoothMatInf α W) := by
-  obtain ⟨hs1, hs2, L, hL⟩ := GlobalTheory.T.archimedeanSectionMatrix_invertible_level_reduction E n ρ j hj
+  obtain ⟨hs1, hs2, L, hL⟩ := _root_.GlobalTheory.JSW.MirCinf.secMatInf_main E n ρ j hj
   have hU : IsOpen {z : Y × (Fin n → Cinf E) | ∀ w, z.2 (j w) w ≠ 0} := by
     simp only [Set.setOf_forall]
     exact isOpen_iInter_of_finite fun w => isOpen_ne_fun (by fun_prop) continuous_const
@@ -1635,7 +1611,7 @@ theorem step_chart (ρ : Fin n) (hρ : (ρ : ℕ) + 1 < n) {lam : (GL (Fin n) (C
   rw [hT4 W hW hWe y g hg]
   simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.coe_snd', ← hL]
   by_cases hv : ∀ w, rowCutInf ρ (g : Matrix (Fin n) (Fin n) (Cinf E)) (j w) w ≠ 0
-  · rw [hT' _ (GlobalTheory.T.isArchimedeanModerateGrowth_matrixSmoothingIntegral E n α hα.continuous hαc hαs W hW) (isWhitInf_smoothMatInf hWe α) _ _ (hs2 g hg hv),
+  · rw [hT' _ (_root_.GlobalTheory.JSW.MirCinf.isModGrowthInf_smoothMatInf E n α hα.continuous hαc hαs W hW) (isWhitInf_smoothMatInf hWe α) _ _ (hs2 g hg hv),
       hB'v _ _ hv, inv_mul_cancel_right]
     by_cases a1 : φ (y, rowCutInf ρ (g : Matrix (Fin n) (Fin n) (Cinf E))) = 0
     · simp [a1]
@@ -1673,7 +1649,7 @@ theorem levRepInf_succ (ρ : Fin n) (hρ : (ρ : ℕ) + 1 < n) {lam : (GL (Fin n
       exact Set.mem_iUnion.2 ⟨fun w => ⟨j w, hj w⟩, hj'⟩)
   choose T hT hT' using fun j : InfinitePlace E → {j : Fin n // j ≤ ρ} => step_chart ρ hρ ih hα hαc hαs hB hBe hC
     (fun y g hg h => (hDC y g hg h).2) (j := fun w => (j w).1) (fun w => (j w).2) (hφ j).1 (hφ j).2.1 (hφ j).2.2
-  refine ⟨_, GlobalTheory.T.isArchimedeanRapidKernelOperator_finset_sum E n Y _ T hT, fun W hW hWe y g hg => ?_⟩
+  refine ⟨_, _root_.GlobalTheory.JSW.MirCinf.isKerOpInf_fintype_sum E n Y _ T hT, fun W hW hWe y g hg => ?_⟩
   simp only [hT' _ W hW hWe y g hg, ← Finset.sum_mul]
   by_cases h : B (y, matInf g) = 0
   · simp [h]
@@ -1783,7 +1759,7 @@ theorem infGL_apply_of_ne (y : GL (Fin a) (Cinf E)) {i j : Fin a} (h : i ≠ j) 
   refine ad_ext ?_ ?_
   · rw [← ent, pInf_infGL, pInf_sInf]
   · rw [← ent, pFin_infGL, pFin_sInf]
-    simp [Matrix.one_apply, h]
+    simp [h]
 
 theorem infGL_mem_NA {u : GL (Fin a) (Cinf E)} (hu : u ∈ GlobalTheory.SmGL.unipB (Cinf E) (Fin a)) :
     infGL E a u ∈ GlobalTheory.JSW.NA (E := E) (a := a) := by
@@ -1791,7 +1767,7 @@ theorem infGL_mem_NA {u : GL (Fin a) (Cinf E)} (hu : u ∈ GlobalTheory.SmGL.uni
   refine ⟨fun i j hji => ?_, fun i => ?_⟩
   · refine ad_ext ?_ ?_
     · rw [map_zero, ← ent, pInf_infGL]; exact h1 i j hji
-    · rw [map_zero, ← ent, pFin_infGL]; simp [Matrix.one_apply, hji.ne']
+    · rw [map_zero, ← ent, pFin_infGL]; simp [hji.ne']
   · refine ad_ext ?_ ?_
     · rw [map_one, ← ent, pInf_infGL]; exact h2 i
     · rw [map_one, ← ent, pFin_infGL]; simp

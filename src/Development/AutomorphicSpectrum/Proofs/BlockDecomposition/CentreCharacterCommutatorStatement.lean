@@ -74,7 +74,7 @@ theorem chz_jc {D : D7} {ρ p : ℕ} (ψ : AddChar (AF D.host.F) ℂ) (b₀ : He
     show _ = Matrix.trace (adj x * (B * y))
     rw [← Matrix.mul_assoc, Matrix.trace_mul_comm]
   have e2 : Matrix.trace (B * (x * adj y)) = cA D (Matrix.trace (pr b₀ x y)) := by
-    rw [← GlobalTheory.CompanionTheory.FourierN.trace_adj]
+    rw [← _root_.GlobalTheory.MixModel.trace_adj]
     have h : adj (pr b₀ x y) = HMul.hMul (HMul.hMul (adj y) B : Mx D p ρ) x := by
       show adj (HMul.hMul (adj x) (HMul.hMul B y : Mx D ρ p) : Mx D p p) = _
       rw [adj_mul, adj_mul, adj_adj, hadj]
@@ -106,7 +106,7 @@ open GlobalTheory.StdUnn PositivityTheory.GramSchwartzFunctions PositivityTheory
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.centre_character_commutator : ∀ {D : D7} {ρ p : ℕ} (ψ : AddChar (AF D.host.F) ℂ) (b₀ : HermE D ρ) (y x : Mx D ρ p), chz ψ b₀ (GlobalTheory.CompanionTheory.FJE.jc y x) = GlobalTheory.CompanionTheory.FJE.chv ψ b₀ x y := by
-  first | exact @GlobalTheory.CompanionTheory.FJE.chz_jc | exact GlobalTheory.CompanionTheory.FJE.chz_jc | (intros; apply GlobalTheory.CompanionTheory.FJE.chz_jc <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.FJE.chz_jc
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.CentreCharacterCommutatorStatement =====

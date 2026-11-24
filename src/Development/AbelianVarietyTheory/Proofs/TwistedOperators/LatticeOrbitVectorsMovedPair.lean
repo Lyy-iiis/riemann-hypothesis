@@ -190,7 +190,7 @@ theorem _root_.GlobalTheory.T.finitePart_eq_integralCombination_of_mem_completed
     ∃ (m : ℕ) (β : Fin m → Formalism.L2.Theta.AE D) (b : Fin m → Fin n → D.host.E),
       (∀ p, finPart D (β p) ∈ intAE D) ∧ (∀ p, b p ∈ B) ∧
       ∀ i, finPart D (Y i) = finPart D (∑ p, β p * incA D (b p i)) := by
-  first | exact @GlobalTheory.LatExpand.finPart_eq_int_comb_of_mem_hatL | exact GlobalTheory.LatExpand.finPart_eq_int_comb_of_mem_hatL | (intros; apply GlobalTheory.LatExpand.finPart_eq_int_comb_of_mem_hatL <;> assumption)
+  first | exact @GlobalTheory.LatExpand.finPart_eq_int_comb_of_mem_hatL
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.FinitePartEqIntegralCombinationOfMemCompletedLatStatement =====
@@ -224,17 +224,6 @@ namespace GlobalTheory.LatMoveGen
 
 variable {D : D7}
 
-theorem gram_mul_inv (V : HSp D) (g : Formalism.L2.Theta.GA D V) :
-    V.gram.map (incA D) * Formalism.L2.Theta.mt V g⁻¹ =
-      ((Formalism.L2.Theta.mt V g).map (cA D))ᵀ * V.gram.map (incA D) := by
-  have h : ((Formalism.L2.Theta.mt V g).map (cA D))ᵀ * V.gram.map (incA D) * Formalism.L2.Theta.mt V g = V.gram.map (incA D) :=
-    (g : HR (AF D.host.F) D.sp.cm.sig V.gram).2
-  have h2 : Formalism.L2.Theta.mt V g * Formalism.L2.Theta.mt V g⁻¹ = 1 := by
-    rw [← GlobalTheory.LatMoveStd.mt_mul'', mul_inv_cancel, GlobalTheory.LatMoveStd.mt_one'']
-  calc V.gram.map (incA D) * Formalism.L2.Theta.mt V g⁻¹
-      = (((Formalism.L2.Theta.mt V g).map (cA D))ᵀ * V.gram.map (incA D) * Formalism.L2.Theta.mt V g) * Formalism.L2.Theta.mt V g⁻¹ := by rw [h]
-    _ = _ := by rw [Matrix.mul_assoc _ (Formalism.L2.Theta.mt V g), h2, Matrix.mul_one]
-
 theorem row_move (V : HSp D) (g : Formalism.L2.Theta.GA D V) (s : Fin V.rank → D.host.E) (j : Fin V.rank) :
     ∑ m, incA D (∑ k, star (s k) * V.gram k m) * Formalism.L2.Theta.mt V g⁻¹ m j =
       ∑ m, cA D ((Formalism.L2.Theta.mt V g *ᵥ fun k => incA D (s k)) m) * incA D (V.gram m j) := by
@@ -251,7 +240,7 @@ theorem row_move (V : HSp D) (g : Formalism.L2.Theta.GA D V) (s : Fin V.rank →
       ((fun m => incA D (∑ k, star (s k) * V.gram k m)) ᵥ* Formalism.L2.Theta.mt V g⁻¹) j := rfl
   have rhs : ∑ m, cA D ((Formalism.L2.Theta.mt V g *ᵥ fun k => incA D (s k)) m) * incA D (V.gram m j) =
       ((fun m => cA D ((Formalism.L2.Theta.mt V g *ᵥ fun k => incA D (s k)) m)) ᵥ* V.gram.map (incA D)) j := rfl
-  rw [lhs, rhs, e1, e2, Matrix.vecMul_vecMul, gram_mul_inv, ← Matrix.vecMul_vecMul, Matrix.vecMul_transpose]
+  rw [lhs, rhs, e1, e2, Matrix.vecMul_vecMul, _root_.GlobalTheory.AdelicLatMove.gram_mul_inv, ← Matrix.vecMul_vecMul, Matrix.vecMul_transpose]
 
 end GlobalTheory.LatMoveGen
 
@@ -266,7 +255,7 @@ theorem act_gen_apply (S T : HSp D) (g : Formalism.L2.Theta.GA D S) (h : Formali
         ∑ m, cA D ((Formalism.L2.Theta.mt S g *ᵥ fun k => incA D (s k)) m) * incA D (S.gram m j)) := by
   rw [← row_move]
   simp only [actO, Matrix.mul_apply, Matrix.of_apply, GlobalTheory.LatMoveStd.gen_eq]
-  simp only [ Matrix.mul_apply, Matrix.of_apply, GlobalTheory.LatMoveStd.gen_eq, Matrix.mulVec, dotProduct,
+  simp only [ Matrix.mulVec, dotProduct,
     Finset.sum_mul, Finset.mul_sum]
   refine Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => ?_
   ring
@@ -373,7 +362,7 @@ theorem _root_.GlobalTheory.T.weilActionO_mem_latticeO_of_integralCombinations :
         finPart D (∑ p, β p * incA D (b p i))) →
     ∀ w ∈ latO S T (AS : Set (Fin S.rank → D.host.E)) (AT : Set (Fin T.rank → D.host.E)) (fun _ => True),
       actO S T g h w ∈ latO S T (BS : Set (Fin S.rank → D.host.E)) (BT : Set (Fin T.rank → D.host.E)) (fun _ => True) := by
-  first | exact @GlobalTheory.LatMoveGen.actO_mem_latO | exact GlobalTheory.LatMoveGen.actO_mem_latO | (intros; apply GlobalTheory.LatMoveGen.actO_mem_latO <;> assumption)
+  first | exact @GlobalTheory.LatMoveGen.actO_mem_latO
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.WeilActionOMemLatticeOOfIntegralCombinationsStatement =====
@@ -502,12 +491,6 @@ theorem actO_latO_le (S T : HSp D) (g : GA D S) (h : GA D T)
       actO S T g h w ∈ latO S T (BS : Set (Fin S.rank → D.host.E)) (BT : Set (Fin T.rank → D.host.E)) (fun _ => True) :=
   GlobalTheory.T.weilActionO_mem_latticeO_of_integralCombinations S T g h AS BS AT BT (fun s hs => GlobalTheory.T.finitePart_eq_integralCombination_of_mem_completedLattice BS _ (hS s hs)) (fun t ht => GlobalTheory.T.finitePart_eq_integralCombination_of_mem_completedLattice BT _ (hT t ht))
 
-theorem actO_actO_inv (S T : HSp D) (g : GA D S) (h : GA D T) (w : WO S T) : actO S T g h (actO S T g⁻¹ h⁻¹ w) = w := by
-  simp only [actO]
-  rw [inv_inv, Matrix.mul_assoc (mt T h), Matrix.mul_assoc (mt T h⁻¹ * w), ← GlobalTheory.LatMoveStd.mt_mul'', mul_inv_cancel,
-    GlobalTheory.LatMoveStd.mt_one'', Matrix.mul_one, ← Matrix.mul_assoc, ← GlobalTheory.LatMoveStd.mt_mul'', mul_inv_cancel,
-    GlobalTheory.LatMoveStd.mt_one'', Matrix.one_mul]
-
 theorem actO_latO_onto (S T : HSp D) (g : GA D S) (h : GA D T)
     (AS BS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)) (AT BT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E))
     (hS : ∀ s ∈ AS, (fun i => Formalism.IndefR.Datum.toEAf D ((mt S g *ᵥ fun k => incA D (s k)) i)) ∈
@@ -524,7 +507,7 @@ theorem actO_latO_onto (S T : HSp D) (g : GA D S) (h : GA D T)
       ∃ w ∈ latO S T (AS : Set (Fin S.rank → D.host.E)) (AT : Set (Fin T.rank → D.host.E)) (fun _ => True),
         actO S T g h w = w') :=
   ⟨actO_latO_le S T g h AS BS AT BT hS hT, fun w' hw' =>
-    ⟨actO S T g⁻¹ h⁻¹ w', actO_latO_le S T g⁻¹ h⁻¹ BS AS BT AT hS' hT' w' hw', actO_actO_inv S T g h w'⟩⟩
+    ⟨actO S T g⁻¹ h⁻¹ w', actO_latO_le S T g⁻¹ h⁻¹ BS AS BT AT hS' hT' w' hw', _root_.GlobalTheory.AdelicLatMove.actO_actO_inv S T g h w'⟩⟩
 
 end GlobalTheory.MovedHomLat
 

@@ -730,7 +730,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex
 
 theorem _root_.GlobalTheory.T.exists_geometric_values_iso_of_identification_dvr : Laws → ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] (D D' : DegPre V) (e : IsPullDeg (RingHom.id V) D D') (F : Type) [Field F] [Algebra (FractionRing V) F] (N N' : NumD F) (ν : NumOf D F N) (ν' : NumOf D' F N'), ∃ J : NumD.Iso N N', GeoIso ν ν' J.toIso ∧ ∀ (k : ℕ) (p : QkPt D F k) (p' : QkPt D' F k) (q : N.QT k) (q' : N'.QT k), ν.QPt p q → ν'.QPt p' q' → GlobalTheory.IndefiniteRowSideFullHecke.ThetaTowerRecognition.Carries e p p' → q'.1.1.toAdd = J.e q.1.1.toAdd ∧ J.Rel q.1.2 q'.1.2 := by
-  first | exact @GlobalTheory.IdentifiedValues.exists_geoIso_rel | exact GlobalTheory.IdentifiedValues.exists_geoIso_rel | (intros; apply GlobalTheory.IdentifiedValues.exists_geoIso_rel <;> assumption)
+  first | exact @GlobalTheory.IdentifiedValues.exists_geoIso_rel
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.ExistsGeometricValuesIsoOfIdentificationDvrStatement =====
@@ -746,8 +746,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex
 
-theorem _root_.GlobalTheory.T.exists_iso_polarisedAbelianSchemes_dvr_of_fieldExtension : Laws → Laws2 → ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] (P P' : PolAV (Sp V)) (C : Type) [Field C] [Algebra (FractionRing V) C] (φ : TF (R := V) C ⊗ P.A ≅ TF (R := V) C ⊗ P'.A), φ.hom ≫ fst _ _ = fst _ _ → lift (𝟙 (TF (R := V) C)) (1 : TF (R := V) C ⟶ P.A) ≫ φ.hom ≫ snd _ _ = 1 → LBIso (P.L.pull (snd (TF (R := V) C) P.A).left) (P'.L.pull (φ.hom ≫ snd (TF (R := V) C) P'.A).left) → ∀ (κ : TF (R := V) C ⟶ TK V) (g : TK V ⊗ P.A ⟶ P'.A), κ ▷ P.A ≫ g = φ.hom ≫ snd _ _ → ∃ Ψ : P.A ≅ P'.A, IsMonHom Ψ.hom ∧ φ.hom ≫ snd _ _ = snd _ _ ≫ Ψ.hom ∧ LBIso P.L (P'.L.pull Ψ.hom.left) := by
-  first | exact @GlobalTheory.IsoOverField.exists_iso_over_dvr | exact GlobalTheory.IsoOverField.exists_iso_over_dvr | (intros; apply GlobalTheory.IsoOverField.exists_iso_over_dvr <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.ExistsIsoPolarisedAbelianSchemesDvrOfFieldExtensStatement =====
@@ -1036,8 +1034,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex
 
-theorem _root_.GlobalTheory.T.exists_pullbackDegeneration_of_values_iso_dvr : Laws → ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] (D D' : DegPre V) (F : Type) [Field F] [Algebra (FractionRing V) F] (N N' : NumD F) (ν : NumOf D F N) (ν' : NumOf D' F N') (J : NumD.Iso N N') (Ψ : D.P.A ≅ D'.P.A), IsMonHom Ψ.hom → LBIso D.P.L (D'.P.L.pull Ψ.hom.left) → ∀ (φ : TF (R := V) F ⊗ D.P.A ≅ TF (R := V) F ⊗ D'.P.A) (w : AbPartIso.BunIso φ), φ.hom ≫ fst _ _ = fst _ _ → φ.hom ≫ snd _ _ = snd _ _ ≫ Ψ.hom → w.IsGen → (∀ x, AbPartIso.Carries ν ν' φ x (J.φ x)) → (∀ x, (J.h x : F) * AbPartIso.wVal ν ν' w J.φ 1 = AbPartIso.wVal ν ν' w J.φ x) → ∃ e : IsPullDeg (RingHom.id V) D D', ∀ (k : ℕ) (p : QkPt D F k) (p' : QkPt D' F k) (q : N.QT k) (q' : N'.QT k), ν.QPt p q → ν'.QPt p' q' → q'.1.1.toAdd = J.e q.1.1.toAdd → J.Rel q.1.2 q'.1.2 → GlobalTheory.IndefiniteRowSideFullHecke.ThetaTowerRecognition.Carries e p p' := by
-  first | exact @GlobalTheory.ValuesIdent.exists_isPullDeg_of_values | exact GlobalTheory.ValuesIdent.exists_isPullDeg_of_values | (intros; apply GlobalTheory.ValuesIdent.exists_isPullDeg_of_values <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.ExistsPullbackDegenerationOfValuesIsoDvrStatement =====
@@ -1070,8 +1066,8 @@ theorem exists_equalizer_ideal {Z Y S : Scheme.{0}} (z : Y ⟶ S) [IsSeparated z
   · rw [← IsClosedImmersion.lift_fac i t ht, Category.assoc, Category.assoc, hi]
   · have e : t ≫ pullback.lift a b h = (t ≫ a) ≫ pullback.diagonal z := by
       apply pullback.hom_ext
-      · simp [pullback.lift_fst]
-      · simp [pullback.lift_snd, ht]
+      · simp
+      · simp [ht]
     rw [← pullback.lift_fst t (t ≫ a) e]
     exact Scheme.Hom.le_ker_comp _ _
 
@@ -1168,7 +1164,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex
 
 theorem _root_.GlobalTheory.T.existsUnique_descent_automorphism_invariant_morphism : ∀ (K C : Type) [Field K] [CharZero K] [Field C] [IsAlgClosed C] [Algebra K C] (S : Scheme.{0}) (b : Sp K ⟶ S) (X Y : Over S), IsSeparated Y.hom → ∀ κ : Over.mk (spMap (algebraMap K C) ≫ b) ⟶ Over.mk b, κ.left = spMap (algebraMap K C) → ∀ f : Over.mk (spMap (algebraMap K C) ≫ b) ⊗ X ⟶ Y, (∀ (σ : C ≃ₐ[K] C) (s : Over.mk (spMap (algebraMap K C) ≫ b) ⟶ Over.mk (spMap (algebraMap K C) ≫ b)), s.left = spMap (σ : C →+* C) → s ▷ X ≫ f = f) → ∃! g : Over.mk b ⊗ X ⟶ Y, κ ▷ X ≫ g = f := by
-  first | exact @GlobalTheory.InvariantMorDescent.existsUnique_desc | exact GlobalTheory.InvariantMorDescent.existsUnique_desc | (intros; apply GlobalTheory.InvariantMorDescent.existsUnique_desc <;> assumption)
+  first | exact @GlobalTheory.InvariantMorDescent.existsUnique_desc
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.ExistsUniqueDescentAutomorphismInvariantMorphismStatement =====
@@ -1341,7 +1337,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex
 
 theorem _root_.GlobalTheory.T.polarisedIso_commutes_fieldAutomorphism_of_torsion : Laws → ∀ (S : Scheme.{0}) (P P' : PolAV S) (C : Type) [Field C] [IsAlgClosed C] (t : Sp C ⟶ S) (φ : Over.mk t ⊗ P.A ≅ Over.mk t ⊗ P'.A), φ.hom ≫ fst _ _ = fst _ _ → lift (𝟙 (Over.mk t)) (1 : Over.mk t ⟶ P.A) ≫ φ.hom ≫ snd _ _ = 1 → LBIso (P.L.pull (snd (Over.mk t) P.A).left) (P'.L.pull (φ.hom ≫ snd (Over.mk t) P'.A).left) → ∀ k : ℕ, 3 ≤ k → (k : C) ≠ 0 → ∀ s : Over.mk t ≅ Over.mk t, (∀ x : Over.mk t ⟶ P.A, x ^ k = 1 → lift (𝟙 (Over.mk t)) (s.hom ≫ x) ≫ φ.hom ≫ snd _ _ = s.hom ≫ lift (𝟙 (Over.mk t)) x ≫ φ.hom ≫ snd _ _) → s.hom ▷ P.A ≫ φ.hom ≫ snd _ _ = φ.hom ≫ snd _ _ := by
-  first | exact @GlobalTheory.SerreTwist.whisker_comp_eq | exact GlobalTheory.SerreTwist.whisker_comp_eq | (intros; apply GlobalTheory.SerreTwist.whisker_comp_eq <;> assumption)
+  first | exact @GlobalTheory.SerreTwist.whisker_comp_eq
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ModuliProofs.PolarisedIsoCommutesFieldAutomorphismOfTorsionStatement =====
@@ -1531,8 +1527,8 @@ theorem exists_pullDeg {C : Type} [Field C] [IsAlgClosed C] [CharZero C] [Algebr
     rw [asIso_hom, b₁, pt, pt, b₂, hz', rb]
   obtain ⟨g, hg, -⟩ := GlobalTheory.T.existsUnique_descent_automorphism_invariant_morphism (FractionRing V) C _ (jK V) D.P.A D'.P.A
     (haveI := D'.P.isAb.proper; inferInstance) (Over.homMk (jFK (R := V) C) rfl) rfl (φ.hom ≫ snd _ _) inv
-  obtain ⟨Ψ, a₁, a₂, a₃⟩ := GlobalTheory.T.exists_iso_polarisedAbelianSchemes_dvr_of_fieldExtension hL hL2 V D.P D'.P C φ g₁ h1 ⟨w, g₂⟩ _ g hg
-  obtain ⟨e, hc⟩ := GlobalTheory.T.exists_pullbackDegeneration_of_values_iso_dvr hL V D D' C N N' ν ν' J Ψ a₁ a₃ φ w g₁ a₂ g₂ g₃
+  obtain ⟨Ψ, a₁, a₂, a₃⟩ := _root_.GlobalTheory.IsoOverField.exists_iso_over_dvr hL hL2 V D.P D'.P C φ g₁ h1 ⟨w, g₂⟩ _ g hg
+  obtain ⟨e, hc⟩ := _root_.GlobalTheory.ValuesIdent.exists_isPullDeg_of_values hL V D D' C N N' ν ν' J Ψ a₁ a₃ φ w g₁ a₂ g₂ g₃
     (fun x => (congrArg _ (g₄ 1).symm).trans ((g₅ x).trans (g₄ x)))
   exact ⟨e, fun k p p' q hq hq' => hc k p p' q _ hq hq' rfl ((qMap_iff (TateInh.homOfIso J)).2 rfl).2⟩
 

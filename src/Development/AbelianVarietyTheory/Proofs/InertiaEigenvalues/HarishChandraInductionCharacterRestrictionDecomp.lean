@@ -68,9 +68,7 @@ open scoped Classical
 
 namespace GlobalTheory.GLm.ProdChar
 
-theorem isChar_of_irr {G : Type} [Group G] {χ : G → ℂ} (h : IsIrr χ) : IsChar χ := by
-  obtain ⟨V, -, hV⟩ := h
-  exact ⟨V, hV⟩
+alias isChar_of_irr := _root_.GlobalTheory.CharDec.isChar_of_isIrr
 
 theorem eq_zero_of_ip {G : Type} [Group G] [Fintype G] {f : G → ℂ} (hf : IsClass f)
     (h : ∀ ρ, IsIrr ρ → ip f ρ = 0) : f = 0 := by
@@ -308,7 +306,7 @@ theorem sum_subgroup {G : Type} [Group G] [Fintype G] (P : Subgroup G) (Φ : P �
     (by simp) (fun x => if h : x ∈ P then Φ ⟨x, h⟩ else 0)
   rw [Finset.sum_filter] at e
   refine (Eq.trans ?_ e.symm).trans ?_
-  · apply Finset.sum_congr rfl; intro a _; simp [dif_pos a.2]
+  · apply Finset.sum_congr rfl; intro a _; simp
   · apply Finset.sum_congr rfl; intro x _; split_ifs <;> rfl
 
 theorem toG_val {g m : ℕ} [Fact g.Prime] {M : Mt g m} (h : IsUnit M) : ((toG M : Gn g m) : Mt g m) = M := by

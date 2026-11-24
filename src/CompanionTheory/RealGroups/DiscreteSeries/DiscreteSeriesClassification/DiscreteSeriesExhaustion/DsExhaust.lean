@@ -1433,7 +1433,7 @@ theorem qdet_shift_pow {ε : Fin n → Bool} {E : Fin n → Fin n → Module.End
   have hadj : ∀ x y : M, inner ℂ ((qdet E w - s • (1 : Module.End ℂ M)) x) y =
       inner ℂ x ((B - (starRingEnd ℂ) s • (1 : Module.End ℂ M)) y) := by
     intro x y
-    simp [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right, hB, mul_comm]
+    simp [hB, mul_comm]
   have hc : Commute (qdet E w - s • (1 : Module.End ℂ M)) (B - (starRingEnd ℂ) s • (1 : Module.End ℂ M)) := by
     refine Commute.sub_left (Commute.sub_right hQ.symm ?_) (Commute.sub_right ?_ ?_)
     · exact (Commute.one_right _).smul_right _
@@ -1676,7 +1676,7 @@ section -- clump:auto
 namespace CompanionTheory.RgExh
 
 theorem dsExhaust : GlobalTheory.Dec.DSExhaust :=
-  Fin.exhaustion_finite_length Hk.infinitesimal_character_shift Hk.hecke_algebra_exhaustion (Dec.decay_estimate Hk.infinitesimal_character_shift) U.far_regular_exhaustion
+  Fin.exhaustion_finite_length _root_.GlobalTheory.CompanionTheory.RgExhHecke.StepCharPf.stepChar Hk.hecke_algebra_exhaustion (Dec.decay_estimate _root_.GlobalTheory.CompanionTheory.RgExhHecke.StepCharPf.stepChar) U.far_regular_exhaustion
 
 theorem discreteSeriesClassification : GlobalTheory.Published.DiscreteSeriesClassification :=
   Fin.discreteSeriesClassification_of dsExhaust

@@ -146,7 +146,7 @@ private theorem dsc_ne_zero_of_valuation_strict_chain {F : Type} [Field F] (v : 
   have hL : v (b ^ 2 * c ^ 2 * d ^ 2) = WithZero.exp (2 * w0 + 2 * (w0 + w1) + 2 * (w0 + w1 + w2)) := by
     rw [map_mul, map_mul, map_pow, map_pow, map_pow, hb, hc, hd]
     simp only [← WithZero.exp_nsmul, ← WithZero.exp_add, nsmul_eq_mul]
-    congr 1 <;> ring
+    congr 1
   rw [key] at h0
   have hR : v (tm b c d e 256 0 0 0 3 + tm b c d e (-192) 1 0 1 2
       + tm b c d e (-128) 0 2 0 2 + tm b c d e 144 0 1 2 1 + tm b c d e (-27) 0 0 4 0
@@ -182,7 +182,7 @@ private theorem dsc_ne_zero_of_valuation_c_le {F : Type} [Field F] (v : Valuatio
   have hL : v (-(4 * (b ^ 3 * d ^ 3))) = WithZero.exp (3 * w0 + 3 * (w0 + w1 + w2)) := by
     rw [Valuation.map_neg, map_mul, map_mul, map_pow, map_pow, h4, hb, hd, one_mul]
     simp only [← WithZero.exp_nsmul, ← WithZero.exp_add, nsmul_eq_mul]
-    congr 1 <;> ring
+    congr 1
   rw [key] at h0
   have hR : v (tm b c d e 256 0 0 0 3 + tm b c d e (-192) 1 0 1 2
       + tm b c d e (-128) 0 2 0 2 + tm b c d e 144 0 1 2 1 + tm b c d e (-27) 0 0 4 0
@@ -245,7 +245,7 @@ private theorem charpoly_fin_four_eq {R : Type} [CommRing R] (A : Matrix (Fin 4)
       + C (-(m3 A 0 1 2 + m3 A 0 1 3 + m3 A 0 2 3 + m3 A 1 2 3)) * X + C A.det := by
   simp only [Matrix.charpoly, Matrix.det_succ_row_zero, Fin.sum_univ_succ, Fin.sum_univ_zero,
     Matrix.det_fin_zero, charmatrix_apply, Matrix.submatrix_apply, m2, m3]
-  simp [Fin.succAbove, Fin.lt_def, Matrix.one_apply, Matrix.diagonal_apply, Fin.ext_iff]
+  simp [Fin.succAbove, Fin.lt_def, Fin.ext_iff]
   ring
 
 private theorem valuation_add_eq_of_valuation_lt {F : Type} [Field F] (v : Valuation F (WithZero (Multiplicative ℤ)))
@@ -313,7 +313,6 @@ theorem UpperTheory.V.AlgebraTools.disc4 :
   have hdet : A.det = φ x.det * RatFunc.X ^ (w 0 + w 1 + w 2 + w 3) := by
     rw [hAdef, Matrix.det_mul, hdm, Matrix.det_diagonal, Fin.prod_univ_four]
     simp only [zpow_add₀ hX0]
-    all_goals ring
   have hadj' : m3 x 0 1 2 ≠ 0 := by
     have hh : x.adjugate 3 3 = m3 x 0 1 2 := by
       rw [Matrix.adjugate_fin_succ_eq_det_submatrix, Matrix.det_fin_three]
@@ -368,7 +367,7 @@ private theorem charpoly_fromBlocks_antidiagonal_fin_two {F : Type} [Field F] (P
   have hcz : charmatrix (0 : Matrix (Fin 2) (Fin 2) F) = diagonal (fun _ : Fin 2 => (X : F[X])) := by
     ext i j
     by_cases h : i = j
-    · subst h; simp [charmatrix_apply]
+    · subst h; simp
     · simp [charmatrix_apply, diagonal_apply_ne _ h]
   rw [hcz]
   generalize hS : (diagonal (fun _ : Fin 2 => (X : F[X])) : Matrix (Fin 2) (Fin 2) F[X]) = S
@@ -390,7 +389,7 @@ private theorem charpoly_fromBlocks_antidiagonal_fin_two {F : Type} [Field F] (P
   rw [det_mul, det_fromBlocks_zero₂₁, det_fromBlocks_zero₁₂] at hdet
   have hSd : det S = X ^ 2 := by
     subst hS
-    simp [det_diagonal, Fin.prod_univ_two, sq]
+    simp [det_diagonal, sq]
   rw [det_mul, hSd] at hdet
   have hX : (X ^ 2 * X ^ 2 : F[X]) ≠ 0 := by
     exact mul_ne_zero (pow_ne_zero _ X_ne_zero) (pow_ne_zero _ X_ne_zero)
@@ -454,16 +453,16 @@ private theorem discSwap_lemma_3 {K : Type} [Field K] (b c : Matrix (Fin 2) (Fin
   have hv : Y ^ w₂ 1 ≠ 0 := zpow_ne_zero _ hY0
   have e00 : N 0 0 = f (c 0 0) * Y ^ w₁ 0 * (f (b 0 0) * Y ^ w₂ 0)
       + f (c 0 1) * Y ^ w₁ 1 * (f (b 1 0) * Y ^ w₂ 0) := by
-    simp [N, Matrix.mul_apply, Fin.sum_univ_two, Matrix.diagonal_apply, hf, hY] <;> ring
+    simp [N, Matrix.mul_apply, Fin.sum_univ_two, Matrix.diagonal_apply, hf, hY]
   have e01 : N 0 1 = f (c 0 0) * Y ^ w₁ 0 * (f (b 0 1) * Y ^ w₂ 1)
       + f (c 0 1) * Y ^ w₁ 1 * (f (b 1 1) * Y ^ w₂ 1) := by
-    simp [N, Matrix.mul_apply, Fin.sum_univ_two, Matrix.diagonal_apply, hf, hY] <;> ring
+    simp [N, Matrix.mul_apply, Fin.sum_univ_two, Matrix.diagonal_apply, hf, hY]
   have e10 : N 1 0 = f (c 1 0) * Y ^ w₁ 0 * (f (b 0 0) * Y ^ w₂ 0)
       + f (c 1 1) * Y ^ w₁ 1 * (f (b 1 0) * Y ^ w₂ 0) := by
-    simp [N, Matrix.mul_apply, Fin.sum_univ_two, Matrix.diagonal_apply, hf, hY] <;> ring
+    simp [N, Matrix.mul_apply, Fin.sum_univ_two, Matrix.diagonal_apply, hf, hY]
   have e11 : N 1 1 = f (c 1 0) * Y ^ w₁ 0 * (f (b 0 1) * Y ^ w₂ 1)
       + f (c 1 1) * Y ^ w₁ 1 * (f (b 1 1) * Y ^ w₂ 1) := by
-    simp [N, Matrix.mul_apply, Fin.sum_univ_two, Matrix.diagonal_apply, hf, hY] <;> ring
+    simp [N, Matrix.mul_apply, Fin.sum_univ_two, Matrix.diagonal_apply, hf, hY]
   have hdet : N 0 0 * N 1 1 - N 0 1 * N 1 0
       = f (c.det * b.det) * (Y ^ w₁ 1) ^ 2 * (Y ^ w₂ 1) ^ 2 * Y ^ (n + m) := by
     rw [e00, e01, e10, e11, hA, hB, det_fin_two, det_fin_two]
@@ -1124,11 +1123,6 @@ open Polynomial Matrix
 
 namespace UpperTheory.V.AlgebraTools.RegFour
 
-private theorem diagz {K : Type} [Field K] (M : Matrix (Fin 4) (Fin 4) K) (a : Fin 4 → K)
-    (ha : Function.Injective a) (h : M.charpoly = ∏ i, (X - C (a i))) :
-    ∃ P Q : Matrix (Fin 4) (Fin 4) K, P * Q = 1 ∧ Q * P = 1 ∧ Q * M * P = diagonal a :=
-  _root_.UpperTheory.Reformulated.B.Qh2.diagz M a ha h
-
 private theorem sortw {n : ℕ} (w : Fin n → ℤ) (hw : Function.Injective w) :
     ∃ π : Equiv.Perm (Fin n), StrictAnti (fun i => w (π i)) := by
   refine ⟨Tuple.sort (fun i => - w i), ?_⟩
@@ -1463,7 +1457,7 @@ theorem UpperTheory.V.AlgebraTools.regCosetFour :
     apply ha i j h
     rw [Units.ext hij, div_self']
     exact IsOfFinOrder.one
-  obtain ⟨P, Q, hPQ, hQP, hD⟩ := RegFour.diagz (r u) _ hinj hu
+  obtain ⟨P, Q, hPQ, hQP, hD⟩ := _root_.UpperTheory.Reformulated.B.Qh2.diagz (r u) _ hinj hu
   have hmul : ∀ x y : Matrix (Fin 4) (Fin 4) K, Q * (x * y) * P = Q * x * P * (Q * y * P) := by
     intro x y
     calc Q * (x * y) * P = Q * x * (P * Q) * y * P := by rw [hPQ]; simp only [Matrix.mul_one, Matrix.mul_assoc]

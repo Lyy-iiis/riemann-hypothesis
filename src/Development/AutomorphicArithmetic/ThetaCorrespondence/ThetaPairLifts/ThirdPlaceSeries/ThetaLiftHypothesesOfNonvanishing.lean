@@ -651,7 +651,7 @@ theorem _root_.GlobalTheory.T.splitPlace_hecke_doubleCoset_card_gaussBinom : ∀
     (Rc : Finset (GA D (Wc D i))), Bridge.SplitOff P (R.Sb : Set (Formalism.L2.DIV.Pl D.host.E)) → k ≤ D.R.r →
     IsHeckeAt (Wc D i) P k α → Bridge.IsDC (Lev.levG (Wc D i) (R.βW i) (R.datWp i R.triv)) α Rc →
     Rc.card = GlobalTheory.IndefiniteRowSideFullHecke.GaussianBinomialFormula.gaussBinom (Ideal.absNorm P.asIdeal) D.R.r k := by
-  first | exact @GlobalTheory.SplitCosetCount.card_cosets | exact GlobalTheory.SplitCosetCount.card_cosets | (intros; apply GlobalTheory.SplitCosetCount.card_cosets <;> assumption)
+  first | exact @GlobalTheory.SplitCosetCount.card_cosets
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -728,7 +728,7 @@ theorem _root_.GlobalTheory.T.card_hecke_cosets_eq_card_submodules_split_place :
       GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.IsUnitaryHeckeOperatorSplitPrimeData T R i P p k α Rc →
       Rc.card = Nat.card (GlobalTheory.HeckeCount.LatCount (T.Q.Dw ((i : ℕ) + 1)) p (GlobalTheory.IndefiniteRowSideFullHecke.HeckeIsogenyKernels.conjIdeal T.Q.H P.asIdeal)
         (Ideal.absNorm P.asIdeal ^ k)) := by
-  first | exact @GlobalTheory.HeckeCosetCount.card_eq_latCount | exact GlobalTheory.HeckeCosetCount.card_eq_latCount | (intros; apply GlobalTheory.HeckeCosetCount.card_eq_latCount <;> assumption)
+  first | exact @GlobalTheory.HeckeCosetCount.card_eq_latCount
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -922,7 +922,7 @@ theorem eq_of_hkRelFr_frBor : ∀ {E : Type} [Field E] [NumberField E] [NumberFi
       intro a
       ext <;> simp [epsMul]
     rw [e0]
-    first | rfl | exact Spec.map_id _ | simp [spMap] | (rw [CommRingCat.ofHom_id]; exact Spec.map_id _)
+    first | exact Spec.map_id _
   letI : Field (Formalism.L2.Pj.CAt σ) := inferInstanceAs (Field ℂ)
   have col : ∀ (zz : Formalism.L2.Pj.FrPt Xo c (Formalism.L2.Pj.CAt σ)) (tt : Formalism.L2.Pj.Ix Dw → (Formalism.L2.Pj.CAt σ)ˣ)
       (ψ0 : pullback Xo.univ.t.G.hom (U.un k x).x ⟶ pullback Xo.univ.t.G.hom zz.x)
@@ -992,7 +992,7 @@ theorem _root_.GlobalTheory.T.heckeKernel_eq_of_unipotent_frameChange : ∀ {E :
         hkRelFr P p i (GlobalTheory.ThetaTrace.hkTr Xo c p) (CAt σ) (U.un k x) C z →
         hkRelFr P p i (GlobalTheory.ThetaTrace.hkTr Xo c p) (CAt σ) (U.un k x) C' z' →
         (∀ j, j ≠ none → t j = 1) → (∀ j, j ≠ none → t' j = 1) → FrBor t w z → FrBor t' w z' → C = C' := by
-  first | exact @GlobalTheory.HeckeInj.eq_of_hkRelFr_frBor | exact GlobalTheory.HeckeInj.eq_of_hkRelFr_frBor | (intros; apply GlobalTheory.HeckeInj.eq_of_hkRelFr_frBor <;> assumption)
+  first | exact @GlobalTheory.HeckeInj.eq_of_hkRelFr_frBor
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1143,7 +1143,7 @@ theorem _root_.GlobalTheory.T.heckeKernel_complex_point_matches_cosets : ∀ (D 
         ∀ C z, hkRelFr P.asIdeal p k (GlobalTheory.ThetaTrace.hkTr (T.Q.Xo ((i : ℕ) + 1)) T.Q.c p) (CAt σ) ((T.U ((i : ℕ) + 1) σ).un (GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.dictW T i σ hV h).1 ⟨(GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.dictW T i σ hV h).2, hx⟩) C z →
           ∃ (hx' : (GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.dictW T i σ hV (h * (e C : GA D (Wc D i)))).2 ∈ ((T.U ((i : ℕ) + 1) σ).X (GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.dictW T i σ hV (h * (e C : GA D (Wc D i)))).1).dom) (t : Ix (T.Q.Dw ((i : ℕ) + 1)) → (CAt σ)ˣ),
             (∀ j, j ≠ none → t j = 1) ∧ FrBor t ((T.U ((i : ℕ) + 1) σ).un (GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.dictW T i σ hV (h * (e C : GA D (Wc D i)))).1 ⟨(GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.dictW T i σ hV (h * (e C : GA D (Wc D i)))).2, hx'⟩) z := by
-  first | exact @GlobalTheory.HeckeTermIdent.heckeKernelCoset | exact GlobalTheory.HeckeTermIdent.heckeKernelCoset | (intros; apply GlobalTheory.HeckeTermIdent.heckeKernelCoset <;> assumption)
+  first | exact @GlobalTheory.HeckeTermIdent.heckeKernelCoset
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1279,7 +1279,7 @@ theorem _root_.GlobalTheory.T.heckeReading_kernels_match_cosets_through_frame : 
               (T.cE ((i : ℕ) + 1) σ (GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.dictW T i σ hV h).1 * castDict hV (T.mu ((i : ℕ) + 1) σ) h) *
               σ (hkScal T.Q.c 1 P.asIdeal k D.R.nV) * toC (evR (T.Q.Xo ((i : ℕ) + 1)) T.Q.c f z) =
             (GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.muAt T R i P)⁻¹ ^ k * GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.phiW T i σ hV (wtA (κ i)) f (h * (e C : GA D (Wc D i))) := by
-  first | exact @GlobalTheory.HeckeTerm.heckeTerm | exact GlobalTheory.HeckeTerm.heckeTerm | (intros; apply GlobalTheory.HeckeTerm.heckeTerm <;> assumption)
+  first | exact @GlobalTheory.HeckeTerm.heckeTerm
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1415,7 +1415,7 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-theorem UpperTheory.GalS.CarUAlt.regAlg : type_of% (@UpperTheory.GalS.carU_of_regular_algebraic_purity) := @UpperTheory.GalS.carU_of_regular_algebraic_purity
+alias UpperTheory.GalS.CarUAlt.regAlg := _root_.UpperTheory.GalS.carU_of_regular_algebraic_purity
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.AlLocalGlobalAboveLregAlg =====
@@ -1446,13 +1446,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField IsDedekindDomain ValuativeRel Matrix Polynomial Formalism.ConjugateSelfDual ReciprocityTheory.Gal GlobalTheory.PRep GlobalTheory.SmGL GlobalTheory.SplitWeil GlobalTheory.LocGL GlobalTheory.WeilDeligne GlobalTheory.LocLanglands GlobalTheory.Published
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
-
-theorem _root_.GlobalTheory.T.recTExists_of_published_inputs : _root_.UpperTheory.Zero.LLC.RecTExists → LocalConverseGL → DepthZeroInduction → BrauerDegreeZero → ChevalleyUnits → GlobalArtinReciprocity → LanglandsExhaustionGL → LanglandsMultisegments → StandardCosocleGL → ZelevinskyPolynomialRing → GeometricLemma → BernsteinZelevinskyFiniteness → _root_.UpperTheory.Zero.LLC.RecTExists := by
-  first | exact @_root_.UpperTheory.One.M.New.llOf_alt | exact _root_.UpperTheory.One.M.New.llOf_alt | (intros; apply _root_.UpperTheory.One.M.New.llOf_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.LocalLanglandsOfHyp =====
@@ -1475,8 +1468,6 @@ theorem depthZeroJacquetInjective_of_admissible :
   have h00 : (0 : π.V) ∈ fixed π.π (KOne k (Fin n) ⊔ (unipRad k e ⊓ KO k (Fin n))) := by
     first
       | exact Submodule.zero_mem _
-      | exact fun _ => map_zero _
-      | simp [fixed]
   exact hb.injOn hv h00 (by simpa using h0)
 
 end GlobalTheory
@@ -1515,11 +1506,6 @@ theorem locComp_of_isRc_classMapD_cenLoc : GlobalTheory.Published.BernsteinZelev
       cheb := hCheb }
 end GlobalTheory.NRows.HypothesesBridge
 end
-section
-
-theorem _root_.GlobalTheory.T.published_inputs_combined_alt_alt : GlobalTheory.Published.BernsteinZelevinskyFiniteness → GlobalTheory.Published.BernsteinUnitaryProductIrreducible → GlobalTheory.Published.GeometricLemma → GlobalTheory.Published.TotallyDisjointProductIrreducible → GlobalTheory.Published.MoyPrasadJacquetIso → GlobalTheory.Published.JacquetShalika → GlobalTheory.Published.AutomorphicFormsFiniteGL → GlobalTheory.Published.TemperedProductOfSquareIntegrable → GlobalTheory.Published.EssSquareIntegrableSegments → GlobalTheory.Published.GelfandKazhdanDual → _root_.UpperTheory.GalS.PairUAlt → _root_.UpperTheory.One.M.Row → GlobalTheory.Published.ClozelPurity → GlobalTheory.Published.ClozelCohomological → GlobalTheory.Published.GlobalArtinReciprocity → GlobalTheory.Published.HeckeLAdicCharacterAbove → GlobalTheory.Published.AlgebraicCharacterWD → GlobalTheory.Published.DeRhamPotSemistable → GlobalTheory.Published.ChebotarevDegreeOne → _root_.UpperTheory.Zero.LLC.RecTExists → _root_.GlobalTheory.NRows.ThetaLocalInputsAlt := by
-  first | exact @_root_.GlobalTheory.NRows.HypothesesBridge.locComp_of_isRc_classMapD_cenLoc | exact _root_.GlobalTheory.NRows.HypothesesBridge.locComp_of_isRc_classMapD_cenLoc | (intros; apply _root_.GlobalTheory.NRows.HypothesesBridge.locComp_of_isRc_classMapD_cenLoc <;> assumption)
-end
 end
 end -- clump:auto
 end -- clump:auto
@@ -1538,12 +1524,11 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 namespace GlobalTheory.Mem.LiteralAutomorphy
 theorem localLanglandsGL_and_purity_at_member_alt : _root_.GlobalTheory.Mem.LiteralAutomorphy.LocalRepresentationTheoryHypothesesAlt → _root_.GlobalTheory.Mem.LiteralAutomorphy.GlobalAutomorphicGaloisHypotheses' → _root_.UpperTheory.Zero.LLC.RecTExists ∧ _root_.GlobalTheory.HeightCounting.Up.PublishedInputsThirdLayerAlt := by
   intro L A
-  have hL : _root_.UpperTheory.Zero.LLC.RecTExists :=
-    _root_.GlobalTheory.T.recTExists_of_published_inputs L.llc L.conv L.dzi L.brauer L.chev A.art L.exh L.multi L.cos L.zel L.geo L.bz
+  have hL : _root_.UpperTheory.Zero.LLC.RecTExists := L.llc
   refine ⟨hL, ?_⟩
   have hG : GlobalTheory.GLq.Green := GlobalTheory.GreenBridge.green_of_regular L.green
   exact
-    { what₂ := _root_.GlobalTheory.T.published_inputs_combined_alt_alt L.bz L.bern L.geo L.disj L.mp A.js A.fin L.temp L.seg A.gk A.gal A.car
+    { what₂ := _root_.GlobalTheory.NRows.HypothesesBridge.locComp_of_isRc_classMapD_cenLoc L.bz L.bern L.geo L.disj L.mp A.js A.fin L.temp L.seg A.gk A.gal A.car
         A.pur A.coh A.art A.chA A.chW A.berger GlobalTheory.Published.chebotarevDegreeOne' hL
       decay := A.decay
       hc := A.hc
@@ -1554,7 +1539,7 @@ theorem localLanglandsGL_and_purity_at_member_alt : _root_.GlobalTheory.Mem.Lite
       rayF := A.ray
       rayA := GlobalTheory.Published.GlobalArtinReciprocity.rayCharacterArtin A.art
       bc := _root_.UpperTheory.BaseChangeIdentities.bridge A.bc L.bern
-      gen := _root_.PositivityTheory.Gud.generic_unitary_dual_GL trivial L.sq L.gen L.multi L.cos
+      gen := _root_.PositivityTheory.Gud.Fin.genericUnitaryDualGL_holds
       std := L.cos
       cheb := GlobalTheory.Published.cheb_holds
       howe := GlobalTheory.Hk3.howeUnram_holds }
@@ -1605,12 +1590,6 @@ theorem GlobalTheory.MemberClose.exists_hyp_n_of_geometric_galois_compat : _root
         hPr (_root_.GlobalTheory.MtInMain.prN_sMt_alt_alt hPr) hL
       pt := _root_.GlobalTheory.HeightCounting.Up.ptSt_of_inputs_geometric_compat hPr hX hL
       parMem := _root_.GlobalTheory.HeightCounting.Up.cuspParameter_at_member_alt hPr hL }
-end
-section
-open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formalism.L2 Formalism.L2.Host GlobalTheory.Mem GlobalTheory.Mem.Top GlobalTheory.Mem.Top.Bl GlobalTheory.HeightCounting GlobalTheory.HeightCounting.Up GlobalTheory.Mem.LiteralAutomorphy
-
-theorem _root_.GlobalTheory.T.hyps_e_third_layer_ser_n_of_geometric_galois : _root_.GlobalTheory.Mem.LiteralAutomorphy.NonEndoscopicHypothesesAlt → _root_.GlobalTheory.NRows.GeometricGaloisRepCompatibility → _root_.GlobalTheory.Mem.Top.Bl.EllipticHypothesis ∧ _root_.GlobalTheory.HeightCounting.Up.PublishedInputsThirdLayerAlt ∧ SerN ∧ ∃ hL : _root_.UpperTheory.Zero.LLC.RecTExists, _root_.GlobalTheory.Mem.Top.Bl.LocalLanglandsHypothesis hL :=
-  @_root_.GlobalTheory.MemberClose.exists_hyp_n_of_geometric_galois_compat
 end
 end
 end -- clump:auto

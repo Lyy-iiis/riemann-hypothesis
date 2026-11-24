@@ -223,9 +223,9 @@ lemma sqAct_tv {r : ℕ} (ν : DomWeight r) (a b : Fin r) (hab : a ≠ b) (t : �
     simp only [Formalism.GradedWeylDivisibility.rowAct, Formalism.GradedWeylDivisibility.rowGen, MvPolynomial.aeval_X]
     by_cases hi : i = b
     · subst hi
-      simp [Formalism.UG.P.wlocal_E, add_mul, Finset.sum_add_distrib, ite_and]
+      simp [Formalism.UG.P.wlocal_E, add_mul, Finset.sum_add_distrib]
       rw [Finset.sum_eq_single a (fun x _ hx => by simp [hx]) (by simp), if_pos rfl, mul_comm]
-    · simp [Formalism.UG.P.wlocal_E, add_mul, Finset.sum_add_distrib, hi]
+    · simp [Formalism.UG.P.wlocal_E, hi]
 
 lemma embGL_tv {n N : ℕ} (h : n + 1 = N) (a b : Fin n) (hab : a ≠ b) (t : ℂ) :
     ((PI.embGL ℂ n N h (tvU a b hab t) : GL (Fin N) ℂ) : Matrix (Fin N) (Fin N) ℂ) =
@@ -299,7 +299,7 @@ end -- clump:auto
 -- ===== end clump member: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.GelfandTsetlinLowering.LiftEqvDiv =====
 
 -- ===== clump member: Formalism.PeriodIntegrals.UnitaryGroupMassFormula.GelfandTsetlinLowering.LiftEqvWt =====
--- clump-header: {"m": "Formalism.PeriodIntegrals.UnitaryGroupMassFormula.GelfandTsetlinLowering.LiftEqvWt", "h": "module\n\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.GelfandTsetlinLowering.LiftDefs\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Std.Tactic.BVDecide.Normalize.Prop\nimport Formalism.LocalRingCardinality.Params\n\n"}
+-- clump-header: {"m": "Formalism.PeriodIntegrals.UnitaryGroupMassFormula.GelfandTsetlinLowering.LiftEqvWt", "h": "module\n\npublic import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.GelfandTsetlinLowering.LiftDefs\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.SimpleRing.Principal\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Std.Tactic.BVDecide.Normalize.Prop\nimport Formalism.LocalRingCardinality.Params\nimport Formalism.GradedWeylDivisibility.DualWeylDominanceOf\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -327,25 +327,6 @@ theorem coeff_aeval_scale {σ : Type} (e : σ → ℂ) (f : MvPolynomial σ ℂ)
     · simp
   · rw [map_add (f := _), MvPolynomial.coeff_add, MvPolynomial.coeff_add, hp, hq, mul_add]
 
-theorem rowAct_diagonal {r c : ℕ} (d : Fin r → ℂ) :
-    rowAct ℂ (n := c) (Matrix.diagonal d) = aeval (fun v : Fin r × Fin c => C (d v.1) * X v) := by
-  unfold Formalism.GradedWeylDivisibility.rowAct
-  congr 1
-  funext v
-  rw [Finset.sum_eq_single v.1]
-  · simp
-  · intro b _ hb
-    simp [Matrix.diagonal_apply_ne _ (Ne.symm hb)]
-  · simp
-
-theorem prod_rowDeg {r c : ℕ} (x : Fin r → ℂ) (m : Fin r × Fin c →₀ ℕ) :
-    (m.prod fun v k => x v.1 ^ k) = ∏ a, x a ^ rowDeg m a := by
-  rw [Finsupp.prod_fintype _ _ (fun _ => pow_zero _), Fintype.prod_prod_type]
-  refine Finset.prod_congr rfl fun a _ => ?_
-  unfold rowDeg
-  show ∏ y : Fin c, x a ^ m (a, y) = x a ^ ∑ s, m (a, s)
-  rw [Finset.prod_pow_eq_pow_sum]
-
 theorem coeff_sqAct_diag {r : ℕ} (lam : DomWeight r) (t : Fin r → ℂˣ) (f : MvPolynomial (Fin r × Fin r) ℂ)
     (m : Fin r × Fin r →₀ ℕ) :
     AddMonoidAlgebra.coeff (sqAct ℂ r lam (diagGL ℂ r t) f) m =
@@ -360,8 +341,8 @@ theorem coeff_sqAct_diag {r : ℕ} (lam : DomWeight r) (t : Fin r → ℂˣ) (f 
       Matrix.diagonal fun a => (t a : ℂ) :=
     Matrix.diagonal_transpose _
   unfold sqAct
-  rw [MvPolynomial.coeff_smul, smul_eq_mul, hdet, htr, rowAct_diagonal, coeff_aeval_scale,
-    prod_rowDeg (fun a => (t a : ℂ)) m]
+  rw [MvPolynomial.coeff_smul, smul_eq_mul, hdet, htr, _root_.Formalism.GradedWeylDivisibility.ldiag_rowAct_diag_eq, coeff_aeval_scale,
+    _root_.Formalism.GradedWeylDivisibility.ldiag_prod_rowDeg (fun a => (t a : ℂ)) m]
 
 theorem weight_rowW_apply {r c : ℕ} (m : Fin r × Fin c →₀ ℕ) (a : Fin r) :
     Finsupp.weight (rowW r c) m a = rowDeg m a := by
@@ -373,7 +354,7 @@ theorem weight_rowW_apply {r c : ℕ} (m : Fin r × Fin c →₀ ℕ) (a : Fin r
     simp [rowW]
   · intro b _ hb
     refine Finset.sum_eq_zero fun s _ => ?_
-    simp [rowW, Pi.single_apply, Ne.symm hb]
+    simp [rowW, Ne.symm hb]
   · simp
 
 theorem weight_colW_apply {r c : ℕ} (m : Fin r × Fin c →₀ ℕ) (j : Fin c) :
@@ -384,7 +365,7 @@ theorem weight_colW_apply {r c : ℕ} (m : Fin r × Fin c →₀ ℕ) (j : Fin c
   rw [Finset.sum_eq_single j]
   · simp [colW]
   · intro b _ hb
-    simp [colW, Pi.single_apply, Ne.symm hb]
+    simp [colW, Ne.symm hb]
   · simp
 
 theorem weight_lastW {n : ℕ} (m : Fin (n + 1) × Fin (n + 1) →₀ ℕ) :
@@ -593,7 +574,7 @@ theorem weight_indicator_eq_degree {r n : ℕ} (m : Fin r × Fin n →₀ ℕ) (
   refine Finset.sum_congr rfl fun v _ => ?_
   by_cases hv : v.1 = c
   · simp [rw1, wa, rowW, hv]
-  · simp [rw1, wa, rowW, hv, Pi.single_apply, Ne.symm hv]
+  · simp [rw1, wa, rowW, hv, Ne.symm hv]
 
 theorem weight_rw1_eq_weight_wa {r n : ℕ} (m : Fin r × Fin n →₀ ℕ) (c : Fin r) :
     Finsupp.weight (rw1 c) m = ((Finsupp.weight (wa c) m : ℕ) : ℤ) := by
@@ -1104,7 +1085,6 @@ theorem initMinor_perm {R : Type*} [CommRing R] {r m s : ℕ} (I : Fin s → Fin
   unfold initMinor
   first
   | (rw [zsmul_eq_mul, ← Matrix.det_permute]; rfl)
-  | (rw [← Units.smul_def, ← Matrix.det_permute]; rfl)
 
 theorem initMinor_not_inj {R : Type*} [CommRing R] {r m s : ℕ} (I : Fin s → Fin r) (hs : s ≤ m)
     (hI : ¬ Function.Injective I) : initMinor R (n := m) I hs = 0 := by
@@ -1138,9 +1118,6 @@ theorem liftRows_perm {n N : ℕ} (h : n + 1 = N) {m : ℕ} (ρ : Fin m → Fin 
     rw [Function.comp_apply]
     first
     | rw [Equiv.Perm.viaFintypeEmbedding_apply_notMem_range _ _ hnot]
-    | rw [Equiv.Perm.viaFintypeEmbedding_apply_not_mem_range _ _ hnot]
-    | rw [Equiv.Perm.viaFintypeEmbedding_apply_notMem_range hnot]
-    | rw [Equiv.Perm.viaFintypeEmbedding_apply_not_mem_range hnot]
     simp [liftRows]
   | cast i =>
     rw [Function.comp_apply]
@@ -1297,14 +1274,13 @@ theorem count_succ {n K : ℕ} (sz : Fin K → ℕ) (hsz : ∀ k, sz k ≤ n) (s
     (Finset.univ.filter fun k => sz k = s.1 + 1).card = shapeDeg sz s - nuNext (shapeDeg sz) s := by
   unfold nuNext shapeDeg
   split_ifs with h
-  · try simp only [Fin.val_mk]
+  · try simp only
     have hsub : (Finset.univ.filter fun k : Fin K => s.1 + 1 < sz k) ⊆ Finset.univ.filter fun k : Fin K => s.1 < sz k := by
       intro k hk
       simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hk ⊢
       omega
     first
     | rw [← Finset.card_sdiff_of_subset hsub]
-    | rw [← Finset.card_sdiff hsub]
     apply congrArg Finset.card
     ext k
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_sdiff]
@@ -1406,7 +1382,6 @@ private theorem card_filter_not_mem_sz_eq_succ {n N : ℕ} (h : n + 1 = N) (lam 
       (Finset.univ.filter fun k : Fin K => sz k = s.1 + 1).card := by
     rw [← e1, ← e2]
     first
-    | exact Finset.filter_card_add_filter_neg_card_eq_card _
     | exact Finset.card_filter_add_card_filter_not _
   have hc := count_succ sz hsz s
   rw [hsh] at hc

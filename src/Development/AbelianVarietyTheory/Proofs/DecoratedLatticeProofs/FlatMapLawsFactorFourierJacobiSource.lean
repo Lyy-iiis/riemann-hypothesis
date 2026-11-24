@@ -353,7 +353,7 @@ theorem kills_insert_of_evalLaw : ∀ (k : Type) [Field k] [ValuativeRel k] [Top
     rw [← integral_const_mul]
     congr 1
     funext y
-    simp [P, p, fillAt_apply_of_notMem β hE hI, mul_assoc]
+    simp [P, p, fillAt_apply_of_notMem β hE hI]
   have hP : ∀ q, L (P q) = 0 := by
     intro q
     induction q using QuotientAddGroup.induction_on with | H a => ?_
@@ -746,7 +746,7 @@ theorem integrate_entry : ∀ (k : Type) [Field k] [ValuativeRel k] [Topological
     rw [hΦ'r a x]
     have h8 := red_indicator k ψ ν R Q w β E I e heE heI Φ.1 {s : k | s - a ∈ U} (x + Matrix.single e.1 e.2 a)
     have hxe : (x + Matrix.single e.1 e.2 a) e.1 e.2 - a = x e.1 e.2 := by
-      simp [Matrix.add_apply, Matrix.single_apply]
+      simp [Matrix.add_apply]
     change red ψ ν w β E I (Set.indicator {t : Matrix R Q k | t e.1 e.2 ∈ {s : k | s - a ∈ U}} Φ.1) _ = _
     rw [h8]
     by_cases hx : x e.1 e.2 ∈ U
@@ -896,8 +896,8 @@ theorem embA_elem_mem (r l : Fin c) (h : r ≠ l) (hrl : r.val < l.val) (a : k) 
   rw [embA_elem_val]
   rcases r' with r' | r' <;> rcases s with s | s
   · simp [Matrix.one_apply]
-  · simp [Matrix.one_apply]
-  · simp [Matrix.one_apply]
+  · simp
+  · simp
   · simp only [lev, Sum.elim_inr] at hrs
     simp only [fromBlocks_apply₂₂, transvection, Matrix.add_apply, single_apply, Matrix.one_apply, Sum.inr.injEq]
     have : ¬ (r = r' ∧ l = s) := by
@@ -1080,7 +1080,7 @@ theorem simpleSum_elem (l m : Fin c) (h : l ≠ m) (a : k) :
     rw [embA_elem_apply]
     by_cases h1 : j.val = i.val + 1
     · have : i ≠ j := by intro e; subst e; omega
-      by_cases h2 : i = l <;> by_cases h3 : j = m <;> simp_all [Matrix.one_apply]
+      by_cases h2 : i = l <;> by_cases h3 : j = m <;> simp_all
     · by_cases h2 : i = l <;> by_cases h3 : j = m <;> simp_all
   simp [this]
 
@@ -1462,17 +1462,11 @@ open GlobalTheory.LocFlat
 section Sets
 variable {n n' : Type} [Fintype n] [DecidableEq n] [Fintype n'] [DecidableEq n'] {c : ℕ}
 
-theorem mem_fixSet {ρ : ℕ} {e : (n ⊕ Fin c) × (n' ⊕ Fin (c + 1))} : e ∈ fixSet ρ ↔
-    ((∃ i, e.2 = Sum.inr i ∧ i.val ≤ ρ ∧ ¬ Free (ρ + 1) e) ∨ (∃ l s, e.1 = Sum.inr l ∧ ρ < l.val ∧ e.2 = Sum.inl s)) := by
-  simp [fixSet]
+alias mem_fixSet := _root_.GlobalTheory.PartRed.LowLaw.mem_fix
 
-theorem mem_transSet {ρ : ℕ} {e : (n ⊕ Fin c) × (n' ⊕ Fin (c + 1))} : e ∈ transSet ρ ↔
-    (Free (ρ + 1) e ∧ ∀ i, e.2 = Sum.inr i → ρ < i.val) := by
-  simp [transSet]
+alias mem_transSet := _root_.GlobalTheory.PartRed.LowLaw.mem_trans
 
-theorem mem_lowSet {ρ : ℕ} {e : (n ⊕ Fin c) × (n' ⊕ Fin (c + 1))} : e ∈ lowSet ρ ↔
-    ∃ (l : Fin c) (i : Fin (c + 1)), e = (Sum.inr l, Sum.inr i) ∧ ρ < i.val ∧ i.val ≤ l.val := by
-  simp [lowSet]
+alias mem_lowSet := _root_.GlobalTheory.PartRed.LowLaw.mem_low
 
 theorem mem_upSet {ρ : ℕ} {e : (n ⊕ Fin c) × (n' ⊕ Fin (c + 1))} : e ∈ upSet ρ ↔
     ∃ (l : Fin c) (i : Fin (c + 1)), e = (Sum.inr l, Sum.inr i) ∧ l.val < i.val ∧ i.val ≤ ρ := by

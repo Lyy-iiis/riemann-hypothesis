@@ -180,12 +180,6 @@ theorem row_one (A : Et F E) (z : A.K) (s : A.Kˣ) (g : SpecialLinearGroup (Fin 
   show ((nS z).1 * (mS s).1 * g.1) 1 j = ((s⁻¹ : A.Kˣ) : A.K) * g.1 1 j
   simp [nS, mS, Matrix.mul_apply, Fin.sum_univ_two]
 
-theorem absK_unit (A : Et F E) (s : A.Kˣ) : A.absK (s : A.K) = (distribHaarChar A.K s : ℝ) := by
-  unfold Et.absK
-  rw [dite_eq_left s.isUnit]
-  congr 2
-  exact Units.ext (IsUnit.unit_spec _)
-
 theorem integral_inv_mul [Unram F E] (A : Et F E) (μK : Measure A.K) [μK.IsAddHaarMeasure] (s : A.Kˣ)
     (H : A.K → ℂ) :
     ∫ t, H (((s⁻¹ : A.Kˣ) : A.K) * t) ∂μK = (distribHaarChar A.K s : ℝ) * ∫ u, H u ∂μK := by
@@ -231,7 +225,7 @@ theorem jHyp_nm : ∀ (F E : Type) [NontriviallyNormedField F] [NontriviallyNorm
     simp only [hH]
     rw [etaK_mul A s u hu]
     ring
-  rw [h2, integral_mul_const, absK_unit]
+  rw [h2, integral_mul_const, _root_.GlobalTheory.JR.EtMeas.absK_unit]
   ring
 
 end GlobalTheory.JHypEquiv
@@ -538,7 +532,7 @@ section -- clump:auto
 open GlobalTheory.JR Matrix MeasureTheory Filter Topology
 
 theorem _root_.GlobalTheory.T.eventually_dual_scaled_OK_subset_nhds : ∀ (F E : Type) [NontriviallyNormedField F] [NontriviallyNormedField E] [NormedAlgebra F E] [StarRing E] [Unram F E] (A : Et F E) (ψ : AddChar F ℂ), IsStdChar ψ → ∀ V ∈ 𝓝 (0 : A.K), ∀ᶠ c in 𝓝[≠] (0 : F), {y : A.K | ∀ x : A.K, c • x ∈ A.OK → A.psiK ψ (x * y) = 1} ⊆ V := by
-  first | exact @GlobalTheory.dual_cinvOK_small | exact GlobalTheory.dual_cinvOK_small | (intros; apply GlobalTheory.dual_cinvOK_small <;> assumption)
+  first | exact @GlobalTheory.dual_cinvOK_small
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.DualCinvOKSmallStatement =====
@@ -954,7 +948,7 @@ section -- clump:auto
 open GlobalTheory.JR Matrix MeasureTheory Filter Topology
 
 theorem _root_.GlobalTheory.T.truncatedWhittaker_jHyp_eq_orbitalIntegral : ∀ (F E : Type) [NontriviallyNormedField F] [NontriviallyNormedField E] [NormedAlgebra F E] [StarRing E] [Unram F E] (A : Et F E) (ψ : AddChar F ℂ), IsStdChar ψ → ∀ (μK : Measure A.K), SelfDual μK (A.kerK ψ) → ∀ φ', IsTest φ' → ∀ a : A.K, IsUnit a → ∀ᶠ c in 𝓝[≠] (0 : F), A.abelian₂ μK ψ a (A.jHyp μK ψ φ') c = A.orbK μK φ' a := by
-  first | exact @GlobalTheory.whittaker_jHyp_eq_orbK | exact GlobalTheory.whittaker_jHyp_eq_orbK | (intros; apply GlobalTheory.whittaker_jHyp_eq_orbK <;> assumption)
+  first | exact @GlobalTheory.whittaker_jHyp_eq_orbK
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.TruncatedWhittakerJHypEqOrbitalIntegralStatement =====
@@ -1260,7 +1254,7 @@ section -- clump:auto
 open GlobalTheory.JR Matrix MeasureTheory Filter Topology
 
 theorem _root_.GlobalTheory.T.weilRep_evalZero_mem_induced : ∀ (F E : Type) [NontriviallyNormedField F] [NontriviallyNormedField E] [NormedAlgebra F E] [StarRing E] [Unram F E] (A : Et F E) (ψ : AddChar F ℂ), IsStdChar ψ → ∀ (x : A.Kˣ) (μ : Measure A.L) (γ : ℂ) W, A.IsWeil ψ x A.etaK μ γ W → ∀ φ, IsTest φ → A.InI (fun g => W g φ 0) ∧ (φ ≠ 0 → γ ≠ 0) := by
-  first | exact @GlobalTheory.WeilSmooth.jx_mem_induced | exact GlobalTheory.WeilSmooth.jx_mem_induced | (intros; apply GlobalTheory.WeilSmooth.jx_mem_induced <;> assumption)
+  first | exact @GlobalTheory.WeilSmooth.jx_mem_induced
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.WeilRepEvalZeroMemInducedStatement =====

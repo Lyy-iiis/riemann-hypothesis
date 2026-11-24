@@ -83,6 +83,7 @@ import Mathlib.Tactic.Linter.HaveILetI
 import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Tactic.ReduceModChar
 import Mathlib.Tactic.TypeStar
+import Mathlib.RingTheory.PicardGroup
 import Development.AbelianVarietyTheory.Counterexamples.HeightSurvey.EmbRelExistsUnique
 import Formalism.LocalToGlobal.BesselHermitianTheta.LemmasChr
 import Mathlib.Data.Matrix.ColumnRowPartitioned
@@ -93,7 +94,6 @@ import Formalism.LocalToGlobal.IndefiniteReal.IndefiniteWeightData
 import Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsIsotropicDualFrameOfSplitEmbeddingStatement
 import Formalism.LocalToGlobal.ProjectiveLattices.HalfOneAddSqrtNegIsIntegral
 import Formalism.PeriodIntegrals.UnitaryGroupMassFormula.StabilizerOrbitVolume.TopoAF
-import Mathlib.RingTheory.PicardGroup
 import Mathlib.Tactic.Linter.Style
 
 -- This file was produced by scripts/clump.py from the modules listed below.
@@ -109,13 +109,13 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.anisotropicTerms_mean_zero_unipotentRadical : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C C' : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → adj D C * V.gram * C' = 1 → adj D C' * V.gram * C' = 0 → adj D C' * V.gram * B = 0 → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χS χT ω → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (ratMx D W.rank r) μ 𝓨 → ∀ (κ : Measure (NI V C)) (𝓝 : Set (NI V C)), κ.IsHaarMeasure → IsFundamentalDomain (NIQ V C) 𝓝 κ → ∀ y : Matrix (Fin W.rank) (Fin r) D.host.E, adj D y * W.gram * y ≠ 0 → ∀ f, IsThetaFunO ψ V W f → ∫ n in 𝓝, res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map y (incA D))) (ω ((n : GA D V), 1) f)) 0 ∂κ = 0 := by
-  first | exact @GlobalTheory.AnisoMean.aniso_mean_zero | exact GlobalTheory.AnisoMean.aniso_mean_zero | (intros; apply GlobalTheory.AnisoMean.aniso_mean_zero <;> assumption)
+  first | exact @GlobalTheory.AnisoMean.aniso_mean_zero
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.AnisotropicTermsMeanZeroUnipotentRadicalStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnipotentRadicalMeanEqVolumeMulRationalMean =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnipotentRadicalMeanEqVolumeMulRationalMean", "h": "module\n\npublic import Development.AbelianVarietyTheory.BlockTheory.TwistedDiscreteSeries.AdjointIsotropicDecomposition\npublic import Development.AbelianVarietyTheory.Definitions.TwistedInnerProducts.CovolOneIntegralAdd\npublic import Mathlib.LinearAlgebra.Matrix.Rank\npublic import Development.AbelianVarietyTheory.Counterexamples.LevelGroupExamples.RightInvariantOfCovolume\nimport Development.AbelianVarietyTheory.Proofs.HeightProofs.IsTopologicalRingAE\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.AdelicUnitaryTopology\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.IsotropicUnipotentRadicalsRationalCocompact\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Dynamics.Ergodic.Action.Regular\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.PiTensorProduct\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.LocalToGlobal.IndefiniteReal.LinksDefs\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnipotentRadicalMeanEqVolumeMulRationalMean", "h": "module\n\npublic import Development.AbelianVarietyTheory.BlockTheory.TwistedDiscreteSeries.AdjointIsotropicDecomposition\npublic import Development.AbelianVarietyTheory.Definitions.TwistedInnerProducts.CovolOneIntegralAdd\npublic import Mathlib.LinearAlgebra.Matrix.Rank\npublic import Development.AbelianVarietyTheory.Counterexamples.LevelGroupExamples.RightInvariantOfCovolume\nimport Development.AbelianVarietyTheory.Proofs.HeightProofs.IsTopologicalRingAE\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.AdelicUnitaryTopology\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.IsotropicUnipotentRadicalsRationalCocompact\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Dynamics.Ergodic.Action.Regular\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.PiTensorProduct\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\nimport Formalism.LocalToGlobal.IndefiniteReal.LinksDefs\nimport Mathlib.RingTheory.PicardGroup\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -199,7 +199,7 @@ theorem mean_of_hom {G : Type} [Group G] [TopologicalSpace G] [IsTopologicalGrou
   have l1 : ∀ n, ∫ a in 𝓐, φ (f n + a) ∂μ = ∫ a in 𝓐, φ a ∂μ := fun n => by
     rw [← GlobalTheory.MixModel.covolOne_integral_add hμ φ hφ (f n)]
     simp only [add_comm]
-  simp only [l1, hinv, integral_const, smul_eq_mul] at hswap
+  simp only [l1, hinv, integral_const] at hswap
   rw [Measure.real, Measure.real, Measure.restrict_apply_univ, Measure.restrict_apply_univ, hμ.2.2] at hswap
   simpa [mul_comm] using hswap.symm
 
@@ -323,8 +323,8 @@ theorem unit_aux {S R : Type*} [CommRing S] [Ring R] [Algebra S R] (h : S) (hh :
     rw [sub_mul, add_mul, one_mul, hu, smul_mul_assoc, hq, mul_sub, mul_sub, mul_one, mul_smul_comm]
     abel
   have e2 : (1 - u - h • q) * (1 + u - h • q) = 1 := by
-    simp only [sub_mul, add_mul, mul_sub, mul_add, one_mul, mul_one, smul_mul_assoc, mul_smul_comm, huu, huq, hqu,
-      hqq, smul_zero, smul_smul]
+    simp only [sub_mul, mul_sub, mul_add, one_mul, mul_one, smul_mul_assoc, mul_smul_comm, huu, huq, hqu,
+      hqq, smul_zero]
     linear_combination (norm := module) (-1 : S) • hh • q
   rw [e1, mul_assoc, e2, mul_one]
 
@@ -486,7 +486,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.unipotentRadicalMean_eq_volume_mul_rationalMean : ∀ (D : D7) (V V' : HSp D) (r : ℕ) (C C' : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → adj D C * V.gram * C' = 1 → adj D C' * V.gram * C' = 0 → adj D C' * V.gram * B = 0 → ∀ (κ : Measure (NI V C)) (𝓝 : Set (NI V C)), κ.IsHaarMeasure → IsFundamentalDomain (NIQ V C) 𝓝 κ → ∀ (s : ℕ) (m : Matrix (Fin s) (Fin r) D.host.E), m.rank = s → ∃ (μ : Measure (Mx D s V'.rank)) (𝓐 : Set (Mx D s V'.rank)), IsCovolOne (ratMx D s V'.rank) μ 𝓐 ∧ ∀ φ : Mx D s V'.rank → ℂ, Continuous φ → (∀ γ ∈ ratMx D s V'.rank, ∀ a, φ (γ + a) = φ a) → ∫ n in 𝓝, φ (HMul.hMul (HMul.hMul ((m * adj D C' * V.gram).map (incA D) : Matrix (Fin s) (Fin V.rank) (AE D)) (mt V (n : GA D V) - 1)) (B.map (incA D) : Matrix (Fin V.rank) (Fin V'.rank) (AE D))) ∂κ = ((κ 𝓝).toReal : ℂ) * ∫ a in 𝓐, φ a ∂μ := by
-  first | exact @GlobalTheory.UnipMean.mean_eq_volume_mul | exact GlobalTheory.UnipMean.mean_eq_volume_mul | (intros; apply GlobalTheory.UnipMean.mean_eq_volume_mul <;> assumption)
+  first | exact @GlobalTheory.UnipMean.mean_eq_volume_mul
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnipotentRadicalMeanEqVolumeMulRationalMeanStatement =====
@@ -504,14 +504,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.UnipMean
 
-theorem heisO_zero {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (V W : HSp D) (f : WO V W → ℂ) : heisO ψ V W 0 f = f := by
-  funext x
-  unfold heisO symplOH symplO hO
-  simp
-
-theorem symplO_zero_left {D : D7} (V W : HSp D) (z : WO V W) : symplO V W 0 z = 0 := by
-  unfold symplO hO
-  simp
+alias symplO_zero_left := _root_.GlobalTheory.SplitScalar.symplO_zero_left
 
 theorem mean_target : ∀ (D : D7) (V W : HSp D) (s : ℕ) (L : Matrix (Fin W.rank) (Fin s) D.host.E), IsIsoFrame W L → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χS χT ω → ∀ (μ : Measure (Mx D s V.rank)) (𝓐 : Set (Mx D s V.rank)), IsCovolOne (ratMx D s V.rank) μ 𝓐 → ∀ (n : NI W L) (f : WO V W → ℂ), IsThetaFunO ψ V W f → ∫ a in 𝓐, ω (1, (n : GA D W)) f (HMul.hMul (L.map (incA D)) (a : Matrix (Fin s) (Fin V.rank) (AE D)) : Matrix (Fin W.rank) (Fin V.rank) (AE D)) ∂μ = ∫ a in 𝓐, f (HMul.hMul (L.map (incA D)) (a : Matrix (Fin s) (Fin V.rank) (AE D)) : Matrix (Fin W.rank) (Fin V.rank) (AE D)) ∂μ := by
   intro D V W s L hL ψ χS χT ω hω μ 𝓐 hcov n f hf
@@ -554,7 +547,7 @@ theorem mean_target : ∀ (D : D7) (V W : HSp D) (s : ℕ) (L : Matrix (Fin W.ra
     refine ⟨c, Circle.coe_ne_zero c, ?_⟩
     intro f' hf'
     have h0 := hc f' hf' 0 (fun y => symplO_zero_left V W _)
-    simp only [heisO_zero, e1, Matrix.mul_one] at h0
+    simp only [_root_.GlobalTheory.SplitScalar.heisO_zero, e1, Matrix.mul_one] at h0
     exact h0
   have key := mean_unip hL hω hcov hsc n.2 f hf
   unfold meanL at key
@@ -578,7 +571,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.unipotentRadical_target_preserves_isotropic_mean : ∀ (D : D7) (V W : HSp D) (s : ℕ) (L : Matrix (Fin W.rank) (Fin s) D.host.E), IsIsoFrame W L → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χS χT ω → ∀ (μ : Measure (Mx D s V.rank)) (𝓐 : Set (Mx D s V.rank)), IsCovolOne (ratMx D s V.rank) μ 𝓐 → ∀ (n : NI W L) (f : WO V W → ℂ), IsThetaFunO ψ V W f → ∫ a in 𝓐, ω (1, (n : GA D W)) f (HMul.hMul (L.map (incA D)) (a : Matrix (Fin s) (Fin V.rank) (AE D)) : Matrix (Fin W.rank) (Fin V.rank) (AE D)) ∂μ = ∫ a in 𝓐, f (HMul.hMul (L.map (incA D)) (a : Matrix (Fin s) (Fin V.rank) (AE D)) : Matrix (Fin W.rank) (Fin V.rank) (AE D)) ∂μ := by
-  first | exact @GlobalTheory.UnipMean.mean_target | exact GlobalTheory.UnipMean.mean_target | (intros; apply GlobalTheory.UnipMean.mean_target <;> assumption)
+  first | exact @GlobalTheory.UnipMean.mean_target
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnipotentRadicalTargetPreservesIsotropicMeanStatement =====
@@ -597,25 +590,6 @@ variable {D : D7}
 
 theorem adj_eq {m n : ℕ} (A : Matrix (Fin m) (Fin n) D.host.E) : adj D A = (A.map star)ᵀ := rfl
 
-theorem adj_ct {m n : ℕ} (A : Matrix (Fin m) (Fin n) D.host.E) : adj D A = Aᴴ := by
-  ext i j; rfl
-
-theorem adj_mul {m n p : ℕ} (A : Matrix (Fin m) (Fin n) D.host.E) (B : Matrix (Fin n) (Fin p) D.host.E) :
-    adj D (A * B) = adj D B * adj D A := by
-  simp only [adj_ct, Matrix.conjTranspose_mul]
-
-theorem adj_adjS {m n : ℕ} (A : Matrix (Fin m) (Fin n) D.host.E) : adj D (adj D A) = A := by
-  simp only [adj_ct, Matrix.conjTranspose_conjTranspose]
-
-theorem adj_gram (V : HSp D) : adj D V.gram = V.gram := by
-  ext i j; simp [adj_eq, GlobalTheory.DualPairCheck.gram_star]
-
-theorem adj_one {m : ℕ} : adj D (1 : Matrix (Fin m) (Fin m) D.host.E) = 1 := by
-  simp only [adj_ct, Matrix.conjTranspose_one]
-
-theorem adj_zero {m n : ℕ} : adj D (0 : Matrix (Fin m) (Fin n) D.host.E) = 0 := by
-  simp only [adj_ct, Matrix.conjTranspose_zero]
-
 theorem frame_decomp (V V' : HSp D) {r : ℕ} (C C' : Matrix (Fin V.rank) (Fin r) D.host.E)
     (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E)
     (hCC : adj D C * V.gram * C = 0) (hBB : adj D B * V.gram * B = V'.gram) (hCB : adj D C * V.gram * B = 0)
@@ -626,20 +600,20 @@ theorem frame_decomp (V V' : HSp D) {r : ℕ} (C C' : Matrix (Fin V.rank) (Fin r
 
   have h1' : adj D C' * V.gram * C = 1 := by
     have := congrArg (adj D) h1
-    rwa [adj_mul, adj_mul, adj_adjS, adj_gram, adj_one, ← Matrix.mul_assoc] at this
+    rwa [_root_.GlobalTheory.TowerForm.adj_mul, _root_.GlobalTheory.TowerForm.adj_mul, _root_.GlobalTheory.TowerForm.adj_adj, _root_.GlobalTheory.TowerForm.adj_gram, _root_.GlobalTheory.HalfDecomp.adj_one, ← Matrix.mul_assoc] at this
   have hBC : adj D B * V.gram * C = 0 := by
     have := congrArg (adj D) hCB
-    rwa [adj_mul, adj_mul, adj_adjS, adj_gram, adj_zero, ← Matrix.mul_assoc] at this
+    rwa [_root_.GlobalTheory.TowerForm.adj_mul, _root_.GlobalTheory.TowerForm.adj_mul, _root_.GlobalTheory.TowerForm.adj_adj, _root_.GlobalTheory.TowerForm.adj_gram, _root_.GlobalTheory.HalfDecomp.adj_zero, ← Matrix.mul_assoc] at this
   have hBC' : adj D B * V.gram * C' = 0 := by
     have := congrArg (adj D) h3
-    rwa [adj_mul, adj_mul, adj_adjS, adj_gram, adj_zero, ← Matrix.mul_assoc] at this
+    rwa [_root_.GlobalTheory.TowerForm.adj_mul, _root_.GlobalTheory.TowerForm.adj_mul, _root_.GlobalTheory.TowerForm.adj_adj, _root_.GlobalTheory.TowerForm.adj_gram, _root_.GlobalTheory.HalfDecomp.adj_zero, ← Matrix.mul_assoc] at this
   let P : Matrix (Fin V.rank) (Fin r ⊕ (Fin V'.rank ⊕ Fin r)) D.host.E := Matrix.fromCols C (Matrix.fromCols B C')
   let Q : Matrix (Fin r ⊕ (Fin V'.rank ⊕ Fin r)) (Fin V.rank) D.host.E :=
     Matrix.fromRows (adj D C' * V.gram) (Matrix.fromRows (V'.gram⁻¹ * adj D B * V.gram) (adj D C * V.gram))
   have hPQ : P * Q = C * (adj D C' * V.gram) + B * (V'.gram⁻¹ * adj D B * V.gram) + C' * (adj D C * V.gram) := by
     simp only [P, Q, Matrix.fromCols_mul_fromRows, add_assoc]
   have hQP : Q * P = 1 := by
-    simp only [P, Q, Matrix.fromRows_mul_fromCols, Matrix.fromRows_mul, Matrix.mul_fromCols]
+    simp only [P, Q, Matrix.fromRows_mul, Matrix.mul_fromCols]
     have e1 : V'.gram⁻¹ * adj D B * V.gram * B = 1 := by
       rw [Matrix.mul_assoc, Matrix.mul_assoc, ← Matrix.mul_assoc (adj D B), hBB, Matrix.nonsing_inv_mul _ hdet]
     have e2 : V'.gram⁻¹ * adj D B * V.gram * C = 0 := by
@@ -717,14 +691,6 @@ theorem symplO_iso (S T : HSp D) {s : ℕ} (L : Matrix (Fin T.rank) (Fin s) D.ho
 end GlobalTheory.IsoTermMean
 
 namespace GlobalTheory.IsoTermMean
-open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
-variable {D : D7}
-
-theorem mt_one (V : HSp D) : mt V 1 = 1 := by simp [Formalism.L2.Theta.mt]
-
-theorem mt_mul_inv (V : HSp D) (g : GA D V) : mt V g * mt V g⁻¹ = 1 := by
-  simp only [Formalism.L2.Theta.mt, ← Units.val_mul, ← map_mul, mul_inv_cancel, map_one, Units.val_one]
-
 end GlobalTheory.IsoTermMean
 
 namespace GlobalTheory.IsoTermMean
@@ -798,7 +764,7 @@ theorem term_eq_aux (V V' W : HSp D) (r : ℕ) (C C' : Matrix (Fin V.rank) (Fin 
   have hLiso : adj D L * W.gram * L = 0 := hL.2.2
   have hres := (GlobalTheory.T.thetaRestrictIsotropicQuotient_wittTower_properties D V V' W r C B hs ψ hstd μ 𝓨 hY).1
   have hact : actO V W (n : GA D V) 1 (Lm * K * mt V (n : GA D V)) = Lm * K := by
-    simp only [actO, mt_one, Matrix.one_mul, Matrix.mul_assoc, mt_mul_inv, Matrix.mul_one]
+    simp only [actO, _root_.GlobalTheory.BesselCompare.mt_one, Matrix.one_mul, Matrix.mul_assoc, _root_.GlobalTheory.MixModel.mt_mul_inv, Matrix.mul_one]
   have hFu := GlobalTheory.ThetaClosed.isThetaFunO_heisO_all hstd hF (Lm * K * mt V (n : GA D V))
   have step1 : heisO ψ V W (Lm * K) (ω ((n : GA D V), 1) F) =
       ω ((n : GA D V), 1) (heisO ψ V W (Lm * K * mt V (n : GA D V)) F) := by
@@ -856,7 +822,7 @@ theorem heis_comm_radical (V W : HSp D) (ψ : AddChar (AF D.host.F) ℂ) (χS χ
       ω (1, (n' : GA D W)) (heisO ψ V W ((L.map (incA D) : Matrix (Fin W.rank) (Fin s) (AE D)) * K) f) := by
   rw [hω.om_heis 1 (n' : GA D W) _ f hf]
   congr 1
-  simp only [actO, inv_one, mt_one, Matrix.mul_one, ← Matrix.mul_assoc, mt_mul_frame W L n'.2]
+  simp only [actO, inv_one, _root_.GlobalTheory.BesselCompare.mt_one, Matrix.mul_one, ← Matrix.mul_assoc, mt_mul_frame W L n'.2]
 
 theorem mean_isoTerm_invariant : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C C' : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → adj D C * V.gram * C' = 1 → adj D C' * V.gram * C' = 0 → adj D C' * V.gram * B = 0 → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χS χT ω → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (ratMx D W.rank r) μ 𝓨 → ∀ (κ : Measure (NI V C)) (𝓝 : Set (NI V C)), κ.IsHaarMeasure → IsFundamentalDomain (NIQ V C) 𝓝 κ → ∀ (s : ℕ) (L : Matrix (Fin W.rank) (Fin s) D.host.E) (m : Matrix (Fin s) (Fin r) D.host.E), IsIsoFrame W L → m.rank = s → ∀ (n' : NI W L) f, IsThetaFunO ψ V W f → ∫ n in 𝓝, res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map (L * m) (incA D))) (ω ((n : GA D V), (n' : GA D W)) f)) 0 ∂κ = ∫ n in 𝓝, res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map (L * m) (incA D))) (ω ((n : GA D V), 1) f)) 0 ∂κ := by
   intro D V V' W r C C' B hs h1 h2 h3 ψ χS χT ω hω μ 𝓨 hY κ 𝓝 hκ h𝓝 s L m hL hm n' f hf
@@ -930,7 +896,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.isotropicTermMean_invariant_unipotentRadical : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C C' : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → adj D C * V.gram * C' = 1 → adj D C' * V.gram * C' = 0 → adj D C' * V.gram * B = 0 → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χS χT ω → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (ratMx D W.rank r) μ 𝓨 → ∀ (κ : Measure (NI V C)) (𝓝 : Set (NI V C)), κ.IsHaarMeasure → IsFundamentalDomain (NIQ V C) 𝓝 κ → ∀ (s : ℕ) (L : Matrix (Fin W.rank) (Fin s) D.host.E) (m : Matrix (Fin s) (Fin r) D.host.E), IsIsoFrame W L → m.rank = s → ∀ (n' : NI W L) f, IsThetaFunO ψ V W f → ∫ n in 𝓝, res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map (L * m) (incA D))) (ω ((n : GA D V), (n' : GA D W)) f)) 0 ∂κ = ∫ n in 𝓝, res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map (L * m) (incA D))) (ω ((n : GA D V), 1) f)) 0 ∂κ := by
-  first | exact @GlobalTheory.IsoTermMean.mean_isoTerm_invariant | exact GlobalTheory.IsoTermMean.mean_isoTerm_invariant | (intros; apply GlobalTheory.IsoTermMean.mean_isoTerm_invariant <;> assumption)
+  first | exact @GlobalTheory.IsoTermMean.mean_isoTerm_invariant
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.IsotropicTermMeanInvariantUnipotentRadicalStatement =====
@@ -949,15 +915,6 @@ noncomputable section
 namespace GlobalTheory.ThetaLiftBound
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
-theorem exists_rat_height_le {D : D7} (W : HSp D) (h : GA D W) :
-    ∃ γ ∈ GQ W, GlobalTheory.Grow.height W (γ * h) ≤ 2 * GlobalTheory.Grow.quotHeight W h := by
-  have hq := GlobalTheory.Grow.one_le_quotHeight W h
-  by_contra hne
-  push_neg at hne
-  have : 2 * GlobalTheory.Grow.quotHeight W h ≤ GlobalTheory.Grow.quotHeight W h :=
-    (GlobalTheory.Grow.le_quotHeight_iff W).2 fun γ hγ => (hne γ hγ).le
-  linarith
 
 theorem bound_pow (c a b M q : ℝ) (A : ℕ) (ha : 1 ≤ a) (haM : a ≤ M) (hb : 1 ≤ b) (hbq : b ≤ 2 * q) :
     c * (a * b) ^ A ≤ max c 0 * (M * (2 * q)) ^ A := by
@@ -984,7 +941,7 @@ theorem lintegral_ne_top : ∀ (D : D7) (V W : HSp D) (r : ℕ) (C : Matrix (Fin
       ENNReal.ofReal (max c 0 * (2 * M) ^ A * max C' 0) := by
     intro n h
     obtain ⟨γ, hγ, k, hk, rfl⟩ := hcov n
-    obtain ⟨γ', hγ', hh⟩ := exists_rat_height_le W h
+    obtain ⟨γ', hγ', hh⟩ := _root_.GlobalTheory.Grow.exists_height_le_two_mul_quotHeight W h
     have e1 : Sg (((γ * k : NI V C) : GA D V) * g, h) = Sg ((k : GA D V) * g, γ' * h) := by
       rw [Subgroup.coe_mul, mul_assoc, h1 _ γ.2 (Subgroup.mem_subgroupOf.1 hγ), h2 _ hγ']
     rw [e1]
@@ -1026,7 +983,7 @@ open scoped ENNReal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.lintegral_thetaLift_termSum_ne_top : ∀ (D : D7) (V W : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E), IsIsoFrame V C → ∀ (κ : Measure (NI V C)) (𝓝 : Set (NI V C)), κ.IsHaarMeasure → IsFundamentalDomain (NIQ V C) 𝓝 κ → ∀ (ν : Measure (GA D W)) (𝓕 : Set (GA D W)), ν.IsHaarMeasure → IsFundamentalDomain (GQ W) 𝓕 ν → ∀ F : GA D W → ℂ, GlobalTheory.Grow.RapidDec W F → ∀ (Sg : GA D V × GA D W → ℝ≥0∞), (∀ n ∈ NI V C, n ∈ GQ V → ∀ a b, Sg (n * a, b) = Sg (a, b)) → (∀ γ ∈ GQ W, ∀ a b, Sg (a, γ * b) = Sg (a, b)) → ∀ (A : ℕ) (c : ℝ), (∀ a b, Sg (a, b) ≤ ENNReal.ofReal (c * (GlobalTheory.Grow.height V a * GlobalTheory.Grow.height W b) ^ A)) → ∀ g : GA D V, ∫⁻ n in 𝓝, ∫⁻ h in 𝓕, Sg ((n : GA D V) * g, h) * ‖F h‖ₑ ∂ν ∂κ ≠ ⊤ := by
-  first | exact @GlobalTheory.ThetaLiftBound.lintegral_ne_top | exact GlobalTheory.ThetaLiftBound.lintegral_ne_top | (intros; apply GlobalTheory.ThetaLiftBound.lintegral_ne_top <;> assumption)
+  first | exact @GlobalTheory.ThetaLiftBound.lintegral_ne_top
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.LintegralThetaLiftTermSumNeTopStatement =====
@@ -1153,7 +1110,7 @@ open scoped ENNReal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.mixedModelTerms_rationalUnipotent_invariant : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C C' : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → adj D C * V.gram * C' = 1 → adj D C' * V.gram * C' = 0 → adj D C' * V.gram * B = 0 → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χS χT ω → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (ratMx D W.rank r) μ 𝓨 → ∀ n ∈ NI V C, n ∈ GQ V → ∀ (y : Matrix (Fin W.rank) (Fin r) D.host.E) f, IsThetaFunO ψ V W f → res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map y (incA D))) (ω (n, 1) f)) 0 = res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map y (incA D))) f) 0 := by
-  first | exact @GlobalTheory.UnipMixed.res_heisO_unip | exact GlobalTheory.UnipMixed.res_heisO_unip | (intros; apply GlobalTheory.UnipMixed.res_heisO_unip <;> assumption)
+  first | exact @GlobalTheory.UnipMixed.res_heisO_unip
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.MixedModelTermsRationalUnipotentInvariantStatement =====
@@ -1169,7 +1126,7 @@ open scoped ENNReal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.rationalFrameStabiliser_normalises_unipotentRadical : ∀ (D : D7) (W : HSp D) (s : ℕ) (L : Matrix (Fin W.rank) (Fin s) D.host.E), IsIsoFrame W L → (∀ γ ∈ GQ W, ∀ γ₀ : Matrix (Fin W.rank) (Fin W.rank) D.host.E, Formalism.L2.Theta.mt W γ = γ₀.map (incA D) → γ₀ * L = L → ∀ n ∈ NI W L, γ * n * γ⁻¹ ∈ NI W L) ∧ (∀ n ∈ NI W L, ∀ n₀ : Matrix (Fin W.rank) (Fin W.rank) D.host.E, Formalism.L2.Theta.mt W n = n₀.map (incA D) → n₀ * L = L) := by
-  first | exact @GlobalTheory.FrameStab.stab | exact GlobalTheory.FrameStab.stab | (intros; apply GlobalTheory.FrameStab.stab <;> assumption)
+  first | exact @GlobalTheory.FrameStab.stab
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.RationalFrameStabiliserNormalisesUnipotentRadicaStatement =====
@@ -1184,7 +1141,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.restrictedHeisenbergTerms_permuted_rationalUnitary : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C C' : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → adj D C * V.gram * C' = 1 → adj D C' * V.gram * C' = 0 → adj D C' * V.gram * B = 0 → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χS χT ω → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (ratMx D W.rank r) μ 𝓨 → ∀ (γ : GA D W) (γ₀ : Matrix (Fin W.rank) (Fin W.rank) D.host.E), γ ∈ GQ W → Formalism.L2.Theta.mt W γ = γ₀.map (incA D) → ∀ (y : Matrix (Fin W.rank) (Fin r) D.host.E) f, IsThetaFunO ψ V W f → res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map (γ₀ * y) (incA D))) (ω (1, γ) f)) 0 = res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map y (incA D))) f) 0 := by
-  first | exact @GlobalTheory.TwistEquiRat.res_heisO_rat_equi | exact GlobalTheory.TwistEquiRat.res_heisO_rat_equi | (intros; apply GlobalTheory.TwistEquiRat.res_heisO_rat_equi <;> assumption)
+  first | exact @GlobalTheory.TwistEquiRat.res_heisO_rat_equi
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.RestrictedHeisenbergTermsPermutedRationalUnitaryStatement =====
@@ -1199,7 +1156,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.theta_series_summable_on_covolume_domain : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C C' : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → adj D C * V.gram * C' = 1 → adj D C' * V.gram * C' = 0 → adj D C' * V.gram * B = 0 → ∀ ψ : AddChar (AF D.host.F) ℂ, IsStdChar D ψ (-1) → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (ratMx D W.rank r) μ 𝓨 → ∀ f, IsThetaFunO ψ V W f → Summable (fun y : Matrix (Fin W.rank) (Fin r) D.host.E => ‖res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map y (incA D))) f) 0‖) ∧ HasSum (fun y : Matrix (Fin W.rank) (Fin r) D.host.E => res V V' W C B μ 𝓨 (heisO ψ V W (isoPart V W C' (Matrix.map y (incA D))) f) 0) (f 0) := by
-  first | exact @GlobalTheory.TwFour.value_zero_eq_sum_restrictions | exact GlobalTheory.TwFour.value_zero_eq_sum_restrictions | (intros; apply GlobalTheory.TwFour.value_zero_eq_sum_restrictions <;> assumption)
+  first | exact @GlobalTheory.TwFour.value_zero_eq_sum_restrictions
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ThetaSeriesSummableOnCovolumeDomainStatement =====
@@ -1261,14 +1218,6 @@ theorem ratM_one (W : HSp D) : ratM W (1 : GQ W) = 1 := by
   rw [← ratM_spec, Matrix.map_one _ (map_zero _) (map_one _)]
   exact congrArg Units.val (map_one (matHom W))
 
-private theorem heisO_zero_twisted_operators {D : D7} (ψ : AddChar (AF D.host.F) ℂ) (V W : HSp D) (u : WO V W → ℂ) :
-    heisO ψ V W 0 u = u := by
-  funext w
-  unfold heisO
-  simp only [symplOH]
-  unfold symplO hO
-  simp
-
 def ratAct (W : HSp D) (r : ℕ) : MulAction (GQ W) {y : Matrix (Fin W.rank) (Fin r) D.host.E // y ≠ 0} where
   smul γ y := ⟨ratM W γ * y.1, fun h => y.2 (by
     have := congrArg (ratM W γ⁻¹ * ·) h
@@ -1293,7 +1242,7 @@ theorem GlobalTheory.TowerCT.towerConstTermOfCompatible_holds : ∀ D : D7, Glob
   obtain ⟨C', h1, h2, h3⟩ := GlobalTheory.T.exists_isotropicDualFrame_of_splitEmbedding D V V' r C B hS
   have hstd : IsStdChar D ψ (-1) := hω.std
   obtain ⟨θ, hθ⟩ := (GlobalTheory.Ker.exists_infFam_and_stdChar D).1
-  have hG := GlobalTheory.KernelSeminorm.thetaGrowth_onObjects D
+  have hG := _root_.GlobalTheory.KernelSeminorm.thetaGrowth D
 
   have hωm : ∀ (p q : GA D V × GA D W) (u : WO V W → ℂ), ω (p * q) u = ω p (ω q u) := by
     intro p q u
@@ -1386,7 +1335,7 @@ theorem GlobalTheory.TowerCT.towerConstTermOfCompatible_holds : ∀ D : D7, Glob
   set a : Matrix (Fin W.rank) (Fin r) D.host.E → ℂ :=
     fun y => ∫ h in 𝓕, (∫ n in 𝓝, tm y (ω ((n : GA D V) * g, h) f) ∂κ) * F h ∂ν with ha
 
-  have heis0 : ∀ u : WO V W → ℂ, heisO ψ V W 0 u = u := fun u => heisO_zero_twisted_operators ψ V W u
+  have heis0 : ∀ u : WO V W → ℂ, heisO ψ V W 0 u = u := fun u => _root_.GlobalTheory.SplitScalar.heisO_zero ψ V W u
   have hT0 : ∀ (n : NI V C) (h : GA D W),
       tm 0 (ω ((n : GA D V) * g, h) f) = thetaKO ω' 1 h (res V V' W C B μ 𝓨 (ω (g, 1) f)) := by
     intro n h
@@ -1508,7 +1457,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.thetaLift_constantTerm_compatibleWeil : ∀ D : D7, GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.TowerConstTermOfCompatible D := by
-  first | exact @GlobalTheory.TowerCT.towerConstTermOfCompatible_holds | exact GlobalTheory.TowerCT.towerConstTermOfCompatible_holds | (intros; apply GlobalTheory.TowerCT.towerConstTermOfCompatible_holds <;> assumption)
+  first | exact @GlobalTheory.TowerCT.towerConstTermOfCompatible_holds
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ThetaLiftConstantTermCompatibleWeilStatement =====
@@ -1544,7 +1493,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.constantTermLift_isotropicSubspace : ∀ D : D7, GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.TowerConstTerm D := by
-  first | exact @GlobalTheory.TowerConstTermObj.towerConstTerm | exact GlobalTheory.TowerConstTermObj.towerConstTerm | (intros; apply GlobalTheory.TowerConstTermObj.towerConstTerm <;> assumption)
+  first | exact @GlobalTheory.TowerConstTermObj.towerConstTerm
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ConstantTermLiftIsotropicSubspaceStatement =====

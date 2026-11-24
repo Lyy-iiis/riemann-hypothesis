@@ -219,7 +219,7 @@ theorem gram_posDef {V : Type} [AddCommGroup V] [Module ℂ V] (h : V →ₗ⋆[
     simp [Matrix.conjTranspose_apply, hh (v p) (v q)]
   · have e : star x ⬝ᵥ ((Matrix.of fun p q => h (v p) (v q)) *ᵥ x) = h (∑ p, x p • v p) (∑ q, x q • v q) := by
 
-      simp [dotProduct, Matrix.mulVec, map_sum, LinearMap.sum_apply, Finset.mul_sum, mul_comm, mul_left_comm]
+      simp [dotProduct, Matrix.mulVec, map_sum, LinearMap.sum_apply, Finset.mul_sum, mul_comm]
       rw [Finset.sum_comm]
       exact Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by ring
     rw [e]
@@ -295,7 +295,7 @@ theorem compare (h0 : val 0 = 0) (hadd : ∀ e ∈ Lm, ∀ e' ∈ Lm, val (e + e
     ext p q
 
     simp only [gramOf, Matrix.of_apply, hval, Matrix.mul_apply, Matrix.conjTranspose_apply, map_sum,
-    LinearMap.sum_apply, LinearMap.map_smulₛₗ, LinearMap.smul_apply, Finset.sum_mul, Complex.star_def,
+    LinearMap.sum_apply, LinearMap.smul_apply, Finset.sum_mul, Complex.star_def,
     RingHom.id_apply, smul_eq_mul, map_smulₛₗ]
     refine Finset.sum_congr rfl fun m _ => ?_
     rw [Finset.mul_sum]
@@ -501,7 +501,7 @@ theorem interior_pol (𝔐 : HodgeCpt Y S y) (hβ : Function.Injective β) (z : 
     have hs : Y.s (𝔐.f (centre z)) = spMap β pt := by
       apply PrimeSpectrum.ext
       have e1 : Y.s (𝔐.f (centre z)) = Spec.map (CommRingCat.ofHom g) (IsLocalRing.closedPoint ℂ) := by
-        rw [e]; simp only [Scheme.Hom.comp_apply]; rfl
+        rw [e]; simp only; rfl
       rw [e1]
       exact (spec_injective_point g hg _).trans (spec_injective_point β hβ pt).symm
     obtain ⟨w, hw, -⟩ := Scheme.Pullback.exists_preimage_pullback (f := Y.s) (g := spMap β) _ _ hs
@@ -514,15 +514,6 @@ theorem interior_pol (𝔐 : HodgeCpt Y S y) (hβ : Function.Injective β) (z : 
     exact hw
   have := GlobalTheory.GenericPol.proper_ample_kTriv Y.m Y.oF.proper Y.oF.ample Y.oF.ktriv n hr
   exact ⟨_, m₁, this.1, this.2.1⟩
-
-theorem spec_dual_fst {A B : Type} [CommRing A] [CommRing B] (f : A →+* B) :
-    Spec.map (CommRingCat.ofHom (TrivSqZeroExt.fstHom B B B).toRingHom) ≫
-        Spec.map (CommRingCat.ofHom (dualMap f)) =
-      Spec.map (CommRingCat.ofHom f) ≫ Spec.map (CommRingCat.ofHom (TrivSqZeroExt.fstHom A A A).toRingHom) := by
-  rw [← Spec.map_comp, ← Spec.map_comp]
-  congr 1
-  refine CommRingCat.hom_ext (RingHom.ext fun a => ?_)
-  simp [dualMap]
 
 theorem tan_of_valAt {X : Scheme.{0}} {Ω' : Type} [Field Ω'] {ξ : Sp Ω' ⟶ X} {G : Over X} [GrpObj G]
     {Li : Type} [AddCommGroup Li] [Module Ω' Li] {M : LieModel G ξ Li} {z : Sp ℂ ⟶ X} {e : Li}
@@ -537,7 +528,7 @@ theorem tan_of_valAt {X : Scheme.{0}} {Ω' : Type} [Field Ω'] {ξ : Sp Ω' ⟶ 
   refine Eq.trans ?_ h2
   change _ = Spec.map (Scheme.stalkClosedPointTo z) ≫ (1 : Over.mk (X.fromSpecStalk (centre z)) ⟶ G).left
   refine Eq.trans ?_ (congrArg (fun k => Spec.map (Scheme.stalkClosedPointTo z) ≫ k) hv)
-  have key := spec_dual_fst (Scheme.stalkClosedPointTo z).hom
+  have key := _root_.GlobalTheory.CompanionTheory.Ar.LieTangent.spec_fst_dual (Scheme.stalkClosedPointTo z).hom
   exact (Category.assoc _ _ _).symm.trans ((congrArg (fun k => k ≫ v.left) key).trans (Category.assoc _ _ _))
 
 theorem exists_sub_mem_flagStep {Ω' : Type} [Field Ω'] {E' : Type} [AddCommGroup E'] [Module Ω' E'] {r : ℕ}

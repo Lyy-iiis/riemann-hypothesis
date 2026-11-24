@@ -114,7 +114,6 @@ theorem ad_herm_symm (v w : Fin (2 * r + k + 1) → ℂ) :
   unfold herm
   first
     | rw [star_dotProduct]
-    | rw [Matrix.star_dotProduct]
   rw [Matrix.star_mulVec, ← Matrix.dotProduct_mulVec, GBasic.Hpk_herm]
 
 theorem ad_unitB_mulVec {m : ℕ} (Bs : Fin m → Fin (2 * r + k + 1) → ℂ) (a b : Fin m)
@@ -262,7 +261,7 @@ theorem adK_smul {F : Mx k r → (Wq →L[ℂ] Wp)} (hF : F ∈ AdK k r z π D) 
     intro g hg hgl
     simp [hE₁ g hg hgl]
   · intro x hx h hh
-    simp [hF.2 x hx h hh, ContinuousLinearMap.comp_smul]
+    simp [hF.2 x hx h hh]
 
 theorem adK_zero : (0 : Mx k r → (Wq →L[ℂ] Wp)) ∈ AdK k r z π D := by
   refine ⟨?_, ?_⟩
@@ -284,7 +283,6 @@ theorem adK_rd (hD : IsOpen D) {X : Mx k r} (hX : inLieLev k r (Fin.last r) X)
   have hc : Continuous (fun t : ℝ => x * NormedSpace.exp ((t : ℂ) • X)) := by
     first
       | exact (Formalism.FourierDecayAlt.P.B5.curve_contDiff x X).continuous
-      | fun_prop
   have hD0 : ∀ᶠ t : ℝ in 𝓝 0, x * NormedSpace.exp ((t : ℂ) • X) ∈ D :=
     hc.continuousAt.preimage_mem_nhds (by simpa using hD.mem_nhds hx.2)
   have hev : (fun t : ℝ => F (h * x * NormedSpace.exp ((t : ℂ) • X))) =ᶠ[𝓝 0]
@@ -321,8 +319,6 @@ theorem ad_rd_point {F : Mx k r → (Wq →L[ℂ] Wp)} (hF : F ∈ AdK k r z π 
     rw [e1]
     first
       | rw [Matrix.exp_conj g _ hgU]
-      | rw [Matrix.exp_conj ℂ g _ hgU]
-      | rw [Matrix.exp_conj ℝ g _ hgU]
     rw [Matrix.mul_assoc, hgi, Matrix.mul_one]
   have hginvfix : ∀ w, g *ᵥ w = w → g⁻¹ *ᵥ w = w := by
     intro w hw

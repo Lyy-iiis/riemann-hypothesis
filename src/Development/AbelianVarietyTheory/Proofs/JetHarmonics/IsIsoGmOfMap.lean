@@ -448,8 +448,7 @@ theorem coeff_prod_X_sub_C_norm_le {K : Type} [NormedField K] [IsUltrametricDist
               apply pow_le_pow_of_le_one h0 h1
               omega
 
-theorem main : ∀ {K : Type} [inst : NormedField K] [IsUltrametricDist K] (θ : ℝ), (0 : ℝ) ≤ θ → θ ≤ (1 : ℝ) → ∀ (S : Finset K), (∀ x ∈ S, ‖x‖ ≤ θ) → ∀ (a : ℕ), ‖AddMonoidAlgebra.coeff (∏ x ∈ S, (Polynomial.X - (Polynomial.C : K → Polynomial K) x)) a‖ ≤ θ ^ (Finset.card S - a) :=
-  fun θ h0 h1 S hS a => coeff_prod_X_sub_C_norm_le θ h0 h1 S hS a
+alias main := _root_.GlobalTheory.RootProductCoeffBound.coeff_prod_X_sub_C_norm_le
 
 end GlobalTheory.RootProductCoeffBound
 end -- clump:auto
@@ -469,11 +468,7 @@ theorem norm_coeff_prod_X_sub_C_le_pow {K : Type} [NormedField K] [IsUltrametric
     (θ : ℝ) (h0 : 0 ≤ θ) (h1 : θ ≤ 1) (S : Finset K) (hS : ∀ x ∈ S, ‖x‖ ≤ θ) (a : ℕ) :
     ‖(∏ x ∈ S, (X - C x) : K[X]).coeff a‖ ≤ θ ^ (S.card - a) := by
   first
-  | exact @_root_.GlobalTheory.RootProductCoeffBound.main
-  | exact _root_.GlobalTheory.RootProductCoeffBound.main
   | (apply _root_.GlobalTheory.RootProductCoeffBound.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.RootProductCoeffBound.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.RootProductCoeffBound.main <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.RootProductCoeffBound.main ..)
 
 theorem exists_pow_eq_interpolation {K : Type} [NormedField K] [IsUltrametricDist K]

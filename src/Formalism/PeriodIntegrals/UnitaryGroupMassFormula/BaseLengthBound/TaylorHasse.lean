@@ -144,7 +144,7 @@ theorem bcol_sub_single {N : ℕ} (jj : Fin N) (α : Fin (WeightFamilies.dimY D 
       by_cases hi : i = l
       · subst hi; simp
       · have : ((l.succ, k) : Idx D j N) ≠ (i.succ, k) := fun e => hi (Fin.succ_injective _ (congrArg Prod.fst e)).symm
-        simp [this, Pi.single_apply, hi]
+        simp [this, hi]
     · have : ((l.succ, jj) : Idx D j N) ≠ (i.succ, k) := fun e => hk (congrArg Prod.snd e).symm
       simp [this, hk]
 
@@ -157,13 +157,13 @@ theorem eq_sub_add_single {d : ℕ} (δ : Fin d → ℕ) (l : Fin d) (h : 1 ≤ 
   funext i
   by_cases hi : i = l
   · subst hi; simp; omega
-  · simp [Pi.single_apply, hi]
+  · simp [hi]
 
 theorem sub_single_of_zero {d : ℕ} (δ : Fin d → ℕ) (l : Fin d) (h : δ l = 0) : δ - Pi.single l 1 = δ := by
   funext i
   by_cases hi : i = l
   · subst hi; simp [h]
-  · simp [Pi.single_apply, hi]
+  · simp [hi]
 
 theorem coe_wfr_Lc (G : GlobalFamilyData X ka wL wF) (la : HeightOneSpectrum (𝓞 B.KO)) (jj : Fin G.N) :
     ((PoleLengthBounds.wfr G la jj : ↥(Frac0 X la G.w)) : Lw X la G.w) =
@@ -420,7 +420,7 @@ theorem bcol_size {N : ℕ} (jj : Fin N) (α : Fin (WeightFamilies.dimY D j) →
   rw [Finsupp.sum_fintype _ _ (fun _ => rfl), Fintype.sum_prod_type, Fin.sum_univ_succ]
   simp [bcol]
 
-theorem size_eq_degree {N : ℕ} (f : Idx D j N →₀ ℕ) : (f.sum fun _ n => n) = Finsupp.degree f := rfl
+alias size_eq_degree := _root_.PI.HJP.sum_eq_degree
 
 end THs
 

@@ -408,9 +408,6 @@ local notation "C" => integralClosure 𝒪[K] L
 theorem tf : Module.IsTorsionFree 𝒪[K] L := by
   first
     | exact Module.IsTorsionFree.trans_faithfulSMul 𝒪[K] K L
-    | (rw [Module.isTorsionFree_iff_faithfulSMul, faithfulSMul_iff_algebraMap_injective,
-        IsScalarTower.algebraMap_eq 𝒪[K] K L]
-       exact (algebraMap K L).injective.comp Subtype.val_injective)
 
 theorem dd : IsDedekindDomain C := integralClosure.isDedekindDomain 𝒪[K] K L
 theorem fr : IsFractionRing C L := integralClosure.isFractionRing_of_finite_extension K L
@@ -428,7 +425,6 @@ attribute [local instance] dd fr mf tfC
 theorem sepFR : Algebra.IsSeparable (FractionRing 𝒪[K]) (FractionRing C) := by
   first
     | infer_instance
-    | exact Algebra.IsAlgebraic.isSeparable_of_perfectField
 
 attribute [local instance] sepFR
 
@@ -786,8 +782,7 @@ private theorem small_lemma_5 (hcont : Continuous (algebraMap ℚ_[l] K)) (y : K
     ∃ N : ℕ, ∀ k ≥ N, algebraMap ℚ_[l] K ((l : ℚ_[l]) ^ k) * y ∈ 𝒪[K] := by
   have h1 : Filter.Tendsto (fun k : ℕ => (l : ℚ_[l]) ^ k) Filter.atTop (nhds 0) :=
     tendsto_pow_atTop_nhds_zero_of_norm_lt_one (by first
-      | exact Padic.norm_p_lt_one
-      | (rw [Padic.norm_p]; exact inv_lt_one_of_one_lt₀ (by exact_mod_cast (Fact.out : l.Prime).one_lt)))
+      | exact Padic.norm_p_lt_one)
   have h2 : Filter.Tendsto (fun k : ℕ => algebraMap ℚ_[l] K ((l : ℚ_[l]) ^ k) * y)
       Filter.atTop (nhds 0) := by
     have := ((hcont.tendsto 0).comp h1).mul_const y
@@ -835,8 +830,7 @@ theorem exists_ne_zero (hcont : Continuous (algebraMap ℚ_[l] K)) : ∃ x : K, 
     exact isCompact_iff_compactSpace.2 h
   obtain ⟨C, hC⟩ := hcpt.exists_bound_of_continuousOn hT.continuousOn
   have hl1 : ‖(l : ℚ_[l])‖ < 1 := (by first
-      | exact Padic.norm_p_lt_one
-      | (rw [Padic.norm_p]; exact inv_lt_one_of_one_lt₀ (by exact_mod_cast (Fact.out : l.Prime).one_lt)))
+      | exact Padic.norm_p_lt_one)
   have hpos : (0 : ℝ) < max C 1 := lt_of_lt_of_le one_pos (le_max_right C 1)
   obtain ⟨n, hn⟩ := exists_pow_lt_of_lt_one (inv_pos.2 hpos) hl1
   refine ⟨algebraMap ℚ_[l] K ((l : ℚ_[l]) ^ n), ?_, fun b => ?_⟩
@@ -1347,7 +1341,7 @@ theorem integral_mem_nhds_and_subset_compact_of_finrank_two [Module.Free K V] (h
         exact (hO x).mp hx
       obtain ⟨h1, h2⟩ := key_bound hθr hθ hdO hint
       refine ⟨h.symm x, ⟨(2 * (h.symm x).1, 2 * (h.symm x).2 * d), ⟨h1, h2⟩, ?_⟩, hpx⟩
-      refine Prod.ext ?_ ?_ <;> dsimp only <;> first | (field_simp; done) | (field_simp; ring)
+      refine Prod.ext ?_ ?_ <;> dsimp only <;> first | (field_simp; done)
 
 end None
 
@@ -1644,21 +1638,19 @@ open Formalism.BasicNotions Formalism.MainNotions.S Formalism.L2.SG.HidaSetting 
 
 namespace Formalism.L2.SG.Closed
 
-theorem FinLeviC_holds : Formalism.L2.SG.Pf.FinLeviC := Formalism.L2.SG.Pf.FinLeviPf.finLeviC_holds
-
-theorem FoldOKC_outright : FoldOKC := FoldOKC_holds FinLeviC_holds
+theorem FoldOKC_outright : FoldOKC := FoldOKC_holds _root_.Formalism.L2.SG.Pf.FinLeviPf.finLeviC_holds
 
 theorem OOLintSumC_holds : Formalism.L2.SG.Pf.OOLintSumC :=
   Formalism.L2.SG.Pf.ooLintSumC_holds_slab Formalism.L2.SG.Pf.SlabMajPt.pointwise_majorant_by_columns Formalism.L2.SG.Pf.SlabCount.countC_holds
 
-theorem OOIntAllC_outright : OOIntAllC := OOIntAllC_holds OOLintSumC_holds
+theorem OOIntAllC_outright : OOIntAllC := _root_.Formalism.L2.SG.Pf.ooIntAllC_holds_of OOLintSumC_holds
 
-theorem AbsConvC_outright : AbsConvC := AbsConvC_holds OOLintSumC_holds
+theorem AbsConvC_outright : AbsConvC := _root_.Formalism.L2.SG.Pf.absConvC_holds_of OOLintSumC_holds
 
 theorem KppOffC_holds : Formalism.L2.SG.RowsConc.KppOffC :=
-  Formalism.L2.SG.FixedDecomposition.kppOffC_of_steps0 FoldOKC_outright FundExistsC_holds OOIntAllC_outright LemmaVC_holds
-    (Formalism.L2.SG.FixedDecomposition.covariantRepZero_of_lemmaV AvgCore_holds Formalism.L2.SG.Pf.ginfUnimod_holds Formalism.L2.SG.Pf.nLamNinf_holds
-      ChiTrivialC_holds Formalism.L2.SG.Pf.psiInfChar_holds Formalism.L2.SG.Pf.rClosedC_holds Formalism.L2.SG.Pf.roDiscreteC_holds
+  Formalism.L2.SG.FixedDecomposition.kppOffC_of_steps0 FoldOKC_outright _root_.Formalism.L2.SG.Pf.fundExistsC_holds OOIntAllC_outright LemmaVC_holds
+    (Formalism.L2.SG.FixedDecomposition.covariantRepZero_of_lemmaV _root_.Formalism.L2.SG.TermOp.Vanish.avgCore Formalism.L2.SG.Pf.ginfUnimod_holds Formalism.L2.SG.Pf.nLamNinf_holds
+      _root_.Formalism.L2.SG.Pf.chiTrivialC_outright Formalism.L2.SG.Pf.psiInfChar_holds Formalism.L2.SG.Pf.rClosedC_holds Formalism.L2.SG.Pf.roDiscreteC_holds
       Formalism.L2.SG.TermOp.Vanish.rational_cocompact_holds)
     schurNFC
 

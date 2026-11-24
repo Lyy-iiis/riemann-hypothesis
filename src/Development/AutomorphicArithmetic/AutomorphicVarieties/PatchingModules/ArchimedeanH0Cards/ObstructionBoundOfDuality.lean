@@ -177,7 +177,7 @@ private theorem defect_sub {k : D0.Hom D} {r : D.Hom D'} {p p' : D'.C2} {c c' : 
     by rw [map_sub, hq3, hq3'], fun w g h => ?_⟩
   have e1 := hq4 w g h
   have e2 := hq4' w g h
-  simp only [Pi.sub_apply, Submodule.coe_sub, AddSubgroupClass.coe_sub, Prod.fst_sub,
+  simp only [Pi.sub_apply, AddSubgroupClass.coe_sub, Prod.fst_sub,
     Prod.snd_sub, map_sub] at e1 e2 ⊢
   rw [e1, e2]
   abel
@@ -655,7 +655,7 @@ theorem UpperTheory.V.Pa.B2.dualBound :
         Nat.card_le_card_of_injective Φ hinj
     _ = (Nat.card {y : ZMod l // Nat.card x.K • y = 0} ^ Nat.card x.K) ^ (n * n * s) := by
         rw [Nat.card_fun, Nat.card_fun]
-        simp [Nat.card_prod, mul_assoc]
+        simp [mul_assoc]
     _ ≤ (Nat.card x.K ^ Nat.card x.K) ^ (n * n * s) :=
         Nat.pow_le_pow_left (Nat.pow_le_pow_left (card_zmod_nsmul_eq_zero_le l _ hK) _) _
     _ = Nat.card x.K ^ (Nat.card x.K * (n * n * s)) := by rw [← pow_mul]
@@ -1253,12 +1253,6 @@ private def odMap {A X X' : Type} [CommRing A] [CommRing X] [CommRing X'] [Algeb
   map_add' M N := by ext i j; simp
   map_smul' c M := by ext i j; simp
 
-private theorem lift_ex {A M Q Q' : Type} [CommRing A] [AddCommGroup M] [AddCommGroup Q]
-    [AddCommGroup Q'] [Module A M] [Module A Q] [Module A Q'] (π : M →ₗ[A] Q)
-    (hπ : Function.Surjective π) (g : M →ₗ[A] Q') (hk : ∀ m, π m = 0 → g m = 0) :
-    ∃ q : Q →ₗ[A] Q', ∀ m, q (π m) = g m :=
-  _root_.UpperTheory.Reformulated.B.Qf12.lift_ex π hπ g hk
-
 theorem UpperTheory.V.Pa.B2.odHom :
     ∀ (l : ℕ) [Fact l.Prime] (L : Loc) (G G0 : Glob l L) (h : G.Hom G0) (n : ℕ) (x : NP G0.frame n) (X : Type) [CommRing X] [Algebra x.A X] (X' : Type) [CommRing X'] [Algebra x.A X'] (D D' : Dat x.A (plOf G)) (o : IsOd h x X D) (o' : IsOd h x X' D') (u : X →ₗ[x.A] X'), ∃ f : D.Hom D', Induced o o' u f := by
   intro l _ L G G0 h n x X _ _ X' _ _ D D' o o' u
@@ -1299,7 +1293,7 @@ theorem UpperTheory.V.Pa.B2.odHom :
       exact (congrArg u this).trans (map_zero u)
     · have : m = 0 := o.kerU w (hm.trans (map_zero _).symm)
       rw [this, map_zero]
-  choose q hq using fun w => lift_ex (D.π w) (D.surj w) (D'.π w ∘ₗ f) (hk w)
+  choose q hq using fun w => _root_.UpperTheory.Reformulated.B.Qf12.lift_ex (D.π w) (D.surj w) (D'.π w ∘ₗ f) (hk w)
   exact ⟨⟨f, q, hall, hq⟩, hf⟩
 end -- clump:auto
 end -- clump:auto

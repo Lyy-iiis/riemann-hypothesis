@@ -196,7 +196,6 @@ theorem idx_arith (g r k : ℕ) (hg : g.Prime) :
   have hB' := hB.ne'
   have hgn : (g : ℝ) ^ ((2 * r + k + 1) * (2 * r + k + 1)) ≠ 0 := pow_ne_zero _ hq0
   field_simp
-  try ring
 
 variable {D : D7} (X : HidaSetting D)
 
@@ -425,9 +424,9 @@ theorem core_loc {R S : Type} [CommRing R] [IsLocalRing R] [CommRing S] (ι : R 
   let pp : Fin 4 → R := ![1, -1, P, -P]
   let qq : Fin 4 → R := ![0, 0, Q, -Q]
   let f : Fin 4 → R := fun i => (Bt - pp i * a + qq i * b * D) ^ 2 - D * (qq i * a - pp i * b) ^ 2
-  have ef0 : f 0 = (Bt - a) ^ 2 - D * b ^ 2 := by simp [f, pp, qq] <;> ring
-  have ef1 : f 1 = (Bt + a) ^ 2 - D * b ^ 2 := by simp [f, pp, qq] <;> ring
-  have ef2 : f 2 = (Bt - P * a + Q * b * D) ^ 2 - D * (Q * a - P * b) ^ 2 := by simp [f, pp, qq] <;> ring
+  have ef0 : f 0 = (Bt - a) ^ 2 - D * b ^ 2 := by simp [f, pp, qq]
+  have ef1 : f 1 = (Bt + a) ^ 2 - D * b ^ 2 := by simp [f, pp, qq]
+  have ef2 : f 2 = (Bt - P * a + Q * b * D) ^ 2 - D * (Q * a - P * b) ^ 2 := by simp [f, pp, qq]
   have ef3 : f 3 = (Bt + P * a - Q * b * D) ^ 2 - D * (Q * a - P * b) ^ 2 := by simp [f, pp, qq] <;> ring
   have hspanTop : Ideal.span (Set.range f) = ⊤ := by
     have mem : ∀ i, f i ∈ Ideal.span (Set.range f) := fun i => Ideal.subset_span ⟨i, rfl⟩
@@ -1207,7 +1206,7 @@ theorem ncTie0All_of (hRB : Formalism.L2.SG.Pf.NcReal.RealBracket) (hSW : PI.Vol
     (Formalism.L2.SG.Pf.MassDataX.volHa'_eq X hb hK FdN FdN' u u' X0 ψ T sd C Th vR Q M δ i0 i0' νq hSW hStd.2.2.1 hMC)
     hcong hRR (Formalism.L2.SG.Pf.NcVal.volOrdV_holds X u u' ψ) (Formalism.L2.SG.Pf.NcVal.volTypV_holds X u u' ψ)
     (Formalism.L2.SG.Pf.AlTieIdx.indexTypC_holds X hb hK FdN FdN' u u' X0 ψ T sd C Th vR Q M δ i0 i0' νq)
-    (Formalism.L2.SG.Pf.NcVal.OmVSt.OmVZ.omV_holdsX X u' ψ) (Formalism.L2.SG.Pf.AlTieLG.fieldDict_holds X u u') hPC
+    (_root_.Formalism.L2.SG.Pf.NcX.OmVSt.omVZ_holdsX X u' ψ) (Formalism.L2.SG.Pf.AlTieLG.fieldDict_holds X u u') hPC
 
 end Formalism.L2.SG.Pf.NcAllS
 end -- clump:auto

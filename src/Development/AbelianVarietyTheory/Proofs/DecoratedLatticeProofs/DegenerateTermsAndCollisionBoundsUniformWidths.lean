@@ -212,7 +212,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.corankSizeHypothesis_explicitConstant_siegelMass : Formalism.HermitianLatticesTheory.SiegelMassRatio → ∀ C : ℝ, 408 * (Real.exp 1 * Real.pi) ≤ C → ∀ (D : D7) (large₂ : SizeData₂ D) (u u' : D.what₂.Word) (C' Cl Cg cb Cu cT CT C0 A : ℝ), 1 ≤ Cl → Cnt.Hyp D large₂ u u' C' Cl Cg cb Cu cT CT C0 A → Formalism.HermitianLatticeCounting.LatticeSumBounds.XiHyp C D.R.k (2 * D.R.rS + 2) D.R.f large₂.sc.b D.host.v (Cnt.NT D u) (BridgeLemma.XiB D large₂ u C) := by
-  first | exact @GlobalTheory.Core.Deg.xiSizes_explicit | exact GlobalTheory.Core.Deg.xiSizes_explicit | (intros; apply GlobalTheory.Core.Deg.xiSizes_explicit <;> assumption)
+  first | exact @GlobalTheory.Core.Deg.xiSizes_explicit
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.CorankSizeHypothesisExplicitConstantSiegelMassStatement =====
@@ -451,7 +451,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.corankSums_bound_with_expLoss : ∀ C : ℝ, 1 ≤ C → ∃ K₀ : ℝ, ∀ (k m f : ℕ) (b g v NT Gam : ℝ) (Xi : ℕ → ℝ), Formalism.HermitianLatticeCounting.LatticeSumBounds.Params C K₀ k m f b g v NT 1 → Formalism.HermitianLatticeCounting.LatticeSumBounds.XiHyp C k m f b v NT Xi → 0 ≤ Gam → Gam ≤ Real.exp ((k : ℝ) / 8) → ∑ s ∈ Finset.Icc 2 k, Formalism.HermitianLatticeCounting.LatticeSumBounds.ndRow C k m f s b g v Gam Xi ≤ (Real.sqrt g)⁻¹ ^ (k * f) ∧ ∑ s ∈ Finset.Icc 2 k, Formalism.HermitianLatticeCounting.LatticeSumBounds.degRow C k m f s b g v Gam Xi ≤ Real.exp (-((k : ℝ) * f * Real.log k) / 2) := by
-  first | exact @GlobalTheory.Core.Deg.corankSums_expLoss | exact GlobalTheory.Core.Deg.corankSums_expLoss | (intros; apply GlobalTheory.Core.Deg.corankSums_expLoss <;> assumption)
+  first | exact @GlobalTheory.Core.Deg.corankSums_expLoss
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.CorankSumsBoundWithExpLossStatement =====
@@ -506,7 +506,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.pairAbs_corank_ge_two_le_sum_corankClasses : ∀ (τ Rw I H H₁ : Type) [Fintype I] [NormedAddCommGroup H] [InnerProductSpace ℂ H] [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] (X : Formalism.FourierDecayAlt.PB.Terms τ Rw I H H₁) (k : ℕ) (B : ℕ → ℝ), X.AbsConv → (∀ p ∈ X.big X.nzSet, X.s0 p.1 p.2 ≤ k) → (∀ s, 2 ≤ s → s ≤ k → Formalism.L2.SG.LoopsCut.ClassLe X (Formalism.L2.SG.LoopsCut.bigS X s) (B s)) → X.pairAbs (X.big X.nzSet) ≤ ∑ s ∈ Finset.Icc 2 k, B s := by
-  first | exact @GlobalTheory.Core.Deg.pairAbs_big_le_sum_classes | exact GlobalTheory.Core.Deg.pairAbs_big_le_sum_classes | (intros; apply GlobalTheory.Core.Deg.pairAbs_big_le_sum_classes <;> assumption)
+  first | exact @GlobalTheory.Core.Deg.pairAbs_big_le_sum_classes
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.PairAbsCorankGeTwoLeSumCorankClassesStatement =====
@@ -614,7 +614,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.collisionAbsSum_bound_of_two_rowBounds : Formalism.HermitianLatticesTheory.SiegelMassRatio → ∀ CT C : ℝ, 408 * (Real.exp 1 * Real.pi) ≤ C → CT ≤ C → ∃ thr : ℝ, ∀ (D : D7) (large₂ : SizeData₂ D) (X : HidaSetting D) (Y : Full X) (hF : FinX Y) (hI : SIso D.s (sOf hF)) (u : D.what₂.Word) (T : TermTie D) (Z : LoopTie D large₂ T u u 1) (C' Cl Cg cb Cu cT C0 : ℝ), thr ≤ C' → thr ≤ Cl → Cnt.Hyp0 D large₂ C' Cl Cg cb Cu cT CT C0 → ConcTie X Y → (Y.tO u u).AbsConv → TieAt hF hI large₂ u T Z → UnitaryVolumeMass.FormAt D u → BridgeLemma.RowsND T Z C → BridgeLemma.RowsDeg T Z C → CollS Y u := by
-  first | exact @GlobalTheory.Core.Deg.collS_of_rowBounds | exact GlobalTheory.Core.Deg.collS_of_rowBounds | (intros; apply GlobalTheory.Core.Deg.collS_of_rowBounds <;> assumption)
+  first | exact @GlobalTheory.Core.Deg.collS_of_rowBounds
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.CollisionAbsSumBoundOfTwoRowBoundsStatement =====
@@ -726,7 +726,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.degenerateCollision_rowBound_at_sizeData : ∀ CT cH cV Ca C2 Ch c C : ℝ, 1 ≤ c → CT ≤ c → |cH| + 2 ≤ c → |cV| + 2 ≤ c → 0 ≤ Ch → c ≤ C → 4 + (c ^ 2 + 2 * max (Ch - c) 0) * (6 * c + 2) ≤ C → 2 * C2 ≤ C → |Ca| ≤ C → ∀ (D : D7) (large₂ : SizeData₂ D) (u : D.what₂.Word) (T : TermTie D) (Z : LoopTie D large₂ T u u 1) (C' Cl Cg cb Cu cT C0 : ℝ), 3 * |C2| ≤ C' → Cnt.Hyp D large₂ u u C' Cl Cg cb Cu cT CT C0 1 → UnitaryVolumeMass.MeanFlagPairCount D large₂ u u C' Cl Cg cb Cu cT CT C0 1 3 c → UnitaryVolumeMass.stHH D large₂ u u C' Cl Cg cb Cu cT CT C0 1 cH → UnitaryVolumeMass.stVol D large₂ T u u 1 Z C' Cl Cg cb Cu cT CT C0 1 cV → AmpAt D large₂ C' Cl Cg cb Cu cT CT C0 (9 * c + 3) Ca C2 Ch 1 → SmallAt D large₂ C' Cl Cg cb Cu cT CT C0 1 → BridgeLemma.TermPtsTie T Z → @BridgeLemma.LatticeDeterminantFactorization D T u u → BridgeLemma₂.wordPairEntriesInLattice T u u → BridgeLemma.RowsDeg T Z C := by
-  first | exact @GlobalTheory.Core.Deg.rowsDeg_at_record | exact GlobalTheory.Core.Deg.rowsDeg_at_record | (intros; apply GlobalTheory.Core.Deg.rowsDeg_at_record <;> assumption)
+  first | exact @GlobalTheory.Core.Deg.rowsDeg_at_record
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.DegenerateCollisionRowBoundAtParametersStatement =====
@@ -833,7 +833,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.S Formal
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.nondegenerateCollision_rowBound_at_parameters : ∀ CT cH cV Ca C2 Ch c C : ℝ, 1 ≤ c → |cH| + 2 ≤ c → |cV| + 2 ≤ c → 0 ≤ Ch → c ≤ C → 4 + (c ^ 2 + 2 * max (Ch - c) 0) * (6 * c + 2) ≤ C → ∀ (D : D7) (large₂ : SizeData₂ D) (u : D.what₂.Word) (T : TermTie D) (Z : LoopTie D large₂ T u u 1) (C' Cl Cg cb Cu cT C0 : ℝ), |C2| ≤ C' → Cnt.Hyp D large₂ u u C' Cl Cg cb Cu cT CT C0 1 → UnitaryVolumeMass.MeanFlagPairCount D large₂ u u C' Cl Cg cb Cu cT CT C0 1 3 c → UnitaryVolumeMass.stHH D large₂ u u C' Cl Cg cb Cu cT CT C0 1 cH → UnitaryVolumeMass.stVol D large₂ T u u 1 Z C' Cl Cg cb Cu cT CT C0 1 cV → AmpAt D large₂ C' Cl Cg cb Cu cT CT C0 (9 * c + 3) Ca C2 Ch 1 → SmallAt D large₂ C' Cl Cg cb Cu cT CT C0 1 → BridgeLemma.TermPtsTie T Z → @BridgeLemma.LatticeDeterminantFactorization D T u u → BridgeLemma₂.wordPairEntriesInLattice T u u → BridgeLemma.RowsND T Z C := by
-  first | exact @GlobalTheory.Core.Deg.rowsND_one_record | exact GlobalTheory.Core.Deg.rowsND_one_record | (intros; apply GlobalTheory.Core.Deg.rowsND_one_record <;> assumption)
+  first | exact @GlobalTheory.Core.Deg.rowsND_one_record
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.NondegenerateCollisionRowBoundAtParametersStatement =====
@@ -936,7 +936,7 @@ open Matrix MeasureTheory NumberField Formalism.BasicNotions Formalism.MainNotio
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.covolume_unipotentIntegral_normalisedHaar : Formalism.L2.SG.Pf.LoopBCovN.CovNFormula := by
-  first | exact @GlobalTheory.CovNFormulaPf.main | exact GlobalTheory.CovNFormulaPf.main | (intros; apply GlobalTheory.CovNFormulaPf.main <;> assumption)
+  first | exact @GlobalTheory.CovNFormulaPf.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.CovolumeUnipotentIntegralNormalisedHaarStatement =====
@@ -1009,7 +1009,7 @@ theorem GlobalTheory.Core.Deg.exists_termLoop_of_standingHypotheses : ∀ (D : D
   exact ⟨Formalism.L2.SG.LoopsFinal.jtPin_of _ hI _ _ _ (Formalism.L2.SG.Pf.FibreCounting.AmpFibreConst_holds Y),
     Formalism.L2.SG.Pf.WittFlags.WRowPin_holds hF hI _ _ _ _,
     Formalism.L2.SG.Pf.FibreCounting.FibreCount_holds Y,
-    Formalism.MainNotions.BridgeLemma₂.rows_TermPtsTie_of _ (Formalism.MainNotions.BridgeLemma₂.rows_rdE_pos D) hti.1,
+    Formalism.MainNotions.BridgeLemma₂.rows_TermPtsTie_of _ (_root_.Formalism.MainNotions.S.rdE_pos D) hti.1,
     hti.2.1, hti.2.2, fun t t' hL hE => hFE t t' hL hE⟩
 
 namespace GlobalTheory.Core.Deg
@@ -1250,15 +1250,15 @@ namespace GlobalTheory.Core.Deg
 theorem termSumBound_of_pairsAmplitude : TermSumBoundOfPairsAmplitude := by
   intro C' Cl Cg cb Cw cT CT C0 D large₂ X Y u hH hT ha hA
   have hN : NormExpDegC :=
-    Formalism.L2.SG.Pf.normExpDegC_of_leaves Formalism.L2.SG.Closed.FinLeviC_holds Formalism.L2.SG.Closed.OOLintSumC_holds
+    Formalism.L2.SG.Pf.normExpDegC_of_leaves _root_.Formalism.L2.SG.Pf.FinLeviPf.finLeviC_holds Formalism.L2.SG.Closed.OOLintSumC_holds
   have hG0 : 0 ≤ (Y.tO u u).Gam1 := ha.2.2.le
   have hPg : 0 ≤ PgC Y := Finset.prod_nonneg fun v _ => by positivity
   have hGB : (Y.tO u u).GGBound (PgC Y) :=
     Formalism.L2.SG.TermOp.ggBound Y.TR (Y.cs u) (Y.cs u) (Y.FN u) (Y.FN u) Formalism.L2.SG.Closed.TermsGGBound_holds Y.psi_ne
       (fun v => card_ge_three hH.2 Y.TR v)
   refine ⟨ha.1.indicator _, ?_⟩
-  exact Formalism.L2.SG.RowsOther.kppDiag_of_pairs (Y.tO u u) Formalism.FourierDecayAlt.P.price_of_index
-    Formalism.FourierDecayAlt.P.equal_index Formalism.FourierDecayAlt.P.pair_split_alt Formalism.FourierDecayAlt.P.subfamilyAlt
+  exact Formalism.L2.SG.RowsOther.kppDiag_of_pairs (Y.tO u u) _root_.Formalism.FourierDecayAlt.P.GrowthPolynomialOperator.t_PriceOfIota
+    _root_.Formalism.FourierDecayAlt.P.GrowthPolynomialOperator.t_EqualIota _root_.Formalism.FourierDecayAlt.P.GrowthPolynomialOperator.t_PairSplit _root_.Formalism.FourierDecayAlt.P.GrowthPolynomialOperator.t_SubFamily
     (PgC Y) (duC X Y u) D.R.k D.R.f hPg ha
     (Formalism.L2.SG.TermOp.rowOrth Y.TR (Y.cs u) (Y.cs u) (Y.FN u) (Y.FN u))
     (Formalism.L2.SG.KappaOffDiagonal.corankPosC_holds D X Y u u hT) (hN D X Y u hT) hGB
@@ -1349,61 +1349,6 @@ namespace GlobalTheory.Core.Deg.AtRecord
 
 open Formalism.FourierDecayAlt
 
-theorem m_eq (R : Ranks) : R.m = 2 * R.rS + 2 := by
-  obtain ⟨t, ht⟩ := R.m_even
-  have := R.two_le_m
-  simp only [Ranks.rS]; omega
-
-theorem sfac_cast (n : ℕ) : (Sz.sfac n : ℝ) = ∏ i ∈ range n, (i.factorial : ℝ) := by
-  simp [Sz.sfac]
-
-theorem vand_pos {n : ℕ} {x : Fin n → ℝ} (h : StrictAnti x) : 0 < vand x :=
-  prod_pos fun _ _ => prod_pos fun _ hb => sub_pos.2 (h (mem_filter.1 hb).2)
-
-theorem isHCParam_uS (D : D7) (w : D.what₂.Word) (τ : D.what₂.Tau) : Formalism.QuantumDeterminants.IsHCParam (uS D w τ) := by
-  have hk := D.R.m_add_three_le_k
-  obtain ⟨c, hc⟩ := D.R.k_even
-  refine ⟨?_, fun a => ?_⟩
-  · obtain ⟨n, hn⟩ : ∃ n, D.R.k = n + 1 := ⟨D.R.k - 1, by omega⟩
-    have key : ∀ (d i : ℕ) (h : i + d + 1 < D.R.k),
-        (D.hcW w τ).u ⟨i + d + 1, h⟩ < (D.hcW w τ).u ⟨i, by omega⟩ := by
-      have step : ∀ (i : ℕ) (h : i + 1 < D.R.k), (D.hcW w τ).u ⟨i + 1, h⟩ < (D.hcW w τ).u ⟨i, by omega⟩ :=
-        fun i h => lt_trans ((D.hcW w τ).v_gt_u ⟨i, by omega⟩) ((D.hcW w τ).u_gt_v ⟨i, by omega⟩)
-      intro d
-      induction d with
-      | zero => intro i h; exact step i h
-      | succ d ih => intro i h; exact lt_trans (step (i + d + 1) h) (ih i (by omega))
-    intro i j hij
-    have hlt : i.val < j.val := hij
-    have := key (j.val - i.val - 1) i.val (by omega)
-    have e : (D.hcW w τ).u ⟨i.val + (j.val - i.val - 1) + 1, by omega⟩ = (D.hcW w τ).u j :=
-      congrArg _ (Fin.ext (by simp; omega))
-    rw [e] at this
-    unfold uS
-    exact_mod_cast this
-  · obtain ⟨z, hz⟩ := (D.hcW w τ).u_half a
-    refine ⟨z - c + 1, ?_⟩
-    unfold uS
-    rw [hz, hc]; push_cast; ring
-
-theorem tcrit_eq (D : D7) (hv : 0 < D.host.v) (u : D.what₂.Word) (τ : D.what₂.Tau) :
-    Tcrit D u τ = Sz.Tcrit D.R.k D.R.m D.host.ka D.host.rdE (gg D) (VV D τ) (vand (uS D u τ)) := by
-  have hka : 0 < D.host.ka := div_pos Real.pi_pos hv
-  have hg : 0 ≤ gg D := by unfold gg; positivity
-  have hm := m_eq D.R
-  have e0 : D.R.m * (D.R.m - 1) / 2 = (D.R.rS + 1) * (2 * D.R.rS + 1) := by
-    have : D.R.m * (D.R.m - 1) = 2 * ((D.R.rS + 1) * (2 * D.R.rS + 1)) := by
-      rw [hm, show 2 * D.R.rS + 2 - 1 = 2 * D.R.rS + 1 by omega]; ring
-    omega
-  have e1 : D.R.m - 1 = 2 * D.R.rS + 1 := by omega
-  have hmR : (D.R.m : ℝ) = 2 * D.R.rS + 2 := by exact_mod_cast hm
-  unfold Tcrit Sz.Tcrit Sz.TcritPow
-  rw [e0, e1, ← Real.rpow_natCast, ← Real.rpow_natCast, ← Real.rpow_neg hka.le]
-  congr 5
-  · congr 1
-    rw [hmR]; push_cast; ring
-  · rw [hmR]; push_cast; rw [hmR]; ring
-
 def sizeData (D : D7) (u : D.what₂.Word) : Sz.SizeData D.what₂.Tau where
   k := D.R.k
   r := D.R.rS
@@ -1417,117 +1362,6 @@ def sizeData (D : D7) (u : D.what₂.Word) : Sz.SizeData D.what₂.Tau where
   dsig := D.dsig
   Vu := fun τ => vand (uS D u τ)
   du := D.duS u
-
-theorem gaG_eq (D : D7) : gaG D = Sz.colIdx D.R.k (D.host.g 0) ^ D.R.f * Sz.colIdx D.R.k (D.host.g 1) ^ D.R.f := by
-  have hS : ∀ i, StandardLattice.SplitsF D (D.host.g i) := fun i =>
-    (GlobalTheory.ColClassCompare.split_g_iff D i).2 (GlobalTheory.IndefiniteRowSideFullHecke.SplitColumnClasses.splitsCompletely_g D i)
-  have hp := GlobalTheory.TypedPlacesProduct.finprod_typed_places D (fun x => ∏ i ∈ Icc 1 D.R.k, (x ^ i - 1)) hS
-  have e : ∀ i, Sz.colIdx D.R.k (D.host.g i) = ∏ j ∈ Icc 1 D.R.k, ((D.host.g i : ℝ) ^ j - 1) := fun i => by
-    have : (0 : ℝ) < D.host.g i := by exact_mod_cast (D.host.g_prime i).pos
-    unfold Sz.colIdx Sz.glCard
-    rw [GlobalTheory.prod_pow_sub_pow_eq_mul_prod_Icc]
-    field_simp
-  rw [e, e]
-  exact hp
-
-theorem idxRows_eq (D : D7) : LocalBesselAndTopKernel.idxRows D =
-    Sz.rowIdx D.R.k D.R.rS (D.host.g 0) ^ D.R.f * Sz.rowIdx D.R.k D.R.rS (D.host.g 1) ^ D.R.f := by
-  have hS : ∀ i, StandardLattice.SplitsF D (D.host.g i) := fun i =>
-    (GlobalTheory.ColClassCompare.split_g_iff D i).2 (GlobalTheory.IndefiniteRowSideFullHecke.SplitColumnClasses.splitsCompletely_g D i)
-  have hp := GlobalTheory.TypedPlacesProduct.finprod_typed_places D
-    (fun x => LocalBesselAndTopKernel.cardGL x D.R.r / (x ^ LocalBesselAndTopKernel.dimNS D * x ^ (D.R.k * (D.R.k - 1) / 2))) hS
-  have hr : D.R.k + 2 * D.R.rS + 1 = D.R.r := by have := dimS_eq D.R; omega
-  unfold Sz.rowIdx
-  rw [hr]
-  exact hp
-
-theorem ratio_ranks (D : D7) (hM : UnitaryVolumeMass.stMassRatio D) (hR : LocalBesselAndTopKernel.FamilyMidVolume D) (hv : 0 < D.host.v)
-    (hg0 : 4 ≤ D.host.g 0) (hg1 : 4 ≤ D.host.g 1) : UnitaryVolumeMass.cTvA D := by
-  intro u
-  have hk := D.R.m_add_three_le_k
-  have hm2 := D.R.two_le_m
-  have hm := m_eq D.R
-  have hst := GlobalTheory.Mass.StdMass.main D.host.E D.sp.cm.cmUnram
-  set S := sizeData D u with hS
-  have hf : S.f = D.R.f := D.what₂.card_Tau
-  have hSm : S.m = D.R.m := hm.symm
-  have hn : S.n = D.R.r := by
-    show D.R.k + S.m - 1 = D.R.r
-    rw [hSm]; rfl
-  have hVu : ∀ τ, 0 < vand (uS D u τ) := fun τ => vand_pos (isHCParam_uS D u τ).1
-  have hOk : S.Ok := ⟨show 1 ≤ D.R.k by omega, hv, by rw [hf]; rfl, (D.host.g_prime 0).two_le,
-    (D.host.g_prime 1).two_le, (D.mem u).A.T_prime.two_le, (hst D.R.k).2.2.1, hVu⟩
-  have hMR : S.MassRatios := by
-    intro M h1 _
-    have h1' : D.R.k < M := h1
-    have h := hM M (by omega) _ _ _ _ _ _ (hst M).1 (hst (M - 1)).1 (hst M).2.1 (hst (M - 1)).2.1
-    rw [StandardLattice.mass_ratio_eq] at h
-    replace h := (div_eq_iff (hst (M - 1)).2.2.1.ne').1 h
-    rw [hf]
-    refine h.trans ?_
-    have hdF : 0 ≤ S.dF := by
-      rw [hOk.hdF]
-      exact pow_nonneg (mul_nonneg two_pos.le hOk.hv.le) _
-    unfold StandardLattice.ratioH
-    rw [Real.rpow_neg hdF, ← Real.sqrt_eq_rpow, div_eq_mul_inv]
-    rfl
-  have hLB : S.LBound := by
-    intro M h1 _
-    have h1' : D.R.k < M := h1
-    rw [hf]
-    exact ⟨StandardLattice.lVal_pos D M (by omega), StandardLattice.massIdentity_holds D M (by omega)⟩
-  have hCC : S.ColumnCount := by
-    have h := (hR _ _ _ (hst D.R.k).1).1 (hst D.R.k).2.1 u
-    rw [gaG_eq, ← sfac_cast] at h
-    unfold Sz.SizeData.ColumnCount Sz.SizeData.idxCol
-    rw [hf]
-    exact h
-  have hD : S.Dstar = D.what₂.Dstar := by
-    have h := (hR _ _ _ (hst D.R.r).1).2 (hst D.R.r).2.1
-    rw [idxRows_eq] at h
-    unfold Sz.SizeData.Dstar Sz.SizeData.idxRow
-    rw [hf, hn]
-    exact h.symm
-  have hA := Final.sz_propA _ S hOk hMR hCC
-  obtain ⟨hE0, hE⟩ := Final.sz_eaSize _ S hOk hLB (show 2 ≤ D.R.k by omega) hg0 hg1
-  have hpow : ∀ τ, 0 < S.TcritPow τ ∧ (Tcrit D u τ / Tr D u) ^ D.R.k = S.TcritPow τ / (S.T : ℝ) ^ S.k := by
-    intro τ
-    have hrd : S.rd = D.host.rdE := by
-      show 2 * (D.host.rdE / 2) = _
-      ring
-    have hVV : S.VV τ = VV D τ := by
-      unfold Sz.SizeData.VV VV
-      rw [hn, sfac_cast]; rfl
-    have hpos : 0 < S.TcritPow τ := by
-      have h1 : 0 < S.ka := div_pos Real.pi_pos hv
-      have h2 : 0 < S.rd := mul_pos two_pos hv
-      have h3 : 0 < S.g := by
-        have a : (0 : ℝ) < D.host.g 0 := by exact_mod_cast (D.host.g_prime 0).pos
-        have b : (0 : ℝ) < D.host.g 1 := by exact_mod_cast (D.host.g_prime 1).pos
-        exact mul_pos a b
-      have h4 : 0 < S.VV τ := by
-        rw [hVV]; exact mul_pos (D.dsig_pos τ) (prod_pos fun i _ => by positivity)
-      have h5 : 0 < S.Vu τ := hVu τ
-      unfold Sz.SizeData.TcritPow Sz.TcritPow
-      positivity
-    refine ⟨hpos, ?_⟩
-    have e : Tcrit D u τ = S.TcritPow τ ^ ((1 : ℝ) / (D.R.k : ℝ)) := by
-      rw [tcrit_eq D hv]
-      unfold Sz.SizeData.TcritPow Sz.Tcrit
-      rw [hrd, hVV, hSm]; rfl
-    rw [div_pow, e, one_div, Real.rpow_inv_natCast_pow hpos.le (by omega)]
-    rfl
-  have hP : 0 ≤ ∏ τ, S.TcritPow τ / (S.T : ℝ) ^ S.k :=
-    prod_nonneg fun τ _ => div_nonneg (hpow τ).1.le (by positivity)
-  have e2 : (2 : ℝ) ^ ((3 : ℝ) - D.R.k) = 8 / 2 ^ S.k := by
-    rw [Real.rpow_sub two_pos, Real.rpow_natCast]; norm_num; rfl
-  rw [prod_congr rfl fun τ _ => (hpow τ).2, e2, ← hD, ← hf]
-  change _ ≤ S.Dstar / S.du ∧ S.Dstar / S.du ≤ _
-  rw [hA]
-  rw [abs_le] at hE
-  refine ⟨mul_le_mul_of_nonneg_right ?_ hP, mul_le_mul_of_nonneg_right ?_ hP⟩
-  · exact (Real.le_log_iff_exp_le hE0).1 hE.1
-  · exact (Real.log_le_iff_le_exp hE0).1 hE.2
 
 theorem sq_le_two_pow (k : ℕ) (hk : 4 ≤ k) : k ^ 2 ≤ 2 ^ k := by
   induction k, hk using Nat.le_induction with
@@ -1568,7 +1402,7 @@ theorem form_of_ranks (D : D7) (hR : LocalBesselAndTopKernel.FamilyMidVolume D) 
   have h1 := (hR _ _ _ hst.1).1 hst.2.1 u
   have h2 := (h3 hp h3T (hT u).1 F0 he hz what₂ hrows).1
   have h4 : dimPi (hc := D.hcW) u = ∏ τ, vand (uS D u τ) / ∏ i ∈ range D.R.k, (i.factorial : ℝ) :=
-    prod_congr rfl fun τ _ => (GlobalTheory.WeylDimU.weyl_dimension _ _ (isHCParam_uS D u τ)).2
+    prod_congr rfl fun τ _ => (GlobalTheory.WeylDimU.weyl_dimension _ _ (_root_.GlobalTheory.CritLevel.isHCParam_uS D u τ)).2
   rw [h1, h2, h4]
   change _ * (Cnt.massU D.host.E D.R.k * (Tr D u ^ D.R.k - 1) ^ D.R.f) * _ =
     Cnt.massU D.host.E D.R.k * _ * _ * _
@@ -1595,9 +1429,9 @@ theorem smallOn_univ_unconditional : SmallOn Set.univ := by
     fun hH0 u => AtRecord.form_of_ranks D hR u (GlobalTheory.Mass.RowsRawMass.main D u) hH0.2.1⟩
   · intro τ w H _ _ z π hπ
     obtain ⟨g, -, hg⟩ := hπ
-    exact (GlobalTheory.WeylDimU.weyl_dimension _ _ (AtRecord.isHCParam_uS D w τ)).1 H _ hg
+    exact (GlobalTheory.WeylDimU.weyl_dimension _ _ (_root_.GlobalTheory.CritLevel.isHCParam_uS D w τ)).1 H _ hg
   · intro _ w τ
-    exact (GlobalTheory.WeylDimU.weyl_dimension _ _ (AtRecord.isHCParam_uS D w τ)).2
+    exact (GlobalTheory.WeylDimU.weyl_dimension _ _ (_root_.GlobalTheory.CritLevel.isHCParam_uS D w τ)).2
   · intro hH0 w
     obtain ⟨-, -, -, hk, hrd, -⟩ := h1 D large₂ C' Cl Cg cb Cu cT CT hC1 hCl1 hH0.1
     obtain ⟨-, -, -, -, -, -, -, -, -, -, -, hg0, -, hg1, -, -, -, -, hv, -⟩ := hH0.1
@@ -1611,7 +1445,7 @@ theorem smallOn_univ_unconditional : SmallOn Set.univ := by
       le_trans (by nlinarith) (le_self_pow₀ (by nlinarith) (by norm_num))
     have hg0' : 4 ≤ D.host.g 0 := by exact_mod_cast h4.trans hg0
     have hg1' : 4 ≤ D.host.g 1 := by exact_mod_cast h4.trans hg1
-    exact tprod_mono D (AtRecord.ratio_ranks D (GlobalTheory.MassAtRecord.massRatio_at_record D) hR (by linarith)
+    exact tprod_mono D (_root_.GlobalTheory.CritLevel.ratio_ranks D (GlobalTheory.MassAtRecord.massRatio_at_record D) hR (by linarith)
       hg0' hg1') (AtRecord.err_le D hδ hk) w
 
 end GlobalTheory.Core.Deg

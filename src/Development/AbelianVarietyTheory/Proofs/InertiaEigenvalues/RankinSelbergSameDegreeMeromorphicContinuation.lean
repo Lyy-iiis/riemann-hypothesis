@@ -9,6 +9,7 @@ public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ConstantTerm
 public import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsEquivariantProj
 public import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PetEqZeroOfOrthogonal
 public import Development.AbelianVarietyTheory.Definitions.Divisors.UnrOutside
+public import Mathlib.Analysis.Matrix.MeasurableSpace
 public import Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.ZintZero
 public import GroundTheory.GlobalFields.TateThesis.AdeleIdealMeasure
 public import GroundTheory.GlobalFields.IdeleGroups.ClassGroup
@@ -137,13 +138,13 @@ open NumberField IsDedekindDomain
 open scoped nonZeroDivisors
 
 theorem _root_.GlobalTheory.T.ideleLogAbsoluteValue_eq_log_ideleModule : ∀ (E : Type) [Field E] [NumberField E] (d : (AdeleRing (𝓞 E) E)ˣ), GlobalTheory.Mem.Chr.CharModel.logNorm E d = Real.log (GroundTheory.Global.IdeleGroup.ideleModule E d : ℝ) := by
-  first | (exact @GlobalTheory.IdeleLogNormCompare.logNorm_eq_log_ideleModule) | (exact GlobalTheory.IdeleLogNormCompare.logNorm_eq_log_ideleModule) | (intros; apply GlobalTheory.IdeleLogNormCompare.logNorm_eq_log_ideleModule  <;> assumption)
+  first | (exact @GlobalTheory.IdeleLogNormCompare.logNorm_eq_log_ideleModule)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IdeleLogAbsoluteValueEqLogIdeleModuleStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.MeasurableCompInfGLProd =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.MeasurableCompInfGLProd", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.IsRapidInf\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.MemBddFormsOfWithSmoothings\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ConstantTermAutomorphicFormIntegral\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsEquivariantProj\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PetEqZeroOfOrthogonal\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.IsFiniteMeasureQuotMeasure\nimport Formalism.PeriodIntegrals.UnitaryGroupMassFormula.AdelicLocalCompactness.AdeleLC\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Development.AbelianVarietyTheory.Definitions.Divisors.UnrOutside\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.MeasurableCompInfGLProd", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.IsRapidInf\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.MemBddFormsOfWithSmoothings\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ConstantTermAutomorphicFormIntegral\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsEquivariantProj\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PetEqZeroOfOrthogonal\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.IsFiniteMeasureQuotMeasure\nimport Formalism.PeriodIntegrals.UnitaryGroupMassFormula.AdelicLocalCompactness.AdeleLC\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Development.AbelianVarietyTheory.Definitions.Divisors.UnrOutside\npublic import Mathlib.Analysis.Matrix.MeasurableSpace\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -377,7 +378,7 @@ open NumberField IsDedekindDomain
 open scoped nonZeroDivisors
 
 theorem _root_.GlobalTheory.T.mem_natMultipleIntegralFiniteAdeles_iff_idealFiniteAdeles : ∀ (E : Type) [Field E] [NumberField E] (N : ℕ), 0 < N → ∀ (J : (FractionalIdeal (𝓞 E)⁰ E)ˣ), (J : FractionalIdeal (𝓞 E)⁰ E) = FractionalIdeal.spanSingleton (𝓞 E)⁰ (N : E) → ∀ z : FiniteAdeleRing (𝓞 E) E, z ∈ GlobalTheory.RSJ.natLat E N ↔ z ∈ GroundTheory.Global.idealFiniteAdeles J := by
-  first | (exact @GlobalTheory.RSJ.natLat_iff_mem_idealFiniteAdeles) | (exact GlobalTheory.RSJ.natLat_iff_mem_idealFiniteAdeles) | (intros; apply GlobalTheory.RSJ.natLat_iff_mem_idealFiniteAdeles  <;> assumption)
+  first | (exact @GlobalTheory.RSJ.natLat_iff_mem_idealFiniteAdeles)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.MemNatMultipleIntegralFiniteAdelesIffIdealFiniteStatement =====
@@ -741,8 +742,6 @@ open NumberField Matrix MeasureTheory Filter Topology GlobalTheory.CuspRep Globa
 open scoped nonZeroDivisors ComplexConjugate
 
 
-theorem _root_.GlobalTheory.T.integral_det_le_one_eq_geometric_series_shells : ∀ (E : Type) [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] (a : ℕ), 0 < a → ∀ (μ : Measure (GA E a)) [μ.IsHaarMeasure] (𝓕 : Set (GA E a)), IsFundamentalDomain (ratGL E a).range 𝓕 μ → ∀ (F : GA E a → ℂ), Continuous F → ∀ C : ℝ, (∀ g, ‖F g‖ ≤ C) → (∀ (γ : GL (Fin a) E) (g : GA E a), F (ratGL E a γ * g) = F g) → ∀ χ : ℂ, ‖χ‖ = 1 → (∀ g, F (splitCentre E a 1 * g) = χ * F g) → ∀ s : ℂ, 1 < s.re → ∫ g in 𝓕 ∩ {g | (ideleModule E (GeneralLinearGroup.det g) : ℝ) ≤ 1}, F g * ((ideleModule E (GeneralLinearGroup.det g) : ℝ) : ℂ) ^ (s - 1) ∂μ = (∫ g in 𝓕 ∩ {g | Real.exp (-((a : ℝ) * (Module.finrank ℚ E : ℝ))) < (ideleModule E (GeneralLinearGroup.det g) : ℝ) ∧ (ideleModule E (GeneralLinearGroup.det g) : ℝ) ≤ 1}, F g * ((ideleModule E (GeneralLinearGroup.det g) : ℝ) : ℂ) ^ (s - 1) ∂μ) / (1 - starRingEnd ℂ χ * Complex.exp (-((((a : ℝ) * (Module.finrank ℚ E : ℝ) : ℝ) : ℂ) * (s - 1)))) := by
-  first | (exact @GlobalTheory.RSThetaGeom.integral_low_geometric) | (exact GlobalTheory.RSThetaGeom.integral_low_geometric) | (intros; apply GlobalTheory.RSThetaGeom.integral_low_geometric  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IntegralDetLeOneEqGeometricSeriesShellsStatement =====
@@ -792,7 +791,7 @@ theorem isFundamentalDomain_shell : ∀ (E : Type) [Field E] [NumberField E] [_r
         {x | ¬∃ γ : (ratGL E a).range, γ • x ∈ 𝓕}) = 0 :=
       measure_iUnion_null fun n => (measurePreserving_mul_left μ _).quasiMeasurePreserving.preimage_null hN
     refine Filter.mem_of_superset (compl_mem_ae_iff.2 hB) fun x hx => ?_
-    simp only [Set.mem_compl_iff, Set.mem_iUnion, Set.mem_preimage, Set.mem_setOf_eq, not_exists, not_not] at hx
+    simp only [Set.mem_compl_iff, Set.mem_iUnion, Set.mem_preimage, Set.mem_setOf_eq, not_exists] at hx
     obtain ⟨m, hm1, hm2⟩ := exists_mem_Ioc_zpow (hδ0 x) hT1
     obtain ⟨γ, hγ⟩ := not_forall_not.1 (hx (-(m + 1)))
     obtain ⟨γ0, hγ0⟩ := γ.2
@@ -862,8 +861,6 @@ open NumberField Matrix MeasureTheory Filter Topology GlobalTheory.CuspRep Globa
 open scoped nonZeroDivisors ComplexConjugate
 
 
-theorem _root_.GlobalTheory.T.isFundamentalDomain_det_shell_latticeGL : ∀ (E : Type) [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] (a : ℕ), 0 < a → ∀ (μ : Measure (GA E a)) [μ.IsHaarMeasure] (𝓕 : Set (GA E a)), IsFundamentalDomain (ratGL E a).range 𝓕 μ → IsFundamentalDomain (latticeGL E a) (𝓕 ∩ {g | Real.exp (-((a : ℝ) * (Module.finrank ℚ E : ℝ))) < (ideleModule E (GeneralLinearGroup.det g) : ℝ) ∧ (ideleModule E (GeneralLinearGroup.det g) : ℝ) ≤ 1}) μ := by
-  first | (exact @GlobalTheory.ShellFD.isFundamentalDomain_shell) | (exact GlobalTheory.ShellFD.isFundamentalDomain_shell) | (intros; apply GlobalTheory.ShellFD.isFundamentalDomain_shell  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.IsFundamentalDomainDetShellLatticeGLStatement =====
@@ -933,27 +930,6 @@ noncomputable section
 namespace GlobalTheory.RSThetaCont
 variable {E : Type} [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] {a : ℕ}
 
-theorem mem_bddForms_of_mspanR {π : CuspSub E a} {ω : HChar E} (hω : ω.IsUnitary) (hπ : π.HasCentChar ω) {φ : Sm E a}
-    (hφ : φ ∈ π.V ∨ φ.1 ∈ GlobalTheory.JSW.mspanR π) : φ.1 ∈ GlobalTheory.Petersson.bddForms E a ω := by
-  have hc0 := CuspSub.hasCentral_iff.2 hπ
-  have hu : π.IsUnitary := ⟨ω, hω, hc0⟩
-  have hR : φ.1 ∈ GlobalTheory.JSW.mspanR π := hφ.elim (fun h => GlobalTheory.JSW.mem_mspanR_of_mem h) id
-  obtain ⟨ψ, hψ, h⟩ := GlobalTheory.JSW.mspanR_words GlobalTheory.CuspOrth.cuspFormsBounded hu φ.1 hR
-  have h0 := (h []).2
-  rw [GlobalTheory.JSW.word_nil, hψ] at h0
-  have hR' : φ.1 ∈ GlobalTheory.JSW.rspan π := (GlobalTheory.JSW.rspan_eq_mspanR π).symm ▸ hR
-  have hZ : GlobalTheory.JSW.rspan π ≤ GlobalTheory.JSW.Central.centralFns E a ω := by
-    refine GlobalTheory.JSW.rspan_le (fun ψ hψ z g => hc0.apply hψ z g) (fun F hF h z g => ?_) fun F hF X _ ν _ k γ _ z g => ?_
-    · change F (GeneralLinearGroup.scalar (Fin a) z * g * h) = _ * F (g * h)
-      rw [mul_assoc]; exact hF z _
-    · change GlobalTheory.JSW.kerInf ν k γ F (GeneralLinearGroup.scalar (Fin a) z * g) = _ * GlobalTheory.JSW.kerInf ν k γ F g
-      simp only [GlobalTheory.JSW.kerInf, mul_assoc]
-      rw [← integral_const_mul]
-      congr 1
-      funext x
-      rw [hF z]; ring
-  exact ⟨h0.cont, GlobalTheory.JSW.rspan_left π hR', hZ hR', h0.bdd⟩
-
 theorem resFn_props {ω ω' : HChar E} (hω : ω.IsUnitary) (hω' : ω'.IsUnitary) {φ φ' : Sm E a}
     (h : φ.1 ∈ GlobalTheory.Petersson.bddForms E a ω) (h' : φ'.1 ∈ GlobalTheory.Petersson.bddForms E a ω')
     {ℓ : Fin a} {Φ : (Fin a → Cinf E) → ℂ} (hΦ : GlobalTheory.CuspQuot.IsTest (GlobalTheory.RSTheta.rowSet E ℓ) Φ)
@@ -971,7 +947,7 @@ theorem isFundamentalDomain_shell (ha : 0 < a) (μ : Measure (GA E a)) [μ.IsHaa
     (h𝓕 : IsFundamentalDomain (ratGL E a).range 𝓕 μ) :
     IsFundamentalDomain (latticeGL E a) (𝓕 ∩ {g | Real.exp (-((a : ℝ) * (Module.finrank ℚ E : ℝ))) <
       (ideleModule E (GeneralLinearGroup.det g) : ℝ) ∧ (ideleModule E (GeneralLinearGroup.det g) : ℝ) ≤ 1}) μ := by
-  exact GlobalTheory.T.isFundamentalDomain_det_shell_latticeGL E a ha μ 𝓕 h𝓕
+  exact _root_.GlobalTheory.ShellFD.isFundamentalDomain_shell E a ha μ 𝓕 h𝓕
 
 theorem differentiable_setIntegral_cpow (μ : Measure (GA E a)) {S : Set (GA E a)} (hSm : NullMeasurableSet S μ) (hS : μ S < ⊤) {c : ℝ} (hc : 0 < c)
     (hδ : ∀ g ∈ S, c ≤ (ideleModule E (GeneralLinearGroup.det g) : ℝ) ∧ (ideleModule E (GeneralLinearGroup.det g) : ℝ) ≤ 1)
@@ -989,7 +965,7 @@ theorem integral_low_geometric (ha : 0 < a) (μ : Measure (GA E a)) [μ.IsHaarMe
           (ideleModule E (GeneralLinearGroup.det g) : ℝ) ∧ (ideleModule E (GeneralLinearGroup.det g) : ℝ) ≤ 1},
         F g * ((ideleModule E (GeneralLinearGroup.det g) : ℝ) : ℂ) ^ (s - 1) ∂μ) /
       (1 - starRingEnd ℂ χ * Complex.exp (-((((a : ℝ) * (Module.finrank ℚ E : ℝ) : ℝ) : ℂ) * (s - 1)))) := by
-  exact GlobalTheory.T.integral_det_le_one_eq_geometric_series_shells E a ha μ 𝓕 h𝓕 F hF C hC hrat χ hχ hz s hs
+  exact _root_.GlobalTheory.RSThetaGeom.integral_low_geometric E a ha μ 𝓕 h𝓕 F hF C hC hrat χ hχ hz s hs
 
 theorem exists_analytic_ratio {L : ℝ} (hL : 0 < L) (χ : ℂ) (hχ : ‖χ‖ = 1) : ∃ h : ℂ → ℂ,
     (∀ x : ℝ, 0 < x → AnalyticAt ℂ h (x : ℂ)) ∧
@@ -1018,8 +994,8 @@ theorem theta_integral_continuation : ∀ (E : Type) [Field E] [NumberField E] [
   refine ⟨c, hc0, ?_⟩
   intro π π' ω ω' hω hω' hπ hπ' φ φ' hφ hφ'
   have ha : 0 < a := ℓ.pos
-  have hb := mem_bddForms_of_mspanR hω hπ hφ
-  have hb' := mem_bddForms_of_mspanR hω' hπ' hφ'
+  have hb := _root_.GlobalTheory.RSThetaLimR.mem_bddForms hω hπ hφ
+  have hb' := _root_.GlobalTheory.RSThetaLimR.mem_bddForms hω' hπ' hφ'
   have hu : π.IsUnitary := ⟨ω, hω, CuspSub.hasCentral_iff.2 hπ⟩
   have hu' : π'.IsUnitary := ⟨ω', hω', CuspSub.hasCentral_iff.2 hπ'⟩
   have hT : GlobalTheory.CuspQuot.IsTest (GlobalTheory.RSTheta.rowSet E ℓ) Φ := ⟨hΦ, hcs, hs⟩
@@ -1329,9 +1305,9 @@ theorem zint_eq_mul_partialL_smooth : ∀ (E : Type) [Field E] [NumberField E] [
   set_option synthInstance.maxHeartbeats 200000 in
   intro E _ _ _ a σ σ' ha hσ hσ' T hTs hψ hT hT'
   obtain ⟨m, rfl⟩ : ∃ m, a = m + 1 := ⟨a - 1, by omega⟩
-  obtain ⟨α, _ℓ, _Φ, _J, _η, π, ω, _φ, hα, hπ, hω, hωc, _h1, _h2, _h3, _h4, _h5, _h6, _h7, hZ⟩ := GlobalTheory.T.unfolded_theta_integral_eq_mul_schur_euler_product E (m + 1) σ ha hσ T hT
+  obtain ⟨α, _ℓ, _Φ, _J, _η, π, ω, _φ, hα, hπ, hω, hωc, _h1, _h2, _h3, _h4, _h5, _h6, _h7, hZ⟩ := _root_.GlobalTheory.RSEulerId.thetaZ_eq_mul_eulD E (m + 1) σ ha hσ T hT
   obtain ⟨α', _ℓ', _Φ', _J', _η', π', ω', _φ', hα', hπ', hω', hωc', _h1', _h2', _h3', _h4', _h5', _h6', _h7', hZ'⟩ :=
-    GlobalTheory.T.unfolded_theta_integral_eq_mul_schur_euler_product E (m + 1) σ' ha hσ' T hT'
+    _root_.GlobalTheory.RSEulerId.thetaZ_eq_mul_eulD E (m + 1) σ' ha hσ' T hT'
   subst hπ hπ'
   obtain ⟨μ₀, hμ₀, 𝓕₁, h𝓕₁⟩ : ∃ (μ : Measure (GA E (m + 1))) (_ : μ.IsHaarMeasure) (𝓕 : Set (GA E (m + 1))),
       IsFundamentalDomain (ratGL E (m + 1)).range 𝓕 μ := by

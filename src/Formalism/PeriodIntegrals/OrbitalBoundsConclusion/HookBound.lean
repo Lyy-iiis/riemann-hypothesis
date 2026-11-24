@@ -98,7 +98,7 @@ theorem rowDiv_one_mul_X (a b : Fin N) (p : MvPolynomial (Fin N × Fin N) ℚ) (
   have h0 := rowGen_coeff_zero a b p
   simp only [rowDiv, map_mul, hX, Polynomial.coeff_mul, Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk,
     Finset.sum_range_succ, Finset.sum_range_zero, zero_add, h0]
-  split_ifs with h <;> simp [Polynomial.coeff_C, Polynomial.coeff_X_mul, add_comm]
+  split_ifs with h <;> simp [Polynomial.coeff_C, add_comm]
 
 theorem polE_apply (a b : Fin N) (f : MvPolynomial (Fin N × Fin N) ℚ) :
     polE N a b f = ∑ s : Fin N, X (a, s) * pderiv (b, s) f := by
@@ -116,7 +116,7 @@ theorem polE_mul_X (a b : Fin N) (p : MvPolynomial (Fin N × Fin N) ℚ) (v : Fi
     obtain ⟨v1, v2⟩ := v
     by_cases h : v1 = b
     · subst h
-      simp [Prod.ext_iff, eq_comm]
+      simp [Prod.ext_iff]
     · simp [h]
   rw [polE_apply, polE_apply, Finset.sum_mul]
   simp only [key, Finset.sum_add_distrib, ← Finset.mul_sum, hs]
@@ -209,15 +209,6 @@ theorem mulXAdj : MulXAdj := by
   show ((fockQ (X v * f) g : ℚ) : ℂ) = ((fockQ f (pderiv v g) : ℚ) : ℂ)
   rw [lfockq_cast, lfockq_cast, map_mul, map_X, Formalism.REAL.fischerInner_X_mul_left, pderiv_map]
 
-private theorem fockQ_eq_sum_of_support_subset_of_type {σ : Type*} (f g : MvPolynomial σ ℚ) (S : Finset (σ →₀ ℕ))
-    (h : f.support ⊆ S) :
-    fockQ f g = ∑ m ∈ S, f.coeff m * g.coeff m * ((∏ k ∈ m.support, (m k).factorial : ℕ) : ℚ) := by
-  unfold fockQ
-  refine Finset.sum_subset h fun m _ hm => ?_
-  have : f.coeff m = 0 := by simpa using hm
-  rw [this]
-  ring
-
 theorem fockQ_zero_left {σ : Type*} (g : MvPolynomial σ ℚ) : fockQ 0 g = 0 := by
   unfold fockQ
   simp
@@ -236,7 +227,7 @@ theorem fockQ_sum_right {σ ι : Type*} (s : Finset ι) (F : ι → MvPolynomial
 
 theorem fockQ_zsmul_left {σ : Type*} (z : ℤ) (f g : MvPolynomial σ ℚ) :
     fockQ (z • f) g = (z : ℚ) * fockQ f g := by
-  rw [← Int.cast_smul_eq_zsmul ℚ z f, fockQ_eq_sum_of_support_subset_of_type _ g f.support MvPolynomial.support_smul]
+  rw [← Int.cast_smul_eq_zsmul ℚ z f, _root_.Formalism.GradedWeylDivisibility.lfockq_eq_sum _ g f.support MvPolynomial.support_smul]
   unfold fockQ
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun m _ => ?_
@@ -430,7 +421,7 @@ theorem Pn_last_zero (n : ℕ) (ν : Fin (n + 1) → ℕ) (h : ν (Fin.last n) =
   refine Finset.prod_congr rfl fun i _ => ?_
   rw [prod_Ioi_castSucc]
   simp only [Fin.coe_castSucc, Fin.val_last, h]
-  congr 1 <;> omega
+  congr 1
 
 theorem Qn_last_zero (n : ℕ) (ν : Fin (n + 1) → ℕ) (h : ν (Fin.last n) = 0) :
     Qn ν = (∏ i : Fin n, (ν (Fin.castSucc i) + (n - i))) * Qn (fun i : Fin n => ν (Fin.castSucc i)) := by

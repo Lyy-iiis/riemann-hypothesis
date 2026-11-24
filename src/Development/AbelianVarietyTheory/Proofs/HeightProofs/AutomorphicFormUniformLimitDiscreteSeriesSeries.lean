@@ -378,17 +378,6 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.discreteSeries_gKMap_values_eq_generalisedCoefficients : ∀ {D : D7} (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)) (V : HSp D)
-    (τ : D.what₂.Tau), IsInfFam (D := D) θ → GlobalTheory.Published.HarishChandraModules → GlobalTheory.Published.CasselmanWallach →
-    ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-      (σ : Matrix (Fin V.rank) (Fin V.rank) ℂ → (H →L[ℂ] H)) (lam : Fin V.rank → ℝ) (ε : Fin V.rank → Bool)
-      (P : Matrix (Fin V.rank) (Fin V.rank) ℂ) (T : GlobalTheory.IndefiniteRowSideFullHecke.FinitePartTypes.kFin ε σ →ₗ[ℂ] (GA D V → ℂ)),
-    Formalism.QuantumDeterminants.IsHCParam lam → IsDS ε lam σ → IsUnit P → Pᴴ * Formalism.REAL.Jm ε * P = gramAt D V τ →
-    GlobalTheory.IndefiniteRowSideFullHecke.FinitePartTypes.IsGKMap θ V τ ε σ P T →
-    ∀ (v : GlobalTheory.IndefiniteRowSideFullHecke.FinitePartTypes.kFin ε σ) (x : GA D V), ∃ ℓ : H →ₗ[ℂ] ℂ,
-      Sobolev₂ (GlobalTheory.SmoothGlob.lieSet ε) σ ℓ ∧ SmoothVec (GlobalTheory.SmoothGlob.lieSet ε) σ (v : H) ∧
-      ∀ y ∈ UJset ε, T v (x * atTau θ V τ (P⁻¹ * y * P)) = ℓ (σ y v) := by
-  first | exact @GlobalTheory.TypeSum.GKCoef.values_eq_coef | exact GlobalTheory.TypeSum.GKCoef.values_eq_coef | (intros; apply GlobalTheory.TypeSum.GKCoef.values_eq_coef <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.DiscreteSeriesGKMapValuesEqGeneralisedCoefficienStatement =====
@@ -812,7 +801,7 @@ theorem exists_orthonormal_eigen : ∀ (n : ℕ) (ε : Fin n → Bool) (H : Type
     have hn : ‖(E i : H)‖ = 1 := E.orthonormal.1 i
     rw [hE i, inner_smul_right, inner_self_eq_norm_sq_to_K, hn] at h1
     have h2 : hTs.eigenvalues rfl i = 1 + ∑ k, ‖dRep σ (X k) (E i : H)‖ ^ 2 := by
-      simp only [RCLike.ofReal_one, Complex.ofReal_one, one_pow, mul_one] at h1
+      simp only [RCLike.ofReal_one, one_pow, mul_one] at h1
       exact_mod_cast h1
     rw [h2]
     have : 0 ≤ ∑ k, ‖dRep σ (X k) (E i : H)‖ ^ 2 := Finset.sum_nonneg fun _ _ => by positivity
@@ -1009,7 +998,7 @@ theorem _root_.GlobalTheory.T.exists_common_growth_exponent_gK_discreteSeries : 
       (∀ i, Sm ε σ (x' i)) ∧ (∀ i, 0 ≤ c i) ∧ (∀ i w, Sm ε σ w → ‖ℓ' i w‖ ≤ c i * sobNorm σ S w) ∧
       (∀ S', Words (lieSet ε) S' → ∑ i, c i * sobNorm σ S' (x' i) ≤ A S' * B (m S')) ∧
       ∀ y ∈ UJset ε, ∑ j, ℓ j (σ y (x j)) = ∑ i, ℓ' i (σ y (x' i)) := by
-  first | exact @GlobalTheory.TypeSum.CoefRep.exists_rewrite | exact GlobalTheory.TypeSum.CoefRep.exists_rewrite | (intros; apply GlobalTheory.TypeSum.CoefRep.exists_rewrite <;> assumption)
+  first | exact @GlobalTheory.TypeSum.CoefRep.exists_rewrite
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.ExistsCommonGrowthExponentGKDiscreteSeriesStatement =====
@@ -1204,7 +1193,7 @@ theorem _root_.GlobalTheory.T.discreteSeriesCoeffSeries_of_kTypeProjections : Gl
         (∀ j, IsKFin ε σ (x j)) ∧
         ∀ y ∈ UJset ε, (∫ k, e k * f (y * Formalism.REAL.toMK k) ∂(Formalism.REAL.muK ε)) = ∑ j, ℓ j (σ y (x j))) →
     GlobalTheory.TypeSum.HasTypeAll (GlobalTheory.SmoothGlob.lieSet ε) (UJset ε) σ f := by
-  first | exact @GlobalTheory.TypeSum.KSeries.hasTypeAll_of_kTypes | exact GlobalTheory.TypeSum.KSeries.hasTypeAll_of_kTypes | (intros; apply GlobalTheory.TypeSum.KSeries.hasTypeAll_of_kTypes <;> assumption)
+  first | exact @GlobalTheory.TypeSum.KSeries.hasTypeAll_of_kTypes
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.DiscreteSeriesCoeffSeriesOfKTypeProjectionsStatement =====
@@ -1361,7 +1350,7 @@ theorem _root_.GlobalTheory.T.kProjection_limit_discreteSeriesCoeffs : ∀ (n : 
         ∃ L : Fin d → (H →ₗ[ℂ] ℂ), (∀ a, Sobolev₂ (GlobalTheory.SmoothGlob.lieSet ε) σ (L a)) ∧
           ∀ y ∈ C, y ∈ UJset ε →
             ‖(∫ k, e k * f (y * Formalism.REAL.toMK k) ∂(Formalism.REAL.muK ε)) - ∑ a, L a (σ y (w a))‖ < δ := by
-  first | exact @GlobalTheory.TypeSum.kAvg_approx_coef | exact GlobalTheory.TypeSum.kAvg_approx_coef | (intros; apply GlobalTheory.TypeSum.kAvg_approx_coef <;> assumption)
+  first | exact @GlobalTheory.TypeSum.kAvg_approx_coef
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.KProjectionLimitDiscreteSeriesCoeffsStatement =====
@@ -1421,7 +1410,7 @@ theorem _root_.GlobalTheory.T.hasAllKTypes_of_closure_discreteSeriesCoefficients
         (∀ j, SmoothVec (GlobalTheory.SmoothGlob.lieSet ε) σ (v j)) ∧
         ∀ y ∈ C, y ∈ UJset ε → ‖f y - ∑ j, ℓ j (σ y (v j))‖ < δ) →
     GlobalTheory.TypeSum.HasTypeAll (GlobalTheory.TypeSum.lieOf (Formalism.REAL.Jm ε)) (Formalism.QuantumDeterminants.UH (Formalism.REAL.Jm ε)) σ f := by
-  first | exact @GlobalTheory.ClosureSeries.hasTypeAll_of_closure | exact GlobalTheory.ClosureSeries.hasTypeAll_of_closure | (intros; apply GlobalTheory.ClosureSeries.hasTypeAll_of_closure <;> assumption)
+  first | exact @GlobalTheory.ClosureSeries.hasTypeAll_of_closure
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.HasAllKTypesOfClosureDiscreteSeriesCoefficientsStatement =====
@@ -1777,7 +1766,7 @@ theorem _root_.GlobalTheory.T.matrix_coefficient_frame_change_discrete_series : 
       SmoothVec (GlobalTheory.SmoothGlob.lieSet ε) σ' v → (∀ y ∈ UJset ε, F (P'⁻¹ * y * P') = ℓ (σ' y v)) →
     ∃ (ℓ' : H →ₗ[ℂ] ℂ) (v' : H), Sobolev₂ (GlobalTheory.SmoothGlob.lieSet ε) σ ℓ' ∧
       SmoothVec (GlobalTheory.SmoothGlob.lieSet ε) σ v' ∧ ∀ y ∈ UJset ε, F (P⁻¹ * y * P) = ℓ' (σ y v') := by
-  first | exact @GlobalTheory.TypeSum.FrameChange.coef_frame_change | exact GlobalTheory.TypeSum.FrameChange.coef_frame_change | (intros; apply GlobalTheory.TypeSum.FrameChange.coef_frame_change <;> assumption)
+  first | exact @GlobalTheory.TypeSum.FrameChange.coef_frame_change
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.HeightProofs.MatrixCoefficientFrameChangeDiscreteSeriesStatement =====
@@ -1798,16 +1787,7 @@ namespace GlobalTheory.ClosureSeries
 
 open GlobalTheory.TypeSum
 
-theorem coef_of_gkMap : ∀ {D : D7} (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)) (V : HSp D)
-    (τ : D.what₂.Tau), IsInfFam (D := D) θ → GlobalTheory.Published.HarishChandraModules → GlobalTheory.Published.CasselmanWallach →
-    ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-      (σ : Matrix (Fin V.rank) (Fin V.rank) ℂ → (H →L[ℂ] H)) (lam : Fin V.rank → ℝ) (ε : Fin V.rank → Bool)
-      (P : Matrix (Fin V.rank) (Fin V.rank) ℂ) (T : GlobalTheory.IndefiniteRowSideFullHecke.FinitePartTypes.kFin ε σ →ₗ[ℂ] (GA D V → ℂ)),
-    Formalism.QuantumDeterminants.IsHCParam lam → IsDS ε lam σ → IsUnit P → Pᴴ * Formalism.REAL.Jm ε * P = gramAt D V τ →
-    GlobalTheory.IndefiniteRowSideFullHecke.FinitePartTypes.IsGKMap θ V τ ε σ P T →
-    ∀ (v : GlobalTheory.IndefiniteRowSideFullHecke.FinitePartTypes.kFin ε σ) (x : GA D V), ∃ ℓ : H →ₗ[ℂ] ℂ,
-      Sobolev₂ (GlobalTheory.SmoothGlob.lieSet ε) σ ℓ ∧ SmoothVec (GlobalTheory.SmoothGlob.lieSet ε) σ (v : H) ∧
-      ∀ y ∈ UJset ε, T v (x * atTau θ V τ (P⁻¹ * y * P)) = ℓ (σ y v) := GlobalTheory.T.discreteSeries_gKMap_values_eq_generalisedCoefficients
+alias coef_of_gkMap := _root_.GlobalTheory.TypeSum.GKCoef.values_eq_coef
 
 theorem coef_transport : GlobalTheory.Published.DiscreteSeriesUpqUnique → ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ),
     Formalism.QuantumDeterminants.IsHCParam lam →
@@ -1831,11 +1811,7 @@ theorem closure_model : GlobalTheory.Published.HarishChandraModules → GlobalTh
         ∀ y ∈ C, y ∈ UJset ε → ‖f y - ∑ j, ℓ j (σ y (v j))‖ < δ) →
     GlobalTheory.TypeSum.HasTypeAll (GlobalTheory.TypeSum.lieOf (Formalism.REAL.Jm ε)) (Formalism.QuantumDeterminants.UH (Formalism.REAL.Jm ε)) σ f := GlobalTheory.T.hasAllKTypes_of_closure_discreteSeriesCoefficients
 
-theorem isClosed_UJset {n : ℕ} (ε : Fin n → Bool) : IsClosed (UJset ε) := by
-  have : UJset ε = {g : Matrix (Fin n) (Fin n) ℂ | gᴴ * Formalism.REAL.Jm ε * g = Formalism.REAL.Jm ε} := rfl
-  rw [this]
-  exact isClosed_eq ((continuous_id.matrix_conjTranspose.matrix_mul continuous_const).matrix_mul continuous_id)
-    continuous_const
+alias isClosed_UJset := _root_.GlobalTheory.AvgCont.isClosed_UJset
 
 theorem continuous_mul_left_GA {D : D7} (V : HSp D) (x : GA D V) : Continuous fun y : GA D V => x * y := by
   haveI : IsModuleTopology (AF D.host.F) (AE D) := ⟨rfl⟩

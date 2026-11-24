@@ -221,7 +221,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.arcTorsionLabels_action_compat : Laws → BrGtSt → AllD fun {E} _ _ _ {H} D => letI := H.starRing; ∀ (R : Type) [CommRing R] [IsDomain R] (C : Type) [NormedField C] [IsAlgClosed C] [Algebra (FractionRing R) C] (A : ArcF D R C) (o : Full D C) (M : Mdl o), M.P.TorsionIso → ∀ (N' : NumD C) (ν' : NumOf M.P.D.toPre C N') (k : ℕ) (β : A.N.Form k) (u r : Cˣ) (J : NumD.Iso (A.N.twist β u) N') (j : ℕ), 0 < j → r ^ j = u → (∀ x (p : (A.N.twist β u).QT j) (q' : N'.QT j) p' z, TwRel β u r (A.q _ x) p → q'.1.1.toAdd = J.e p.1.1.toAdd → J.Rel p.1.2 q'.1.2 → ν'.QPt p' q' → z.left = (o.I.ev j x).left ≫ M.φ → M.P.ToA C j p' z) → ∀ (x : 𝓞 E) (b : A.N.A), b ^ j = 1 → J.φ (actV (N := A.N) A.ν A.oa.onB x b) = actV ν' M.P.oD.onB x (J.φ b) := by
-  first | exact @GlobalTheory.Relabel.act_compat_on_torsion | exact GlobalTheory.Relabel.act_compat_on_torsion | (intros; apply GlobalTheory.Relabel.act_compat_on_torsion <;> assumption)
+  first | exact @GlobalTheory.Relabel.act_compat_on_torsion
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ArcTorsionLabelsActionCompatStatement =====
@@ -298,7 +298,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.exists_completeDVR_over_powerSeries_uniformiser : ∀ (O' : Type) [CommRing O'] [IsDomain O'] [CharZero O'] (K : Type) [Field K] [Algebra (PowerSeries O') K] [FaithfulSMul (PowerSeries O') K] [Algebra.IsAlgebraic (PowerSeries O') K], ∃ (W : Type) (_ : CommRing W) (_ : IsDomain W) (_ : IsLocalRing W) (φ : PowerSeries O' →+* W) (K₁ : Type) (_ : Field K₁) (_ : Algebra (FractionRing W) K₁) (_ : Algebra.IsAlgebraic (FractionRing W) K₁) (e : K →+* K₁), CDV W ∧ φ PowerSeries.X ∈ IsLocalRing.maximalIdeal W ∧ ∀ x, e (algebraMap (PowerSeries O') K x) = algebraMap (FractionRing W) K₁ (algebraMap W _ (φ x)) := by
-  first | exact @GlobalTheory.HasFields.exists_cdv_over_powerSeries | exact GlobalTheory.HasFields.exists_cdv_over_powerSeries | (intros; apply GlobalTheory.HasFields.exists_cdv_over_powerSeries <;> assumption)
+  first | exact @GlobalTheory.HasFields.exists_cdv_over_powerSeries
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsCompleteDVROverPowerSeriesUniformiserStatement =====
@@ -359,8 +359,8 @@ theorem isCoordPt_descend (hL : Laws) {K C : Type} [Field K] [IsAlgClosed K] [Fi
     (v : I → K) (v' : I → C) (s : Cˣ) (hv : ∀ i, f (v i) = s * v' i)
     (H : IsCoordPt P m x z fun i => fnOf (v' i)) : IsCoordPt P₀ m x₀ z₀ fun i => fnOf (v i) := by
   have hC : (m : C) ≠ 0 := by rw [← map_natCast f]; exact (map_ne_zero f).2 hK
-  obtain ⟨a₁, a₂, -⟩ := GlobalTheory.T.thetaCoordinates_exist_unique_separate_points hL K (Sp K) P₀ (𝟙 _) m hm hK I x₀ hk₀
-  obtain ⟨-, b₂, -⟩ := GlobalTheory.T.thetaCoordinates_exist_unique_separate_points hL C (Sp C) P (𝟙 _) m hm hC I x hk
+  obtain ⟨a₁, a₂, -⟩ := _root_.GlobalTheory.CoordSep.coord_exists_unique_separate hL K (Sp K) P₀ (𝟙 _) m hm hK I x₀ hk₀
+  obtain ⟨-, b₂, -⟩ := _root_.GlobalTheory.CoordSep.coord_exists_unique_separate hL C (Sp C) P (𝟙 _) m hm hC I x hk
   obtain ⟨v₀, h₀⟩ := a₁ z₀
   have q := isCoordPt_cart hL.secBaseChange hp hw hx hk hz h₀
   simp only [← FullExtend.fnOf_map] at q
@@ -403,9 +403,9 @@ theorem exists_descend : Laws → AllD fun {E} _ _ _ {H} D => ∀ (K C : Type) [
     have e' : I'.ev 1 0 = 1 := (I'.ker 1 one_pos 0).2 ⟨0, by simp⟩
     have k := key m hm 1 one_pos 0 v v' s hv
     rw [e, e'] at k
-    obtain ⟨-, -, a₃, -⟩ := GlobalTheory.T.thetaCoordinates_exist_unique_separate_points hL K (Sp K) o.P (𝟙 _) m hm (Nat.cast_ne_zero.2 hm.pos.ne') _
+    obtain ⟨-, -, a₃, -⟩ := _root_.GlobalTheory.CoordSep.coord_exists_unique_separate hL K (Sp K) o.P (𝟙 _) m hm (Nat.cast_ne_zero.2 hm.pos.ne') _
       (I.ev (m ^ 2)) (tateIso_ev_pow I (pow_pos hm.pos 2))
-    obtain ⟨-, -, b₃, -⟩ := GlobalTheory.T.thetaCoordinates_exist_unique_separate_points hL C (Sp C) o'.P (𝟙 _) m hm (Nat.cast_ne_zero.2 hm.pos.ne') _
+    obtain ⟨-, -, b₃, -⟩ := _root_.GlobalTheory.CoordSep.coord_exists_unique_separate hL C (Sp C) o'.P (𝟙 _) m hm (Nat.cast_ne_zero.2 hm.pos.ne') _
       (I'.ev (m ^ 2)) (tateIso_ev_pow I' (pow_pos hm.pos 2))
     exact (a₃ v).2 (k ((b₃ v').1 Q))
 
@@ -428,7 +428,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.exists_descended_torsion_isometry_theta_coordinates : Laws → AllD fun {E} _ _ _ {H} D => ∀ (K C : Type) [Field K] [Field C] (f : K →+* C) (o : Full D K) (o' : Full D C), FullExt f o o' → ∀ (I' : FullI o') (ζ : ℕ → Kˣ), (∀ n, 0 < n → (I'.ζ n : C) = f (ζ n)) → ∃ I : FullI o, (∀ n, 0 < n → I.ζ n = ζ n) ∧ ∀ m, Odd m → (∀ (v : D.La → K) (v' : D.La → C) (s : Cˣ), (∀ x, f (v x) = s * v' x) → (withI o' I').Theta m v' → (withI o I).Theta m v) ∧ ∀ j, 0 < j → ∀ z (v : D.La → K) (v' : D.La → C) (s : Cˣ), (∀ x, f (v x) = s * v' x) → (withI o' I').Coord m (I'.ev j z) v' → (withI o I).Coord m (I.ev j z) v := by
-  first | exact @GlobalTheory.DescendIso.exists_descend | exact GlobalTheory.DescendIso.exists_descend | (intros; apply GlobalTheory.DescendIso.exists_descend <;> assumption)
+  first | exact @GlobalTheory.DescendIso.exists_descend
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsDescendedTorsionIsometryThetaCoordinatesStatement =====
@@ -445,7 +445,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.exists_full_torsion_isometry_of_tateIsoQ : GlobalTheory.UT.LL → AllD fun {E} _ _ _ {H} D => ∀ (C : Type) [NormedField C] (o : Full D C) (M : Mdl o) (I' : TateIsoQ D M.P.D.toPre M.P.oD C), ∃ I : FullI o, I.ζ = I'.ζ ∧ ∀ j, 0 < j → ∀ x, ∃ z : TFK (R := M.W) C ⟶ M.P.A.A, z.left = (I.ev j x).left ≫ M.φ ∧ M.P.ToA C j (I'.ev j x) z := by
-  first | exact @GlobalTheory.Relabel.exists_fullI_of_tateIsoQ | exact GlobalTheory.Relabel.exists_fullI_of_tateIsoQ | (intros; apply GlobalTheory.Relabel.exists_fullI_of_tateIsoQ <;> assumption)
+  first | exact @GlobalTheory.Relabel.exists_fullI_of_tateIsoQ
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsFullTorsionIsometryOfTateIsoQStatement =====
@@ -462,7 +462,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.twist_iso_torsionRepresentative_mulEquiv : ∀ (O : Type) [CommRing O] (N N' : NumD O) (k : ℕ) (β : N.Form k) (u : Oˣ) (J : NumD.Iso (N.twist β u) N'), (∀ (r : Oˣ) (j : ℕ), r ^ j = u → ∃ τ : N.QT j ≃* N'.QT j, (∀ q q', τ q = q' ↔ TwJ β u r J q q') ∧ (∀ q₁ q₂, N.QEq q₁ q₂ ↔ N'.QEq (τ q₁) (τ q₂)) ∧ ∀ q₁ q₂, N'.wp (τ q₁) (τ q₂) = N.wp q₁ q₂) ∧ ∀ (r₁ r₂ : Oˣ) (n n' m : ℕ) (q₁ : N.QT n) (q₂ : N.QT n') (q₁' : N'.QT n) (q₂' : N'.QT n'), r₂ ^ m = r₁ → q₁.1.1 = q₂.1.1 → q₁.1.2 = q₂.1.2 ^ m → TwJ β u r₁ J q₁ q₁' → TwJ β u r₂ J q₂ q₂' → q₁'.1.1 = q₂'.1.1 ∧ q₁'.1.2 = q₂'.1.2 ^ m := by
-  first | exact @GlobalTheory.Relabel.twJ_mulEquiv | exact GlobalTheory.Relabel.twJ_mulEquiv | (intros; apply GlobalTheory.Relabel.twJ_mulEquiv <;> assumption)
+  first | exact @GlobalTheory.Relabel.twJ_mulEquiv
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.TwistIsoTorsionRepresentativeMulEquivStatement =====
@@ -591,7 +591,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.exists_torsionIsometry_twistByRoots_of_dataIso : BrGtSt → BrWpSt → AllD fun {E} _ _ _ {H} D => letI := H.starRing; ∀ (R R' : Type) [CommRing R] [IsDomain R] [CommRing R'] [IsDomain R'] (F : Type) [Field F] [IsAlgClosed F] [Algebra (FractionRing R) F] [Algebra (FractionRing R') F] (A : ArcF D R F) (D' : DegPre R') [Module (𝓞 E) D'.X] (oa' : D'.OAct (𝓞 E)), D'.PsiEven → D'.TauBimult → ∀ (N' : NumD F) (ν' : NumOf D' F N') (k : ℕ) (β : A.N.Form k) (u : Fˣ) (r : ℕ → Fˣ) (J : NumD.Iso (A.N.twist β u) N'), Roots u r → ActCompat A.ν A.oa ν' oa' β u r J → ∃ I' : TateIsoQ D D' oa' F, I'.ζ = A.I.ζ ∧ ∀ j, 0 < j → ∀ x, ∃ q', TwJ β u (r j) J (A.q j x) q' ∧ ν'.QPt (I'.ev j x) q' := by
-  first | exact @GlobalTheory.Relabel.exists_tateIsoQ_twJ | exact GlobalTheory.Relabel.exists_tateIsoQ_twJ | (intros; apply GlobalTheory.Relabel.exists_tateIsoQ_twJ <;> assumption)
+  first | exact @GlobalTheory.Relabel.exists_tateIsoQ_twJ
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsTorsionIsometryTwistByRootsOfDataIsoStatement =====
@@ -688,7 +688,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.exists_uniformisedModel_valued_extension : HV → Laws6 → GlobalTheory.LN.UDvrSt → GlobalTheory.LN.HomExtSt → ThetaPtDeterminesSt → EndDeterminedOnTorsionSt → ThetaUnifAV → AllA fun {E} _ _ _ {H} {D} {l} {Xo} {c} {W₀} Y {O'} _ _ {b} a => ∀ (K : Type) [Field K] [IsAlgClosed K] [Algebra (FractionRing O') K] (A : Lift a K) (o : Full D K), o.ρ = A.ρ → ∀ (C : Type) [NontriviallyNormedField C] [IsUltrametricDist C] [CompleteSpace C] [IsAlgClosed C] [CharZero C] (W : Type) [CommRing W] [IsDomain W] [IsLocalRing W] [Algebra (FractionRing W) C], CDV W → CExt W (IsLocalRing.maximalIdeal W) C → ∀ (K₁ : Type) [Field K₁] [Algebra (FractionRing W) K₁] [Algebra.IsAlgebraic (FractionRing W) K₁] (gam : K₁ →+* C) (e : K →+* K₁) (φ : O' →+* W), (∀ x, gam (algebraMap (FractionRing W) K₁ x) = algebraMap (FractionRing W) C x) → (∀ x, e (algebraMap (FractionRing O') K (algebraMap O' _ x)) = algebraMap (FractionRing W) K₁ (algebraMap W _ (φ x))) → ∀ o' : Full D C, FullExt (gam.comp e) o o' → ∃ (M : Mdl o') (f : W →+* M.W), ∀ x, algebraMap (FractionRing M.W) C (algebraMap _ _ (f x)) = algebraMap (FractionRing W) C (algebraMap _ _ x) := by
-  first | exact @GlobalTheory.Ex.ExtModel.exists_mdl_ext | exact GlobalTheory.Ex.ExtModel.exists_mdl_ext | (intros; apply GlobalTheory.Ex.ExtModel.exists_mdl_ext <;> assumption)
+  first | exact @GlobalTheory.Ex.ExtModel.exists_mdl_ext
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsUniformisedModelValuedExtensionStatement =====
@@ -704,8 +704,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
-theorem _root_.GlobalTheory.T.lineBundleIso_values_constant_of_same_cube_theta : Laws → ∀ (R R' : Type) [CommRing R] [IsDomain R] [CommRing R'] [IsDomain R'] (f : R' →+* R) (D : DegPre R) (D' : DegPre R') (F : Type) [Field F] [Algebra (FractionRing R) F] [Algebra (FractionRing R') F] (N : NumD F) (k : ℕ) (β : N.Form k) (u : Fˣ) (ν : NumOf D F (N.twist β u)) (ν' : NumOf D' F N) (φ : D.P.A.left ⟶ D'.P.A.left) (w : LB.Iso D.P.L (D'.P.L.pull φ)), IsGrpPullback D.P.A D'.P.A (spMap f) φ → w.IsGen → (∀ x, (ν.eA x).left ≫ φ = (ν'.eA x).left) → ∀ n : ℕ, (∀ x : N.A, ∃ y, y ^ n = x) → (∀ a : N.A, ∃ t, t ^ n = 1 ∧ N.th (a * t) ≠ 0) → ∃ (w' : LB.Iso (D.P.L.pull (snd (TF (R := R) F) D.P.A).left) (D'.P.L.pull ((snd (TF (R := R) F) D.P.A).left ≫ φ))) (c : Fˣ), w'.IsGen ∧ ∀ x, valF (lift (𝟙 (TF (R := R) F)) (ν.eA x)).left _ (w'.s (fun _ => ν'.J (ν'.eA x).left, fun _ => ν.J (ν.eA x).left)).val = c := by
-  first | exact @GlobalTheory.IsoValConst.exists_iso_val_const | exact GlobalTheory.IsoValConst.exists_iso_val_const | (intros; apply GlobalTheory.IsoValConst.exists_iso_val_const <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.LineBundleIsoValuesConstantOfSameCubeThetaStatement =====
@@ -721,8 +719,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
-theorem _root_.GlobalTheory.T.normalisedRosatiGenerator_values_move_along_iso : Laws → ∀ (R R' : Type) [CommRing R] [IsDomain R] [CommRing R'] [IsDomain R'] (D : DegPre R) (D' : DegPre R') (F : Type) [Field F] [IsAlgClosed F] [Algebra (FractionRing R) F] [Algebra (FractionRing R') F] (N N' : NumD F) (ν : NumOf D F N) (ν' : NumOf D' F N') (O : Type) [CommRing O] [StarRing O] (oa : D.P.OAct O) (oa' : D'.P.OAct O) (Φ : (TF (R := R) F ⊗ D.P.A).left ⟶ D'.P.A.left) (w : LB.Iso (D.P.L.pull (snd (TF (R := R) F) D.P.A).left) (D'.P.L.pull Φ)) (φ : N.A →* N'.A) (wv : N.A → F), w.IsGen → Φ ≫ D'.P.A.hom = (fst (TF (R := R) F) D.P.A).left ≫ (TF (R := R') F).hom → (∀ x, (lift (𝟙 (TF (R := R) F)) (ν.eA x)).left ≫ Φ = (ν'.eA (φ x)).left) → (∀ x, wv x = valF (lift (𝟙 (TF (R := R) F)) (ν.eA x)).left _ (w.s (fun _ => ν'.J (ν'.eA (φ x)).left, fun _ => ν.J (ν.eA x).left)).val) → (∀ y b, φ (actV ν oa y b) = actV ν' oa' y (φ b)) → ∀ (a : O) ρ ρ', RosV ν oa a ρ → RosV ν' oa' a ρ' → ∀ b b', ρ' (φ b) (φ b') * (wv (actV ν oa (star a) b) * wv b' * wv (b * actV ν oa a b')) = ρ b b' * (wv (actV ν oa (star a) b * b') * wv b * wv (actV ν oa a b')) := by
-  first | exact @GlobalTheory.RosMove.rosV_move | exact GlobalTheory.RosMove.rosV_move | (intros; apply GlobalTheory.RosMove.rosV_move <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.NormalisedRosatiGeneratorValuesMoveAlongIsoStatement =====
@@ -739,7 +735,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.thetaPoints_coords_relabelled_twistedData_series : GlobalTheory.UT.LL → BrGtSt → TXSt → EVSt → AllD fun {E} _ _ _ {H} D => ∀ (C : Type) [NontriviallyNormedField C] [IsUltrametricDist C] [CompleteSpace C] [IsAlgClosed C] [CharZero C] (o : Full D C) (M : Mdl o) (I : FullI o) (N N' : NumD C) (ν' : NumOf M.P.D.toPre C N') (k : ℕ) (β : N.Form k) (u : Cˣ) (r : ℕ → Cˣ) (J : NumD.Iso (N.twist β u) N') (q : ∀ j : ℕ, D.La → N.QT j), (∀ j, 0 < j → ∀ x, ∃ (q' : N'.QT j) (p' : QkPt M.P.D.toPre C j) (z : TFK (R := M.W) C ⟶ M.P.A.A), TwJ β u (r j) J (q j x) q' ∧ ν'.QPt p' q' ∧ z.left = (I.ev j x).left ≫ M.φ ∧ M.P.ToA C j p' z) → ∀ m, Odd m → ∀ p : D.La → (N.twist β u).QT (m ^ 2), (∀ x, TwRel β u (r (m ^ 2)) (q _ x) (p x)) → (withI o I).Theta m (fun x => (N.twist β u).tx m (p x)) ∧ ∀ j, 0 < j → ∀ z (p₀ : (N.twist β u).QT j), TwRel β u (r j) (q j z) p₀ → (withI o I).Coord m (I.ev j z) fun x => (N.twist β u).ev m (p x) p₀.1.2 := by
-  first | exact @GlobalTheory.RelabelCoords.theta_coord | exact GlobalTheory.RelabelCoords.theta_coord | (intros; apply GlobalTheory.RelabelCoords.theta_coord <;> assumption)
+  first | exact @GlobalTheory.RelabelCoords.theta_coord
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ThetaPointsCoordsRelabelledTwistedDataSeriesStatement =====
@@ -834,7 +830,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.torsionQuotientAction_compat_of_rosatiValues : GlobalFnsSt → BrGtSt → AllD fun {E} _ _ _ {H} D => letI := H.starRing; ∀ (R R' : Type) [CommRing R] [IsDomain R] [CommRing R'] [IsDomain R'] (F : Type) [Field F] [IsAlgClosed F] [Algebra (FractionRing R) F] [Algebra (FractionRing R') F] (A : ArcF D R F) (D' : DegPre R') [Module (𝓞 E) D'.X] (oa' : D'.OAct (𝓞 E)), D'.PsiEven → D'.TauBimult → ∀ (N' : NumD F) (ν' : NumOf D' F N') (k : ℕ) (β : A.N.Form k) (u : Fˣ) (r : ℕ → Fˣ) (J : NumD.Iso (A.N.twist β u) N'), Roots u r → A.Bal β → (∀ (x : 𝓞 E) y, ν'.eX (J.e (A.act x y)) = x • ν'.eX (J.e y)) → (∀ (x : 𝓞 E) b, J.φ (actV (N := A.N) A.ν A.oa.onB x b) = actV ν' oa'.onB x (J.φ b)) → (∀ a : 𝓞 E, ∃ ρ ρ', RosV A.ν A.oa.onB a ρ ∧ RosV ν' oa'.onB a ρ' ∧ ∀ b b' : A.N.A, ρ' (J.φ b) (J.φ b') * (J.h (actV (N := A.N) A.ν A.oa.onB (star a) b) * J.h b' * J.h (b * actV (N := A.N) A.ν A.oa.onB a b') : Fˣ) = ρ b b' * (J.h (actV (N := A.N) A.ν A.oa.onB (star a) b * b') * J.h b * J.h (actV (N := A.N) A.ν A.oa.onB a b') : Fˣ)) → ActCompat A.ν A.oa ν' oa' β u r J := by
-  first | exact @GlobalTheory.Relabel.actCompat_of_rosV | exact GlobalTheory.Relabel.actCompat_of_rosV | (intros; apply GlobalTheory.Relabel.actCompat_of_rosV <;> assumption)
+  first | exact @GlobalTheory.Relabel.actCompat_of_rosV
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.TorsionQuotientActionCompatOfRosatiValuesStatement =====
@@ -851,7 +847,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.torusExtension_action_in_values : GlobalFnsSt → ∀ (R : Type) [CommRing R] [IsDomain R] (D : DegPre R) (F : Type) [Field F] [Algebra (FractionRing R) F] (N : NumD F) (ν : NumOf D F N) (O : Type) [CommRing O] [StarRing O], (∀ (oa : D.P.OAct O) (x : O), ∃ ρ, RosV ν oa x ρ) ∧ ∀ [Module O D.X] (oa : D.OAct O) (x : O) (ρ : N.A → N.A → F), RosV ν oa.onB x ρ → ∀ g g' v v', ν.Pt g v → ν.Pt g' v' → (GtAct oa x g g' ↔ v'.b = actV ν oa.onB x v.b ∧ ∀ χ, (v'.s χ : F) = v.s (ν.eX.symm (star x • ν.eX χ)) * ρ (N.c χ) v.b) := by
-  first | exact @GlobalTheory.Relabel.gtAct_values | exact GlobalTheory.Relabel.gtAct_values | (intros; apply GlobalTheory.Relabel.gtAct_values <;> assumption)
+  first | exact @GlobalTheory.Relabel.gtAct_values
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.TorusExtensionActionInValuesStatement =====
@@ -945,7 +941,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex GlobalTheory.Relabel
 
 theorem _root_.GlobalTheory.T.valuesIso_respects_endomorphism_of_torsion_compat : Laws → ∀ (R : Type) [CommRing R] [IsDomain R] (D D' : DegPre R) (F : Type) [Field F] [IsAlgClosed F] [Algebra (FractionRing R) F] (N N' : NumD F) (ν : NumOf D F N) (ν' : NumOf D' F N') (I : NumB.Iso N.toNumB N'.toNumB), GeoIso ν ν' I → ∀ (O : Type) [CommRing O] [StarRing O] (oa : D.P.OAct O) (oa' : D'.P.OAct O) (n : ℕ), n.Prime → (n : F) ≠ 0 → ∀ x : O, (∀ (j : ℕ) (b : N.A), b ^ n ^ j = 1 → I.φ (actV ν oa x b) = actV ν' oa' x (I.φ b)) → ∀ b, I.φ (actV ν oa x b) = actV ν' oa' x (I.φ b) := by
-  first | exact @GlobalTheory.Relabel.actV_compat_of_torsion | exact GlobalTheory.Relabel.actV_compat_of_torsion | (intros; apply GlobalTheory.Relabel.actV_compat_of_torsion <;> assumption)
+  first | exact @GlobalTheory.Relabel.actV_compat_of_torsion
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ValuesIsoRespectsEndomorphismOfTorsionCompatStatement =====
@@ -1009,18 +1005,18 @@ theorem actCompat_of_match (hL : Laws) (hL2 : Laws2) {E : Type} [Field E] [Numbe
   obtain ⟨ρW, hρW⟩ := (GlobalTheory.T.torusExtension_action_in_values hG _ _ C _ νW (𝓞 E)).1 oW.onB x
   obtain ⟨ρ', hρ'⟩ := (GlobalTheory.T.torusExtension_action_in_values hG _ _ C _ ν' (𝓞 E)).1 M.P.oD.onB x
   refine ⟨ρ, ρ', hρ, hρ', fun (y y' : A.N.A) => ?_⟩
-  obtain ⟨w', κ, hw', hκ⟩ := GlobalTheory.T.lineBundleIso_values_constant_of_same_cube_theta hL _ _ f DW a.D₀ C A.N _ A.be u νW A.ν φ w hp hw hA n hT.div (fun t => by
+  obtain ⟨w', κ, hw', hκ⟩ := _root_.GlobalTheory.IsoValConst.exists_iso_val_const hL _ _ f DW a.D₀ C A.N _ A.be u νW A.ν φ w hp hw hA n hT.div (fun t => by
     obtain ⟨s, h₁, h₂⟩ := hT.good t
     exact ⟨s, h₁, fun h => by rw [h, norm_zero] at h₂; exact zero_ne_one h₂⟩)
   have hTF : (TF (R := M.W) C).hom ≫ spMap f = (TF (R := O') C).hom := by
     have := congrArg (· ≫ a.D₀.P.A.hom) (hA 1)
     rwa [Category.assoc, hp.1.w, ← Category.assoc, Over.w, Over.w] at this
-  have e₁ := GlobalTheory.T.normalisedRosatiGenerator_values_move_along_iso hL _ _ DW a.D₀ C _ A.N νW A.ν (𝓞 E) oW.onB a.oa.onB _ w' (MonoidHom.id A.N.A) (fun _ => κ) hw'
+  have e₁ := _root_.GlobalTheory.RosMove.rosV_move hL _ _ DW a.D₀ C _ A.N νW A.ν (𝓞 E) oW.onB a.oa.onB _ w' (MonoidHom.id A.N.A) (fun _ => κ) hw'
     (by rw [Category.assoc, hp.1.w, ← hTF, ← Category.assoc, ← Category.assoc, Over.w, Over.w])
     (fun y => by rw [← Category.assoc, ← Over.comp_left, lift_snd]; exact hA y) (fun y => (hκ y).symm) eW x ρW ρ hρW hρ y y'
   have e₂ : ρ y y' = ρW y y' := mul_right_cancel₀ (by simp) e₁
   obtain ⟨Φ, w₂, wv, g₁, g₂, g₃, g₄, g₅⟩ := hg
-  have e₃ := GlobalTheory.T.normalisedRosatiGenerator_values_move_along_iso hL _ _ DW M.P.D.toPre C _ N' νW ν' (𝓞 E) oW.onB M.P.oD.onB _ w₂ J.φ.toMonoidHom wv g₂
+  have e₃ := _root_.GlobalTheory.RosMove.rosV_move hL _ _ DW M.P.D.toPre C _ N' νW ν' (𝓞 E) oW.onB M.P.oD.onB _ w₂ J.φ.toMonoidHom wv g₂
     (by rw [Over.w, Over.w]) (fun y => by rw [← Over.comp_left, ← Category.assoc, g₃, lift_snd]; rfl) g₄
     (fun x y => (congrArg J.φ (eW x y)).trans (hB x y)) x ρW ρ' hρW hρ' y y'
   have h0 : wv 1 ≠ 0 := by
@@ -1101,13 +1097,13 @@ theorem exists_has : HV → Laws6 → GlobalTheory.LN.UDvrSt → GlobalTheory.LN
       _ ≤ ‖(n : C)‖ * 1 := by gcongr
       _ = _ := mul_one _
   obtain ⟨N', ν', J, hJX, hlab, DW, _, oW, ψ, he', w, e', νW, hm, -, hA', hgeo⟩ :=
-    GlobalTheory.T.lift_valuation_integral_norm hV h6 hU hH hT hE hA E H D l Xo c W₀ Y O' b ϖ a hb C A u r o M (f.comp (φ.comp PowerSeries.C))
+    _root_.GlobalTheory.ModelData.data_of_model hV h6 hU hH hT hE hA E H D l Xo c W₀ Y O' b ϖ a hb C A u r o M (f.comp (φ.comp PowerSeries.C))
       (f (φ PowerSeries.X)) hint hr hu1 (by rw [hf, huv, hgam]) (fun x => (hf _).trans (hOC x).symm) n hn ho h1 fun j => by
       refine ⟨Units.ext ?_, fun p hp => ?_⟩
       · rw [hext.2.1 _ (pow_pos hn.pos j), (h₀ j).1]
         exact hAζ _ (pow_pos hn.pos j)
       · obtain ⟨s, hs⟩ := (hser _ ho.pow p hp).1
-        have hc := GlobalTheory.T.thetaCoordinates_exist_unique_separate_points hL C _ o.P (𝟙 _) (n ^ j) ho.pow (Nat.cast_ne_zero.2 (pow_pos hn.pos j).ne') _
+        have hc := _root_.GlobalTheory.CoordSep.coord_exists_unique_separate hL C _ o.P (𝟙 _) (n ^ j) ho.pow (Nat.cast_ne_zero.2 (pow_pos hn.pos j).ne') _
           (o.I.ev ((n ^ j) ^ 2)) fun x => (o.I.onto _ (pow_pos (pow_pos hn.pos j) 2) _).2 ⟨x, rfl⟩
         refine (hc.2.2.1 _).2 ((hc.2.1 1 _ _ ((hc.2.2.1 _).1 (hθ _ _ (h₀ j).2))).2 ⟨s⁻¹, funext fun x => ?_⟩)
         rw [Pi.smul_apply, hs, smul_eq_mul, Units.inv_mul_cancel_left]
@@ -1157,7 +1153,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.Ex
 
 theorem _root_.GlobalTheory.T.power_series_algebraic_closure_compatible : HV → Laws6 → GlobalTheory.LN.UDvrSt → GlobalTheory.LN.HomExtSt → ThetaPtDeterminesSt → EndDeterminedOnTorsionSt → ThetaUnifAV → AllA fun {E} _ _ _ {H} {D} {l} {Xo} {c} {W₀} Y {O'} _ _ {b} a => ∀ (K : Type) [Field K] [IsAlgClosed K] [Algebra (FractionRing O') K] [Algebra (PowerSeries O') K] [FaithfulSMul (PowerSeries O') K] [Algebra.IsAlgebraic (PowerSeries O') K], (∀ x, algebraMap (FractionRing O') K (algebraMap O' _ x) = algebraMap (PowerSeries O') K (PowerSeries.C x)) → ∀ (S : Ser a K (algebraMap _ K)) (n : ℕ), n.Prime → Odd n → IsUnit (n : O') → ∀ o₀ : Full D K, o₀.ρ = S.A.ρ → (∀ j, o₀.I.ζ (n ^ j) = S.A.I.ζ (n ^ j) ∧ o₀.Theta (n ^ j) (S.v (n ^ j))) → ∃ o, S.Has o := by
-  first | exact @GlobalTheory.Relabel.exists_has | exact GlobalTheory.Relabel.exists_has | (intros; apply GlobalTheory.Relabel.exists_has <;> assumption)
+  first | exact @GlobalTheory.Relabel.exists_has
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.PowerSeriesAlgebraicClosureCompatibleStatement =====

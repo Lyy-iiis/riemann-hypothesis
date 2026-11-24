@@ -118,8 +118,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open Formalism.L2.SG.AdBridge GlobalTheory.BesselChar
 
 
-theorem _root_.GlobalTheory.T.exists_levi_preimage_of_fix_isotropic_frames : ∀ {D : D7} {S S₀ : HSp D} {ρ : ℕ} (d : HypDec S S₀ ρ) (g : GA D S), mt S g ⬝ d.jX = d.jX → mt S g ⬝ d.jY = d.jY → ∃ b : GA D S₀, d.emb0 b = g := by
-  first | exact @GlobalTheory.MixModel.HypDec.exists_emb0_eq_of_fix_jX_jY | exact GlobalTheory.MixModel.HypDec.exists_emb0_eq_of_fix_jX_jY | (intros; apply GlobalTheory.MixModel.HypDec.exists_emb0_eq_of_fix_jX_jY <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.ExistsLeviPreimageOfFixIsotropicFramesStatement =====
@@ -211,7 +209,7 @@ open Formalism.L2.SG.AdBridge GlobalTheory.BesselChar
 
 
 theorem _root_.GlobalTheory.T.exists_orthogonalComplement_preimage_of_fix_line : ∀ {D : D7} {S₀ A L : HSp D} (o : OrthDec S₀ A L) (ζ : Fin L.rank → D.host.E), IsLineVec L ζ → ∀ (b : GA D S₀), (mt S₀ b *ᵥ (fun k => incA D (vecB o ζ k)) = fun k => incA D (vecB o ζ k)) → ∃ a : GA D A, o.emb (a, 1) = b := by
-  first | exact @GlobalTheory.LineFix.exists_emb_of_fix_line | exact GlobalTheory.LineFix.exists_emb_of_fix_line | (intros; apply GlobalTheory.LineFix.exists_emb_of_fix_line <;> assumption)
+  first | exact @GlobalTheory.LineFix.exists_emb_of_fix_line
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.ExistsOrthogonalComplementPreimageOfFixLineStatement =====
@@ -370,7 +368,7 @@ theorem range_embA_iff {S V₀ A L : HSp D} {ρ : ℕ} (d : HypDec S V₀ ρ) (o
     rw [Matrix.mulVec_mulVec, d.wittDecomp_anisotropicEmbedding_inclAnisotropic, ← Matrix.mulVec_mulVec, hw, Matrix.mulVec_mulVec (M := mt V₀ _), o.emb_jB,
       MixModel.mt_one, Matrix.mul_one]
   · rintro ⟨h1, h2, h3⟩
-    obtain ⟨b, rfl⟩ := GlobalTheory.T.exists_levi_preimage_of_fix_isotropic_frames d g h1 h2
+    obtain ⟨b, rfl⟩ := _root_.GlobalTheory.MixModel.HypDec.exists_emb0_eq_of_fix_jX_jY d g h1 h2
     have hb : (mt V₀ b *ᵥ fun k => incA D (vecB o ζ k)) = fun k => incA D (vecB o ζ k) := by
       rw [Matrix.mulVec_mulVec, d.wittDecomp_anisotropicEmbedding_inclAnisotropic, ← Matrix.mulVec_mulVec] at h3
       have := congrArg (fun w => d.p0 *ᵥ w) h3

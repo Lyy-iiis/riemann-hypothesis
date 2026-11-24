@@ -108,7 +108,7 @@ theorem mulZ_lin (f : ℂ → ℂ) (Φ Ψ : Fn k r (Wq →L[ℂ] Wp)) (s : ℂ) 
   funext c g
   simp only [mulZ, Pi.add_apply, Pi.smul_apply]
   by_cases hx : (c, g) ∈ DomR k r z z'
-  · simp only [Set.indicator_of_mem hx, Pi.add_apply, Pi.smul_apply, smul_add]
+  · simp only [Set.indicator_of_mem hx, smul_add]
     rw [smul_comm]
   · simp [Set.indicator_of_notMem hx]
 
@@ -816,20 +816,17 @@ theorem zeta_smooth_level (hD : IsOpen D) (hU : IsOpen U) (hDU : ∀ g ∈ D, ze
   · have hJ := jet_sub (J 1 0) (jet_sub (jet_val (U := U) (ζ0 := ζ0) (tL k r z z' i Y 1 0 h g))
       (jet_dZ (U := U) (ζ0 := ζ0) (tL k r z z' i Y 1 1 h g)))
     have := jet_zero hU h0 hJ (fun j l => by
-      beta_reduce
       rw [lower_left_monomial_action z z' hD hh hg Y j l, (mono_at ζ0 j l).1, (mono_at ζ0 j l).2.1]
       split_ifs <;> simp_all) f hf
     exact sub_eq_zero.mp this
   · have hJ := jet_sub (J 1 1) (jet_val (U := U) (ζ0 := ζ0) (tL k r z z' i Y 1 1 h g))
     have := jet_zero hU h0 hJ (fun j l => by
-      beta_reduce
       rw [diagonal_monomial_action z z' hD hh hg Y j l, (mono_at ζ0 j l).1]
       split_ifs <;> simp_all) f hf
     exact sub_eq_zero.mp this
   · have hJ := jet_sub (J 0 1) (jet_add (jet_val (U := U) (ζ0 := ζ0) (tL k r z z' i Y 0 1 h g))
       (jet_dZb (U := U) (ζ0 := ζ0) (tL k r z z' i Y 1 1 h g)))
     have := jet_zero hU h0 hJ (fun j l => by
-      beta_reduce
       rw [upper_right_monomial_action z z' hD hh hg Y j l, (mono_at ζ0 j l).1, (mono_at ζ0 j l).2.2]
       split_ifs <;> simp_all) f hf
     exact sub_eq_zero.mp this
@@ -1538,8 +1535,6 @@ end Formalism.FourierDecayAlt.P.NFx4.NO
 
 namespace Formalism.FourierDecayAlt.P
 
-theorem normal_form_order_zero_of_parts : Formalism.FourierDecayAlt.NF.NFOrder0OfParts := NFx4.NO.nFOrder0OfParts
-
 end Formalism.FourierDecayAlt.P
 
 end
@@ -1884,7 +1879,7 @@ theorem ssDown (hP : P.OK) (hS : Wd.IsStart d.QQ (M.qC P)) {l : ℕ} (hl : l ∈
     d.SS l * star (d.SS l) = d.κ fun ρ => ((M.NrmDown P l ρ : ℝ) : ℂ) := by
   refine ext_right hd fun ρ => ?_
   rw [kap_Pj]
-  have hNF := Formalism.FourierDecayAlt.P.nrmFacts_statement P hP l hl
+  have hNF := _root_.Formalism.FourierDecayAlt.P.Mx4.nrmFacts P hP l hl
   by_cases h : ∃ τ, M.Up P l τ ρ
   · obtain ⟨τ, hτ⟩ := h
     obtain ⟨Y, hY⟩ : ∃ Y : ℂ, Y = -(M.rho P ρ l : ℂ) := ⟨_, rfl⟩
@@ -2366,7 +2361,7 @@ theorem blk_comm {τl τj : M.Ty P} (hτl : M.Up P l ρ τl) (hτj : M.Up P j ρ
     refine supp_mul d.κ (supp_SSk hd i _) (supp_SSk hd m _) ρ ρ'' (comm_not_off hd hl hj hjl hσ ?_)
     simp only [Pi.add_apply, Pi.zero_apply, ee]
     by_contra hc; push Not at hc; obtain ⟨h1, h2⟩ := hc
-    apply hn; split_ifs at h1 h2 <;> simp_all <;> omega
+    apply hn; split_ifs at h1 h2 <;> simp_all
   rw [sum2 _ _ hj hl hjl zz, term_upup hd hτl, term_upup hd hτj]
 
 end Comm
@@ -2494,8 +2489,8 @@ theorem op_identity (u v : ℂ) :
     (u - v) • (L.GG * L.GG * (L.nabs * L.nab - L.nab * L.nabs) +
       (1 + u + v) • (L.ζ * L.ζb - L.GG)) := by
   unfold R.LevelData.m0 R.LevelData.l0
-  simp only [alg_mul, mul_add, add_mul, mul_sub, sub_mul, mul_neg, neg_mul, neg_neg, smul_mul_assoc,
-    mul_smul_comm, mul_assoc, smul_add, smul_sub, smul_neg, neg_sub, neg_add]
+  simp only [alg_mul, mul_sub, sub_mul, mul_neg, neg_mul, smul_mul_assoc,
+    mul_smul_comm, mul_assoc, smul_add, smul_sub, smul_neg, neg_sub]
   simp only [M1, M2, M3', M4, M5, M6', M7, M8, M9, gamma_zeta_nabla_cancel, gamma_zeta_conj_cancel, s_zb, gamma_nabla_zeta_commutator]
   module
 
@@ -2761,7 +2756,7 @@ theorem model_Pj_ne (ρ : M.Ty P) : Pj (M.kap P) ρ ≠ 0 := by
 
 theorem model_scalar (hP : P.OK) (ρ : M.Ty P) (u v : ℂ) :
     Cf ρ u v = (u - v) * M.xC P ρ u * M.xC P ρ v * (((2 * M.aC P ρ * P.TT : ℝ) : ℂ) + (1 + u + v) * (P.TT : ℂ)) := by
-  obtain ⟨L, hL⟩ := Formalism.FourierDecayAlt.P.level_exists_model P
+  obtain ⟨L, hL⟩ := _root_.Formalism.FourierDecayAlt.P.Mx2.levelExists P
   have hd := model_hyp P hP L hL
   have hQ : ∀ Y, (dM P L).QQ Y = M.QQr P Y := Formalism.FourierDecayAlt.P.model_is_normal_form P L hL
   have hND : ∀ m ∈ Icc 1 (P.k - 1), (dM P L).SS m * star ((dM P L).SS m) =
@@ -2885,6 +2880,6 @@ end
 namespace Formalism.FourierDecayAlt.P
 
 theorem normal_form_order_zero : Formalism.FourierDecayAlt.NF.NFOrder0 :=
-  normal_form_order_zero_of_parts multiplication_zeta_exists actual_zeta_smooth_alt
+  _root_.Formalism.FourierDecayAlt.P.NFx4.NO.nFOrder0OfParts multiplication_zeta_exists actual_zeta_smooth_alt
 
 end Formalism.FourierDecayAlt.P

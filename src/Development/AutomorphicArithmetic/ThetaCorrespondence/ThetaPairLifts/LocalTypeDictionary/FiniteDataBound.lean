@@ -2,6 +2,7 @@ module
 
 public import Development.AbelianVarietyTheory.Statements.PlaceShiftStatements.InfClassAt
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteCoefficientBound
+public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MovedTensorUnfoldingIntegralValuationLossBoundStatement
 public import Development.AbelianVarietyTheory.BlockTheory.DivisorBase.LevelPlusSubgroup
 public import Formalism.LocalToGlobal.IndefiniteReal.LinksLemmas
 public import Development.AbelianVarietyTheory.Definitions.Divisors.ExistsGivenStageEqOne
@@ -34,7 +35,6 @@ public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.HasInfExp
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.NormSatakeLeOfUnitarySphericalGL
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.OppositePathLocalTotalTensorMemCoefficientField
 public import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.BernsteinUnitaryProductIrreducible
-public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MovedTensorUnfoldingIntegralValuationLossBoundStatement
 import Formalism.MirabolicMackeyTheory.MirabolicMackeyProofs.RamBasic
 import Formalism.QuotientMetricDivisors.HermitianTwistDivisors.ValBasic
 import Mathlib.Algebra.Order.Floor.Extended
@@ -104,7 +104,7 @@ import Mathlib.Algebra.Order.Star.Int
 -- Members: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteDataBound, Development.AutomorphicArithmetic.DivisorFrames.AbsHcExponentLeAndAbsCenterLeOfSizeRows, Development.AutomorphicArithmetic.DivisorFrames.IsIntegralLocalGridTensorOfLevelChar, Development.AutomorphicArithmetic.DivisorFrames.ExistsMemKOEqStdFrameMulOfIsPrimFrame, Development.AutomorphicArithmetic.DivisorFrames.FourierSumBlockTransposeInvEq, Development.AutomorphicArithmetic.DivisorFrames.HaarVolSelfEqOneOfOpenSubgroupLeKO, Development.AutomorphicArithmetic.DivisorFrames.NuDetMulSliceBBlockAction, Development.AutomorphicArithmetic.LocalEmbeddings.FlipInt, Development.AutomorphicArithmetic.DivisorFrames.ExistsPowLocKMulInfEqOneOfLevelLeTwo, Development.AutomorphicArithmetic.DivisorFrames.IsIntegralCmTypeUnitaryPartMulAbsNormPow, Development.AutomorphicArithmetic.LocalEmbeddings.FlipVal, Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlipsLossBoundedAtExceptionalPlaces, Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.FiniteDataBound
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteDataBound =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteDataBound", "h": "module\n\npublic import Development.AbelianVarietyTheory.Statements.PlaceShiftStatements.InfClassAt\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteCoefficientBound\nimport Formalism.MirabolicMackeyTheory.MirabolicMackeyProofs.RamBasic\nimport Formalism.QuotientMetricDivisors.HermitianTwistDivisors.ValBasic\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Tactic.TypeStar\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteDataBound", "h": "module\n\npublic import Development.AbelianVarietyTheory.Statements.PlaceShiftStatements.InfClassAt\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteCoefficientBound\nimport Formalism.MirabolicMackeyTheory.MirabolicMackeyProofs.RamBasic\nimport Formalism.QuotientMetricDivisors.HermitianTwistDivisors.ValBasic\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Tactic.TypeStar\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.MovedTensorUnfoldingIntegralValuationLossBoundStatement\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -125,23 +125,6 @@ variable {D : D7}
 
 theorem lossLe_one (w : PlL D) : LossLe w 1 0 := ⟨1, map_one _, Or.inr (by simp [Formalism.DivisionValues.ValuationRepresentative.vw_one])⟩
 
-theorem lossLe_mul {w : PlL D} {z z' : ℂ} {a a' : ℝ} (h : LossLe w z a) (h' : LossLe w z' a') :
-    LossLe w (z * z') (a + a') := by
-  obtain ⟨y, rfl, hy⟩ := h
-  obtain ⟨y', rfl, hy'⟩ := h'
-  refine ⟨y * y', map_mul _ _ _, ?_⟩
-  by_cases h0 : y = 0
-  · exact Or.inl (by simp [h0])
-  by_cases h0' : y' = 0
-  · exact Or.inl (by simp [h0'])
-  rcases hy with h1 | h1
-  · exact absurd h1 h0
-  rcases hy' with h2 | h2
-  · exact absurd h2 h0'
-  refine Or.inr ?_
-  rw [Formalism.DivisionValues.ValuationRepresentative.vw_mul w _ _ h0 h0', Int.cast_add]
-  linarith
-
 theorem lossLe_prod {w : PlL D} {ι : Type*} (s : Finset ι) (z : ι → ℂ) (a : ι → ℝ) (h : ∀ i ∈ s, LossLe w (z i) (a i)) :
     LossLe w (∏ i ∈ s, z i) (∑ i ∈ s, a i) := by
   classical
@@ -149,7 +132,7 @@ theorem lossLe_prod {w : PlL D} {ι : Type*} (s : Finset ι) (z : ι → ℂ) (a
   | empty => simpa using lossLe_one w
   | insert i s hi ih =>
     rw [Finset.prod_insert hi, Finset.sum_insert hi]
-    exact lossLe_mul (h i (Finset.mem_insert_self _ _)) (ih fun j hj => h j (Finset.mem_insert_of_mem hj))
+    exact _root_.GlobalTheory.UnfoldLoss.MovedChosen.lossLe_mul (h i (Finset.mem_insert_self _ _)) (ih fun j hj => h j (Finset.mem_insert_of_mem hj))
 
 theorem loss_mono {dl : PlL D → ℝ} {B B' : ℝ} (h : Loss dl B) (hB : B ≤ B') : Loss dl B' :=
   ⟨h.1, h.2.1, fun s => (h.2.2 s).trans hB⟩
@@ -926,7 +909,7 @@ theorem UpperTheory.nu_det_mul_sliceB_block_action :
     have e1 : g (i, j + 1) = 1 := hg1 _ (by simp)
     have e2 : g (i + 1, j) = 1 := hg1 _ (by simp)
     simp only [Grid.edgeFactor, Edge.src, Edge.tgt, hg0, e1, e2, ha, map_one, apow_one, mul_one]
-    simp only [Grid.kappa, Grid.blockChar, Grid.nu, gdet, map_one, map_inv, MonoidHom.div_apply,
+    simp only [Grid.kappa, Grid.blockChar, Grid.nu, gdet, map_inv, MonoidHom.div_apply,
       Units.val_div_eq_div_val, Units.val_inv_eq_inv_val, Units.val_one, inv_one, mul_one, one_mul]
     field_simp
   have hprod : (γ.map (G.edgeFactor .one g)).prod = (G.nu i j (gdet u⁻¹) : ℂ) := by
@@ -970,6 +953,7 @@ section -- clump:auto
 
 open GlobalTheory.SplitFlip GlobalTheory.SplitWeil
 attribute [-instance] Formalism.DoubleCosetMeasures.instMeasGL Formalism.DoubleCosetMeasures.instMeasMat
+attribute [local instance high] GlobalTheory.SplitWeil.matrixMeasurableSpace
 
 noncomputable section
 
@@ -1053,7 +1037,6 @@ theorem fourierSum_mem {A D : Type} [Fintype A] [DecidableEq A] [Fintype D] [Dec
     · rw [mem_Lo, mul_inv_cancel₀ (pow_ne_zero _ (by exact_mod_cast hq))]
       exact isIntegral_one
     rw [← Valuation.mem_integer_iff]
-    change _ ∈ 𝒪[k]
     rw [pairCols, Finset.mul_sum]
     refine Subring.sum_mem _ fun i _ => ?_
     rw [Finset.mul_sum]
@@ -1071,7 +1054,6 @@ theorem invFourierSum_inv_mem {A D : Type} [Fintype A] [DecidableEq A] [Decidabl
   split_ifs with h
   · refine sum_mem fun S _ => Lo_mul (b := 0) (hΦ _) (Lo_zero (hψ _ ?_))
     rw [← Valuation.mem_integer_iff]
-    change _ ∈ 𝒪[k]
     have e1 : ((ϖ ^ e : kˣ) : k) * pairCols P T ((ϖ ^ e)⁻¹ • liftRes S) = ∑ i, ∑ j : P, liftRes S i j * T i j := by
       rw [pairCols, Finset.mul_sum]
       refine Finset.sum_congr rfl fun i _ => ?_
@@ -1402,7 +1384,7 @@ theorem UpperTheory.exists_pow_locK_mul_inf_eq_one_of_levelLe_two :
       simp only [one_pow] at hp
       rw [← hp, ← pow_mul, ← zpow_natCast, mul_zpow, ← zpow_natCast (χ.locK P k) h, ← zpow_mul,
         ← zpow_mul]
-      congr 2 <;> push_cast <;> ring
+      congr 2 <;> push_cast
     have e2 : χ.inf a ^ (c * ((mf P * N : ℕ) : ℤ)) * χ.locK P a ^ (c * ((mf P * N : ℕ) : ℤ)) = 1 := by
       rw [← mul_zpow, show c * ((mf P * N : ℕ) : ℤ) = (N : ℤ) * (c * mf P) by push_cast; ring,
         zpow_mul, zpow_natCast, hA, one_zpow]
@@ -1712,7 +1694,7 @@ private theorem nu_int {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} (G : Gr
   have h12 := (GlobalTheory.SizesOfRows.sizes_of_sizeRows large₂ hS).2.2.2.2.2.2.2
   have e1 : (((locGrid G t w).nu i j (unifAt w) : ℂˣ) : ℂ) =
       ((L.C.mu0 ⟨j, hj⟩).val w : ℂ) * ((L.xiH t).val w : ℂ) * (((G.ch.chiH (D.R.m - i)).val w : ℂ))⁻¹ := by
-    simp only [Grid.nu, locGrid, muBase, dif_pos hj, MonoidHom.div_apply, Units.val_div_eq_div_val, div_eq_mul_inv]
+    simp only [Grid.nu, locGrid, muBase, dif_pos hj, div_eq_mul_inv]
     rw [MonoidHom.mul_apply, MonoidHom.inv_apply, Units.val_mul, Units.val_inv_eq_inv_val]
     rfl
   have hμ := L.C.isMu0 ⟨j, hj⟩
@@ -1795,14 +1777,14 @@ theorem _root_.GlobalTheory.T.flips_loss_bounded_at_exceptional_places : ∃ CF0
   have hchi : ∀ i, 1 ≤ i → i ≤ D.R.m → ∀ x, ((ch.G.ch.chiH i).loc w x : ℂ) ∈ K :=
     fun i a b x => hK _ (hF.chars.chi i a b w x)
   have habs : ∀ u : (Kw w)ˣ, apow u (1 / 2) ∈ K :=
-    GlobalTheory.TflipField.apow_half_mem K w (hK _ (hF.sqrt w (.inr ⟨t, hw⟩)))
-  have hψ := GlobalTheory.TflipField.psiAt_mem (W := ch.W) K (fun z hz => hK _ (hF.roots t w hw z hz)) h00.cond
+    _root_.GlobalTheory.HalfPowField.apow_half_mem_of_sqrt K w (hK _ (hF.sqrt w (.inr ⟨t, hw⟩)))
+  have hψ := _root_.GlobalTheory.FunObj.psiAt_mem_subfield_of_roots (W := ch.W) K (fun z hz => hK _ (hF.roots t w hw z hz)) h00.cond
   obtain ⟨y, hy⟩ : ∃ y, D.what₂.embLL y = Tflip ch.W ch.S.B t Φ w z :=
     RingHom.mem_fieldRange.1 (GlobalTheory.TflipField.flips_mem K h00.unif h00.cond h00.one_le habs hψ (flipOrder D.R.m)
       (givenStage t w ch.S.B Φ)
       (fun x hx => ⟨(hfl x hx).2.2.1, (hfl x hx).2.2.2, GlobalTheory.TflipField.nu_mem K t w hmu hxi hchi (hfl x hx).1 (hfl x hx).2.1⟩)
       (canFlip_flipOrder _).1 (fun X => GivenAdm.givenLevel_open hL hw X) hadm.tensor
-      (GlobalTheory.TflipField.givenStage_mem K ch.S.B t Φ w hmu hxi) z)
+      (_root_.GlobalTheory.GivenField.tensor_givenStage_mem K ch.S.B t Φ w hmu hxi) z)
 
   have key : Tflip ch.W ch.S.B t Φ w z ∈ UpperTheory.FlipInt.Lo (resCard (Kw w)) (0 + (flipOrder D.R.m).length *
       (depthAt ch.G w * bigN D * (3 * (2 * ⌊8 * large₂.sc.b⌋₊) + 8 * bigN D))) := by
@@ -1862,32 +1844,15 @@ open IsDedekindDomain NumberField GlobalTheory.ChiGrid GlobalTheory.FunObj Globa
 open Formalism.DivisionValues (vw lw)
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField GlobalTheory.FunObj.borelKw
   GlobalTheory.FunObj.borelSpaceKw
-noncomputable section
 namespace GlobalTheory.FunDat
-section Val
-variable {D : D7}
-end Val
-section Sum
-variable {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} (G : GridData L sc)
-end Sum
 end GlobalTheory.FunDat
-end
 noncomputable section
 namespace GlobalTheory.FunDat
-section Cases
-variable {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} (G : GridData L sc)
-end Cases
 theorem finDatK_alt : _root_.GlobalTheory.FunPr.ThetaLocalInputs → FinDatK := fun _ => finDatK_of GlobalTheory.T.flips_loss_bounded_at_exceptional_places GlobalTheory.T.movedTensor_unfolding_integral_valuation_loss_bound
 end GlobalTheory.FunDat
 end
 end
 
-section
-open GlobalTheory.SumSize GlobalTheory.RowClaim
-
-theorem _root_.GlobalTheory.T.finDatK_of_theta_inputs : _root_.GlobalTheory.FunPr.ThetaLocalInputs → FinDatK := by
-  first | exact @_root_.GlobalTheory.FunDat.finDatK_alt | exact _root_.GlobalTheory.FunDat.finDatK_alt | (intros; apply _root_.GlobalTheory.FunDat.finDatK_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.LocalTypeDictionary.FiniteDataBound =====

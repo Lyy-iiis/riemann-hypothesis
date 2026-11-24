@@ -489,7 +489,6 @@ theorem UpperTheory.exists_principalCongruence_level_invariant :
       rw [e]; exact this
   have hfix : f.1 (g * h * finGL E 2 (l⁻¹ * k * l)) = f.1 (g * h) := congrFun (congrArg Subtype.val hkV) (g * h)
   rw [← hfix, hκk, hh]
-  congr 1
   simp only [map_mul, map_inv, mul_assoc]
   rw [← mul_assoc (finGL E 2 k), ← infGL_comm]
   simp [mul_assoc]
@@ -683,7 +682,7 @@ theorem UpperTheory.hasLevel_of_unitIdele_congruent_one :
     intro v
     simp [Dv]
   refine ⟨fun i j => ?_, fun v => ⟨?_, fun i j => ?_⟩⟩
-  · fin_cases i <;> fin_cases j <;> simp [aE, h1] <;> rfl
+  · fin_cases i <;> fin_cases j <;> simp [aE, h1]
   · rw [H.KAt, GlobalTheory.LFun.KGL, GlobalTheory.AdelicU.mem_GLint_iff]
     have e1 : (1 : H.Kv v) ∈ Formalism.UG.Ov ℚ v := one_mem _
     have e0 : (0 : H.Kv v) ∈ Formalism.UG.Ov ℚ v := zero_mem _
@@ -1268,7 +1267,7 @@ theorem UpperTheory.unipotentTheta_mem_congruence_of_integral :
     intro q
     refine inv_eq_of_mul_eq_one_right (Units.ext ?_)
     change (!![1, q; 0, 1] : Matrix (Fin 2) (Fin 2) (A E)) * !![1, -q; 0, 1] = 1
-    simp [Matrix.mul_fin_two, Matrix.one_fin_two]
+    simp [Matrix.one_fin_two]
   have hn : nu D ((M : A ℚ) * (d : A ℚ) * c) = gl (nU ((M : A E) * (AdeleBaseChange.adeleMap ℚ E c * rt ((d : E) * D.θ)))) := by
     change gl (nU (D.mkE 0 ((M : A ℚ) * (d : A ℚ) * c))) = _
     rw [hx]
@@ -1338,12 +1337,7 @@ open UpperTheory.ConvolutionTheory.R2.G (FS2 Rw nE row)
 open UpperTheory.V.Af.Smo (EigAt)
 open scoped ComplexOrder
 
-private theorem ψ_add' (x y : A ℚ) : ψ (x + y) = ψ x * ψ y := by simp [ψ, AddChar.map_add_eq_mul]
-
 private theorem ψ_zero' : ψ (0 : A ℚ) = 1 := by simp [ψ]
-
-private theorem ψ_neg_mul' (x : A ℚ) : ψ (-x) * ψ x = 1 := by
-  rw [← ψ_add', neg_add_cancel, ψ_zero']
 
 private theorem congE_mono {E : Type} [Field E] [NumberField E] {M L : ℕ} (h : M ∣ L) {κ : GL (Fin 2) (A E)}
     (hκ : CongE L κ) : CongE M κ := by
@@ -1468,7 +1462,7 @@ theorem UpperTheory.ConvolutionTheory.RankTwoDescent.exGd_of :
       rw [hΦ]; exact e
     rw [e', hc]
     have e2 : ψ ((a : A ℚ) * iota L * (1 - (y : A ℚ))) = ψ (x a) * ψ (-((y : A ℚ) * x a)) := by
-      rw [← ψ_add', hx]
+      rw [← _root_.UpperTheory.ConvolutionTheory.RankTwoDescent.Nz.psi_add, hx]
       congr 1
       ring
     rw [e2]
@@ -1485,7 +1479,7 @@ theorem UpperTheory.ConvolutionTheory.RankTwoDescent.exGd_of :
     have e2 : ψ (-((y : A ℚ) * ((M₀ : A ℚ) * (d : A ℚ) * b))) = 1 := by
       have := mul_right_cancel₀ hz' (e.symm.trans (one_mul _).symm)
       exact this
-    have e3 := ψ_neg_mul' ((y : A ℚ) * ((M₀ : A ℚ) * (d : A ℚ) * b))
+    have e3 := _root_.UpperTheory.ConvolutionTheory.RankTwoDescent.Nz.psi_neg_mul ((y : A ℚ) * ((M₀ : A ℚ) * (d : A ℚ) * b))
     rw [e2, one_mul] at e3
     rw [hMdef]
     push_cast

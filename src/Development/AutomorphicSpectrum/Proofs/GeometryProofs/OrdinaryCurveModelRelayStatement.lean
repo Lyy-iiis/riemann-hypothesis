@@ -288,8 +288,7 @@ open GlobalTheory.CompanionTheory.Ar.Num GlobalTheory.CompanionTheory.Ar.GR Reci
 
 namespace GlobalTheory.CompanionTheory.Ar.Num
 
-theorem pt_af_type_main : ∀ {o C : Type} [CommRing o] [Field C] [Algebra o C] (RC : Subalgebra o C) (p : ℕ) [Fact p.Prime] {I : Type} [Fintype I] [DecidableEq I] (MM : Submodule RC ((I → ZMod p) → C)), MM ≤ intFun RC _ → ∀ {F : Type} [Field F] [Fintype F] {n : ℕ} {Sg : Type} {r s : Sg → ℕ} (D : LieLatticeData C F n Sg r s) (χ : F → RC), χ 0 = 0 → χ 1 = 1 → ∀ (i : (Fin n → F) →+ (I → ZMod p)) (π : (I → ZMod p) →+ (Fin n → F)), (∀ y, π (i y) = y) → (∀ h ∈ MM, (fun x => h (i (π x))) ∈ MM) → (MM.map (LinearMap.funLeft RC C (i : (Fin n → F) → (I → ZMod p)))).toAddSubgroup = D.M → ∀ (Pm : Matrix (Fin n) I RC) (J : Matrix I (Fin n) RC), Pm * J = 1 → (∀ (k : Fin n) (x : I → ZMod p), (∑ j, Pm k j * ((x j).val : RC)) - χ (π x k) ∈ Ideal.span {(p : RC)}) → (∀ l ∈ afLat p MM, Matrix.vecMul l (J * Pm) ∈ afLat p MM) → (∀ l : Fin n → RC, (fun k => (l k : C)) ∈ D.af RC p (fun a => (χ a : C)) ↔ Matrix.vecMul l Pm ∈ afLat p MM) ∧ ∀ u : Fin n → C, u ∈ D.hh RC p (fun a => (χ a : C)) ↔ ∀ l ∈ afLat p MM, (∑ j, (l j : C) * (J.map (algebraMap RC C)).mulVec u j) ∈ RC :=
-  @PositivityTheory.Xgn.t_pt_af_type
+alias pt_af_type_main := _root_.PositivityTheory.Xgn.t_pt_af_type
 
 end GlobalTheory.CompanionTheory.Ar.Num
 end -- clump:auto
@@ -564,7 +563,6 @@ namespace PositivityTheory.Xgn.TestGroupPoint
 theorem bcLin_apply {Ω C : Type} [Field Ω] [Field C] [Algebra Ω C] {m n : ℕ} (f : (Fin m → Ω) →ₗ[Ω] (Fin n → Ω))
     (x : Fin m → C) (k : Fin n) : TestPt.bcLin C f x k = ∑ i, algebraMap Ω C (f (Pi.single i 1) k) * x i := by
   simp only [TestPt.bcLin, Matrix.toLin'_apply, Matrix.mulVec, dotProduct, Matrix.map_apply, LinearMap.toMatrix'_apply]
-  try (refine Finset.sum_congr rfl fun i _ => ?_; congr 4; funext j; simp [Pi.single_apply])
 
 theorem bcLin_bc {Ω C : Type} [Field Ω] [Field C] [Algebra Ω C] {m n : ℕ} (f : (Fin m → Ω) →ₗ[Ω] (Fin n → Ω))
     (x : Fin m → Ω) (k : Fin n) : TestPt.bcLin C f (fun i => algebraMap Ω C (x i)) k = algebraMap Ω C (f x k) := by
@@ -717,10 +715,10 @@ theorem gram_cong {E : Type} [Field E] [NumberField E] {R : Type} [CommRing R] {
     congr 2
     have h1 : dl m = B m.2 • (Pi.single m.1 1 : Fin n → 𝓞 E) := by
       funext t
-      by_cases h : t = m.1 <;> simp [dl, Pi.single_apply, h, hB]
+      by_cases h : t = m.1 <;> simp [dl, h, hB]
     have h2 : (Pi.single l (bar (B m.2) * B k) : Fin n → 𝓞 E) = bar (B m.2) • (Pi.single l (B k) : Fin n → 𝓞 E) := by
       funext t
-      by_cases h : t = l <;> simp [Pi.single_apply, h]
+      by_cases h : t = l <;> simp [h]
     rw [h1, h2, hadj, hbar]
   have hexp : ∀ l c, L l c = ∑ t, ((B.repr c t : ℤ) : R ⧸ Ideal.span {(p : R)}) * L l (B t) := by
     intro l c
@@ -791,7 +789,7 @@ theorem ev_col (hRr : 1 ≤ Rr) (hact : ∀ a u, Dh.ρΩ a u = u ∘ₗ ρ (bar 
   intro V t hV
   have hdl : dl m = RingOfIntegers.basis E m.2 • (Pi.single m.1 1 : Fin n → 𝓞 E) := by
     funext j
-    by_cases h : j = m.1 <;> simp [dl, Pi.single_apply, h]
+    by_cases h : j = m.1 <;> simp [dl, h]
   have hvec : (fun j => (Hm j m : C)) =
       (fun j => (io ⟨Dh.h (dl m), Dh.h_mem _⟩ j : C)) + (p : C) • (fun j => (w j : C)) := by
     funext j
@@ -986,11 +984,6 @@ variable {C O : Type} [Field C] [CommRing O] [Algebra O C] {E : Type} [Field E] 
   {V Ω' : Type} [AddCommGroup V] [Module C V] [Module O V] [IsScalarTower O C V]
   [AddCommGroup Ω'] [Module C Ω'] [Module O Ω'] [IsScalarTower O C Ω']
 
-theorem pt_swap (P : HTPoint C O c κ N V Ω') (x y : V) : P.e x y = -P.e y x := by
-  have h := P.alt (x + y)
-  simp only [map_add (f := _), LinearMap.add_apply, P.alt, zero_add, add_zero] at h
-  linear_combination h
-
 theorem pt_tate (P : HTPoint C O c κ N V Ω') (m : Ix E N) :
     P.tate (dl m) = P.ρ (RingOfIntegers.basis E m.2) (P.t m.1) :=
   PositivityTheory.HtPt.Gd.tate_single P m.1 _
@@ -1018,7 +1011,7 @@ theorem pt_matrices {v : Valuation C NNReal} (hv : v.Integers O) (P : HTPoint C 
     exact Submodule.subset_span ⟨q, rfl⟩
   haveI : FiniteDimensional C V := Module.Finite.of_basis B
   have hnd : ∀ x, (∀ y, P.e x y = 0) → x = 0 := fun x hx =>
-    P.nondeg x fun y => by rw [pt_swap, hx, neg_zero]
+    P.nondeg x fun y => by rw [_root_.GlobalTheory.CompanionTheory.Ar.HT.PtBasic.e_skew, hx, neg_zero]
   have hei : Function.Injective (P.e : V →ₗ[C] Module.Dual C V) := by
     set_option backward.isDefEq.respectTransparency.instanceSearchTypes false in rw [injective_iff_map_eq_zero]
     intro x hx
@@ -1034,7 +1027,7 @@ theorem pt_matrices {v : Valuation C NNReal} (hv : v.Integers O) (P : HTPoint C 
   have hwT : ∀ m, w m ∈ P.T := fun m => by
     rw [← P.perfect]
     intro x hx
-    rw [pt_swap, hw]
+    rw [_root_.GlobalTheory.CompanionTheory.Ar.HT.PtBasic.e_skew, hw]
     refine neg_mem ?_
     rw [hT] at hx
     obtain ⟨a, rfl⟩ := (Submodule.mem_span_range_iff_exists_fun O).1 hx
@@ -1075,14 +1068,14 @@ theorem pt_matrices {v : Valuation C NNReal} (hv : v.Integers O) (P : HTPoint C 
       rw [LinearMap.mem_ker]
       refine imp_congr_right fun _ => ?_
       change P.e y x = 0 ↔ _
-      rw [pt_swap P y x, neg_eq_zero]
+      rw [_root_.GlobalTheory.CompanionTheory.Ar.HT.PtBasic.e_skew P y x, neg_eq_zero]
     have h2 := LinearMap.BilinForm.finrank_orthogonal (B := P.e) ⟨hnd, P.nondeg⟩ (LinearMap.ker P.ht)
     rw [horth, finrank_eq_card_basis B] at h2
     omega
   · ext m m'
     apply hinj
     simp only [Matrix.transpose_apply, Matrix.neg_apply, Matrix.of_apply, map_neg, hEg]
-    exact pt_swap P _ _
+    exact _root_.GlobalTheory.CompanionTheory.Ar.HT.PtBasic.e_skew P _ _
   · ext m m'
     apply hinj
     have h := congrArg (fun f : Module.Dual C V => f (B m')) (hw m)
@@ -1660,8 +1653,7 @@ def smallSub {C : Type} [Field C] (v : Valuation C NNReal) (t : NNReal) {r : ℕ
   zero_mem' m := by simp
   neg_mem' ha m := by rw [map_neg, Valuation.map_neg]; exact ha m
 
-theorem bar_bar {E : Type} [Field E] [NumberField E] [IsCMField E] (H : Host E) (a : 𝓞 E) : H.bar (H.bar a) = a :=
-  RingOfIntegers.ext (by rw [H.bar_eq, H.bar_eq, IsCMField.complexConj_apply_apply])
+alias bar_bar := _root_.GlobalTheory.HostModel.bar_bar
 
 end PositivityTheory.Xgn.TestGroupPoint
 
@@ -1795,7 +1787,6 @@ theorem PositivityTheory.Xgn.test_group_point_exists : GlobalTheory.CompanionThe
     congr 2
     first
       | exact IsCMField.complexConj_apply_apply E _
-      | simp [HT.cmConj]
   · let f : Ix E (D.p + D.q) → ((Fin (labelRk D (e τ)) → C) →ₗ[C] C) := fun m =>
       ∑ m', (Eg m m' : C) • (LinearMap.proj m' ∘ₗ ((Jm _ s).map (algebraMap RC C)).mulVecLin ∘ₗ TestPt.bcLin C (i τ)) +
         ∑ k, ev (b (e τ) k) (fun j => (Hm j m : C)) • LinearMap.proj k
@@ -1832,7 +1823,7 @@ open GlobalTheory.CompanionTheory.Ar.Num.FamEx GlobalTheory.CompanionTheory.Ar.B
 
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.ordinary_curve_model_relay : GlobalTheory.CompanionTheory.Ar.HT.FarguesHodgeTate → GlobalTheory.CompanionTheory.Ar.GR.QuotientByFiniteFlatStatement → GlobalTheory.CompanionTheory.Ar.GR.ZarhinStatement → GlobalTheory.CompanionTheory.Ar.GR.HodgeTateDatumStatement → GlobalTheory.CompanionTheory.Ar.GR.OrdinaryCurveStatement → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (O₀ : Type) [CommRing O₀] (β : O₀ →+* c.F) (Y : Model Xo c β) (S : Finset ℕ) (Ω : Type) [Field Ω] (K : Type) [Fintype K] [DecidableEq K] (J : K → Type) [∀ k, Fintype (J k)] (y : (Σ k, J k) → Ω) (𝔐 : HodgeCpt Y S y) (d : ℕ), IsArithVar (mCoordIdeal y) (d + 1) → 0 < D.p + D.q → ∀ (p : ℕ) [Fact p.Prime], p ∈ S → HT.HTFree 𝔐 p → p ≠ 2 → ¬ (p : ℤ) ∣ NumberField.discr E → ∀ (b : ∀ t, Fin (labelRk D t) → 𝔐.Li), (∀ t, LinearIndependent Ω (b t) ∧ Submodule.span Ω (Set.range (b t)) = 𝔐.Vgen t) → ∀ φ : Equiv.Perm (CMType H ⊕ CMType H), IsFrobLabels c p φ → ∀ (A : Type) [CommRing A] [Algebra A Ω] [IsIntegralClosure A ℤ Ω] (m : Ideal A) [m.IsPrime], (p : A) ∈ m → ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Algebra A O] [IsLocalization.AtPrime O m] [Algebra O Ω] [IsScalarTower A O Ω], ∀ (t₀ : CMType H ⊕ CMType H) (Sg : Type) [Fintype Sg] (e : Sg → CMType H ⊕ CMType H) (φ' : Equiv.Perm Sg) (F : Type) [Field F] [Fintype F] [CharP F p] (pq : (𝓞 E ⧸ Ideal.span {(p : 𝓞 E)}) →+* F) (sc : F →+ (𝓞 E ⧸ Ideal.span {(p : 𝓞 E)})) (w : O) (σ : Sg → F →+* IsLocalRing.ResidueField O), IsOrbit O 𝔐 p φ t₀ e φ' pq w σ → IsSec pq sc → ∀ (G : GenTors 𝔐 p) (c' : ∀ k, J k), mseg y c' ≠ 0 → ∀ (P : ChartPack G O c') (i : ∀ τ, (Fin (labelRk D (e τ)) → Ω) →ₗ[Ω] (Fin (D.p + D.q) → Ω)), (∀ τ : Sg, SeqHyp (CR O y c') (algebraMap O Ω w) (coordLat O y (𝔐.HT p (e τ)) (b (e τ)) c') (dotDual (CR O y c') (coordLat O y (𝔐.HT p (e τ).swap) (b (e τ).swap) c')) (i τ) (qMap P (b (e τ).swap)) ∧ ∀ σE : E →+* Ω, (∀ a : 𝓞 E, σE (a : E) = 𝔐.emb (e τ) a) → DualSeq P σE (𝔐.R p - 2) (coordLat O y (𝔐.HT p (e τ)) (b (e τ)) c') (b (e τ)) (i τ)) → (chartD e b pq sc w P i).Base (CR O y c') p (algebraMap O Ω w) → ∀ (C : Type) [Field C] [Algebra O C] [Algebra Ω C] [IsScalarTower O Ω C] (RC : Subalgebra O C), IsTestPt p (CR O y c') RC → ∀ χ : Sg → F →*₀ C, (∀ τ a (o : O), IsLocalRing.residue O o = σ τ a → χ τ a - algebraMap O C o ∈ RC ∧ ∀ u ∈ RC, u * (χ τ a - algebraMap O C o) ≠ 1) → ∀ [DecidableEq F] [Fintype (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.NAdd E (D.p + D.q) p)] [DecidableEq (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.NAdd E (D.p + D.q) p)], ∀ (v : Valuation C NNReal), (∀ c, c ∈ RC ↔ v c ≤ 1) → v (p : C) < 1 → ∀ τ (hb : ((Fin (labelRk D (e τ)) → C) →ₗ[C] (Fin (D.p + D.q) → C))), Function.Injective hb → LinearMap.range hb = LinearMap.ker (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.bcLin C (qMap P (b (e τ).swap))) → (stdLat RC _).comap hb.toAddMonoidHom = ((chartD e b pq sc w P i).bc RC).W τ → (∀ a ∈ ((chartD e b pq sc w P i).bc RC).W τ, hb a - GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.bcLin C (i τ) a ∈ mulLat (algebraMap O C w) (stdLat RC _)) → (((chartD e b pq sc w P i).bc RC).hh RC p (fun a => χ τ a)).map (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.bcLin C (qMap P (b (e τ).swap))).toAddMonoidHom = ((chartD e b pq sc w P i).bc RC).om τ ∧ (((chartD e b pq sc w P i).bc RC).hh RC p (fun a => χ τ a)).comap hb.toAddMonoidHom = divLat (algebraMap O C w) (((chartD e b pq sc w P i).bc RC).lie τ) := by
-  first | exact @PositivityTheory.Xgn.test_group_point_exists | exact PositivityTheory.Xgn.test_group_point_exists
+  first | exact @PositivityTheory.Xgn.test_group_point_exists
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.OrdinaryCurveModelRelay =====
@@ -1850,7 +1841,7 @@ open GlobalTheory.CompanionTheory.Ar.Num.FamEx GlobalTheory.CompanionTheory.Ar.B
 
 
 theorem _root_.GlobalTheory.T.ordinary_curve_model_relay : GlobalTheory.CompanionTheory.Ar.HT.FarguesHodgeTate → GlobalTheory.CompanionTheory.Ar.GR.QuotientByFiniteFlatStatement → GlobalTheory.CompanionTheory.Ar.GR.ZarhinStatement → GlobalTheory.CompanionTheory.Ar.GR.HodgeTateDatumStatement → GlobalTheory.CompanionTheory.Ar.GR.OrdinaryCurveStatement → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l) (c : Coeff l) (O₀ : Type) [CommRing O₀] (β : O₀ →+* c.F) (Y : Model Xo c β) (S : Finset ℕ) (Ω : Type) [Field Ω] (K : Type) [Fintype K] [DecidableEq K] (J : K → Type) [∀ k, Fintype (J k)] (y : (Σ k, J k) → Ω) (𝔐 : HodgeCpt Y S y) (d : ℕ), IsArithVar (mCoordIdeal y) (d + 1) → 0 < D.p + D.q → ∀ (p : ℕ) [Fact p.Prime], p ∈ S → HT.HTFree 𝔐 p → p ≠ 2 → ¬ (p : ℤ) ∣ NumberField.discr E → ∀ (b : ∀ t, Fin (labelRk D t) → 𝔐.Li), (∀ t, LinearIndependent Ω (b t) ∧ Submodule.span Ω (Set.range (b t)) = 𝔐.Vgen t) → ∀ φ : Equiv.Perm (CMType H ⊕ CMType H), IsFrobLabels c p φ → ∀ (A : Type) [CommRing A] [Algebra A Ω] [IsIntegralClosure A ℤ Ω] (m : Ideal A) [m.IsPrime], (p : A) ∈ m → ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Algebra A O] [IsLocalization.AtPrime O m] [Algebra O Ω] [IsScalarTower A O Ω], ∀ (t₀ : CMType H ⊕ CMType H) (Sg : Type) [Fintype Sg] (e : Sg → CMType H ⊕ CMType H) (φ' : Equiv.Perm Sg) (F : Type) [Field F] [Fintype F] [CharP F p] (pq : (𝓞 E ⧸ Ideal.span {(p : 𝓞 E)}) →+* F) (sc : F →+ (𝓞 E ⧸ Ideal.span {(p : 𝓞 E)})) (w : O) (σ : Sg → F →+* IsLocalRing.ResidueField O), IsOrbit O 𝔐 p φ t₀ e φ' pq w σ → IsSec pq sc → ∀ (G : GenTors 𝔐 p) (c' : ∀ k, J k), mseg y c' ≠ 0 → ∀ (P : ChartPack G O c') (i : ∀ τ, (Fin (labelRk D (e τ)) → Ω) →ₗ[Ω] (Fin (D.p + D.q) → Ω)), (∀ τ : Sg, SeqHyp (CR O y c') (algebraMap O Ω w) (coordLat O y (𝔐.HT p (e τ)) (b (e τ)) c') (dotDual (CR O y c') (coordLat O y (𝔐.HT p (e τ).swap) (b (e τ).swap) c')) (i τ) (qMap P (b (e τ).swap)) ∧ ∀ σE : E →+* Ω, (∀ a : 𝓞 E, σE (a : E) = 𝔐.emb (e τ) a) → DualSeq P σE (𝔐.R p - 2) (coordLat O y (𝔐.HT p (e τ)) (b (e τ)) c') (b (e τ)) (i τ)) → (chartD e b pq sc w P i).Base (CR O y c') p (algebraMap O Ω w) → ∀ (C : Type) [Field C] [Algebra O C] [Algebra Ω C] [IsScalarTower O Ω C] (RC : Subalgebra O C), IsTestPt p (CR O y c') RC → ∀ χ : Sg → F →*₀ C, (∀ τ a (o : O), IsLocalRing.residue O o = σ τ a → χ τ a - algebraMap O C o ∈ RC ∧ ∀ u ∈ RC, u * (χ τ a - algebraMap O C o) ≠ 1) → ∀ [DecidableEq F] [Fintype (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.NAdd E (D.p + D.q) p)] [DecidableEq (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.NAdd E (D.p + D.q) p)], ∀ (v : Valuation C NNReal), (∀ c, c ∈ RC ↔ v c ≤ 1) → v (p : C) < 1 → ∀ τ (hb : ((Fin (labelRk D (e τ)) → C) →ₗ[C] (Fin (D.p + D.q) → C))), Function.Injective hb → LinearMap.range hb = LinearMap.ker (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.bcLin C (qMap P (b (e τ).swap))) → (stdLat RC _).comap hb.toAddMonoidHom = ((chartD e b pq sc w P i).bc RC).W τ → (∀ a ∈ ((chartD e b pq sc w P i).bc RC).W τ, hb a - GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.bcLin C (i τ) a ∈ mulLat (algebraMap O C w) (stdLat RC _)) → (((chartD e b pq sc w P i).bc RC).hh RC p (fun a => χ τ a)).map (GlobalTheory.CompanionTheory.Ar.Num.FamEx.TestPt.bcLin C (qMap P (b (e τ).swap))).toAddMonoidHom = ((chartD e b pq sc w P i).bc RC).om τ ∧ (((chartD e b pq sc w P i).bc RC).hh RC p (fun a => χ τ a)).comap hb.toAddMonoidHom = divLat (algebraMap O C w) (((chartD e b pq sc w P i).bc RC).lie τ) := by
-  first | exact @GlobalTheory.CompanionTheory.Relay.ordinary_curve_model_relay | exact GlobalTheory.CompanionTheory.Relay.ordinary_curve_model_relay | (intros; apply GlobalTheory.CompanionTheory.Relay.ordinary_curve_model_relay <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Relay.ordinary_curve_model_relay
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.OrdinaryCurveModelRelayStatement =====

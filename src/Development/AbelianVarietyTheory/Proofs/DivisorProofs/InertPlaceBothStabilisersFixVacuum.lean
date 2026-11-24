@@ -255,20 +255,7 @@ noncomputable section
 
 namespace GlobalTheory.VDblEig
 
-theorem boxFun_mem_SB' {k : Type} [CommRing k] [TopologicalSpace k] [T2Space k] {κ κ' : Type}
-    {φ₁ : (κ → k) → ℂ} {φ₂ : (κ' → k) → ℂ} (h₁ : φ₁ ∈ SB (κ → k)) (h₂ : φ₂ ∈ SB (κ' → k)) :
-    boxFun φ₁ φ₂ ∈ SB (κ ⊕ κ' → k) := by
-  have cl : Continuous fun x : κ ⊕ κ' → k => x ∘ Sum.inl := continuous_pi fun i => continuous_apply _
-  have cr : Continuous fun x : κ ⊕ κ' → k => x ∘ Sum.inr := continuous_pi fun i => continuous_apply _
-  refine ⟨(h₁.1.comp_continuous cl).mul (h₂.1.comp_continuous cr), ?_⟩
-  let e := (Homeomorph.sumArrowHomeomorphProdArrow (X := k) (ι := κ) (ι' := κ'))
-  refine HasCompactSupport.intro ((h₁.2.prod h₂.2).image e.symm.continuous) fun x hx => ?_
-  have hx' : e x ∉ tsupport φ₁ ×ˢ tsupport φ₂ := fun h => hx ⟨e x, h, e.symm_apply_apply x⟩
-  rw [Homeomorph.sumArrowHomeomorphProdArrow_apply, Set.mem_prod, not_and_or] at hx'
-  simp only [boxFun]
-  rcases hx' with h | h
-  · rw [image_eq_zero_of_notMem_tsupport h, zero_mul]
-  · rw [image_eq_zero_of_notMem_tsupport h, mul_zero]
+alias boxFun_mem_SB' := _root_.GlobalTheory.DblVacLine.box_mem_SB
 
 theorem star_mem_SB' {Y : Type} [TopologicalSpace Y] {φ : Y → ℂ} (h : φ ∈ SB Y) :
     (fun y => star (φ y)) ∈ SB Y :=
@@ -469,11 +456,11 @@ theorem map_add_gen {R S Fh : Type*} [CommRing R] [CommRing S] [FunLike Fh R S]
 
 theorem map_one_eq {R S : Type*} [CommRing R] [CommRing S] (ι : R →ₙ+* S) {n : Type*} [DecidableEq n] :
     (1 : Matrix n n R).map ι = ι 1 • (1 : Matrix n n S) := by
-  ext i j; by_cases h : i = j <;> simp [Matrix.one_apply, h]
+  ext i j; by_cases h : i = j <;> simp [h]
 
 theorem map_neg_one_eq {R S : Type*} [CommRing R] [CommRing S] (ι : R →ₙ+* S) {n : Type*} [DecidableEq n] :
     (-1 : Matrix n n R).map ι = -(ι 1 • (1 : Matrix n n S)) := by
-  ext i j; by_cases h : i = j <;> simp [Matrix.one_apply, h]
+  ext i j; by_cases h : i = j <;> simp [h]
 
 theorem assoc_a {R : Type*} [CommRing R] {a b c d e : Type*} [Fintype b] [Fintype c] [Fintype d]
     (A : Matrix a b R) (B : Matrix b c R) (C : Matrix c d R) (D : Matrix d e R) :
@@ -548,7 +535,7 @@ theorem transport_back : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [N
     rw [Matrix.mulVec_mulVec, hZP, ← Matrix.mulVec_mulVec, map_mulVec_gen]
 
   have hPcQc : P.map (cA σ) * Q.map (cA σ) = ι 1 • (1 : Matrix (Fin n) (Fin n) (AE F E)) := by
-    rw [← map_mul_gen, hPQ]; ext i j; by_cases h : i = j <;> simp [Matrix.one_apply, h, hce]
+    rw [← map_mul_gen, hPQ]; ext i j; by_cases h : i = j <;> simp [h, hce]
   have h1 : Pᵀ * incM F X.J = JL.map ι * Q.map (cA σ) := by
     calc Pᵀ * incM F X.J = ι 1 • (Pᵀ * incM F X.J) := by
             rw [← Matrix.smul_mul, ← Matrix.transpose_smul, heP]
@@ -588,16 +575,16 @@ theorem transport_back : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [N
     rw [Matrix.fromRows_map, map_one_eq]
   have hanti : GlobalTheory.DblVac.antiCols (F := F) (E := E) n * P = Matrix.fromBlocks P 0 0 P * (Matrix.fromRows (1 : Matrix (Fin n) (Fin n) O) (-1 : Matrix (Fin n) (Fin n) O)).map ι := by
     rw [hNab, GlobalTheory.DblVac.antiCols, Matrix.fromRows_mul, Matrix.fromBlocks_mul_fromRows]
-    simp [Matrix.mul_smul, heP]
+    simp [heP]
   have hdiag : ∀ Y : Matrix (Fin n) (Fin n) (AE F E), (diagCols (Fin n) : Matrix (Fin n ⊕ Fin n) (Fin n) (AE F E)) * (P * Y) = Matrix.fromBlocks P 0 0 P * ((Matrix.fromRows (1 : Matrix (Fin n) (Fin n) O) (1 : Matrix (Fin n) (Fin n) O)).map ι * Y) := by
     intro Y
     rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hDel, diagCols, Matrix.fromRows_mul, Matrix.fromBlocks_mul_fromRows]
-    simp [Matrix.mul_smul, heP]
+    simp [heP]
   have hantiT : ∀ {k : Type} [Fintype k] (Y : Matrix (Fin n ⊕ Fin n) k (AE F E)), (GlobalTheory.DblVac.antiCols (F := F) (E := E) n)ᵀ * (Matrix.fromBlocks P 0 0 P * Y) = P * (((Matrix.fromRows (1 : Matrix (Fin n) (Fin n) O) (-1 : Matrix (Fin n) (Fin n) O)).map ι)ᵀ * Y) := by
     intro k _ Y
     rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hNab, GlobalTheory.DblVac.antiCols, Matrix.transpose_fromRows, Matrix.transpose_fromRows,
       Matrix.fromCols_mul_fromBlocks, Matrix.mul_fromCols]
-    simp [Matrix.mul_smul, heP]
+    simp [heP]
   have hMG' : ∀ {k : Type} [Fintype k] (Y : Matrix (Fin n ⊕ Fin n) k (AE F E)), M * (Matrix.fromBlocks P 0 0 P * Y) = Matrix.fromBlocks P 0 0 P * (G.map ι * Y) := by
     intro k _ Y; rw [← Matrix.mul_assoc, hMG, Matrix.mul_assoc]
   have hQPι : ZL.map ι * (Q * P) = ZL.map ι := by rw [hQP, Matrix.mul_smul, Matrix.mul_one, hmapE]
@@ -1003,7 +990,7 @@ theorem GlobalTheory.HermBlockChange.exists_unit_lower_block : ∀ (O : Type) [C
     rw [hT, Matrix.fromBlocks_transpose]; simp
   have hTc : T.map c = T := by
     rw [hT, Matrix.fromBlocks_map]; simp
-    ext i j; by_cases h : i = j <;> simp [Matrix.one_apply, h]
+    ext i j; by_cases h : i = j <;> simp [h]
   have hTT : T * T = (2 : O) • 1 := by
     rw [hT, Matrix.fromBlocks_multiply, ← Matrix.fromBlocks_one, Matrix.fromBlocks_smul]
     simp [two_smul]
@@ -1022,7 +1009,7 @@ theorem GlobalTheory.HermBlockChange.exists_unit_lower_block : ∀ (O : Type) [C
   have hmapsmul : ∀ (b : O) (M : Matrix (Fin n ⊕ Fin n) (Fin n ⊕ Fin n) O), (b • M).map c = c b • M.map c := by
     intro b M; ext i j; simp
   have hgt : gᵀ = a • (T * Gᵀ * T) := by
-    simp only [hg, Matrix.transpose_smul, Matrix.transpose_mul, Matrix.transpose_transpose, hTt, Matrix.mul_assoc]
+    simp only [hg, Matrix.transpose_smul, Matrix.transpose_mul, hTt, Matrix.mul_assoc]
   have hgc : g.map c = a • (T * G.map c * T) := by
     rw [hg, hTt, hmapsmul, Matrix.map_mul, Matrix.map_mul, hTc, hca]
   have hgK : gᵀ * K * g.map c = K := by
@@ -1086,7 +1073,7 @@ theorem GlobalTheory.fromBlocks_unitary_transfer : ∀ (A O : Type) [CommRing A]
       = (Matrix.fromBlocks JL 0 0 (-JL)).map ι := by
     rw [Matrix.fromBlocks_transpose, Matrix.fromBlocks_multiply, Matrix.fromBlocks_map,
       Matrix.fromBlocks_multiply, Matrix.fromBlocks_map, hneg, ← hP]
-    simp [Matrix.mul_neg, Matrix.neg_mul]
+    simp
   have hc : (G.map c).map ι = (G.map ι).map γ := by
     ext i j; simp [hγ]
   apply Matrix.map_injective hinj
@@ -1753,28 +1740,9 @@ theorem matD_mul {σ : E →ₐ[F] E} {d : ℕ} {W : Spc F E d} (g h : UD σ W) 
 theorem matD_inv_mul {σ : E →ₐ[F] E} {d : ℕ} {W : Spc F E d} (g : UD σ W) : matD g⁻¹ * matD g = 1 := by
   rw [← matD_mul, inv_mul_cancel]; rfl
 
-theorem KD_mul {σ : E →ₐ[F] E} {d : ℕ} {W : Spc F E d} {v : Pl (F := F)} {g h : UD σ W} (hg : g ∈ KD σ W v)
-    (hh : h ∈ KD σ W v) : g * h ∈ KD σ W v := by
-  refine ⟨fun u hu => ?_, fun z hz => ?_⟩
-  · have e : matD (g * h) - 1 = matD g * (matD h - 1) + (matD g - 1) := by
-      rw [matD_mul, Matrix.mul_sub, Matrix.mul_one]; abel
-    show u • (matD (g * h) - 1) = 0
-    have h1 : u • (matD h - 1) = 0 := hh.1 u hu
-    have h2 : u • (matD g - 1) = 0 := hg.1 u hu
-    rw [e, smul_add, ← Matrix.mul_smul, h1, h2, Matrix.mul_zero, add_zero]
-  · refine ⟨?_, ?_⟩
-    · rw [matD_mul, ← Matrix.mulVec_mulVec]; exact (hg.2 _ (hh.2 z hz).1).1
-    · rw [_root_.mul_inv_rev, matD_mul, ← Matrix.mulVec_mulVec]; exact (hh.2 _ (hg.2 z hz).2).2
+alias KD_mul := _root_.GlobalTheory.DblVacFactor.KD_mul
 
-theorem KD_inv {σ : E →ₐ[F] E} {d : ℕ} {W : Spc F E d} {v : Pl (F := F)} {g : UD σ W} (hg : g ∈ KD σ W v) :
-    g⁻¹ ∈ KD σ W v := by
-  refine ⟨fun u hu => ?_, fun z hz => ?_⟩
-  · have e : matD g⁻¹ - 1 = -(matD g⁻¹ * (matD g - 1)) := by
-      rw [Matrix.mul_sub, matD_inv_mul, Matrix.mul_one]; abel
-    show u • (matD g⁻¹ - 1) = 0
-    have h2 : u • (matD g - 1) = 0 := hg.1 u hu
-    rw [e, smul_neg, ← Matrix.mul_smul, h2, Matrix.mul_zero, neg_zero]
-  · rw [inv_inv]; exact ⟨(hg.2 z hz).2, (hg.2 z hz).1⟩
+alias KD_inv := _root_.GlobalTheory.DblVacFactor.KD_inv
 
 theorem PDiag_inv {σ : E →ₐ[F] E} {d : ℕ} {W : Spc F E d} {p : UD σ W} (hp : p ∈ PDiag σ W) :
     p⁻¹ ∈ PDiag σ W := by

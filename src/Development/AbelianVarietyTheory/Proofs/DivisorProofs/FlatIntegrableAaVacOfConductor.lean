@@ -132,8 +132,8 @@ theorem mem_oppositePath_bound {m : ℕ} {b : Edge} (hb : b ∈ oppositePath m) 
     b.src.1 ≤ m ∧ b.src.2 ≤ m ∧ b.tgt.1 ≤ m ∧ b.tgt.2 ≤ m := by
   simp only [oppositePath, List.mem_append, List.mem_map, List.mem_range, List.mem_reverse] at hb
   rcases hb with ⟨i, hi, rfl⟩ | ⟨j, hj, rfl⟩
-  · simp only [Edge.src, Edge.tgt]; omega
-  · simp only [Edge.src, Edge.tgt]; omega
+  · simp only; omega
+  · simp only; omega
 
 theorem length_oppositePath (m : ℕ) : (oppositePath m).length = 2 * m := by
   simp [oppositePath]; ring
@@ -466,8 +466,6 @@ section -- clump:auto
 open MeasureTheory ValuativeRel Matrix
 open GlobalTheory.OriginBox GlobalTheory.FunObj GlobalTheory.SplitFlip GlobalTheory.SplitWeil GlobalTheory.RootEx
 
-theorem _root_.GlobalTheory.T.unfoldingCharacterPhase_origin_valuation_le_box : ∀ {k : Type} [Field k] [ValuativeRel k] (G : Grid k) (ϖ : kˣ) (a a' : ℤ) (e : Vars G), e ∈ box G ϖ a a' → valuation k (phase (0 : ColArgs G) e) ≤ valuation k ((ϖ ^ (a + a') : kˣ) : k) := by
-  first | exact @GlobalTheory.OriginBox.phase_origin_le | exact GlobalTheory.OriginBox.phase_origin_le | (intros; apply GlobalTheory.OriginBox.phase_origin_le <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.UnfoldingCharacterPhaseOriginValuationLeBoxStatement =====
@@ -509,7 +507,7 @@ theorem flatTensor_moved_box (G : Grid k) (hs : 1 ≤ G.s) (ψ : AddChar k Circl
     funext e
     rw [flatIntegrand, moved_false, _root_.GlobalTheory.OriginBox.indicator_moveArgs_origin G hs ϖ a a' g hg e]
     by_cases he : e ∈ box G ϖ a a'
-    · have h1 := GlobalTheory.T.unfoldingCharacterPhase_origin_valuation_le_box G ϖ a a' e he
+    · have h1 := _root_.GlobalTheory.OriginBox.phase_origin_le G ϖ a a' e he
       rw [Set.indicator_of_mem he, Set.indicator_of_mem he, hψ _ (by rwa [Valuation.map_neg])]
       simp only [Pi.one_apply, mul_one, Circle.coe_one, P]
     · rw [Set.indicator_of_notMem he, Set.indicator_of_notMem he]
@@ -664,7 +662,7 @@ open GlobalTheory.FunObj GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheor
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField GlobalTheory.FunObj.borelKw GlobalTheory.FunObj.borelSpaceKw
 
 theorem _root_.GlobalTheory.T.originDatum_value_halfIntegerPow_placeAA : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {G : GridData L sc} (W : G.Weil) (w : Pl D.host.E), (∀ a : Kw w, valuation (Kw w) a ≤ valuation (Kw w) ((genAt w D.host.AA * genAt w D.host.AAbar : (Kw w)ˣ) : Kw w) → psiAt W w a = 1) → ∃ n : ℤ, (aaTerm W w).datum 0 0 = (resCard (Kw w) : ℂ) ^ ((n : ℂ) / 2) ∧ |n| ≤ 8 * ((D.R.m : ℤ) ^ 3 * (bigN D : ℤ) ^ 2 * (|FractionalIdeal.count D.host.E w D.host.AA| + |FractionalIdeal.count D.host.E w D.host.AAbar|)) := by
-  first | exact @GlobalTheory.OriginBox.aaTerm_datum_origin | exact GlobalTheory.OriginBox.aaTerm_datum_origin | (intros; apply GlobalTheory.OriginBox.aaTerm_datum_origin <;> assumption)
+  first | exact @GlobalTheory.OriginBox.aaTerm_datum_origin
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.OriginDatumValueHalfIntegerPowPlaceAAStatement =====
@@ -681,7 +679,7 @@ open GlobalTheory.FunObj GlobalTheory.ChiGrid GlobalTheory.SplitFlip GlobalTheor
 attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField GlobalTheory.FunObj.borelKw GlobalTheory.FunObj.borelSpaceKw
 
 theorem _root_.GlobalTheory.T.unfoldingTerm_coef_eq_residueCard_zpow : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {G : GridData L sc} (W : G.Weil) (w : Pl D.host.E), ∃ n : ℤ, (aaTerm W w).coef = (resCard (Kw w) : ℚ) ^ n ∧ |n| ≤ 2 * ((D.R.m : ℤ) ^ 3 * (bigN D : ℤ) ^ 2 * (|FractionalIdeal.count D.host.E w D.host.AA| + |FractionalIdeal.count D.host.E w D.host.AAbar|)) := by
-  first | exact @GlobalTheory.FunObj.AaCoef.aaTerm_coef_eq_zpow | exact GlobalTheory.FunObj.AaCoef.aaTerm_coef_eq_zpow | (intros; apply GlobalTheory.FunObj.AaCoef.aaTerm_coef_eq_zpow <;> assumption)
+  first | exact @GlobalTheory.FunObj.AaCoef.aaTerm_coef_eq_zpow
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.UnfoldingTermCoefEqResidueCardZpowStatement =====

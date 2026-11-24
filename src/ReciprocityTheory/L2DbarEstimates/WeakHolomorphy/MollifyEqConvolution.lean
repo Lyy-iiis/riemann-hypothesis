@@ -106,8 +106,6 @@ private theorem integral_circleMap_smul_eq_two_pi_mul {n : ℕ} {a : ℝ} {h : V
           simp only [deriv_circleMap, sub_zero, smul_eq_mul]
           first
           | (rw [mul_comm (circleMap 0 1 θ) Complex.I, mul_assoc, mul_inv_cancel_left₀ hne])
-          | field_simp
-          | (field_simp; ring)
       _ = ∮ l in C(0, 1), (l - 0)⁻¹ • h (x + l • z) := rfl
       _ = (2 * Real.pi * Complex.I : ℂ) • h (x + (0 : ℂ) • z) := hC
       _ = 2 * Real.pi * Complex.I * h x := by rw [e0, smul_eq_mul]
@@ -129,14 +127,6 @@ private theorem integral_comp_smul_of_norm_eq_one {n : ℕ} (c : ℂ) (hc : ‖c
         rw [norm_smul, hc, one_mul] }
   show ∫ z, f (e z) = ∫ z, f z
   exact e.measurePreserving.integral_comp e.toHomeomorph.measurableEmbedding f
-
-private theorem moll_eq_zero_of_half_lt_norm {n : ℕ} {t : ℝ} (ht : 0 < t) {z : V n} (hz : t / 2 < ‖z‖) :
-    moll n t z = 0 := by
-  have h1 : 1 - 4 * (‖z‖ / t) ^ 2 ≤ 0 := by
-    have h2 : 1 / 2 < ‖z‖ / t := by
-      rw [lt_div_iff₀ ht]; linarith
-    nlinarith
-  simp only [moll, mollProf, bumpProf, Real.smoothTransition.zero_of_nonpos h1, mul_zero]
 
 private theorem integrable_moll (n : ℕ) {t : ℝ} (ht : 0 < t) : Integrable (moll n t) :=
   (moll_contDiff n t).continuous.integrable_of_hasCompactSupport (moll_hasCompactSupport n ht)
@@ -180,7 +170,7 @@ private theorem integral_moll_mul_eq_of_differentiableOn_ball {n : ℕ} {a : ℝ
       have hev : (fun p : ℝ × V n => (moll n a p.2 : ℂ) * h (x + circleMap 0 1 p.1 • p.2))
           =ᶠ[𝓝 (θ0, z0)] fun _ => 0 := by
         filter_upwards [hopen.mem_nhds hmem] with p hp
-        rw [moll_eq_zero_of_half_lt_norm ha hp]
+        rw [_root_.ReciprocityTheory.L2DbarEstimates.C.moll_eq_zero_of_lt ha hp]
         simp
       exact (continuousAt_congr hev).mpr continuousAt_const
   have hInt : Integrable
@@ -191,11 +181,7 @@ private theorem integral_moll_mul_eq_of_differentiableOn_ball {n : ℕ} {a : ℝ
     have hbd : Integrable (fun p : ℝ × V n => C * |moll n a p.2|)
         ((volume.restrict (Set.Ioc 0 (2 * Real.pi))).prod volume) := by
       first
-      | exact MeasureTheory.Integrable.prod_mul hg1 (integrable_moll n ha).abs
       | exact MeasureTheory.Integrable.mul_prod hg1 (integrable_moll n ha).abs
-      | exact MeasureTheory.Integrable.prod_smul hg1 (integrable_moll n ha).abs
-      | exact MeasureTheory.Integrable.comp_snd ((integrable_moll n ha).abs.const_mul C) _
-      | exact ((integrable_moll n ha).abs.const_mul C).comp_snd
     refine Integrable.mono' hbd
       hcont.aestronglyMeasurable (Filter.Eventually.of_forall fun p => ?_)
     show ‖(moll n a p.2 : ℂ) * h (x + circleMap 0 1 p.1 • p.2)‖ ≤ C * |moll n a p.2|
@@ -207,7 +193,7 @@ private theorem integral_moll_mul_eq_of_differentiableOn_ball {n : ℕ} {a : ℝ
         abs_one, one_mul]
       exact hp
     · push_neg at hp
-      rw [moll_eq_zero_of_half_lt_norm ha hp]
+      rw [_root_.ReciprocityTheory.L2DbarEstimates.C.moll_eq_zero_of_lt ha hp]
       simp
   have hswap := integral_integral_swap hInt
   try beta_reduce at hswap
@@ -218,7 +204,7 @@ private theorem integral_moll_mul_eq_of_differentiableOn_ball {n : ℕ} {a : ℝ
     by_cases hz : ‖z‖ ≤ a / 2
     · rw [← intervalIntegral.integral_of_le Real.two_pi_pos.le, integral_circleMap_smul_eq_two_pi_mul hh (by linarith)]
     · push_neg at hz
-      rw [moll_eq_zero_of_half_lt_norm ha hz]
+      rw [_root_.ReciprocityTheory.L2DbarEstimates.C.moll_eq_zero_of_lt ha hz]
       simp
   rw [← intervalIntegral.integral_of_le Real.two_pi_pos.le,
     show (fun θ : ℝ => ∫ z, (moll n a z : ℂ) * h (x + circleMap 0 1 θ • z))

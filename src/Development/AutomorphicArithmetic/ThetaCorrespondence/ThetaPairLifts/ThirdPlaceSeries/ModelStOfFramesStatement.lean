@@ -180,7 +180,7 @@ section -- clump:auto
 open GlobalTheory.ExpFrame
 
 theorem _root_.GlobalTheory.T.frameCoeffRing_prime_not_isUnit : ∀ (l : ℕ) [Fact l.Prime] (ι : Type) (N : ℕ) (F : Frame l ι N), F.Ok → ¬ IsUnit ((l : ℕ) : F.O) := by
-  first | exact @GlobalTheory.ExpFrame.Frame.prime_not_isUnit | exact GlobalTheory.ExpFrame.Frame.prime_not_isUnit | (intros; apply GlobalTheory.ExpFrame.Frame.prime_not_isUnit <;> assumption)
+  first | exact @GlobalTheory.ExpFrame.Frame.prime_not_isUnit
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FrameCoeffRingPrimeNotIsUnitStatement =====
@@ -204,9 +204,7 @@ section Gen
 
 variable {L V J : Type} [Field L] [DecidableEq L] [AddCommGroup V] [Module L V]
 
-def jointGen (T : J → End L V) (y : J → L) : Submodule L V := ⨅ j, (T j).maxGenEigenspace (y j)
-
-theorem mem_iSup_filter (T : J → End L V) (p : (J → L) → Submodule L V) (hp : ∀ y, p y ≤ jointGen T y) {θ : J → L} {f : V}
+theorem mem_iSup_filter (T : J → End L V) (p : (J → L) → Submodule L V) (hp : ∀ y, p y ≤ _root_.Formalism.L2.Col.eigAt T y) {θ : J → L} {f : V}
     (hf : ∀ j, T j f = θ j • f) (Y : Finset (J → L)) (j : J) (hY : f ∈ ⨆ y ∈ Y, p y) :
     f ∈ ⨆ y ∈ Y.filter (fun y => y j = θ j), p y := by
   have hsplit : (⨆ y ∈ Y, p y) ≤ (⨆ y ∈ Y.filter (fun y => y j = θ j), p y) ⊔
@@ -219,12 +217,12 @@ theorem mem_iSup_filter (T : J → End L V) (p : (J → L) → Submodule L V) (h
   have hA : (⨆ y ∈ Y.filter (fun y => y j = θ j), p y) ≤ (T j).maxGenEigenspace (θ j) := by
     refine iSup₂_le fun y hy => ?_
     have hyj := (Finset.mem_filter.1 hy).2
-    calc p y ≤ jointGen T y := hp y
+    calc p y ≤ _root_.Formalism.L2.Col.eigAt T y := hp y
       _ ≤ (T j).maxGenEigenspace (y j) := iInf_le (fun j => (T j).maxGenEigenspace (y j)) j
       _ = (T j).maxGenEigenspace (θ j) := by rw [hyj]
   have hB : (⨆ y ∈ Y.filter (fun y => y j ≠ θ j), p y) ≤ ⨆ (μ : L) (_ : μ ≠ θ j), (T j).maxGenEigenspace μ := by
     refine iSup₂_le fun y hy => ?_
-    calc p y ≤ jointGen T y := hp y
+    calc p y ≤ _root_.Formalism.L2.Col.eigAt T y := hp y
       _ ≤ (T j).maxGenEigenspace (y j) := iInf_le (fun j => (T j).maxGenEigenspace (y j)) j
       _ ≤ _ := le_biSup (fun μ => (T j).maxGenEigenspace μ) (show y j ∈ {μ | μ ≠ θ j} from (Finset.mem_filter.1 hy).2)
   have hfθ : f ∈ (T j).maxGenEigenspace (θ j) := by
@@ -239,7 +237,7 @@ theorem mem_iSup_filter (T : J → End L V) (p : (J → L) → Submodule L V) (h
   rw [← hab, hb0, add_zero]
   exact ha
 
-theorem mem_of_mem_iSup_finset (T : J → End L V) (p : (J → L) → Submodule L V) (hp : ∀ y, p y ≤ jointGen T y)
+theorem mem_of_mem_iSup_finset (T : J → End L V) (p : (J → L) → Submodule L V) (hp : ∀ y, p y ≤ _root_.Formalism.L2.Col.eigAt T y)
     {θ : J → L} {f : V} (hf : ∀ j, T j f = θ j • f) (Y : Finset (J → L)) (hY : f ∈ ⨆ y ∈ Y, p y) : f ∈ p θ := by
   induction Y using Finset.strongInduction with
   | H Y ih =>
@@ -293,8 +291,8 @@ theorem hasBlock_of_occurs : ∀ (K : Type) [Field K] [NumberField K] [StarRing 
   let S : Set (F.I → PadicAlgCl l) :=
     {y | ∃ x : B.Pl × ℕ → K, (∀ P, x (P, 0) = 1) ∧ Formalism.L2.Col.HasBlocks B.n B.q B.t B.bl x ∧ ∀ i, y i = R.e0 (x (R.ix i))}
   let p : (F.I → PadicAlgCl l) → Submodule (PadicAlgCl l) (F.G → NablaT (PadicAlgCl l) N lam) :=
-    fun y => ⨆ (_ : y ∈ S), jointGen (heckeQ F lam) y
-  have hp : ∀ y, p y ≤ jointGen (heckeQ F lam) y := fun y => iSup_le fun _ => le_rfl
+    fun y => ⨆ (_ : y ∈ S), _root_.Formalism.L2.Col.eigAt (heckeQ F lam) y
+  have hp : ∀ y, p y ≤ _root_.Formalism.L2.Col.eigAt (heckeQ F lam) y := fun y => iSup_le fun _ => le_rfl
   have key : B.ZH ≤ (⨆ y, p y).comap R.rd := by
     rw [BlockDat.ZH, Formalism.L2.Col.blockSum, Formalism.L2.Col.eigSum]
     refine iSup₂_le fun x hx => ?_
@@ -304,10 +302,10 @@ theorem hasBlock_of_occurs : ∀ (K : Type) [Field K] [NumberField K] [StarRing 
     · rw [hv0, map_zero]
       exact Submodule.zero_mem _
     have hx1 : ∀ P, x (P, 0) = 1 := fun P =>
-      GlobalTheory.ExpFrame.eq_one_of_occurs (op := B.op) ((Submodule.ne_bot_iff _).2 ⟨v, hv, hv0⟩) (hop P)
+      _root_.Formalism.L2.Col.Occurs.eq_one (op := B.op) ((Submodule.ne_bot_iff _).2 ⟨v, hv, hv0⟩) (hop P)
     refine Submodule.mem_iSup_of_mem (fun i => R.e0 (x (R.ix i))) ?_
     refine Submodule.mem_iSup_of_mem (show (fun i => R.e0 (x (R.ix i))) ∈ S from ⟨x, hx1, hx, fun i => rfl⟩) ?_
-    rw [jointGen, Submodule.mem_iInf]
+    rw [_root_.Formalism.L2.Col.eigAt, Submodule.mem_iInf]
     intro i
     have hv' := Formalism.L2.Col.eigAt_le B.op x (R.ix i) hv
     rw [mem_maxGenEigenspace] at hv' ⊢
@@ -606,7 +604,6 @@ theorem maximal_ideal_eq_joint_eigen : ∀ (l : ℕ) [Fact l.Prime] (O : Type) [
             rw [← MvPolynomial.algebraMap_eq]
             first
               | exact Ideal.Quotient.mk_algebraMap _ _ _
-              | rfl
         _ = Ideal.Quotient.mkₐ O m (Polynomial.aeval q P) := e
         _ = 0 := by rw [Ideal.Quotient.mkₐ_eq_mk]; exact hP
     have hu0 : IsUnit (P.coeff 0) := by
@@ -864,7 +861,7 @@ theorem _root_.GlobalTheory.ExpCover.values_mem_of_local {l : ℕ} [Fact l.Prime
           _ = b ((((∑ k, ρ (X i) k j • B k : Z) : M) : G → V) g) := by rw [e1]
           _ = ∑ k, emb (ρ (X i) k j) • f k g := by
 
-              simp [f, map_sum, map_smulₛₗ, Submodule.coe_sum, Finset.sum_apply]
+              simp [f, map_sum, map_smulₛₗ, Finset.sum_apply]
       calc emb (cst i) • ∑ s ∈ tr i, v (g * s)
           = ∑ j, c j • (emb (cst i) • ∑ s ∈ tr i, f j (g * s)) := by
             simp only [hv_apply, Finset.smul_sum]
@@ -945,15 +942,7 @@ private theorem toF_coe (z : Fin (B.dZ ℓ Z) → K) :
     ((B.toF ℓ Z z : B.S.Forms) : B.S.Cl → B.S.V) = B.S.I ((B.fE ℓ Z).mulVec z) := by
   simp [BlockDat.toF, BlockDat.fE, CSD.I, Matrix.mulVec_mulVec]
 
-private theorem toF_mem (z : Fin (B.dZ ℓ Z) → K) : B.toF ℓ Z z ∈ Z := by
-  have h1 : (B.zE ℓ Z).mulVec z ∈ B.Z0 ℓ Z := by
-    rw [BlockDat.zE, subE_mulVec]; exact Submodule.coe_mem _
-  have h2 : (B.vE ℓ).mulVec ((B.zE ℓ Z).mulVec z) ∈ B.coord Z := h1
-  obtain ⟨f, hf, hfe⟩ := Submodule.mem_map.1 h2
-  have : B.toF ℓ Z z = f := by
-    simp only [BlockDat.toF, LinearMap.coe_comp, Function.comp_apply, Matrix.mulVecLin_apply]
-    rw [← hfe]; simp
-  rw [this]; exact hf
+private alias toF_mem := _root_.Formalism.IndefR.Cx.BlockGood.toF_mem
 
 private theorem mem_cutZ (z : Fin (B.dZ ℓ Z) → K) :
     z ∈ B.cutZ ℓ Z ↔ ∀ c, ((B.toF ℓ Z z : B.S.Forms) : B.S.Cl → B.S.V) c ∈ B.S.Nab c := by
@@ -1191,7 +1180,7 @@ section
 open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions Formalism.L2.DIV Formalism.L2.Pj GlobalTheory.BigTop GlobalTheory.BigOn GlobalTheory.ExpTie GlobalTheory.ExpFrame Formalism.CohomologicalDescent.DepthNonnegative Formalism.CohomologicalDescent.LogSmallConstantBounds Formalism.CohomologicalDescent.ShortWeightBounds Formalism.CohomologicalDescent.LD Formalism.RankGapBounds.FormsTensorLocalization
 
 theorem _root_.GlobalTheory.T.model_statement_of_crystalline_chebotarev_frame_gal : GlobalTheory.Published.BhattScholzeCrystallineLattices → GlobalTheory.Published.ChebotarevDegreeOne → _root_.GlobalTheory.ExpTie.SmallnessCondition → _root_.GlobalTheory.ExpTie.FrameStatement' → _root_.GlobalTheory.ExpTie.GaloisStatement → _root_.GlobalTheory.ExpTie.ModelStatement := by
-  first | exact @_root_.GlobalTheory.ExpModel.modelSt_of_small_frame_gal | exact _root_.GlobalTheory.ExpModel.modelSt_of_small_frame_gal | (intros; apply _root_.GlobalTheory.ExpModel.modelSt_of_small_frame_gal <;> assumption)
+  first | exact @_root_.GlobalTheory.ExpModel.modelSt_of_small_frame_gal
 end
 end -- clump:auto
 end -- clump:auto

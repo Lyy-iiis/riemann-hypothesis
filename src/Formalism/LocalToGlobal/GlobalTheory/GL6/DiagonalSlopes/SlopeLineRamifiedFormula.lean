@@ -314,14 +314,14 @@ theorem polynomial_rep_residue_eval (Tf : Forms0 D u) (hS : Formalism.MainNotion
       t2iT s o c P := by
   rw [Tf.norm 0 (Nat.zero_le _) rfl s (t2iRes Tf hS x c) (fun c' => if c' = c then P else 0) ?_ o ho]
   · rw [Finset.sum_eq_single c]
-    · simp only [if_pos rfl]; rfl
+    · simp only; rfl
     · intro c' _ hc
       simp only [hc, if_false, map_zero, norm_form_zero, Complex.zero_re, mul_zero]
     · intro h; exact absurd (Finset.mem_univ c) h
   · intro c' z
     rw [t2iRes_spec]
     by_cases h : c' = c
-    · subst h; simp only [if_pos rfl]; exact hP z
+    · subst h; simp only; exact hP z
     · simp only [h, if_false, map_zero, Pi.zero_apply]
 
 def t2iDil (v : (D.mem u).A.vT) (a : ((D.mem u).A.Fv v)ˣ) : (D.mem u).C.cls 0 ≃ (D.mem u).C.cls 0 where
@@ -475,9 +475,9 @@ open Formalism.BasicNotions Formalism.L2.Forms
 
 variable {D : D7} {u : D.what₂.Word}
 
-theorem freeT_0 (T : Forms0 D u) : Nonempty (Formalism.MainNotions.product_first_zeroth_parts.FreeT D u) := S0.freeT_tied T
+alias freeT_0 := _root_.Formalism.L2.GlobalTheoryTheory.LocalLatticeBases.S0.freeT_tied
 
-theorem slopeLine_0 (hS : Formalism.MainNotions.product_first_zeroth_parts.HidaSetting D u) (T : Forms0 D u) (hC : ChiFin0 T) : Formalism.MainNotions.product_first_zeroth_parts.SlopeLine D u := S0.slopeLine_tied hS T hC
+alias slopeLine_0 := _root_.Formalism.L2.GlobalTheoryTheory.LocalLatticeBases.S0.slopeLine_tied
 
 end Formalism.L2.GlobalTheoryTheory.LocalLatticeBases
 end -- clump:auto

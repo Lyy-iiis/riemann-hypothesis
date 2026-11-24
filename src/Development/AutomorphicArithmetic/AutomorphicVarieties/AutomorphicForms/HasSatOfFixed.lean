@@ -87,7 +87,7 @@ private lemma core {G W V : Type} [Group G] [TopologicalSpace G] [IsTopologicalG
          mul_mem' := by
            intro a b ha hb
            simp only [Set.mem_setOf_eq] at ha hb ⊢
-           simp [map_mul, Module.End.mul_apply, ha, hb]
+           simp [map_mul, ha, hb]
          one_mem' := by simp
          inv_mem' := by
            intro a ha
@@ -193,12 +193,7 @@ private def sInt (w : HeightOneSpectrum (𝓞 F)) : Ov F w →ₙ+* Ohat F where
   map_zero' := Subtype.ext (map_zero (sLoc F w))
   map_add' x y := Subtype.ext (map_add (sLoc F w) x.1 y.1)
 
-theorem LocIsotypic.hasFixed {n : ℕ} {V : Type} [AddCommGroup V] [Module ℂ V]
-    {ρ : Representation ℂ (GL (Fin n) (Af F)) V} {w : HeightOneSpectrum (𝓞 F)}
-    {σ : SmIrr (GL (Fin n) (w.adicCompletion F))} (h : LocIsotypic ρ w σ)
-    {U : Subgroup (GL (Fin n) (w.adicCompletion F))} (hU : IsCompact (U : Set (GL (Fin n) (w.adicCompletion F))))
-    (hf : HasFixed (ρ.comp (locGL F n w)) U) : HasFixed σ.ρ U :=
-  _root_.UpperTheory.Reformulated.B.HasFixedVector.hasFixed h hU hf
+alias LocIsotypic.hasFixed := _root_.UpperTheory.Reformulated.B.HasFixedVector.hasFixed
 
 end UpperTheory.V.Af
 end -- clump:auto

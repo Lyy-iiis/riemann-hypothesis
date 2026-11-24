@@ -153,10 +153,6 @@ section -- clump:auto
 
 open IsLocalRing Matrix UpperTheory.V.Alg UpperTheory.V.U3 UpperTheory.V.Fr
 
-private theorem lc_of_open_ker {G H : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Group H]
-    (f : G →* H) (hf : IsOpen (f.ker : Set G)) : IsLocallyConstant f :=
-  _root_.UpperTheory.Reformulated.B.LocallyConstantOfKernel.lc_of_ker f hf
-
 theorem UpperTheory.V.Fr.frame_extension_of_locallyConstant :
     ∀ {l : ℕ} [Fact l.Prime] {k : Type} [Field k] [CharP k l] {F : Frame l k} {C₀ : ℕ}, F.Ok C₀ → ∀ a ∈ F.strS k, ∃ x ∈ Z1C F.loc (chRep (F.Ψ⁻¹ ^ 2 * F.delK k)) (fun _ => ⊥), x.1 F.c = 0 ∧ ∀ g : F.G0, a g = x.1 g * F.Ψ g := by
   classical
@@ -183,7 +179,7 @@ theorem UpperTheory.V.Fr.frame_extension_of_locallyConstant :
   let b : F.G0 → k := fun g => a g * (((F.Ψ g)⁻¹ : kˣ) : k)
   have b1 : IsLocallyConstant b := by
     refine a1.mul ?_
-    exact ((lc_of_open_ker F.Ψ h.Ψ_open).comp_continuous continuous_subtype_val).comp
+    exact ((_root_.UpperTheory.Reformulated.B.LocallyConstantOfKernel.lc_of_ker F.Ψ h.Ψ_open).comp_continuous continuous_subtype_val).comp
       (fun u : kˣ => ((u⁻¹ : kˣ) : k))
   have b2 : ∀ g g' : F.G0, b (g * g') = b g + ((F.Ψ g : k)⁻¹) ^ 2 * b g' := fun g g' => by
     simp only [b, a2, smul_eq_mul, Subgroup.coe_mul, map_mul, Units.val_inv_eq_inv_val, Units.val_mul]
@@ -197,7 +193,7 @@ theorem UpperTheory.V.Fr.frame_extension_of_locallyConstant :
     rcases Int.units_eq_one_or (F.del s) with h1 | h1 <;> simp [e, h1, h.del_c]
   let p : F.Γ → F.G0 := fun s => ⟨s * e (F.del s), he s⟩
   have pc : Continuous p :=
-    Continuous.subtype_mk (continuous_id.mul ((lc_of_open_ker F.del h.del_open).comp e).continuous) _
+    Continuous.subtype_mk (continuous_id.mul ((_root_.UpperTheory.Reformulated.B.LocallyConstantOfKernel.lc_of_ker F.del h.del_open).comp e).continuous) _
   have p1 : ∀ g : F.G0, p g = g := fun g => Subtype.ext (by simp [p, e, hd])
   have p2 : ∀ g : F.G0, p (g * F.c) = g := fun g =>
     Subtype.ext (by simp [p, e, hd, h.del_c, mul_assoc, h.c_sq])
@@ -381,7 +377,7 @@ theorem UpperTheory.V.Fr.finrank_structMapY_range :
         rw [key]
         simp only [xf, Frame.loc2, if_true, MonoidHom.comp_apply]
         rw [hcv, ← hc, hβ' s⁻¹]
-        simp only [map_inv, inv_inv, Units.val_inv_eq_inv_val, smul_eq_mul]
+        simp only [map_inv, inv_inv, smul_eq_mul]
         field_simp
         ring
   let φ : F.strY k →ₗ[k] Z1C F.loc2 ρ (fun _ => ⊥) :=
@@ -543,7 +539,7 @@ theorem UpperTheory.V.Fr.framePoint_alg_coord_eq :
     have y01 := hz (F.loc0 v s) 0 1 (by decide)
     have y02 := hz (F.loc0 v s) 0 2 (by decide)
     have y12 := hz (F.loc0 v s) 1 2 (by decide)
-    simp (config := {decide := true}) only [ordProd, List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil, mul_one, Matrix.mul_apply, Fin.sum_univ_three, Matrix.sub_apply, Matrix.smul_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons, Matrix.tail_cons, Fin.succ_zero_eq_one, Fin.succ_one_eq_two, Matrix.one_apply, Matrix.zero_apply, smul_eq_mul, z01, z02, z12, y01, y02, y12, hd, hb.2, hl, w0, w1, w2, zpow_one, zpow_zero, _root_.zpow_neg_one, Units.val_one, map_one, if_true, if_false, mul_zero, zero_mul, sub_zero, zero_sub, add_zero, zero_add] at e
+    simp (config := {decide := true}) only [ordProd, List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil, mul_one, Matrix.mul_apply, Fin.sum_univ_three, Matrix.sub_apply, Matrix.smul_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons, Matrix.tail_cons, Fin.succ_zero_eq_one, Fin.succ_one_eq_two, Matrix.one_apply, Matrix.zero_apply, smul_eq_mul, z01, z02, z12, hd, hb.2, hl, w0, w1, w2, zpow_one, zpow_zero, _root_.zpow_neg_one, Units.val_one, map_one, if_true, if_false, mul_zero, zero_mul, sub_zero, add_zero] at e
     set x : k := ↑(F.Ψ (F.loc v t)) with hx
     set xi : k := ↑(F.Ψ (F.loc v t))⁻¹ with hxi
     set y : k := ↑(F.Ψ (F.loc v s)) with hy
@@ -690,7 +686,7 @@ theorem UpperTheory.V.Fr.framePoint_y_coord_eq :
       exact hf (by rw [← inv_eq_one.mp h.symm, sub_self])
     refine ⟨algebraMap k Q (1 - ((F.Ψ (F.loc v t) : k))⁻¹)⁻¹ * ρ.r (F.loc0 v t) 2 1, fun s => ?_⟩
     have h21 := congrFun (congrFun (ρ.ord v ![t, s, t]) 2) 1
-    simp [ordProd, Matrix.mul_apply, Fin.sum_univ_three, Matrix.one_apply, hd0, hd1, hd2, h01, h02, h12,
+    simp [ordProd, Matrix.mul_apply, Fin.sum_univ_three, Matrix.one_apply, hd1, hd2, h01, h02, h12,
       hψ0, hψ1, hψ2, hl] at h21
     simp only [Algebra.smul_def, mul_one] at h21
     have hD : (algebraMap k Q ((F.Ψ (F.loc v t) : k))⁻¹ - algebraMap k Q ((F.Ψ (F.loc v t) : k))) * algebraMap k Q (((F.Ψ (F.loc v t) : k))⁻¹ - ((F.Ψ (F.loc v t) : k)))⁻¹ = 1 := by
@@ -1244,15 +1240,6 @@ section -- clump:auto
 
 open IsLocalRing Matrix UpperTheory.V.Alg UpperTheory.V.U3 UpperTheory.V.Fr
 
-private theorem lc_of_ker {G H : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Group H]
-    (φ : G →* H) (h : IsOpen (φ.ker : Set G)) : IsLocallyConstant φ :=
-  _root_.UpperTheory.Reformulated.B.LocallyConstantOfKernel.lc_of_ker φ h
-
-private theorem diag_mul {n : ℕ} {Q : Type} [CommRing Q] (a b : Matrix (Fin n) (Fin n) Q)
-    (ha : ∀ i j, i < j → a i j = 0) (hb : ∀ i j, i < j → b i j = 0) (i : Fin n) :
-    (a * b) i i = a i i * b i i :=
-  _root_.UpperTheory.Reformulated.B.Qk64.diag_mul a b ha hb i
-
 private theorem key {l : ℕ} [Fact l.Prime] {k : Type} [Field k] [CharP k l] {F : Frame l k} {C₀ n : ℕ}
     (hF : F.Ok C₀) {Q : Type} [CommRing Q] [IsDomain Q] [IsLocalRing Q] [IsNoetherianRing Q]
     [Finite (ResidueField Q)] (f : k →+* Q) (ρ : NRep F n Q) (hc : ρ.Cont (maximalIdeal Q))
@@ -1268,14 +1255,14 @@ private theorem key {l : ℕ} [Fact l.Prime] {k : Type} [Field k] [CharP k l] {F
     { toFun := fun g => ρ.r g i i * f (((F.Ψ g ^ w n i)⁻¹ : kˣ) : k)
       map_one' := by simp
       map_mul' := fun a b => by
-        rw [map_mul, diag_mul _ _ (hz a) (hz b), Subgroup.coe_mul, map_mul, mul_zpow, mul_inv, Units.val_mul,
+        rw [map_mul, _root_.UpperTheory.Reformulated.B.Qk64.diag_mul _ _ (hz a) (hz b), Subgroup.coe_mul, map_mul, mul_zpow, mul_inv, Units.val_mul,
           map_mul]
         ring }
   have hχ : ∀ g, χ g = ρ.r g i i * f (((F.Ψ g ^ w n i)⁻¹ : kˣ) : k) := fun _ => rfl
   have hinv : ∀ g : F.G0, f (((F.Ψ g ^ w n i)⁻¹ : kˣ) : k) * f ((F.Ψ g ^ w n i : kˣ) : k) = 1 := fun g => by
     rw [← map_mul, Units.inv_mul, map_one]
   have hΨ : IsLocallyConstant fun g : F.G0 => F.Ψ g :=
-    (lc_of_ker F.Ψ hF.Ψ_open).comp_continuous continuous_subtype_val
+    (_root_.UpperTheory.Reformulated.B.LocallyConstantOfKernel.lc_of_ker F.Ψ hF.Ψ_open).comp_continuous continuous_subtype_val
   have h1 : χ g = 1 := by
     refine adic_char_unipotent_pgroup_quotient (l := l) χ h h0 (fun N => ?_) (fun g => ?_) (fun A _ _ hA ψ hψ hh => H A hA ψ hψ ?_) g
     · have := (hc.1 i i N).mul (hΨ.comp fun u : kˣ =>

@@ -993,9 +993,7 @@ theorem gmap_inv {a : S.V ≃ₗ[E] S.V} {L L' : Submodule (𝓞 E) S.V} (h : Fo
     Formalism.HermitianLatticesTheory.gmap a⁻¹ L = L' := by
   rw [← h, ← gmap_mul, inv_mul_cancel, gmap_one]
 
-theorem xflag_zero : Xflag F 0 = ⊥ := by
-  show Submodule.span E (F.fl.e '' {i | i.1 < 0}) = ⊥
-  simp
+alias xflag_zero := _root_.Formalism.L2.SG.FourParts.Xflag_zero
 
 theorem xflag_mono (j : ℕ) : Xflag F j ≤ Xflag F (j + 1) :=
   Submodule.span_mono (Set.image_mono fun i (hi : i.1 < j) => Nat.lt_succ_of_lt hi)
@@ -1195,22 +1193,22 @@ theorem dcrel_of {Λ Λ' : Submodule (𝓞 E) S.V} {T T' : E} (F : LFlag S r T) 
       rw [xa_mapFlag] at hx ⊢
       obtain ⟨y, hy, rfl⟩ := hx
       refine ⟨n' y - y, hn'.2.1 j y hy, ?_⟩
-      simp [le_mul_app, le_inv_app, map_sub]
+      simp [le_inv_app, map_sub]
     · change x ∈ orth S (mapFlag γ hγ F'.fl).X at hx
       change _ ∈ (mapFlag γ hγ F'.fl).X
       rw [x_mapFlag] at hx ⊢
       have hy := orth_map γ hγ _ x hx
       refine ⟨n' (γ.symm x) - γ.symm x, hn'.2.2 _ hy, ?_⟩
-      simp [le_mul_app, le_inv_app, map_sub]
+      simp [le_inv_app, map_sub]
   refine ⟨n, hn, γ * n' * γ⁻¹, hm, fun a => ?_, ?_⟩
   · rw [mapLF, mapLF, dite_eq_left hγ, dite_eq_left hγ₂]
     show (mapFlag γ₂ hγ₂ F'.fl).fvec a = n ((γ * n' * γ⁻¹) ((mapFlag γ hγ F'.fl).fvec a))
     rw [fvec_mapFlag, fvec_mapFlag, h]
-    simp [le_mul_app, le_inv_app]
+    simp [le_inv_app]
   · rw [mapLF, mapLF, dite_eq_left hγ, dite_eq_left hγ₂]
     show γ₂ F'.zt = n ((γ * n' * γ⁻¹) (γ F'.zt))
     rw [h]
-    simp [le_mul_app, le_inv_app]
+    simp [le_inv_app]
 
 end Gen
 

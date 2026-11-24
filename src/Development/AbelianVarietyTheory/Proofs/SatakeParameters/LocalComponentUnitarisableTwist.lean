@@ -67,8 +67,6 @@ open GlobalTheory.CuspRep GlobalTheory.WeilDeligne GlobalTheory.Pst GlobalTheory
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 open GlobalTheory.GalCut GlobalTheory.Published
 
-theorem _root_.GlobalTheory.T.cuspidal_traceMatrixUnits_acts_by_sum_infinitesimalCharacter : ∀ (E : Type) [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] (a : ℕ) (π : GlobalTheory.CuspRep.CuspSub E a) (τ : E →+* ℂ) (m : Multiset ℂ), π.HasInfChar τ m → ∀ φ ∈ π.V, (∑ i : Fin a, GlobalTheory.CuspRep.Eop τ i i) φ = m.sum • φ := by
-  first | exact @GlobalTheory.trace_Eop_of_hasInfChar | exact GlobalTheory.trace_Eop_of_hasInfChar | (intros; apply GlobalTheory.trace_Eop_of_hasInfChar <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.CuspidalTraceMatrixUnitsActsBySumInfinitesimalChStatement =====
@@ -90,8 +88,8 @@ variable {E : Type} [Field E] [NumberField E] [_root_.NumberField.IsTotallyCompl
 def conjPerm : Equiv.Perm (E →+* ℂ) where
   toFun := ComplexEmbedding.conjugate
   invFun := ComplexEmbedding.conjugate
-  left_inv τ := by ext x; simp [ComplexEmbedding.conjugate_coe_eq]
-  right_inv τ := by ext x; simp [ComplexEmbedding.conjugate_coe_eq]
+  left_inv τ := by ext x; simp
+  right_inv τ := by ext x; simp
 
 theorem sum_atEmb_I : ∑ τ : E →+* ℂ, atEmb τ Complex.I = 0 := by
   have e : ∀ τ : E →+* ℂ, atEmb (conjPerm τ) Complex.I = -atEmb τ Complex.I := by
@@ -140,8 +138,8 @@ theorem zc_eq_sum_Eop : ∀ (E : Type) [Field E] [NumberField E] [_root_.NumberF
   unfold zc
   congr 1
   funext k l
-  simp [toL, Finset.sum_apply, Matrix.single_apply, eq_comm]
-  simp only [Finset.sum_apply, Pi.single_apply]
+  simp [toL, Finset.sum_apply]
+  simp only [Pi.single_apply]
   by_cases h : k = l
   · subst h; simp [ite_apply, Pi.single_apply]
   · simp [ite_apply, Pi.single_apply, h, Ne.symm h]
@@ -162,7 +160,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 open GlobalTheory.GalCut GlobalTheory.Published
 
 theorem _root_.GlobalTheory.T.splitCentreDerivative_eq_sum_diagonalMatrixUnits : ∀ (E : Type) [Field E] [NumberField E] [_root_.NumberField.IsTotallyComplex E] (a : ℕ), GlobalTheory.ResW.zc E a = ∑ τ : E →+* ℂ, ∑ i : Fin a, GlobalTheory.CuspRep.Eop τ i i := by
-  first | exact @GlobalTheory.ResW.zc_eq_sum_Eop | exact GlobalTheory.ResW.zc_eq_sum_Eop | (intros; apply GlobalTheory.ResW.zc_eq_sum_Eop <;> assumption)
+  first | exact @GlobalTheory.ResW.zc_eq_sum_Eop
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.SplitCentreDerivativeEqSumDiagonalMatrixUnitsStatement =====
@@ -188,7 +186,7 @@ variable {E : Type} [Field E] [NumberField E] [_root_.NumberField.IsTotallyCompl
 theorem zc_eq_sum_Eop : zc E a = ∑ τ : E →+* ℂ, ∑ i : Fin a, Eop τ i i := GlobalTheory.T.splitCentreDerivative_eq_sum_diagonalMatrixUnits E a
 
 theorem sum_Eop_apply {π : CuspSub E a} {τ : E →+* ℂ} {m : Multiset ℂ} (h : π.HasInfChar τ m) {φ : Sm E a}
-    (hφ : φ ∈ π.V) : (∑ i : Fin a, Eop τ i i) φ = m.sum • φ := GlobalTheory.T.cuspidal_traceMatrixUnits_acts_by_sum_infinitesimalCharacter E a π τ m h φ hφ
+    (hφ : φ ∈ π.V) : (∑ i : Fin a, Eop τ i i) φ = m.sum • φ := _root_.GlobalTheory.trace_Eop_of_hasInfChar E a π τ m h φ hφ
 
 theorem cex_eq (π : CuspSub E a) : cex (⟨a, π⟩ : Letter E) = ∑ τ : E →+* ℂ, ((CG.mk π).infChar τ).sum := by
   refine (letter_centralExponent E ⟨a, π⟩).2.2.2.2 _ ?_

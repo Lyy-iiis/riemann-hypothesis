@@ -302,7 +302,7 @@ theorem γA_letE (g : W.Gam) (i : ZMod n) : W.γA g (letE i : LetA O n) = letE i
   simp only [LocWach.γA, letγ, AlgHom.pi_apply, AlgHom.comp_apply, Pi.evalAlgHom_apply, letE]
   by_cases h : j = i
   · subst h; simp
-  · simp [Pi.single_apply, h]
+  · simp [h]
 
 variable (S : Submodule O (LcQ W T π' c))
 
@@ -551,7 +551,7 @@ theorem lcq_finite_local (hπ0 : ∀ i, PowerSeries.constantCoeff (π' i) = 0)
   have hgen : ∀ j, e • b j ∈ NcS W T (c - 1) := by
     intro j
     refine ⟨⟨(W.N T).smul_mem e (hbN j), hDel _ fun δ hδ => ?_⟩, ?_⟩
-    · rw [gradNPf_γD_smul, hΔe δ hδ, hbΔ j δ hδ]
+    · rw [_root_.Formalism.MainNotions.LiftingTheory.gammaD_semilinear, hΔe δ hδ, hbΔ j δ hδ]
     · exact (mem_letS (c - 1) (e • b j)).mpr (by rw [smul_smul, hee])
   let g : Fin r → LcQ W T π' c := fun j => Submodule.Quotient.mk ⟨e • b j, hgen j⟩
   have htop : Submodule.span O (Set.range g) = ⊤ := by

@@ -68,7 +68,7 @@ theorem condOne_condExp : ∀ (E : Type) [Field E] [NumberField E] (ϖ : ∀ w :
     by_contra h
     push_neg at h
     exact hne (AddChar.ext _ _ fun x => by rw [h x, AddChar.one_apply])
-  obtain ⟨n, hn⟩ := GlobalTheory.CharConductor.exists_conductor_exponent E w ψ hcont hnorm hne'
+  obtain ⟨n, hn⟩ := _root_.GlobalTheory.ConductorAdicCompletion.exists_conductor_adicCompletion E w ψ hcont hnorm hne'
   have hval : Valued.v (((ϖ w ^ (-n) : (w.adicCompletion E)ˣ)) : w.adicCompletion E) = WithZero.exp n := by
     rw [Units.val_zpow_eq_zpow_val, map_zpow₀, hϖ]
     rw [← WithZero.exp, ← WithZero.exp_zsmul]
@@ -102,7 +102,7 @@ section -- clump:auto
 open NumberField IsDedekindDomain Matrix GlobalTheory.CuspRep Formalism.UG GlobalTheory.LFun
 
 theorem _root_.GlobalTheory.T.scaledLocalCharacter_unitConductor_conductorExponent : ∀ (E : Type) [Field E] [NumberField E] (ϖ : ∀ w : HeightOneSpectrum (𝓞 E), (w.adicCompletion E)ˣ) (w : HeightOneSpectrum (𝓞 E)), IsUnifV E w (ϖ w : w.adicCompletion E) → GlobalTheory.RamShift.CondOne w ((ϖ w ^ GlobalTheory.RamShift.condExp ϖ w : (w.adicCompletion E)ˣ) : w.adicCompletion E) := by
-  first | (exact @GlobalTheory.RamShift.condOne_condExp) | (exact GlobalTheory.RamShift.condOne_condExp) | (intros; apply GlobalTheory.RamShift.condOne_condExp  <;> assumption)
+  first | (exact @GlobalTheory.RamShift.condOne_condExp)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ScaledLocalCharacterUnitConductorConductorExponeStatement =====

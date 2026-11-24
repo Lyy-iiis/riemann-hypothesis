@@ -64,19 +64,6 @@ section Gen
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [Algebra F E]
 
-theorem intAdele_smul_mem_hat {n : ℕ} (S : Set (Fin n → E)) (c : FiniteAdeleRing (𝓞 F) F)
-    (hc : ∀ v, c v ∈ v.adicCompletionIntegers F) {z : Fin n → GlobalTheory.AdLat.RA F E}
-    (hz : z ∈ GlobalTheory.AdLat.hat F S) : (c ⊗ₜ[F] (1 : E)) • z ∈ GlobalTheory.AdLat.hat F S := by
-  induction hz using AddSubgroup.closure_induction with
-  | mem y hy =>
-    obtain ⟨a, ha, x, hx, rfl⟩ := hy
-    refine AddSubgroup.subset_closure ⟨c * a, fun v => mul_mem (hc v) (ha v), x, hx, ?_⟩
-    funext i
-    simp [Algebra.TensorProduct.tmul_mul_tmul]
-  | zero => rw [smul_zero]; exact zero_mem _
-  | add y y' _ _ h h' => rw [smul_add]; exact add_mem h h'
-  | neg y _ h => rw [smul_neg]; exact neg_mem h
-
 theorem ideal_smul_mem_hat {n : ℕ} (I : Ideal (𝓞 E)) (L : Submodule (𝓞 E) (Fin n → E)) {t : 𝓞 E} (ht : t ∈ I)
     {z : Fin n → GlobalTheory.AdLat.RA F E} (hz : z ∈ GlobalTheory.AdLat.hat F (L : Set (Fin n → E))) :
     ((1 : FiniteAdeleRing (𝓞 F) F) ⊗ₜ[F] (t : E)) • z ∈
@@ -194,7 +181,7 @@ theorem mulVec_sub_mem_hat_smul : ∀ {D : D7} (V : HSp D) {La : Type} [AddCommG
   | mem y hy =>
     obtain ⟨c, hc, x, hx, rfl⟩ := hy
     rw [gen_sub K c x]
-    exact intAdele_smul_mem_hat _ c hc (step2 x hx)
+    exact _root_.GlobalTheory.Member.AALev.hat_smul_adele _ c hc (step2 x hx)
   | zero => rw [Matrix.mulVec_zero, sub_zero]; exact zero_mem _
   | add y y' _ _ h h' =>
     have e : K *ᵥ (y + y') - (y + y') = (K *ᵥ y - y) + (K *ᵥ y' - y') := by
@@ -222,7 +209,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.levelMove_lift_congruent_mod_ideal : ∀ {D : D7} (V : HSp D) {La : Type} [AddCommGroup La] [Module (𝓞 D.host.E) La] (ι : La →ₗ[𝓞 D.host.E] (Fin V.rank → D.host.E)), Formalism.L2.Pj.LatEmb V ι → ∀ (M : ℕ) (Mb Mh : Ideal (𝓞 D.host.E)), Mb ⊔ Mh = ⊤ → ((M : ℕ) : 𝓞 D.host.E) ∈ Mb → ∀ (κ : Formalism.L2.Theta.GA D V), GlobalTheory.Member.FinCong V 1 κ → ∀ (f : La →ₗ[𝓞 D.host.E] La), (∀ a ∈ Mh • (⊤ : Submodule (𝓞 D.host.E) La), ∃ w ∈ Formalism.L2.Pj.latGHat V 1, Formalism.L2.Pj.finVec V (ι (f a)) - (Formalism.L2.Theta.finHom V κ).1 *ᵥ Formalism.L2.Pj.finVec V (ι a) = M • w) → (∀ x, f x - x ∈ Mb • (⊤ : Submodule (𝓞 D.host.E) La)) → ∀ z ∈ GlobalTheory.AdLat.hat D.host.F (Formalism.L2.Pj.latG V 1 : Set (Fin V.rank → D.host.E)), (Formalism.L2.Theta.finHom V κ).1 *ᵥ z - z ∈ GlobalTheory.AdLat.hat D.host.F ((Mb • Formalism.L2.Pj.latG V 1 : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) : Set (Fin V.rank → D.host.E)) := by
-  first | exact @GlobalTheory.LevelMoveCong.mulVec_sub_mem_hat_smul | exact GlobalTheory.LevelMoveCong.mulVec_sub_mem_hat_smul | (intros; apply GlobalTheory.LevelMoveCong.mulVec_sub_mem_hat_smul <;> assumption)
+  first | exact @GlobalTheory.LevelMoveCong.mulVec_sub_mem_hat_smul
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LevelMoveLiftCongruentModIdealStatement =====

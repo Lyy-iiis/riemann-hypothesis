@@ -1106,7 +1106,7 @@ theorem evalDiag_T_step (w n : ℕ) (V : ℍ → ℂ[X]) (hV : ∀ τ, V τ ∈ 
     push_cast; ring
   rw [← hT τ, eval_polySlash w _ _ _ (hV _), hm, hc]
   · simp only [Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_cons, Matrix.head_fin_const]
+      Matrix.empty_val', Matrix.cons_val_fin_one]
     push_cast
     simp
   · rw [hm]
@@ -1163,7 +1163,7 @@ private theorem norm_eval_le_sum_of_mem_degreeLT {w : ℕ} {p : ℂ[X]} (hp : p 
     (x : ℂ) : ‖p.eval x‖ ≤ ∑ j ∈ Finset.range (w + 1), ‖p.coeff j‖ * ‖x‖ ^ j := by
   rw [eval_eq_sum_range' (natDegree_lt_of_mem_degreeLT hp)]
   refine (norm_sum_le _ _).trans (le_of_eq ?_)
-  simp [norm_mul, norm_pow]
+  simp [norm_pow]
 
 open Polynomial UpperHalfPlane in
 open scoped MatrixGroups ModularForm in
@@ -1467,14 +1467,6 @@ theorem per_exists : ∀ (Γ : Subgroup SL(2, ℤ)), Γ.FiniteIndex → ∀ σ :
     rw [zpow_natCast, conj_pow]
   rwa [← this]
 
-theorem eichler_mem (w : ℕ) (f : ℍ → ℂ) (τ : ℍ) : eichler w f τ ∈ degreeLT ℂ (w + 1) := by
-  unfold eichler
-  refine Submodule.sum_mem _ fun j hj => ?_
-  rw [mem_degreeLT]
-  refine (degree_C_mul_X_pow_le _ _).trans_lt ?_
-  have := Finset.mem_range.1 hj
-  exact_mod_cast this
-
 theorem per_cov (Γ : Subgroup SL(2, ℤ)) (w : ℕ) (U : ℍ → ℂ[X]) (hU : ∀ τ, U τ ∈ degreeLT ℂ (w + 1))
     (heq : ∀ (γ : Γ) (τ : ℍ), slP w (mat γ) (U ((γ : SL(2, ℤ)) • τ)) = U τ) (σ : SL(2, ℤ)) (n : ℕ)
     (hγ : σ * ModularGroup.T ^ (n : ℤ) * σ⁻¹ ∈ Γ) (τ : ℍ) :
@@ -1486,7 +1478,7 @@ theorem per_cov (Γ : Subgroup SL(2, ℤ)) (w : ℕ) (U : ℍ → ℂ[X]) (hU : 
   rw [h2] at h1
   rw [← h1]
   have hm' : ((⟨_, hγ⟩ : Γ) : SL(2, ℤ)) * σ = σ * ModularGroup.T ^ (n : ℤ) := by
-    simp only [Subgroup.coe_mk]; group
+    simp only; group
   have e1 : slP w (mat (ModularGroup.T ^ (n : ℤ))) (slP w (mat σ) (U (σ • ModularGroup.T ^ (n : ℤ) • τ))) =
       slP w (mat (σ * ModularGroup.T ^ (n : ℤ))) (U (σ • ModularGroup.T ^ (n : ℤ) • τ)) := by
     rw [show mat (σ * ModularGroup.T ^ (n : ℤ)) = mat σ * mat (ModularGroup.T ^ (n : ℤ)) from
@@ -1508,8 +1500,8 @@ theorem decay_at_cusp : ∀ (Γ : Subgroup SL(2, ℤ)) (k : ℕ), Γ.FiniteIndex
     rwa [show w + 1 = k - 1 by omega]
   have hUdeg : ∀ τ, U τ ∈ degreeLT ℂ (w + 1) := by
     intro τ
-    refine Submodule.sub_mem _ (Submodule.sub_mem _ (eichler_mem w _ τ) ?_) hpw
-    have h0 := eichler_mem w (⇑h) τ
+    refine Submodule.sub_mem _ (Submodule.sub_mem _ (_root_.GlobalTheory.EichlerLimit.eichler_mem w _ τ) ?_) hpw
+    have h0 := _root_.GlobalTheory.EichlerLimit.eichler_mem w (⇑h) τ
     rw [mem_degreeLT] at h0 ⊢
     exact (degree_map_le).trans_lt h0
   set V : ℍ → ℂ[X] := fun τ => slP w (mat σ) (U (σ • τ)) with hV
@@ -1577,15 +1569,6 @@ open scoped MatrixGroups ModularForm
 open scoped Manifold
 
 namespace GlobalTheory.HeckeFamilyMatrices.Positivity
-
-open Polynomial UpperHalfPlane in
-open scoped MatrixGroups ModularForm in
-open scoped Manifold in
-private lemma eichler_mem_degreeLT_succ (w : ℕ) (g : ℍ → ℂ) (τ : ℍ) :
-    _root_.GlobalTheory.HeckeFamilyMatrices.eichler w g τ ∈ ℂ[X]_(w + 1) := by
-  rw [Polynomial.mem_degreeLT, Polynomial.degree_lt_iff_coeff_zero]
-  intro m hm
-  rw [_root_.GlobalTheory.EichlerChange.coeff_eichler, Nat.choose_eq_zero_of_lt (by omega), Nat.cast_zero, zero_mul]
 
 open Polynomial UpperHalfPlane in
 open scoped MatrixGroups ModularForm in
@@ -1702,8 +1685,8 @@ private lemma eq_zero_of_eichler_conj_slash_relation (Γ : Subgroup SL(2, ℤ)) 
   have hk1 : k - 1 = k - 2 + 1 := by omega
   have hp' : p ∈ ℂ[X]_(k - 2 + 1) := by rw [← hk1]; exact hp
   have hmem : ∀ τ, V τ ∈ ℂ[X]_(k - 2 + 1) := fun τ =>
-    sub_mem (sub_mem (eichler_mem_degreeLT_succ _ _ _)
-      (map_conj_mem_degreeLT (eichler_mem_degreeLT_succ _ _ _))) hp'
+    sub_mem (sub_mem (_root_.GlobalTheory.EichlerLimit.eichler_mem _ _ _)
+      (map_conj_mem_degreeLT (_root_.GlobalTheory.EichlerLimit.eichler_mem _ _ _))) hp'
   have hcf : ∀ g : CuspForm (Subgroup.map (Matrix.SpecialLinearGroup.mapGL ℝ) Γ) k, ∀ n : ℕ,
       Continuous fun τ => (_root_.GlobalTheory.HeckeFamilyMatrices.eichler (k - 2) g τ).coeff n := by
     intro g n
@@ -1759,7 +1742,7 @@ theorem _root_.GlobalTheory.HeckeFamilyMatrices.Positivity.eq_zero_of_per_sub_cj
           _root_.GlobalTheory.HeckeFamilyMatrices.eichler (k - 2) g τ := fun g =>
     (_root_.GlobalTheory.HeckeFamilyMatrices.PerCoc.per_mem_Z1_and_eq_slP_eichler_sub Γ k (by omega) (CuspForm.toModularFormₗ g)).2
   have hmemE : ∀ (g : ℍ → ℂ) (τ : ℍ), _root_.GlobalTheory.HeckeFamilyMatrices.eichler (k - 2) g τ ∈ ℂ[X]_(k - 2 + 1) :=
-    fun g τ => eichler_mem_degreeLT_succ _ _ _
+    fun g τ => _root_.GlobalTheory.EichlerLimit.eichler_mem _ _ _
   have hconj : ∀ p ∈ ℂ[X]_(k - 2 + 1), ∀ γ : SL(2, ℤ),
       map (starRingEnd ℂ) (_root_.GlobalTheory.HeckeFamilyMatrices.slP (k - 2) (_root_.GlobalTheory.HeckeFamilyMatrices.mat γ) p) =
         _root_.GlobalTheory.HeckeFamilyMatrices.slP (k - 2) (_root_.GlobalTheory.HeckeFamilyMatrices.mat γ) (map (starRingEnd ℂ) p) :=

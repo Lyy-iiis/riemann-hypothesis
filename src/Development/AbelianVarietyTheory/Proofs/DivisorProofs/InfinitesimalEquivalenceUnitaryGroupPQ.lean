@@ -619,16 +619,14 @@ theorem vAct_bracket (hρ : Formalism.QuantumDeterminants.IsCRepOn (UJset ε) ρ
         (X1 * Y1 - Y1 * X1) + Complex.I • (X1 * Y2 - Y2 * X1) + Complex.I • (X2 * Y1 - Y1 * X2) -
           (X2 * Y2 - Y2 * X2) := by
     intro X1 X2 Y1 Y2
-    simp only [add_mul, mul_add, smul_mul_assoc, mul_smul_comm, smul_smul, Complex.I_mul_I, neg_one_smul,
-      smul_sub, smul_add, smul_neg, neg_smul, Complex.I_mul_I]
+    simp only [add_mul, mul_add, smul_mul_assoc, mul_smul_comm, smul_smul, Complex.I_mul_I, smul_sub, smul_add, neg_smul, Complex.I_mul_I]
     module
   have h := hm (cre ε X) (cim ε X) (cre ε Y) (cim ε Y)
   rw [cre_add_cim, cre_add_cim] at h
   rw [h, map_sub, map_add (f := _), map_add (f := _), map_smul, map_smul, vAct_bracket_of_mem hρ hV (cre_mem X) (cre_mem Y),
     vAct_bracket_of_mem hρ hV (cre_mem X) (cim_mem Y), vAct_bracket_of_mem hρ hV (cim_mem X) (cre_mem Y),
     vAct_bracket_of_mem hρ hV (cim_mem X) (cim_mem Y), vAct_decomp hρ hV X, vAct_decomp hρ hV Y]
-  simp only [add_mul, mul_add, smul_mul_assoc, mul_smul_comm, smul_smul, Complex.I_mul_I, neg_one_smul,
-    smul_sub, smul_add, smul_neg, neg_smul, Complex.I_mul_I]
+  simp only [add_mul, mul_add, smul_mul_assoc, mul_smul_comm, smul_smul, Complex.I_mul_I, smul_sub, smul_add, neg_smul, Complex.I_mul_I]
   module
 
 def vE (hρ : Formalism.QuantumDeterminants.IsCRepOn (UJset ε) ρ) (hV : IsGKSub ε ρ V) (a b : Fin n) : Module.End ℂ V :=
@@ -638,7 +636,7 @@ theorem actM_vE (hρ : Formalism.QuantumDeterminants.IsCRepOn (UJset ε) ρ) (hV
     ReciprocityTheory.ChartRestriction.DS.actM (vE hρ hV) X = vAct hρ hV X := by
   have hX : X = ∑ a, ∑ b, X a b • single a b (1 : ℂ) := by
     ext i j
-    simp [Matrix.sum_apply, single_apply, ite_and, Finset.sum_ite_eq, Finset.sum_ite_eq']
+    simp [Matrix.sum_apply, single_apply, ite_and, Finset.sum_ite_eq']
   conv_rhs => rw [hX]
 
   simp only [map_sum, map_smul, ReciprocityTheory.ChartRestriction.DS.actM, vE]
@@ -666,11 +664,6 @@ theorem vIso_le (Λ : Fin n → ℝ) : vIso ε ρ V Λ ≤ V := sSup_le fun _ hS
 
 theorem vIso_le_kIso (Λ : Fin n → ℝ) : vIso ε ρ V Λ ≤ GlobalTheory.KFinDual.kIso ε ρ Λ :=
   sSup_le_sSup fun _ hS => hS.2
-
-theorem isURepOn_Kset (hU : IsURepOn (UJset ε) ρ) : IsURepOn (Kset ε) ρ :=
-  ⟨⟨hU.1.1, fun a ha b hb => hU.1.2 a (mem_UJset_of_mem_Kset ha) b (mem_UJset_of_mem_Kset hb)⟩,
-    fun g hg => hU.2.1 g (mem_UJset_of_mem_Kset hg),
-    fun v => (hU.2.2 v).mono fun _ hk => mem_UJset_of_mem_Kset hk⟩
 
 theorem le_iSup_vIso (hU : IsURepOn (Kset ε) ρ)
     (hirr : ∀ S : Submodule ℂ H, FiniteDimensional ℂ S → S ≠ ⊥ → IsKStableOn ε ρ S →
@@ -738,7 +731,7 @@ theorem kType_exists [CompleteSpace H] (hU : IsURepOn (UJset ε) ρ) :
 theorem mem_of_mem_closure [CompleteSpace H] (hU : IsURepOn (UJset ε) ρ) (hV : IsGKSub ε ρ V)
     (hA : IsAdmissibleSub ε ρ V) {w : H} (hw : w ∈ V.topologicalClosure) (hk : IsKFin ε ρ w) : w ∈ V := by
   classical
-  have hUK := isURepOn_Kset hU
+  have hUK := _root_.GlobalTheory.Dec.FormF.URep_K hU
   have hty := kType_exists hU
   obtain ⟨s, hs⟩ := GlobalTheory.KFinDual.exists_finset (GlobalTheory.KFinDual.decomp n ε H ρ hUK hty) w hk
   set A : Submodule ℂ H := s.sup (vIso ε ρ V) with hAdef
@@ -773,8 +766,8 @@ theorem mem_of_mem_closure [CompleteSpace H] (hU : IsURepOn (UJset ε) ρ) (hV :
 
 theorem casimir_eq_etr {M : Type} [AddCommGroup M] [Module ℂ M] (E : Fin n → Fin n → Module.End ℂ M) :
     ReciprocityTheory.ChartRestriction.DS.casimir E = etr E 2 := by
-  simp only [ReciprocityTheory.ChartRestriction.DS.casimir, etr, Formalism.REAL.epow, Finset.sum_mul, ite_mul, one_mul, zero_mul,
-    Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  simp only [ReciprocityTheory.ChartRestriction.DS.casimir, etr, Formalism.REAL.epow, ite_mul, one_mul, zero_mul,
+    Finset.sum_ite_eq, Finset.mem_univ, if_true]
 
 def vK (hV : IsGKSub ε ρ V) (κ : Matrix (Fin n) (Fin n) ℂ) (hκ : κ ∈ Kset ε) : Module.End ℂ V :=
   (ρ κ : H →ₗ[ℂ] H).restrict (fun x hx => hV.kStable κ hκ x hx)
@@ -932,7 +925,7 @@ theorem admissibleClosure_gKSubmodule : GlobalTheory.Published.AdmissibleClosure
   have hgen : ∀ v ∈ V, σ g v ∈ V.topologicalClosure := by
     intro v hv
     refine Submodule.iSup_induction (vIso ε σ V) (motive := fun v => σ g v ∈ V.topologicalClosure)
-      (le_iSup_vIso (isURepOn_Kset hU) (kType_exists hU) hV hv)
+      (le_iSup_vIso (_root_.GlobalTheory.Dec.FormF.URep_K hU) (kType_exists hU) hV hv)
       (fun Λ y hy => rep_mem_closure_of_vIso hU hV hA Λ hg hy) (by simp)
       (fun a b ha hb => by rw [map_add]; exact add_mem ha hb)
   have hw' : w ∈ closure (V : Set H) := by rwa [← Submodule.topologicalClosure_coe]
@@ -986,7 +979,7 @@ theorem exists_kIso_ne_bot [Nontrivial H₁] (hU : IsURepOn (UJset ε) σ₁) :
   by_contra hc
   push_neg at hc
   have hall : ∀ v : H₁, IsKFin ε σ₁ v → v = 0 := fun v hv => by
-    have h := GlobalTheory.KFinDual.decomp n ε H₁ σ₁ (isURepOn_Kset hU) (kType_exists hU) v hv
+    have h := GlobalTheory.KFinDual.decomp n ε H₁ σ₁ (_root_.GlobalTheory.Dec.FormF.URep_K hU) (kType_exists hU) v hv
     have h0 : (⨆ Λ : Fin n → ℝ, sSup {S : Submodule ℂ H₁ | IsKTypeOf ε σ₁ Λ S}) = ⊥ := iSup_eq_bot.2 hc
     rw [h0] at h
     exact (Submodule.mem_bot ℂ).1 h
@@ -1004,8 +997,8 @@ theorem form_prop [Nontrivial H₁] (hU₁ : IsURepOn (UJset ε) σ₁) (hI₁ :
     (hL : ∀ X ∈ lieSet ε, ∀ v, IsKFin ε σ₁ v → T (dRep σ₁ X v) = dRep σ₂ X (T v)) :
     ∃ c : ℝ, 0 < c ∧ ∀ v w, IsKFin ε σ₁ v → IsKFin ε σ₁ w → ⟪T v, T w⟫_ℂ = (c : ℂ) * ⟪v, w⟫_ℂ := by
   classical
-  have hUK₁ := isURepOn_Kset hU₁
-  have hUK₂ := isURepOn_Kset hU₂
+  have hUK₁ := _root_.GlobalTheory.Dec.FormF.URep_K hU₁
+  have hUK₂ := _root_.GlobalTheory.Dec.FormF.URep_K hU₂
   have hG₁ := isGKSub_kFinVec hU₁ hI₁
   have hG₂ := isGKSub_kFinVec hU₂ hI₂
   obtain ⟨Λ₀, hΛ₀⟩ := exists_kIso_ne_bot hU₁

@@ -201,15 +201,6 @@ theorem enorm_mixS_le' {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsStdChar D ψ (-
         exact GlobalTheory.HeisTaylor.enorm_le_supN φ _
     _ = _ := by rw [setLIntegral_const, v.covol.2.2, mul_one]
 
-theorem one_add_pow_le {L : ℝ} (hL : 0 ≤ L) (N : ℕ) : (1 + L) ^ N ≤ 2 ^ N * (1 + L ^ N) := by
-  first
-  | exact @_root_.GlobalTheory.OneAddPowBoundTwistedOperators.one_add_pow_le
-  | exact _root_.GlobalTheory.OneAddPowBoundTwistedOperators.one_add_pow_le
-  | (apply _root_.GlobalTheory.OneAddPowBoundTwistedOperators.one_add_pow_le <;> assumption)
-  | (intros; apply _root_.GlobalTheory.OneAddPowBoundTwistedOperators.one_add_pow_le <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.OneAddPowBoundTwistedOperators.one_add_pow_le <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.OneAddPowBoundTwistedOperators.one_add_pow_le ..)
-
 theorem mixS_weight_le : ∀ {D : D7} (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (θ : InfFam D), IsInfFam θ →
     ∀ (V X S₀ : HSp D) (r : ℕ) (d : GlobalTheory.MixModel.HypDec V S₀ r) (μ' : Measure (Mx D X.rank r))
     (𝓕' : Set (Mx D X.rank r)), IsCovolOne (GlobalTheory.MixModel.ratMx D X.rank r) μ' 𝓕' → ∀ N : ℕ,
@@ -291,7 +282,7 @@ theorem mixS_weight_le : ∀ {D : D7} (ψ : AddChar (AF D.host.F) ℂ), IsStdCha
     calc (1 + ∑ τ, ∑ i, ∑ j, ‖compAt θ τ x i j‖) ^ N ≤ ((1 + ∑ τ, A τ) * (1 + ∑ a, ℓ a x)) ^ N :=
           pow_le_pow_left₀ (by positivity) h1 N
       _ = (1 + ∑ τ, A τ) ^ N * (1 + ∑ a, ℓ a x) ^ N := mul_pow _ _ _
-      _ ≤ (1 + ∑ τ, A τ) ^ N * (2 ^ N * (1 + (∑ a, ℓ a x) ^ N)) := by gcongr; exact one_add_pow_le hLn N
+      _ ≤ (1 + ∑ τ, A τ) ^ N * (2 ^ N * (1 + (∑ a, ℓ a x) ^ N)) := by gcongr; exact _root_.GlobalTheory.OneAddPowBoundTwistedOperators.one_add_pow_le hLn N
       _ = _ := by ring
   have h0 := hpow 0 Ψ hΨ x
   have hN := hpow N Ψ hΨ x
@@ -342,7 +333,7 @@ theorem _root_.GlobalTheory.T.mixed_theta_series_rapid_decay : ∀ {D : D7} (ψ 
     ∃ (k : ℕ) (C : ℝ), 0 ≤ C ∧ ∀ Ψ : WO V X → ℂ, IsThetaFunO ψ V X Ψ → ∀ x : Mx D X.rank r,
       ‖d.mixS X ψ μ' 𝓕' Ψ x 0‖ₑ * ENNReal.ofReal ((1 + ∑ τ, ∑ i, ∑ j, ‖compAt θ τ x i j‖) ^ N) ≤
         ENNReal.ofReal C * GlobalTheory.Size.wordSum (GlobalTheory.Size.heisDer ψ θ) GlobalTheory.HeisTaylor.supN k Ψ := by
-  first | exact @GlobalTheory.MixWeight.mixS_weight_le | exact GlobalTheory.MixWeight.mixS_weight_le | (intros; apply GlobalTheory.MixWeight.mixS_weight_le <;> assumption)
+  first | exact @GlobalTheory.MixWeight.mixS_weight_le
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.MixedThetaSeriesRapidDecayStatement =====

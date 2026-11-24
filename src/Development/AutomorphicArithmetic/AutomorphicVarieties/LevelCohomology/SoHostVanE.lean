@@ -273,7 +273,7 @@ theorem UpperTheory.Reformulated.B.LocallyConstantMaps.locConst :
   intro x
   refine ⟨(fun y => x⁻¹ * y) ⁻¹' (↑ψ.ker : Set Γ),
     h.preimage (continuous_const.mul continuous_id), ?_, ?_⟩
-  · simp [MonoidHom.mem_ker]
+  · simp
   · intro y hy
     have hy' : ψ (x⁻¹ * y) = 1 := MonoidHom.mem_ker.mp hy
     rw [map_mul, map_inv, inv_mul_eq_one] at hy'
@@ -288,10 +288,6 @@ section -- clump:auto
 @[expose] public section
 
 open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.Gal Formalism.GaloisCohomology IsLocalRing UpperTheory.V UpperTheory.V.Base UpperTheory.V.X
-
-private theorem locConst {Γ A : Type} [Group Γ] [TopologicalSpace Γ] [IsTopologicalGroup Γ] [Group A] (ψ : Γ →* A)
-    (h : IsOpen (ψ.ker : Set Γ)) : IsLocallyConstant ψ :=
-  _root_.UpperTheory.Reformulated.B.LocallyConstantMaps.locConst ψ h
 
 private theorem dvd_pow_l (l : ℕ) [Fact l.Prime] (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
     [Algebra ℤ_[l] O] [Module.Finite ℤ_[l] O] (a : O) (ha : a ≠ 0) : ∃ N : ℕ, a ∣ (l : O) ^ N := by
@@ -331,7 +327,7 @@ theorem UpperTheory.V.X.So.contLev :
     exact dvd_mul_right _ _
   have h1 := (locConst_smul l O M N m hm).comp_continuous
     (f := fun g => ((cycZ k Ω l g ^ n : ℤ_[l]ˣ) : ℤ_[l])) (Units.continuous_val.comp (hc.zpow n))
-  have h2 := ((locConst ψ hψ).prodMk h1).comp fun p : Oˣ × M => (p.1 : O) • p.2
+  have h2 := ((_root_.UpperTheory.Reformulated.B.LocallyConstantFunctions.locConst ψ hψ).prodMk h1).comp fun p : Oˣ × M => (p.1 : O) • p.2
   refine h2.continuous.congr fun g => ?_
   show (ψ g : O) • (algebraMap ℤ_[l] O ((cycZ k Ω l g ^ n : ℤ_[l]ˣ) : ℤ_[l]) • m) = ρ g m
   have e' : chiO k Ω l O g ^ n = Units.map (algebraMap ℤ_[l] O).toMonoidHom (cycZ k Ω l g ^ n) :=
@@ -461,7 +457,7 @@ theorem UpperTheory.V.X.So.locKill :
       rw [hc, ← Units.val_mul]
       congr 1
       simp only [map_inv, MonoidHom.mul_apply, MonoidHom.inv_apply, MonoidHom.zpow_apply, zpow_sub,
-        zpow_one, mul_inv, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]
+        zpow_one, mul_inv, mul_left_comm]
     have hmem : ∀ φ : H0 τ, ι (φ : TDual (ZMod (l ^ r)) M) ∈ Set.range ι₀ := by
       intro φ
       rw [← hι₀rng]
@@ -582,7 +578,7 @@ theorem UpperTheory.V.X.So.lineNeg :
     intro g
     have h1 : etaO F (F.π g) = η₀ g := by
       simp only [etaO, η₀, MonoidHom.comp_apply, hη]
-    simp only [lineChar, MonoidHom.mul_apply, MonoidHom.zpow_apply, MonoidHom.pow_apply, MonoidHom.inv_apply, hΨ, h1,
+    simp only [lineChar, MonoidHom.mul_apply, MonoidHom.pow_apply, MonoidHom.inv_apply, hΨ, h1,
       Chr.Psi, ψ', zpow_neg, zpow_natCast, mul_pow, pow_mul, mul_inv, inv_inv, mul_assoc]
   have ho : IsOpen (ψ'.ker : Set (G ℚ Ω)) := by
     refine Subgroup.isOpen_mono (H₁ := (Chr.cls ℚ Ω N).ker ⊓ (Chr.cls ℚ Ω 4).ker) (fun g hg => ?_)

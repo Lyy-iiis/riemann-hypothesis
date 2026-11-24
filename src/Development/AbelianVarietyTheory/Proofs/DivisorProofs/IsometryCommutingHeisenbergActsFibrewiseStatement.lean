@@ -294,20 +294,6 @@ open scoped GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels
 
 namespace GlobalTheory.ArchTrigBump
 
-theorem exists_bounded_trig {X : Type} [PseudoMetricSpace X] [ProperSpace X] (x₀ : X) {B : Type} [AddCommGroup B]
-    (χ : B → X → ℂ) (hc : ∀ b, Continuous (χ b)) (hadd : ∀ a b x, χ (a + b) x = χ a x * χ b x)
-    (hzero : ∀ x, χ 0 x = 1) (hnorm : ∀ a x, ‖χ a x‖ = 1) (hsep : ∀ x y, x ≠ y → ∃ b, χ b x ≠ χ b y)
-    (β : X → ℝ) (hβ : Continuous β) (h01 : ∀ u, 0 ≤ β u ∧ β u ≤ 1) :
-    ∃ (s : ℕ → Finset B) (c : ℕ → B → ℂ), (∀ n x, ‖∑ b ∈ s n, c n b * χ b x‖ ≤ 2) ∧
-      ∀ x, Filter.Tendsto (fun n => ∑ b ∈ s n, c n b * χ b x) Filter.atTop (nhds (β x : ℂ)) := by
-  first
-  | exact @_root_.GlobalTheory.RealAlgebraCharacters.main
-  | exact _root_.GlobalTheory.RealAlgebraCharacters.main
-  | (apply _root_.GlobalTheory.RealAlgebraCharacters.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.RealAlgebraCharacters.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.RealAlgebraCharacters.main <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.RealAlgebraCharacters.main ..)
-
 variable {F : Type} [Field F] [NumberField F]
 
 theorem continuous_toMixed : Continuous (InfiniteAdeleRing.ringEquiv_mixedSpace F) := by
@@ -401,7 +387,7 @@ theorem arch_bump_trig : ∀ {F : Type} [Field F] [NumberField F] {κ : Type} [F
     Complex.exp (-(2 * Real.pi * Complex.I) * (Algebra.trace ℝ (mixedEmbedding.mixedSpace F) (u ⬝ᵥ w) : ℝ))
   have hT : Continuous (Algebra.trace ℝ (mixedEmbedding.mixedSpace F)) :=
     LinearMap.continuous_of_finiteDimensional _
-  obtain ⟨s, c, hb, hl⟩ := exists_bounded_trig 0 χ
+  obtain ⟨s, c, hb, hl⟩ := _root_.GlobalTheory.RealAlgebraCharacters.main 0 χ
     (fun w => Complex.continuous_exp.comp (continuous_const.mul (Complex.continuous_ofReal.comp
       (hT.comp (continuous_id.dotProduct continuous_const)))))
     (fun a b x => by simp only [χ, dotProduct_add, map_add (f := _), Complex.ofReal_add, mul_add, Complex.exp_add])
@@ -483,7 +469,7 @@ theorem _root_.GlobalTheory.T.archimedean_smooth_bump_with_trigonometric_expansi
         (∀ n (x : κ → AF F), ‖∑ b ∈ s n, c n b * ψ (x ⬝ᵥ b)‖ ≤ C) ∧
         ∀ x : κ → AF F, Filter.Tendsto (fun n => ∑ b ∈ s n, c n b * ψ (x ⬝ᵥ b)) Filter.atTop
           (nhds ((β (fun i => (x i).1) : ℝ) : ℂ)) := by
-  first | exact @GlobalTheory.ArchTrigBump.arch_bump_trig | exact GlobalTheory.ArchTrigBump.arch_bump_trig | (intros; apply GlobalTheory.ArchTrigBump.arch_bump_trig <;> assumption)
+  first | exact @GlobalTheory.ArchTrigBump.arch_bump_trig
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ArchimedeanSmoothBumpWithTrigonometricExpansionStatement =====
@@ -745,7 +731,7 @@ theorem _root_.GlobalTheory.T.exists_trigPolynomial_indicator_awayFromPlace : �
         (fun i => ((x + (GlobalTheory.LatVac.liftV v 1 • y - GlobalTheory.LatVac.liftV v 1 • x)) i).2) ∈ V) ∧
       ∀ x : κ → AF F, (fun i => (x i).2) ∈ K →
         ∑ b ∈ s, c b * ψ (x ⬝ᵥ b) = A.indicator (fun _ => (1 : ℂ)) (fun i => (x i).2) := by
-  first | exact @GlobalTheory.OffVTrig.exists_offV_indicator_poly | exact GlobalTheory.OffVTrig.exists_offV_indicator_poly | (intros; apply GlobalTheory.OffVTrig.exists_offV_indicator_poly <;> assumption)
+  first | exact @GlobalTheory.OffVTrig.exists_offV_indicator_poly
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsTrigPolynomialIndicatorAwayFromPlaceStatement =====
@@ -827,7 +813,7 @@ theorem exists_finite_indicator_poly : ∀ {F : Type} [Field F] [NumberField F] 
         (fun i => ((x + (GlobalTheory.LatVac.liftV v 1 • y - GlobalTheory.LatVac.liftV v 1 • x)) i).2) ∈ V) ∧
       ∀ x : κ → AF F, (fun i => (x i).2) ∈ K →
         ∑ b ∈ s, c b * ψ (x ⬝ᵥ b) = A.indicator (fun _ => (1 : ℂ)) (fun i => (x i).2) := by
-  first | exact @GlobalTheory.T.exists_trigPolynomial_indicator_awayFromPlace | exact GlobalTheory.T.exists_trigPolynomial_indicator_awayFromPlace
+  first | exact @GlobalTheory.T.exists_trigPolynomial_indicator_awayFromPlace
 
 theorem exists_arch_bump_poly : ∀ {F : Type} [Field F] [NumberField F] {κ : Type} [Fintype κ] (ψ : AddChar (AF F) ℂ),
     GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.IsStd ψ → ∀ (U : Set (κ → Ainf F)) (y : κ → AF F), IsOpen U → (fun i => (y i).1) ∈ U →
@@ -838,7 +824,7 @@ theorem exists_arch_bump_poly : ∀ {F : Type} [Field F] [NumberField F] {κ : T
         (∀ n (x : κ → AF F), ‖∑ b ∈ s n, c n b * ψ (x ⬝ᵥ b)‖ ≤ C) ∧
         ∀ x : κ → AF F, Filter.Tendsto (fun n => ∑ b ∈ s n, c n b * ψ (x ⬝ᵥ b)) Filter.atTop
           (nhds ((β (fun i => (x i).1) : ℝ) : ℂ)) := by
-  first | exact @GlobalTheory.T.archimedean_smooth_bump_with_trigonometric_expansion | exact GlobalTheory.T.archimedean_smooth_bump_with_trigonometric_expansion
+  first | exact @GlobalTheory.T.archimedean_smooth_bump_with_trigonometric_expansion
 
 theorem exists_trig_prod : ∀ {X B : Type} [AddCommMonoid B] [DecidableEq B] (χ : B → X → ℂ),
     (∀ b b' x, χ (b + b') x = χ b x * χ b' x) → ∀ (s₁ s₂ : Finset B) (c₁ c₂ : B → ℂ),
@@ -917,8 +903,8 @@ theorem exists_localizing_weight : ∀ {F : Type} [Field F] [NumberField F] {κ 
   obtain ⟨hΨc, KΨ, hKΨ, hΨK⟩ := continuous_and_compact_finite_support Ψ hΨ
   obtain ⟨U, V, hU, hV, hyU, hyV, hbox⟩ := exists_box_nhds O y hO hyO
   obtain ⟨A, sf, cf, hA, hyA, hsf, hAinv, hAV, hfK⟩ :=
-    exists_finite_indicator_poly v ψ hψ hnt (KΦ ∪ KΨ) (hKΦ.union hKΨ) y V hV hyV
-  obtain ⟨β, hβc, hβ01, hβy, hβU, sa, ca, C, hsa, hCb, hlim⟩ := exists_arch_bump_poly ψ hψ U y hU hyU
+    _root_.GlobalTheory.OffVTrig.exists_offV_indicator_poly v ψ hψ hnt (KΦ ∪ KΨ) (hKΦ.union hKΨ) y V hV hyV
+  obtain ⟨β, hβc, hβ01, hβy, hβU, sa, ca, C, hsa, hCb, hlim⟩ := _root_.GlobalTheory.ArchTrigBump.arch_bump_trig ψ hψ U y hU hyU
   have hmul : ∀ (b b' : κ → AF F) (x : κ → AF F), ψ (x ⬝ᵥ (b + b')) = ψ (x ⬝ᵥ b) * ψ (x ⬝ᵥ b') :=
     fun b b' x => by rw [dotProduct_add, AddChar.map_add_eq_mul]
   choose s c hs hsc using fun n => exists_trig_prod (fun b x => ψ (x ⬝ᵥ b)) hmul sf (sa n) cf (ca n)
@@ -1054,7 +1040,7 @@ theorem _root_.GlobalTheory.T.exists_localizingWeight_equal_offPlaceMasses : ∀
       (∀ x, h x ≠ 0 → x + (GlobalTheory.LatVac.liftV v 1 • y - GlobalTheory.LatVac.liftV v 1 • x) ∈ O) ∧
       (∃ O' : Set (κ → AF F), IsOpen O' ∧ y ∈ O' ∧ ∀ x ∈ O', Ψ x ≠ 0 → 1 / 2 ≤ h x) ∧
       ∫⁻ x, h x * ‖Ψ x‖ₑ ^ 2 ∂μ = ∫⁻ x, h x * ‖Φ x‖ₑ ^ 2 ∂μ := by
-  first | exact @GlobalTheory.OffVLocalWeights.exists_localizing_weight | exact GlobalTheory.OffVLocalWeights.exists_localizing_weight | (intros; apply GlobalTheory.OffVLocalWeights.exists_localizing_weight <;> assumption)
+  first | exact @GlobalTheory.OffVLocalWeights.exists_localizing_weight
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLocalizingWeightEqualOffPlaceMassesStatement =====
@@ -1426,7 +1412,7 @@ theorem eq_zero_of_vanish_fibre : ∀ {F : Type} [Field F] [NumberField F] {κ :
     have := hiso μ inferInstance _ hmem
     rw [hT] at this
     exact this
-  exact lw v ψ hstd hnt μ inferInstance Φ hΦ (T Φ) hTΦ htrig y O hO hyO
+  exact _root_.GlobalTheory.OffVLocalWeights.exists_localizing_weight v ψ hstd hnt μ inferInstance Φ hΦ (T Φ) hTΦ htrig y O hO hyO
 
 end GlobalTheory.FibreLocality
 end -- clump:auto
@@ -1461,7 +1447,7 @@ theorem _root_.GlobalTheory.T.isometry_commuting_heisenberg_acts_fibrewise : ∀
     (∀ u : AF F, evFin F v u = 0 → ∀ p q : κ → AF F, ∀ Φ ∈ GlobalTheory.WeilM.schA F κ,
       T (GlobalTheory.WeilM.schr ψ (u • p, u • q) Φ) = GlobalTheory.WeilM.schr ψ (u • p, u • q) (T Φ)) →
     ∀ Φ ∈ GlobalTheory.WeilM.schA F κ, ∀ y : κ → AF F, (∀ z, GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.At (evFin F v) z → Φ (y + z) = 0) → T Φ y = 0 := by
-  first | exact @GlobalTheory.FibreLocality.eq_zero_of_vanish_fibre | exact GlobalTheory.FibreLocality.eq_zero_of_vanish_fibre | (intros; apply GlobalTheory.FibreLocality.eq_zero_of_vanish_fibre <;> assumption)
+  first | exact @GlobalTheory.FibreLocality.eq_zero_of_vanish_fibre
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsometryCommutingHeisenbergActsFibrewiseStatement =====

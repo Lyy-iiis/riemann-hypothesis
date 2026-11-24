@@ -946,14 +946,6 @@ open scoped TensorProduct NNReal
 
 namespace GlobalTheory.CompanionTheory.KFin.Base
 
-theorem herm_add_left {R V : Type} [CommRing R] [AddCommGroup V] [Module R V] {c : R →+* R} {h : V → V → R} (hH : IsHerm c h)
-    (x y z : V) : h (x + y) z = h x z + h y z := by
-  rw [hH.symm, hH.add_right, map_add (f := _), ← hH.symm, ← hH.symm]
-
-theorem herm_smul_left {R V : Type} [CommRing R] [AddCommGroup V] [Module R V] {c : R →+* R} {h : V → V → R} (hH : IsHerm c h)
-    (a : R) (x z : V) : h (a • x) z = c a * h x z := by
-  rw [hH.symm, hH.smul_right, map_mul, ← hH.symm]
-
 theorem hasBase_of_field {k R : Type} [Field k] [CommRing R] [Algebra k R] (c : R →+* R) (𝔬 : Subring R) (W : Valuation R ℝ≥0)
     (hf : ∀ a : R, a ≠ 0 → ∃ b : R, a * b = 1) (hinv : ∀ a, c (c a) = a)
     (hfix : ∀ a, c a = a → ∃ x : k, algebraMap k R x = a)
@@ -980,7 +972,7 @@ theorem hasBase_of_field {k R : Type} [Field k] [CommRing R] [Algebra k R] (c : 
       add_mem' := by
         rintro z w ⟨a, ha, hz⟩ ⟨b, hb, hw⟩
         refine ⟨a + b + h z w, add_mem (add_mem ha hb) (key z w a b ha hb hz hw), ?_⟩
-        rw [herm_add_left hH, hH.add_right, hH.add_right, hz, hw, hH.symm z w, map_add (f := _), map_add (f := _)]
+        rw [_root_.GlobalTheory.CompanionTheory.KFin.swapHerm_add_left hH, hH.add_right, hH.add_right, hz, hw, hH.symm z w, map_add (f := _), map_add (f := _)]
         ring
       zero_mem' := ⟨0, zero_mem _, by rw [h0, map_zero, add_zero]⟩
       smul_mem' := by
@@ -989,7 +981,7 @@ theorem hasBase_of_field {k R : Type} [Field k] [CommRing R] [Algebra k R] (c : 
         · have hr : W (r : R) ≤ 1 := (h𝔬 r).1 r.2
           rw [h𝔬, map_mul, map_mul, hWc]
           exact mul_le_one' (mul_le_one' hr hr) ((h𝔬 a).1 ha)
-        · rw [Subring.smul_def, herm_smul_left hH, hH.smul_right, hz, map_mul, map_mul, hinv]
+        · rw [Subring.smul_def, _root_.GlobalTheory.CompanionTheory.KFin.EvenAniso.smul_left hH, hH.smul_right, hz, map_mul, map_mul, hinv]
           ring }
   have hLM : ∀ N : Submodule 𝔬 V, IsEvenInt c 𝔬 h N → N ≤ M := by
     intro N hN' x hx
@@ -1080,7 +1072,7 @@ theorem hasBase_of_split {k R : Type} [Field k] [CommRing R] (O : ValuationSubri
         apply φ.injective
         rw [map_mul, hc, RingEquiv.apply_symm_apply, map_one, Prod.swap_prod_mk, Prod.mk_mul_mk,
           mul_comm (α / α') (α' / α), hs] <;> rfl
-      rw [hp, hp, herm_smul_left hH, hH.smul_right, ← mul_assoc, hcs, one_mul]
+      rw [hp, hp, _root_.GlobalTheory.CompanionTheory.KFin.EvenAniso.smul_left hH, hH.smul_right, ← mul_assoc, hcs, one_mul]
     · obtain ⟨r, rfl⟩ := hspan z
       rw [hp, smul_smul, hL1, hL2]
       have e1 : (φ (φ.symm (α' / α, α / α') * r)).1 = α' / α * (φ r).1 := by
@@ -1094,7 +1086,7 @@ theorem hasBase_of_split {k R : Type} [Field k] [CommRing R] (O : ValuationSubri
         · rw [hx1]
           field_simp
         · rw [hy1, ← hud, ← hud']
-          field_simp <;> ring
+          field_simp
       · rintro ⟨⟨x, hx, hx1⟩, ⟨y, hy, hy1⟩⟩
         refine ⟨⟨x, hx, ?_⟩, ⟨u' * u⁻¹ * y, mul_mem (mul_mem hu2 hu') hy, ?_⟩⟩
         · have h3 : (φ r).1 = α / α' * (α' / α * (φ r).1) := by field_simp
@@ -1102,7 +1094,7 @@ theorem hasBase_of_split {k R : Type} [Field k] [CommRing R] (O : ValuationSubri
           field_simp
         · have h3 : (φ r).2 = α' / α * (α / α' * (φ r).2) := by field_simp
           rw [h3, hy1, ← hud, ← hud']
-          field_simp <;> ring
+          field_simp
 
 theorem hasBase_place : ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}, IsCMExt F E σ → ∀ (v : HeightOneSpectrum (𝓞 F)), HasBase (sigR (Fv F v) σ) (intLoc F E v) := by
   intro F E _ _ _ _ _ σ hcm v

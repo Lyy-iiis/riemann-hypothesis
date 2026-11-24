@@ -620,11 +620,6 @@ section -- clump:auto
 
 open IsLocalRing UpperTheory.V.Alg
 
-open MvPowerSeries in
-private theorem mem_span_X {O σ : Type} [CommRing O] [Fintype σ] (f : MvPowerSeries σ O)
-    (hf : constantCoeff f = 0) : f ∈ Ideal.span (Set.range (MvPowerSeries.X : σ → MvPowerSeries σ O)) :=
-  _root_.UpperTheory.Reformulated.B.MemSpanVariable.mem_span_X f hf
-
 section Abstract
 
 variable {O R A : Type} [CommRing O] [IsDomain O] [CommRing R] [Algebra O R] [CommRing A] [Algebra O A]
@@ -716,7 +711,7 @@ theorem UpperTheory.power_series_approximation_mod_maximal :
   have h1 : ∀ g ∈ maximalIdeal (MvPowerSeries (Fin n) E),
       Appr φ (maximalIdeal (MvPowerSeries (Fin n) E) ^ (1 + 1)) g := by
     intro g hg
-    have hs := mem_span_X g ((hmem g).1 hg)
+    have hs := _root_.UpperTheory.Reformulated.B.MemSpanVariable.mem_span_X g ((hmem g).1 hg)
     obtain ⟨r, rfl⟩ := Ideal.mem_span_range_iff_exists_fun.1 hs
     refine Finset.sum_induction _ _ (fun a b ha hb => appr_add ha hb) (appr_zero _ _) fun i _ => ?_
     refine appr_mul (i := 0) (j := 1) (by simp) (by rw [pow_one, hmem]; simp) (h0 _) ⟨t i, c, hc, ?_⟩
@@ -1012,7 +1007,7 @@ theorem sc_first {O E R : Type} [CommRing O] [Field E] [Algebra O E] [CommRing R
       map_smul' := fun c a => by
         simp only [map_smul, RingHom.id_apply]
         simp only [smul_eq_mul, map_mul, Algebra.smul_def, mul_add, Finset.mul_sum, mul_assoc,
-          MvPowerSeries.algebraMap_apply, Algebra.algebraMap_self, RingHom.id_apply] }
+          MvPowerSeries.algebraMap_apply] }
   have hm : ∀ a, ∑ i, MvPowerSeries.C (D i a) * MvPowerSeries.X i ∈ maximalIdeal (MvPowerSeries (Fin n) E) :=
     fun a => (sc_max E n _).2 (by simp)
   refine ⟨AlgHom.ofLinearMap ((Ideal.Quotient.mkₐ O _).toLinearMap ∘ₗ L) ?_ fun a b => ?_, fun a => rfl⟩

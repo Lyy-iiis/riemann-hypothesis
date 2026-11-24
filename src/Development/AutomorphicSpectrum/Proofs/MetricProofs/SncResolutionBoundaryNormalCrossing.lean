@@ -856,15 +856,7 @@ theorem isMultiHomog_part (b : K → ℕ) (s : MvPolynomial (Σ k, ι k) ℂ) :
   refine hm (if_neg fun h => hk ?_)
   exact congrFun h k
 
-theorem isMultiHomog_mul {s f : MvPolynomial (Σ k, ι k) ℂ} {b a : K → ℕ}
-    (hs : IsMultiHomog s b) (hf : IsMultiHomog f a) : IsMultiHomog (s * f) (b + a) := by
-  classical
-  intro m hm k
-  obtain ⟨m₁, h₁, m₂, h₂, rfl⟩ := Finset.mem_add.1 (support_mul s f hm)
-  have := congrFun (mdeg_add m₁ m₂) k
-  simp only [mdeg, Pi.add_apply] at this
-  rw [this, hs m₁ h₁ k, hf m₂ h₂ k]
-  rfl
+alias isMultiHomog_mul := _root_.GlobalTheory.CompanionTheory.Ar.Cmp.SncRes.Dict.isMultiHomog_mul
 
 theorem coeff_mul_eq_zero {r f : MvPolynomial (Σ k, ι k) ℂ} {b a : K → ℕ}
     (hr : ∀ m ∈ r.support, mdeg m ≠ b) (hf : IsMultiHomog f a) {m : (Σ k, ι k) →₀ ℕ}
@@ -1147,7 +1139,6 @@ theorem relation_homogenises (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fi
   obtain ⟨e, s₀, hs₀⟩ := IsLocalization.Away.surj x (ψ s')
   have h4 : i (s₀ * f) ∈ (Q ^ n ⊔ P).map i := by
     rw [map_mul]
-    change i s₀ * i f ∈ _
     rw [show i s₀ = ψ s' * i x ^ e from hs₀.symm]
     have := Ideal.mul_mem_left _ (i x ^ e) h3
     convert this using 1

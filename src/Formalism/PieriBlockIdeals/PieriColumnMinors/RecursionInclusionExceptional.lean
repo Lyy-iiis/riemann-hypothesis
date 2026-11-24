@@ -386,13 +386,6 @@ def BeyondHE : Prop :=
     W.Ok P → ∀ l : ℕ, l.Prime → P.lJ < (l : ℝ) → P.h < (l : ℝ) →
     (∀ τ, W.ex P τ l = 0) ∧ W.JA P l = 0 ∧ W.JW P l = 0
 
-def RecIncl7E : Prop :=
-  ExIntervalLt → ExCut → LemmaDGraded → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P →
-    ∀ X : ℕ → HidaSetting ι P.Nr W.lam, (∀ l : ℕ, l.Prime → ¬ IsUnit ((l : ℕ) : (X l).O)) →
-    (∀ l : ℕ, l.Prime → W.WRange P l → (X l).WInputs l (kc P) W.j W.T2 (W.iW P l)) →
-    ∀ l : ℕ, l.Prime → (X l).Incl l (W.Jrec7 P l) ∧ (X l).Jmin l ≤ W.Jrec7 P l
-
 def InputsRec7E : Prop :=
   ExIntervalLt → ExCut → ∀ P : Par, P.Hyp → P.Large →
     ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P → Fintype.card ι = P.f →
@@ -550,10 +543,6 @@ theorem thin_exceptional : ThinAE := by
 
 theorem one_le_k_of_hyp (P : Par) (hH : P.Hyp) : 1 ≤ P.k := hH.m_pos.trans hH.m_le
 
-theorem kc_cast_le_k (P : Par) : (kc P : ℝ) ≤ (P.k : ℝ) := by
-  unfold kc
-  exact_mod_cast Nat.sub_le P.k 1
-
 theorem thick_exceptional : ThickAE := by
   intro hI hC P hH hL ι W hW J τ hτ l hl
   obtain ⟨sh, hS0, hE0⟩ := shape_a_real_holds P hH hL ι W hW τ hτ
@@ -629,7 +618,7 @@ theorem thick_exceptional : ThickAE := by
               (mul_le_mul_of_nonneg_left g2 (by positivity))
         _ = _ := by ring
     refine (hmain.trans hs.2).trans ?_
-    have hk := kc_cast_le_k P
+    have hk := _root_.Formalism.CohomologicalDescent.ShortWeightBounds.kc_cast_le_k P
     have hk0 : (0 : ℝ) ≤ (kc P : ℝ) := Nat.cast_nonneg _
     have h01 : (1 : ℝ) ≤ (h0 P : ℝ) := by exact_mod_cast one_le_floor_height P hH
     have hl1 : 0 ≤ Real.log (3 * (h0 P : ℝ)) := Real.log_nonneg (by linarith)

@@ -733,7 +733,7 @@ theorem gM_transpose_mulVec {F : Type} [Field F] [NumberField F] {ι : Type} [Fi
     Matrix.one_apply, Fintype.sum_prod_type, smul_eq_mul]
   rw [Finset.mul_sum, Finset.sum_comm]
   refine Finset.sum_congr rfl fun w _ => ?_
-  simp [Finset.sum_ite_eq, mul_assoc]
+  simp [mul_assoc]
 
 theorem gM_DM_emb_eq_trace : ∀ (F : Type) [Field F] [NumberField F] (ι : Type) [Fintype ι] [DecidableEq ι] [DecidableEq (InfinitePlace F)] (M : ℕ) (B : Matrix ι ι F) (ρ : InfinitePlace F → (F →+* ℝ)) (P : InfinitePlace F → Matrix ι ι ℝ), QSetup M B ρ P → ∀ (b : InfinitePlace F → 𝓞 F) (N : ℕ) (y : ι → F), (gM ρ b N)ᵀ *ᵥ (DM B ρ *ᵥ emb ρ y) = fun p => (((N : ℚ) * Algebra.trace ℚ F ((b p.2 : F) * (B *ᵥ y) p.1) : ℚ) : ℝ) := by
   intro F _ _ ι _ _ _ M B ρ P hQ b N y
@@ -1414,7 +1414,7 @@ theorem ZM_map_im {F : Type} [Field F] [NumberField F] {ι : Type} [Fintype ι] 
   by_cases h : v = u
   · subst h
     simp [ZB, blockDiagonal_apply]
-  · simp [ZB, blockDiagonal_apply, h]
+  · simp [blockDiagonal_apply, h]
 
 theorem ZM_symm_posDef_gauss (F : Type) [Field F] [NumberField F] (ι : Type) [Fintype ι]
     [DecidableEq ι] [DecidableEq (InfinitePlace F)] (M : ℕ) (B : Matrix ι ι F)
@@ -1642,14 +1642,6 @@ namespace GlobalTheory.CompanionTheory.SW.ThW
 
 section Linear
 
-theorem sb_add {V : Type} [TopologicalSpace V] {φ φ' : V → ℂ} (h : SB φ) (h' : SB φ') : SB (φ + φ') :=
-  ⟨h.1.add h'.1, h.2.add h'.2⟩
-
-theorem sb_smul {V : Type} [TopologicalSpace V] (c : ℂ) {φ : V → ℂ} (h : SB φ) : SB (c • φ) :=
-  ⟨by
-    have := h.1.comp (fun z => c * z)
-    exact this, h.2.smul_left⟩
-
 theorem sb_integrable {V : Type} [AddCommGroup V] [TopologicalSpace V] [MeasurableSpace V]
     {χ : V → V → ℂ} {μ : Measure V} (hV : NADual V χ μ) {φ : V → ℂ} (h : SB φ) (y : V) :
     Integrable (fun x => φ x * χ x y) μ := by
@@ -1657,13 +1649,6 @@ theorem sb_integrable {V : Type} [AddCommGroup V] [TopologicalSpace V] [Measurab
   have hc : Continuous fun x => φ x * χ x y :=
     h.1.continuous.mul (hC.comp (by fun_prop : Continuous fun x : V => (x, y)))
   exact hc.integrable_of_hasCompactSupport h.2.mul_right
-
-theorem fou_add {V : Type} [AddCommGroup V] [TopologicalSpace V] [MeasurableSpace V]
-    {χ : V → V → ℂ} {μ : Measure V} (hV : NADual V χ μ) {φ φ' : V → ℂ} (h : SB φ) (h' : SB φ') :
-    fou χ μ (φ + φ') = fou χ μ φ + fou χ μ φ' := by
-  funext y
-  simp only [fou, Pi.add_apply, add_mul]
-  exact integral_add (sb_integrable hV h y) (sb_integrable hV h' y)
 
 theorem fou_smul {V : Type} [MeasurableSpace V] (χ : V → V → ℂ) (μ : Measure V) (c : ℂ)
     (φ : V → ℂ) : fou χ μ (c • φ) = c • fou χ μ φ := by
@@ -1885,10 +1870,10 @@ theorem core [MeasurableSpace (A F)] [BorelSpace (A F)] {lf : Measure (A F)}
       exact ⟨h0, by rw [hf0, ht0, ht0, mul_zero]⟩
     | insert a t ha ih =>
       obtain ⟨ihs, ihe⟩ := ih
-      have hca := sb_smul (c a) (hI a)
+      have hca := _root_.CompanionTheory.PlacePermOperatorBicommutantSpan.sb_smul (c a) (hI a)
       simp only [Finset.sum_insert ha]
-      refine ⟨sb_add hca ihs, ?_⟩
-      rw [fou_add hV hca ihs, theta_add (hsum hτ' (hsb hca)) (hsum hτ' (hsb ihs)),
+      refine ⟨_root_.CompanionTheory.PlacePermOperatorBicommutantSpan.sb_add hca ihs, ?_⟩
+      rw [_root_.CompanionTheory.PlacePermOperatorBicommutantSpan.fou_add hV hca ihs, theta_add (hsum hτ' (hsb hca)) (hsum hτ' (hsb ihs)),
         theta_add (hsum hτ hca) (hsum hτ ihs), mul_add, ihe, fou_smul, theta_smul, theta_smul]
       congr 1
       rw [← base hl h1 hψ hQ hV a hN hτ]

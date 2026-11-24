@@ -83,15 +83,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz (schwartzA)
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
-theorem _root_.GlobalTheory.T.block_weil_action_theta_unfolding : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsCharAF D.host.F ψ → ∀ (V : HSp D) (r s : ℕ)
-    (b : Matrix (Fin r) (Fin r) D.host.E), (b.map (D.sp.cm.sig : D.host.E → D.host.E)).transpose = b →
-    ∀ (a : Matrix (Fin (r + s)) (Fin (r + s)) D.host.E), IsUnit a.det →
-    ∀ (Φ : Mx D V.rank (r + s) → ℂ) (y₁ : Mx D V.rank r) (y₂ : Mx D V.rank s) (v : Mx D V.rank ((r + s) + (r + s))),
-    xPart v = -HMul.hMul (colJoin y₁ (0 : Mx D V.rank s)) (rat a) →
-    yPart v = HMul.hMul (colJoin (-HMul.hMul y₁ (rat b)) y₂) (rat (cT (D.sp.cm.sig : D.host.E →+* D.host.E) a)⁻¹) →
-    ∀ (p : Matrix (Fin V.rank) (Fin r) D.host.E) (q : Matrix (Fin V.rank) (Fin s) D.host.E),
-      Heisenberg₂ ψ V v Φ (rat (colJoin p q * a)) = cellTerm ψ V b a Φ p q y₁ y₂ := by
-  first | exact @GlobalTheory.CompanionTheory.EisUnfold.Summand.summand | exact GlobalTheory.CompanionTheory.EisUnfold.Summand.summand | (intros; apply GlobalTheory.CompanionTheory.EisUnfold.Summand.summand <;> assumption)
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -260,7 +251,7 @@ theorem _root_.GlobalTheory.T.covolume_one_column_join_product : ∀ (D : D7) (m
     (𝓕s : Set (Mx D m s)), IsCovolOne (ratMx D m r) μr 𝓕r → IsCovolOne (ratMx D m s) μs 𝓕s →
     IsCovolOne (ratMx D m (r + s)) ((μr.prod μs).map fun z => colJoin z.1 z.2)
       ((fun z : Mx D m r × Mx D m s => colJoin z.1 z.2) '' (𝓕r ×ˢ 𝓕s)) := by
-  first | exact @GlobalTheory.CompanionTheory.EisUnfold.ProdCovol.isCovolOne_colJoin | exact GlobalTheory.CompanionTheory.EisUnfold.ProdCovol.isCovolOne_colJoin | (intros; apply GlobalTheory.CompanionTheory.EisUnfold.ProdCovol.isCovolOne_colJoin <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.EisUnfold.ProdCovol.isCovolOne_colJoin
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -517,7 +508,7 @@ theorem _root_.GlobalTheory.T.eisenstein_coefficient_block_unfolding : ∀ (D : 
           cellTerm ψ V b a Φ pq.1 pq.2 z.1 z.2 ∂(μr.prod μs) =
         ∫ t, ψ (halfTr (Matrix.trace (HMul.hMul (rat b) (inner V t t) : Mx D r r))) *
           Φ (HMul.hMul (colJoin (-t) (0 : Mx D V.rank s)) (rat a)) ∂μr := by
-  first | exact @GlobalTheory.CompanionTheory.EisUnfold.integral_cells_eq | exact GlobalTheory.CompanionTheory.EisUnfold.integral_cells_eq | (intros; apply GlobalTheory.CompanionTheory.EisUnfold.integral_cells_eq <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.EisUnfold.integral_cells_eq
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -611,7 +602,7 @@ theorem _root_.GlobalTheory.T.eisenstein_hermitian_integral_unfolding : ∀ (D :
     ∀ (b : HermE D r) (Φ : Mx D V.rank (r + s) → ℂ),
       ∫ t, ψ (halfTr (Matrix.trace (HMul.hMul (rat b.1) (inner V t t) : Mx D r r))) *
           Φ (HMul.hMul (colJoin (-t) (0 : Mx D V.rank s)) (rat a)) ∂μr = J ψ V μr (pull c Φ) b := by
-  first | exact @GlobalTheory.CompanionTheory.EisUnfold.NegStep.integral_colJoin_neg_eq_J | exact GlobalTheory.CompanionTheory.EisUnfold.NegStep.integral_colJoin_neg_eq_J | (intros; apply GlobalTheory.CompanionTheory.EisUnfold.NegStep.integral_colJoin_neg_eq_J <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.EisUnfold.NegStep.integral_colJoin_neg_eq_J
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -633,10 +624,7 @@ namespace GlobalTheory.CompanionTheory.EisUnfold.Period
 
 variable {D : D7}
 
-theorem rat_sub' {m n : ℕ} (p p₀ : Matrix (Fin m) (Fin n) D.host.E) :
-    (rat (p - p₀) : Mx D m n) = rat p - rat p₀ := by
-  ext i j
-  simp [rat]
+alias rat_sub' := _root_.GlobalTheory.MixModel.rat_sub
 
 theorem psi_inner_rat {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsCharAF D.host.F ψ) (V : HSp D) {s : ℕ}
     (q q₀ : Matrix (Fin V.rank) (Fin s) D.host.E) :
@@ -714,7 +702,7 @@ theorem _root_.GlobalTheory.T.lattice_sum_shift_invariant : ∀ (D : D7) (ψ : A
         cellTerm ψ V b a Φ pq.1 pq.2 (y₁ + rat p₀) (y₂ + rat q₀) =
       ∑' pq : Matrix (Fin V.rank) (Fin r) D.host.E × Matrix (Fin V.rank) (Fin s) D.host.E,
         cellTerm ψ V b a Φ pq.1 pq.2 y₁ y₂ := by
-  first | exact @GlobalTheory.CompanionTheory.EisUnfold.Period.tsum_cellTerm_add_rat | exact GlobalTheory.CompanionTheory.EisUnfold.Period.tsum_cellTerm_add_rat | (intros; apply GlobalTheory.CompanionTheory.EisUnfold.Period.tsum_cellTerm_add_rat <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.EisUnfold.Period.tsum_cellTerm_add_rat
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -829,7 +817,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.schwartz_lattice_sum_bounded : ∀ (D : D7) (θ : InfFam D), IsInfFam θ → ∀ (m n : ℕ) (φ : Mx D m n → ℂ), φ ∈ schwartzA θ m n →
     Continuous φ ∧ ∃ B : ℝ≥0, ∀ w : Mx D m n, ∑' ξ : Matrix (Fin m) (Fin n) D.host.E, ‖φ (rat ξ + w)‖ₑ ≤ B := by
-  first | exact @GlobalTheory.CompanionTheory.EisUnfold.schwartzA_continuous_and_tsum_enorm_le | exact GlobalTheory.CompanionTheory.EisUnfold.schwartzA_continuous_and_tsum_enorm_le | (intros; apply GlobalTheory.CompanionTheory.EisUnfold.schwartzA_continuous_and_tsum_enorm_le <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.EisUnfold.schwartzA_continuous_and_tsum_enorm_le
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -929,8 +917,8 @@ theorem colJoin_mul_eId {m r s : ℕ} (y₁ : Mx D m r) (y₂ : Mx D m s) :
       colJoin y₁ (0 : Mx D m s) := by
   ext i k
   refine Fin.addCases (fun j => ?_) (fun j => ?_) k
-  · simp [eId, Matrix.mul_apply, Matrix.diagonal_apply, Matrix.map_apply]
-  · simp [eId, Matrix.mul_apply, Matrix.diagonal_apply, Matrix.map_apply]
+  · simp [eId, Matrix.mul_apply, Matrix.diagonal_apply]
+  · simp [eId, Matrix.mul_apply, Matrix.diagonal_apply]
 
 theorem colJoin_mul_extB {m r s : ℕ} (y₁ : Mx D m r) (y₂ : Mx D m s) (b : Matrix (Fin r) (Fin r) D.host.E) :
     (HMul.hMul (colJoin y₁ y₂) ((extB b : Matrix (Fin (r + s)) (Fin (r + s)) D.host.E).map (incA D)) : Mx D m (r + s)) =
@@ -938,7 +926,7 @@ theorem colJoin_mul_extB {m r s : ℕ} (y₁ : Mx D m r) (y₂ : Mx D m s) (b : 
   ext i k
   refine Fin.addCases (fun j => ?_) (fun j => ?_) k
   · simp [Matrix.mul_apply, Fin.sum_univ_add, extB_castAdd, extB_natAdd_left, rat]
-  · simp [Matrix.mul_apply, Fin.sum_univ_add, extB_natAdd_right]
+  · simp [Matrix.mul_apply, extB_natAdd_right]
 
 theorem parts : ∀ (D : D7) (m r s : ℕ) (b : Matrix (Fin r) (Fin r) D.host.E) (a : Matrix (Fin (r + s)) (Fin (r + s)) D.host.E)
     (y₁ : Mx D m r) (y₂ : Mx D m s),
@@ -991,7 +979,7 @@ theorem _root_.GlobalTheory.T.weil_action_block_matrix_components : ∀ (D : D7)
         -HMul.hMul (colJoin y₁ (0 : Mx D m s)) (rat a) ∧
       yPart (HMul.hMul (zy (colJoin y₁ y₂)) ((repMat (D.sp.cm.sig : D.host.E →+* D.host.E) b a).map (incA D))) =
         HMul.hMul (colJoin (-HMul.hMul y₁ (rat b)) y₂) (rat (cT (D.sp.cm.sig : D.host.E →+* D.host.E) a)⁻¹) := by
-  first | exact @GlobalTheory.CompanionTheory.EisUnfold.Parts.parts | exact GlobalTheory.CompanionTheory.EisUnfold.Parts.parts | (intros; apply GlobalTheory.CompanionTheory.EisUnfold.Parts.parts <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.EisUnfold.Parts.parts
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1037,7 +1025,7 @@ theorem unfold2 : Unfold2 := by
     rw [hT]
     dsimp only
     rw [← e.tsum_eq]
-    exact tsum_congr fun pq => GlobalTheory.T.block_weil_action_theta_unfolding D ψ hψ V r s b.1 b.2 a ha Φ y₁ y₂ _ hx hy pq.1 pq.2
+    exact tsum_congr fun pq => _root_.GlobalTheory.CompanionTheory.EisUnfold.Summand.summand D ψ hψ V r s b.1 b.2 a ha Φ y₁ y₂ _ hx hy pq.1 pq.2
   have hper : ∀ γ ∈ ratMx D V.rank (r + s), ∀ y, T (γ + y) = T y := by
     intro γ hγ y
     obtain ⟨g, rfl⟩ := mem_ratMx.1 hγ
@@ -1097,7 +1085,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz (schwartzA)
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.eisenstein_unfolding_second_term : PositivityTheory.GramSchwartzFunctions.EC.Unfold2 := by
-  first | exact @GlobalTheory.CompanionTheory.EisUnfold.unfold2 | exact GlobalTheory.CompanionTheory.EisUnfold.unfold2 | (intros; apply GlobalTheory.CompanionTheory.EisUnfold.unfold2 <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.EisUnfold.unfold2
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.EisensteinUnfoldingSecondTermStatement =====

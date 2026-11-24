@@ -128,7 +128,7 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 
 theorem _root_.GlobalTheory.T.affineHilbert_representing_universal_subscheme : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (r : ℕ) (H : Scheme.{0}) (R : (GlobalTheory.HilbAff.functor A B r).RepresentableBy H), ∃ (U : Scheme.{0}) (u : U ⟶ pullback (Spec.map (CommRingCat.ofHom (algebraMap A B))) (R.homEquiv (𝟙 H)).1), IsClosedImmersion u ∧ IsFinite (u ≫ pullback.snd _ (R.homEquiv (𝟙 H)).1) ∧ Flat (u ≫ pullback.snd _ (R.homEquiv (𝟙 H)).1) ∧ (∀ y, (u ≫ pullback.snd _ (R.homEquiv (𝟙 H)).1).finrank y = r) ∧ ∀ (T : Scheme.{0}) (g : T ⟶ Spec (CommRingCat.of A)) (V : Scheme.{0}) (v : V ⟶ pullback (Spec.map (CommRingCat.ofHom (algebraMap A B))) g), IsClosedImmersion v → IsFinite (v ≫ pullback.snd _ g) → Flat (v ≫ pullback.snd _ g) → (∀ y, (v ≫ pullback.snd _ g).finrank y = r) → ∃! f : T ⟶ H, ∃ hf : f ≫ (R.homEquiv (𝟙 H)).1 = g, ∃ w : V ⟶ U, IsPullback v w (pullback.map _ g _ (R.homEquiv (𝟙 H)).1 (𝟙 _) f (𝟙 _) (by simp) (by rw [Category.comp_id, hf])) u := by
-  first | (exact @GlobalTheory.HilbAff.universal) | (exact GlobalTheory.HilbAff.universal) | (intros; apply GlobalTheory.HilbAff.universal  <;> assumption)
+  first | (exact @GlobalTheory.HilbAff.universal)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AffineHilbertRepresentingUniversalSubschemeStatement =====
@@ -151,7 +151,7 @@ theorem exists_comap_eq : ∀ {X : Scheme.{0}} {ι : Type u} (V : ι → Scheme.
       (J i).comap a = (J j).comap a') →
     ∃ I : X.IdealSheafData, ∀ i, I.comap (f i) = J i := by
   intro X ι V f hf hcov J hJ
-  exact idealSheaf_glue_of_openImmersions (fun 𝒜 h1 h2 k h3 => GlobalTheory.T.exists_idealSheafData_of_compatible_ideals 𝒜 h1 h2 k h3)
+  exact idealSheaf_glue_of_openImmersions (fun 𝒜 h1 h2 k h3 => _root_.GlobalTheory.AffineIdealGlue.exists_idealSheafData_of_compatible 𝒜 h1 h2 k h3)
     V f hf (fun x => by obtain ⟨i, y, hy⟩ := hcov x; exact ⟨i, y, hy⟩) J hJ
 
 end GlobalTheory.IdealGlue
@@ -167,13 +167,6 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 universe u
 
-theorem _root_.GlobalTheory.T.exists_idealSheaf_comap_eq_of_openCover : ∀ {X : Scheme.{0}} {ι : Type u} (V : ι → Scheme.{0}) (f : ∀ i, V i ⟶ X),
-    (∀ i, IsOpenImmersion (f i)) → (∀ x : X, ∃ i y, f i y = x) →
-    ∀ (J : ∀ i, (V i).IdealSheafData),
-    (∀ i j (Y : Scheme.{0}) (a : Y ⟶ V i) (a' : Y ⟶ V j), a ≫ f i = a' ≫ f j →
-      (J i).comap a = (J j).comap a') →
-    ∃ I : X.IdealSheafData, ∀ i, I.comap (f i) = J i := by
-  first | (exact @GlobalTheory.IdealGlue.exists_comap_eq) | (exact GlobalTheory.IdealGlue.exists_comap_eq) | (intros; apply GlobalTheory.IdealGlue.exists_comap_eq <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsIdealSheafComapEqOfOpenCoverStatement =====
@@ -186,10 +179,6 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 universe u
 
-theorem _root_.GlobalTheory.T.idealSheafData_ext_of_openCover' : ∀ {X : Scheme.{0}} {ι : Type u} (V : ι → Scheme.{0}) (f : ∀ i, V i ⟶ X),
-    (∀ i, IsOpenImmersion (f i)) → (∀ x : X, ∃ i y, f i y = x) →
-    ∀ (I I' : X.IdealSheafData), (∀ i, I.comap (f i) = I'.comap (f i)) → I = I' := by
-  first | (exact @GlobalTheory.HilbAff.idealSheafData_ext_of_openCover) | (exact GlobalTheory.HilbAff.idealSheafData_ext_of_openCover) | (intros; apply GlobalTheory.HilbAff.idealSheafData_ext_of_openCover  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IdealSheafDataExtOfOpenCoverStatement =====
@@ -274,13 +263,6 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 universe u
 
-theorem _root_.GlobalTheory.T.isFiniteFlatRankClosedSubscheme_of_openCover : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (r : ℕ)
-    {T : Scheme.{0}} {ι : Type u} (V : ι → Scheme.{0}) (f : ∀ i, V i ⟶ T),
-    (∀ i, IsOpenImmersion (f i)) → (∀ x : T, ∃ i y, f i y = x) →
-    ∀ (g : T ⟶ Spec (CommRingCat.of A)) (I : (pullback (GlobalTheory.HilbAff.str A B) g).IdealSheafData),
-    (∀ i, GlobalTheory.HilbAff.Good A B r (f i ≫ g) (I.comap (GlobalTheory.HilbAff.bc A B g (f i)))) →
-    GlobalTheory.HilbAff.Good A B r g I := by
-  first | (exact @GlobalTheory.HilbAff.good_of_cover) | (exact GlobalTheory.HilbAff.good_of_cover) | (intros; apply GlobalTheory.HilbAff.good_of_cover  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsFiniteFlatRankClosedSubschemeOfOpenCoverStatement =====
@@ -294,25 +276,6 @@ open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 universe u
 
 namespace GlobalTheory.HilbAff
-theorem glue_exists {X : Scheme.{0}} {ι : Type u} (V : ι → Scheme.{0}) (f : ∀ i, V i ⟶ X)
-    (hf : ∀ i, IsOpenImmersion (f i)) (hcov : ∀ x : X, ∃ i y, f i y = x)
-    (J : ∀ i, (V i).IdealSheafData)
-    (hJ : ∀ i j (Y : Scheme.{0}) (a : Y ⟶ V i) (a' : Y ⟶ V j), a ≫ f i = a' ≫ f j →
-      (J i).comap a = (J j).comap a') :
-    ∃ I : X.IdealSheafData, ∀ i, I.comap (f i) = J i :=
-  GlobalTheory.T.exists_idealSheaf_comap_eq_of_openCover V f hf hcov J hJ
-theorem glue_ext {X : Scheme.{0}} {ι : Type u} (V : ι → Scheme.{0}) (f : ∀ i, V i ⟶ X)
-    (hf : ∀ i, IsOpenImmersion (f i)) (hcov : ∀ x : X, ∃ i y, f i y = x)
-    (I I' : X.IdealSheafData) (h : ∀ i, I.comap (f i) = I'.comap (f i)) : I = I' :=
-  GlobalTheory.T.idealSheafData_ext_of_openCover' V f hf hcov I I' h
-theorem good_local (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (r : ℕ)
-    {T : Scheme.{0}} {ι : Type u} (V : ι → Scheme.{0}) (f : ∀ i, V i ⟶ T)
-    (hf : ∀ i, IsOpenImmersion (f i)) (hcov : ∀ x : T, ∃ i y, f i y = x)
-    (g : T ⟶ Spec (CommRingCat.of A)) (I : (pullback (GlobalTheory.HilbAff.str A B) g).IdealSheafData)
-    (h : ∀ i, GlobalTheory.HilbAff.Good A B r (f i ≫ g) (I.comap (GlobalTheory.HilbAff.bc A B g (f i)))) :
-    GlobalTheory.HilbAff.Good A B r g I :=
-  GlobalTheory.T.isFiniteFlatRankClosedSubscheme_of_openCover A B r V f hf hcov g I h
-
 theorem snd_eq_of_sigma {A B : Type} [CommRing A] [CommRing B] [Algebra A B] {r : ℕ} {T : Scheme.{0}}
     {g₀ g₁ : T ⟶ Spec (CommRingCat.of A)}
     {I₀ : (pullback (str A B) g₀).IdealSheafData} {I₁ : (pullback (str A B) g₁).IdealSheafData}
@@ -335,7 +298,7 @@ theorem fac_bc {A B : Type} [CommRing A] [CommRing B] [Algebra A B] {T Z : Schem
     pullback.lift (φ ≫ pullback.fst _ _) (𝟙 Z) (by
         rw [Category.id_comp, Category.assoc, pullback.condition, Category.assoc]) ≫
       bc A B g (φ ≫ pullback.snd _ _) = φ := by
-  apply pullback.hom_ext <;> simp only [bc, pullback.map, Category.assoc, pullback.lift_fst, pullback.lift_snd, pullback.lift_fst_assoc, pullback.lift_snd_assoc, Category.comp_id, Category.id_comp]
+  apply pullback.hom_ext <;> simp only [bc, pullback.map, Category.assoc, pullback.lift_fst, pullback.lift_snd, pullback.lift_snd_assoc, Category.comp_id, Category.id_comp]
 
 theorem lift_map_eq {A B : Type} [CommRing A] [CommRing B] [Algebra A B] {T T' Z : Scheme.{0}}
     (g : T ⟶ Spec (CommRingCat.of A)) (g' : T' ⟶ Spec (CommRingCat.of A))
@@ -349,9 +312,9 @@ theorem lift_map_eq {A B : Type} [CommRing A] [CommRing B] [Algebra A B] {T T' Z
     pullback.lift (φ' ≫ pullback.fst _ _) (𝟙 Z) (by
         rw [Category.id_comp, Category.assoc, pullback.condition, Category.assoc]) := by
   apply pullback.hom_ext
-  · simp only [bc, pullback.map, Category.assoc, pullback.lift_fst, pullback.lift_snd, pullback.lift_fst_assoc, pullback.lift_snd_assoc, Category.comp_id, Category.id_comp]
+  · simp only [pullback.map, Category.assoc, pullback.lift_fst, Category.comp_id]
     exact e1
-  · simp only [bc, pullback.map, Category.assoc, pullback.lift_fst, pullback.lift_snd, pullback.lift_fst_assoc, pullback.lift_snd_assoc, Category.comp_id, Category.id_comp]
+  · simp only [pullback.map, Category.assoc, pullback.lift_snd, Category.comp_id]
 
 theorem comap_eq_of_map_eq {A B : Type} [CommRing A] [CommRing B] [Algebra A B] {r : ℕ}
     {X X' Z : Scheme.{0}} (y : (functor A B r).obj (op X)) (y' : (functor A B r).obj (op X'))
@@ -418,11 +381,11 @@ theorem isSheaf_functor (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (r 
     have p1 : ∀ k (b : Z ⟶ pullback (str A B) (𝒰.f k ≫ g)),
         (b ≫ pullback.map (str A B) (𝒰.f k ≫ g) (str A B) (x k).1 (𝟙 _) (𝟙 _) (𝟙 _)
           (by simp) (by simp [hg k])) ≫ pullback.fst _ _ = b ≫ pullback.fst _ _ := by
-      intro k b; simp only [bc, pullback.map, Category.assoc, pullback.lift_fst, pullback.lift_snd, pullback.lift_fst_assoc, pullback.lift_snd_assoc, Category.comp_id, Category.id_comp]
+      intro k b; simp only [pullback.map, Category.assoc, pullback.lift_fst, Category.comp_id]
     have p2 : ∀ k (b : Z ⟶ pullback (str A B) (𝒰.f k ≫ g)),
         (b ≫ pullback.map (str A B) (𝒰.f k ≫ g) (str A B) (x k).1 (𝟙 _) (𝟙 _) (𝟙 _)
           (by simp) (by simp [hg k])) ≫ pullback.snd _ _ = b ≫ pullback.snd _ _ := by
-      intro k b; simp only [bc, pullback.map, Category.assoc, pullback.lift_fst, pullback.lift_snd, pullback.lift_fst_assoc, pullback.lift_snd_assoc, Category.comp_id, Category.id_comp]
+      intro k b; simp only [pullback.map, Category.assoc, pullback.lift_snd, Category.comp_id]
     have e1 : a ≫ pullback.fst _ _ = a' ≫ pullback.fst _ _ := by
       rw [← f1 i, ← f1 j, ← Category.assoc, e, Category.assoc]
     have e2 : (a ≫ pullback.snd _ _) ≫ 𝒰.f i = (a' ≫ pullback.snd _ _) ≫ 𝒰.f j := by
@@ -432,9 +395,9 @@ theorem isSheaf_functor (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (r 
     refine comap_eq_of_map_eq (x i) (x j) _ _ (by rw [p1, p1, e1]) ?_
     rw [p2, p2]
     exact hx i j Z _ _ e2
-  obtain ⟨I, hI⟩ := glue_exists (fun j : 𝒰.I₀ => pullback (str A B) (𝒰.f j ≫ g))
+  obtain ⟨I, hI⟩ := _root_.GlobalTheory.IdealGlue.exists_comap_eq (fun j : 𝒰.I₀ => pullback (str A B) (𝒰.f j ≫ g))
     (fun j : 𝒰.I₀ => bc A B g (𝒰.f j)) hoi hcov J hJ
-  have good : Good A B r g I := good_local A B r 𝒰.X 𝒰.f (fun j => inferInstance)
+  have good : Good A B r g I := _root_.GlobalTheory.HilbAff.good_of_cover A B r 𝒰.X 𝒰.f (fun j => inferInstance)
     (fun y => 𝒰.exists_eq y) g I (fun j => by rw [hI j]; exact good_transport (hg j) (x j).2.2)
   have amal : ∀ j, (functor A B r).map (𝒰.f j).op ⟨g, ⟨I, good⟩⟩ = x j := fun j =>
     sigma_eq A B r (hg j) (hI j) _ (x j).2.2
@@ -445,7 +408,7 @@ theorem isSheaf_functor (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (r 
   change g' = g at e
   subst e
   have : I' = I := by
-    refine glue_ext (fun j : 𝒰.I₀ => pullback (str A B) (𝒰.f j ≫ g))
+    refine _root_.GlobalTheory.HilbAff.idealSheafData_ext_of_openCover (fun j : 𝒰.I₀ => pullback (str A B) (𝒰.f j ≫ g))
       (fun j : 𝒰.I₀ => bc A B g (𝒰.f j)) hoi hcov I' I fun j => ?_
     have := (hy' j).trans (amal j).symm
     exact congrArg Subtype.val (eq_of_heq (Sigma.mk.inj_iff.mp this).2)
@@ -464,8 +427,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 
-theorem _root_.GlobalTheory.T.affineHilbertSchemeFunctor_isSheaf_zariski : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] (r : ℕ), Presieve.IsSheaf Scheme.zariskiTopology (GlobalTheory.HilbAff.functor A B r) := by
-  first | (exact @GlobalTheory.HilbAff.isSheaf_functor) | (exact GlobalTheory.HilbAff.isSheaf_functor) | (intros; apply GlobalTheory.HilbAff.isSheaf_functor <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AffineHilbertSchemeFunctorIsSheafZariskiStatement =====
@@ -503,12 +464,12 @@ theorem representing_qc_qs_loft : ∀ (A B : Type) [CommRing A] [CommRing B] [Al
     intro X Y Z a b
     ext p
     simp
-  choose W hW hWc using fun σ : Fin r ↪ Fin N => GlobalTheory.T.exists_open_affineHilbertChartBasic_locus A B N r e σ H ξ
-  choose X x hXa hXl hXb hXu using fun σ : Fin r ↪ Fin N => GlobalTheory.T.affineHilbertChart_representable A B N r e σ
+  choose W hW hWc using fun σ : Fin r ↪ Fin N => _root_.GlobalTheory.HilbAff.Locus.exists_basic_locus A B N r e σ H ξ
+  choose X x hXa hXl hXb hXu using fun σ : Fin r ↪ Fin N => _root_.GlobalTheory.HilbAff.chart_represents A B N r e σ
   have hcov : ⨆ σ, W σ = ⊤ := by
     rw [eq_top_iff]
     intro h _
-    obtain ⟨σ, U, hU, hb⟩ := GlobalTheory.T.exists_affineHilbertChartBasic_neighbourhood A B N r e H ξ h
+    obtain ⟨σ, U, hU, hb⟩ := _root_.GlobalTheory.HilbAff.exists_basic_nhd A B N r e H ξ h
     have := (hW σ _ U.ι).2 hb
     rw [Scheme.Opens.range_ι] at this
     exact TopologicalSpace.Opens.mem_iSup.2 ⟨σ, this hU⟩
@@ -538,7 +499,7 @@ theorem representing_qc_qs_loft : ∀ (A B : Type) [CommRing A] [CommRing B] [Al
     haveI := hg σ; haveI := hXa σ; exact IsAffine.of_isIso (g σ)
   have hint : ∀ (U : H.Opens), CompactSpace U.toScheme → ∀ τ, IsCompact ((U : Set H) ∩ W τ) := by
     intro U hU τ
-    obtain ⟨V, hV, hVc⟩ := GlobalTheory.T.exists_open_affineHilbertChartBasic_locus A B N r e τ U.toScheme ((functor A B r).map U.ι.op ξ)
+    obtain ⟨V, hV, hVc⟩ := _root_.GlobalTheory.HilbAff.Locus.exists_basic_locus A B N r e τ U.toScheme ((functor A B r).map U.ι.op ξ)
     have key : ∀ (Z' : Scheme.{0}) (a : Z' ⟶ U.toScheme),
         Set.range a ⊆ V ↔ U.ι '' Set.range a ⊆ W τ := fun Z' a => by
       rw [hV, hmap, ← hW, hrc]
@@ -588,8 +549,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 
-theorem _root_.GlobalTheory.T.affineHilbertScheme_representing_qc_qs_finiteType : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] [Module.Free A B] [Module.Finite A B] (r : ℕ) (H : Scheme.{0}) (R : (GlobalTheory.HilbAff.functor A B r).RepresentableBy H), QuasiCompact (R.homEquiv (𝟙 H)).1 ∧ QuasiSeparated (R.homEquiv (𝟙 H)).1 ∧ LocallyOfFiniteType (R.homEquiv (𝟙 H)).1 := by
-  first | (exact @GlobalTheory.HilbAff.representing_qc_qs_loft) | (exact GlobalTheory.HilbAff.representing_qc_qs_loft) | (intros; apply GlobalTheory.HilbAff.representing_qc_qs_loft <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AffineHilbertSchemeRepresentingQcQsFiniteTypeStatement =====
@@ -765,8 +724,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits
 
-theorem _root_.GlobalTheory.T.flat_subscheme_of_quotient_flat_affine : ∀ (V : Type) [CommRing V] (X : Scheme.{0}) [IsAffine X] (p : X ⟶ Spec (CommRingCat.of V)) (J : X.IdealSheafData), ((Ideal.Quotient.mk (J.ideal ⟨⊤, isAffineOpen_top X⟩)).comp (p.appTop.hom.comp (Scheme.ΓSpecIso (CommRingCat.of V)).inv.hom)).Flat → Flat (J.subschemeι ≫ p) := by
-  first | (exact @GlobalTheory.closedSub_flat_of_quotient_flat) | (exact GlobalTheory.closedSub_flat_of_quotient_flat) | (intros; apply GlobalTheory.closedSub_flat_of_quotient_flat  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FlatSubschemeOfQuotientFlatAffineStatement =====
@@ -788,7 +745,7 @@ theorem exists_flat_ideal_extension (V K : Type) [CommRing V] [IsDomain V] [Valu
   obtain ⟨J₀, hf, hJ⟩ := _root_.GlobalTheory.FlatHilbAff.exists_flat_ideal V K X X' p p' b h (I.ideal ⟨⊤, isAffineOpen_top X'⟩)
   have e : (Scheme.IdealSheafData.ofIdealTop J₀).ideal ⟨⊤, isAffineOpen_top X⟩ = J₀ :=
     Scheme.IdealSheafData.equivOfIsAffine.apply_symm_apply J₀
-  refine ⟨Scheme.IdealSheafData.ofIdealTop J₀, GlobalTheory.T.flat_subscheme_of_quotient_flat_affine V X p _ (by rw [e]; exact hf), ?_⟩
+  refine ⟨Scheme.IdealSheafData.ofIdealTop J₀, _root_.GlobalTheory.closedSub_flat_of_quotient_flat V X p _ (by rw [e]; exact hf), ?_⟩
   apply Scheme.IdealSheafData.ext_of_isAffine
   rw [_root_.GlobalTheory.IdealSheafData.ideal_comap_top_of_isAffine, e, hJ]
 
@@ -883,7 +840,7 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits Opposite
 
 theorem _root_.GlobalTheory.T.affineHilbertScheme_valuativeCriterion_existence : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] [Module.Free A B] [Module.Finite A B] (r : ℕ) (H : Scheme.{0}) (R : (GlobalTheory.HilbAff.functor A B r).RepresentableBy H), ValuativeCriterion.Existence (R.homEquiv (𝟙 H)).1 := by
-  first | (exact @GlobalTheory.HilbAff.valuativeExistence) | (exact GlobalTheory.HilbAff.valuativeExistence) | (intros; apply GlobalTheory.HilbAff.valuativeExistence  <;> assumption)
+  first | (exact @GlobalTheory.HilbAff.valuativeExistence)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.AffineHilbertSchemeValuativeCriterionExistenceStatement =====
@@ -927,7 +884,7 @@ theorem ker_eq_bot_of_isPullback {Z ZK Y Y' : Scheme.{0}} [IsAffine Z] [IsAffine
   have hf : π.appTop.hom.Flat := (HasRingHomProperty.iff_of_isAffine (P := @Flat)).mp inferInstance
   have hinj := pushout_inl_injective hP hf hj
   rw [Scheme.ker_of_isAffine, (RingHom.injective_iff_ker_eq_bot _).mp hinj]
-  first | exact map_bot (Scheme.IdealSheafData.equivOfIsAffine (X := Z)).symm | simp
+  first | exact map_bot (Scheme.IdealSheafData.equivOfIsAffine (X := Z)).symm
 
 theorem appTop_spec_injective {R S : CommRingCat.{0}} (f : R ⟶ S) (hf : Function.Injective f.hom) :
     Function.Injective (Spec.map f).appTop.hom := by
@@ -1032,16 +989,16 @@ theorem hilbertScheme_exists : ∀ (A B : Type) [CommRing A] [CommRing B] [Algeb
   intro A B _ _ _ _ _ r
   obtain ⟨N, ⟨e⟩⟩ := exists_basis_fin A B
   let F := GlobalTheory.HilbAff.functor A B r
-  choose X x hX hlft hbas huniv using fun σ : Fin r ↪ Fin N => GlobalTheory.T.affineHilbertChart_representable A B N r e σ
+  choose X x hX hlft hbas huniv using fun σ : Fin r ↪ Fin N => _root_.GlobalTheory.HilbAff.chart_represents A B N r e σ
   choose W hW _ using fun (σ : Fin r ↪ Fin N) (Z : Scheme.{0}) (y : F.obj (op Z)) =>
-    GlobalTheory.T.exists_open_affineHilbertChartBasic_locus A B N r e σ Z y
+    _root_.GlobalTheory.HilbAff.Locus.exists_basic_locus A B N r e σ Z y
   have stab : ∀ σ (Z : Scheme.{0}) (g : Z ⟶ X σ), GlobalTheory.HilbAff.Basic A B e σ (F.map g.op (x σ)) := by
     intro σ Z g
     have htop : Set.range (𝟙 (X σ)) ⊆ (W σ (X σ) (x σ) : Set (X σ)) :=
       (hW σ _ _ _ (𝟙 _)).2 (by rw [op_id, F.map_id]; exact hbas σ)
     exact (hW σ _ _ _ g).1 (fun z _ => htop ⟨z, rfl⟩)
   have hrep : F.IsRepresentable := by
-    refine GlobalTheory.GeneratorFunctor.isRepresentable_of_charts F (GlobalTheory.T.affineHilbertSchemeFunctor_isSheaf_zariski A B r) X x W ?_ ?_ ?_
+    refine GlobalTheory.GeneratorFunctor.isRepresentable_of_charts F (_root_.GlobalTheory.HilbAff.isSheaf_functor A B r) X x W ?_ ?_ ?_
     · intro σ Z y Z' a
       rw [hW]
       constructor
@@ -1055,12 +1012,12 @@ theorem hilbertScheme_exists : ∀ (A B : Type) [CommRing A] [CommRing B] [Algeb
       obtain ⟨g₀, -, hu⟩ := huniv σ Z _ (stab σ Z g)
       exact (hu g rfl).trans (hu g' h.symm).symm
     · intro Z y z
-      obtain ⟨σ, U, hz, hb⟩ := GlobalTheory.T.exists_affineHilbertChartBasic_neighbourhood A B N r e Z y z
+      obtain ⟨σ, U, hz, hb⟩ := _root_.GlobalTheory.HilbAff.exists_basic_nhd A B N r e Z y z
       refine ⟨σ, (hW σ Z y U U.ι).2 hb ?_⟩
       simpa using hz
   let R := F.representableBy
   obtain ⟨U, u, h1, h2, h3, h4, h5⟩ := GlobalTheory.T.affineHilbert_representing_universal_subscheme A B r F.reprX R
-  obtain ⟨q1, q2, q3⟩ := GlobalTheory.T.affineHilbertScheme_representing_qc_qs_finiteType A B r F.reprX R
+  obtain ⟨q1, q2, q3⟩ := _root_.GlobalTheory.HilbAff.representing_qc_qs_loft A B r F.reprX R
   refine ⟨F.reprX, (R.homEquiv (𝟙 _)).1, U, u, ?_, h1, h2, h3, h4, h5⟩
   rw [IsProper.eq_valuativeCriterion, ValuativeCriterion.eq]
   exact ⟨⟨⟨⟨GlobalTheory.T.affineHilbertScheme_valuativeCriterion_existence A B r F.reprX R, _root_.GlobalTheory.HilbAff.valuativeCriterion_uniqueness A B r F.reprX R⟩, q1⟩, q2⟩, q3⟩
@@ -1079,7 +1036,7 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits
 
 theorem _root_.GlobalTheory.T.hilbert_scheme_finite_free_algebra_affine_exists : ∀ (A B : Type) [CommRing A] [CommRing B] [Algebra A B] [Module.Free A B] [Module.Finite A B] (r : ℕ), ∃ (H : Scheme.{0}) (h : H ⟶ Spec (CommRingCat.of A)) (U : Scheme.{0}) (u : U ⟶ pullback (Spec.map (CommRingCat.ofHom (algebraMap A B))) h), IsProper h ∧ IsClosedImmersion u ∧ IsFinite (u ≫ pullback.snd _ h) ∧ Flat (u ≫ pullback.snd _ h) ∧ (∀ y, (u ≫ pullback.snd _ h).finrank y = r) ∧ ∀ (T : Scheme.{0}) (g : T ⟶ Spec (CommRingCat.of A)) (V : Scheme.{0}) (v : V ⟶ pullback (Spec.map (CommRingCat.ofHom (algebraMap A B))) g), IsClosedImmersion v → IsFinite (v ≫ pullback.snd _ g) → Flat (v ≫ pullback.snd _ g) → (∀ y, (v ≫ pullback.snd _ g).finrank y = r) → ∃! f : T ⟶ H, ∃ hf : f ≫ h = g, ∃ w : V ⟶ U, IsPullback v w (pullback.map _ g _ h (𝟙 _) f (𝟙 _) (by simp) (by rw [Category.comp_id, hf])) u := by
-  first | (exact @GlobalTheory.HilbAff.hilbertScheme_exists) | (exact GlobalTheory.HilbAff.hilbertScheme_exists) | (intros; apply GlobalTheory.HilbAff.hilbertScheme_exists <;> assumption)
+  first | (exact @GlobalTheory.HilbAff.hilbertScheme_exists)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSchemeFiniteFreeAlgebraAffineExistsStatement =====
@@ -1132,7 +1089,7 @@ lemma transferIso_map {S Z S' Z' : Scheme.{0}} (z : Z ⟶ S) (z' : Z' ⟶ S') (e
         pullback.map z g z (h' ≫ eS.hom) (𝟙 Z) f (𝟙 S) (by simp) (by rw [Category.comp_id, hf]) := by
   simp only [transferIso, asIso_hom, transferMap, pullback.map]
   apply pullback.hom_ext <;>
-    simp only [Category.assoc, pullback.lift_fst, pullback.lift_snd, pullback.lift_fst_assoc, pullback.lift_snd_assoc, Category.comp_id, Category.id_comp]
+    simp only [Category.assoc, pullback.lift_fst, pullback.lift_snd, pullback.lift_fst_assoc, pullback.lift_snd_assoc, Category.comp_id]
 
 theorem isHilbRep_transfer : ∀ {S Z S' Z' : Scheme.{0}} (z : Z ⟶ S) (z' : Z' ⟶ S') (eS : S' ≅ S) (eZ : Z' ≅ Z),
     eZ.hom ≫ z = z' ≫ eS.hom → ∀ r : ℕ, IsHilbRep z' r → IsHilbRep z r := by
@@ -1240,8 +1197,8 @@ lemma restrictIso_natural {Y H : Scheme.{0}} (b : Y ⟶ W.toScheme) (h : H ⟶ W
       (restrictIso z W h).hom = (restrictIso z W b).hom ≫ bc z c (h ≫ W.ι) (b ≫ W.ι) w := by
   apply pullback.hom_ext
   · simp only [bc, pullback.map, pullback.lift_fst, pullback.lift_fst_assoc, Category.assoc, Category.comp_id,
-      restrictIso_hom_fst_assoc, restrictIso_hom_fst]
-  · simp only [bc, pullback.map, pullback.lift_snd, pullback.lift_snd_assoc, Category.assoc, Category.comp_id,
+      restrictIso_hom_fst]
+  · simp only [bc, pullback.map, pullback.lift_snd, Category.assoc, Category.comp_id,
       restrictIso_hom_snd_assoc, restrictIso_hom_snd]
 
 theorem isHilbRep_restrict_local : ∀ {S Z : Scheme.{0}} (z : Z ⟶ S) (r : ℕ) (W : S.Opens),
@@ -1355,8 +1312,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits
 
-theorem _root_.GlobalTheory.T.exists_idealSheafData_glue_of_openImmersions : (∀ {X : Scheme.{0}} (𝒜 : Set X.affineOpens), (∀ W ∈ 𝒜, ∀ W' : X.affineOpens, W' ≤ W → W' ∈ 𝒜) → (∀ x : X, ∃ W ∈ 𝒜, x ∈ W.1) → ∀ (k : ∀ W : X.affineOpens, Ideal Γ(X, W)), (∀ W ∈ 𝒜, ∀ (W' : X.affineOpens) (h : W' ≤ W), (k W).map (X.presheaf.map (homOfLE h).op).hom = k W') → ∃ I : X.IdealSheafData, ∀ W ∈ 𝒜, I.ideal W = k W) → ∀ {X : Scheme.{0}} {ι : Type*} (P : ι → Scheme.{0}) (e : ∀ i, P i ⟶ X), (∀ i, IsOpenImmersion (e i)) → (∀ x : X, ∃ i, x ∈ Set.range (e i)) → ∀ (K : ∀ i, (P i).IdealSheafData), (∀ i j (Q : Scheme.{0}) (a : Q ⟶ P i) (b : Q ⟶ P j), a ≫ e i = b ≫ e j → (K i).comap a = (K j).comap b) → ∃ I : X.IdealSheafData, ∀ i, I.comap (e i) = K i := by
-  first | (exact @GlobalTheory.IdealGlue.idealSheaf_glue_of_openImmersions) | (exact GlobalTheory.IdealGlue.idealSheaf_glue_of_openImmersions) | (intros; apply GlobalTheory.IdealGlue.idealSheaf_glue_of_openImmersions  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IdealSheafGlueOfOpenImmersionsStatement =====
@@ -1453,7 +1408,7 @@ theorem HPt.exists_glue : ∀ {S Z : Scheme.{0}} (z : Z ⟶ S) (r : ℕ) (Y : Sc
       rw [← Scheme.IdealSheafData.comap_comp, ← hb]
     rw [e1, e2, H']
     rfl
-  obtain ⟨I, hI⟩ := GlobalTheory.T.exists_idealSheafData_glue_of_openImmersions GlobalTheory.T.exists_idealSheafData_of_compatible_ideals (ι := 𝒰.I₀) (fun i : 𝒰.I₀ => pullback z (x i).1) e he hcov (fun i : 𝒰.I₀ => (x i).2.1) hK
+  obtain ⟨I, hI⟩ := _root_.GlobalTheory.IdealGlue.idealSheaf_glue_of_openImmersions _root_.GlobalTheory.AffineIdealGlue.exists_idealSheafData_of_compatible (ι := 𝒰.I₀) (fun i : 𝒰.I₀ => pullback z (x i).1) e he hcov (fun i : 𝒰.I₀ => (x i).2.1) hK
   have hfr : IsFinFlatRk (I.subschemeι ≫ pullback.snd z f) r := by
     refine isFinFlatRk_of_cover _ 𝒰 r fun i => ⟨(I.comap (e i)).subscheme, _, _,
       (isPullback_comap I (e i)).flip.paste_vert (hP i), ?_⟩
@@ -1477,7 +1432,7 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits GlobalTheory.HilbertSch GlobalTheory.HilbGlue
 
 theorem _root_.GlobalTheory.T.hilbert_point_glue_open_cover : ∀ {S Z : Scheme.{0}} (z : Z ⟶ S) (r : ℕ) (Y : Scheme.{0}) (𝒰 : Y.OpenCover) (x : ∀ i, GlobalTheory.HilbGlue.HPt z r (𝒰.X i)), (∀ i j (R : Scheme.{0}) (b : R ⟶ 𝒰.X i) (c : R ⟶ 𝒰.X j), b ≫ 𝒰.f i = c ≫ 𝒰.f j → GlobalTheory.HilbGlue.HPt.map b (x i) = GlobalTheory.HilbGlue.HPt.map c (x j)) → ∃ y : GlobalTheory.HilbGlue.HPt z r Y, ∀ i, GlobalTheory.HilbGlue.HPt.map (𝒰.f i) y = x i := by
-  first | (exact @GlobalTheory.HilbGlue.HPt.exists_glue) | (exact GlobalTheory.HilbGlue.HPt.exists_glue) | (intros; apply GlobalTheory.HilbGlue.HPt.exists_glue <;> assumption)
+  first | (exact @GlobalTheory.HilbGlue.HPt.exists_glue)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertPointGlueOpenCoverStatement =====
@@ -1549,8 +1504,6 @@ section -- clump:auto
 
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits GlobalTheory.HilbertSch GlobalTheory.HilbGlue
 
-theorem _root_.GlobalTheory.T.isProper_of_represents_hilbertFunctor_of_local : ∀ {S Z : Scheme.{0}} (z : Z ⟶ S) (r : ℕ) (H : Scheme.{0}) (u : GlobalTheory.HilbGlue.HPt z r H), (∀ (T : Scheme.{0}) (x : GlobalTheory.HilbGlue.HPt z r T), ∃! c : T ⟶ H, GlobalTheory.HilbGlue.HPt.map c u = x) → (∀ s : S, ∃ W : S.Opens, s ∈ W ∧ ∃ (T : Scheme.{0}) (y : GlobalTheory.HilbGlue.HPt z r T) (π : T ⟶ W.toScheme), IsProper π ∧ y.1 = π ≫ W.ι ∧ ∀ (Y : Scheme.{0}) (x : GlobalTheory.HilbGlue.HPt z r Y) (b : Y ⟶ W.toScheme), x.1 = b ≫ W.ι → ∃! c : Y ⟶ T, GlobalTheory.HilbGlue.HPt.map c y = x) → IsProper u.1 := by
-  first | (exact @GlobalTheory.HilbGlue.isProper_of_represents_of_local_proper) | (exact GlobalTheory.HilbGlue.isProper_of_represents_of_local_proper) | (intros; apply GlobalTheory.HilbGlue.isProper_of_represents_of_local_proper  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsProperOfRepresentsHilbertFunctorOfLocalStatement =====
@@ -1595,7 +1548,7 @@ theorem GlobalTheory.HilbGlue.isHilbRep_of_cover : ∀ (S Z : Scheme.{0}) (z : Z
       fun c => (e.homEquiv_eq c).symm
     exact ⟨H, e.homEquiv (𝟙 H), fun T x => ⟨e.homEquiv.symm x, (h _).trans (e.homEquiv.apply_symm_apply x),
       fun c hc => e.homEquiv.eq_symm_apply.2 ((h c).symm.trans hc)⟩⟩
-  have hprop : IsProper u.1 := GlobalTheory.T.isProper_of_represents_hilbertFunctor_of_local z r H u hu hloc'
+  have hprop : IsProper u.1 := _root_.GlobalTheory.HilbGlue.isProper_of_represents_of_local_proper z r H u hu hloc'
   obtain ⟨h, I⟩ := u
   refine ⟨H, h, I.1.subscheme, I.1.subschemeι, hprop, inferInstance, I.2.1, I.2.2.1, I.2.2.2, ?_⟩
   intro T g V v _ h1 h2 h3
@@ -1620,7 +1573,7 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits GlobalTheory.HilbertSch
 
 theorem _root_.GlobalTheory.T.isHilbertSchemeRepresentable_of_open_cover : ∀ (S Z : Scheme.{0}) (z : Z ⟶ S), IsFinite z → Flat z → LocallyOfFinitePresentation z → ∀ r : ℕ, (∀ s : S, ∃ W : S.Opens, s ∈ W ∧ IsHilbRep (z ∣_ W) r) → IsHilbRep z r := by
-  first | (exact @GlobalTheory.HilbGlue.isHilbRep_of_cover) | (exact GlobalTheory.HilbGlue.isHilbRep_of_cover) | (intros; apply GlobalTheory.HilbGlue.isHilbRep_of_cover <;> assumption)
+  first | (exact @GlobalTheory.HilbGlue.isHilbRep_of_cover)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsHilbertSchemeRepresentableOfOpenCoverStatement =====
@@ -1661,7 +1614,7 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits
 
 theorem _root_.GlobalTheory.T.hilbertScheme_finite_locallyFree_representable_proper : ∀ (S Z : Scheme.{0}) (z : Z ⟶ S), IsFinite z → Flat z → LocallyOfFinitePresentation z → ∀ r : ℕ, ∃ (H : Scheme.{0}) (h : H ⟶ S) (U : Scheme.{0}) (u : U ⟶ pullback z h), IsProper h ∧ IsClosedImmersion u ∧ IsFinite (u ≫ pullback.snd z h) ∧ Flat (u ≫ pullback.snd z h) ∧ (∀ y, (u ≫ pullback.snd z h).finrank y = r) ∧ ∀ (T : Scheme.{0}) (g : T ⟶ S) (V : Scheme.{0}) (v : V ⟶ pullback z g), IsClosedImmersion v → IsFinite (v ≫ pullback.snd z g) → Flat (v ≫ pullback.snd z g) → (∀ y, (v ≫ pullback.snd z g).finrank y = r) → ∃! f : T ⟶ H, ∃ hf : f ≫ h = g, ∃ w : V ⟶ U, IsPullback v w (pullback.map z g z h (𝟙 Z) f (𝟙 S) (by simp) (by rw [Category.comp_id, hf])) u := by
-  first | (exact @GlobalTheory.HilbertSch.main) | (exact GlobalTheory.HilbertSch.main) | (intros; apply GlobalTheory.HilbertSch.main <;> assumption)
+  first | (exact @GlobalTheory.HilbertSch.main)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HilbertSchemeFiniteLocallyFreeRepresentablePropeStatement =====

@@ -93,7 +93,7 @@ theorem liftPQ (Z₁ Z₂ : M.Mat (r + 1)) (γ : IsoMbe Z₁.Z Z₂.Z) :
       apply LinearMap.pi_ext
       intro j x
       have h1 : (Pi.single j x : Fin (r + 1) → M.R) = x • Pi.single j 1 := by
-        ext k; by_cases hk : k = j <;> simp [Pi.single_apply, hk]
+        ext k; by_cases hk : k = j <;> simp [hk]
       have h2 : P.mulVec (Pi.single j x) = x • p j := by
         ext i; simp [P, Matrix.mulVec_single, mul_comm]
       simp only [LinearMap.comp_apply, Submodule.mkQ_apply, Matrix.mulVecLin_apply, LinearEquiv.coe_coe]
@@ -167,13 +167,12 @@ theorem liftPQ_inv (Z₁ Z₂ : M.Mat (r + 1)) (γ : IsoMbe Z₁.Z Z₂.Z) (P P'
     simp only [Matrix.of_apply, Fin.lastCases_castSucc, Fin.lastCases_last, mul_zero, add_zero]
     by_cases hj : j = Fin.last r
     · subst hj
-      simp only [if_pos rfl, mul_zero, Finset.sum_const_zero, add_zero]
+      simp only
       rw [Matrix.mul_apply]
       simp [hPe, hP'e, Matrix.one_apply]
     · simp only [if_neg hj]
       have h := congrFun (hc j) i
-      simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Pi.sub_apply, Matrix.mulVec_single,
-        mul_one] at h
+      simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Pi.sub_apply, Matrix.mulVec_single] at h
       have hcomm : ∑ x : Fin r, Z₁.Z i x.castSucc * c j x = ∑ x : Fin r, c j x * Z₁.Z i x.castSucc :=
         Finset.sum_congr rfl (fun _ _ => mul_comm _ _)
       rw [hcomm, h, Matrix.one_apply, Pi.single_apply]
@@ -244,11 +243,6 @@ theorem secondProj_zzPlus (hs : M.split = some g) (Zh : Matrix (Fin (r + 1)) (Fi
   · simp [secondProj_apply, cor, h]
   · simp [secondProj_apply, cor, h]
 
-theorem secondProj_zzPlus_conj_eq (hs : M.split = some g) (Zh : Matrix (Fin (r + 1)) (Fin (r + 1)) E) (T T' : F)
-    (a b : Fin (r + 1)) :
-    ph2 g (HermSp.ZZplusOf M (Zh.map M.L.cj) T T' a b) =
-      -(ph1 g (Zh b a) / (g.q : F)) - cor r a b (T' / (g.q : F)) := secondProj_zzPlus_conj hs Zh T T' a b
-
 theorem lift_zsig (hs : M.split = some g) {T T' : F} {TT : M.R} {Zh : Matrix (Fin (r + 1)) (Fin (r + 1)) E}
     {Z Zσ : M.Mat (r + 1)} (hG : GHyp M g T T' TT Zh Z Zσ) :
     Zσ.Z = -lstar (sigR hs) Z.Z + epsR hs hG.2.1 • liftE r := by
@@ -265,7 +259,7 @@ theorem lift_zsig (hs : M.split = some g) {T T' : F} {TT : M.R} {Zh : Matrix (Fi
   constructor
   · rw [firstProj_zzPlus_conj hs, firstProj_conj_apply, secondProj_zzPlus hs]
     by_cases ha : a = Fin.last r <;> by_cases hb : b = Fin.last r <;> simp [cor, ha, hb] <;> field_simp <;> ring
-  · rw [secondProj_zzPlus_conj_eq hs, secondProj_conj_apply, firstProj_zzPlus hs]
+  · rw [_root_.Formalism.L2.SG.LocalCountModules.ThetaMbe0GWork.secondProj_zzPlus_conj hs, secondProj_conj_apply, firstProj_zzPlus hs]
     by_cases ha : a = Fin.last r <;> by_cases hb : b = Fin.last r <;> simp [cor, ha, hb] <;> field_simp <;> ring
 
 theorem lift_cancel (Z : M.Mat (r + 1)) (A B : Matrix (Fin (r + 1)) (Fin (r + 1)) M.R) (h : Z.Z * A = Z.Z * B) :
@@ -279,12 +273,6 @@ theorem lift_cancel (Z : M.Mat (r + 1)) (A B : Matrix (Fin (r + 1)) (Fin (r + 1)
   exact congrFun (congrFun h2 i) j
 
 end LiftM
-
-section LiftK
-
-variable {R : Type} [CommRing R] {r : ℕ}
-
-end LiftK
 
 def isoMbeSymm {R : Type} [CommRing R] {r : ℕ} {Z₁ Z₂ : Matrix (Fin (r + 1)) (Fin (r + 1)) R} (γ : IsoMbe Z₁ Z₂) :
     IsoMbe Z₂ Z₁ :=

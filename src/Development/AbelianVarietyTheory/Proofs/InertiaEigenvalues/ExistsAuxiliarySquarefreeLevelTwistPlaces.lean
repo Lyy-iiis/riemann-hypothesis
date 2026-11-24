@@ -282,7 +282,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.onePlaceTwist_trivial_on_congruent_units : ∀ (D : D7) {A : Type} [CommGroup A] (PP : Pl D.host.E) (χ : (AE D)ˣ →* A) (κ : GlobalTheory.ExportSeries.ResChars D A), (⟨{PP}, χ, κ⟩ : GlobalTheory.ExportSeries.Twist D A).Good → ∀ N : ℕ, ((N : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal → ∀ x : (AE D)ˣ, FinUnit x → (∃ y ∈ intAE D, finPart D (x : AE D) - 1 = N • y) → χ x = 1 := by
-  first | exact @GlobalTheory.OnePlaceCong.chi_eq_one_of_cong | exact GlobalTheory.OnePlaceCong.chi_eq_one_of_cong | (intros; apply GlobalTheory.OnePlaceCong.chi_eq_one_of_cong <;> assumption)
+  first | exact @GlobalTheory.OnePlaceCong.chi_eq_one_of_cong
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.OnePlaceTwistTrivialOnCongruentUnitsStatement =====
@@ -300,7 +300,7 @@ open GlobalTheory.UnivCover
 
 
 theorem _root_.GlobalTheory.T.openKernel_ideleCharacter_trivial_finitePart_one : ∀ (D : D7) {A : Type} [Group A] (χ : (AE D)ˣ →* A), IsOpen (χ.ker : Set (AE D)ˣ) → ∀ x : (AE D)ˣ, finPart D (x : AE D) = 1 → χ x = 1 := by
-  first | exact @GlobalTheory.UnivCover.OpenKerChar.map_eq_one_of_finPart_eq_one | exact GlobalTheory.UnivCover.OpenKerChar.map_eq_one_of_finPart_eq_one | (intros; apply GlobalTheory.UnivCover.OpenKerChar.map_eq_one_of_finPart_eq_one <;> assumption)
+  first | exact @GlobalTheory.UnivCover.OpenKerChar.map_eq_one_of_finPart_eq_one
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.OpenKernelIdeleCharacterTrivialFinitePartOneStatement =====
@@ -404,7 +404,7 @@ theorem exists_field_adjoin_root (k : Subfield ℂ) (L : IntermediateField ℚ �
     IntermediateField.adjoin_rootSet_isSplittingField (IsAlgClosed.splits _)
   haveI : FiniteDimensional ℚ C := Polynomial.IsSplittingField.finiteDimensional C p
   haveI : Normal ℚ C := Normal.of_isSplittingField p
-  refine ⟨L ⊔ C, inferInstance, @IntermediateField.normal_sup ℚ ℂ _ _ _ L C (by convert ‹Normal ℚ L› <;> exact Subsingleton.elim _ _) (by convert ‹Normal ℚ C› <;> exact Subsingleton.elim _ _), le_sup_left, fun x hx => ?_,
+  refine ⟨L ⊔ C, inferInstance, @IntermediateField.normal_sup ℚ ℂ _ _ _ L C (by convert ‹Normal ℚ L›) (by convert ‹Normal ℚ C›), le_sup_left, fun x hx => ?_,
     (le_sup_right : C ≤ L ⊔ C) (IntermediateField.subset_adjoin ℚ _ ((hroots z).2 (pow_orderOf_eq_one z)))⟩
   let S : IntermediateField ℚ ℂ := Subfield.toIntermediateField k fun r => by
     simpa using SubfieldClass.ratCast_mem k r
@@ -602,7 +602,7 @@ theorem isLevDatum_vecAt {B : Base S T} (hB : B.Good) {Q : Finset (Pl D.host.E)}
     exact ⟨(hlat t d1.1).2 ⟨d1.2, d2.2⟩, d1.1⟩
   · obtain ⟨i1, i2⟩ := (hlat u hue).1 hu
     have e1 : frMapAdj S T B.F.βS B.F.βT (t + N • u) = frMapAdj S T B.F.βS B.F.βT t + N • frMapAdj S T B.F.βS B.F.βT u := by
-      rw [GlobalTheory.RefDatumLev.frMapAdj_add', GlobalTheory.RefDatumLev.frMapAdj_nsmul']
+      rw [_root_.GlobalTheory.PlaceVec.frMapAdj_add, GlobalTheory.RefDatumLev.frMapAdj_nsmul']
     have hKu : IsHalf (halfIdem B.G.Pg (B.de.Q ∪ Q)) (N • u) := fun a b => by
       rw [Matrix.smul_apply, nsmul_eq_mul, mul_left_comm, hue a b]
     have hh : IsHalf (halfIdem B.G.Pg (B.de.Q ∪ Q)) (t + N • u) ↔ IsHalf (halfIdem B.G.Pg (B.de.Q ∪ Q)) t := by
@@ -659,8 +659,8 @@ theorem delQ_det_eq_one (hu : u.Good Q) (V : HSp D) {N : ℕ} (hN : Odd N) (hQ :
   ext PP
   have hg := hu.2 PP.1 PP.2
   exact congrArg Multiplicative.toAdd (GlobalTheory.FibreIdem.char_root_eq_one' V (u.del PP.1) N hN hg.real
-    (GlobalTheory.FibreIdem.chi_eq_one_of_finPart D _ hg.isOpen)
-    (GlobalTheory.FibreIdem.chi_eq_one_of_cong D PP.1 (u.del PP.1) u.kap hg N (hQ PP.1 PP.2)) w _ (isDetRoot_detRoot V w) hw)
+    (_root_.GlobalTheory.UnivCover.OpenKerChar.map_eq_one_of_finPart_eq_one D _ hg.isOpen)
+    (_root_.GlobalTheory.OnePlaceCong.chi_eq_one_of_cong D PP.1 (u.del PP.1) u.kap hg N (hQ PP.1 PP.2)) w _ (isDetRoot_detRoot V w) hw)
 
 theorem delQ_det_laws (hu : u.Good Q) (V : HSp D) {N : ℕ} (hN : Odd N) (hQ : ∀ PP ∈ Q, (N : 𝓞 D.host.E) ∈ PP.asIdeal) :
     (∀ h h' : GA D V, finHom V h = finHom V h' → detChar V (u.delQ Q) h = detChar V (u.delQ Q) h') ∧

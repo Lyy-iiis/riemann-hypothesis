@@ -289,7 +289,7 @@ theorem UpperTheory.Gal.KunnethLefschetz.kunL_holds :
     · intro u v
       obtain rfl : m = n - 2 * (d : ℤ) := by omega
       simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, he,
-        DirectSum.toModule_lof, dif_pos rfl]
+        DirectSum.toModule_lof]
       simp [TensorProduct.lift.tmul, LinearMap.compl₁₂_apply, LinearMap.lsmul_apply]
     · intro a b h' hbm u v
       obtain rfl : b = n - a := by omega
@@ -1525,7 +1525,6 @@ theorem slice_holds : Slice := by
   congr 1
   first
   | exact hR.one_nat y.1 hunitX
-  | exact hR.one_nat y.1 hunit
 
 end UpperTheory.Gal.KunnethLefschetz
 end -- clump:auto
@@ -1682,10 +1681,6 @@ open CategoryTheory Limits AlgebraicGeometry GlobalTheory.EtC LateralTheory.Etal
 
 namespace UpperTheory.Gal.KunnethLefschetz
 
-private theorem seq_sec (P : ℕ → Type 1) (hf : ∀ j, Finite (P j)) (hn : ∀ j, Nonempty (P j))
-    (t : ∀ j, P (j + 1) → P j) : ∃ s : ∀ j, P j, ∀ j, t j (s (j + 1)) = s j :=
-  _root_.UpperTheory.Reformulated.B.Qi50.seq_sec P hf hn t
-
 private theorem cast_root {q : ℕ} {X : Scheme.{0}} (ζ : Prim q Γ(X, ⊤)) (a : ℤ) (ha : a = 0) (h0 : (0 : ℤ) = 0) :
     Ht.cast h0 ha (rootClass a ζ) = rootClass 0 ζ := by
   subst ha; rfl
@@ -1724,7 +1719,7 @@ theorem towerL_holds : TowerL := by
       have h := congrArg (red (l ^ (j + 1)) (l ^ j) (sch.obj (S k)) 0 0) w.2
       rw [red_cast, hA.1, (hA.2.1 (hinv (j + 1))).1] at h
       exact h⟩
-  obtain ⟨s, hs⟩ := seq_sec P hf hn t
+  obtain ⟨s, hs⟩ := _root_.UpperTheory.Reformulated.B.Qi50.seq_sec P hf hn t
   exact ⟨⟨fun j => (s j).1.1, fun j => congrArg (fun w : P j => w.1.1) (hs j)⟩,
     ⟨fun j => (s j).1.2, fun j => congrArg (fun w : P j => w.1.2) (hs j)⟩, fun j => (s j).2⟩
 

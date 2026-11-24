@@ -66,15 +66,6 @@ open scoped Classical
 
 variable {g : ℕ} [Fact g.Prime]
 
-theorem ip_list_sum_left {G : Type} [Group G] [Fintype G] (L : List (G → ℂ)) (B : G → ℂ) :
-    ip L.sum B = (L.map fun ρ => ip ρ B).sum := by
-  induction L with
-  | nil => simp [ip]
-  | cons ρ L ih =>
-    rw [List.sum_cons, List.map_cons, List.sum_cons, ← ih]
-    unfold ip
-    simp only [Pi.add_apply, add_mul, Finset.sum_add_distrib, mul_add]
-
 theorem list_nat_sum {G : Type} [Group G] [Fintype G] (L : List (G → ℂ)) (hL : ∀ ρ ∈ L, IsIrr ρ) (B : G → ℂ)
     (hB : IsChar B) : ∃ N : ℕ, (L.map fun ρ => ip ρ B).sum = N ∧ ∀ ρ ∈ L, ip ρ B ≠ 0 → N ≠ 0 := by
   induction L with
@@ -97,12 +88,12 @@ theorem ip_ne_zero_of_common {G : Type} [Group G] [Fintype G] {ψ A B : G → �
   rw [GlobalTheory.GLq.LabelMul.ip_sum_eq_count hψ L hL] at hψA
   have hm : ψ ∈ L := List.count_pos_iff.1 (Nat.pos_of_ne_zero (by exact_mod_cast hψA))
   obtain ⟨N, hN, hN0⟩ := list_nat_sum L hL B hB
-  rw [ip_list_sum_left, hN]
+  rw [_root_.GlobalTheory.CharDec.ip_list_sum_left, hN]
   exact_mod_cast hN0 ψ hm hψB
 
 theorem ip_add_ne_zero {G : Type} [Group G] [Fintype G] {ψ X Y : G → ℂ} (hψ : IsIrr ψ) (hX : IsChar X)
     (hY : IsChar Y) (h : ip ψ X ≠ 0) : ip ψ (X + Y) ≠ 0 := by
-  rw [GlobalTheory.GLq.LabelMul.ip_add_right]
+  rw [_root_.GlobalTheory.CharDec.ip_add_right]
   obtain ⟨k, hk⟩ := GlobalTheory.GLq.LabelMul.ip_nat hψ hX
   obtain ⟨l, hl⟩ := GlobalTheory.GLq.LabelMul.ip_nat hψ hY
   rw [hk] at h
@@ -141,7 +132,7 @@ theorem eq_of_isCuspOf_det (L : LabelDatum g) (θ : (ZMod g)ˣ →* ℂˣ) (c : 
   let y : Gn g 1 := Units.map (Matrix.scalar (Fin 1) : ZMod g →+* Mt g 1).toMonoidHom u
   have hy00 : (y : Mt g 1) 0 0 = u := by simp [y]
   have hcp : (y : Mt g 1).charpoly = X - C ((y : Mt g 1) 0 0) := by
-    simp [Matrix.charpoly, Matrix.det_fin_one]
+    simp [Matrix.charpoly]
   have hx : algebraMap (ZMod g) (Formalism.CyclotomicNorms.Fbar g) (-P.coeff 0) ∈ Formalism.CyclotomicNorms.rootsBar P := by
     rw [hPe]; simp [Formalism.CyclotomicNorms.rootsBar]
   have hz : L.gen 1 ∈ Formalism.CyclotomicNorms.rootsBar (y : Mt g 1).charpoly := by
@@ -152,7 +143,7 @@ theorem eq_of_isCuspOf_det (L : LabelDatum g) (θ : (ZMod g)ˣ →* ℂˣ) (c : 
     rw [← map_pow, pow_one, ZMod.pow_card_sub_one_eq_one hc'0, map_one]
   have hth := GlobalTheory.GLq.LabelDet.theta_gen_pow L hxp 1
   rw [pow_one, pow_one] at hth
-  have hdet : Matrix.GeneralLinearGroup.det y = u := by ext; simp [y, Matrix.det_fin_one]
+  have hdet : Matrix.GeneralLinearGroup.det y = u := by ext; simp [y]
   simp only [hdet, Nat.sub_self, pow_zero, one_mul, Finset.sum_range_one, pow_one, hth] at key
   rw [h.2 u hu] at key
   have := L.teich_inj _ _ ((_root_.map_ne_zero _).2 h.1) ((_root_.map_ne_zero _).2 hc'0) key

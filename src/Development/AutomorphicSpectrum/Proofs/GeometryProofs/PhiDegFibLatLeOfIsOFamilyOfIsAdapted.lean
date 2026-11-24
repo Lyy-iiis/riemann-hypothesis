@@ -124,6 +124,7 @@ import Development.AutomorphicSpectrum.Proofs.GeometryProofs.TateIsoDatumExists
 import Mathlib.Algebra.AffineMonoid.Basic
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.PullCub
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.PullbackSections.UnifAt
+import Mathlib.CategoryTheory.Monoidal.Opposite.Mon
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicSpectrum.Proofs.GeometryProofs.ExistsFamilyUniformisationStatement, Development.WeilBound.CoreStatements.PlurisubharmonicCones.ExistsCoordLattice, Development.WeilBound.CoreStatements.PlurisubharmonicCones.ExistsGram, Development.WeilBound.CoreStatements.PlurisubharmonicCones.ExistsSmulMemSpan, Development.WeilBound.CoreStatements.PlurisubharmonicCones.LogOmBound, Development.AutomorphicSpectrum.Proofs.GeometryProofs.PhiDegFibLatLeOfIsOFamilyOfIsAdapted
@@ -371,7 +372,7 @@ theorem exists_coord_lattice {M : Type} [AddCommGroup M] [Module (𝓞 L) M] [Mo
     LinearMap.range (c • (1 : Matrix (Fin n) (Fin n) (𝓞 L))).mulVecLin with hA
   have hAmem : ∀ w, w ∈ A ↔ ∃ v, c • v = w := by
     intro w
-    simp [hA, Matrix.mulVecLin_apply, Matrix.smul_mulVec, Matrix.one_mulVec]
+    simp [hA]
   have hAE : A ≤ E := by
     intro w hw
     obtain ⟨v, rfl⟩ := (hAmem w).1 hw
@@ -469,7 +470,7 @@ theorem exists_local_frame {M : Type} [AddCommGroup M] [Module (𝓞 L) M] [Modu
     · exact sub_eq_zero.1 h0
     · simp only [sub_smul, Finset.sum_sub_distrib, Matrix.mul_apply, Matrix.of_apply, Matrix.smul_apply,
         Matrix.one_apply, smul_eq_mul, mul_ite, mul_one, mul_zero, ite_smul, zero_smul, Finset.sum_ite_eq,
-        Finset.mem_univ, if_true, Finset.sum_smul, smul_smul]
+        Finset.mem_univ, if_true, Finset.sum_smul]
       rw [sub_eq_zero, Finset.sum_comm]
       calc ∑ k, ∑ l, (T i k * v k l) • x l = ∑ k, T0 i k • (c • y k) := by
             simp only [hy, Finset.smul_sum, smul_smul, hTdef, Matrix.of_apply]
@@ -531,7 +532,7 @@ private theorem exists_logNorms_lemma {L : Type} [Field L] [NumberField L] (B : 
   obtain ⟨r, hr, hz⟩ := RCLike.nonneg_iff_exists_ofReal.1 hnn
   unfold gramDet
   rw [heq, ← hz]
-  simp [RCLike.norm_ofReal, abs_of_nonneg hr]
+  simp [abs_of_nonneg hr]
 
 private theorem exists_logNorms_lemma_2 {L : Type} [Field L] [NumberField L] (B : HermitianBundle.{0} L)
     (F : Submodule (𝓞 L) B.carrier) {n : ℕ} (x : Fin n → B.carrier) (hx : ∀ i, x i ∈ F)
@@ -790,7 +791,7 @@ theorem rank_eig (hρ : MB.IsActOf t'.act.act ρM) {tB : SAB H (Sp L)} (m' : SAB
     (σ : L →+* ℂ) (s : 𝓞 E →+* 𝓞 L) {n : ℕ}
     (h : LieMult tB.act (spMap σ) ((σ.comp (algebraMap (𝓞 L) L)).comp s) n) : B.rank (eigSp ρM s) = n := by
   have hg : Function.Injective (σ.comp (algebraMap (𝓞 L) L)) := σ.injective.comp (IsFractionRing.injective _ _)
-  obtain ⟨W, _, _, MW, ρW, j, h1, -, -, h2⟩ := exists_model MB hρ m' _ hg (spMap σ) (spMap_comp _ _).symm
+  obtain ⟨W, _, _, MW, ρW, j, h1, -, -, h2⟩ := exists_model MB hρ m' _ hg (spMap σ) (_root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp _ _).symm
   obtain ⟨x, hx, hli, hsp⟩ := exists_smul_mem_span B (eigSp ρM s) rfl
   obtain ⟨h3, h4⟩ := h2 s _ x hx hli fun z hz => (hsp z hz).imp fun u hu =>
     ⟨IsUnit.mk0 _ ((map_ne_zero_iff _ hg).2 hu.1), hu.2⟩
@@ -846,12 +847,12 @@ theorem inf_norm (hρ : MB.IsActOf t'.act.act ρM) (hfib : IsFibre (HodgeIP t'.G
   have hg : Function.Injective ((s.comp e).comp (algebraMap (𝓞 L) L)) :=
     (s.comp e).injective.comp (IsFractionRing.injective _ _)
   have hx : spMap s ≫ spMap (e.comp (algebraMap (𝓞 L) L)) = spMap ((s.comp e).comp (algebraMap (𝓞 L) L)) :=
-    (spMap_comp _ _).symm
+    (_root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp _ _).symm
   obtain ⟨wK, wec, k1, k2, k3, k4, -⟩ := exists_vec MB hρ n mf _ hg (spMap s) hx (under (spMap s ≫ y))
     (Category.assoc _ _ _)
   have hfr' : IsFramed U τ (s.comp β) (spMap s ≫ y) (fun k => wec (x₁ k)) fun k => wec (x₂ k) := by
     refine ⟨?_, ?_, ?_, ?_⟩
-    · rw [Category.assoc, hy, spMap_comp]
+    · rw [Category.assoc, hy, _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
     · rintro _ ⟨a, rfl⟩
       exact hU ⟨_, (Scheme.Hom.comp_apply _ _ _).symm⟩
     · rw [RingHom.comp_assoc, hs₁]
@@ -972,7 +973,7 @@ theorem fin_norm (hρ : MB.IsActOf t'.act.act ρM)
         ∃ m'' : SABMap tK _ (spMap (algebraMap V F)), n.φ = m''.φ ≫ mT.φ := by
       rintro _ n rfl
       exact sabCancel pullCubCancel E H _ _ _ _ _ _ _ _ mT n
-    exact key _ n (spMap_comp gV (algebraMap V F))
+    exact key _ n (_root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp gV (algebraMap V F))
   have hfr' : IsFramed U τ β y (fun k => vec (y₁ k)) fun k => vec (y₂ k) :=
     ⟨hy, hU, hs₁ ▸ h3 s₁ _ y₁ a1 a2 fun z hz => (a3 z hz).imp fun u hu => ⟨hne u hu.1, hu.2⟩,
       hs₂ ▸ h3 s₂ _ y₂ b1 b2 fun z hz => (b3 z hz).imp fun u hu => ⟨hne u hu.1, hu.2⟩⟩
@@ -1056,7 +1057,7 @@ end -- clump:auto
 -- ===== end clump member: Development.WeilBound.CoreStatements.PlurisubharmonicCones.LogOmBound =====
 
 -- ===== clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.PhiDegFibLatLeOfIsOFamilyOfIsAdapted =====
--- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.GeometryProofs.PhiDegFibLatLeOfIsOFamilyOfIsAdapted", "h": "module\n\npublic import Development.AutomorphicSpectrum.Statements.GeometryStatements.FlatDegree\npublic import Development.AutomorphicSpectrum.Statements.GeometryStatements.NineGeoU\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.FlatSat\npublic import Development.AbelianVarietyTheory.Counterexamples.ModuliSurvey.ExistsGoodLevel\npublic import Development.AbelianVarietyTheory.Counterexamples.ModuliSurvey.ModuliNonemptyOfObj\npublic import Development.AbelianVarietyTheory.Proofs.GenericRegularity.MemRangeOfIsAlgebraicRatFun\npublic import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.ExistsUnfFamily\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.ExistsFamilyUniformisationStatement\npublic import Development.AutomorphicSpectrum.Statements.GeometryStatements.ThmFlatA\npublic import Development.AutomorphicSpectrum.PublishedTheorems.Geometry₂.GagaSections\npublic import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.BlowupProjections.BlowupProjStatement\npublic import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.UniformisationConclusion\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.FlatTheoremOfResolutionGaga\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.KroneckerCharacterPeriodFormula\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.LieSignatureNumberField\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.ExistsCoordLattice\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.ExistsSmulMemSpan\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.HeightComparisonGlobalModel\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.LogOmBound\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.Rt0ConjNegNeZero\npublic import Formalism.LocalToGlobal.ProjectiveLattices.CompSplitPfB\nimport Development.AutomorphicSpectrum.Definitions.GlobalGeometry.SlopeBoundSt\nimport Development.AutomorphicSpectrum.Proofs.GeometryProofs.TateIsoDatumExists\nimport Development.WeilBound.CoreStatements.PlurisubharmonicCones.FinrankOfLieMult\nimport Formalism.LocalToGlobal.ProjectiveLattices.CompSplitPfD\nimport Formalism.LocalToGlobal.ProjectiveLattices.FreeBridge\nimport Mathlib.Algebra.AffineMonoid.Basic\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.PullCub\nimport ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.PullbackSections.UnifAt\n\n"}
+-- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.GeometryProofs.PhiDegFibLatLeOfIsOFamilyOfIsAdapted", "h": "module\n\npublic import Development.AutomorphicSpectrum.Statements.GeometryStatements.FlatDegree\npublic import Development.AutomorphicSpectrum.Statements.GeometryStatements.NineGeoU\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.FlatSat\npublic import Development.AbelianVarietyTheory.Counterexamples.ModuliSurvey.ExistsGoodLevel\npublic import Development.AbelianVarietyTheory.Counterexamples.ModuliSurvey.ModuliNonemptyOfObj\npublic import Development.AbelianVarietyTheory.Proofs.GenericRegularity.MemRangeOfIsAlgebraicRatFun\npublic import Development.AbelianVarietyTheory.Proofs.UnitaryExistence.ExistsUnfFamily\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.ExistsFamilyUniformisationStatement\npublic import Development.AutomorphicSpectrum.Statements.GeometryStatements.ThmFlatA\npublic import Development.AutomorphicSpectrum.PublishedTheorems.Geometry₂.GagaSections\npublic import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.BlowupProjections.BlowupProjStatement\npublic import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.UniformisationConclusion\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.FlatTheoremOfResolutionGaga\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.KroneckerCharacterPeriodFormula\npublic import Development.AutomorphicSpectrum.Proofs.GeometryProofs.LieSignatureNumberField\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.ExistsCoordLattice\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.ExistsSmulMemSpan\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.HeightComparisonGlobalModel\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.LogOmBound\npublic import Development.WeilBound.CoreStatements.PlurisubharmonicCones.Rt0ConjNegNeZero\npublic import Formalism.LocalToGlobal.ProjectiveLattices.CompSplitPfB\nimport Development.AutomorphicSpectrum.Definitions.GlobalGeometry.SlopeBoundSt\nimport Development.AutomorphicSpectrum.Proofs.GeometryProofs.TateIsoDatumExists\nimport Development.WeilBound.CoreStatements.PlurisubharmonicCones.FinrankOfLieMult\nimport Formalism.LocalToGlobal.ProjectiveLattices.CompSplitPfD\nimport Formalism.LocalToGlobal.ProjectiveLattices.FreeBridge\nimport Mathlib.Algebra.AffineMonoid.Basic\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.PullCub\nimport ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.PullbackSections.UnifAt\nimport Mathlib.CategoryTheory.Monoidal.Opposite.Mon\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1148,7 +1149,7 @@ theorem flat_hermitian_fibre_signature (hG : _root_.GlobalTheory.CompanionTheory
     hdeg⟩ := flat_point_of_principal_sign hG hF H tB hP ρ p' q' σ hσ hs h0 τ hτ χ hχ
   obtain ⟨n₀, -⟩ := sabComp pullCubComp E H _ _ _ _ _ _ _ _ m' mo
   let n : SABMap tK t' (spMap (e.comp (algebraMap (𝓞 L) L))) :=
-    ReciprocityTheory.ChartRestriction.G.PullbackSections.sabMapCast n₀ (LevelTowerAlt.spMap_comp _ _).symm
+    ReciprocityTheory.ChartRestriction.G.PullbackSections.sabMapCast n₀ (_root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp _ _).symm
   have hs₁ : β.comp (tauIn c τ) = (e.comp (algebraMap (𝓞 L) L)).comp s₁ :=
     RingHom.ext fun a => io.injective ((hβ _).trans ((he _).trans (h₁ a)).symm)
   have hs₂ : β.comp (tauIn c (ComplexEmbedding.conjugate τ)) = (e.comp (algebraMap (𝓞 L) L)).comp s₂ :=

@@ -689,10 +689,6 @@ theorem minor_om_mul (S : Matrix (Fin N) (Fin N) ℂ) {h : Matrix (Fin N) (Fin N
     minorIJ (S * h) (omIdx N j) (omIdx N j) = minorIJ S (omIdx N j) (omIdx N j) * minorIJ h (omIdx N j) (omIdx N j) :=
   minorIJ_mul_of_support S h _ _ (support_omIdx hh)
 
-theorem minor_one (C : Finset (Fin N)) : minorIJ (1 : Matrix (Fin N) (Fin N) ℂ) C C = 1 := by
-  rw [minorIJ_self_of_triangular 1 Matrix.blockTriangular_one]
-  simp
-
 theorem minor_ne {S : Matrix (Fin N) (Fin N) ℂ} (hS : IsBlockDiag j S) (hd : S.det ≠ 0) :
     minorIJ S (wIdx N j) (wIdx N j) ≠ 0 ∧ minorIJ S (omIdx N j) (omIdx N j) ≠ 0 := by
   have hu : IsUnit S.det := isUnit_iff_ne_zero.2 hd
@@ -700,7 +696,7 @@ theorem minor_ne {S : Matrix (Fin N) (Fin N) ℂ} (hS : IsBlockDiag j S) (hd : S
   have e : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hu
   have e1 := minor_w_mul S hi
   have e2 := minor_om_mul S hi
-  rw [e, minor_one] at e1 e2
+  rw [e, _root_.GlobalTheory.CompanionTheory.Ar.PB.CovMap.LocImg.FV.minorIJ_one_same] at e1 e2
   exact ⟨left_ne_zero_of_mul (e1 ▸ one_ne_zero), left_ne_zero_of_mul (e2 ▸ one_ne_zero)⟩
 
 theorem detFac_ne {S : Matrix (Fin N) (Fin N) ℂ} (hS : IsBlockDiag j S) (hd : S.det ≠ 0) (i : Fin N) :
@@ -882,7 +878,7 @@ theorem sum_dy (M : FlagModel y Ψ N j) (p : Ψ × Fin N) (l : K → ℝ) :
     rw [Finset.sum_neg_distrib]
   · cases hb : M.blk p with
     | none => simp
-    | some k => simp [eq_comm]
+    | some k => simp
 
 def cc (M : FlagModel y Ψ N j) (τ : Ψ) (ζ : NonPluckerBlocks M.blk → ℂ) (S : Matrix (Fin N) (Fin N) ℂ) : K → ℂ := fun k =>
   if h : ∀ p, M.blk p ≠ some k then ζ ⟨k, h⟩
@@ -1251,8 +1247,8 @@ theorem eq_zero_of_minors (B : Matrix (Fin N) (Fin N) ℂ) (hB : B.det ≠ 0) (S
     have h1 : Mᵀ.updateCol x v = (B.submatrix (Function.update e x r) e)ᵀ := by
       ext a b
       by_cases hb : b = x
-      · subst hb; simp [Matrix.updateCol_apply, v]
-      · simp [Matrix.updateCol_apply, hb, M, Function.update_of_ne hb]
+      · subst hb; simp [v]
+      · simp [hb, M]
     rw [Matrix.cramer_apply, h1, Matrix.det_transpose]
     exact det_submatrix_eq_zero B S hA _ x (by simpa using hr)
   have hv : Mᵀ.det • v = 0 := by rw [← Matrix.mulVec_cramer, hcr, Matrix.mulVec_zero]
@@ -1453,7 +1449,7 @@ theorem fac_ne_zero (hj : j ≤ N) (i : Fin N) {h : Matrix (Fin N) (Fin N) ℂ} 
   have hN : 0 < N := by have := i.2; omega
   have hd' := GlobalTheory.CompanionTheory.Ar.PB.CPts.detFac_ne_zero hj (⟨N - 1, by omega⟩ : Fin N) hh hd
   have e1 : j ≤ N - 1 + 1 := by omega
-  simp only [detFac, if_pos e1, show N - 1 + 1 = N by omega, if_true, if_pos hj] at hd'
+  simp only [detFac, show N - 1 + 1 = N by omega, if_true, if_pos hj] at hd'
   simp only [Fib.facOf]
   have := left_ne_zero_of_mul hd'
   have := right_ne_zero_of_mul hd'
@@ -1474,7 +1470,7 @@ theorem xi_sum (τ : Ψ) {a b : Fin N} (hb : (b : ℕ) = a + 1) (D : Fin N → �
     have e1 : ((i : ℕ) = (a : ℕ) + 1) ↔ i = b := by rw [Fin.ext_iff, hb]
     simp only [xiCoef, if_true, e1]
     push_cast
-    split_ifs <;> first | ring | simp
+    split_ifs <;> first | ring
   simp only [e, Finset.sum_sub_distrib, Finset.sum_add_distrib, Finset.sum_ite_eq', Finset.mem_univ, if_true]
   congr 2
   by_cases ha : (a : ℕ) = 0

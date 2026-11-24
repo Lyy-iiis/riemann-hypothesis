@@ -1051,11 +1051,11 @@ theorem J_succ {n : ℕ} (a b : Fin n ⊕ Fin n) :
 
 theorem J_succ_e {n : ℕ} (a : Fin n ⊕ Fin n) :
     J (Fin (n + 1)) ℝ (Sum.map Fin.succ Fin.succ a) (Sum.inl 0) = 0 := by
-  rcases a with i | i <;> simp [J, one_apply, Fin.succ_ne_zero]
+  rcases a with i | i <;> simp [J, Fin.succ_ne_zero]
 
 theorem J_e_succ {n : ℕ} (b : Fin n ⊕ Fin n) :
     J (Fin (n + 1)) ℝ (Sum.inl 0) (Sum.map Fin.succ Fin.succ b) = 0 := by
-  rcases b with j | j <;> simp [J, one_apply, (Fin.succ_ne_zero j).symm]
+  rcases b with j | j <;> simp [J, (Fin.succ_ne_zero j).symm]
 
 theorem reduce_row {n : ℕ} (H : Matrix (Fin (n + 1) ⊕ Fin (n + 1)) (Fin (n + 1) ⊕ Fin (n + 1)) ℝ)
     (a : Fin n ⊕ Fin n) :
@@ -1419,41 +1419,29 @@ set_option maxSynthPendingDepth 1
 
 namespace GroundTheory.Heights₂.Heights
 
-theorem SymplOmegaMem.full : SymplOmegaMem.Statement :=
-  SymplOmegaMem.proof
+alias SymplOmegaMem.full := _root_.GroundTheory.Heights₂.Heights.SymplOmegaMem.proof
 
-theorem SymplCons.full : SymplCons.Statement :=
-  SymplCons.proof
+alias SymplCons.full := _root_.GroundTheory.Heights₂.Heights.SymplCons.proof
 
-theorem SymplExtVecMul.full : SymplExtVecMul.Statement :=
-  SymplExtVecMul.proof
+alias SymplExtVecMul.full := _root_.GroundTheory.Heights₂.Heights.SymplExtVecMul.proof
 
-theorem SymplTwoRow.full : SymplTwoRow.Statement :=
-  SymplTwoRow.proof
+alias SymplTwoRow.full := _root_.GroundTheory.Heights₂.Heights.SymplTwoRow.proof
 
-theorem SymplGcd.full : SymplGcd.Statement :=
-  SymplGcd.proof
+alias SymplGcd.full := _root_.GroundTheory.Heights₂.Heights.SymplGcd.proof
 
-theorem SymplQuadDiag.full : SymplQuadDiag.Statement :=
-  SymplQuadDiag.proof
+alias SymplQuadDiag.full := _root_.GroundTheory.Heights₂.Heights.SymplQuadDiag.proof
 
-theorem SymplBoxVolume.full : SymplBoxVolume.Statement :=
-  SymplBoxVolume.proof
+alias SymplBoxVolume.full := _root_.GroundTheory.Heights₂.Heights.SymplBoxVolume.proof
 
-theorem SymplShortPrim.full : SymplShortPrim.Statement :=
-  SymplShortPrim.proof
+alias SymplShortPrim.full := _root_.GroundTheory.Heights₂.Heights.SymplShortPrim.proof
 
-theorem SymplGramMem.full : SymplGramMem.Statement :=
-  SymplGramMem.proof
+alias SymplGramMem.full := _root_.GroundTheory.Heights₂.Heights.SymplGramMem.proof
 
-theorem SymplReducePosDef.full : SymplReducePosDef.Statement :=
-  SymplReducePosDef.proof
+alias SymplReducePosDef.full := _root_.GroundTheory.Heights₂.Heights.SymplReducePosDef.proof
 
-theorem SymplReduceConj.full : SymplReduceConj.Statement :=
-  SymplReduceConj.proof
+alias SymplReduceConj.full := _root_.GroundTheory.Heights₂.Heights.SymplReduceConj.proof
 
-theorem SymplDetSchur.full : SymplDetSchur.Statement :=
-  SymplDetSchur.proof
+alias SymplDetSchur.full := _root_.GroundTheory.Heights₂.Heights.SymplDetSchur.proof
 
 theorem SymplExtMem.full : SymplExtMem.Statement :=
   SymplExtMem.proof SymplOmegaMem.full SymplCons.full

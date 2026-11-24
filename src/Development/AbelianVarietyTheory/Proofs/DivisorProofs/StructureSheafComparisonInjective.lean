@@ -74,7 +74,7 @@ theorem eq_of_secMap_eq_on_pairs {X : Scheme.{0}} (B B' : Type) [CommRing B] [Co
     refine (Sp B').sheaf.eq_of_locally_eq' (fun y => (W y).1) ⊤ (fun _ => homOfLE le_top)
       (fun y _ => TopologicalSpace.Opens.mem_iSup.2 ⟨y, hyW y⟩) _ _ (fun y => ?_)
     have := h (W y) (p y) (hp y)
-    simp only [secMap, Scheme.Hom.appLE, Scheme.Hom.id_app, CommRingCat.hom_comp, RingHom.comp_apply] at this
+    simp only [secMap] at this
     exact this
   exact (Scheme.ΓSpecIso (CommRingCat.of B')).symm.commRingCatIsoToRingEquiv.injective key
 end GlobalTheory.CechDR.AffLoc
@@ -261,8 +261,6 @@ section -- clump:auto
 
 open CategoryTheory AlgebraicGeometry Opposite ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi GlobalTheory.CatCoh GlobalTheory.Cris GlobalTheory.CechDR GlobalTheory.CechDR.AffLoc
 
-theorem _root_.GlobalTheory.T.cocycle_local_sections_restrict_compatibly : ∀ {R : Type} [CommRing R] {X : Scheme.{0}} {s : X ⟶ Sp R} (f : Z1 ((IsTriv s).ι ⋙ O (dp0 R) s)) (g : C0 (OAff s)), (∀ ⦃U V : AffOp X⦄ (a : U ⟶ V), g V - Sec.res s (leOfHom a.unop) (g U) = fv f ((affF s).map a)) → ∀ (T : TT s) (p q : Pair (pt T)) (hpq : p ≤ q), Sec.res (algStr R T.obj.B) (Pair.le_fst hpq) (hSec f g T q) = hSec f g T p := by
-  first | exact @GlobalTheory.CechDR.AffLoc.hSec_res | exact GlobalTheory.CechDR.AffLoc.hSec_res | (intros; apply GlobalTheory.CechDR.AffLoc.hSec_res <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.CocycleLocalSectionsRestrictCompatiblyStatement =====
@@ -355,7 +353,7 @@ theorem cmpO_injective : ∀ (R : Type) [CommRing R] (X : Scheme.{0}) (s : X ⟶
       g V - Sec.res s (leOfHom a.unop) (g U) = fv f ((affF s).map a) :=
     fun U V a ↦ congrFun (congrFun (congrFun hg U) V) a
   have ex : ∀ T : TT s, ∃ G : T.obj.B, ∀ p : Pair (pt T), toSec R T.obj.B p.1.1 G = hSec f g T p :=
-    fun T ↦ _root_.GlobalTheory.CechDR.AffLoc.exists_glue_pair T.obj.B (pt T) (hSec f g T) fun p q hpq ↦ GlobalTheory.T.cocycle_local_sections_restrict_compatibly f g hg' T p q hpq
+    fun T ↦ _root_.GlobalTheory.CechDR.AffLoc.exists_glue_pair T.obj.B (pt T) (hSec f g T) fun p q hpq ↦ _root_.GlobalTheory.CechDR.AffLoc.hSec_res f g hg' T p q hpq
   choose G hG using ex
   exact H1.mk_eq_zero.2 ⟨G, funext fun T ↦ funext fun T' ↦ funext fun φ ↦
     (_root_.GlobalTheory.CechDR.AffLoc.fv_eq_sub_of_glued f g hg' φ (G T) (G T') (hG T) (hG T')).symm⟩

@@ -64,6 +64,7 @@ import Mathlib.Tactic.NormNum.Prime
 import Mathlib.Tactic.NormNum.RealSqrt
 import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Tactic.ReduceModChar
+import Development.AbelianVarietyTheory.Statements.HyperbolicHypotheses.HypothesesInhabitedHyperbolic
 
 @[expose] public section
 
@@ -115,14 +116,6 @@ theorem exists_EF_one {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Ho
   obtain ⟨a, ha⟩ := D.unimod.2 (bs.coord j)
   exact ⟨a, bs j, by rw [ha]; simp⟩
 
-theorem subsingleton_La {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} (D : Datum H)
-    (hpq : D.p + D.q = 0) : Subsingleton D.La := by
-  haveI := D.fin
-  haveI := D.proj
-  have h := D.rank
-  rw [hpq] at h
-  exact Module.finrank_zero_iff.1 h
-
 theorem fullTorsion_of_equiv {X : Scheme.{0}} {Ω Ω' : Type} [Field Ω] [Field Ω'] {G : Over X} [GrpObj G]
     (κ : Ω' ≃+* Ω) {ξ' : Sp Ω' ⟶ X} {ξ : Sp Ω ⟶ X} (h : spMap κ.toRingHom ≫ ξ' = ξ) {n : ℕ}
     (hf : FullTorsion G ξ n) : FullTorsion G ξ' n := by
@@ -152,7 +145,7 @@ theorem fullTorsion_of_equiv {X : Scheme.{0}} {Ω Ω' : Type} [Field Ω] [Field 
     rw [← Spec.map_comp, ← CommRingCat.ofHom_comp]
   refine ⟨Over.homMk (spMap κ.symm.toRingHom ≫ x.left) ?_, ?_⟩
   · have := Over.w x
-    simp only [Over.mk_left, Over.mk_hom, Functor.id_obj, Functor.const_obj_obj, Functor.id_map] at this ⊢
+    simp only [Over.mk_left, Over.mk_hom] at this ⊢
     simp only [Category.assoc, this]
     rw [← Category.assoc, h1, Category.id_comp]
   · simp only [Over.homMk_left]
@@ -292,7 +285,7 @@ theorem push_one {S S' : Scheme.{0}} {G' : Over S'} {G : Over S} [GrpObj G'] [Gr
 
 theorem tors_trivial (o : Obj D l b s) (t : SAB H X) (m : SABMap o.t t ξ) {n : ℕ} (hn : 0 < n)
     (hpq : D.p + D.q = 0) (g : Over.mk ξ ⟶ t.G) (hg : g ^ n = 1) : g = 1 := by
-  haveI := subsingleton_La D hpq
+  haveI := _root_.GlobalTheory.AllClasses.subsingleton_of_rank_zero D hpq
   let i := algebraMap Ω (AlgebraicClosure Ω)
   obtain ⟨I⟩ := exists_tate o i
   have hp := m.cart

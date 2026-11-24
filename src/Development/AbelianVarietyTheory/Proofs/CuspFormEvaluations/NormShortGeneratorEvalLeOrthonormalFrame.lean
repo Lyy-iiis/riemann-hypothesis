@@ -83,7 +83,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.Dict
 
 theorem _root_.GlobalTheory.T.anFib_lift_alt : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Geo.Tor.Level H) (Xo : Moduli Dw l) (c : Coeff l) (n : ℕ) (d : DeltaDat Xo c n) [Algebra c.F ℂ] [Algebra d.c₂.F ℂ], (∀ t : c.F, algebraMap d.c₂.F ℂ (d.eF t) = algebraMap c.F ℂ t) → d.IsLev → ∀ (r g : ℕ) (X : Data E r) (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (idx : Fin g ≃ X.Ψ × Fin r) (e : Fin g ≃ Lt1 Dw) (x : Frame X.Ψ r) (L : Lt E r) (y : FrPt Xo c ℂ) (A : AnFib X bas idx e x L y), IsSympl X bas → x ∈ X.dom → SelfD X L → ∀ y₂ : FrPt d.Xo₂ d.c₂ ℂ, FrOver d y₂ y → ∀ mk : Dw.La →ₗ[𝓞 E] (Fin r → E), A.Marked mk → ∃ A₂ : AnFib X bas idx e x L y₂, (∀ θ, A.Reads 1 y.s θ → A₂.Reads 1 y₂.s θ) ∧ ∃ mk₂ : Dw.La →ₗ[𝓞 E] (Fin r → E), IsMark d.l₂ L mk₂ ∧ A₂.Marked mk₂ ∧ MarkOver l d.l₂ L mk mk₂ := by
-  first | exact @GlobalTheory.Dict.Lift.anFib_lift | exact GlobalTheory.Dict.Lift.anFib_lift | (intros; apply GlobalTheory.Dict.Lift.anFib_lift <;> assumption)
+  first | exact @GlobalTheory.Dict.Lift.anFib_lift
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SiegelThetaTransformation.AnFibLiftStatement =====
@@ -112,22 +112,13 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {r g q0 n : ℕ} {X 
 theorem isSB_smul (c : ℂ) {φ : TF n g} (h : IsSB φ) : IsSB (c • φ) :=
   (_root_.GlobalTheory.SW.isSB_algebra_haar_linear ℚ _ _ φ φ h h).2.1 c
 
-theorem thA_sum (idx : Fin g ≃ X.Ψ × Fin r) (hs : IsSympl X bas) {x : Frame X.Ψ r}
-    (hx : x ∈ X.dom) {T : Type} (s : Finset T) (f : T → TF n g) (hf : ∀ i, IsSB (f i)) :
-    thA X bas idx (∑ i ∈ s, f i) x = ∑ i ∈ s, thA X bas idx (f i) x := by
-  induction s using Finset.induction_on with
-  | empty => simpa using UnAct.thA_smul (X := X) (bas := bas) idx x 0 (0 : TF n g)
-  | insert a s ha ih =>
-    rw [Finset.sum_insert ha, Finset.sum_insert ha, ← ih]
-    exact UnAct.thA_add idx hs hx (hf a) (RecSum.isSB_sum s f hf)
-
 theorem theta_sum₂ (hr : X.p0 + q0 = r) (idx : Fin g ≃ X.Ψ × Fin r) (hs : IsSympl X bas) {x : Frame X.Ψ r}
     (hx : x ∈ X.dom) {T : Type} (s : Finset T) (W : T → ℂ) (f : T → TF n g) (hf : ∀ i, IsSB (f i))
     (P : Harm.Poly ℂ X.Ψ q0 X.p0 (Fin n)) :
     thP X hr bas idx (∑ i ∈ s, W i • f i) P x = ∑ i ∈ s, W i * thP X hr bas idx (f i) P x := by
   unfold thP
   rw [← Jet.polyDeriv_sum_fun P _ s W _ fun i _ => ThetaHol.differentiable_thA idx hs (hf i) hx,
-    thA_sum idx hs hx s _ fun i => isSB_smul _ (hf i)]
+    _root_.GlobalTheory.Dict.ShortVal.thA_sum idx hs hx s _ fun i => isSB_smul _ (hf i)]
   congr 1
   funext w
   simp only [Finset.sum_apply, UnAct.thA_smul, Pi.smul_apply, smul_eq_mul]
@@ -231,7 +222,7 @@ theorem norm_evR_le : Formalism.MainNotions.ModuliIntegralCharts.H1.ChartIndepSt
     simp only [Function.comp, FD.sgn]
     split_ifs <;> simp
   obtain ⟨W, Dc, A, θ, v, κ, he, hg, hw, hL, hmk, hA, hrd, hth, hmean, hvac, hprod⟩ :=
-    GlobalTheory.T.exists_analyticData_unitFrame_framedPoint E H Dw l Xo c σ r U hσ hU hr1 a n hDom k x huf
+    _root_.GlobalTheory.Dict.VSetup.exists_setup E H Dw l Xo c σ r U hσ hU hr1 a n hDom k x huf
   obtain ⟨-, -, hlen, -, -⟩ := hx_ortho E r (U.X k) W.g Dc.bas Dc.idx Dc.sympl x.1 x.2 hxo
   obtain ⟨y₂, hy₂⟩ := hlev.2.2.2.2.2.2.1 ℂ hcomp (unC U k x)
   obtain ⟨B, hB, mk₂, hmk₂, hB₂, -⟩ := GlobalTheory.T.anFib_lift_alt E H Dw l Xo c n d hcomp hlev r W.g (U.X k) Dc.bas Dc.idx W.e x.1

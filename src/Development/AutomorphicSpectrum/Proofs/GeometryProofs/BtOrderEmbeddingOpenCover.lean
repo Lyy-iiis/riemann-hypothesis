@@ -93,7 +93,7 @@ open CategoryTheory Limits AlgebraicGeometry MonoidalCategory CartesianMonoidalC
 open GlobalTheory.CompanionTheory.Ar.BT
 
 theorem _root_.GlobalTheory.CompanionTheory.Relay.btOrder_eq_btOrder_top : ∀ (R : Type) [CommRing R] [IsDomain R] [IsIntegrallyClosed R] (T : Type) [CommGroup T] [Finite T] (Γ : QFGroup R T) (U : Γ.G.left.Opens), Γ.IsFinOpenSub U → Γ.btOrder U = Γ.btOrder ⊤ := by
-  first | exact @PositivityTheory.UnitarySelfGeneration.bt_sub_eq_top | exact PositivityTheory.UnitarySelfGeneration.bt_sub_eq_top
+  first | exact @PositivityTheory.UnitarySelfGeneration.bt_sub_eq_top
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.BtOrderEqBtOrderTop =====
@@ -221,10 +221,6 @@ theorem spec_valRing_fromSpec {B : Type} [CommRing B] {X : Scheme.{0}} (x : Spec
   have : CommRingCat.ofHom (valRing x U h) = x.appLE U ⊤ h ≫ (Scheme.ΓSpecIso (CommRingCat.of B)).hom := rfl
   rw [this, Spec.map_comp, Category.assoc, e, ← Category.assoc, ← Spec.map_comp]
   simp
-
-theorem fromSpec_mem' {X : Scheme.{0}} {U : X.Opens} (hU : IsAffineOpen U) (z) : hU.fromSpec z ∈ U := by
-  rw [← SetLike.mem_coe, ← hU.range_fromSpec]
-  exact ⟨z, rfl⟩
 
 variable {R : Type} [CommRing R] [IsDomain R] {T : Type} [CommGroup T]
 
@@ -367,7 +363,7 @@ theorem openImmersion_translatesCover : ∀ (R : Type) [CommRing R] [IsDomain R]
     obtain ⟨Q', hQ'⟩ : (⟨Q, hQ⟩ : PrimeSpectrum (Γ.btOrder ⊤)) ∈ Set.range (PrimeSpectrum.comap ψ.hom) := by
       rw [range_comap_of_surjective _ _ hsurj]
       exact hk
-    refine ⟨t, hU.fromSpec Q', fromSpec_mem' hU _, fun f f' hff => ?_⟩
+    refine ⟨t, hU.fromSpec Q', _root_.GlobalTheory.CompanionTheory.Ar.BT.SubOrder.fromSpec_mem hU _, fun f f' hff => ?_⟩
     have hjg : (j (hU.fromSpec Q')).asIdeal = Q := by
       have h1 : j (hU.fromSpec Q') = (Spec.map ψ) Q' := by
         rw [hψ]

@@ -287,10 +287,6 @@ noncomputable section
 
 namespace GlobalTheory.LatPtDecomp
 
-theorem exists_zsmul_mem {E : Type} [Field E] [NumberField E] {n : ℕ} (L : Submodule (𝓞 E) (Fin n → E))
-    (hL : L.IsFullLattice E) (w : Fin n → E) : ∃ N : ℤ, N ≠ 0 ∧ N • w ∈ L := by
-  exact _root_.GlobalTheory.IntSmulMemSubmodule.exists_int_smul_mem L hL w
-
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
 
 theorem exists_sub_mem (v : Pl (F := F)) (t : Fv F v) {k : F} (hk : k ≠ 0) :
@@ -331,8 +327,8 @@ theorem core {n d : ℕ} (X : Spc F E n) (Y : Spc F E d) (hX : X.L.IsFullLattice
     (i : Fin n) (j : Fin d) (t : Fv F v) (x : E) :
     ∃ X₀ : Matrix (Fin n) (Fin d) E,
       Matrix.single i j (GlobalTheory.EmbChart.atPlace v t ⊗ₜ[F] x) - GlobalTheory.EmbChart.atPlace v 1 • incM F X₀ ∈ latAtV X Y v := by
-  obtain ⟨N, hN, hNx⟩ := exists_zsmul_mem X.L hX (Pi.single i x)
-  obtain ⟨N', hN', hNy⟩ := exists_zsmul_mem Y.L hY (Pi.single j 1)
+  obtain ⟨N, hN, hNx⟩ := _root_.GlobalTheory.IntSmulMemSubmodule.exists_int_smul_mem X.L hX (Pi.single i x)
+  obtain ⟨N', hN', hNy⟩ := _root_.GlobalTheory.IntSmulMemSubmodule.exists_int_smul_mem Y.L hY (Pi.single j 1)
   have hK : ((N * N' : ℤ) : F) ≠ 0 := Int.cast_ne_zero.2 (mul_ne_zero hN hN')
   obtain ⟨s, hs⟩ := exists_sub_mem v t hK
   set r := (algebraMap F (Fv F v) ((N * N' : ℤ) : F))⁻¹ * (t - algebraMap F (Fv F v) s) with hr
@@ -346,9 +342,9 @@ theorem core {n d : ℕ} (X : Spc F E n) (Y : Spc F E d) (hX : X.L.IsFullLattice
       simp only [Matrix.vecMulVec_apply, Pi.smul_apply, Pi.single_apply, Matrix.single_apply]
       by_cases h1 : a = i <;> by_cases h2 : b = j
       · subst h1 h2
-        simp only [if_true, and_self, smul_eq_mul, mul_one]
+        simp only [if_true, and_self]
         rw [Algebra.smul_def (A := E) ((N * N' : ℤ) : F), map_intCast]
-        simp only [algebraMap_int_eq, eq_intCast, zsmul_eq_mul, mul_one]; push_cast; ring
+        simp only [zsmul_eq_mul, mul_one]; push_cast; ring
       all_goals simp [h1, h2, eq_comm (a := i), eq_comm (a := j)]
     have hev : ∀ c : F, evFin F v (c • (1 : AF F)) = algebraMap F (Fv F v) c := fun c => by
       rw [map_smul, map_one, Algebra.algebraMap_eq_smul_one]
@@ -1515,7 +1511,7 @@ theorem vecMulVec_mem_latAtV_left {n d : ℕ} (X : Spc F E n) (W : Spc F E d) (v
     rintro z ⟨a, ha, hai, x, hx, rfl⟩
     refine AddSubgroup.subset_closure ⟨a, ha, hai, x, hx, y, hy, ?_⟩
     ext i j
-    simp only [f, AddMonoidHom.coe_mk, ZeroHom.coe_mk, Matrix.vecMulVec_apply, Pi.smul_apply, Matrix.smul_apply, incM,
+    simp only [f, AddMonoidHom.coe_mk, ZeroHom.coe_mk, Matrix.vecMulVec_apply, Matrix.smul_apply, incM,
       Matrix.map_apply, map_mul, Algebra.smul_def, Pi.mul_apply, Pi.algebraMap_apply]
     ring
   exact this hz
@@ -1538,7 +1534,7 @@ theorem mul_left_inv_mem_latAtV {n d : ℕ} (X : Spc F E n) (W : Spc F E d) (v :
           (fun j => inclR (F := F) (AF F) (y j)) := by
       ext i j
       simp only [Matrix.mul_apply, Matrix.vecMulVec_apply, Matrix.smul_apply, Matrix.mulVec,
-        dotProduct, Pi.smul_apply, incM, Matrix.map_apply, map_mul, Algebra.smul_def, Pi.mul_apply, Pi.algebraMap_apply,
+        dotProduct, incM, Matrix.map_apply, map_mul, Algebra.smul_def, Pi.mul_apply, Pi.algebraMap_apply,
         Finset.sum_mul]
       refine Finset.sum_congr rfl fun l _ => ?_
       ring

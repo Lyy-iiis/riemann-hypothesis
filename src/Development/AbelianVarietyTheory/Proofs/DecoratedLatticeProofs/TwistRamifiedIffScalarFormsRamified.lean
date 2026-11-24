@@ -147,7 +147,7 @@ variable {D : D7}
 theorem real_le_off (V : HSp D) (P : Pl D → Prop) : GinfC V ≤ grpOff V P := by
   intro a ha
   rw [GinfC, MonoidHom.mem_ker] at ha
-  rw [grpOff, GlobalTheory.FinPl.LocProd.mem_congGrp_entries]
+  rw [grpOff, _root_.GlobalTheory.FrameAt.mem_congGrp]
   intro i j
   have h2 : finPart D (Formalism.L2.Theta.mt V a i j) = (1 : Matrix (Fin V.rank) (Fin V.rank) _) i j :=
     congrArg (fun x : GL (Fin V.rank) _ => x.1 i j) ha
@@ -260,7 +260,7 @@ theorem _root_.GlobalTheory.T.diamondTranslateSum_eq_zero_of_chartRepresentative
     StdT I l Z u p β Q L → ∀ j (hj : j ≤ B.R.m), ∀ φ ∈ (I.fm l u a).Fi j, ∀ (i : ι) (v : (I.atT l u a).vT), Formalism.L2.NTheta.IsIdemAt (p i).e v.1 →
     ∀ g : 𝓀[k]ˣ → GL (Fin ((I.rec7 l Z).sp.X j).rank) k, (∀ s, g s • Q j i = s • Q j i) →
       ∀ b y, (∀ (c : {c // A.chOf j c = b}) y', ∑ᶠ s, A.rd θ j hj b φ y' (A.h j b c * (β j i).gl (g s)) = 0) → ∀ x, ∑ᶠ s, A.rd θ j hj b φ y (x * (β j i).gl (g s)) = 0 := by
-  first | exact @GlobalTheory.AdForm.diaSum_eq_zero_of_reps | exact GlobalTheory.AdForm.diaSum_eq_zero_of_reps | (intros; apply GlobalTheory.AdForm.diaSum_eq_zero_of_reps <;> assumption)
+  first | exact @GlobalTheory.AdForm.diaSum_eq_zero_of_reps
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.DiamondTranslateSumEqZeroOfChartRepresentativesStatement =====
@@ -309,11 +309,6 @@ theorem finM_inf' {D : D7} (V : HSp D) {n : ℕ} (hn : V.rank = n) (k : GA D V) 
 end GlobalTheory.AdForm.RdTrans
 
 namespace GlobalTheory.AdForm.RdTrans
-
-theorem infM_fin'' {D : D7} (θ : InfFam D) (V : HSp D) {n : ℕ} (hn : V.rank = n) (k : GA D V) (hk : k ∈ GfC V)
-    (τ : D.what₂.Tau) : infM θ V hn k τ = 1 := by
-  subst hn
-  exact GlobalTheory.AdForm.RdLaw.infM_fin θ V k hk τ
 
 end GlobalTheory.AdForm.RdTrans
 
@@ -435,7 +430,7 @@ theorem GlobalTheory.AdForm.rd_trTo : ∀ {B : Base} {X : PreX B.toPre} (I : TC 
       atInf (Formalism.L2.Forms.embT (I.rec7 l Z)) (((I.stp u a j).gam c.1 ((I.stp u a j).mv c.1 d))⁻¹ : GL _ _).val τ := by
     intro τ
     have e1 : infM θ _ (rankN (I.rec7 l Z) j hj) α τ = infM θ _ (rankN (I.rec7 l Z) j hj) ai τ := by
-      rw [hα, GlobalTheory.AdForm.Model.infM_mul, GlobalTheory.AdForm.RdTrans.infM_fin'' θ _ _ af haf, Matrix.mul_one]
+      rw [hα, GlobalTheory.AdForm.Model.infM_mul, _root_.GlobalTheory.AdForm.ChartVal.infM_fin' θ _ _ af haf, Matrix.mul_one]
     have e2 : infM θ _ (rankN (I.rec7 l Z) j hj) ai⁻¹ τ * infM θ _ (rankN (I.rec7 l Z) j hj) ai τ = 1 := by
       rw [← GlobalTheory.AdForm.Model.infM_mul, inv_mul_cancel, GlobalTheory.AdForm.Model.infM_one]
     exact GlobalTheory.AdForm.RdTrans.eq_of_mul_eq_one _ _ _ _ e2
@@ -479,7 +474,7 @@ theorem _root_.GlobalTheory.T.chartScalarForm_adelicPoint_eq_classTransport : �
     A.chOf j ((I.stp u a j).cl c.1 d) = b →
     cosetIn d = cosetIn ((I.stp u a j).rep ((I.stp u a j).cl c.1 d)) → ∀ y,
       A.rd θ j hj b φ y x = (I.stp u a j).trTo B.fields.emb B.embLL c.1 d (φ ((I.stp u a j).cl c.1 d)) y := by
-  first | exact @GlobalTheory.AdForm.rd_trTo | exact GlobalTheory.AdForm.rd_trTo | (intros; apply GlobalTheory.AdForm.rd_trTo <;> assumption)
+  first | exact @GlobalTheory.AdForm.rd_trTo
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.ChartScalarFormAdelicPointEqClassTransportStatement =====
@@ -692,7 +687,7 @@ theorem frame_trivial_off : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok
           exact Ideal.add_mem _ (Ideal.mul_mem_left _ _ a1) (Ideal.mul_mem_left _ _ a3)
         exact v.1.isPrime.ne_top ((Ideal.eq_top_iff_one _).2 this)
   have hb : Formalism.UG.bc (Formalism.UG.prV (E := B.host.E) (w.under (𝓞 B.host.F))) δ = 1 :=
-    GlobalTheory.T.splitFrameGL_finiteMatrix_offPlace_eq_one (I.rec7 l Z) k (p i) ((I.rec7 l Z).sp.X j) _ (β j i) g _ (rankN (I.rec7 l Z) j hj) δ hδ _ hne
+    _root_.GlobalTheory.StabOff.bc_prV_finM_eq_one (I.rec7 l Z) k (p i) ((I.rec7 l Z).sp.X j) _ (β j i) g _ (rankN (I.rec7 l Z) j hj) δ hδ _ hne
   have hb' : Formalism.UG.bc (Formalism.UG.prV (E := B.host.E) (w.under (𝓞 B.host.F))) δ⁻¹ = 1 := by
     rw [map_inv, hb, inv_one]
   have h2 : Formalism.UG.prV (E := B.host.E) (w.under (𝓞 B.host.F)) ((δ⁻¹).1 r r') = if r = r' then 1 else 0 := by
@@ -731,7 +726,7 @@ theorem _root_.GlobalTheory.T.frameImage_trivial_off_levelPrime : ∀ {B : Base}
     StdT I l Z u p β Q L → ∀ j (hj : j ≤ B.R.m) (i : ι) (v : (I.atT l u a).vT), Formalism.L2.NTheta.IsIdemAt (p i).e v.1 → ∀ (g : GL (Fin ((I.rec7 l Z).sp.X j).rank) k) (δ : TC.GA B (B.R.N j)), δ.1 = finM _ (rankN (I.rec7 l Z) j hj) ((β j i).gl g) →
     ∀ w : HeightOneSpectrum (𝓞 B.fields.E), (w ∈ (B.primes X).vGs ∨ w ∈ I.SQ ∨ (w ∈ (B.primes X).vT u ∧ w ≠ v.1)) →
       ∀ r r', adAt B.host.F w ((δ⁻¹).1 r r') = if r = r' then 1 else 0 := by
-  first | exact @GlobalTheory.AdForm.FrameTriv.frame_trivial_off | exact GlobalTheory.AdForm.FrameTriv.frame_trivial_off | (intros; apply GlobalTheory.AdForm.FrameTriv.frame_trivial_off <;> assumption)
+  first | exact @GlobalTheory.AdForm.FrameTriv.frame_trivial_off
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.FrameImageTrivialOffLevelPrimeStatement =====
@@ -986,11 +981,6 @@ theorem decoratedLattice_unitScale_functional_keeps_frames {X : Formalism.L2.Col
   · have e : p.mv (Formalism.L2.Col.DecoSet.dia1 P c p.1.1.deco) = p := dif_neg h
     rw [e]
 
-theorem finM_mul' {D : D7} (V : HSp D) {n : ℕ} (hn : V.rank = n) (g h : GA D V) :
-    finM V hn (g * h) = finM V hn g * finM V hn h := by
-  subst hn
-  exact GlobalTheory.AdForm.RdLaw.finM_mul V g h
-
 theorem ptOf_gl_dia : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)) (u : B.Word) (a : I.ι) (Ch : ℕ → Type) (A : TwDat I l Z u a Ch), A.Is → ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (ι : Type)
     (p : ι → SplitPt (I.rec7 l Z) k) (β : ∀ j i, Frame (p i) ((I.rec7 l Z).sp.X j) (Fin ((I.rec7 l Z).sp.X j).rank))
     (Q : ∀ j, ι → Pair k (Fin ((I.rec7 l Z).sp.X j).rank)) (L : ∀ j, Lat ((I.rec7 l Z).sp.X j)),
@@ -1010,7 +1000,7 @@ theorem ptOf_gl_dia : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → T
   have hR := hA.reads j hj
   let y : TC.GA B (B.R.N j) := ((A.K j hj (A.chOf j c)).y ⟨c, rfl⟩).1
   refine ⟨y * δ, ?_, ?_⟩
-  · rw [Units.val_mul, hδ, finM_mul', (hA.h j hj _ ⟨c, rfl⟩).2]
+  · rw [Units.val_mul, hδ, _root_.GlobalTheory.FrameGlInt.finM_mul, (hA.h j hj _ ⟨c, rfl⟩).2]
     rfl
   · obtain ⟨p0, hk0, hN0⟩ := hR.k_std (A.chOf j c)
     have hkc := hk0.lat
@@ -1051,7 +1041,7 @@ theorem _root_.GlobalTheory.T.exists_chartPoint_rightTranslate_stabilizer_splitP
         ∃ z : TC.GA B (B.R.N j),
           z.1 = finM _ (rankN (I.rec7 l Z) j hj) (A.h j b c * (β j i).gl (g s)) ∧
           TC.PtOf (z * A.kb j b) (extTo I.SQ (((I.atIn u a).A j).diaPt v (e s) c.1).1.1) := by
-  first | exact @GlobalTheory.AdForm.DiaChart.ptOf_gl_dia | exact GlobalTheory.AdForm.DiaChart.ptOf_gl_dia | (intros; apply GlobalTheory.AdForm.DiaChart.ptOf_gl_dia <;> assumption)
+  first | exact @GlobalTheory.AdForm.DiaChart.ptOf_gl_dia
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.ExistsChartPointRightTranslateStabilizerSplitPlaStatement =====
@@ -1148,7 +1138,7 @@ theorem _root_.GlobalTheory.T.representative_diamond_translate_sum_scalarForm : 
     StdT I l Z u p β Q L → ∀ j (hj : j ≤ B.R.m), ∀ φ ∈ (I.fm l u a).Fi j, ∀ (i : ι) (v : (I.atT l u a).vT), Formalism.L2.NTheta.IsIdemAt (p i).e v.1 →
     ∀ g : 𝓀[k]ˣ → GL (Fin ((I.rec7 l Z).sp.X j).rank) k, (∀ s, g s • Q j i = s • Q j i) →
       ∀ b y (c : {c // A.chOf j c = b}), (∑ᶠ s, A.rd θ j hj b φ y (A.h j b c * (β j i).gl (g s))) = (∑ᶠ s : ((I.atT l u a).Fv v)ˣ, (I.fm l u a).dilT j v s c.1 (φ ((I.fm l u a).dil j v s c.1))) y := by
-  first | exact @GlobalTheory.AdForm.rd_dia_sum | exact GlobalTheory.AdForm.rd_dia_sum | (intros; apply GlobalTheory.AdForm.rd_dia_sum <;> assumption)
+  first | exact @GlobalTheory.AdForm.rd_dia_sum
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.RepresentativeDiamondTranslateSumScalarFormStatement =====
@@ -1217,7 +1207,7 @@ theorem _root_.GlobalTheory.T.diamondTranslates_scalarForms_sum_iff : ∀ {B : B
     ∀ g : 𝓀[k]ˣ → GL (Fin ((I.rec7 l Z).sp.X j).rank) k, (∀ s, g s • Q j i = s • Q j i) →
       ((∀ b y, ∑ᶠ s, rTrans ((β j i).gl (g s)) (A.rd θ j hj b φ y) = 0) ↔
         ∀ c, ∑ᶠ s : ((I.atT l u a).Fv v)ˣ, (I.fm l u a).dilT j v s c (φ ((I.fm l u a).dil j v s c)) = 0) := by
-  first | exact @GlobalTheory.AdForm.diaSum_iff | exact GlobalTheory.AdForm.diaSum_iff | (intros; apply GlobalTheory.AdForm.diaSum_iff <;> assumption)
+  first | exact @GlobalTheory.AdForm.diaSum_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.DiamondTranslatesScalarFormsSumIffStatement =====
@@ -1284,14 +1274,6 @@ namespace GlobalTheory.AdForm.RamCont
 
 variable {D : D7}
 
-theorem infM_mul' (θ : InfFam D) (V : HSp D) {n : ℕ} (hn : V.rank = n) (g h : GA D V) (τ : D.what₂.Tau) :
-    infM θ V hn (g * h) τ = infM θ V hn g τ * infM θ V hn h τ := by
-  subst hn; exact GlobalTheory.AdForm.RdLaw.infM_mul θ V g h τ
-
-theorem infM_fin' (θ : InfFam D) (V : HSp D) {n : ℕ} (hn : V.rank = n) (k : GA D V) (hk : k ∈ GfC V) (τ : D.what₂.Tau) :
-    infM θ V hn k τ = 1 := by
-  subst hn; exact GlobalTheory.AdForm.RdLaw.infM_fin θ V k hk τ
-
 theorem continuous_infM' (θ : InfFam D) (hθ : IsInfFam θ) (V : HSp D) {n : ℕ} (hn : V.rank = n) (τ : D.what₂.Tau) :
     Continuous fun g : GA D V => infM θ V hn g τ := by
   subst hn; exact GlobalTheory.AdForm.RdLaw.continuous_infM θ hθ V τ
@@ -1317,7 +1299,7 @@ theorem pf_inv_mul_mem (V : HSp D) (g : GA D V) : (GlobalTheory.AdForm.RdLaw.pf 
 
 theorem infM_mul_pf (θ : InfFam D) (V : HSp D) {n : ℕ} (hn : V.rank = n) (k d : GA D V) (τ : D.what₂.Tau) :
     infM θ V hn (k * ((GlobalTheory.AdForm.RdLaw.pf V d)⁻¹ * d)) τ = infM θ V hn k τ * infM θ V hn d τ := by
-  rw [infM_mul' θ V hn k, infM_mul' θ V hn _ d, infM_fin' θ V hn _ (inv_mem (GlobalTheory.AdForm.RdLaw.pf_fin V d)), one_mul]
+  rw [_root_.GlobalTheory.AdForm.Model.infM_mul θ V hn k, _root_.GlobalTheory.AdForm.Model.infM_mul θ V hn _ d, _root_.GlobalTheory.AdForm.ChartVal.infM_fin' θ V hn _ (inv_mem (GlobalTheory.AdForm.RdLaw.pf_fin V d)), one_mul]
 
 end GlobalTheory.AdForm.RamCont
 
@@ -1432,7 +1414,7 @@ open scoped TensorProduct Pointwise
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.tupleColumn_scalarAdelicForm_continuous : ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)) (u : B.Word) (a : I.ι) (Ch : ℕ → Type) (A : TwDat I l Z u a Ch), A.Is → ∀ θ, IsInfFam θ → ∀ j (hj : j ≤ B.R.m), ∀ φ ∈ (I.fm l u a).Fi j, ∀ b y, Continuous (A.rd θ j hj b φ y) := by
-  first | exact @GlobalTheory.AdForm.RamCont.rd_continuous | exact GlobalTheory.AdForm.RamCont.rd_continuous | (intros; apply GlobalTheory.AdForm.RamCont.rd_continuous <;> assumption)
+  first | exact @GlobalTheory.AdForm.RamCont.rd_continuous
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.TupleColumnScalarAdelicFormContinuousStatement =====

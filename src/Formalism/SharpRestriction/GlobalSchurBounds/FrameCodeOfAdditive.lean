@@ -418,8 +418,7 @@ section Shares
 
 variable {D : D7} {L : SizeData₂ D}
 
-theorem logWeight_nonneg (w : D.what₂.places.Pl) : 0 ≤ SizeData₂.lwP w := by
-  simpa only [SizeData₂.lwP, lw] using div_nonneg (Real.log_natCast_nonneg _) (Nat.cast_nonneg _)
+alias logWeight_nonneg := _root_.Formalism.MainNotions.J.logWeight_nonneg
 
 theorem kapv_nonneg (X : G.Inst D L) (K : G.Consts) (hK : K.Nonneg) (hI : G.KapIDef X K) (a b : G.HH D → ℤ) (p : ℕ)
     (t0 : G.HH D) : 0 ≤ G.kapv X K a b p t0 := by
@@ -685,7 +684,6 @@ theorem sign_group_pow_odd (g : G0) {i : ℕ} (hi : Odd i) : g ^ i = g := by
 theorem iotaH_nsmul (e : Formalism.HC.Frame) (x : e.A) (i : ℕ) : e.iota (i • x) = e.iota x ^ i := by
   unfold Formalism.HC.Frame.iota
   first
-  | exact ofAdd_nsmul x i
   | rfl
 
 theorem plGG_partner {p : ℕ} (h : ZetaZeroFreeRegion.InertK D p) (t : G.HH D) {i : ℕ} (hi : Odd i) :

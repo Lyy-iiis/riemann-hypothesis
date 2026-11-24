@@ -367,13 +367,6 @@ section -- clump:auto
 
 
 
-section
-open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formalism.ConjugateSelfDual ReciprocityTheory.Gal ReciprocityTheory.Aut Formalism.AUTREP Formalism.L2 Formalism.L2.Host GlobalTheory.HeightCounting NumberField IsDedekindDomain GlobalTheory.CuspRep GlobalTheory.UnitaryBC GlobalTheory.FormDict GlobalTheory.DefiniteBC
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
-
-theorem _root_.GlobalTheory.T.cuspReadG_recT_of_cgTrue : ∀ (hL : _root_.UpperTheory.Zero.LLC.RecTExists) (D : D7) (T : GlobalTheory.RowTie.WDTie D.nd D.naut), _root_.GlobalTheory.HeightCounting.CGTrueT hL D T → _root_.GlobalTheory.DefiniteBC.CuspReadG (_root_.GlobalTheory.FormDict.recT_alt T hL) := by
-  first | exact @_root_.UpperTheory.One.M.cusp_read_rec_t | exact _root_.UpperTheory.One.M.cusp_read_rec_t | (intros; apply _root_.UpperTheory.One.M.cusp_read_rec_t <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.CuspidalOfLocalLanglands =====
@@ -504,7 +497,7 @@ theorem rec_spehQuot_alt : ∀ (E Ω : Type) [Field E] [NumberField E] [Field Ω
   have hA := _root_.GlobalTheory.isL_of_irreducible_prod_unitarisable_nu _ (_root_.GlobalTheory.LocGL.UnitaryOrder.add_one_le_of_precedes _) a _ σ.ρ σ.irred m δ Δ s hΔ hδu hs hd0 hφ
   have hB := _root_.GlobalTheory.speh_quotient_isL _ hLM (_root_.GlobalTheory.LocGL.UnitaryOrder.add_one_le_of_precedes _) (GlobalTheory.T.parabolicInduction_in_stages_product_of_products _) a _ σ.ρ m δ Δ s hΔ hδu hs hd0 hφ d n hd _ σ'.ρ σ'.irred hq
   have h4 := _root_.GlobalTheory.T.sum_segments_langlands_at_place E Ω A w h rc hrc
-  first | (have hOpn := UpperTheory.One.M.opn _ (hrc); obtain ⟨a', ha', ε, L⟩ := hOpn) | obtain ⟨a', ha', ε, -, L⟩ := hrc
+  first | (have hOpn := UpperTheory.One.M.opn _ (hrc); obtain ⟨a', ha', ε, L⟩ := hOpn)
   rw [L.langlands _ _ (isL_of_equiv hB (equivRep (ParLaws.toRep σ'))),
     L.langlands _ _ (isL_of_equiv hA (equivRep (ParLaws.toRep σ))), List.map_flatMap, sumList_flatMap]
   congr 1
@@ -524,21 +517,6 @@ section -- clump:auto
 
 
 
-section
-open NumberField ReciprocityTheory.Gal Formalism.ConjugateSelfDual IsDedekindDomain GlobalTheory.PRep GlobalTheory.SmGL GlobalTheory.LocGL GlobalTheory.WeilDeligne GlobalTheory.LocLanglands GlobalTheory.CuspRep GlobalTheory.DefiniteBC
-
-theorem _root_.GlobalTheory.T.local_langlands_speh_product' : ∀ (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (A : ValuationSubring Ω) (w : HeightOneSpectrum (𝓞 E)),
-    letI := GlobalTheory.LocalData.complRel w
-    haveI := GlobalTheory.LocalData.isLocalField w
-    ∀ (h : IsPlaceOver A w) (rc : IrrGL (k := w.adicCompletion E) → WD h),
-    _root_.UpperTheory.Zero.LLC.IsRecT h rc → GlobalTheory.Published.GenericUnitaryDualGL → GlobalTheory.Published.StandardCosocleGL →
-    ∀ (a d n : ℕ) (hd : ∑ _ : Fin d, a = n) (σ : LocIrr w a) (σ' : LocIrr w n),
-      IsUnitarisable σ.ρ → IsGeneric σ.ρ → IsSpehQuot hd σ σ' →
-      rc (cls (ParLaws.toRep σ')) =
-        sumList ((List.range d).map fun k : ℕ => (rc (cls (ParLaws.toRep σ))).lpTw (((d : ℝ) - 1) / 2 - k)) := by
-  first | exact @_root_.GlobalTheory.SpehRec.rec_spehQuot_alt | exact _root_.GlobalTheory.SpehRec.rec_spehQuot_alt | (intros; apply _root_.GlobalTheory.SpehRec.rec_spehQuot_alt <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.RecSpehQuotStatement =====
@@ -599,7 +577,7 @@ theorem transported_reciprocity_speh_of_generic_unitary_dual (hTZ : GlobalTheory
   intro w a d n hd P σ σ' hP hu hq
   have hg : IsGeneric σ.ρ := GlobalTheory.CuspRep.Generic.isGeneric_of_isLocComp H.E a P w σ hP
   apply (T.e w).injective
-  rw [_root_.GlobalTheory.FormDict.RecTLaws.equiv_transported_reciprocity_eq_local_reciprocity, e_lpSumList, _root_.GlobalTheory.T.local_langlands_speh_product' _ _ _ w _ _ (_root_.GlobalTheory.CuspRep.ParLawsT.isRecT_locRecT hL (N.plOm.2 w)) hTZ hSC a d n hd σ σ'
+  rw [_root_.GlobalTheory.FormDict.RecTLaws.equiv_transported_reciprocity_eq_local_reciprocity, e_lpSumList, _root_.GlobalTheory.SpehRec.rec_spehQuot_alt _ _ _ w _ _ (_root_.GlobalTheory.CuspRep.ParLawsT.isRecT_locRecT hL (N.plOm.2 w)) hTZ hSC a d n hd σ σ'
     hu hg hq, List.map_map]
   congr 1
   refine List.map_congr_left fun k _ => ?_
@@ -623,13 +601,6 @@ section -- clump:auto
 
 
 
-section
-open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formalism.ConjugateSelfDual ReciprocityTheory.Gal ReciprocityTheory.Aut Formalism.AUTREP Formalism.L2 Formalism.L2.Host GlobalTheory.HeightCounting NumberField IsDedekindDomain GlobalTheory.CuspRep GlobalTheory.UnitaryBC GlobalTheory.FormDict GlobalTheory.DefiniteBC
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
-
-theorem _root_.GlobalTheory.T.recProd_recSpeh_recSatake : GlobalTheory.Published.GenericUnitaryDualGL → GlobalTheory.Published.StandardCosocleGL → ∀ (hL : _root_.UpperTheory.Zero.LLC.RecTExists) {R : Ranks} {H : Host R} {what₂ : Rows.Data R} (N : NData R H what₂) (A : NAut N) (T : GlobalTheory.RowTie.WDTie N A), RecProd (_root_.GlobalTheory.FormDict.recT_alt T hL) ∧ RecSpeh (_root_.GlobalTheory.FormDict.recT_alt T hL) ∧ RecSatake (_root_.GlobalTheory.FormDict.recT_alt T hL) := by
-  first | exact @_root_.GlobalTheory.FormDict.RecTLaws.transported_reciprocity_prod_and_speh_and_satake | exact _root_.GlobalTheory.FormDict.RecTLaws.transported_reciprocity_prod_and_speh_and_satake | (intros; apply _root_.GlobalTheory.FormDict.RecTLaws.transported_reciprocity_prod_and_speh_and_satake <;> assumption)
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.RecSatakeRecTStatement =====
@@ -646,7 +617,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.unitary_of_local_langlands' : ∀ (hL : _root_.UpperTheory.Zero.LLC.RecTExists) (D : D7) (T : GlobalTheory.RowTie.WDTie D.nd D.naut) (A : _root_.GlobalTheory.HeightCounting.AUSideAlt D), _root_.GlobalTheory.HeightCounting.AutomorphicSideRealised hL D T A → _root_.UpperTheory.One.M.Ud.UnitaryReadS D.nbc (_root_.GlobalTheory.FormDict.recT_alt T hL) := by
-  first | exact @_root_.UpperTheory.One.M.unitaryRead_true_alt trivial | exact (_root_.UpperTheory.One.M.unitaryRead_true_alt trivial) | (intros; apply (_root_.UpperTheory.One.M.unitaryRead_true_alt trivial) <;> assumption)
+  first | exact @_root_.UpperTheory.One.M.unitaryRead_true_alt trivial
 end
 end -- clump:auto
 end -- clump:auto
@@ -687,10 +658,10 @@ theorem aux_of_cgTrue_of_auTrue (hA : AscComp) : DefiniteN → GlobalTheory.Publ
     ∀ (hL : _root_.UpperTheory.Zero.LLC.RecTExists) (D : D7) (T : GlobalTheory.RowTie.WDTie D.nd D.naut) (A : _root_.GlobalTheory.HeightCounting.AUSideAlt D),
       _root_.GlobalTheory.HeightCounting.CGTrueT hL D T → _root_.GlobalTheory.HeightCounting.AutomorphicSideRealised hL D T A → SphericalInertData.Conclusion1 D := by
   intro hNT hGU hSC hL D T A hCG hAU
-  obtain ⟨hP, hS, hSat⟩ := _root_.GlobalTheory.T.recProd_recSpeh_recSatake hGU hSC hL D.nd D.naut T
+  obtain ⟨hP, hS, hSat⟩ := _root_.GlobalTheory.FormDict.RecTLaws.transported_reciprocity_prod_and_speh_and_satake hGU hSC hL D.nd D.naut T
   exact _root_.UpperTheory.One.M.Ud.baseChangeDefinite_of_cmDatum_recLaws D (_root_.GlobalTheory.FormDict.recT_alt T hL) hNT
     (discCsd_of hA D.host.E) hP hS hSat
-    (_root_.GlobalTheory.T.cuspReadG_recT_of_cgTrue hL D T hCG) (_root_.GlobalTheory.T.unitary_of_local_langlands' hL D T A hAU)
+    (_root_.UpperTheory.One.M.cusp_read_rec_t hL D T hCG) (_root_.GlobalTheory.T.unitary_of_local_langlands' hL D T A hAU)
 end Closing
 end UpperTheory.BaseChangeIdentities
 end Pr

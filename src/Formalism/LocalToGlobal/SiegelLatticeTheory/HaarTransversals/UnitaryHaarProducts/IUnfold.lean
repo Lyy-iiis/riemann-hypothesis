@@ -110,7 +110,6 @@ theorem gramV_eq_conjTranspose_t8C_mul_t8C (I : AutInst) (x : I.GA) (v : Infinit
     intro a i
     first
       | rfl
-      | (unfold coordV t8C; simp [Matrix.mulVec, dotProduct, Matrix.mul_apply])
   unfold gramV
   ext a c
   simp only [hc, Matrix.mul_apply, Matrix.conjTranspose_apply]
@@ -449,10 +448,6 @@ theorem one_le_norm_embedding_alt (I : AutInst) (a : 𝓞 I.E) (ha : a ≠ 0) :
   push Not at h
   nlinarith [norm_nonneg (I.φ w (a : I.E))]
 
-theorem lattice_common_denominator (I : AutInst) : ∃ b : 𝓞 I.E, b ≠ 0 ∧
-    ∀ y ∈ I.L, ∀ i, ∃ c : 𝓞 I.E, (c : I.E) = (b : I.E) * y i := by
-  first | exact UpperTheory.Reformulated.B.LatticeCoordinatesCommonDenominator.lattice_common_denominator .. | (apply UpperTheory.Reformulated.B.LatticeCoordinatesCommonDenominator.lattice_common_denominator <;> assumption) | (intros; apply UpperTheory.Reformulated.B.LatticeCoordinatesCommonDenominator.lattice_common_denominator <;> assumption) | (apply @UpperTheory.Reformulated.B.LatticeCoordinatesCommonDenominator.lattice_common_denominator <;> assumption) | (intros; apply @UpperTheory.Reformulated.B.LatticeCoordinatesCommonDenominator.lattice_common_denominator <;> assumption) | (apply @UpperTheory.Reformulated.B.LatticeCoordinatesCommonDenominator.lattice_common_denominator <;> first | assumption | infer_instance) | exact @UpperTheory.Reformulated.B.LatticeCoordinatesCommonDenominator.lattice_common_denominator I
-
 theorem invertible_matrix_lower_bound {n : ℕ} (A : Matrix (Fin n) (Fin n) ℂ) (hA : IsUnit A) :
     ∃ C : ℝ, 0 < C ∧ ∀ (w : Fin n → ℂ) (i : Fin n), ‖w i‖ ^ 2 ≤ C * ∑ k, ‖(A *ᵥ w) k‖ ^ 2 := by
   obtain ⟨U, rfl⟩ := hA
@@ -477,7 +472,7 @@ theorem invertible_matrix_lower_bound {n : ℕ} (A : Matrix (Fin n) (Fin n) ℂ)
 theorem lattice_vectors_bounded_below (h0 : LatticeCommensurable) : LatticeVectorsBoundedBelow := by
   intro I x
   obtain ⟨m, hm1, hm, -⟩ := h0 I x
-  obtain ⟨b, hb0, hb⟩ := lattice_common_denominator I
+  obtain ⟨b, hb0, hb⟩ := _root_.UpperTheory.Reformulated.B.LatticeCoordinatesCommonDenominator.lattice_common_denominator I
   have hC : ∀ v, ∃ C : ℝ, 0 < C ∧ ∀ (u : Fin I.n → I.E) (i : Fin I.n),
       ‖I.φ v (u i)‖ ^ 2 ≤ C * ∑ k, ‖coordV I x v u k‖ ^ 2 := fun v => by
     have hU : IsUnit (uMat (x.1 v)⁻¹ * (I.P v)⁻¹) :=
@@ -817,9 +812,6 @@ set_option autoImplicit false
 
 namespace Formalism.L2.SG.Pf
 
-theorem reduction_theory : Formalism.L2.SG.LitS.ReductionTau :=
-  Tau.reductionTau
-
 end Formalism.L2.SG.Pf
 end -- clump:auto
 end -- clump:auto
@@ -1034,11 +1026,11 @@ theorem one_mem_sinf : (1 : X.B.I.Ginf) ∈ X.SinfU u := by
   intro v
   have e : uMat ((1 : X.B.I.Ginf) v) = 1 := by simp [uMat]
   rw [e]
-  refine ⟨fun a => ?_, ?_⟩ <;> simp [Submodule.zero_mem]
+  refine ⟨fun a => ?_, ?_⟩ <;> simp
 
 theorem one_mem_sfin : (1 : X.B.I.Gf) ∈ SfinU X u := by
   have e : X.B.I.fmat 1 = 1 := by simp [AutInst.fmat]
-  refine ⟨fun a => ?_, ?_⟩ <;> simp [e, Submodule.zero_mem]
+  refine ⟨fun a => ?_, ?_⟩ <;> simp [e]
 
 theorem mem_sset_of_closure (hS : SGroup X u) {y : X.B.I.GA}
     (hy : y ∈ Subgroup.closure {y : X.B.I.GA | y.1 ∈ X.SinfU u ∧ y.2 ∈ SfinU X u}) :
@@ -1348,7 +1340,7 @@ theorem psiR_norm {n r : ℕ} (ε : Fin n → Bool) (gg : ℕ) (e f : Fin r → 
   unfold psiR
   rw [Complex.norm_exp]
   have him : ((∑ a, (rootCoord ε e f z g a + star (rootCoord ε e f z g a))) / (gg : ℂ)).im = 0 := by
-    simp [Complex.div_im, Complex.im_sum, Complex.star_def]
+    simp [Complex.div_im, Complex.im_sum]
   have hre : (2 * (Real.pi : ℂ) * Complex.I *
       ((∑ a, (rootCoord ε e f z g a + star (rootCoord ε e f z g a))) / (gg : ℂ))).re = 0 := by
     rw [Complex.mul_re, him]
@@ -1391,12 +1383,12 @@ theorem weightMeas_holds : WeightMeas X u := by
   exact normI_nonneg _ _
 
 theorem level_subgroup_compact_open : LevelSubgroupCompactOpen X := by
-  have hc := Cut.level_subgroup_isClopen X (Formalism.L2.SG.Closed.level_subgroup_is_group X) (Formalism.L2.SG.Closed.level_subgroup_properties X)
+  have hc := Cut.level_subgroup_isClopen X (_root_.Formalism.L2.SG.Pf.level_subgroup_character_unitary X) (Formalism.L2.SG.Closed.level_subgroup_properties X)
   exact ⟨hc.isOpen, (Formalism.L2.SG.Closed.AutKCompact_holds X.B.I).of_isClosed_subset hc.isClosed
     (Formalism.L2.SG.Closed.level_subgroup_properties X).2.1⟩
 
 theorem multPoly_holds_of (hTT : TauTrans X.B.I) (hNP : NormPow X.B.I) (hO : OmCover X.B.I) : Cut.MultPoly X :=
-  multPoly_of X (Formalism.L2.SG.Closed.LatCount_holds X.B.I) Formalism.L2.SG.Closed.DistTri_holds reduction_theory hTT hNP hO
+  multPoly_of X (Formalism.L2.SG.Closed.LatCount_holds X.B.I) Formalism.L2.SG.Closed.DistTri_holds _root_.Formalism.L2.SG.Pf.Tau.reductionTau hTT hNP hO
 
 theorem iUnfold_holds_of (hK : X.LevelSubgroupCharacter) (hSC : SCompact X u) (hPU : PsiUnit X u) (hCB : ColBound X u hK)
     (hSec : SinfSection X u) (hNG : NormGeOne X.B.I) : Cut.IUnfold X u hK :=
@@ -1592,7 +1584,7 @@ theorem tauTrans_holds : TauTrans I := by
   have hne' : Nonempty (Sub I x') := by
     by_contra hE
     rw [not_nonempty_iff] at hE
-    have hpos := ((reduction_theory I hn).2 x').1
+    have hpos := ((_root_.Formalism.L2.SG.Pf.Tau.reductionTau I hn).2 x').1
     unfold LitS.Size.tau1 at hpos
     rw [Real.iInf_of_isEmpty] at hpos
     norm_num at hpos

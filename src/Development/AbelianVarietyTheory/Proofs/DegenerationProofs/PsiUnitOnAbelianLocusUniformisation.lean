@@ -76,7 +76,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.exists_unramified_ext_torsion_points_good_reduction : Laws → Laws2 → ∀ (T : Type) [CommRing T] [IsDomain T] [IsDiscreteValuationRing T] (G : Over (Sp T)) [GrpObj G] [IsCommMonObj G], IsSemiAbelian G → abLocus G = Set.univ → ∀ (F : Type) [Field F] [IsAlgClosed F] [Algebra T F], Function.Injective (algebraMap T F) → ∀ k : ℕ, IsUnit (k : T) → ∃ (T' : Subalgebra T F) (_ : IsDiscreteValuationRing T'), (∀ π : T, Irreducible π → Irreducible (algebraMap T T' π)) ∧ ∀ x : Over.mk (spMap (algebraMap T F)) ⟶ G, x ^ k = 1 → ∃ x' : Sp T' ⟶ G.left, spMap (T'.val.toRingHom) ≫ x' = x.left := by
-  first | exact @GlobalTheory.exists_unramified_torsion_points | exact GlobalTheory.exists_unramified_torsion_points | (intros; apply GlobalTheory.exists_unramified_torsion_points <;> assumption)
+  first | exact @GlobalTheory.exists_unramified_torsion_points
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsUnramifiedExtTorsionPointsGoodReductionStatement =====
@@ -92,7 +92,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.psiUnitOn_of_fixed_over_unramified_extension : Laws → Laws2 → ∀ (R : Type) [CommRing R] [IsDomain R] [IsNoetherianRing R] [IsIntegrallyClosed R] [CharZero R] (D : DegPre R), D.TauBimult → D.PsiEven → ∀ (P : PrimeSpectrum R), P.asIdeal.height = 1 → ∀ (n : ℕ), 2 ≤ n → (∀ (j : ℕ), ∃ (T' : Subring (AlgebraicClosure (FractionRing R))) (_ : IsDiscreteValuationRing T') (f : Localization.AtPrime P.asIdeal →+* T'), (∀ r : R, (f (algebraMap R _ r) : AlgebraicClosure (FractionRing R)) = algebraMap (FractionRing R) _ (algebraMap R _ r)) ∧ (∀ π, Irreducible π → Irreducible (f π)) ∧ ∀ (σ : AlgebraicClosure (FractionRing R) ≃+* AlgebraicClosure (FractionRing R)), (∀ x ∈ T', σ x = x) → ∀ p q : QkPt D (AlgebraicClosure (FractionRing R)) (n ^ j), QkExt σ.toRingHom p q → QkPt.Equiv D _ p q) → ∀ y, ∃ V : (Sp R).Opens, P ∈ V ∧ PsiUnitOn D y V := by
-  first | exact @GlobalTheory.UnramTorsion.psiUnitOn_of_unramified | exact GlobalTheory.UnramTorsion.psiUnitOn_of_unramified | (intros; apply GlobalTheory.UnramTorsion.psiUnitOn_of_unramified <;> assumption)
+  first | exact @GlobalTheory.UnramTorsion.psiUnitOn_of_unramified
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.PsiUnitOnOfFixedOverUnramifiedExtensionStatement =====
@@ -386,7 +386,7 @@ theorem psiUnitOn_abLocus : Laws → Laws2 → Laws3 → Laws4 → Laws5 → ∀
   have hp : QkToAkU U.toUnifPre F (n ^ j) p (f p) := (hf p _).2 rfl
   obtain ⟨w, hw⟩ := U.ext
   have fix := fixed_of_extends hcomp gp T' hx σ' hσ (f p) (hp w hw).1
-  exact (hfi p q).1 ((hf q _).1 ((GlobalTheory.T.qkToAkU_iff_galois_equivariant hL R I hB D A G hG U F F σ' (n ^ j) hk p q (f p) (f p) hpq fix).1 hp))
+  exact (hfi p q).1 ((hf q _).1 ((_root_.GlobalTheory.TorsionExt.qkToAkU_iff_of_qkExt hL R I hB D A G hG U F F σ' (n ^ j) hk p q (f p) (f p) hpq fix).1 hp))
 
 end GlobalTheory.PsiAbelian
 end -- clump:auto

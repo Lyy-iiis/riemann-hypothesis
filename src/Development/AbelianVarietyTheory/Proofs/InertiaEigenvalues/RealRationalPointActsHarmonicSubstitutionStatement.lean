@@ -181,7 +181,7 @@ theorem _root_.GlobalTheory.T.fockSubstitution_homogeneous_coeff_mem_after_scali
       z * ((u τ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ) x y ∈ O) →
     ∀ (d : ℕ) (P : MvPolynomial (FVar D m n) ℂ), P.IsHomogeneous d → (∀ mo, P.coeff mo ∈ O) →
       ∀ mo, z ^ d * (GlobalTheory.ExportSeries.fockSubst p u P).coeff mo ∈ O := by
-  first | exact @GlobalTheory.FockCoefInt.fockSubst_coeff_mem | exact GlobalTheory.FockCoefInt.fockSubst_coeff_mem | (intros; apply GlobalTheory.FockCoefInt.fockSubst_coeff_mem <;> assumption)
+  first | exact @GlobalTheory.FockCoefInt.fockSubst_coeff_mem
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.FockSubstitutionHomogeneousCoeffMemAfterScalingStatement =====
@@ -319,13 +319,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.LevelSeries
 
 
-theorem _root_.GlobalTheory.T.fockSubstitution_preserves_harmonicLetterPolynomials : ∀ (D : D7) (H : Geo.Tor.Host D.host.E) (Dw : Datum H) (m n : ℕ) (lt : LtN Dw n ≃ FVar D m n),
-    m = Dw.p + Dw.q → (∀ τ : D.host.E →+* ℂ, InPsi H τ ↔ ∃ ρ, τ = tauE D ρ) → IsLetters Dw lt →
-    ∀ (u : GlobalTheory.ExportSeries.GLR D n) (wa : (D.host.E →+* ℂ) × ℕ → ℕ) (Q : MvPolynomial (LtN Dw n) ℂ),
-      Q ∈ HHa Dw.mult n ℂ ComplexEmbedding.conjugate (InPsi H) (fun τ i => wa (τ, i)) →
-      MvPolynomial.rename lt.symm (GlobalTheory.ExportSeries.fockSubst (m := m) (fun _ => Dw.p) u (MvPolynomial.rename lt Q)) ∈
-        HHa Dw.mult n ℂ ComplexEmbedding.conjugate (InPsi H) (fun τ i => wa (τ, i)) := by
-  first | exact @GlobalTheory.FockSubstHarm.rename_fockSubst_mem_HHa | exact GlobalTheory.FockSubstHarm.rename_fockSubst_mem_HHa | (intros; apply GlobalTheory.FockSubstHarm.rename_fockSubst_mem_HHa <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.FockSubstitutionPreservesHarmonicLetterPolynomiaStatement =====
@@ -391,7 +384,7 @@ open GlobalTheory.LevelSeries
 theorem _root_.GlobalTheory.T.realComponent_eq_conj_inverse_rationalMatrix : ∀ (D : D7) (θ : InfFam D), IsInfFam θ → ∀ (V : HSp D) (γ a : GA D V) (γ' : GL (Fin V.rank) D.host.E),
     γ ∈ GQ V → GlobalTheory.Member.IsRat V γ γ' → a ∈ GinfC V → γ * a ∈ GfC V → ∀ τ : D.what₂.Tau, ∃ σ : D.host.E →+* ℂ,
       Formalism.IndefR.Datum.compAt θ τ (Formalism.L2.Theta.mt V a) = ((γ'⁻¹ : GL (Fin V.rank) D.host.E) : Matrix (Fin V.rank) (Fin V.rank) D.host.E).map σ := by
-  first | exact @GlobalTheory.ArchRatComp.compAt_mt_eq_map_inv | exact GlobalTheory.ArchRatComp.compAt_mt_eq_map_inv | (intros; apply GlobalTheory.ArchRatComp.compAt_mt_eq_map_inv <;> assumption)
+  first | exact @GlobalTheory.ArchRatComp.compAt_mt_eq_map_inv
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.RealComponentEqConjInverseRationalMatrixStatement =====
@@ -504,7 +497,7 @@ theorem _root_.GlobalTheory.T.realPoint_acts_on_thetaFockVacua_by_det_power : �
     ∃ k : D.what₂.Tau → ℤ, ∀ a ∈ GinfC V, ∀ f : WO V W → ℂ, IsThetaFunO ψ V W f →
       (∀ τ, IsFockVacAt (heisO ψ V W) θ τ (cplxO 1 (sW τ)) f) →
       om (a, 1) f = (∏ τ, (Formalism.IndefR.Datum.compAt θ τ (Formalism.L2.Theta.mt V a)).det ^ k τ) • f := by
-  first | exact @GlobalTheory.RealVacPow.vacuum_det_power | exact GlobalTheory.RealVacPow.vacuum_det_power | (intros; apply GlobalTheory.RealVacPow.vacuum_det_power <;> assumption)
+  first | exact @GlobalTheory.RealVacPow.vacuum_det_power
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.RealPointActsOnThetaFockVacuaByDetPowerStatement =====
@@ -538,20 +531,6 @@ theorem map_infPart_of_nsmul {V W : HSp D} {y : WO V W} {M : ℕ} (hM : M ≠ 0)
   rw [Matrix.map_apply, Matrix.smul_apply, map_nsmul, ← Nat.cast_smul_eq_nsmul D.host.F] at h1
   exact (smul_eq_zero.1 h1).resolve_left (Nat.cast_ne_zero.2 hM)
 
-theorem map_infPart_of_mem_latO {V W : HSp D} {LV : Set (Fin V.rank → D.host.E)} {LW : Set (Fin W.rank → D.host.E)}
-    {u : WO V W} (hu : u ∈ latO V W LV LW fun _ => True) : u.map (infPart D) = 0 := by
-  ext i j
-  rw [Matrix.map_apply, Matrix.zero_apply]
-  unfold latO at hu
-  refine AddSubgroup.closure_induction (p := fun u _ => infPart D (u i j) = 0) ?_ ?_ ?_ ?_ hu
-  · rintro w ⟨α, -, -, a, -, s, -, t, -, rfl⟩
-    rw [Matrix.of_apply]
-    exact (show infPart D (pairA D.host.F 0 α ⊗ₜ[D.host.F] (a * t i * ∑ k, star (s k) * V.gram k j)) =
-      (0 : Ainf D.host.F) ⊗ₜ[D.host.F] (a * t i * ∑ k, star (s k) * V.gram k j) from rfl).trans (TensorProduct.zero_tmul _ _)
-  · simp
-  · intro x y _ _ hx hy; rw [Matrix.add_apply, RingHom.map_add (f := _), hx, hy, add_zero]
-  · intro x _ hx; rw [Matrix.neg_apply, RingHom.map_neg, hx, neg_zero]
-
 theorem trSp_theta_fock : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle)
     (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ΛV : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E))
     (ΛW : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E)) (sW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ)
@@ -566,7 +545,7 @@ theorem trSp_theta_fock : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : In
   have hle : trSp ψ V W ΛV ΛW f₀ e M O₁ ≤ Sp.restrictScalars O₁ := by
     refine Submodule.span_le.2 ?_
     rintro _ ⟨y, -, hy, rfl⟩
-    exact Submodule.subset_span ⟨⟨y, map_infPart_of_nsmul hM (map_infPart_of_mem_latO hy)⟩, rfl⟩
+    exact Submodule.subset_span ⟨⟨y, map_infPart_of_nsmul hM (_root_.GlobalTheory.SplitScalar.latO_fin hy)⟩, rfl⟩
   obtain ⟨c, hc⟩ := Finsupp.mem_span_range_iff_exists_finsupp.1 (hle hf)
   rw [← hc]
   exact ⟨GlobalTheory.FinTranslate.isTheta_sum_heisO_fin D ψ V W hvac.1.1 f₀ hvac.2.theta _ c.support (fun a => a.1) c
@@ -603,7 +582,7 @@ theorem _root_.GlobalTheory.T.span_finiteTranslates_vacuum_thetaFockVacua : ∀ 
     (f₀ : WO V W → ℂ), VacPair ψ θ V W χV χW om ΛV ΛW sW f₀ →
     ∀ (e : AE D) (M : ℕ) (O₁ : Subring ℂ), M ≠ 0 → ∀ f ∈ trSp ψ V W ΛV ΛW f₀ e M O₁,
       IsThetaFunO ψ V W f ∧ ∀ τ, IsFockVacAt (heisO ψ V W) θ τ (cplxO 1 (sW τ)) f := by
-  first | exact @GlobalTheory.LevelSeries.trSp_theta_fock | exact GlobalTheory.LevelSeries.trSp_theta_fock | (intros; apply GlobalTheory.LevelSeries.trSp_theta_fock <;> assumption)
+  first | exact @GlobalTheory.LevelSeries.trSp_theta_fock
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.SpanFiniteTranslatesVacuumThetaFockVacuaStatement =====
@@ -705,7 +684,7 @@ theorem _root_.GlobalTheory.T.weilRep_real_point_fockVector_substitution : ∀ (
     ∀ P : MvPolynomial (FVar D W.rank V.rank) ℂ,
       om (a, 1) (stdF ψ θ V W sW BW f P) =
         stdF ψ θ V W sW BW (om (a, 1) f) (GlobalTheory.ExportSeries.fockSubst (fun _ => p) u P) := by
-  first | exact @GlobalTheory.RealFockVac.om_stdF_subst | exact GlobalTheory.RealFockVac.om_stdF_subst | (intros; apply GlobalTheory.RealFockVac.om_stdF_subst <;> assumption)
+  first | exact @GlobalTheory.RealFockVac.om_stdF_subst
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.WeilRepRealPointFockVectorSubstitutionStatement =====
@@ -771,7 +750,7 @@ theorem real_act_harm : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfF
       (l : ℂ) ^ c * ((u τ : GL (Fin V.rank) ℂ) : Matrix (Fin V.rank) (Fin V.rank) ℂ) x y ∈ O := fun τ x y => by
     rw [hui τ, hu τ, hσ τ]
     exact ⟨(hden (σ τ) x y).1, (hden (σ τ) x y).2⟩
-  have hQ2 := GlobalTheory.T.fockSubstitution_preserves_harmonicLetterPolynomials D H Dw W.rank V.rank lt hrk hΨ hlt u wa Q hQ
+  have hQ2 := _root_.GlobalTheory.FockSubstHarm.rename_fockSubst_mem_HHa D H Dw W.rank V.rank lt hrk hΨ hlt u wa Q hQ
   refine ⟨((l : ℂ) ^ (c * d + ∑ τ, c * (V.rank * (k τ).natAbs)) *
       ∏ τ, (Formalism.IndefR.Datum.compAt θ τ (Formalism.L2.Theta.mt V a)).det ^ k τ) •
       MvPolynomial.rename lt.symm (GlobalTheory.ExportSeries.fockSubst (m := W.rank) (fun _ => Dw.p) u (MvPolynomial.rename lt Q)),
@@ -826,7 +805,7 @@ open GlobalTheory.LevelSeries
 
 
 theorem _root_.GlobalTheory.T.real_rational_point_acts_harmonic_substitution : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle) (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)) (ΛV : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (ΛW : Submodule (𝓞 D.host.E) (Fin W.rank → D.host.E)) (sW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ) (f₀ : WO V W → ℂ), VacPair ψ θ V W χV χW om ΛV ΛW sW f₀ → ∀ (H : Geo.Tor.Host D.host.E) (Dw : Datum H) (BW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ) (lt : LtN Dw V.rank ≃ FVar D W.rank V.rank) (wa : (D.host.E →+* ℂ) × ℕ → ℕ), W.rank = Dw.p + Dw.q → (∀ τ : D.host.E →+* ℂ, InPsi H τ ↔ ∃ ρ, τ = tauE D ρ) → (∀ τ, IsONBasis (gramAt D W τ) (sW τ) (BW τ) Dw.p) → IsLetters Dw lt → ∀ l c : ℕ, ∃ c' : ℕ, ∀ (γ a : GA D V) (γ' : GL (Fin V.rank) D.host.E) (O : Subring ℂ), γ ∈ GQ V → GlobalTheory.Member.IsRat V γ γ' → a ∈ GinfC V → γ * a ∈ GfC V → (∀ (τ : D.host.E →+* ℂ) x y, (l : ℂ) ^ c * τ (γ'.val x y) ∈ O ∧ (l : ℂ) ^ c * τ (γ'⁻¹.val x y) ∈ O) → ∀ Q ∈ HHa Dw.mult V.rank ℂ ComplexEmbedding.conjugate (InPsi H) (fun τ i => wa (τ, i)), (∀ mo, Q.coeff mo ∈ O) → ∃ Q' ∈ HHa Dw.mult V.rank ℂ ComplexEmbedding.conjugate (InPsi H) (fun τ i => wa (τ, i)), (∀ mo, Q'.coeff mo ∈ O) ∧ ∀ (M : ℕ) (e : AE D) (O₁ : Subring ℂ), M ≠ 0 → ∀ f ∈ trSp ψ V W ΛV ΛW f₀ e M O₁, ((l : ℂ) ^ c') • om (a, 1) (stdF ψ θ V W sW BW f (MvPolynomial.rename lt Q)) = stdF ψ θ V W sW BW f (MvPolynomial.rename lt Q') := by
-  first | exact @GlobalTheory.LevelSeries.ArchAct.real_act_harm | exact GlobalTheory.LevelSeries.ArchAct.real_act_harm | (intros; apply GlobalTheory.LevelSeries.ArchAct.real_act_harm <;> assumption)
+  first | exact @GlobalTheory.LevelSeries.ArchAct.real_act_harm
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.RealRationalPointActsHarmonicSubstitutionStatement =====

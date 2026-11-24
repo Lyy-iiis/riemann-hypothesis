@@ -240,9 +240,6 @@ theorem e_mem_Xa (F : FlagD H r) {a : ℕ} (b : Fin r) (h : b.val < a) : F.e b.c
   unfold FlagD.Xa
   exact Submodule.subset_span ⟨b, h, rfl⟩
 
-theorem Xa_mono (F : FlagD H r) {a b : ℕ} (h : a ≤ b) : F.Xa a ≤ F.Xa b := by
-  exact GlobalTheory.DegCnt.LiftS.Xa_le (fun c hc => GlobalTheory.DegCnt.LiftS.e_mem_Xa F c (lt_of_lt_of_le hc h))
-
 theorem Xa_le_X (F : FlagD H r) (a : ℕ) : F.Xa a ≤ F.X := by
   exact GlobalTheory.DegCnt.LiftS.Xa_le (fun b _ => GlobalTheory.DegCnt.LiftS.e_mem_Xa F b b.2)
 
@@ -574,7 +571,6 @@ theorem pair_ideal (𝔫 : Ideal (𝓞 K)) (hn : ∀ x ∈ 𝔫, ∃ y ∈ 𝔫,
     change algebraMap (𝓞 K) K (c' * k) = _
     rw [map_mul]
     congr 1
-    all_goals exact hc'e
   · rintro a b ⟨m1, hm1, e1⟩ ⟨m2, hm2, e2⟩
     refine ⟨m1 + m2, Ideal.add_mem _ hm1 hm2, ?_⟩
     rw [map_add (f := _), ← e1, ← e2]
@@ -639,7 +635,7 @@ theorem s_Xa (G : FlagD H r) {s : V →ₗ[K] V} (hs : G.InN s) (a : ℕ) {y : V
   obtain ⟨-, -, he, -⟩ := hs
   have key : ∀ b : Fin r, b.val < a → s (G.e b.castSucc) ∈ G.Xa a := by
     intro b hb
-    have h1 : s (G.e b.castSucc) - G.e b.castSucc ∈ G.Xa a := Xa_mono G hb.le (he b)
+    have h1 : s (G.e b.castSucc) - G.e b.castSucc ∈ G.Xa a := _root_.GlobalTheory.UnipStab.Xa_mono G hb.le (he b)
     have h2 : G.e b.castSucc ∈ G.Xa a := Submodule.subset_span ⟨b, hb, rfl⟩
     simpa using add_mem h1 h2
   have hle : G.Xa a ≤ (G.Xa a).comap s := Submodule.span_le.2 (by
@@ -694,7 +690,7 @@ theorem exists_lift [FiniteDimensional K V] (N : NF H r) (h0 : II N.F N.F' ⊓ N
     intro u hu
     have hsu := hsII u hu
     rw [hfa, levi_apply, p_II N h0 hu, q_X N (hIIX u hu)]
-    simp only [sub_self, sub_zero, map_zero, add_zero, LinearEquiv.coe_coe]
+    simp only [sub_self, map_zero, add_zero, LinearEquiv.coe_coe]
     exact htr _ (hermFlag_isotropicPart_orthogonal_anisotropicVector N.F (hIIX _ hsu)) (orth_X N.F (hIIX _ hsu) (hIIX d hdII))
   have hfXa : ∀ u ∈ N.F.Xa N.j, f u = s u := by
     intro u hu

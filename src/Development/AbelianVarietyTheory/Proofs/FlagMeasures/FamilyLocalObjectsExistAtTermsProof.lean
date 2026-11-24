@@ -192,8 +192,6 @@ theorem base_data_of_global_term : ∀ (D : D7) (Z : LocDat D), ∀ (u u' : D.wh
     exact Submodule.mem_span_singleton.mpr ⟨⟨Qa p a b - Qb p a b, sub_mem (hqa a b) (hqb a b)⟩, by
       first
         | exact (Subring.smul_def _ _).trans (mul_one _)
-        | exact mul_one _
-        | (show _ * _ = _; exact mul_one _)
         | rfl⟩
   · rw [hf'eq p]; exact (hQb p).2
 
@@ -213,7 +211,7 @@ open scoped Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.baseData_of_global_term : ∀ (D : D7) (Z : LocDat D), ∀ (u u' : D.what₂.Word) (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) (Λ : Submodule (𝓞 D.host.E) (VS D).V), IsRowLat D F0 Λ → ∀ F' : LFlag (D.sp.Y 0) D.R.rS (((D.mem u').A.T : ℕ) : D.host.E), PD D Λ (lf D F0) u' F' → Gval (lf D F0) F' ≠ 0 → ∀ w : Point D.host.E (D.R.rS + 1), IsInCell (ZhatOM (ZhatL (lf D F0) F')) w → ∃ (F00 : LFlag (D.sp.Y 0) D.R.rS (((D.mem u).A.T : ℕ) : D.host.E)) (F'0 F'1 : LFlag (D.sp.Y 0) D.R.rS (((D.mem u').A.T : ℕ) : D.host.E)) (FP : ∀ p : PlF D, LocNG.FPair (locH Z p) D.R.rS) (d0 : ∀ p, LocNG.Datum (FP p)), (∃ n ∈ Formalism.L2.SG.NGData.NRat (lf D F0), ∀ a, frame F00 a = n (frame (lf D F0) a)) ∧ ZhatOM (ZhatL F00 F'0) = ptMat w ∧ Gval F00 F'0 ≠ 0 ∧ IsInCell (ZhatOM (ZhatL (lf D F0) F'1)) w ∧ (∀ p, AtBase Z p F00 F'0 (Tu D u) (Tu D u') (FP p) ∧ (FP p).RelG (LocNG.theta (Z.M p)) ∧ LocNG.IsTermOver (FP p) (d0 p) (locU Z p Λ (lf D F0) F' (Tu D u) (Tu D u')) ∧ (locU Z p Λ (lf D F0) F' (Tu D u) (Tu D u')).f' = scaled Z p (frame F'1)) ∧ {p : PlF D | ¬ ((FP p).PrimeTo ∧ LocNG.IsTermOver (FP p) (d0 p) ⟨lattice₂ D Z.M p Λ, scaled Z p (frame F00), scaled Z p (frame F'0), ((Tu D u : ℕ) : (D.s.atP p).Fp), ((Tu D u' : ℕ) : (D.s.atP p).Fp)⟩)}.Finite := by
-  first | exact @GlobalTheory.BaseTerm.base_data_of_global_term | exact GlobalTheory.BaseTerm.base_data_of_global_term | (intros; apply GlobalTheory.BaseTerm.base_data_of_global_term <;> assumption)
+  first | exact @GlobalTheory.BaseTerm.base_data_of_global_term
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.BaseDataOfGlobalTermStatement =====
@@ -281,11 +279,6 @@ variable {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F]
   {E : Type} [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E]
   {M : Model F E} {V : Type} [AddCommGroup V] [Module E V]
 
-theorem mem_img (g : V ≃ₗ[E] V) (Λ : Submodule M.L.O V) (x : V) :
-    x ∈ img g Λ ↔ ∃ y ∈ Λ, g y = x := by
-  unfold img
-  exact Submodule.mem_map
-
 theorem span_map_le (g : V ≃ₗ[E] V) (S : Set V) :
     ∀ v ∈ Submodule.span M.L.O S, g v ∈ Submodule.span M.L.O ((fun x => g x) '' S) := by
   intro v hv
@@ -293,65 +286,12 @@ theorem span_map_le (g : V ≃ₗ[E] V) (S : Set V) :
   rw [← Submodule.span_image] at h
   exact h
 
-theorem img_selfDual (H : HermSp M V) {g : V ≃ₗ[E] V} (hg : IsUnitary H g)
-    {Λ : Submodule M.L.O V} (hΛ : H.IsSelfDual Λ) : H.IsSelfDual (img g Λ) := by
-  obtain ⟨hfg, hsp, hdual⟩ := hΛ
-  have hg' : ∀ x y, H.h (g x) (g y) = H.h x y := hg
-  have hset : ((img g Λ : Submodule M.L.O V) : Set V) = (g : V →ₗ[E] V) '' (Λ : Set V) := by
-    ext x
-    simp only [SetLike.mem_coe, mem_img, Set.mem_image, LinearEquiv.coe_coe]
-  refine ⟨hfg.map _, ?_, fun x => ?_⟩
-  · rw [hset, Submodule.span_image, hsp, Submodule.map_top]
-    exact LinearEquiv.range g
-  · have hx : x ∈ img g Λ ↔ g.symm x ∈ Λ := by
-      rw [mem_img]
-      constructor
-      · rintro ⟨y, hy, rfl⟩
-        simpa using hy
-      · intro h
-        exact ⟨_, h, by simp⟩
-    rw [hx, hdual (g.symm x)]
-    constructor
-    · intro h y hy
-      obtain ⟨z, hz, rfl⟩ := (mem_img g Λ y).1 hy
-      have := h z hz
-      rw [← hg' (g.symm x) z, LinearEquiv.apply_symm_apply] at this
-      exact this
-    · intro h z hz
-      rw [← hg' (g.symm x) z, LinearEquiv.apply_symm_apply]
-      exact h (g z) ((mem_img g Λ (g z)).2 ⟨z, hz, rfl⟩)
-
-theorem img_frame (H : HermSp M V) {g : V ≃ₗ[E] V} (hg : IsUnitary H g)
-    {Λ : Submodule M.L.O V} {r : ℕ} {f : Fin (r + 1) → V} {T : F} (hf : H.IsFrame Λ r f T) :
-    H.IsFrame (img g Λ) r (fun b => g (f b)) T := by
-  have hg' : ∀ x y, H.h (g x) (g y) = H.h x y := hg
-  obtain ⟨⟨hmem, hli, hsp⟩, hiso, hzz, hT⟩ := hf
-  refine ⟨⟨fun a => (mem_img g Λ _).2 ⟨f a, hmem a, rfl⟩, hli.map' _ g.ker, ?_⟩, ?_, ?_, hT⟩
-  · intro x hx hxs
-    obtain ⟨y, hy, rfl⟩ := (mem_img g Λ x).1 hx
-    have hr : Set.range (fun b => g (f b)) = (g : V →ₗ[E] V) '' Set.range f :=
-      Set.range_comp (⇑(g : V →ₗ[E] V)) f
-    have hys : y ∈ Submodule.span E (Set.range f) := by
-      rw [hr, Submodule.span_image, Submodule.mem_map] at hxs
-      obtain ⟨z, hz, hzy⟩ := hxs
-      rwa [← g.injective hzy]
-    have h2 := span_map_le (M := M) g (Set.range f) y (hsp y hy hys)
-    have hr' : Set.range (fun b => g (f b)) = (fun x => g x) '' Set.range f :=
-      Set.range_comp (fun x => g x) f
-    rw [hr']
-    exact h2
-  · intro a b hab
-    rw [hg']
-    exact hiso a b hab
-  · rw [hg']
-    exact hzz
-
 theorem smulLat_map (H : HermSp M V) (g : V ≃ₗ[E] V) (c : E) (Λ : Submodule M.L.O V) {x : V}
     (hx : x ∈ H.smulLat c Λ) : g x ∈ H.smulLat c (img g Λ) := by
   unfold HermSp.smulLat at hx ⊢
   refine Submodule.span_mono ?_ (span_map_le (M := M) g _ x hx)
   rintro _ ⟨_, ⟨v, hv, rfl⟩, rfl⟩
-  exact ⟨g v, (mem_img g Λ (g v)).2 ⟨v, hv, rfl⟩, by simp only [map_smul]⟩
+  exact ⟨g v, (_root_.GlobalTheory.LocOver.TermOver.mem_img g Λ (g v)).2 ⟨v, hv, rfl⟩, by simp only [map_smul]⟩
 
 private lemma Zhat_comp_unitary (H : HermSp M V) {g : V ≃ₗ[E] V} (hg : IsUnitary H g) {r : ℕ}
     (f f' : Fin (r + 1) → V) :
@@ -368,7 +308,7 @@ private lemma Dl_comp_unitary (H : HermSp M V) {g : V ≃ₗ[E] V} (hg : IsUnita
 theorem isTerm_move (H : HermSp M V) {g : V ≃ₗ[E] V} (hg : IsUnitary H g) {r : ℕ} {t : Term V M r}
     (ht : H.IsTerm t) : H.IsTerm (move g t) := by
   obtain ⟨hsd, hfr, hfr', hD, hG, hsp⟩ := ht
-  refine ⟨img_selfDual H hg hsd, img_frame H hg hfr, img_frame H hg hfr', ?_, ?_, ?_⟩
+  refine ⟨_root_.GlobalTheory.LocOver.TermOver.img_selfDual H hg hsd, _root_.GlobalTheory.LocOver.TermOver.img_frame H hg hfr, _root_.GlobalTheory.LocOver.TermOver.img_frame H hg hfr', ?_, ?_, ?_⟩
   · show IsUnit (H.Dl (fun b => g (t.f b)) (fun b => g (t.f' b)) (r + 1))
     rw [Dl_comp_unitary H hg]
     exact hD
@@ -439,7 +379,7 @@ open scoped Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.globalTerm_lies_over_localDatum_after_isometry : ∀ (D : D7) (Z : LocDat D), ∀ (u u' : D.what₂.Word) (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) (Λ : Submodule (𝓞 D.host.E) (VS D).V), IsRowLat D F0 Λ → ∀ F' : LFlag (D.sp.Y 0) D.R.rS (((D.mem u').A.T : ℕ) : D.host.E), PD D Λ (lf D F0) u' F' → Gval (lf D F0) F' ≠ 0 → ∀ (w : Point D.host.E (D.R.rS + 1)) (F00 : LFlag (D.sp.Y 0) D.R.rS (((D.mem u).A.T : ℕ) : D.host.E)) (F'0 : LFlag (D.sp.Y 0) D.R.rS (((D.mem u').A.T : ℕ) : D.host.E)), IsInCell (ZhatOM (ZhatL (lf D F0) F')) w → ZhatOM (ZhatL F00 F'0) = ptMat w → ∀ (p : PlF D) (P : LocNG.FPair (locH Z p) D.R.rS), AtBase Z p F00 F'0 (Tu D u) (Tu D u') P → ∃ d, Over P d (locU Z p Λ (lf D F0) F' (Tu D u) (Tu D u')) := by
-  first | exact @GlobalTheory.LocOver.GlobOver.over_local | exact GlobalTheory.LocOver.GlobOver.over_local | (intros; apply GlobalTheory.LocOver.GlobOver.over_local <;> assumption)
+  first | exact @GlobalTheory.LocOver.GlobOver.over_local
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.GlobalTermLiesOverLocalDatumAfterIsometryStatement =====
@@ -481,7 +421,7 @@ theorem same : ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.W
   have hgm : Formalism.HermitianLatticesTheory.gmap (n * (t.lin * n' * t.lin⁻¹)) t.lam = t.lam := by
     have hg0 : Formalism.HermitianLatticesTheory.gmap t.lin t.lam' = t.lam := t.rep.2.2.2.1
     have hg1 : Formalism.HermitianLatticesTheory.gmap t'.lin t'.lam' = t'.lam := t'.rep.2.2.2.1
-    rw [hβ, Formalism.L2.SG.Pf.MainEqClass.gmap_mul', Formalism.L2.SG.Pf.MainEqClass.gmap_inv_of' hg0, hl', hg1, hl]
+    rw [hβ, _root_.PI.DCRelEquiv.UnitaryGroupMassFormula.gmap_mul', _root_.Formalism.L2.SG.Pf.gmap_inv hg0, hl', hg1, hl]
   have hfr : ∀ a, frame t'.frame a = (n * (t.lin * n' * t.lin⁻¹)) (frame t.frame a) := by
     intro a
     rw [hβ]
@@ -491,8 +431,8 @@ theorem same : ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.W
     rw [LinearEquiv.symm_apply_apply]
   have hI := Formalism.L2.SG.Pf.iotaDict_fwd Y t t' hl hl' hi
   rw [← hβ] at hI
-  have hEq := Formalism.L2.SG.Closed.TermEqIff_holds D u u' (X.Fu u) t.lam hΛ
-  have hGF := (Formalism.L2.SG.Closed.TermFun_holds D u u' (X.Fu u) t.lam hΛ).1
+  have hEq := _root_.term_eq_iff_relation D u u' (X.Fu u) t.lam hΛ
+  have hGF := (_root_.term_function_const D u u' (X.Fu u) t.lam hΛ).1
   have hrel : DCRel t.lam (lf D (X.Fu u)) (Quot.out t.toTerm.cls).1 t.frame :=
     (hEq (Quot.out t.toTerm.cls) ⟨t.frame, t.rep.2.2.2.2⟩).1 (Quot.out_eq _)
   have hR0 : Gval (lf D (X.Fu u)) (Quot.out t.toTerm.cls).1 ≠ 0 := hG
@@ -511,7 +451,7 @@ theorem same : ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.W
     t.rep.2.2.2.2 hpd' hGt n hn _ hmN hgm hfr hI p P hP d s1
   have s3 : Over P d (locU (⟨Y.δ, Y.M, Y.agree⟩ : LocDat D) p t'.lam (lf D (X.Fu u)) t'.frame (Tu D u) (Tu D u')) := by
     rw [← hl]; exact s2
-  have hEq' := Formalism.L2.SG.Closed.TermEqIff_holds D u u' (X.Fu u) t'.lam hΛ'
+  have hEq' := _root_.term_eq_iff_relation D u u' (X.Fu u) t'.lam hΛ'
   have hrel' : DCRel t'.lam (lf D (X.Fu u)) t'.frame (Quot.out t'.toTerm.cls).1 :=
     (hEq' ⟨t'.frame, t'.rep.2.2.2.2⟩ (Quot.out t'.toTerm.cls)).1 (Quot.out_eq _).symm
   exact (GlobalTheory.T.localData_globalTerm_independent_of_representative D (⟨Y.δ, Y.M, Y.agree⟩ : LocDat D) u u' (X.Fu u) t'.lam hΛ' t'.frame
@@ -532,7 +472,7 @@ open scoped Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.terms_same_row_same_weight_same_localData : ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.Word), ∀ t t' : TauC Y u u', t.G ≠ 0 → (Y.tO u u').rowOf t = (Y.tO u u').rowOf t' → Formalism.L2.SG.TermOp.wt t = Formalism.L2.SG.TermOp.wt t' ∧ (nmlOf Y u u' t = nmlOf Y u u' t' → ∀ (p : PlF D) (P : LocNG.FPair (locH (⟨Y.δ, Y.M, Y.agree⟩ : LocDat D) p) D.R.rS), P.RelG (LocNG.theta (Y.M p)) → ∀ d, Over P d (locU (⟨Y.δ, Y.M, Y.agree⟩ : LocDat D) p t.toTerm.lam (lf D (X.Fu u)) (Quot.out t.toTerm.cls).1 (Tu D u) (Tu D u')) → Over P d (locU (⟨Y.δ, Y.M, Y.agree⟩ : LocDat D) p t'.toTerm.lam (lf D (X.Fu u)) (Quot.out t'.toTerm.cls).1 (Tu D u) (Tu D u'))) := by
-  first | exact @GlobalTheory.LocOver.TermSame.same | exact GlobalTheory.LocOver.TermSame.same | (intros; apply GlobalTheory.LocOver.TermSame.same <;> assumption)
+  first | exact @GlobalTheory.LocOver.TermSame.same
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.TermsSameRowSameWeightSameLocalDataStatement =====

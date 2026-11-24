@@ -262,15 +262,11 @@ def shiftEmb {m k : ℕ} (σ : Fin m ↪o Fin k) : Fin m ↪o Fin (k + 1) :=
 @[simp] theorem consEmb_zero {m k : ℕ} (σ : Fin m ↪o Fin k) : consEmb σ 0 = 0 := by
   first
     | rfl
-    | exact Fin.cons_zero (α := fun _ => Fin (k + 1)) _ _
-    | (show Fin.cons (α := fun _ => Fin (k + 1)) 0 (fun a => (σ a).succ) 0 = 0; simp)
 
 @[simp] theorem consEmb_succ {m k : ℕ} (σ : Fin m ↪o Fin k) (a : Fin m) :
     consEmb σ a.succ = (σ a).succ := by
   first
     | rfl
-    | exact Fin.cons_succ (α := fun _ => Fin (k + 1)) _ _ _
-    | (show Fin.cons (α := fun _ => Fin (k + 1)) 0 (fun a => (σ a).succ) a.succ = (σ a).succ; simp)
 
 @[simp] theorem shiftEmb_apply {m k : ℕ} (σ : Fin m ↪o Fin k) (a : Fin m) :
     shiftEmb σ a = (σ a).succ := rfl
@@ -339,12 +335,10 @@ theorem interleave_embeddings : ∀ {T : Type 1} {u v w : List T}, Zc.Comb.Inter
       · rw [GlobalTheory.CompanionTheory.WordProd.Intl.consEmb_succ]
         first
           | exact hu x
-          | simpa using hu x
     · intro x
       rw [GlobalTheory.CompanionTheory.WordProd.Intl.shiftEmb_apply]
       first
         | exact hv x
-        | simpa using hv x
   | @right a u v w _ ih =>
     obtain ⟨r, σ₀, σ₁, h0, h1, hu, hv⟩ := ih
     refine ⟨(Fin.cons (1 : Fin 2) r : Fin (w.length + 1) → Fin 2), GlobalTheory.CompanionTheory.WordProd.Intl.shiftEmb σ₀,
@@ -370,7 +364,6 @@ theorem interleave_embeddings : ∀ {T : Type 1} {u v w : List T}, Zc.Comb.Inter
       rw [GlobalTheory.CompanionTheory.WordProd.Intl.shiftEmb_apply]
       first
         | exact hu x
-        | simpa using hu x
     · intro x
       obtain rfl | ⟨x, rfl⟩ := Fin.eq_zero_or_eq_succ (n := v.length) x
       · rw [GlobalTheory.CompanionTheory.WordProd.Intl.consEmb_zero]
@@ -378,7 +371,6 @@ theorem interleave_embeddings : ∀ {T : Type 1} {u v w : List T}, Zc.Comb.Inter
       · rw [GlobalTheory.CompanionTheory.WordProd.Intl.consEmb_succ]
         first
           | exact hv x
-          | simpa using hv x
 
 end GlobalTheory.CompanionTheory.WordProd.Intl
 end -- clump:auto
@@ -471,7 +463,7 @@ theorem wd_prod₂_of_interleave_fin (hA : GlobalTheory.Published.IrreducibleAdm
   classical
   obtain ⟨hdu, hju⟩ := hxu
   obtain ⟨hdv, hjv⟩ := hyv
-  have hE := interleave_embed (T := IrrGL (k := k)) hw
+  have hE := _root_.GlobalTheory.CompanionTheory.WordProd.Intl.interleave_embeddings (T := IrrGL (k := k)) hw
   obtain ⟨r, σ₀, σ₁, hE⟩ := hE
   obtain ⟨hr0, hr1, hw0, hw1⟩ := hE
   let n := w.length
@@ -507,12 +499,12 @@ theorem wd_prod₂_of_interleave_fin (hA : GlobalTheory.Published.IrreducibleAdm
       jhMult (piTensor fun j => (s₀ i j).rep.ρ) (jac (f i) (ρ i)) ≠ 0 := by
     intro f
     refine Fin.forall_fin_two.2 ⟨?_, ?_⟩
-    · refine row_ne_zero (X 0).rep (hs 0) w.get σ₀ (fun j => b₀.1 0 j) (fun a => ?_) (fun j hj => ?_) hdeg0
+    · refine _root_.GlobalTheory.CompanionTheory.WordProd.RowCell.jhMult_row (X 0).rep (hs 0) w.get σ₀ (fun j => b₀.1 0 j) (fun a => ?_) (fun j hj => ?_) hdeg0
         (f 0) ?_
       · simp [b₀, (hr0 (σ₀ a)).2 ⟨a, rfl⟩]
       · simp [b₀, mt (hr0 j).1 hj]
       · rw [jm_congr' (funext hw0) hdeg0 hdu]; exact hju
-    · refine row_ne_zero (X 1).rep (hs 1) w.get σ₁ (fun j => b₀.1 1 j) (fun a => ?_) (fun j hj => ?_) hdeg1
+    · refine _root_.GlobalTheory.CompanionTheory.WordProd.RowCell.jhMult_row (X 1).rep (hs 1) w.get σ₁ (fun j => b₀.1 1 j) (fun a => ?_) (fun j hj => ?_) hdeg1
         (f 1) ?_
       · simp [b₀, (hr1 (σ₁ a)).2 ⟨a, rfl⟩]
       · simp [b₀, mt (hr1 j).1 hj]
@@ -555,7 +547,7 @@ section -- clump:auto
 open GlobalTheory.PRep GlobalTheory.SplitWeil GlobalTheory.SmGL GlobalTheory.LocGL GlobalTheory.JHMult Zc Zc.M
 
 theorem _root_.GlobalTheory.T.word_occurs_product_interleave : ∀ {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (hA : GlobalTheory.Published.IrreducibleAdmissibleGL), ∀ (x y : IrrGL (k := k)) (u v w : List (IrrGL (k := k))), (∀ c ∈ u, c.IsCusp) → (∀ c ∈ v, c.IsCusp) → Wd x.rep u → Wd y.rep v → Zc.Comb.Interleave u v w → Wd (prod₂ x.rep y.rep) w := by
-  first | exact @GlobalTheory.CompanionTheory.WordProd.wd_prod₂_of_interleave | exact GlobalTheory.CompanionTheory.WordProd.wd_prod₂_of_interleave | (intros; apply GlobalTheory.CompanionTheory.WordProd.wd_prod₂_of_interleave <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.WordProd.wd_prod₂_of_interleave
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.WordOccursProductInterleaveStatement =====
@@ -647,7 +639,7 @@ theorem langlandsMultisegments_of_clauses (hA : GlobalTheory.Published.Irreducib
     (hFree : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k], LOrderFree k)
     (hE : GlobalTheory.Published.LanglandsExhaustionGL) : GlobalTheory.Published.LanglandsMultisegments := by
   intro k _ _ _ _ _
-  exact ⟨GlobalTheory.T.langlands_injective_of_socle hA (hSoc k) (hSeg k),
+  exact ⟨_root_.GlobalTheory.CompanionTheory.Multisegment.lInjective hA (hSoc k) (hSeg k),
     fun 𝔪 𝔫 x y hd h₀ h₁ hy =>
       _root_.GlobalTheory.CompanionTheory.LangSumSub.main hA (hSoc k) (hSeg k)
         (hFree k) (hE k) 𝔪 𝔫 x y hd h₀ h₁ hy⟩

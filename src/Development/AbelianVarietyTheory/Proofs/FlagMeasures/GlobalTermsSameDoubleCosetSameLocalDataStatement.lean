@@ -682,9 +682,9 @@ theorem over_same : ∀ (D : D7) (Z : LocDat D), ∀ (u u' : D.what₂.Word) (F0
   have hnI : n ∈ Formalism.HermitianLatticesTheory.isom (VS D).hT := hn.1
   have hmI : m ∈ Formalism.HermitianLatticesTheory.isom (VS D).hT := hm.1
   have hnmI : n * m ∈ Formalism.HermitianLatticesTheory.isom (VS D).hT := mul_mem hnI hmI
-  obtain ⟨gn, hgnE, -, -, -, hgnN⟩ := GlobalTheory.T.rational_isometry_extends_local_isometry D Z p n hnI
-  obtain ⟨gm, hgmE, -, -, -, hgmN⟩ := GlobalTheory.T.rational_isometry_extends_local_isometry D Z p m hmI
-  obtain ⟨g, -, -, hguniq, hgimg, -⟩ := GlobalTheory.T.rational_isometry_extends_local_isometry D Z p (n * m) hnmI
+  obtain ⟨gn, hgnE, -, -, -, hgnN⟩ := _root_.GlobalTheory.LocExt.ext_isometry D Z p n hnI
+  obtain ⟨gm, hgmE, -, -, -, hgmN⟩ := _root_.GlobalTheory.LocExt.ext_isometry D Z p m hmI
+  obtain ⟨g, -, -, hguniq, hgimg, -⟩ := _root_.GlobalTheory.LocExt.ext_isometry D Z p (n * m) hnmI
   have hext : Ext p (n * m) (gn * gm) := fun x => by
     show (gn * gm) (baseChange₂ D p x) = baseChange₂ D p ((n * m) x)
     rw [LinearEquiv.mul_apply, hgmE x, hgnE (m x), LinearEquiv.mul_apply]
@@ -738,7 +738,7 @@ open scoped Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.global_terms_same_doubleCoset_same_local_data : ∀ (D : D7) (Z : LocDat D), ∀ (u u' : D.what₂.Word) (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) (Λ : Submodule (𝓞 D.host.E) (VS D).V), IsRowLat D F0 Λ → ∀ F₁ F₂ : LFlag (D.sp.Y 0) D.R.rS (((D.mem u').A.T : ℕ) : D.host.E), PD D Λ (lf D F0) u' F₁ → PD D Λ (lf D F0) u' F₂ → Gval (lf D F0) F₁ ≠ 0 → ∀ n ∈ Formalism.L2.SG.NGData.NRat (lf D F0), ∀ m ∈ Formalism.L2.SG.NGData.NRat F₁, Formalism.HermitianLatticesTheory.gmap (n * m) Λ = Λ → (∀ a, frame F₂ a = (n * m) (frame F₁ a)) → IotaCompat Λ (lf D F0) F₁ F₂ (n * m) (gS D) → ∀ (p : PlF D) (P : LocNG.FPair (locH Z p) D.R.rS), P.RelG (LocNG.theta (Z.M p)) → ∀ d, Over P d (locU Z p Λ (lf D F0) F₁ (Tu D u) (Tu D u')) → Over P d (locU Z p Λ (lf D F0) F₂ (Tu D u) (Tu D u')) := by
-  first | exact @GlobalTheory.LocSame.over_same | exact GlobalTheory.LocSame.over_same | (intros; apply GlobalTheory.LocSame.over_same <;> assumption)
+  first | exact @GlobalTheory.LocSame.over_same
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.GlobalTermsSameDoubleCosetSameLocalDataStatement =====

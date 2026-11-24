@@ -844,13 +844,6 @@ theorem kappa_basis (κ : W ⊗[Z] T ≃+ RW ⊗[O] T) (hκ : ∀ w t, κ (w ⊗
   rw [hw, key, AddEquiv.symm_apply_apply, LinearEquiv.apply_symm_apply]
 
 
-omit [Module Z T] in
-theorem map_mulLeft (r : RW) (y : RW ⊗[O] T) :
-    TensorProduct.map (LinearMap.mulLeft O r) (LinearMap.id : T →ₗ[O] T) y = r • y := by
-  induction y with
-  | tmul w' t => rw [TensorProduct.map_tmul, TensorProduct.smul_tmul']; rfl
-  | add y y' h h' => rw [map_add (f := _), smul_add, h, h']
-
 end Kappa
 
 section Rings
@@ -987,7 +980,7 @@ theorem perfect_tilt {l : ℕ} [Fact l.Prime] : PerfectRing (Cb l) l := by
   obtain ⟨a', rfl⟩ := surjective_frobenius (OCb l) l a
   obtain ⟨b', rfl⟩ := surjective_frobenius (OCb l) l b
   refine ⟨algebraMap _ _ a' / algebraMap _ _ b', ?_⟩
-  simp [frobenius_def, div_pow]
+  simp [frobenius_def]
 
 theorem exists_basis_OL {l : ℕ} [Fact l.Prime] (LL : FinExt l) :
     ∃ d, Nonempty (Module.Basis (Fin d) ℤ_[l] ↥(OL LL)) := by
@@ -1349,7 +1342,7 @@ theorem build_prism (BS : GlobalTheory.Published.BhattScholzeCrystallineLattices
         rw [hγ, hH g hg, map_one]; rfl))
       rw [hνb, hν3, e, FCrys.tr_id]) (fun i => by
         rw [hAφ]
-        exact Finset.sum_congr rfl fun i _ => (map_mulLeft _ _).symm)
+        exact Finset.sum_congr rfl fun i _ => (_root_.GlobalTheory.HWL.EtMem.map_mulLeft _ _).symm)
     choose x hx using hm
     refine ⟨q T hT, x, card_basis T o (cb T hT), by simpa only [hx] using hbas, fun y => ?_⟩
     simp only [hx, ← hνsum]

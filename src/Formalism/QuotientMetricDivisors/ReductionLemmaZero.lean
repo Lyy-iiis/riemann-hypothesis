@@ -85,7 +85,7 @@ lemma le_ph_sub {a b : ℝ} (ha : 0 < a) (hab : a ≤ b) :
   have h1 := Real.log_le_sub_one_of_pos (div_pos ha hb)
   rw [Real.log_div ha.ne' hb.ne'] at h1
   have h2 := mul_le_mul_of_nonneg_left h1 hb.le
-  have h3 : b * (a / b - 1) = a - b := by field_simp <;> ring
+  have h3 : b * (a / b - 1) = a - b := by field_simp
   rw [h3] at h2
   unfold ph
   linarith
@@ -172,9 +172,8 @@ section -- clump:auto
 
 namespace Formalism.DivisionValues
 
-theorem reduction_lemma_zero : GramDeterminantQuotientMetric := gram_determinant_quotient_metric
-theorem lemmaRb : LemmaRb := reduction_lemma_second
-theorem specDet : SpecDet := spectral_determinant_formula
+alias reduction_lemma_zero := _root_.Formalism.DivisionValues.gram_determinant_quotient_metric
+alias specDet := _root_.Formalism.DivisionValues.spectral_determinant_formula
 theorem stepA : StepA := reduction_first_step
 
 theorem interlace : Formalism.LatticeIndexTer.Interlace := Formalism.LatticeIndexTer.sumInterlacedBound

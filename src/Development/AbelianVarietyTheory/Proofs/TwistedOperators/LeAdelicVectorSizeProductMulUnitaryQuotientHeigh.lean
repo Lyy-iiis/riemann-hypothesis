@@ -95,7 +95,7 @@ open scoped NNReal TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.finitePlace_relativeNorm_le_localSize_pow : ∀ (D : D7) (v : HeightOneSpectrum (𝓞 D.host.F)) (y : D.host.E), ‖algebraMap D.host.F (Fv D.host.F v) (Algebra.norm D.host.F y)‖₊ ≤ GlobalTheory.AdelicU.absFin D.host.F v ((1 : Fv D.host.F v) ⊗ₜ[D.host.F] y) ^ Module.finrank D.host.F D.host.E := by
-  first | exact @GlobalTheory.NormFin.normFin_le | exact GlobalTheory.NormFin.normFin_le | (intros; apply GlobalTheory.NormFin.normFin_le <;> assumption)
+  first | exact @GlobalTheory.NormFin.normFin_le
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.FinitePlaceRelativeNormLeLocalSizePowStatement =====
@@ -141,7 +141,7 @@ open scoped NNReal TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.infinitePlace_relativeNorm_le_maxEmbedding_pow : ∀ (D : D7) (w : InfinitePlace D.host.F) (y : D.host.E) (c : ℝ≥0), (∀ τ : GlobalTheory.AdelicU.EmbOver D.host.E w, ‖τ.1 y‖₊ ≤ c) → w (Algebra.norm D.host.F y) ≤ (c : ℝ) ^ Module.finrank D.host.F D.host.E := by
-  first | exact @GlobalTheory.NormInf.main | exact GlobalTheory.NormInf.main | (intros; apply GlobalTheory.NormInf.main <;> assumption)
+  first | exact @GlobalTheory.NormInf.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.InfinitePlaceRelativeNormLeMaxEmbeddingPowStatement =====
@@ -164,12 +164,9 @@ namespace GlobalTheory.SeenSize
 
 variable {D : D7}
 
-theorem mt_mul_mt_inv (V : HSp D) (g : GA D V) : Formalism.L2.Theta.mt V g * Formalism.L2.Theta.mt V g⁻¹ = 1 := by
-  simp [Formalism.L2.Theta.mt, ← Units.val_mul, ← map_mul]
-
 theorem mulVec_seen (V : HSp D) (g : GA D V) (ξ : Fin V.rank → D.host.E) :
     Formalism.L2.Theta.mt V g *ᵥ seen V g ξ = fun i => incA D (ξ i) := by
-  rw [seen, mulVec_mulVec, mt_mul_mt_inv, one_mulVec]
+  rw [seen, mulVec_mulVec, _root_.GlobalTheory.MixModel.mt_mul_inv, one_mulVec]
 
 theorem htFin_inv (V : HSp D) (g : GA D V) (v : HeightOneSpectrum (𝓞 D.host.F)) :
     htFin D.host.F v (Formalism.UG.bc (compFin D.host.F D.host.E v) (matHom V g⁻¹)) =
@@ -192,7 +189,7 @@ theorem entry_le_opNorm {n : ℕ} (y : Matrix (Fin n) (Fin n) ℂ) (i j : Fin n)
   have h2 := PiLp.nnnorm_apply_le (Matrix.toEuclideanCLM (n := Fin n) (𝕜 := ℂ) y (EuclideanSpace.single j 1)) i
   have h3 : Matrix.toEuclideanCLM (n := Fin n) (𝕜 := ℂ) y (EuclideanSpace.single j 1) i = y i j := by
     change ∑ k, y i k * (EuclideanSpace.single j (1 : ℂ)) k = _
-    simp [Pi.single_apply]
+    simp
   rw [h3] at h2
   refine h2.trans (h1.trans ?_)
   simp [opNorm]
@@ -306,7 +303,7 @@ theorem rat_size {n : ℕ} (ξ : Fin n → D.host.E) (hξ : ξ ≠ 0) :
   have hP := NumberField.prod_abs_eq_one hx
   simp only [hm, pow_one] at hP
   rw [← finprod_comp_equiv FinitePlace.equivHeightOneSpectrum.symm] at hP
-  simp only [FinitePlace.equivHeightOneSpectrum_symm_apply, FinitePlace.mk_apply] at hP
+  simp only [FinitePlace.equivHeightOneSpectrum_symm_apply] at hP
   have hQ : (∏ w : InfinitePlace D.host.F, ‖w.embedding (Algebra.norm D.host.F (ξ i))‖₊) *
       ∏ᶠ v, ‖algebraMap D.host.F (Fv D.host.F v) (Algebra.norm D.host.F (ξ i))‖₊ = 1 := by
     apply NNReal.coe_injective
@@ -379,9 +376,7 @@ end GlobalTheory.SeenSize
 namespace GlobalTheory.SeenSize
 variable {D : D7}
 
-theorem mt_mul (V : HSp D) (a b : GA D V) :
-    Formalism.L2.Theta.mt V (a * b) = Formalism.L2.Theta.mt V a * Formalism.L2.Theta.mt V b := by
-  simp [Formalism.L2.Theta.mt, map_mul, Units.val_mul]
+alias mt_mul := _root_.GlobalTheory.MixModel.mt_mul
 
 theorem exists_seen_mul {V : HSp D} {γ : GA D V} (hγ : γ ∈ GQ V) (g : GA D V) {ξ : Fin V.rank → D.host.E}
     (hξ : ξ ≠ 0) : ∃ η : Fin V.rank → D.host.E, η ≠ 0 ∧ seen V (γ * g) η = seen V g ξ := by
@@ -390,7 +385,7 @@ theorem exists_seen_mul {V : HSp D} {γ : GA D V} (hγ : γ ∈ GQ V) (g : GA D 
   have h2 : (fun i => incA D ((γ₀ *ᵥ ξ) i)) = Formalism.L2.Theta.mt V γ *ᵥ fun i => incA D (ξ i) := by
     rw [h1]; funext i; exact RingHom.map_mulVec (incA D) γ₀ ξ i
   have h3 : Formalism.L2.Theta.mt V γ⁻¹ * Formalism.L2.Theta.mt V γ = 1 := by
-    simpa using mt_mul_mt_inv V γ⁻¹
+    simpa using _root_.GlobalTheory.MixModel.mt_mul_inv V γ⁻¹
   refine ⟨γ₀ *ᵥ ξ, fun h => hξ ?_, ?_⟩
   · have h4 : Formalism.L2.Theta.mt V γ *ᵥ (fun i => incA D (ξ i)) = 0 := by
       rw [← h2, h]; funext i; exact map_zero _

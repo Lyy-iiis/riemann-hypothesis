@@ -423,7 +423,7 @@ private theorem dual_basis {k H S : Type} [Field k] [AddCommGroup H] [Module k H
   · obtain ⟨x, hx⟩ := (Module.evalEquiv k H).surjective (b.coord t)
     have : ∀ t', l (a t') x = b.coord t (b t') := fun t' => by rw [← hx, hb]; rfl
     refine ⟨x, by simp [this], fun t' h => ?_⟩
-    simp [this, Finsupp.single_apply, h]
+    simp [this, h]
 
 private theorem abstract {S X : Type} (z : S → R) (hz : ∀ s, z s ∈ maximalIdeal R) (wt : S → X) (H : X → Type)
     [∀ j, AddCommGroup (H j)] [∀ j, Module (ResidueField O) (H j)]
@@ -542,7 +542,7 @@ private theorem mfst_one : (1 : Matrix ι ι (DualNumber k)).map fst = 1 := by
 omit [Fintype ι] in
 private theorem msnd_one : (1 : Matrix ι ι (DualNumber k)).map snd = 0 := by
   ext a b
-  by_cases e : a = b <;> simp [Matrix.one_apply, e]
+  by_cases e : a = b <;> simp [e]
 
 omit [Fintype ι] [DecidableEq ι] [CommRing k] in
 private theorem lc_mat [Finite ι] {Γ : Type} [TopologicalSpace Γ] {c : Γ → Matrix ι ι k}
@@ -1319,17 +1319,12 @@ private theorem rel_pres_min {A ι : Type} [CommRing A] [IsLocalRing A] [IsNoeth
   · subst hw; exact h1
   · exact Ideal.mem_sup_left (hmem w hw)
 
-private theorem rel_pres_span_X {O σ : Type} [CommRing O] (s : Finset σ) :
-    ∀ f : MvPowerSeries σ O, (∀ n : σ →₀ ℕ, (∀ i ∈ s, n i = 0) → coeff n f = 0) →
-      f ∈ Ideal.span (Set.range (MvPowerSeries.X : σ → MvPowerSeries σ O)) :=
-  _root_.UpperTheory.Reformulated.B.PowerSeriesMemSpanAllVariables.pi_span_X s
-
 private theorem rel_pres_max_le {O : Type} [CommRing O] [IsLocalRing O] {X : Type} [AddCommGroup X] {R : Type}
     [CommRing R] [Algebra O R] [IsCO O R] (W : WPres O X R) (hz : ∀ s, W.z s ∈ maximalIdeal R) :
     maximalIdeal R ≤ Ideal.span (Set.range W.z) ⊔ (maximalIdeal O).map (algebraMap O R) := by
   intro x hx
   obtain ⟨f, rfl⟩ := W.surj x
-  have h1 := rel_pres_span_X Finset.univ (f - algebraMap O _ (constantCoeff f)) (fun n hn => by
+  have h1 := _root_.UpperTheory.Reformulated.B.PowerSeriesMemSpanAllVariables.pi_span_X Finset.univ (f - algebraMap O _ (constantCoeff f)) (fun n hn => by
     have : n = 0 := Finsupp.ext fun i => hn i (Finset.mem_univ i)
     subst this
     simp [MvPowerSeries.algebraMap_apply])

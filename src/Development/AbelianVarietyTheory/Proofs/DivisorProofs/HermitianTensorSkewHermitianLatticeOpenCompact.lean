@@ -95,10 +95,6 @@ namespace GlobalTheory.LatOpenCpt
 
 open GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels
 
-theorem exists_zsmul_mem {E : Type} [Field E] [NumberField E] {n : ℕ} (L : Submodule (𝓞 E) (Fin n → E))
-    (hL : L.IsFullLattice E) (z : Fin n → E) : ∃ m : ℤ, m ≠ 0 ∧ m • z ∈ L := by
-  exact _root_.GlobalTheory.IntegerMultipleMembership.exists_int_smul_mem L hL z
-
 theorem vecMulVec_mem {E : Type} [Field E] [NumberField E] {n d : ℕ} {LX : Submodule (𝓞 E) (Fin n → E)}
     {LY : Submodule (𝓞 E) (Fin d → E)} (sX : Finset LX) (hsX : Submodule.span ℤ (sX : Set LX) = ⊤) (sY : Finset LY)
     (hsY : Submodule.span ℤ (sY : Set LY) = ⊤) (H : AddSubgroup (Matrix (Fin n) (Fin d) E))
@@ -161,11 +157,11 @@ theorem span_top {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E
     (Z : Matrix (Fin n) (Fin d) (AE F E)) : Z ∈ Submodule.span (AF F) (Set.range fun i => incM F (t i)) := by
   set S := Submodule.span (AF F) (Set.range fun i => incM F (t i))
   have hzs : ∀ (k : ℤ) (P : Matrix (Fin n) (Fin d) E), incM F (k • P) = k • incM F P := fun k P => by
-    ext a b; simp [incM, map_zsmul]
+    ext a b; simp [incM]
   have hall : ∀ (x : Fin n → E) (y : Fin d → E), incM F (vecMulVec x y) ∈ S := by
     intro x y
-    obtain ⟨m, hm, hmx⟩ := exists_zsmul_mem LX hX x
-    obtain ⟨m', hm', hmy⟩ := exists_zsmul_mem LY hY y
+    obtain ⟨m, hm, hmx⟩ := _root_.GlobalTheory.IntegerMultipleMembership.exists_int_smul_mem LX hX x
+    obtain ⟨m', hm', hmy⟩ := _root_.GlobalTheory.IntegerMultipleMembership.exists_int_smul_mem LY hY y
     have h1 := ht _ hmx _ hmy
     rw [smul_vecMulVec, vecMulVec_smul, smul_smul, hzs] at h1
     have hk : ((m * m' : ℤ) : F) ≠ 0 := Int.cast_ne_zero.mpr (mul_ne_zero hm hm')
@@ -234,7 +230,7 @@ theorem main : ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField
     refine ⟨Pi.single (⟨x, hx⟩, ⟨y, hy⟩) 1, (hO _).2 fun i => ?_, ?_⟩
     · by_cases h : i = (⟨x, hx⟩, ⟨y, hy⟩)
       · rw [h]; simp
-      · simp [Pi.single_apply, h]
+      · simp [h]
     · show ∑ i, (Pi.single ((⟨x, hx⟩, ⟨y, hy⟩) : ι) (1 : Fv F v) : ι → Fv F v) i • ρ i = _
       rw [Finset.sum_eq_single ((⟨x, hx⟩, ⟨y, hy⟩) : ι) (fun b _ hb => by simp [Pi.single_apply, hb]) (by simp)]
       simp only [Pi.single_eq_same, one_smul]

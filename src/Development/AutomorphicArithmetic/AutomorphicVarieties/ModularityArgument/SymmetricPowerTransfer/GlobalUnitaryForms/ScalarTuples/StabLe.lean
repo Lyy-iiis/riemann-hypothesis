@@ -98,10 +98,6 @@ section Abs
 
 variable {O : Type} [CommRing O]
 
-private theorem isInt_conj {B : Type} [Ring B] [Algebra O B] (a b k : B) (h1 : a * b = 1) (h2 : b * a = 1)
-    (h : IsIntegral O k) : IsIntegral O (a * k * b) :=
-  _root_.UpperTheory.Reformulated.B.Qf45.isInt_conj a b k h1 h2 h
-
 private theorem isInt_mat {L : Type} [CommRing L] [Algebra O L] {n : Type} [Fintype n] [DecidableEq n]
     (N : Matrix n n L) (h : ∀ i j, IsIntegral O (N i j)) : IsIntegral O N := by
   let N' : Matrix n n (integralClosure O L) := fun i j => ⟨N i j, h i j⟩
@@ -251,7 +247,7 @@ private theorem conj_sq {L : Type} [CommRing L] (Y Y' G T S S' : Matrix (Fin 2) 
     linear_combination this - n0 * hdY
   have hdS : S.det * S'.det = 1 := by rw [← Matrix.det_mul, hS, Matrix.det_one]
   have e : n0 • (Y' * T * Y) = (a ^ 2) • (S * S) := by
-    calc n0 • (Y' * T * Y) = Y' * (n0 • T) * Y := by simp [Matrix.mul_smul, Matrix.smul_mul]
+    calc n0 • (Y' * T * Y) = Y' * (n0 • T) * Y := by simp
       _ = Y' * (G * G) * Y := by rw [hT]
       _ = (Y' * G * Y) * (Y' * G * Y) := by
         have : (Y' * G * Y) * (Y' * G * Y) = Y' * G * (Y * Y') * G * Y := by simp only [Matrix.mul_assoc]
@@ -259,7 +255,7 @@ private theorem conj_sq {L : Type} [CommRing L] (Y Y' G T S S' : Matrix (Fin 2) 
         simp [Matrix.mul_assoc]
       _ = (a ^ 2) • (S * S) := by
         rw [hG]
-        simp [Matrix.mul_smul, Matrix.smul_mul, smul_smul, pow_two]
+        simp [smul_smul, pow_two]
   calc Y' * T * Y = (b ^ 2 * S'.det) • (n0 • (Y' * T * Y)) := by
         rw [smul_smul]
         have : b ^ 2 * S'.det * n0 = 1 := by
@@ -323,7 +319,7 @@ private theorem int_D (O : Type) [CommRing O] [Algebra O K] (hr : τ ^ 2 - 4 ≠
     refine isInt_mat _ fun i j' => ?_
     rw [Matrix.smul_apply, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul]
     exact hdI.mul (((hent _ _ _).mul (hent _ _ _)).add ((hent _ _ _).mul (hent _ _ _)))
-  have hTI := isInt_conj _ _ _ h2 h1 hXI
+  have hTI := _root_.UpperTheory.Reformulated.B.Qf45.isInt_conj _ _ _ h2 h1 hXI
   have eT : mt y * (mt y⁻¹ * jA γ hγ (quo s) * mt y) * mt y⁻¹ = jA γ hγ (quo s) := by
     calc _ = (mt y * mt y⁻¹) * jA γ hγ (quo s) * (mt y * mt y⁻¹) := by simp only [Matrix.mul_assoc]
       _ = _ := by rw [h2, Matrix.one_mul, Matrix.mul_one]
@@ -358,7 +354,7 @@ private theorem int_U (O : Type) [CommRing O] [Algebra O K] {c : K} {d m : EL Δ
     congrArg Subtype.val (mul_inv_cancel y)
   have h2 : ((y⁻¹ : U3 Δ) : Matrix (Fin 3) (Fin 3) (Lsq K Δ)) * (y : Matrix (Fin 3) (Fin 3) (Lsq K Δ)) = 1 :=
     congrArg Subtype.val (inv_mul_cancel y)
-  have hI := isInt_conj _ _ _ h1 h2 hk
+  have hI := _root_.UpperTheory.Reformulated.B.Qf45.isInt_conj _ _ _ h1 h2 hk
   have e : (y : Matrix (Fin 3) (Fin 3) (Lsq K Δ)) * ((y⁻¹ * ι s * y : U3 Δ) : Matrix (Fin 3) (Fin 3) (Lsq K Δ)) *
       ((y⁻¹ : U3 Δ) : Matrix (Fin 3) (Fin 3) (Lsq K Δ)) = (ι s : Matrix (Fin 3) (Fin 3) (Lsq K Δ)) :=
     congrArg Subtype.val (show y * (y⁻¹ * ι s * y) * y⁻¹ = ι s by group)

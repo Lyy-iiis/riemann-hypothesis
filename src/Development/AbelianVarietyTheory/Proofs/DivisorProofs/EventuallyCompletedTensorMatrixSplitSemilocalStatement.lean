@@ -133,8 +133,6 @@ section -- clump:auto
 open Matrix NumberField IsDedekindDomain GlobalTheory.LKTrip GlobalTheory.LKMid GlobalTheory.OrbFinAf
 open scoped TensorProduct Classical
 
-theorem _root_.GlobalTheory.T.charpoly_eq_of_monic_aeval_powers_linearIndependent : ∀ (K : Type) [CommRing K] (n : ℕ) (X : Matrix (Fin n) (Fin n) K) (P : Polynomial K), P.Monic → P.natDegree = n → Polynomial.aeval X P = 0 → LinearIndependent K (fun i : Fin n => X ^ (i : ℕ)) → X.charpoly = P := by
-  first | (exact @GlobalTheory.charpoly_eq_of_monic_aeval_linearIndependent) | (exact GlobalTheory.charpoly_eq_of_monic_aeval_linearIndependent) | (intros; apply GlobalTheory.charpoly_eq_of_monic_aeval_linearIndependent  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.CharpolyEqOfMonicAevalPowersLinearIndependentStatement =====
@@ -235,16 +233,6 @@ noncomputable section
 
 namespace GlobalTheory.OrbFinAf.MatrixUnits₂
 
-theorem exists_order (C : Type) [Ring C] [Algebra ℚ C] [FiniteDimensional ℚ C] :
-    ∃ OB : Subring C, Module.Finite ℤ OB ∧ ∀ b : C, ∃ m : ℕ, 0 < m ∧ (m : C) * b ∈ OB := by
-  first
-  | exact @_root_.GlobalTheory.MultiplierOrders.exists_order
-  | exact _root_.GlobalTheory.MultiplierOrders.exists_order
-  | (apply _root_.GlobalTheory.MultiplierOrders.exists_order <;> assumption)
-  | (intros; apply _root_.GlobalTheory.MultiplierOrders.exists_order <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.MultiplierOrders.exists_order <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.MultiplierOrders.exists_order ..)
-
 theorem isIntV_order_eventually (p : ℕ) [Fact p.Prime] (G : HTGroup p) (OB : Subring G.C)
     (hfin : Module.Finite ℤ OB) :
     ∀ᶠ v in (Filter.cofinite : Filter (AwayP p)), ∀ x ∈ OB, IsIntV G v ((1 : Qv v) ⊗ₜ[ℚ] x) := by
@@ -330,8 +318,8 @@ theorem matrixUnits_eventually : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p),
       (∀ i j k l, E i j * E k l = if j = k then E i l else 0) ∧ ∑ i, E i i = 1 ∧
       ∀ i j, IsIntV G v (E i j) := by
   intro p _ G
-  obtain ⟨OB, hfin, hspan⟩ := exists_order G.C
-  obtain ⟨N, hN, hmat⟩ := GlobalTheory.T.adjoinLocalOrderTensorPadic_matrix_almost_all G.F G.C G.n G.rankC OB hfin hspan
+  obtain ⟨OB, hfin, hspan⟩ := _root_.GlobalTheory.MultiplierOrders.exists_order G.C
+  obtain ⟨N, hN, hmat⟩ := _root_.GlobalTheory.LocMatrix.locOrder_matrix G.F G.C G.n G.rankC OB hfin hspan
   filter_upwards [finite_dvd p N hN, isIntV_order_eventually p G OB hfin, intV_order_eventually p G]
     with v hv hO hord
   haveI : Fact (primesEquiv v.1 : ℕ).Prime := ⟨(primesEquiv v.1).2⟩
@@ -352,9 +340,9 @@ theorem matrixUnits_eventually : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p),
       ext a b
       rw [Matrix.sum_apply, Matrix.one_apply, Finset.sum_eq_single a]
       · by_cases h : a = b
-        · subst h; simp [Matrix.single_apply]
-        · simp [Matrix.single_apply, h]
-      · intro c _ hc; simp [Matrix.single_apply, hc]
+        · subst h; simp
+        · simp [h]
+      · intro c _ hc; simp [hc]
       · simp
     simp only [E]
 
@@ -375,8 +363,6 @@ section -- clump:auto
 open Matrix NumberField IsDedekindDomain GlobalTheory.LKTrip GlobalTheory.LKMid GlobalTheory.OrbFinAf
 open scoped TensorProduct Classical
 
-theorem _root_.GlobalTheory.T.eventually_integral_matrix_units_at_places : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p), ∀ᶠ v in (Filter.cofinite : Filter (AwayP p)), ∃ E : Fin G.n → Fin G.n → Qv v ⊗[ℚ] G.C, (∀ i j k l, E i j * E k l = if j = k then E i l else 0) ∧ ∑ i, E i i = 1 ∧ ∀ i j, IsIntV G v (E i j) := by
-  first | (exact @GlobalTheory.OrbFinAf.MatrixUnits₂.matrixUnits_eventually) | (exact GlobalTheory.OrbFinAf.MatrixUnits₂.matrixUnits_eventually) | (intros; apply GlobalTheory.OrbFinAf.MatrixUnits₂.matrixUnits_eventually  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.EventuallyIntegralMatrixUnitsAtPlacesStatement =====
@@ -405,7 +391,7 @@ def intFAlgMap (G : HTGroup p) (v : AwayP p) (h1 : IsIntV G v 1)
   ((algebraMap (Qv v) (Qv v ⊗[ℚ] G.F)).comp (v.1.adicCompletionIntegers ℚ).subtype).codRestrict _ fun c => by
     rw [mem_intF]
     intro i
-    simp only [RingHom.coe_comp, Function.comp_apply, AlgHom.commutes, Algebra.algebraMap_eq_smul_one,
+    simp only [RingHom.coe_comp, Function.comp_apply, Algebra.algebraMap_eq_smul_one,
       map_smul, Finsupp.smul_apply, smul_eq_mul, map_one]
     exact mul_mem c.2 (h1 i)
 
@@ -464,8 +450,6 @@ section -- clump:auto
 open Matrix NumberField IsDedekindDomain GlobalTheory.LKTrip GlobalTheory.LKMid GlobalTheory.OrbFinAf
 open scoped TensorProduct Classical
 
-theorem _root_.GlobalTheory.T.integralLocalCenter_finite_maximal_ideals : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p) (v : AwayP p) (h1 : IsIntV G v 1) (hm : ∀ y z : Qv v ⊗[ℚ] G.C, IsIntV G v y → IsIntV G v z → IsIntV G v (y * z)), Set.Finite {I : Ideal (intF G v h1 hm) | I.IsMaximal} := by
-  first | (exact @GlobalTheory.OrbFinAf.intF_finite_maximal) | (exact GlobalTheory.OrbFinAf.intF_finite_maximal) | (intros; apply GlobalTheory.OrbFinAf.intF_finite_maximal  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntegralLocalCenterFiniteMaximalIdealsStatement =====
@@ -519,8 +503,6 @@ section -- clump:auto
 open Matrix NumberField IsDedekindDomain GlobalTheory.LKTrip GlobalTheory.LKMid GlobalTheory.OrbFinAf
 open scoped TensorProduct Classical
 
-theorem _root_.GlobalTheory.T.localTensorCenterInclusion_injective_central_finrank : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p) (v : AwayP p), Function.Injective (iotaF G v) ∧ (∀ z x, Commute (iotaF G v z) x) ∧ Module.finrank (Qv v) (Qv v ⊗[ℚ] G.C) = G.n ^ 2 * Module.finrank (Qv v) (Qv v ⊗[ℚ] G.F) := by
-  first | (exact @GlobalTheory.OrbFinAf.iotaF_props) | (exact GlobalTheory.OrbFinAf.iotaF_props) | (intros; apply GlobalTheory.OrbFinAf.iotaF_props  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.LocalTensorCenterInclusionInjectiveCentralFinranStatement =====
@@ -541,7 +523,7 @@ def phiL {n : ℕ} (ι : K →ₐ[k] B) (E : Fin n → Fin n → B) :
     Matrix (Fin n) (Fin n) K →ₗ[k] B where
   toFun M := ∑ a, ∑ b, ι (M a b) * E a b
   map_add' M N := by simp [add_mul, Finset.sum_add_distrib]
-  map_smul' c M := by simp [Finset.smul_sum, smul_mul_assoc]
+  map_smul' c M := by simp [Finset.smul_sum]
 
 theorem phiL_apply {n : ℕ} (ι : K →ₐ[k] B) (E : Fin n → Fin n → B) (M) :
     phiL ι E M = ∑ a, ∑ b, ι (M a b) * E a b := rfl
@@ -598,7 +580,7 @@ theorem phiL_mul {n : ℕ} (ι : K →ₐ[k] B) (E : Fin n → Fin n → B)
     · rw [mul_zero]
 
   simp only [phiL_apply, Finset.sum_mul, Finset.mul_sum, h, Matrix.mul_apply, map_sum]
-  simp only [Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  simp only [Finset.sum_ite_eq', Finset.mem_univ, if_true]
   conv_lhs => rw [Finset.sum_comm]
   conv_rhs => rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun d _ => ?_
@@ -638,8 +620,6 @@ section -- clump:auto
 open Matrix NumberField IsDedekindDomain GlobalTheory.LKTrip GlobalTheory.LKMid GlobalTheory.OrbFinAf
 open scoped TensorProduct Classical
 
-theorem _root_.GlobalTheory.T.matrix_units_give_matrix_algebra_iso : ∀ (k K B : Type) [Field k] [CommRing K] [Ring B] [Algebra k K] [Algebra k B] [FiniteDimensional k B] (n : ℕ) (ι : K →ₐ[k] B), Function.Injective ι → (∀ z x, Commute (ι z) x) → Module.finrank k B = n ^ 2 * Module.finrank k K → ∀ E : Fin n → Fin n → B, (∀ a b c d, E a b * E c d = if b = c then E a d else 0) → ∑ a, E a a = 1 → ∃ Φ : Matrix (Fin n) (Fin n) K ≃+* B, (∀ M, Φ M = ∑ a, ∑ b, ι (M a b) * E a b) ∧ ∀ x a b, ι (Φ.symm x a b) = ∑ c, E c a * x * E b c := by
-  first | (exact @GlobalTheory.MatUnitIso.matrixRingEquiv_of_matrixUnits) | (exact GlobalTheory.MatUnitIso.matrixRingEquiv_of_matrixUnits) | (intros; apply GlobalTheory.MatUnitIso.matrixRingEquiv_of_matrixUnits  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.MatrixUnitsGiveMatrixAlgebraIso =====
@@ -711,8 +691,6 @@ section -- clump:auto
 open Matrix NumberField IsDedekindDomain GlobalTheory.LKTrip GlobalTheory.LKMid GlobalTheory.OrbFinAf
 open scoped TensorProduct Classical
 
-theorem _root_.GlobalTheory.T.powers_linearIndependent_over_localTensorCenter : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p) (γ : G.C), (minpoly G.F γ).natDegree = G.n → ∀ (v : AwayP p) (c : Fin G.n → Qv v ⊗[ℚ] G.F), ∑ i, iotaF G v (c i) * (1 : Qv v) ⊗ₜ[ℚ] γ ^ (i : ℕ) = 0 → c = 0 := by
-  first | (exact @GlobalTheory.OrbFinAf.pow_indep_tensor) | (exact GlobalTheory.OrbFinAf.pow_indep_tensor) | (intros; apply GlobalTheory.OrbFinAf.pow_indep_tensor  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.PowersLinearIndependentOverLocalTensorCenterStatement =====
@@ -743,12 +721,12 @@ theorem coeff_isIntV_eventually (p : ℕ) [Fact p.Prime] (G : HTGroup p) (f : Po
 theorem split_eventually : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p) (γ : G.C), (minpoly G.F γ).natDegree = G.n → (minpoly G.F γ).Separable → ∀ᶠ v in (Filter.cofinite : Filter (AwayP p)), ∃ (K : Type) (_ : CommRing K) (R : Subring K) (Φ : Matrix (Fin G.n) (Fin G.n) K ≃+* Qv v ⊗[ℚ] G.C), Set.Finite {I : Ideal R | I.IsMaximal} ∧ (∀ a : Qv v ⊗[ℚ] G.C, IsIntV G v a ↔ ∀ i j, Φ.symm a i j ∈ R) ∧ ∃ Q : Polynomial R, Q.Separable ∧ Q.map R.subtype = (Φ.symm ((1 : Qv v) ⊗ₜ[ℚ] γ)).charpoly := by
   intro p _ G γ hdeg hsep
   obtain ⟨a, b, hab⟩ := hsep
-  filter_upwards [intV_order_eventually p G, GlobalTheory.T.eventually_integral_matrix_units_at_places p G, coeff_isIntV_eventually p G (minpoly G.F γ),
+  filter_upwards [intV_order_eventually p G, _root_.GlobalTheory.OrbFinAf.MatrixUnits₂.matrixUnits_eventually p G, coeff_isIntV_eventually p G (minpoly G.F γ),
     coeff_isIntV_eventually p G a, coeff_isIntV_eventually p G b] with v hO hEE hP ha hb
   obtain ⟨h1, hm, -⟩ := hO
   obtain ⟨E, hE, hE1, hEi⟩ := hEE
-  obtain ⟨hinj, hcen, hdim⟩ := GlobalTheory.T.localTensorCenterInclusion_injective_central_finrank p G v
-  obtain ⟨Φ, hΦ, hΦs⟩ := GlobalTheory.T.matrix_units_give_matrix_algebra_iso (Qv v) (Qv v ⊗[ℚ] G.F) (Qv v ⊗[ℚ] G.C) G.n (iotaF G v) hinj hcen hdim E hE hE1
+  obtain ⟨hinj, hcen, hdim⟩ := _root_.GlobalTheory.OrbFinAf.iotaF_props p G v
+  obtain ⟨Φ, hΦ, hΦs⟩ := _root_.GlobalTheory.MatUnitIso.matrixRingEquiv_of_matrixUnits (Qv v) (Qv v ⊗[ℚ] G.F) (Qv v ⊗[ℚ] G.C) G.n (iotaF G v) hinj hcen hdim E hE hE1
   let φ0 : G.F →+* Qv v ⊗[ℚ] G.F :=
     (Algebra.TensorProduct.includeRight : G.F →ₐ[ℚ] Qv v ⊗[ℚ] G.F).toRingHom
   have hφ : ∀ x, iotaF G v (φ0 x) = (1 : Qv v) ⊗ₜ[ℚ] algebraMap G.F G.C x := fun x => rfl
@@ -768,7 +746,7 @@ theorem split_eventually : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p) (γ : G.
     · simp [Matrix.algebraMap_matrix_apply]
     · intro j _ hj; simp [Matrix.algebraMap_matrix_apply, Ne.symm hj]
     · simp
-  refine ⟨Qv v ⊗[ℚ] G.F, inferInstance, intF G v h1 hm, Φ, GlobalTheory.T.integralLocalCenter_finite_maximal_ideals p G v h1 hm,
+  refine ⟨Qv v ⊗[ℚ] G.F, inferInstance, intF G v h1 hm, Φ, _root_.GlobalTheory.OrbFinAf.intF_finite_maximal p G v h1 hm,
     fun x => ⟨fun hx i j => ?_, fun hx => ?_⟩, ?_⟩
   · show IsIntV G v (iotaF G v (Φ.symm x i j))
     rw [hΦs]
@@ -786,7 +764,7 @@ theorem split_eventually : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p) (γ : G.
       have hmon : (minpoly G.F γ).Monic := minpoly.monic (Algebra.IsIntegral.isIntegral γ)
       have hX : Φ (Φ.symm ((1 : Qv v) ⊗ₜ[ℚ] γ)) = (1 : Qv v) ⊗ₜ[ℚ] γ := Φ.apply_symm_apply _
       symm
-      apply GlobalTheory.T.charpoly_eq_of_monic_aeval_powers_linearIndependent
+      apply _root_.GlobalTheory.charpoly_eq_of_monic_aeval_linearIndependent
       · exact hmon.map φ0
       · rw [hmon.natDegree_map, hdeg]
       · apply Φ.injective
@@ -810,7 +788,7 @@ theorem split_eventually : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p) (γ : G.
         exact h4.symm
       · rw [Fintype.linearIndependent_iff]
         intro g hg
-        have := GlobalTheory.T.powers_linearIndependent_over_localTensorCenter p G γ hdeg v g (by
+        have := _root_.GlobalTheory.OrbFinAf.pow_indep_tensor p G γ hdeg v g (by
           have h2 := congrArg Φ hg
 
           rw [map_sum, map_zero] at h2
@@ -833,8 +811,6 @@ section -- clump:auto
 open Matrix NumberField IsDedekindDomain GlobalTheory.LKTrip GlobalTheory.LKMid GlobalTheory.OrbFinAf
 open scoped TensorProduct Classical
 
-theorem _root_.GlobalTheory.T.eventually_completedTensor_matrix_split_semilocal : ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p) (γ : G.C), (minpoly G.F γ).natDegree = G.n → (minpoly G.F γ).Separable → ∀ᶠ v in (Filter.cofinite : Filter (AwayP p)), ∃ (K : Type) (_ : CommRing K) (R : Subring K) (Φ : Matrix (Fin G.n) (Fin G.n) K ≃+* Qv v ⊗[ℚ] G.C), Set.Finite {I : Ideal R | I.IsMaximal} ∧ (∀ a : Qv v ⊗[ℚ] G.C, IsIntV G v a ↔ ∀ i j, Φ.symm a i j ∈ R) ∧ ∃ Q : Polynomial R, Q.Separable ∧ Q.map R.subtype = (Φ.symm ((1 : Qv v) ⊗ₜ[ℚ] γ)).charpoly := by
-  first | (exact @GlobalTheory.OrbFinAf.split_eventually) | (exact GlobalTheory.OrbFinAf.split_eventually) | (intros; apply GlobalTheory.OrbFinAf.split_eventually  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.EventuallyCompletedTensorMatrixSplitSemilocalStatement =====

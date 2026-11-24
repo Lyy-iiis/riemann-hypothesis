@@ -65,7 +65,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open scoped Classical
 
 theorem _root_.GlobalTheory.T.exists_archimedean_lift_unitaryGroupProduct : ∀ (D : D7) (θ : InfFam D) (V : HSp D), IsInfFam θ → ∃ L : (D.what₂.Tau → Mt V.rank) → GA D V, (∀ u ∈ UG (gramAt D V), L u ∈ GinfC V ∧ ∀ τ, archM V (θ τ) (L u) = u τ) ∧ (∀ u ∈ UG (gramAt D V), ∀ u' ∈ UG (gramAt D V), L (u * u') = L u * L u') ∧ ContinuousOn L (UG (gramAt D V)) ∧ (∀ g, (fun τ => archM V (θ τ) g) ∈ UG (gramAt D V)) ∧ (∀ u ∈ GinfC V, L (fun τ => archM V (θ τ) u) = u) ∧ (∀ τ, ∀ g ∈ Formalism.QuantumDeterminants.UH (gramAt D V τ), atTau θ V τ g = L (Pi.mulSingle τ g)) ∧ (∀ g, ∃ a ∈ GfC V, ∃ u ∈ GinfC V, g = a * u) ∧ (∀ a ∈ GfC V, ∀ u ∈ GinfC V, a * u = u * a) ∧ ∀ τ, (gramAt D V τ).IsHermitian ∧ (gramAt D V τ).det ≠ 0 := by
-  first | exact @GlobalTheory.RealLift.exists_real_lift | exact GlobalTheory.RealLift.exists_real_lift | (intros; apply GlobalTheory.RealLift.exists_real_lift <;> assumption)
+  first | exact @GlobalTheory.RealLift.exists_real_lift
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsArchimedeanLiftUnitaryGroupProductStatement =====
@@ -173,14 +173,9 @@ theorem inZe_iff (X : Data E r) {H : Matrix (Fin r) (Fin r) E} (hG : X.Gm = -H�
 
 end
 
-theorem archM_mul {D : D7} (V : HSp D) (θ : Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ) (a b : GA D V) :
-    archM V θ (a * b) = archM V θ a * archM V θ b := by
-  unfold archM
-  rw [map_mul, Units.val_mul, Matrix.map_mul]
-
 theorem det_archM_conj {D : D7} (V : HSp D) (θ : Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ) (h v : GA D V) :
     (archM V θ (h⁻¹ * v * h)).det = (archM V θ v).det := by
-  rw [archM_mul, Matrix.det_mul_comm, ← archM_mul, ← mul_assoc, mul_inv_cancel, one_mul]
+  rw [_root_.GlobalTheory.PointAtPlace.archM_mul, Matrix.det_mul_comm, ← _root_.GlobalTheory.PointAtPlace.archM_mul, ← mul_assoc, mul_inv_cancel, one_mul]
 
 
 
@@ -248,7 +243,7 @@ theorem isHolCusp_of_zCusp : ∀ (D : D7) (θ : InfFam D) (V : HSp D) (S : D.wha
       obtain ⟨ρ, rfl⟩ := e.surjective τ
       have h1 := hx' ρ (e ρ) (he ρ)
       have h2 := hfr ρ (e ρ) (he ρ)
-      rw [e2, archM_mul, hvs] at h1
+      rw [e2, _root_.GlobalTheory.PointAtPlace.archM_mul, hvs] at h1
       show mat x' (e ρ) = (X k).flowMat η (e ρ) (s (e ρ)) * mat y (e ρ)
       rw [h1, h2, Matrix.mul_assoc]
       rfl
@@ -292,7 +287,7 @@ theorem isHolCusp_of_zCusp : ∀ (D : D7) (θ : InfFam D) (V : HSp D) (S : D.wha
       group
     rw [e1, hF.aut.left q hq, hlev ((γ * g)⁻¹ * a * (γ * g)⁻¹⁻¹) haU ((MonoidHom.normal_ker (infHom V)).conj_mem a haF _)]
     refine key _ _ (mul_mem huI hI) fun ρ => ?_
-    rw [archM_mul, hA, ht, hm]
+    rw [_root_.GlobalTheory.PointAtPlace.archM_mul, hA, ht, hm]
     simp only
     rw [flowMat_mul _ hη0]
     simp
@@ -348,7 +343,7 @@ open scoped TensorProduct InnerProductSpace ContDiff
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.isHolomorphicCuspForm_of_adelic_constantTerms_zero : ∀ (D : D7) (θ : InfFam D) (V : HSp D) (S : D.what₂.Tau → SPar) (M : DSModel V S) (w : D.what₂.Tau → Fin V.rank → ℤ) (r : ℕ) (hr : V.rank = r) (Comp : Type) (X : Comp → ReciprocityTheory.ChartRestriction.G.FD.Data D.host.E r) (la : ∀ k, ReciprocityTheory.ChartRestriction.G.FD.Wt (X k).Ψ r) (dict : GA D V → Σ k, ReciprocityTheory.ChartRestriction.G.FD.Frame (X k).Ψ r) (mu : GA D V → ℂ) (c : Comp → ℂ) (Kf : Subgroup (GA D V)), HolShape M → GoodDict θ M w hr X la dict mu c Kf → ∀ P : FDSec X, (∀ k, (X k).IsBddSec (la k) (P k)) → ZCusp V (adel V dict (muPin V dict mu c) P) → IsHolCusp X la P := by
-  first | exact @GlobalTheory.HolDict.IntoCusp.isHolCusp_of_zCusp | exact GlobalTheory.HolDict.IntoCusp.isHolCusp_of_zCusp | (intros; apply GlobalTheory.HolDict.IntoCusp.isHolCusp_of_zCusp <;> assumption)
+  first | exact @GlobalTheory.HolDict.IntoCusp.isHolCusp_of_zCusp
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsHolomorphicCuspFormOfAdelicConstantTermsZeroStatement =====

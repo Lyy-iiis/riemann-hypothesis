@@ -240,7 +240,7 @@ lemma den_analyticAt (hb : SgStarBasic) (z : ℂ) : AnalyticAt ℂ (den L α S) 
 
 private lemma add_self_eq_two_mul_extended_int (x : WithTop ℤ) : x + x = 2 * x := by
   cases x with
-  | top => first | rfl | decide | simp
+  | top => first | rfl
   | coe a =>
     rw [← WithTop.coe_add, show (2 : WithTop ℤ) = ((2 : ℤ) : WithTop ℤ) from rfl, ← WithTop.coe_mul,
       two_mul]
@@ -695,21 +695,17 @@ section -- clump:auto
 
 namespace Formalism.L2.Th1.F
 
-theorem latticeOnly : LatticeOnly := lattice_only
-theorem homogeneity : Homogeneity := homogeneity_thm
+alias homogeneity := _root_.Formalism.L2.Th1.F.homogeneity_thm
 theorem kerRepsExist : KerRepsExist := kernel_reps_exist
 theorem kerRepsCard : KerRepsCard := kernel_reps_card
 theorem mulStableIntegral : MulStableIntegral := mul_stable_integral
 theorem isogenyP : IsogenyP := isogenyWeierstrassP_of_ellipticNoPole ellipticNoPole
-theorem pSecond : PSecond := weierstrass_p_second_derivative
+alias pSecond := _root_.Formalism.L2.Th1.F.weierstrass_p_second_derivative
 theorem isogenySigma : IsogenySigma :=
   isogenySigma_of ellipticNoPole sigmaOrder sgStarAdd sgStarQuasi sgStarBasic kerRepsCard sigmaEntire
 theorem translateProduct : TranslateProduct := translateProduct_of sgStarAdd
 theorem halfShift : HalfShift := halfShift_of sigmaAdd sigmaQuasi sigmaZero pInjective
 theorem cmThetaEq : CmThetaEq := cm_theta_eq
-theorem cmStable : CmStable := cm_stable
-theorem cmNorm : CmNorm := cm_norm
-
 end Formalism.L2.Th1.F
 end -- clump:auto
 end -- clump:auto

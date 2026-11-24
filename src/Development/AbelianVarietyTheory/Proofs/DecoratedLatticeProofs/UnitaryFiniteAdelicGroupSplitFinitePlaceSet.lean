@@ -133,7 +133,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.continuous_idempotentCut_and_isClosed_scaledKernel : ∀ (D : D7) (V : HSp D), (∀ (ε : AF D.host.F) (hε : ε * ε = ε), Continuous (GlobalTheory.FinPl.SetCut.cutG V ε hε)) ∧ ∀ c : AF D.host.F, IsClosed {g : GA D V | ∀ i j, algebraMap (AF D.host.F) (AE D) c * (Formalism.L2.Theta.mt V g - 1) i j = 0} := by
-  first | exact @GlobalTheory.FinPl.SetCut.continuous_cutG_and_isClosed | exact GlobalTheory.FinPl.SetCut.continuous_cutG_and_isClosed | (intros; apply GlobalTheory.FinPl.SetCut.continuous_cutG_and_isClosed <;> assumption)
+  first | exact @GlobalTheory.FinPl.SetCut.continuous_cutG_and_isClosed
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.ContinuousIdempotentCutIsClosedScaledKernelStatement =====
@@ -149,7 +149,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_compactOpen_latticeStabilizerAtPlaces : ∀ (D : D7) (V : HSp D) (L : Lat V), IsSelfDualC V L → ∀ P : Pl D → Prop, ∃ K : Subgroup (GA D V), (∀ g, g ∈ K ↔ InK V L P g) ∧ IsCompact (K : Set (GA D V)) ∧ IsOpen ((K.subgroupOf (grpAt V P) : Subgroup _) : Set (grpAt V P)) := by
-  first | exact @GlobalTheory.FinPl.KOpen.exists_compact_open | exact GlobalTheory.FinPl.KOpen.exists_compact_open | (intros; apply GlobalTheory.FinPl.KOpen.exists_compact_open <;> assumption)
+  first | exact @GlobalTheory.FinPl.KOpen.exists_compact_open
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.ExistsCompactOpenLatticeStabilizerAtPlacesStatement =====
@@ -165,7 +165,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.inLatticeStabilizerAtPlaces_iff_placeSet_prod : ∀ (D : D7) (V : HSp D) (L : Lat V) (P : Pl D → Prop) (Q : Finset (Pl D)) (κ : GA D V), InK V L P κ ↔ ∃ a b, InK V L (fun p => P p ∧ p ∈ Q) a ∧ InK V L (fun p => P p ∧ p ∉ Q) b ∧ κ = a * b := by
-  first | exact @GlobalTheory.FinPl.KSplit.inK_iff_prod | exact GlobalTheory.FinPl.KSplit.inK_iff_prod | (intros; apply GlobalTheory.FinPl.KSplit.inK_iff_prod <;> assumption)
+  first | exact @GlobalTheory.FinPl.KSplit.inK_iff_prod
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.InLatticeStabilizerAtPlacesIffPlaceSetProdStatement =====
@@ -231,14 +231,12 @@ theorem jac_cutG_map_NFlag (V : HSp D) {ρ : ℕ} (e : Matrix (Fin V.rank) (Fin 
 theorem unitaryIdempotentCut_wittHyperbolicEmbedding_comm {V V₀ : HSp D} {ρ : ℕ} (d : HypDec V V₀ ρ) (ε : AF D.host.F) (hε : ε * ε = ε) (h : GA D V₀) :
     cutG V ε hε (d.emb0 h) = d.emb0 (cutG V₀ ε hε h) := by
   apply GlobalTheory.MixModel.mt_injective V
-  change Formalism.L2.Theta.mt V (cutG V ε hε (d.emb0 h)) = Formalism.L2.Theta.mt V (d.emb0 (cutG V₀ ε hε h))
   rw [mt_cutG, HypDec.unitaryMatrix_wittCoreEmbedding, HypDec.unitaryMatrix_wittCoreEmbedding, mt_cutG]
   exact smul_add_one_sub_smul_block _ _ _ _ _ _ d.sum_eq_one
 
 theorem jac_cutG_emb_inl {V₀ A L : HSp D} (o : OrthDec V₀ A L) (ε : AF D.host.F) (hε : ε * ε = ε) (h : GA D A) :
     cutG V₀ ε hε (o.emb (h, 1)) = o.emb (cutG A ε hε h, 1) := by
   apply GlobalTheory.MixModel.mt_injective V₀
-  change Formalism.L2.Theta.mt V₀ (cutG V₀ ε hε (o.emb (h, 1))) = Formalism.L2.Theta.mt V₀ (o.emb (cutG A ε hε h, 1))
   rw [mt_cutG, OrthDec.mt_emb, OrthDec.mt_emb, mt_cutG, mt_one]
   exact smul_add_one_sub_smul_block₂ _ _ _ _ _ _ o.sum_eq_one
 
@@ -280,7 +278,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.unitaryIdempotentCut_mem_fourierJacobi_besselGroup : ∀ (D : D7) (V V₀ : HSp D) (ρ : ℕ) (d : HypDec V V₀ ρ) (ε : AF D.host.F) (hε : ε * ε = ε), (∀ g ∈ jacGrp d, GlobalTheory.FinPl.SetCut.cutG V ε hε g ∈ jacGrp d) ∧ ∀ (A L : HSp D) (o : OrthDec V₀ A L), ∀ g ∈ besGrp d o, GlobalTheory.FinPl.SetCut.cutG V ε hε g ∈ besGrp d o := by
-  first | exact @GlobalTheory.FinPl.SetCut.cutG_mem_jacGrp_besGrp | exact GlobalTheory.FinPl.SetCut.cutG_mem_jacGrp_besGrp | (intros; apply GlobalTheory.FinPl.SetCut.cutG_mem_jacGrp_besGrp <;> assumption)
+  first | exact @GlobalTheory.FinPl.SetCut.cutG_mem_jacGrp_besGrp
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.UnitaryIdempotentCutMemFourierJacobiBesselGroupStatement =====
@@ -311,8 +309,7 @@ theorem mul_eq_add_sub_one (c : R) (a b : Matrix n n R) (ha : c • (a - 1) = a 
   have e2 : b * a = (b - 1) * (a - 1) + (a + b - 1) := by noncomm_ring
   exact ⟨by rw [e1, h1, zero_add], by rw [e2, h2, zero_add]⟩
 
-theorem cut_sub_one (c : R) (g : Matrix n n R) : c • g + (1 - c) • (1 : Matrix n n R) - 1 = c • (g - 1) := by
-  rw [smul_sub, sub_smul, one_smul]; abel
+alias cut_sub_one := _root_.GlobalTheory.FinPl.KSplit.cut_sub_one
 
 theorem cut_left (c : R) (a b : Matrix n n R) (ha : c • (a - 1) = a - 1) (hb : c • (b - 1) = 0) :
     c • (a * b) + (1 - c) • (1 : Matrix n n R) = a := by
@@ -325,31 +322,12 @@ theorem cut_right (c : R) (a b : Matrix n n R) (ha : c • (a - 1) = a - 1) (hb 
     show a + b - 1 - 1 = (a - 1) + (b - 1) by abel, sub_smul, one_smul, smul_add, ha, hb]
   abel
 
-theorem cut_mul_cut (c : R) (hc : c * c = c) (g : Matrix n n R) :
-    (c • g + (1 - c) • (1 : Matrix n n R)) * ((1 - c) • g + (1 - (1 - c)) • (1 : Matrix n n R)) = g := by
-  have h0 : c * (1 - c) = 0 := by rw [mul_sub, mul_one, hc, sub_self]
-  rw [(mul_eq_add_sub_one c _ _ (by rw [cut_sub_one, smul_smul, hc]) (by rw [cut_sub_one, smul_smul, h0, zero_smul])).1,
-    sub_sub_cancel, sub_smul, sub_smul, one_smul, one_smul]
-  abel
-
 end Alg
 
 variable {D : D7}
 
 theorem mem_idOff_iff (P : Pl D → Prop) (a : AE D) : a ∈ idOff D P ↔ ∀ w, P w → GlobalTheory.FinPl.compAt D w a = 0 := by
   simp only [idOff, Submodule.mem_iInf, RingHom.mem_ker, Subtype.forall]
-
-theorem mem_GfC_iff_entries (V : HSp D) (g : GA D V) :
-    g ∈ GfC V ↔ ∀ i j, infPart D ((Formalism.L2.Theta.mt V g - 1) i j) = 0 := by
-  rw [GlobalTheory.UnitaryIdemCut.mem_GfC_iff, Units.ext_iff]
-  change (Formalism.L2.Theta.mt V g).map (infPart D) = 1 ↔ _
-  rw [← Matrix.ext_iff]
-  refine forall_congr' fun i => forall_congr' fun j => ?_
-  rw [Matrix.sub_apply, RingHom.map_sub, sub_eq_zero, Matrix.map_apply]
-  by_cases hij : i = j
-  · subst hij
-    rw [Matrix.one_apply_eq, Matrix.one_apply_eq, RingHom.map_one]
-  · rw [Matrix.one_apply_ne hij, Matrix.one_apply_ne hij, RingHom.map_zero]
 
 theorem mem_grpAt_iff_parts (V : HSp D) (P : Pl D → Prop) (g : GA D V) :
     g ∈ grpAt V P ↔ ∀ i j, infPart D ((Formalism.L2.Theta.mt V g - 1) i j) = 0 ∧
@@ -363,14 +341,14 @@ theorem mem_grpOff_iff_parts (V : HSp D) (P : Pl D → Prop) (g : GA D V) :
   exact forall_congr' fun i => forall_congr' fun j => mem_idOff_iff P _
 
 theorem grpAt_le_GfC (V : HSp D) (P : Pl D → Prop) : grpAt V P ≤ GfC V := fun g hg =>
-  (mem_GfC_iff_entries V g).2 fun i j => ((mem_grpAt_iff_parts V P g).1 hg i j).1
+  (_root_.GlobalTheory.FinPl.KOpen.mem_GfC_iff V g).2 fun i j => ((mem_grpAt_iff_parts V P g).1 hg i j).1
 
 theorem grpAt_le_grpOff (V : HSp D) (P P' : Pl D → Prop) (h : ∀ p, P p → ¬ P' p) : grpAt V P ≤ grpOff V P' := fun g hg =>
   (mem_grpOff_iff_parts V P' g).2 fun i j w hw => ((mem_grpAt_iff_parts V P g).1 hg i j).2 w fun h' => h w h' hw
 
 theorem GfC_inf_grpOff (V : HSp D) (P : Pl D → Prop) : GfC V ⊓ grpOff V P = grpAt V fun p => ¬ P p := by
   ext g
-  rw [Subgroup.mem_inf, mem_GfC_iff_entries, mem_grpOff_iff_parts, mem_grpAt_iff_parts]
+  rw [Subgroup.mem_inf, _root_.GlobalTheory.FinPl.KOpen.mem_GfC_iff, mem_grpOff_iff_parts, mem_grpAt_iff_parts]
   exact ⟨fun h i j => ⟨h.1 i j, fun w hw => h.2 i j w (not_not.1 hw)⟩,
     fun h => ⟨fun i j => (h i j).1, fun i j w hw => (h i j).2 w (not_not.2 hw)⟩⟩
 
@@ -418,7 +396,7 @@ theorem cutG_mul_cutG (V : HSp D) (Q : Finset (Pl D)) (g : GA D V) :
     cutG V _ (idemQ_mul_self Q) g * cutG V _ (one_sub_idemQ_mul_self Q) g = g := by
   apply mt_injective V
   rw [mt_mul, mt_cutG, mt_cutG, algebraMap_one_sub]
-  exact cut_mul_cut _ (eQ_mul_self Q) _
+  exact _root_.GlobalTheory.FinPl.KSplit.cut_mul_cut _ (eQ_mul_self Q) _
 
 theorem cutG_mem_Q (V : HSp D) (Q : Finset (Pl D)) (g : GA D V) :
     cutG V _ (idemQ_mul_self Q) g ∈ grpAt V (· ∈ Q) := by
@@ -434,7 +412,7 @@ theorem cutG_mem_Qc (V : HSp D) (Q : Finset (Pl D)) {g : GA D V} (hg : g ∈ GfC
   intro i j
   rw [mt_cutG, cut_sub_one, Matrix.smul_apply, smul_eq_mul, algebraMap_one_sub]
   refine ⟨?_, fun w hw => ?_⟩
-  · rw [RingHom.map_mul, (mem_GfC_iff_entries V g).1 hg i j, mul_zero]
+  · rw [RingHom.map_mul, (_root_.GlobalTheory.FinPl.KOpen.mem_GfC_iff V g).1 hg i j, mul_zero]
   · rw [RingHom.map_mul, RingHom.map_sub, RingHom.map_one, (parts_idemQ Q).2 w, if_pos (not_not.1 hw), sub_self, zero_mul]
 
 theorem isClosed_of_idem (V : HSp D) (P : Pl D → Prop) (c : AF D.host.F)

@@ -131,11 +131,7 @@ theorem cst_specMap (p : X ⟶ Spec (CommRingCat.of R')) (g : R →+* R') (U : X
   simp only [AbLaw.cst, RingHom.comp_apply, Scheme.Hom.comp_appTop, CommRingCat.hom_comp]
   rw [this]
 
-theorem gs_sec {H : LB X} (s : LB.Sec H) (r : Z ⟶ X) (z : Z) {i j : H.ι} (hi : r z ∈ H.U i) (hj : r z ∈ H.U j) :
-    gs r z _ (s.f i) = (gm r z _ (H.g i j)).val * gs r z _ (s.f j) := by
-  have hm : r z ∈ H.U i ⊓ H.U j := ⟨hi, hj⟩
-  have e := congrArg (gs r z _) (s.compat i j)
-  rwa [gs_res _ z _ hm, gs_mul _ z _ hm, gs_res _ z _ hm, gs_unit _ z _ hm] at e
+alias gs_sec := _root_.GlobalTheory.SecPullIso.gs_sec_trans
 
 def formSec {σ : Type} (p : X ⟶ Spec (CommRingCat.of R)) {H : LB X} (s : σ → LB.Sec H) {F : MvPolynomial σ R}
     {t : ℕ} (hF : F.IsHomogeneous t) : LB.Sec (AbLaw.pw H t) where
@@ -287,7 +283,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.sections_pow_veryAmple_are_forms_of_closedFibre : ∀ (A : Type) [CommRing A] [IsLocalRing A] [IsNoetherianRing A] (X : Scheme.{0}) (f : X ⟶ Spec (CommRingCat.of A)), Flat f → ∀ (H : LB X) (n : ℕ) (s : Fin (n + 1) → LB.Sec H), H.IsLB → VeryAmpleBy f H s → ∀ (K : Type) [Field K] (g₀ : A →+* K), Function.Surjective g₀ → ∀ (X₀ : Scheme.{0}) (π : X₀ ⟶ X) (f₀ : X₀ ⟶ Spec (CommRingCat.of K)), IsPullback π f₀ f (Spec.map (CommRingCat.ofHom g₀)) → ∀ (H₀ : LB X₀) (w₀ : LB.Iso H₀ (H.pull π)) (s₀ : Fin (n + 1) → LB.Sec H₀), H₀.IsLB → w₀.IsGen → (∀ j, (∀ z (k : (H).ι) (k' : (H₀).ι), (π) z ∈ (H).U k → z ∈ (H₀).U k' → gs (π) z _ ((s j).f k) = (Geo.Tor.gw (w₀) (𝟙 _) z k k').val * gs (𝟙 _) z _ ((s₀ j).f k'))) → ∀ t : ℕ, FirstCohomologyVanishes (pw H₀ t) → (∀ σ : LB.Sec (pw H₀ t), ∃ P : MvPolynomial (Fin (n + 1)) K, P.IsHomogeneous t ∧ ∀ k : H₀.ι, σ.f k = MvPolynomial.eval₂Hom (cst (f₀) ((H₀).U k)) (fun j => (s₀ j).f k) (P)) → ∀ σ : LB.Sec (pw H t), ∃ P : MvPolynomial (Fin (n + 1)) A, P.IsHomogeneous t ∧ ∀ k : H.ι, σ.f k = MvPolynomial.eval₂Hom (cst (f) ((H).U k)) (fun j => (s j).f k) (P) := by
-  first | exact @GlobalTheory.Degen.sections_pw_are_forms_of_closed_fibre | exact GlobalTheory.Degen.sections_pw_are_forms_of_closed_fibre | (intros; apply GlobalTheory.Degen.sections_pw_are_forms_of_closed_fibre <;> assumption)
+  first | exact @GlobalTheory.Degen.sections_pw_are_forms_of_closed_fibre
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.SectionsPowVeryAmpleAreFormsOfClosedFibreStatement =====
@@ -310,16 +306,7 @@ open MvPolynomial
 
 variable {X X' Z : Scheme.{0}} {R R' : Type} [CommRing R] [CommRing R']
 
-theorem eval₂_scale {σ A : Type} [CommRing A] (φ : R →+* A) (c : A) (x : σ → A) {F : MvPolynomial σ R}
-    {e : ℕ} (hF : F.IsHomogeneous e) : eval₂ φ (fun j => c * x j) F = c ^ e * eval₂ φ x F := by
-  rw [eval₂_eq, eval₂_eq, Finset.mul_sum]
-  refine Finset.sum_congr rfl fun a ha => ?_
-  have hd : ∑ j ∈ a.support, a j = e := by
-    have := hF (mem_support_iff.1 ha)
-    rw [← this, Finsupp.weight_apply, Finsupp.sum]
-    simp
-  simp only [mul_pow, Finset.prod_mul_distrib, Finset.prod_pow_eq_pow_sum, hd]
-  ring
+alias eval₂_scale := _root_.GlobalTheory.Degen.FormOnto.eval₂_scale
 
 def gsHom (r : Z ⟶ X) (z : Z) (U : X.Opens) (h : r z ∈ U) : Γ(X, U) →+* Z.presheaf.stalk z :=
   (Z.presheaf.germ (r ⁻¹ᵁ U) z h).hom.comp (r.app U).hom
@@ -341,19 +328,7 @@ theorem gs_eval {σ : Type} (p : X ⟶ Spec (CommRingCat.of R)) (r : Z ⟶ X) (z
   · ext j
     exact gsHom_apply r z U h _
 
-theorem const_comp (p : X ⟶ Spec (CommRingCat.of R')) (g : R →+* R') (U : X.Opens) :
-    AbLaw.cst (p ≫ Spec.map (CommRingCat.ofHom g)) U = (AbLaw.cst p U).comp g := by
-  ext a
-  have := congrArg (fun q => q.hom a) (Scheme.ΓSpecIso_inv_naturality (CommRingCat.ofHom g))
-  simp only [CommRingCat.hom_comp, RingHom.comp_apply, CommRingCat.hom_ofHom] at this
-  simp only [AbLaw.cst, RingHom.comp_apply, Scheme.Hom.comp_appTop, CommRingCat.hom_comp]
-  rw [this]
-
-theorem gs_sec {H : LB X} (s : LB.Sec H) (r : Z ⟶ X) (z : Z) {i j : H.ι} (hi : r z ∈ H.U i) (hj : r z ∈ H.U j) :
-    gs r z _ (s.f i) = (gm r z _ (H.g i j)).val * gs r z _ (s.f j) := by
-  have hm : r z ∈ H.U i ⊓ H.U j := ⟨hi, hj⟩
-  have e := congrArg (gs r z _) (s.compat i j)
-  rwa [gs_res _ z _ hm, gs_mul _ z _ hm, gs_res _ z _ hm, gs_unit _ z _ hm] at e
+alias gs_sec := _root_.GlobalTheory.SecPullIso.gs_sec_trans
 
 def formSec {σ : Type} (p : X ⟶ Spec (CommRingCat.of R)) {H : LB X} (s : σ → LB.Sec H) {F : MvPolynomial σ R}
     {t : ℕ} (hF : F.IsHomogeneous t) : LB.Sec (AbLaw.pw H t) where
@@ -462,7 +437,7 @@ theorem exists_form_correction : ∀ (A : Type) [CommRing A] [IsLocalRing A] [Is
     Eq.trans (fn_ext fun z hz => by
       obtain ⟨k, hk⟩ := exists_chart hM (β z)
       exact (germ_rel hrel hτ' f c z k k' hk hz).1 (congrArg _ (hc' k))) (by
-      rw [hβ.w, const_comp]
+      rw [hβ.w, _root_.GlobalTheory.Degen.FormOnto.cst_specMap]
       rfl)
   have hgc : (fun i => g (c i)) = 0 :=
     (hτ A' g X' β f' hβ _ _ τ' hM' hw' hτ' (formSec (β ≫ f) s' hF)).unique hc'' fun k' =>
@@ -497,7 +472,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.exists_form_correction_of_vanishing_after_baseChange : ∀ (A : Type) [CommRing A] [IsLocalRing A] [IsNoetherianRing A] (X : Scheme.{0}) (f : X ⟶ Spec (CommRingCat.of A)), Flat f → ∀ (H : LB X) (n : ℕ) (s : Fin (n + 1) → LB.Sec H), H.IsLB → VeryAmpleBy f H s → ∀ (K : Type) [Field K] (g₀ : A →+* K), Function.Surjective g₀ → ∀ (X₀ : Scheme.{0}) (π : X₀ ⟶ X) (f₀ : X₀ ⟶ Spec (CommRingCat.of K)), IsPullback π f₀ f (Spec.map (CommRingCat.ofHom g₀)) → ∀ (H₀ : LB X₀) (w₀ : LB.Iso H₀ (H.pull π)) (s₀ : Fin (n + 1) → LB.Sec H₀), H₀.IsLB → w₀.IsGen → (∀ j, (∀ z (k : (H).ι) (k' : (H₀).ι), (π) z ∈ (H).U k → z ∈ (H₀).U k' → gs (π) z _ ((s j).f k) = (Geo.Tor.gw (w₀) (𝟙 _) z k k').val * gs (𝟙 _) z _ ((s₀ j).f k'))) → ∀ t : ℕ, FirstCohomologyVanishes (pw H₀ t) → (∀ σ : LB.Sec (pw H₀ t), ∃ P : MvPolynomial (Fin (n + 1)) K, P.IsHomogeneous t ∧ ∀ k : H₀.ι, σ.f k = MvPolynomial.eval₂Hom (cst (f₀) ((H₀).U k)) (fun j => (s₀ j).f k) (P)) → ∀ (A' : Type) [CommRing A'] (g : A →+* A') (X' : Scheme.{0}) (β : X' ⟶ X) (f' : X' ⟶ Spec (CommRingCat.of A')), IsPullback β f' f (Spec.map (CommRingCat.ofHom g)) → ∀ (H' : LB X') (w : LB.Iso H' (H.pull β)) (s' : Fin (n + 1) → LB.Sec H'), H'.IsLB → w.IsGen → (∀ j, (∀ z (k : (H).ι) (k' : (H').ι), (β) z ∈ (H).U k → z ∈ (H').U k' → gs (β) z _ ((s j).f k) = (Geo.Tor.gw (w) (𝟙 _) z k k').val * gs (𝟙 _) z _ ((s' j).f k'))) → ∀ F : MvPolynomial (Fin (n + 1)) A, F.IsHomogeneous t → (∀ k : (H').ι, MvPolynomial.eval₂Hom (cst (β ≫ f) ((H').U k)) (fun j => (s' j).f k) (F) = 0) → ∃ G : MvPolynomial (Fin (n + 1)) A, G.IsHomogeneous t ∧ (∀ d, g (AddMonoidAlgebra.coeff G d) = 0) ∧ (∀ k : (H).ι, MvPolynomial.eval₂Hom (cst (f) ((H).U k)) (fun j => (s j).f k) (F - G) = 0) := by
-  first | exact @GlobalTheory.FormCorr.exists_form_correction | exact GlobalTheory.FormCorr.exists_form_correction | (intros; apply GlobalTheory.FormCorr.exists_form_correction <;> assumption)
+  first | exact @GlobalTheory.FormCorr.exists_form_correction
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsFormCorrectionOfVanishingAfterBaseChangeStatement =====
@@ -557,14 +532,7 @@ theorem exists_form_lift {σ R R' : Type} [CommRing R] [CommRing R'] (g : R →+
   · rw [MvPolynomial.coeff_map]
   · rw [map_zero, hF.coeff_eq_zero h]
 
-theorem cst_comp_spec {X : Scheme.{0}} {R R' : Type} [CommRing R] [CommRing R']
-    (p : X ⟶ Spec (CommRingCat.of R')) (g : R →+* R') (U : X.Opens) :
-    AbLaw.cst (p ≫ Spec.map (CommRingCat.ofHom g)) U = (AbLaw.cst p U).comp g := by
-  ext a
-  have := congrArg (fun q => q.hom a) (Scheme.ΓSpecIso_inv_naturality (CommRingCat.ofHom g))
-  simp only [CommRingCat.hom_comp, RingHom.comp_apply, CommRingCat.hom_ofHom] at this
-  simp only [AbLaw.cst, RingHom.comp_apply, Scheme.Hom.comp_appTop, CommRingCat.hom_comp]
-  rw [this]
+alias cst_comp_spec := _root_.GlobalTheory.Degen.FormOnto.cst_specMap
 
 theorem exists_pull_tower {σ R : Type} [CommRing R] (I : Ideal R)
     (Y : ∀ e : ℕ, Over (Spec (CommRingCat.of (R ⧸ I ^ (e + 1)))))
@@ -655,7 +623,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.exists_form_correction_next_thickening_local : ∀ (R : Type) [CommRing R] [IsLocalRing R] [IsNoetherianRing R] (I : Ideal R), I ≠ ⊤ → ∀ (Y : ∀ e : ℕ, Over (Spec (CommRingCat.of (R ⧸ I ^ (e + 1))))) (β : ∀ e, (Y e).left ⟶ (Y (e + 1)).left), (∀ e, IsPullback (β e) (Y e).hom (Y (e + 1)).hom (thickTrans R I e)) → (∀ e, Flat (Y e).hom) → ∀ (H : ∀ e, LB (Y e).left) (v : ∀ e, LB.Iso (H e) ((H (e + 1)).pull (β e))), (∀ e, (H e).IsLB ∧ (v e).IsGen) → ∀ (n : ℕ) (s : ∀ e, Fin (n + 1) → LB.Sec (H e)), (∀ e j, (∀ z (k : (H (e + 1)).ι) (k' : (H e).ι), (β e) z ∈ (H (e + 1)).U k → z ∈ (H e).U k' → gs (β e) z _ ((s (e + 1) j).f k) = (Geo.Tor.gw (v e) (𝟙 _) z k k').val * gs (𝟙 _) z _ ((s e j).f k'))) → VeryAmpleBy (Y 0).hom (H 0) (s 0) → ∃ t₀ : ℕ, ∀ t, t₀ ≤ t → ∀ (e : ℕ) (F : MvPolynomial (Fin (n + 1)) R), F.IsHomogeneous t → (∀ k : (H e).ι, MvPolynomial.eval₂Hom (cst ((Y (e)).hom ≫ thick R I (e)) ((H e).U k)) (fun j => (s e j).f k) (F) = 0) → ∃ G : MvPolynomial (Fin (n + 1)) R, G.IsHomogeneous t ∧ (∀ d, AddMonoidAlgebra.coeff G d ∈ I ^ (e + 1)) ∧ (∀ k : (H (e + 1)).ι, MvPolynomial.eval₂Hom (cst ((Y (e + 1)).hom ≫ thick R I (e + 1)) ((H (e + 1)).U k)) (fun j => (s (e + 1) j).f k) (F - G) = 0) := by
-  first | exact @GlobalTheory.Degen.exists_form_correction_local | exact GlobalTheory.Degen.exists_form_correction_local | (intros; apply GlobalTheory.Degen.exists_form_correction_local <;> assumption)
+  first | exact @GlobalTheory.Degen.exists_form_correction_local
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.ExistsFormCorrectionNextThickeningLocalStatement =====
@@ -679,16 +647,7 @@ section Germs
 
 variable {X X' X'' Z : Scheme.{0}} {R R' : Type} [CommRing R] [CommRing R']
 
-theorem eval₂_scale {σ A : Type} [CommRing A] (φ : R →+* A) (c : A) (x : σ → A) {F : MvPolynomial σ R}
-    {e : ℕ} (hF : F.IsHomogeneous e) : eval₂ φ (fun j => c * x j) F = c ^ e * eval₂ φ x F := by
-  rw [eval₂_eq, eval₂_eq, Finset.mul_sum]
-  refine Finset.sum_congr rfl fun a ha => ?_
-  have hd : ∑ j ∈ a.support, a j = e := by
-    have := hF (mem_support_iff.1 ha)
-    rw [← this, Finsupp.weight_apply, Finsupp.sum]
-    simp
-  simp only [mul_pow, Finset.prod_mul_distrib, Finset.prod_pow_eq_pow_sum, hd]
-  ring
+alias eval₂_scale := _root_.GlobalTheory.Degen.FormOnto.eval₂_scale
 
 def gsHom (r : Z ⟶ X) (z : Z) (U : X.Opens) (h : r z ∈ U) : Γ(X, U) →+* Z.presheaf.stalk z :=
   (Z.presheaf.germ (r ⁻¹ᵁ U) z h).hom.comp (r.app U).hom
@@ -710,28 +669,15 @@ theorem gs_eval_poly {σ : Type} (p : X ⟶ Spec (CommRingCat.of R)) (r : Z ⟶ 
   · ext j
     exact gsHom_apply r z U h _
 
-theorem cst_comp_spec (p : X ⟶ Spec (CommRingCat.of R')) (g : R →+* R') (U : X.Opens) :
-    AbLaw.cst (p ≫ Spec.map (CommRingCat.ofHom g)) U = (AbLaw.cst p U).comp g := by
-  ext a
-  have := congrArg (fun q => q.hom a) (Scheme.ΓSpecIso_inv_naturality (CommRingCat.ofHom g))
-  simp only [CommRingCat.hom_comp, RingHom.comp_apply, CommRingCat.hom_ofHom] at this
-  simp only [AbLaw.cst, RingHom.comp_apply, Scheme.Hom.comp_appTop, CommRingCat.hom_comp]
-  rw [this]
+alias cst_comp_spec := _root_.GlobalTheory.Degen.FormOnto.cst_specMap
 
-theorem gs_sec_chart {H : LB X} (s : LB.Sec H) (r : Z ⟶ X) (z : Z) {i j : H.ι} (hi : r z ∈ H.U i) (hj : r z ∈ H.U j) :
-    gs r z _ (s.f i) = (gm r z _ (H.g i j)).val * gs r z _ (s.f j) := by
-  have hm : r z ∈ H.U i ⊓ H.U j := ⟨hi, hj⟩
-  have e := congrArg (gs r z _) (s.compat i j)
-  rwa [gs_res _ z _ hm, gs_mul _ z _ hm, gs_res _ z _ hm, gs_unit _ z _ hm] at e
+alias gs_sec_chart := _root_.GlobalTheory.SecPullIso.gs_sec_trans
 
 def Rel {H : LB X} {H' : LB X'} (β : X' ⟶ X) (w : LB.Iso H' (H.pull β)) (s : LB.Sec H) (s' : LB.Sec H') : Prop :=
   ∀ z (k : H.ι) (k' : H'.ι), β z ∈ H.U k → z ∈ H'.U k' →
     gs β z _ (s.f k) = (gw w (𝟙 _) z k k').val * gs (𝟙 _) z _ (s'.f k')
 
-theorem gs_stalkMap_comp (r : Z ⟶ X') (β : X' ⟶ X) (z : Z) (U : X.Opens) (h : β (r z) ∈ U) (a : Γ(X, U)) :
-    (r.stalkMap z).hom (gs β (r z) U a) = gs (r ≫ β) z U a := by
-  rw [← gs_pull r β z U h, gs_eq β _ U h, gs_eq r z _ h]
-  exact Scheme.Hom.germ_stalkMap_apply r (β ⁻¹ᵁ U) z h _
+alias gs_stalkMap_comp := _root_.GlobalTheory.Unif.PolyStep.gs_stalkMap
 
 theorem Rel.pull {H : LB X} {H' : LB X'} {β : X' ⟶ X} {w : LB.Iso H' (H.pull β)} {s : LB.Sec H} {s' : LB.Sec H'}
     (h : Rel β w s s') (r : Z ⟶ X') (z : Z) (k : H.ι) (k' : H'.ι) (hk : β (r z) ∈ H.U k) (hk' : r z ∈ H'.U k') :
@@ -827,13 +773,7 @@ theorem mem_vanIdeal_pull {H : LB X} {H' : LB X'} (hH : H.IsLB) {β : X' ⟶ X} 
   rw [h0 k, ← gsHom_apply β z _ hk, map_zero] at e
   rw [(Units.isUnit _).mul_right_eq_zero.1 e.symm, ← gsHom_apply (𝟙 X') z _ hz, map_zero]
 
-theorem component_mem_span (S : Set (MvPolynomial σ R)) (hS : ∀ F ∈ S, ∃ t, F.IsHomogeneous t) :
-    ∀ F ∈ Ideal.span S, ∀ t, homogeneousComponent t F ∈ Ideal.span S := by
-  intro F hF t
-  letI := MvPolynomial.gradedAlgebra (σ := σ) (R := R)
-  have h := Ideal.homogeneous_span (homogeneousSubmodule σ R) S (fun F hF => hS F hF) t hF
-  rwa [show (DirectSum.decompose (homogeneousSubmodule σ R) F t : MvPolynomial σ R) = homogeneousComponent t F from
-    decomposition.decompose'_apply F t] at h
+alias component_mem_span := _root_.GlobalTheory.Unif.FormalEmb.component_mem_span
 
 end GlobalTheory.Degen.FormalEmb
 
@@ -858,7 +798,7 @@ theorem GlobalTheory.Degen.exists_projective_of_formal_embedding_local : ∀ (R 
     · exact hva
     · obtain ⟨j₀, hj, w, hw, hr⟩ := tower _ Y β hβ H v hH s hs e
       exact GlobalTheory.AbLaw.veryAmpleBy_of_isNilpotent _ _ _ (Ideal.Quotient.factor_surjective _)
-        (GlobalTheory.Degen.isNilpotent_ker_factor_pow I _)
+        (_root_.GlobalTheory.Degen.PolyStepLocal.nilpotent_ker I _)
         _ _ _ _ j₀ hj _ _ w n _ _ (hH _).1 (hH _).1 ((isGen_iff _).2 hw) hr hva
   have c₁ : ∀ e, β e ≫ (Y (e + 1)).hom ≫ thick V I (e + 1) = (Y e).hom ≫ thick V I e := fun e => by
     rw [← Category.assoc, (hβ e).w, Category.assoc, thickTrans_comp]

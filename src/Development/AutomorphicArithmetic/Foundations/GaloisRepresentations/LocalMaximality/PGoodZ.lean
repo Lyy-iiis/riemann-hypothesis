@@ -153,7 +153,7 @@ private theorem stab_tensor (f : S →ₐ[ℂ] Module.End ℂ E) (g : S' →ₐ[
       simp only [Submodule.mem_comap, TensorProduct.mk_apply, TensorProduct.map_tmul]
       exact Submodule.apply_mem_map₂ _ (hP _ a.2 _ hp) (hQ _ b.2 _ hq)
     have h2 := hle hm
-    simp only [AlgHom.comp_apply, Algebra.TensorProduct.map_tmul, Subalgebra.coe_val]
+    simp only [AlgHom.comp_apply]
     exact h2
   | add p q hp hq =>
     rw [map_add (f := _), map_add (f := _), LinearMap.add_apply]
@@ -232,7 +232,7 @@ theorem UpperTheory.Gal.productCup_of_system.goodZ_of :
   have hrB : ∀ I J : Finset (Fin (d + 1)), I.Nonempty → I ⊆ J → rB ℂ K (xv x) I ≤ rB ℂ K (xv x) J := by
     intro I J hI hIJ
     obtain ⟨i, hi⟩ := hI
-    exact (GlobalTheory.T.finite_cover_ring_localization_chart ℂ F K d (xv x) hx I i hi).1 J hIJ
+    exact (_root_.GlobalTheory.PD.rB_mono_loc ℂ F K d (xv x) hx I i hi).1 J hIJ
   have hx0 : ∀ i, xv x i ≠ 0 := fun i => (x i).ne_zero
   refine ⟨⟨?_, ?_, ?_, ?_, ?_⟩, ⟨?_, ?_, ?_, ?_, ?_⟩, ?_⟩
   · intro I I' J J' hI hJ hII hJJ

@@ -72,7 +72,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.Local
 theorem _root_.GlobalTheory.T.gridLocalTensorPlaces_over_split_places : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {G : GridData L sc} {μ₀ : T} (_hL : L.Is μ₀) (t : T)
     (w : HeightOneSpectrum (𝓞 D.host.E)), w ∈ locPl G t →
       Nonempty (D.host.E →ₐ[D.host.F] Fv D.host.F (w.under (𝓞 D.host.F))) := by
-  first | exact @GlobalTheory.LocPlSplit.locPl_split | exact GlobalTheory.LocPlSplit.locPl_split | (intros; apply GlobalTheory.LocPlSplit.locPl_split <;> assumption)
+  first | exact @GlobalTheory.LocPlSplit.locPl_split
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.GridLocalTensorPlacesOverSplitPlacesStatement =====
@@ -140,20 +140,20 @@ theorem squareChars_isGood : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Const
     · intro w hw
       rcases Finset.mem_union.1 hw with hw | hw
       · rcases (G.pl.mem_S0_of_sum_eq).1 hw with h | h
-        · exact GlobalTheory.T.not_unrAt_of_under_eq_v0 hL t i j w h
-        · exact GlobalTheory.T.alpha_div_beta_ramified_first hL t i j w h
+        · exact _root_.GlobalTheory.ThetaGridRamifiedOverBasePlace.thetaGridCharacterQuotient_not_unramified_over_basePlace hL t i j w h
+        · exact _root_.GlobalTheory.FunObj.SqNum.not_unrAt_alpha_div_beta_over_S₁ hL t i j w h
       · obtain ⟨h1, h2⟩ := Finset.mem_sdiff.1 hw
         obtain ⟨P, hP, e⟩ := Finset.mem_image.1 h1
-        exact GlobalTheory.T.alpha_div_beta_ramified_at_level hL t i j w P hP e h2
+        exact _root_.GlobalTheory.TwistRam.not_unrAt_alpha_div_beta hL t i j w P hP e h2
     · intro w hw
       have hw' : w.under (𝓞 D.host.F) ∉ G.pl.S0 ∪ ((L.Q t).image (fun P => P.under (𝓞 D.host.F)) \ G.pl.S0) := hw
-      refine GlobalTheory.T.alpha_unramified_outside hL t i j w (fun h => hw' (Finset.mem_union_left _ h)) fun P hP e => hw' ?_
+      refine _root_.GlobalTheory.FunObj.alpha_unrAt hL t i j w (fun h => hw' (Finset.mem_union_left _ h)) fun P hP e => hw' ?_
       by_cases h : w.under (𝓞 D.host.F) ∈ G.pl.S0
       · exact Finset.mem_union_left _ h
       · exact Finset.mem_union_right _ (Finset.mem_sdiff.2 ⟨Finset.mem_image.2 ⟨P, hP, e⟩, h⟩)
     · intro w hw
       have hw' : w.under (𝓞 D.host.F) ∉ G.pl.S0 ∪ ((L.Q t).image (fun P => P.under (𝓞 D.host.F)) \ G.pl.S0) := hw
-      exact GlobalTheory.T.beta_unramified_outside hL i j w (fun h => hw' (Finset.mem_union_left _ h))
+      exact _root_.GlobalTheory.FunObj.beta_unrAt_off hL i j w (fun h => hw' (Finset.mem_union_left _ h))
 
 end GlobalTheory.FunObj
 
@@ -185,7 +185,7 @@ theorem _root_.GlobalTheory.T.squareCharacters_isGood_gridPlaces : ∀ {D : D7} 
       ∀ B : Base D.host.F D.host.E, S₀ ∪ Q ⊆ B.P → B.v₁ ∉ S₀ ∪ Q → SplitsFully D.host.E B.v₁ →
         HasExp B.emb (alpha G t i j) B.mα → HasExp B.emb (beta G i j) B.mβ →
         Chars.IsGood B ⟨alpha G t i j, beta G i j, S₀, Q⟩ (spW G i j).rank (spW₁ G i j).rank := by
-  first | exact @GlobalTheory.FunObj.squareChars_isGood | exact GlobalTheory.FunObj.squareChars_isGood | (intros; apply GlobalTheory.FunObj.squareChars_isGood <;> assumption)
+  first | exact @GlobalTheory.FunObj.squareChars_isGood
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.SquareCharactersIsGoodGridPlacesStatement =====

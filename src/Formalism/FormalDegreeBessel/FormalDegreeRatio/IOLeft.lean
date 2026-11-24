@@ -80,9 +80,6 @@ private lemma commutator_right_transform_of_commutation_relation {A : Type*} [Ri
   · first
     | (refine Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => ?_
        congr 1 <;> ring)
-    | (rw [Finset.sum_comm]
-       refine Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => ?_
-       congr 1 <;> ring)
 
 private lemma commutator_left_transform_of_commutation_relation {A : Type*} [Ring A] [Algebra ℂ A] {n : ℕ} (F : Fin n → Fin n → A)
     (M P : Matrix (Fin n) (Fin n) ℂ)

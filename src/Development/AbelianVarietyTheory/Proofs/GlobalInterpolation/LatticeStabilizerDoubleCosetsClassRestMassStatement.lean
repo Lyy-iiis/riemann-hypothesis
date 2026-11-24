@@ -57,7 +57,7 @@ theorem defClassRest : ∀ D : D7, DefClassRest D := by
   obtain ⟨⟨θ, hθ⟩, A, hA⟩ := GlobalTheory.DecompCompare.exists_data D W hW hsig
   have hK : KSub D W W.rank 0 θ A = StabFin.SFin D.sp.cm.sig W.gram (L0c D W) :=
     SetLike.coe_injective (StabFin.KSub_eq D W hW hsig θ hθ A hA)
-  obtain ⟨-, n, g, hcov, hdisj, -, hsum⟩ := GlobalTheory.DefiniteDecompObj.doubleCosets_mass D W hW hsig θ hθ A hA
+  obtain ⟨-, n, g, hcov, hdisj, -, hsum⟩ := _root_.GlobalTheory.DefiniteDecomp.defClassDecomp D W hW hsig θ hθ A hA
   rw [hK] at hcov hdisj hsum
   exact ⟨n, g, hcov, hdisj, hsum⟩
 
@@ -75,7 +75,7 @@ open NumberField MeasureTheory Formalism.BasicNotions Formalism.MainNotions.Stan
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.lattice_stabilizer_doubleCosets_classRest_mass : ∀ D : D7, DefClassRest D := by
-  first | exact @GlobalTheory.ClassRestObj.defClassRest | exact GlobalTheory.ClassRestObj.defClassRest | (intros; apply GlobalTheory.ClassRestObj.defClassRest <;> assumption)
+  first | exact @GlobalTheory.ClassRestObj.defClassRest
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.GlobalInterpolation.LatticeStabilizerDoubleCosetsClassRestMassStatement =====

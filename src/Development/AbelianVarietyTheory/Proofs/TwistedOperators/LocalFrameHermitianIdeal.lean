@@ -295,7 +295,7 @@ open scoped Matrix
 
 
 theorem _root_.GlobalTheory.T.hermitianForm_dualFlag_eq_reduced_frame_coordinates : ∀ {D : D7} (g : ℕ) (e0 f0 : Fin D.R.rS → VA (II D)) (z0 : VA (II D)) (bw bwd : Fin D.R.k → VA (II D)) (ew : EAf D), Formalism.L2.SG.Pf.BunEx.Unip.FH (II D) g e0 f0 z0 bw bwd ew → ∀ (β : GL (Fin (Yc D 0).rank) (EAf D)) (PP : Pl D.host.E) (w : Bool), IsFrame β (II D).L → LocAt g e0 f0 z0 bw bwd ew β PP w → ∀ u ∈ (II D).Lf, (∀ p (h1 : hA (II D) (flagV D.R.rS D.R.k (Yc D 0).rank f0 e0 (dualOrRevBasis w bw bwd) (-z0) p) u ∈ Formalism.L2.Herm.intAf D.host.F D.host.E), resS D.host.F PP ⟨_, h1⟩ = redV β PP u p) ∧ (∀ i (h1 : hA (II D) ((if w then bw else bwd) i) u ∈ Formalism.L2.Herm.intAf D.host.F D.host.E), resS D.host.F PP ⟨_, h1⟩ = 0) := by
-  first | exact @GlobalTheory.SeeConjGroup.CoefRead.coef_read | exact GlobalTheory.SeeConjGroup.CoefRead.coef_read | (intros; apply GlobalTheory.SeeConjGroup.CoefRead.coef_read <;> assumption)
+  first | exact @GlobalTheory.SeeConjGroup.CoefRead.coef_read
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.HermitianFormDualFlagEqReducedFrameCoordinatesStatement =====
@@ -353,7 +353,7 @@ open scoped Matrix
 
 
 theorem _root_.GlobalTheory.T.mem_span_add_smul_lattice_of_frame_coeffs_zmod : ∀ (I : AutInst) (g : ℕ) {r k : ℕ} (e0 f0 : Fin r → VA I) (z0 : VA I) (bw bwd : Fin k → VA I) (ew : I.E ⊗[I.F] Af I.F), Formalism.L2.SG.Pf.BunEx.Unip.FH I g e0 f0 z0 bw bwd ew → ∀ v ∈ I.Lf, ∀ (Se : Set (Fin r)) (Sb : Set (Fin k)), (∀ a, a ∉ Se → ZMod' I g (hA I (f0 a) v)) → (∀ a, ZMod' I g (hA I (e0 a) v)) → ZMod' I g (hA I z0 v) → (∀ i, i ∉ Sb → ZMod' I g (hA I (bwd i) v)) → (∀ i, ZMod' I g (hA I (bw i) v)) → v ∈ Formalism.L2.SG.Pf.unitaryCongruence.Mo I g (e0 '' Se ∪ bw '' Sb) := by
-  first | exact @GlobalTheory.mo_of_coef_mod | exact GlobalTheory.mo_of_coef_mod | (intros; apply GlobalTheory.mo_of_coef_mod <;> assumption)
+  first | exact @GlobalTheory.mo_of_coef_mod
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.MemSpanAddSmulLatticeOfFrameCoeffsZmodStatement =====
@@ -414,13 +414,6 @@ theorem flag_mem (S : Set M) (hn : n = 2 * ρ + k + 1) (he : ∀ a, e a ∈ S) (
 end Flag
 
 theorem rank_Y (D : D7) : (Yc D 0).rank = D.R.r := Formalism.L2.SG.InstExistsPf.rank_eq D
-
-theorem rank_Y' (D : D7) : (Yc D 0).rank = 2 * D.R.rS + D.R.k + 1 := by
-  rw [rank_Y]
-  obtain ⟨j, hj⟩ := D.R.m_even
-  have := D.R.two_le_m
-  simp only [Formalism.BasicNotions.Ranks.r, Formalism.BasicNotions.Ranks.rS]
-  omega
 
 theorem mem_hat {D : D7} (L : Submodule (𝓞 D.host.E) (Fin (Yc D 0).rank → D.host.E)) (v : Fin (Yc D 0).rank → EAf D) :
     v ∈ lamAf (F := D.host.F) L ↔ v ∈ Formalism.L2.Herm.hatL (F := D.host.F) L :=
@@ -646,7 +639,7 @@ theorem core (h : FH (II D) g e0 f0 z0 bw bwd ew) (hβ : IsFrame β (II D).L) (h
   have hm := h.mem
   set s : VA (II D) := flagV D.R.rS D.R.k (Yc D 0).rank e0 f0 (basisOrRevDual w bw bwd) z0 q with hs
   have hsL : s ∈ (II D).Lf := by
-    refine flag_mem e0 f0 (basisOrRevDual w bw bwd) z0 ((II D).Lf : Set (VA (II D))) (rank_Y' D) (fun a => (hm.1 a).1)
+    refine flag_mem e0 f0 (basisOrRevDual w bw bwd) z0 ((II D).Lf : Set (VA (II D))) (_root_.GlobalTheory.SeeConjGroup.CoefRead.rank_val D) (fun a => (hm.1 a).1)
       (fun a => (hm.1 a).2) (fun i => ?_) hm.2.1 q
     cases w
     · exact (hm.2.2 _).2
@@ -682,7 +675,7 @@ theorem tab_loc (h : FH (II D) g e0 f0 z0 bw bwd ew) (hβ : IsFrame β (II D).L)
     (hM : M ∈ St β) (hu : upperLeftBlock (r_le_Y (D := D) 0) (redFn β PP M) ∈ unipSym (kP PP) D.R.r D.R.rS D.R.k) :
     Tab (fun t s => ZD D PP (hA (II D) t (((II D).fmat y - 1) *ᵥ s))) e0 f0 bw bwd z0 := by
   have hm := h.mem
-  refine tab_of _ e0 f0 bw bwd z0 ((II D).Lf : Set (VA (II D))) (rank_Y' D) w (fun a => (hm.1 a).1) hm.2.2 hm.2.1
+  refine tab_of _ e0 f0 bw bwd z0 ((II D).Lf : Set (VA (II D))) (_root_.GlobalTheory.SeeConjGroup.CoefRead.rank_val D) w (fun a => (hm.1 a).1) hm.2.2 hm.2.1
     (core h hβ hl hy hyM hM hu) (fun s hs => ?_) (fun i s hs => ?_) (fun i t ht => ?_)
   · rw [hA_neg_left] at hs
     exact ZD_neg hs

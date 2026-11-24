@@ -133,7 +133,7 @@ theorem heckeForm_of_global_euler : ∀ D : D7, GlobalForm D → EulerRight D �
     have := hfz.1.1 (sZero A B) (by simp only [Set.mem_setOf_eq, Complex.ofReal_re, hs0re]; linarith)
     rwa [GlobalTheory.IndefiniteRowSideFullHecke.FlatZetaIntegral.flatIntegrand_self] at this
   refine ⟨hUp₁, hUp₂, hint0, fun l hl => ?_⟩
-  have hd := GlobalTheory.T.partialNormalizingFactorProduct_analytic_ne_zero D (Sf : Set (FinPl D)) A.rank B.rank
+  have hd := _root_.GlobalTheory.Core.Rk.IP.dSfun_analytic_ne_zero D (Sf : Set (FinPl D)) A.rank B.rank
   have hER : EqRight (fun s => ∫ g, integrand om m ν 𝓕 LA a Φ₁ Φ₂ u₁ u₂ s g ∂m)
       (fun s => LFun.LSD D Sf par χB (s + 1 / 2) / LFun.dSfun D.host.E (Sf : Set (FinPl D)) A.rank B.rank s *
         ∫ g in openOff A LA Sf, integrand om m ν 𝓕 LA a Φ₁ Φ₂ u₁ u₂ s g ∂m) := by
@@ -177,7 +177,7 @@ open GlobalTheory.Core.Rk.IP
 
 
 theorem _root_.GlobalTheory.T.heckeInnerProductFormula_of_doublingEuler : ∀ D : D7, GlobalForm D → EulerRight D → HeckeForm D := by
-  first | exact @GlobalTheory.Core.Rk.IP.heckeForm_of_global_euler | exact GlobalTheory.Core.Rk.IP.heckeForm_of_global_euler | (intros; apply GlobalTheory.Core.Rk.IP.heckeForm_of_global_euler <;> assumption)
+  first | exact @GlobalTheory.Core.Rk.IP.heckeForm_of_global_euler
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.HeckeInnerProductFormulaOfDoublingEulerStatement =====
@@ -198,7 +198,7 @@ open GlobalTheory.Core.Rk.IP
 
 
 theorem _root_.GlobalTheory.T.global_doubling_zeta_form_selfDual_lattice_transfer : ∀ (D : D7) (A : HSp D) (L L' : Lat A), IsSelfDualC A L → IsSelfDualC A L' → GlobalFormAt A L → GlobalFormAt A L' := by
-  first | exact @GlobalTheory.Core.Rk.GlobMove.globalFormAt_move | exact GlobalTheory.Core.Rk.GlobMove.globalFormAt_move | (intros; apply GlobalTheory.Core.Rk.GlobMove.globalFormAt_move <;> assumption)
+  first | exact @GlobalTheory.Core.Rk.GlobMove.globalFormAt_move
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.GlobalDoublingZetaFormSelfDualLatticeTransferStatement =====
@@ -219,7 +219,7 @@ open GlobalTheory.Core.Rk.IP
 
 
 theorem _root_.GlobalTheory.T.siegelWeil_fockDoubledPair_of_weil_and_ichino : GlobalTheory.Published.WeilRepresentationUnitaryPair → GlobalTheory.Published.WeilSiegelFormulaUnitary → GlobalTheory.Published.SiegelWeilUnitaryConvergent → ∀ D : D7, SiegelWeilFock D := by
-  first | exact @GlobalTheory.Core.Rk.IP.siegelWeilAll_of_hypotheses | exact GlobalTheory.Core.Rk.IP.siegelWeilAll_of_hypotheses | (intros; apply GlobalTheory.Core.Rk.IP.siegelWeilAll_of_hypotheses <;> assumption)
+  first | exact @GlobalTheory.Core.Rk.IP.siegelWeilAll_of_hypotheses
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.SiegelWeilFockDoubledPairOfWeilAndIchinoStatement =====
@@ -454,7 +454,7 @@ theorem globalFormAt_frameLat_nc : GlobalTheory.Published.WeilRepresentationUnit
     · obtain ⟨C, N, hCN⟩ := GlobalTheory.T.theta_kernel_moderate_growth_both_variables D ψ A B χA χB om hP.weil Φ hΦ.1
       refine ⟨C * GlobalTheory.Grow.height B h ^ N, N, fun g => (hCN g h).trans (le_of_eq ?_)⟩
       rw [mul_pow]; ring
-  obtain ⟨i₁, i₂, l₁, l₂, hss⟩ := GlobalTheory.T.seesaw_fubini_two_lifts_moderate_growth_kernels D A B m mH hm hmH (fun g h => thetaKO om g h Φ₁)
+  obtain ⟨i₁, i₂, l₁, l₂, hss⟩ := _root_.GlobalTheory.Core.Rk.Seesaw.seesaw_fubini D A B m mH hm hmH (fun g h => thetaKO om g h Φ₁)
     (fun g h => thetaKO om g h Φ₂) (fun K hK => by
       rcases hK with rfl | rfl
       exacts [hKer Φ₁ hΦ₁, hKer Φ₂ hΦ₂]) u₁ u₂ (rd u₁ hu₁) (rd u₂ hu₂)
@@ -512,7 +512,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Core.Rk.IP
 
 theorem _root_.GlobalTheory.T.globalFormAt_frameLat_of_siegelWeil : GlobalTheory.Published.WeilRepresentationUnitaryPair → GlobalTheory.Published.CuspRapidDecay → _root_.GlobalTheory.Published.DoublingMethodLocalZetaIntegrals → ∀ D : D7, SiegelWeilFock D → ∀ A : HSp D, GlobalFormAt A (frameLat A) := by
-  first | exact @_root_.GlobalTheory.Core.Rk.IP.globalFormAt_frameLat_nc | exact _root_.GlobalTheory.Core.Rk.IP.globalFormAt_frameLat_nc | (intros; apply _root_.GlobalTheory.Core.Rk.IP.globalFormAt_frameLat_nc <;> assumption)
+  first | exact @_root_.GlobalTheory.Core.Rk.IP.globalFormAt_frameLat_nc
 end
 end -- clump:auto
 end -- clump:auto
@@ -554,7 +554,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Core.Rk.IP
 
 theorem _root_.GlobalTheory.T.globalForm_of_siegel_weil : GlobalTheory.Published.WeilRepresentationUnitaryPair → GlobalTheory.Published.CuspRapidDecay → GlobalTheory.Published.WeilSiegelFormulaUnitary → GlobalTheory.Published.SiegelWeilUnitaryConvergent → _root_.GlobalTheory.Published.DoublingMethodLocalZetaIntegrals → ∀ D : D7, GlobalForm D := by
-  first | exact @_root_.GlobalTheory.Core.Rk.IP.globalForm_of_siegelWeil' | exact _root_.GlobalTheory.Core.Rk.IP.globalForm_of_siegelWeil' | (intros; apply _root_.GlobalTheory.Core.Rk.IP.globalForm_of_siegelWeil' <;> assumption)
+  first | exact @_root_.GlobalTheory.Core.Rk.IP.globalForm_of_siegelWeil'
 end
 end -- clump:auto
 end -- clump:auto
@@ -581,7 +581,7 @@ theorem heckeForm_of_doubling' : GlobalTheory.Published.WeilRepresentationUnitar
   intro p1 p2 p3 p4 p5 p6 D
   have hU := _root_.GlobalTheory.InertZeta.unramDoublingInert
   have hG : GlobalForm D := _root_.GlobalTheory.T.globalForm_of_siegel_weil p1 p2 p3 p4 p5 D
-  have hPB := paramBoundOn_all_of_split_inert D (GlobalTheory.T.sphericalParameterBound_split_place D) (GlobalTheory.T.sphericalParameterBound_nonsplit_places hU D)
+  have hPB := paramBoundOn_all_of_split_inert D (_root_.GlobalTheory.Core.Rk.BdSplit.paramBound_split D) (_root_.GlobalTheory.Core.Rk.ParamInert.paramBoundOn_nonsplit hU D)
   have hLZ := localZetaOn_all_of_split_inert D (GlobalTheory.T.unramifiedDoublingIntegral_splitPlace_adelic p6 D) (GlobalTheory.T.unramified_doubling_integral_inert_adelic hU D (GlobalTheory.T.sphericalParameterBound_nonsplit_places hU D))
   have hE : EulerRight D := GlobalTheory.T.doubling_eulerProduct_farRight p2 D (GlobalTheory.T.doublingSphericalFactorization_of_weilDualPair p1 D) hLZ hPB
   exact GlobalTheory.T.heckeInnerProductFormula_of_doublingEuler D hG hE
@@ -599,7 +599,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Core.Rk.IP
 
 theorem _root_.GlobalTheory.T.heckeForm_of_doubling : GlobalTheory.Published.WeilRepresentationUnitaryPair → GlobalTheory.Published.CuspRapidDecay → GlobalTheory.Published.WeilSiegelFormulaUnitary → GlobalTheory.Published.SiegelWeilUnitaryConvergent → _root_.GlobalTheory.Published.DoublingMethodLocalZetaIntegrals → GlobalTheory.Published.UnramifiedDoublingGL → ∀ D : D7, HeckeForm D := by
-  first | exact @_root_.GlobalTheory.Core.Rk.IP.heckeForm_of_doubling' | exact _root_.GlobalTheory.Core.Rk.IP.heckeForm_of_doubling' | (intros; apply _root_.GlobalTheory.Core.Rk.IP.heckeForm_of_doubling' <;> assumption)
+  first | exact @_root_.GlobalTheory.Core.Rk.IP.heckeForm_of_doubling'
 end
 end -- clump:auto
 end -- clump:auto

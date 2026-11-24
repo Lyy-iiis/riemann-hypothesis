@@ -83,7 +83,7 @@ theorem exists_clopen_integral_of_smooth_over_field :
         z ∈ Set.range j := by
   intro F _ Z q hq z
   obtain ⟨hR, hN, hL⟩ := isReduced_isNormalScheme_isLocallyNoetherian_of_smooth_over_field F Z q hq
-  have : GlobalTheory.IsNormalScheme Z := by first | exact hN | exact IsNormalScheme.of_pred hN
+  have : GlobalTheory.IsNormalScheme Z := by first | exact IsNormalScheme.of_pred hN
   have hC : irreducibleComponent z ∈ irreducibleComponents Z := irreducibleComponent_mem_irreducibleComponents z
   let C : Z.Opens := ⟨irreducibleComponent z, IsNormalScheme.isOpen_of_mem_irreducibleComponents hC⟩
   have hzC : z ∈ C := mem_irreducibleComponent
@@ -445,11 +445,6 @@ open ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.AnForm.R
 
 namespace GlobalTheory.WeakRes
 
-theorem isProjOver_comp_closed {R : Type} [CommRing R] {X X' : Scheme.{0}} (g : X' ⟶ X) [IsClosedImmersion g]
-    {f : X ⟶ Sp R} (hf : IsProjOver f) : IsProjOver (g ≫ f) := by
-  obtain ⟨M, k, hk, rfl⟩ := hf
-  exact ⟨M, g ≫ k, inferInstance, by simp⟩
-
 theorem isProjOver_seq {F : Type} [Field F] {Y Y' : Scheme.{0}} (f : Y ⟶ Sp F) {B : Set Y} {s : Y' ⟶ Y}
     (h : IsSmoothBlowupSeq f B s) (hf : IsProjOver f) : IsProjOver (s ≫ f) := by
   induction h with
@@ -458,7 +453,7 @@ theorem isProjOver_seq {F : Type} [Field F] {Y Y' : Scheme.{0}} (f : Y ⟶ Sp F)
     obtain ⟨X', b, hb', hproj, -⟩ := ProjBlowup.exists_blowup (s ≫ f) ih J
     obtain ⟨e, he, heb⟩ := ProjBlowup.exists_iso_of_blowup J π b hb hb'
     rw [← heb, Category.assoc]
-    exact isProjOver_comp_closed e hproj
+    exact _root_.GlobalTheory.ProjSpace.isProjOver_comp_of_isClosedImmersion e hproj
 
 
 attribute [local instance] MvPolynomial.gradedAlgebra in
@@ -502,7 +497,7 @@ theorem weak_resolution : GlobalTheory.Published.Principalisation → ∀ (F : T
     refine ⟨W', h, U', hW', ?_, ?_, hU'ne, hU'iso⟩
     · rw [hq]; exact _root_.GlobalTheory.RelDimOfDim.smoothOfRelativeDimension_of_topologicalKrullDim_eq F W' _ n inferInstance (hd.trans hdim)
     · rw [hq, ← Category.assoc]
-      exact isProjOver_comp_closed _ (isProjOver_seq f hseq₁ (ProjSpace.isProjOver_pspace_str F _))
+      exact _root_.GlobalTheory.ProjSpace.isProjOver_comp_of_isClosedImmersion _ (isProjOver_seq f hseq₁ (ProjSpace.isProjOver_pspace_str F _))
 
 end GlobalTheory.WeakRes
 end -- clump:auto

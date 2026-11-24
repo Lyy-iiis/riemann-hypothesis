@@ -288,7 +288,7 @@ theorem rho_one_eval : ∀ {Λ A B K : Type} [CommRing Λ] [CommRing A] [CommRin
     (hC.basis 0 bs (C.μ 0 P.oneV)).unique h2.symm h3
   have h5 : φ = ∑ s, φ (bs s) • bs.coord s := by
     refine bs.ext fun t => ?_
-    simp [Finset.sum_apply, Module.Basis.coord_apply, Finsupp.single_apply]
+    simp
   have h6 : φ P.oneV = ∑ s, bs.coord s P.oneV * φ (bs s) := by
     conv_lhs => rw [← bs.sum_repr P.oneV]
 
@@ -420,27 +420,27 @@ theorem cg_r (n i j : ℕ) (x : M.Hc false n i) (y : M.Hc false n j) :
     rHof d hc M s n (i + j) (cupS M n i j x y) = cupZn L M s n i j (rHof d hc M s n i x) (rHof d hc M s n j y) := by
   refine (congrArg (rHof d hc M s n (i + j)) (cupS_apply M n i j x y)).trans ?_
   refine Eq.trans ?_ (cupZn_apply L M s n i j _ _).symm
-  exact (red_cup (d n) M.p s {⊤} ((PAlg.base l).cris n) L.lam (hc n) none).1 rfl x y
+  exact (_root_.GlobalTheory.CompanionTheory.RedCup.redMor_cup_one (d n) M.p s {⊤} ((PAlg.base l).cris n) L.lam (hc n) none).1 rfl x y
 
 theorem cg_red (n i j : ℕ) (z : HO (QA L M s) i) (w : HO (QA L M s) j) :
     redM (QA L M s) none ((l : L.A) ^ n) (i + j) (cupZ L M s i j z w) =
       cupZn L M s n i j (redM (QA L M s) none ((l : L.A) ^ n) i z) (redM (QA L M s) none ((l : L.A) ^ n) j w) := by
   refine (congrArg (redM (QA L M s) none ((l : L.A) ^ n) (i + j)) (cupZ_apply L M s i j z w)).trans ?_
   refine Eq.trans ?_ (cupZn_apply L M s n i j _ _).symm
-  exact redM_cup (QA L M s) none ((l : L.A) ^ n) rfl z w
+  exact _root_.GlobalTheory.CompanionTheory.RedCup.redM_cup (QA L M s) none ((l : L.A) ^ n) rfl z w
 
 theorem cg_b (i j : ℕ) (z : HO (QA L M s) i) (w : HO (QA L M s) j) :
     bMap M s hL hQ (i + j) (cupZ L M s i j z w) = cupW L M s i j (bMap M s hL hQ i z) (bMap M s hL hQ j w) := by
   refine (congrArg (bMap M s hL hQ (i + j)) (cupZ_apply L M s i j z w)).trans ?_
   refine Eq.trans ?_ (cupW_apply L M s i j _ _).symm
-  exact (smor_cup (smB M s hL hQ)).1 rfl z w
+  exact (_root_.GlobalTheory.CompanionTheory.SiteCup.smor_cup (smB M s hL hQ)).1 rfl z w
 
 theorem cg_mu (i j : ℕ) (v : HdR M.q i) (w : HdR M.q j) :
     muB L.γB M.q 1 s {⊤} (i + j) (cupR M i j v w) =
       cupW L M s i j (muB L.γB M.q 1 s {⊤} i v) (muB L.γB M.q 1 s {⊤} j w) := by
   refine (congrArg (muB L.γB M.q 1 s {⊤} (i + j)) (cupR_eq M i j v w)).trans ?_
   refine Eq.trans ?_ (cupW_apply L M s i j _ _).symm
-  exact (muB_cup L.γB M.q 1 s {⊤}).1 rfl v w
+  exact (_root_.GlobalTheory.CompanionTheory.SiteCup.muB_cup L.γB M.q 1 s {⊤}).1 rfl v w
 
 theorem cg_tS (n i j : ℕ) (x : M.Hc false (n + 1) i) (y : M.Hc false (n + 1) j) :
     (M.HS false (i + j)).r n (cupS M (n + 1) i j x y) = cupS M n i j ((M.HS false i).r n x) ((M.HS false j).r n y) := by
@@ -454,10 +454,10 @@ theorem cg_oneS (n : ℕ) : (M.HS false 0).r n (CH.oneH (B.OcA (B.schFn M.p) (ok
 
 theorem cg_one_r (n : ℕ) : redM (QA L M s) none ((l : L.A) ^ n) 0 (CH.oneH (sP (QA L M s)).A) =
     rHof d hc M s n 0 (CH.oneH (B.OcA (B.schFn M.p) (okToOC l K) false n)) :=
-  (red_cup (d n) M.p s {⊤} ((PAlg.base l).cris n) L.lam (hc n) none).2.symm
+  (_root_.GlobalTheory.CompanionTheory.RedCup.redMor_cup_one (d n) M.p s {⊤} ((PAlg.base l).cris n) L.lam (hc n) none).2.symm
 
 theorem cg_one_b : bMap M s hL hQ 0 (CH.oneH (sP (QA L M s)).A) = muB L.γB M.q 1 s {⊤} 0 (oneK M.q) :=
-  (smor_cup (smB M s hL hQ)).2.trans (muB_cup L.γB M.q 1 s {⊤}).2.symm
+  (_root_.GlobalTheory.CompanionTheory.SiteCup.smor_cup (smB M s hL hQ)).2.trans (_root_.GlobalTheory.CompanionTheory.SiteCup.muB_cup L.γB M.q 1 s {⊤}).2.symm
 
 theorem cupOf_rHof_good : (cupOf hL M s hQ (rHof d hc M s)).Good :=
   ⟨cg_r M s d hc, cg_red M s, cg_b hL M s hQ, cg_mu M s, cg_tS M, cg_oneS M, cg_one_r M s d hc, cg_one_b hL M s hQ⟩
@@ -541,7 +541,7 @@ theorem homGal_good_of_galRed (hr : GalRed hL g M s rH) : (homGal hL g M s hQ rH
     o := hL.σB_K g
     tS := fun n j x => ((M.galH false j (IntermediateField.fixingSubgroupEquiv K g)).comm n x).symm
     r := hr
-    red := fun n j z => nmHM_redM _ l s none n j z
+    red := fun n j z => _root_.GlobalTheory.CompanionTheory.RedPull.nmHM_redM _ l s none n j z
     b := nmHO_nmGB_bMap hL g M s hQ
     μ := fun j v => (nm_muB (nmGB hL g M) (Category.id_comp _) 1 s (hL.σB_K g) j v).trans
       (congrArg _ (pullR_id' M.q j v)) }
@@ -605,7 +605,7 @@ theorem homPull_good_of_nmHM_pull
     o := fun _ => rfl
     tS := fun n j x => ((Model.pullH u hu false j).comm n x).symm
     r := hr
-    red := fun n j z => nmHM_redM _ l s none n j z
+    red := fun n j z => _root_.GlobalTheory.CompanionTheory.RedPull.nmHM_redM _ l s none n j z
     b := nmHO_nmPullB_bMap hL u hu s hQN hQM
     μ := nm_muB (nmPullB L u hu) (Model.genMap_q u hu) 1 s (fun _ => rfl) }
 
@@ -643,7 +643,7 @@ theorem semilinear_eq_sum_coord {K B : Type*} {V : Type*} [Field K] [CommRing B]
     (φ : Module.Dual K V) : f φ = ∑ s, f (bs.coord s) * o (φ (bs s)) := by
   have hφ : φ = ∑ s, φ (bs s) • bs.coord s := by
     refine bs.ext fun t => ?_
-    simp [LinearMap.sum_apply, Finsupp.single_apply]
+    simp
   conv_lhs => rw [hφ]
 
   rw [map_sum]
@@ -792,9 +792,6 @@ theorem exists_rho {Λ A B K : Type} [CommRing Λ] [CommRing A] [CommRing B] [Fi
   have hunit : IsUnit (C.ℓ : B) := by
     first
     | exact hC.unit
-    | simpa using hC.unit.map C.ι
-    | simpa using hC.unit.map C.o
-    | simpa using (hC.unit.map C.lam).map C.ι
   obtain ⟨u, hu⟩ := hunit
   let w : C.W j := ((u⁻¹ : Bˣ) : B) ^ e • C.b j z
   let bs₀ := Module.finBasis K (C.V j)
@@ -1156,19 +1153,19 @@ variable {l : ℕ} [Fact l.Prime] {K : IntermediateField ℚ_[l] (PadicAlgCl l)}
 
 theorem crystalline_firstChern_level [FiniteDimensional ℚ_[l] K] (hM : M.Sm) (U : Cov M.q) (hU : ∀ α, U.d α + m ≤ s) (hs : m ≤ s)
     (a : (dat Amp).Ch M) (x : ((dat Amp).H a).N 2) (hx : (dat Amp).c1H a x) (c : HdR M.q 2) (hcK : IsFirstChernDeRham M.q (lineK a.1) c) :
-    (chainOf hL M s (qb_le hL M s) (rHof d hc M s)).Rho (fun n => (show (M.HS false 2).lim from x).1 n) (evB M c) := by
+    (chainOf hL M s (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf hL M s) (rHof d hc M s)).Rho (fun n => (show (M.HS false 2).lim from x).1 n) (evB M c) := by
   obtain ⟨N, i, -, -, hi⟩ := a.2
   have hcov := sSup_𝒱D a.1 N i hi
-  obtain ⟨z, hz, -⟩ := thickening_firstChern_existsUnique L.γ M.p l s a.1 hcov
+  obtain ⟨z, hz, -⟩ := _root_.GlobalTheory.CompanionTheory.CrystallineFirstChernTorsionFree.existsUnique_isFirstChernTorsionFree L.γ M.p l s a.1 hcov
   refine ⟨fun k φ => ?_, 0, z, fun n => ?_, fun {e} bs => ?_⟩
   · show algebraMap K L.B (k • φ c) = algebraMap K L.B k * algebraMap K L.B (φ c)
     rw [smul_eq_mul, map_mul]
   · rw [pow_zero, one_smul]
-    exact coefficientReduction_firstChernClass_tateTwist (d n) M.p s ((PAlg.base l).cris n) L.lam (hc n) a.1 hcov _ z (hx n) hz
+    exact _root_.GlobalTheory.CompanionTheory.ReductionFirstChern.coefficientReduction_firstChernClass_tateTwist (d n) M.p s ((PAlg.base l).cris n) L.lam (hc n) a.1 hcov _ z (hx n) hz
   · rw [pow_zero, one_smul]
-    have h1 : bMap M s hL (qb_le hL M s) 2 z = muB L.γB M.q 1 s {⊤} 2 c :=
-      thickening_firstChern_pullback (nmB M hL) (QA L M s) (TF 1 s) (Or.inl ⟨rfl, 1, s, rfl⟩) (qb_le hL M s) a.1 s z _ hcov hz
-        (deRham_firstChern_to_thickening L.γB M.q s (lineK a.1) c hcK)
+    have h1 : bMap M s hL (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf hL M s) 2 z = muB L.γB M.q 1 s {⊤} 2 c :=
+      _root_.GlobalTheory.CompanionTheory.FirstChernPullback.firstChern_pullback (nmB M hL) (QA L M s) (TF 1 s) (Or.inl ⟨rfl, 1, s, rfl⟩) (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf hL M s) a.1 s z _ hcov hz
+        (_root_.GlobalTheory.CompanionTheory.FirstChernRationalLift.isFirstChernThickening_muB_of_isFirstChernDeRham L.γB M.q s (lineK a.1) c hcK)
     refine Eq.trans ?_ h1.symm
     show ∑ t, algebraMap K L.B (bs.coord t c) • muB L.γB M.q 1 s {⊤} 2 (bs t) = muB L.γB M.q 1 s {⊤} 2 c
     conv_rhs => rw [← bs.sum_repr c]
@@ -1265,26 +1262,26 @@ theorem quoM_bMap (hQ : ∀ T, QB L M s T → QA L M s (((nmB M hL).mor 0).obj T
 
 
 theorem fil_lev_pf [FiniteDimensional ℚ_[l] K] (hM : M.Sm) (U : Cov M.q) (hU : ∀ α, U.d α + m ≤ s) (hs : m ≤ s) {j : ℕ}
-    (x : ∀ n, M.Hc false n j) (hx : (chainOf hL M s (qb_le hL M s) (rHof d hc M s)).Comp x)
-    (f : Module.Dual K (HdR M.q j) →+ L.B) (hf : (chainOf hL M s (qb_le hL M s) (rHof d hc M s)).Rho x f) (N r : ℕ) (hN : N ≤ s)
+    (x : ∀ n, M.Hc false n j) (hx : (chainOf hL M s (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf hL M s) (rHof d hc M s)).Comp x)
+    (f : Module.Dual K (HdR M.q j) →+ L.B) (hf : (chainOf hL M s (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf hL M s) (rHof d hc M s)).Rho x f) (N r : ℕ) (hN : N ≤ s)
     (hfil : ∀ n, x n ∈ B.HcFil (B.schFn M.p) (okToOC l K) false n N j) (φ : Module.Dual K (HdR M.q j))
     (hφ : ∀ h ∈ FilR M.q j (r + 1), φ h = 0) : f φ ∈ pdP L.γB (N - r) := by
   obtain ⟨hlin, e, z, hz, hb⟩ := hf
-  obtain ⟨e', -, -, hsep⟩ := cg_lift hL M hM s hs j
+  obtain ⟨e', -, -, hsep⟩ := _root_.CrystallineSemistableComparison.Pb.Kap.cg_lift_pf hL M hM s hs j
   have h1 : ∀ n, redM (QA L M s) (some (N : ℤ)) ((l : L.A) ^ n) j z = 0 := fun n => by
     have h2 : redM (QA L M s) none ((l : L.A) ^ n) j z = (l : L.A) ^ e • rHof d hc M s n j (x n) := hz n
     rw [← toSome_redM, h2, map_smul]
     have h3 : toSome (QA L M s) N ((l : L.A) ^ n) j (rHof d hc M s n j (x n)) = 0 :=
-      red_fil (d n) M.p s {⊤} ((PAlg.base l).cris n) L.lam (hc n) N j (x n) (hfil n)
+      _root_.GlobalTheory.CompanionTheory.RedFil.red_kills_toSome (d n) M.p s {⊤} ((PAlg.base l).cris n) L.lam (hc n) N j (x n) (hfil n)
     rw [h3, smul_zero]
   have h4 := hsep N (by exact_mod_cast hN) z h1
   rw [← map_smul] at h4
-  have h5 := quoM_bMap hL M s (qb_le hL M s) N j _ h4
+  have h5 := quoM_bMap hL M s (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf hL M s) N j _ h4
   haveI := (m_fin M hM j).1
   let bs := Module.finBasis K (HdR M.q j)
-  have h6 : (l : L.B) ^ e • ∑ t, f (bs.coord t) • muB L.γB M.q 1 s {⊤} j (bs t) = bMap M s hL (qb_le hL M s) j z := hb bs
+  have h6 : (l : L.B) ^ e • ∑ t, f (bs.coord t) • muB L.γB M.q 1 s {⊤} j (bs t) = bMap M s hL (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf hL M s) j z := hb bs
   rw [LinearMap.map_smulₛₗ, ← h6, map_pow, map_natCast, map_smul, map_smul] at h5
-  have hu := unit_B hL
+  have hu := _root_.CrystallineSemistableComparison.Pb.Kap.unit_B_pf hL
   rw [(hu.pow e').smul_eq_zero, (hu.pow e).smul_eq_zero] at h5
   have h7 := (basisB L.γB s m (pdP_B_bot hL) hs M.q U hU {⊤} sSup_singleton j bs).2 N hN _ h5 r φ hφ
   have h8 : f φ = ∑ t, f (bs.coord t) * algebraMap K L.B (φ (bs t)) := by
@@ -1340,18 +1337,24 @@ theorem rho_mono (M : Model l K) (m : ℕ) {s s' : ℕ} (h : s ≤ s') (hG : (ch
     (homS (hS.lev m) M h (qb_le (hS.lev m) M s) (qb_le (hS.lev m) M s')
       (rHof (dOf S hS hC m) (hcOf S hS hC m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s'))
     hG' hG (homS_good_of_inclHM _ _ _ _ _ _ _ (rHof_incl_pf S hS hC M m h)) x f hf
-  have e : (homS (hS.lev m) M h (qb_le (hS.lev m) M s) (qb_le (hS.lev m) M s')
+  have e : (homS (hS.lev m) M h (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf (hS.lev m) M s) (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf (hS.lev m) M s')
       (rHof (dOf S hS hC m) (hcOf S hS hC m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s')).tr j f = f := by
     ext φ
     rfl
   rw [e] at H
   exact H
 
+private theorem rhoK_witness {M : Model l K} {a : (dat Amp).Ch M} {j m : ℕ}
+    {x : ((dat Amp).H a).N j} {f : Module.Dual K (HdR M.q j) →+ (S.L m).B}
+    (hf : rhoK S hS hC a j m x f) :
+    ∃ s₀ : ℕ, ∀ s, s₀ ≤ s → (chK S hS hC M m s).Rho (show (M.HS false j).lim from x).1 f :=
+  hf.2
+
 theorem rho_uniq_pf : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ j m x f f',
     rhoK S hS hC a j m x f → rhoK S hS hC a j m x f' → f = f' := by
-  intro M a hM j m x f f' hρ₁ hρ₂
-  obtain ⟨_, s₀, h⟩ := hρ₁
-  obtain ⟨_, s₀', h'⟩ := hρ₂
+  intro M a hM j m x f f' hf hf'
+  obtain ⟨s₀, h⟩ := rhoK_witness S hS hC hf
+  obtain ⟨s₀', h'⟩ := rhoK_witness S hS hC hf'
   obtain ⟨s₁, hg⟩ := chK_good S hS hC M hM m
   exact _root_.GlobalTheory.CompanionTheory.KapUniq.rho_unique (chK S hS hC M m (max s₁ (max s₀ s₀'))) (hg _ (le_max_left _ _)) _ f f'
     (h _ (le_trans (le_max_left _ _) (le_max_right _ _))) (h' _ (le_trans (le_max_right _ _) (le_max_right _ _)))
@@ -1369,29 +1372,29 @@ theorem rho_ex_pf : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ j m x
 
 theorem rho_add_pf : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ j m x y f g,
     rhoK S hS hC a j m x f → rhoK S hS hC a j m y g → rhoK S hS hC a j m (x + y) (f + g) := by
-  intro M a hM j m x y f g hρ₁ hρ₂
-  obtain ⟨_, s₀, h⟩ := hρ₁
-  obtain ⟨_, s₀', h'⟩ := hρ₂
+  intro M a hM j m x y f g hf hg
+  obtain ⟨s₀, h⟩ := rhoK_witness S hS hC hf
+  obtain ⟨s₀', h'⟩ := rhoK_witness S hS hC hg
   exact ⟨hM, max s₀ s₀', fun s hs => _root_.GlobalTheory.CompanionTheory.KapRho.rho_add (chK S hS hC M m s) _ _ f g
     (h s (le_trans (le_max_left _ _) hs)) (h' s (le_trans (le_max_right _ _) hs))⟩
 
 theorem rho_smul_pf : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ j m (c : (per l K).A) x f, rhoK S hS hC a j m x f →
     rhoK S hS hC a j m (c • x) ((AddMonoidHom.mulLeft ((S.L m).ι ((S.L m).lam c))).comp f) := by
-  intro M a hM j m c x f hρ₁
-  obtain ⟨_, s₀, h⟩ := hρ₁
+  intro M a hM j m c x f hf
+  obtain ⟨s₀, h⟩ := rhoK_witness S hS hC hf
   exact ⟨hM, s₀, fun s hs => _root_.GlobalTheory.CompanionTheory.KapChain.rho_smul (chK S hS hC M m s) c _ f (h s hs)⟩
 
 theorem rho_lin'_pf : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ j m x f, rhoK S hS hC a j m x f →
     ∀ (k : K) φ, f (k • φ) = algebraMap K (S.L m).B k * f φ := by
-  intro M a hM j m x f hρ₁ k φ
-  obtain ⟨_, s₀, h⟩ := hρ₁
+  intro M a hM j m x f hf k φ
+  obtain ⟨s₀, h⟩ := rhoK_witness S hS hC hf
   exact (h s₀ le_rfl).1 k φ
 
 theorem rho_fil_pf : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ j m x f, rhoK S hS hC a j m x f → ∀ n r : ℕ, n ≤ m →
     (dat Amp).fil a j n x → ∀ φ : Module.Dual K (HdR M.q j), (∀ h ∈ FilR M.q j (r + 1), φ h = 0) →
       f φ ∈ pdP (S.L m).γB (n - r) := by
-  intro M a hM j m x f hρ₁ n r hnm hfil φ hφ
-  obtain ⟨_, s₀, h⟩ := hρ₁
+  intro M a hM j m x f hf n r hnm hfil φ hφ
+  obtain ⟨s₀, h⟩ := rhoK_witness S hS hC hf
   obtain ⟨U⟩ := cov_sm_pf M hM
   have hU : ∀ α, U.d α + (m + 1) ≤ max s₀ (Finset.univ.sup U.d + (m + 1)) := fun α => by
     have := Finset.le_sup (f := U.d) (Finset.mem_univ α)
@@ -1401,8 +1404,8 @@ theorem rho_fil_pf : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ j m 
 
 theorem rho_firstChern_formula : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ m x f c, rhoK S hS hC a 2 m x f → (dat Amp).c1H a x →
     IsFirstChernDeRham _ (lineK a.1) c → ∀ φ, f φ = algebraMap K (S.L m).B (φ c) := by
-  intro M a hM m x f c hρ₁ hx hc φ
-  obtain ⟨_, s₀, h⟩ := hρ₁
+  intro M a hM m x f c hf hx hc φ
+  obtain ⟨s₀, h⟩ := rhoK_witness S hS hC hf
   obtain ⟨U⟩ := cov_sm_pf M hM
   obtain ⟨s₁, hg⟩ := chK_good S hS hC M hM m
   have hU : ∀ α, U.d α + (m + 1) ≤ max (max s₀ s₁) (Finset.univ.sup U.d + (m + 1)) := fun α => by
@@ -1509,7 +1512,7 @@ variable (S : LevSys (per l K)) (hS : S.Good) (hC : ∀ m, (S.L m).CrisOK)
 
 variable [FiniteDimensional ℚ_[l] K]
 
-theorem lev_good (M : Model l K) (m s : ℕ) : (homLev S hS m M s (qb_le (hS.lev (m + 1)) M s) (qb_le (hS.lev m) M s)
+theorem lev_good (M : Model l K) (m s : ℕ) : (homLev S hS m M s (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf (hS.lev (m + 1)) M s) (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf (hS.lev m) M s)
     (rHof (dOf S hS hC (m + 1)) (hcOf S hS hC (m + 1)) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s)).Good := by
   exact
     { ℓ := rfl
@@ -1518,7 +1521,7 @@ theorem lev_good (M : Model l K) (m s : ℕ) : (homLev S hS m M s (qb_le (hS.lev
       o k := hS.dK m k
       tS n j x := rfl
       r n j x := nmHM_nmLevA_rHof_succ S hS hC M m s n j x
-      red n j z := nmHM_redM _ l s none n j z
+      red n j z := _root_.GlobalTheory.CompanionTheory.RedPull.nmHM_redM _ l s none n j z
       b j z := nmHO_nmLevB_bMap S hS m M s _ _ j z
       μ j v := (nm_muB (nmLevB S hS m M) (Category.id_comp _) 1 s (hS.dK m) j v).trans (congrArg _ (pullR_id' M.q j v)) }
 
@@ -1537,7 +1540,7 @@ theorem rho_lev_pf : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ j m 
     (show (M.HS false j).lim from x).1 f (hs₀ s (by omega))
   exact h
 
-theorem rho_act_of (hG : ∀ (M : Model l K) m s g, (homGal (hS.lev m) g M s (qb_le (hS.lev m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s)).Good) : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ j m (g : K.fixingSubgroup) x f,
+theorem rho_act_of (hG : ∀ (M : Model l K) m s g, (homGal (hS.lev m) g M s (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf (hS.lev m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s)).Good) : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ j m (g : K.fixingSubgroup) x f,
     rhoK S hS hC a j m x f → rhoK S hS hC a j m (((dat Amp).H a).act j g x) (((S.L m).σB g).toAddMonoidHom.comp f) := by
   intro M a hM j m g x f hρ₁
   obtain ⟨hM', s₀, hs₀⟩ := hρ₁
@@ -1547,7 +1550,7 @@ theorem rho_act_of (hG : ∀ (M : Model l K) m s g, (homGal (hS.lev m) g M s (qb
     (hs₁ s (by omega)) (hs₁ s (by omega)) (hG M m s g) (show (M.HS false j).lim from x).1 f (hs₀ s (by omega))
 
 theorem rho_nat_of (hP : ∀ (M N : Model l K) (u : M.X ⟶ N.X) (hu : u ≫ N.p = M.p) m s,
-    (homPull (hS.lev m) u hu s (qb_le (hS.lev m) N s) (qb_le (hS.lev m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) N s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s)).Good) : ∀ {M N : Model l K} {u : M.X ⟶ N.X} {hu : u ≫ N.p = M.p} {a : (dat Amp).Ch M} {b : (dat Amp).Ch N}
+    (homPull (hS.lev m) u hu s (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf (hS.lev m) N s) (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf (hS.lev m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) N s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s)).Good) : ∀ {M N : Model l K} {u : M.X ⟶ N.X} {hu : u ≫ N.p = M.p} {a : (dat Amp).Ch M} {b : (dat Amp).Ch N}
     (μ : (dat Amp).Mo u hu a b), M.Sm → N.Sm → ∀ j m x f f', rhoK S hS hC b j m x f → rhoK S hS hC a j m ((dat Amp).pullH μ j x) f' →
       ∀ φ, f' φ = f (φ ∘ₗ pullR j (Model.genMap u hu) (Model.genMap_q u hu)) := by
   intro M N u hu a b μ hM hN j m x f f' hρ₁ hρ₂ φ
@@ -1562,14 +1565,14 @@ theorem rho_nat_of (hP : ∀ (M N : Model l K) (u : M.X ⟶ N.X) (hu : u ≫ N.p
   rw [e]
   rfl
 
-theorem rho_one_of (hU : ∀ (M : Model l K) m s, (cupOf (hS.lev m) M s (qb_le (hS.lev m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s)).Good) : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ m x f, rhoK S hS hC a 0 m x f → ((dat Amp).H a).one x →
+theorem rho_one_of (hU : ∀ (M : Model l K) m s, (cupOf (hS.lev m) M s (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf (hS.lev m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s)).Good) : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ m x f, rhoK S hS hC a 0 m x f → ((dat Amp).H a).one x →
     ∀ φ, f φ = algebraMap K (S.L m).B (φ (oneK M.q)) := by
   intro M a hM m x f hρ₁ hx φ
   obtain ⟨_, s₀, h₀⟩ := hρ₁
   obtain ⟨s₁, hs₁⟩ := chK_good S hS hC M hM m
   obtain ⟨s, e0, e1⟩ : ∃ s, s₀ ≤ s ∧ s₁ ≤ s := ⟨s₀ + s₁, by omega⟩
   have h := h₀ s e0
-  rw [show (show (M.HS false 0).lim from x).1 = (cupOf (hS.lev m) M s (qb_le (hS.lev m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s)).oneS from
+  rw [show (show (M.HS false 0).lim from x).1 = (cupOf (hS.lev m) M s (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf (hS.lev m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s)).oneS from
     funext ((one_iff (hS.lev m) M s (qb_le (hS.lev m) M s) (rHof (dOf S hS hC m) (hcOf S hS hC m) M s) a x).1 hx)] at h
   exact _root_.GlobalTheory.CompanionTheory.KapUnit.rho_one_eval (chK S hS hC M m s) (hs₁ s e1) _ (hU M m s) f h φ
 
@@ -1582,7 +1585,7 @@ theorem rho_cup_pf : ∀ {M : Model l K} (a : (dat Amp).Ch M), M.Sm → ∀ {i j
   refine hx.2.elim fun s₀ h₀ => hy.2.elim fun s₁ h₁ => hz.2.elim fun s₂ h₂ => (chK_good S hS hC M hM m).elim fun s₃ h₃ => ?_
   exact cup_genA (hS.lev m) M (s₀ + s₁ + s₂ + s₃) _ _ (h₃ _ (by omega)) (cupOf_rHof_good _ M _ _ _ _) _ _ _ f g h (h₀ _ (by omega))
     (h₁ _ (by omega)) (h₂ _ (by omega))
-    ((cup_iff_cS_lim (hS.lev m) M 0 (qb_le (hS.lev m) M 0) (rHof (dOf S hS hC m) (hcOf S hS hC m) M 0) a x y z).1 hc) b b' φ
+    ((cup_iff_cS_lim (hS.lev m) M 0 (_root_.CrystallineSemistableComparison.Pb.Kap.qb_le_pf (hS.lev m) M 0) (rHof (dOf S hS hC m) (hcOf S hS hC m) M 0) a x y z).1 hc) b b' φ
 
 include hS hC in
 theorem rhoSys_ex : Nonempty (RhoSys S Model.Sm (dat Amp) fun a c => IsFirstChernDeRham _ (lineK a.1) c) :=
@@ -1639,13 +1642,11 @@ open Kap
 
 variable {l : ℕ} [Fact l.Prime] {K : IntermediateField ℚ_[l] (PadicAlgCl l)}
 
-theorem levSys_ex' [FiniteDimensional ℚ_[l] K] : ∃ S : LevSys (per l K), S.Good ∧ ∀ m, (S.L m).CrisOK := CrystallineSemistableComparison.HT.levSys_ex
-
 theorem rhoSys_ex' [FiniteDimensional ℚ_[l] K] (S : LevSys (per l K)) (hS : S.Good) (hC : ∀ m, (S.L m).CrisOK) :
     Nonempty (RhoSys S Model.Sm (dat Amp) fun {M} a c => IsFirstChernDeRham M.q (lineK a.1) c) := Mo.rhoSys_ex S hS hC
 
 theorem crystalline_deRham_firstChern_exists [FiniteDimensional ℚ_[l] K] : ∃ L : KapL (l := l) (K := K) Amp, LieComplementChartContDiffAt L := by
-  obtain ⟨S, hS, hC⟩ := levSys_ex' (l := l) (K := K)
+  obtain ⟨S, hS, hC⟩ := _root_.CrystallineSemistableComparison.HT.levSys_ex (l := l) (K := K)
   obtain ⟨P⟩ := rhoSys_ex' S hS hC
   obtain ⟨A⟩ := kap_abs (facts l K) (fun c => ⟨_, rfl⟩) hS P
   exact ⟨⟨A.κ, A.lin, A.lin', A.act, A.nat, A.fil, A.cup, A.one⟩, A.c1⟩

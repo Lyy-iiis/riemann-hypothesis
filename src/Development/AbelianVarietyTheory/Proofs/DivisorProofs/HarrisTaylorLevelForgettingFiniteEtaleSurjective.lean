@@ -212,7 +212,7 @@ theorem exists_liftScheme : ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (R : Type
       have hG := tateAt_congr o N' (x' := (x ≫ h.left) ≫ Z.hom)
         (by rw [Category.assoc, Over.w h]) _
         (fun a => (Over.homMk (x ≫ h.left) rfl : Over.mk ((x ≫ h.left) ≫ Z.hom) ⟶ Z) ≫ et a)
-        (fun a => by rw [← hh a, ← Category.assoc, ← Category.assoc]; congr 1; try (ext; simp)) (hgeo k x)
+        (fun a => by rw [← hh a, ← Category.assoc, ← Category.assoc]; congr 1) (hgeo k x)
       refine (key k (x ≫ h.left)).1 hG ⟨u, ?_⟩
       rw [Scheme.Hom.comp_apply, hu]
     obtain ⟨h', hh'⟩ := (Hi T h).1 hr
@@ -233,7 +233,6 @@ theorem exists_liftScheme : ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (R : Type
     rw [hf' a]
     simp only [← Category.assoc]
     congr 1
-    try (ext; simp)
 
 end GlobalTheory.UPel.HT
 end -- clump:auto
@@ -254,13 +253,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 namespace GlobalTheory.HTLift
 
 open GlobalTheory.SiegelPull
-
-theorem push_comp' {S S' : Scheme.{0}} {A : Over S} {A' : Over S'} [GrpObj A] [GrpObj A'] {f : S' ⟶ S}
-    {φ : A'.left ⟶ A.left} (h : IsGrpPullback A' A f φ) {α : A' ⟶ A'} {β : A ⟶ A}
-    (hab : α.left ≫ φ = φ ≫ β.left) (T : Over S') (x : T ⟶ A') : pushHom h T (x ≫ α) = pushHom h T x ≫ β :=
-  Over.OverMorphism.ext (by
-    show (x.left ≫ α.left) ≫ φ = (x.left ≫ φ) ≫ β.left
-    rw [Category.assoc, hab, Category.assoc])
 
 theorem exists_obj_of_isLift : ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (R : Type) [CommRing R] (b : Base D R)
     (N N' : ℕ) (hd : N ∣ N') (hc : N'.Coprime p) (S : Scheme.{0}) (s : S ⟶ Sp R) (o : Obj b N s) (T : Over S)
@@ -295,14 +287,14 @@ theorem exists_obj_of_isLift : ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (R : T
       eta_add := fun y z => push_injective pb _ (by
         rw [map_mul, key, key, key, hadd, MonObj.comp_mul])
       eta_lin := fun c y => push_injective pb _ (by
-        rw [push_comp' pb (mT.act c), key, key, hlin, Category.assoc])
+        rw [_root_.GlobalTheory.HTPull.push_comp pb (mT.act c), key, key, hlin, Category.assoc])
       eta_ker := fun y => push_injective pb _ (by
         rw [key, hker, map_one, MonObj.comp_one])
       geom := fun k _ _ x β hx => by
         obtain ⟨I, hI⟩ := hgeom k x
         let e : (Over.mk x ⟶ oT.A) ≃* (Over.mk (x ≫ T.hom) ⟶ o.A) := MulEquiv.ofBijective (pushHom pb (Over.mk x))
           ⟨push_injective pb _, push_surjective pb _⟩
-        have ea : ∀ c g, e (g ≫ oT.act.act c) = e g ≫ o.act.act c := fun c g => push_comp' pb (mT.act c) _ g
+        have ea : ∀ c g, e (g ≫ oT.act.act c) = e g ≫ o.act.act c := fun c g => _root_.GlobalTheory.HTPull.push_comp pb (mT.act c) _ g
         have ex : ∀ z, z.left = (e.symm z).left ≫ mT.φ := fun z =>
           (congrArg (fun q => q.left) (e.apply_symm_apply z)).symm
         have dg := diag_iso mT.sq mT.pol
@@ -615,10 +607,7 @@ theorem forget_map_finite_etale_surjective : ∀ (p : ℕ) [Fact p.Prime] (D : D
       exact (_root_.GlobalTheory.HTSpecTate.tateIsoO_iff_of_specializes p D R b N N' hc M.X M.s M.univ T lv hadd hker hlin (𝟙 T.left) x'
         (x'.base (⊥ : PrimeSpectrum k')) (⊥ : PrimeSpectrum k') (by
           first
-          | exact specializes_rfl
-          | (rw [Scheme.id.base_apply])
-          | (simp only [Scheme.Hom.id_apply]; exact specializes_rfl)
-          | exact (Subsingleton.elim (α := PrimeSpectrum k) _ _) ▸ specializes_rfl)).1 h1
+          | exact specializes_rfl)).1 h1
   obtain ⟨f, -, -⟩ := (HY T lv).1 hlv
   obtain ⟨u, hu⟩ : z ∈ Set.range g := by rw [hg]; rfl
   refine ⟨(f.left ≫ h).base u, ?_⟩

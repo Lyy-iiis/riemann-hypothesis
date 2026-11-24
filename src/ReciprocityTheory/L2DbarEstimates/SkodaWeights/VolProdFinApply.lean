@@ -156,11 +156,6 @@ open scoped ENNReal InnerProductSpace
 
 noncomputable section
 
-theorem near_vsq_pos {p : ℕ} (w : Fin p → ℂ) (hw : w ≠ 0) : 0 < vsq w := by
-  obtain ⟨i, hi⟩ := Function.ne_iff.mp hw
-  exact Finset.sum_pos' (fun j _ => by positivity)
-    ⟨i, Finset.mem_univ _, pow_pos (norm_pos_iff.mpr hi) 2⟩
-
 private theorem contDiffOn_vsq_gv_comp_chart_symm {M : Type*} [TopologicalSpace M] (n : ℕ) (z : M → V n)
     {p : ℕ} (g : Fin p → M → ℂ) (hg : ∀ l, Holo n z (g l))
     (e : OpenPartialHomeomorph M (V n)) (he : IsChart n z e) :
@@ -209,7 +204,7 @@ theorem near_smooth_slice {M : Type*} [TopologicalSpace M] [T2Space M] (n : ℕ)
   have hv : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun y => (((vsq (gv g (e.symm y)))⁻¹ : ℝ) : ℂ))
       e.target :=
     Complex.ofRealCLM.contDiff.comp_contDiffOn ((contDiffOn_vsq_gv_comp_chart_symm n z g hg e he).inv
-      fun y _ => (near_vsq_pos (gv g (e.symm y)) (hN (e.symm y))).ne')
+      fun y _ => (_root_.ReciprocityTheory.L2DbarEstimates.H.vsq_pos (gv g (e.symm y)) (hN (e.symm y))).ne')
   have hnum : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
       (fun y => u (e.symm y) * (starRingEnd ℂ) (g i (e.symm y))) e.target := hu'.mul hc
   show ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun y => u (e.symm y) * (starRingEnd ℂ) (g i (e.symm y)) /
@@ -225,7 +220,7 @@ theorem skodaNear (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
     Smooth.continuous n X.z hz _ (Holo.smooth n X.z _ (hg l))
   have huc : Continuous u' := Smooth.continuous n X.z hz _ (Holo.smooth n X.z _ hu')
   have hNc := near_continuous_vsq g hgc
-  have hNp : ∀ x, 0 < vsq (gv g x) := fun x => near_vsq_pos _ (hN x)
+  have hNp : ∀ x, 0 < vsq (gv g x) := fun x => _root_.ReciprocityTheory.L2DbarEstimates.H.vsq_pos _ (hN x)
   have hW := skodaWeight n M X.z hz p g φ₀ t hg hN hφ₀ hLφ₀ ht.le
   have hWc : Continuous (skW g φ₀ t) := near_continuous_of_smoothR n X.z hz _ hW.1
   have hlogc : Continuous (fun x => Real.log (vsq (gv g x))) :=
@@ -429,7 +424,6 @@ theorem pt_Gs {p : ℕ} (g : Fin p → ℂ) (w : ℂ) (c : ℝ) (hN : 0 < vsq g)
   simp_rw [hterm]
   rw [← Finset.sum_mul, ← Finset.sum_div, ← Finset.mul_sum, hv]
   field_simp
-  try ring
 
 variable {n : ℕ} {M : Type*} [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
   [MeasurableSpace M] [BorelSpace M]
@@ -564,7 +558,6 @@ theorem wint_Gs_eq (z : M → V n) (hz : IsLocalHomeomorph z) (p : ℕ) (g : Fin
       (‖w (a, i).1 * (starRingEnd ℂ) (g (a, i).2 (a, i).1) / ((vsq (gv g (a, i).1) : ℝ) : ℂ)‖ ^ 2 *
         Real.exp (-φ (a, i).1))) _ fun i _ => hFm.comp measurable_prodMk_right]
   refine lintegral_congr fun x => ?_
-  beta_reduce
   rw [← ENNReal.ofReal_sum_of_nonneg fun i _ => by positivity]
   congr 1
   exact pt_Gs (gv g x) (w x) (φ x) (hN x)
@@ -779,7 +772,6 @@ theorem skodaOps (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
     (fun a f₁ f₂ => by funext q; beta_reduce; ring)
     (fun f₁ f₂ h => by
       filter_upwards [hlift f₁ f₂ h] with q hq
-      beta_reduce
       rw [hq])
     (fun w => by
       obtain ⟨wm, hwm, hwae⟩ := exists_pow_mul_eq_eval₂_theta n X.z _ hψm w
@@ -792,7 +784,6 @@ theorem skodaOps (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
         exact (A2 w).1)
       refine ⟨H, ?_⟩
       filter_upwards [hH, hlift _ _ hwae] with q h1 h2
-      beta_reduce
       rw [h1, h2])
     (fun w H hH => le_of_eq (hGsn w H hH))
   obtain ⟨G, hG⟩ := exists_clm_weightedL2_of_bounded n (fun q : M × Fin p => X.z q.1) X.z (fun x : M × Fin p => φ x.1)
@@ -805,7 +796,6 @@ theorem skodaOps (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
       exact Finset.sum_congr rfl fun i _ => by ring)
     (fun h₁ h₂ hh => by
       filter_upwards [hslice h₁ h₂ hh] with x hx
-      beta_reduce
       exact Finset.sum_congr rfl fun i _ => by rw [hx i])
     (fun h => by
       obtain ⟨hm, hhm, hhae⟩ := exists_pow_mul_eq_eval₂_theta n (fun q : M × Fin p => X.z q.1) _ hψpm h
@@ -817,7 +807,6 @@ theorem skodaOps (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
           exact (B2 h).1))
       refine ⟨H, ?_⟩
       filter_upwards [hH, hslice _ _ hhae] with x h1 h2
-      beta_reduce
       rw [h1]
       exact Finset.sum_congr rfl fun i _ => by rw [h2 i])
     (fun h H hH => hGb h H hH)

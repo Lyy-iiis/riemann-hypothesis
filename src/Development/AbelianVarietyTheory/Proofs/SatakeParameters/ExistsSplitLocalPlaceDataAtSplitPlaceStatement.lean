@@ -87,7 +87,7 @@ theorem conjPl_ne {D : D7} (s : SplitPlace D.host.E) : Formalism.DivisionValues.
     have h1 := PI.CompAtExist.muV_eq (GlobalTheory.SplitConjPlace.conjSP s) x
     rw [hw] at h1
     exact h1
-  obtain ⟨φ, hφc, hφ, -⟩ := GlobalTheory.DenseCompl.exists_extension s.w s.v _ hv
+  obtain ⟨φ, hφc, hφ, -⟩ := _root_.GlobalTheory.ValuationExtensionContinuous.exists_extension s.w s.v _ hv
   obtain ⟨c, hc, -, hci⟩ := GlobalTheory.SplitCompl.exists_ringEquiv D.host.E s
   have hg : ∀ y, φ (c y) = y := by
     intro y
@@ -140,7 +140,7 @@ theorem exists_place : ∀ (D : D7) (s : SplitPlace D.host.E) (hF : D.host.F = m
     intro x
     rw [← hP]
     exact GlobalTheory.AdelicU.valued_apply_eq_valuation (emb hsa) x
-  obtain ⟨φ, hφc, hφ, -⟩ := GlobalTheory.DenseCompl.exists_extension s.w v _ hf
+  obtain ⟨φ, hφc, hφ, -⟩ := _root_.GlobalTheory.ValuationExtensionContinuous.exists_extension s.w v _ hf
   let g : D.host.F →+* s.w.adicCompletion D.host.E :=
     (algebraMap D.host.E (s.w.adicCompletion D.host.E)).comp (algebraMap D.host.F D.host.E)
   have hg : ∀ a, Valued.v (g a) = v.valuation D.host.F a := by
@@ -148,7 +148,7 @@ theorem exists_place : ∀ (D : D7) (s : SplitPlace D.host.E) (hF : D.host.F = m
     simp only [g, RingHom.comp_apply]
     rw [GlobalTheory.Idele.valued_algebraMap, ← hf, AlgHom.toRingHom_eq_coe, RingHom.coe_coe, AlgHom.commutes,
       GlobalTheory.Idele.valued_algebraMap]
-  obtain ⟨ψ, hψc, hψ, -⟩ := GlobalTheory.DenseCompl.exists_extension v s.w g hg
+  obtain ⟨ψ, hψc, hψ, -⟩ := _root_.GlobalTheory.ValuationExtensionContinuous.exists_extension v s.w g hg
   have hcomp : ∀ y, φ (ψ y) = y := by
     intro y
     refine (HeightOneSpectrum.denseRange_algebraMap D.host.F v).induction_on
@@ -245,7 +245,7 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_splitLocalPlaceData_at_splitPlace : ∀ (D : D7) (s : SplitPlace D.host.E) (hF : D.host.F = maximalRealSubfield D.host.E), ∃ (p : GlobalTheory.LocMod.Place D (s.w.adicCompletion D.host.E)) (c : s.v.adicCompletion (maximalRealSubfield D.host.E) ≃+* s.w.adicCompletion D.host.E), Formalism.L2.JoinChr.IsPlIdem D p.e s.w ∧ Continuous c ∧ (∀ x : D.host.E, c (s.i x) = algebraMap D.host.E (s.w.adicCompletion D.host.E) x) ∧ ∀ a : Formalism.L2.Theta.AE D, p.π a = c (s.proj (GlobalTheory.NJoin.tensCast hF (Formalism.L2.Theta.finPart D a))) := by
-  first | exact @GlobalTheory.SplitLocPlace.exists_place | exact GlobalTheory.SplitLocPlace.exists_place | (intros; apply GlobalTheory.SplitLocPlace.exists_place <;> assumption)
+  first | exact @GlobalTheory.SplitLocPlace.exists_place
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.ExistsSplitLocalPlaceDataAtSplitPlaceStatement =====

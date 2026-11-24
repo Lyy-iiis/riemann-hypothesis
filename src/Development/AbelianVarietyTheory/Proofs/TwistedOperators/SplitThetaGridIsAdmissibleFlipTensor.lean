@@ -7,7 +7,6 @@ public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.LiftResMu
 public import Development.AbelianVarietyTheory.Proofs.TwistedOperators.ValuationGdetKapAt
 public import Mathlib.Analysis.Matrix.MeasurableSpace
 public import Formalism.DoubleCosetMeasures.StatementZ
-public import Mathlib
 public import Development.AbelianVarietyTheory.Definitions.Divisors.OmAUnipFourierInv
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.MemGlLatCongOfSmul
 public import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SumOKEx
@@ -141,7 +140,7 @@ def srcDiff (e : Edge) : ℤ := (e.src.1 : ℤ) - e.src.2
 
 theorem srcDiff_of_join {e e' : Edge} (h : e.tgt = e'.src) : srcDiff e' = srcDiff e + 1 := by
   cases e <;> cases e' <;> simp only [Edge.src, Edge.tgt, Prod.mk.injEq] at h <;>
-    simp only [srcDiff, Edge.src] <;> omega
+    simp only [srcDiff] <;> omega
 
 theorem pairwise_of_isPath {γ : List Edge} (h : IsPath γ) :
     γ.Pairwise fun a b => srcDiff a < srcDiff b := by
@@ -206,7 +205,7 @@ namespace GlobalTheory.SplitFlip
 def pathInnerDiff (X : ℕ × ℕ) : ℤ := (X.1 : ℤ) - X.2
 
 theorem pathInnerDiff_tgt (e : Edge) : pathInnerDiff e.tgt = pathInnerDiff e.src + 1 := by
-  cases e <;> simp [pathInnerDiff, Edge.tgt, Edge.src] <;> push_cast <;> ring
+  cases e <;> simp [pathInnerDiff] <;> push_cast <;> ring
 
 theorem IsPath.pairwise_lt_source_index_difference_along_path {γ : List Edge} (hγ : IsPath γ) :
     (γ.map fun e => pathInnerDiff e.src).Pairwise (· < ·) := by
@@ -404,14 +403,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.Local
 attribute [local instance 10000] GlobalTheory.SplitWeil.matrixMeasurableSpace
 open GlobalTheory.TopLevelInv
 
-theorem _root_.GlobalTheory.T.inversePartialFourierSum_comp_fromBlocks : ∀ {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    {A D₁ D₂ : Type} [Fintype A] [DecidableEq A] [Fintype D₁] [DecidableEq D₁] [Fintype D₂] [DecidableEq D₂]
-    (ψ : AddChar k Circle) (ϖ : kˣ) (e : ℕ), IsUnif ϖ → HasConductor ψ 1 →
-    ∀ Φ : Matrix A (D₁ ⊕ D₂) k → ℂ, HasDepth ϖ e (blockLat ϖ e (Assignment.one.block D₁ D₂)ᶜ) Φ →
-    ∀ M₁ ∈ KO k D₁, ∀ M₂ ∈ KO k D₂, ∀ X : Matrix A (D₁ ⊕ D₂) k,
-      invFourierSum ψ ϖ e (Assignment.one.block D₁ D₂)ᶜ (fun Z => Φ (Z * fromBlocks M₁.val 0 0 (invT M₂).val)) X =
-        invFourierSum ψ ϖ e (Assignment.one.block D₁ D₂)ᶜ Φ (X * fromBlocks M₁.val 0 0 M₂.val) := by
-  first | exact @GlobalTheory.BlockSubstFourier.invFourierSum_comp_fromBlocks | exact GlobalTheory.BlockSubstFourier.invFourierSum_comp_fromBlocks | (intros; apply GlobalTheory.BlockSubstFourier.invFourierSum_comp_fromBlocks <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.InversePartialFourierSumCompFromBlocksStatement =====
@@ -595,13 +586,13 @@ theorem _root_.GlobalTheory.T.partialFourierSum_firstBlock_blockDiagonal : ∀ {
     ∀ Φ : Matrix A (D₁ ⊕ D₂) k → ℂ, IsNatDatum ϖ e Φ → ∀ M₁ ∈ KO k D₁, ∀ M₂ ∈ KO k D₂, ∀ Y : Matrix A (D₁ ⊕ D₂) k,
       fourierSum ψ ϖ e (Assignment.one.block D₁ D₂) (fun Z => Φ (Z * fromBlocks M₁.val 0 0 M₂.val)) Y =
         fourierSum ψ ϖ e (Assignment.one.block D₁ D₂) Φ (Y * fromBlocks (invT M₁).val 0 0 M₂.val) := by
-  first | exact @GlobalTheory.BlockSubst.fourierSum_blockDiag_one | exact GlobalTheory.BlockSubst.fourierSum_blockDiag_one | (intros; apply GlobalTheory.BlockSubst.fourierSum_blockDiag_one <;> assumption)
+  first | exact @GlobalTheory.BlockSubst.fourierSum_blockDiag_one
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.PartialFourierSumFirstBlockBlockDiagonalStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.PrimitiveFrameDatumBlockSubstitution =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.TwistedOperators.PrimitiveFrameDatumBlockSubstitution", "h": "module\n\npublic import Mathlib.Analysis.Matrix.MeasurableSpace\npublic import Formalism.DoubleCosetMeasures.StatementZ\npublic import Mathlib\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.RankEqCardIffExistsFrameMatrixFirstColumnBlock\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.ExistsGivenStageEqOne\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.OmAUnipFourierInv\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Proofs.TwistedOperators.PairPtsClasses\nimport Development.AbelianVarietyTheory.Proofs.TwistedOperators.ValuationGdetKapAt\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.TwistedOperators.PrimitiveFrameDatumBlockSubstitution", "h": "module\n\npublic import Mathlib.Analysis.Matrix.MeasurableSpace\npublic import Formalism.DoubleCosetMeasures.StatementZ\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.RankEqCardIffExistsFrameMatrixFirstColumnBlock\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.ExistsGivenStageEqOne\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.OmAUnipFourierInv\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Development.AbelianVarietyTheory.Proofs.TwistedOperators.PairPtsClasses\nimport Development.AbelianVarietyTheory.Proofs.TwistedOperators.ValuationGdetKapAt\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -745,7 +736,7 @@ theorem _root_.GlobalTheory.T.primitiveFrameDatum_blockSubstitution : ∀ {k : T
           (fun Y => Ψ (Y * fromBlocks (invT M₁).val 0 0 M₂.val)) X =
         (ν (gdet M₁) : ℂ) * (((ν (gdet M₂))⁻¹ : ℂˣ) : ℂ) *
           phiA μ σ ν ϖ e (blockLat ϖ e (Assignment.one.block D₁ D₂)) Ψ (X * fromBlocks M₁.val 0 0 (invT M₂).val) := by
-  first | exact @GlobalTheory.FrameSubst.phiA_blockSubst | exact GlobalTheory.FrameSubst.phiA_blockSubst | (intros; apply GlobalTheory.FrameSubst.phiA_blockSubst <;> assumption)
+  first | exact @GlobalTheory.FrameSubst.phiA_blockSubst
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.PrimitiveFrameDatumBlockSubstitutionStatement =====
@@ -790,7 +781,7 @@ theorem squareFlip_blockDiag_cols : ∀ {k : Type} [Field k] [ValuativeRel k] [T
     rw [← latA_blockLat]; exact hd
   unfold squareFlip
   rw [h1, h2, map_smul, Pi.smul_apply, smul_eq_mul,
-    GlobalTheory.T.inversePartialFourierSum_comp_fromBlocks ψ⁻¹ ϖ e hϖ (hasConductor_inv hψ) _ h3 M₁ hM₁ M₂ hM₂ X]
+    _root_.GlobalTheory.BlockSubstFourier.invFourierSum_comp_fromBlocks ψ⁻¹ ϖ e hϖ (hasConductor_inv hψ) _ h3 M₁ hM₁ M₂ hM₂ X]
 
 end GlobalTheory.SquareFlipCols
 end -- clump:auto
@@ -816,13 +807,13 @@ theorem _root_.GlobalTheory.T.squareFlip_equivariant_blockDiagonal_columnSubstit
       squareFlip μ σ ψ ν ϖ e (Assignment.one.block D₁ D₂) (fun Z => Φ (Z * fromBlocks M₁.val 0 0 M₂.val)) X =
         (ν (gdet M₁) : ℂ) * (((ν (gdet M₂))⁻¹ : ℂˣ) : ℂ) *
           squareFlip μ σ ψ ν ϖ e (Assignment.one.block D₁ D₂) Φ (X * fromBlocks M₁.val 0 0 M₂.val) := by
-  first | exact @GlobalTheory.SquareFlipCols.squareFlip_blockDiag_cols | exact GlobalTheory.SquareFlipCols.squareFlip_blockDiag_cols | (intros; apply GlobalTheory.SquareFlipCols.squareFlip_blockDiag_cols <;> assumption)
+  first | exact @GlobalTheory.SquareFlipCols.squareFlip_blockDiag_cols
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SquareFlipEquivariantBlockDiagonalColumnSubstituStatement =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.FrameTestFunctionTransposeIntegralGLMulEqChar =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.TwistedOperators.FrameTestFunctionTransposeIntegralGLMulEqChar", "h": "module\n\npublic import Mathlib.Analysis.Matrix.MeasurableSpace\npublic import Formalism.DoubleCosetMeasures.StatementZ\npublic import Mathlib\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.ValuationGdetKapAt\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.TwistedOperators.FrameTestFunctionTransposeIntegralGLMulEqChar", "h": "module\n\npublic import Mathlib.Analysis.Matrix.MeasurableSpace\npublic import Formalism.DoubleCosetMeasures.StatementZ\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.ValuationGdetKapAt\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -865,7 +856,7 @@ theorem fFun_transpose_mul_of_mem_KO : ∀ {k : Type} [Field k] [ValuativeRel k]
     rw [hh', gdet_mul, gdet_invT]
     congr 2
     ext
-    simp [m, P, Matrix.GeneralLinearGroup.val_det_apply, det_submatrix_equiv_self, det_fromBlocks_zero₂₁]
+    simp [m, P, Matrix.GeneralLinearGroup.val_det_apply, det_submatrix_equiv_self]
   have hv : valuation k ((gdet u)⁻¹ : kˣ) = 1 := by
     rw [← map_inv]; exact valuation_gdet_of_mem_KO (inv_mem hu)
   rw [e1, splitTheta_fFun_frameFirstBlock_mul, splitTheta_fFun_frameFirstBlock_mul, e2, e3, apow_mul, apow_of_valuation_eq_one hv, map_mul, Units.val_mul, map_inv]
@@ -891,7 +882,7 @@ open GlobalTheory.TopLevelInv
 theorem _root_.GlobalTheory.T.frameTestFunction_transpose_integralGL_mul_eq_char : ∀ {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] [MeasurableSpace k] [BorelSpace k] {A A' D : Type} [Fintype A] [DecidableEq A] [Fintype A'] [DecidableEq A'] [Fintype D] [DecidableEq D]
     (μ : Measure (GL A' k)) [μ.IsHaarMeasure] (σ : A ⊕ A' ≃ D) (ν : kˣ →* ℂˣ) (Ψ : Matrix A' D k → ℂ) (u : GL A k), u ∈ KO k A → ∀ h : GL D k,
       (ν (gdet u) : ℂ) * fFun μ σ ν Ψ (u.valᵀ * (X0 k σ * (invT h).val)) = fFun μ σ ν Ψ (X0 k σ * (invT h).val) := by
-  first | exact @GlobalTheory.FFunLeftInv.fFun_transpose_mul_of_mem_KO | exact GlobalTheory.FFunLeftInv.fFun_transpose_mul_of_mem_KO | (intros; apply GlobalTheory.FFunLeftInv.fFun_transpose_mul_of_mem_KO <;> assumption)
+  first | exact @GlobalTheory.FFunLeftInv.fFun_transpose_mul_of_mem_KO
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.FrameTestFunctionTransposeIntegralGLMulEqCharStatement =====
@@ -1061,11 +1052,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar GlobalTheory.Local
 attribute [local instance 10000] GlobalTheory.SplitWeil.matrixMeasurableSpace
 open GlobalTheory.TopLevelInv
 
-theorem _root_.GlobalTheory.T.sum_quotientIntegerMatrices_invariant_integralGL_mul_left : ∀ {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] {A B : Type} [Fintype A] [DecidableEq A] [Fintype B] [DecidableEq B]
-    (ϖ : kˣ) (e : ℕ), IsUnif ϖ → ∀ f : Matrix A B k → ℂ, (∀ Z Z' : Matrix A B k, (∀ i j, Z' i j ∈ 𝒪[k]) → f (Z + Z') = f Z) →
-    ∀ M : GL A k, M ∈ KO k A →
-      ∑ S : A → B → Res k e, f (M.val * ((ϖ ^ e)⁻¹ • liftRes S)) = ∑ S : A → B → Res k e, f ((ϖ ^ e)⁻¹ • liftRes S) := by
-  first | exact @GlobalTheory.ResSumInv.sum_res_mul_left | exact GlobalTheory.ResSumInv.sum_res_mul_left | (intros; apply GlobalTheory.ResSumInv.sum_res_mul_left <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SumQuotientIntegerMatricesInvariantIntegralGLMulStatement =====
@@ -1137,7 +1123,7 @@ theorem squareFlip_one_rows : ∀ {k : Type} [Field k] [ValuativeRel k] [Topolog
     rcases j with c | c
     · simp [setCols, Assignment.block, hX', Matrix.mul_apply, Matrix.toCols₁]
     · simp [setCols, Assignment.block, Matrix.mul_apply]
-      first | rfl | exact Matrix.mul_apply | (erw [Matrix.mul_apply]; simp)
+      first | rfl
   have hsub : X'.submatrix id (Subtype.val : Assignment.two.block D₁ D₂ → D₁ ⊕ D₂) =
       (u⁻¹).val * X.submatrix id (Subtype.val : Assignment.two.block D₁ D₂ → D₁ ⊕ D₂) := by
     ext i ⟨j, hj⟩
@@ -1174,7 +1160,7 @@ theorem squareFlip_one_rows : ∀ {k : Type} [Field k] [ValuativeRel k] [Topolog
         simpa [setCols, hj] using hZ' i ⟨j, hj⟩
       · intro i j hj
         simp [setCols, hj]
-    have key := GlobalTheory.T.sum_quotientIntegerMatrices_invariant_integralGL_mul_left ϖ e hϖ (fun Z => φ (setCols (Assignment.two.block D₁ D₂) X' Z) * (ψ (pairCols (Assignment.two.block D₁ D₂) X' Z) : ℂ)) hg (invT u⁻¹) hMK
+    have key := _root_.GlobalTheory.ResSumInv.sum_res_mul_left ϖ e hϖ (fun Z => φ (setCols (Assignment.two.block D₁ D₂) X' Z) * (ψ (pairCols (Assignment.two.block D₁ D₂) X' Z) : ℂ)) hg (invT u⁻¹) hMK
     beta_reduce at key
     rw [← key, Finset.mul_sum]
     refine Finset.sum_congr rfl fun S _ => ?_
@@ -1205,7 +1191,7 @@ theorem _root_.GlobalTheory.T.squareFlip_rows_integralGL_invariant : ∀ {k : Ty
       (ν (gdet u) : ℂ) * squareFlip μ σ ψ ν ϖ e (Assignment.one.block D₁ D₂) Φ
           (fromCols (u.valᵀ * X.toCols₁) ((u⁻¹).val * X.toCols₂)) =
         squareFlip μ σ ψ ν ϖ e (Assignment.one.block D₁ D₂) Φ X := by
-  first | exact @GlobalTheory.SquareFlipRows.squareFlip_one_rows | exact GlobalTheory.SquareFlipRows.squareFlip_one_rows | (intros; apply GlobalTheory.SquareFlipRows.squareFlip_one_rows <;> assumption)
+  first | exact @GlobalTheory.SquareFlipRows.squareFlip_one_rows
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SquareFlipRowsIntegralGLInvariantStatement =====
@@ -1233,10 +1219,6 @@ theorem exists_split {γ : List Edge} {i j : ℕ} (hγ : IsPath γ) (h : PassesT
 
 theorem not_touch {γ : List Edge} {i j : ℕ} (hγ : IsPath γ) (h : PassesThrough i j γ) :
     ∀ b ∈ γ, b.src ≠ (i + 1, j + 1) ∧ b.tgt ≠ (i + 1, j + 1) := _root_.GlobalTheory.SplitFlip.pathAvoid hγ h
-
-theorem innerVertices_flipPath {γ : List Edge} {i j : ℕ} (hγ : IsPath γ) (h : PassesThrough i j γ) :
-    ∀ X ∈ innerVertices (flipPath i j γ), X ≠ (i, j) ∧ (X ≠ (i + 1, j + 1) → X ∈ innerVertices γ) :=
-  _root_.GlobalTheory.SplitFlip.mem_innerVertices_flipPath hγ h
 
 end GlobalTheory.FlipAdm
 
@@ -1333,7 +1315,7 @@ theorem edgeFactor_square (i j : ℕ) (g : G.VertexGroup) (hg : g (i, j) = 1) (h
     apow_of_valuation_eq_one (valuation_gdet_of_mem_KO (Assignment.one.read_mem_KO (hK Y))) z
   have hap : ∀ z, apow (1 : kˣ) z = 1 := fun z => apow_of_valuation_eq_one (by simp) z
   simp only [Grid.edgeFactor, Edge.src, Edge.tgt, ha, mul_one, hg, map_one, hap]
-  simp only [Grid.kappa, Grid.blockChar, Grid.nu, gdet, map_one, MonoidHom.div_apply, Units.val_div_eq_div_val,
+  simp only [Grid.kappa, Grid.blockChar, Grid.nu, gdet, MonoidHom.div_apply, Units.val_div_eq_div_val,
     Units.val_inv_eq_inv_val, Units.val_one, inv_one, mul_one, one_mul]
   field_simp
 end
@@ -1399,10 +1381,10 @@ theorem isAdmissible_flip : ∀ {k : Type} [Field k] [ValuativeRel k] [Topologic
   obtain ⟨γ, J, T⟩ := St
   obtain ⟨hpath, -, htens, hinv⟩ := hadm
   simp only at hν hpt hlev hpath htens hinv
-  obtain ⟨l₁, l₂, hγ, hfl⟩ := exists_split hpath hpt
+  obtain ⟨l₁, l₂, hγ, hfl⟩ := _root_.GlobalTheory.SplitFlip.flipPath_split hpath hpt
   have h1 : Edge.theta i j ∈ γ := hpt.subset (by simp)
   have h2 : Edge.ex i j ∈ γ := hpt.subset (by simp)
-  refine ⟨isPath_flipPath hpath hpt, fun X _ => ?_, isTensor_flipTensor hϖ hψ he hν (hlev (i, j)).1 (hlev (i, j)).2 h1 h2 htens,
+  refine ⟨_root_.GlobalTheory.SplitFlip.isPath_flipPath hpath hpt, fun X _ => ?_, isTensor_flipTensor hϖ hψ he hν (hlev (i, j)).1 (hlev (i, j)).2 h1 h2 htens,
     fun X hX u hu => ?_⟩
   · by_cases hXW : X = (i + 1, j + 1)
     · subst hXW
@@ -1411,7 +1393,7 @@ theorem isAdmissible_flip : ∀ {k : Type} [Field k] [ValuativeRel k] [Topologic
     · simp only [Grid.PiLocalization₂.flip, Grid.flipLevel, Function.update_of_ne hXW]
       exact hlev X
   · simp only [Grid.PiLocalization₂.flip] at hX hu ⊢
-    obtain ⟨hX1, hX2⟩ := innerVertices_flipPath hpath hpt X hX
+    obtain ⟨hX1, hX2⟩ := _root_.GlobalTheory.SplitFlip.mem_innerVertices_flipPath hpath hpt X hX
     have huK : u ∈ KO k _ := by
       by_cases hXW : X = (i + 1, j + 1)
       · subst hXW; simpa [Grid.flipLevel] using hu
@@ -1427,7 +1409,7 @@ theorem isAdmissible_flip : ∀ {k : Type} [Field k] [ValuativeRel k] [Topologic
     congr 1
     by_cases hXW : X = (i + 1, j + 1)
     · subst hXW
-      exact pathAct_mulSingle_of_not_touch htens _ (not_touch hpath hpt) u
+      exact pathAct_mulSingle_of_not_touch htens _ (_root_.GlobalTheory.SplitFlip.pathAvoid hpath hpt) u
     · rw [Grid.flipLevel, Function.update_of_ne hXW] at hu
       exact hinv X (hX2 hXW) u hu
 

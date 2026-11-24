@@ -146,7 +146,7 @@ theorem cen_isom (e : Fin r → S.V) (he : ∀ a b, S.hT (e a) (e b) = 0) (c : M
     intro x y
 
     simp only [nil_apply, map_sum, LinearMap.sum_apply, LinearMap.map_smulₛₗ, LinearMap.smul_apply,
-    LinearMap.map_smul, smul_eq_mul, map_mul, RingHom.id_apply, hstar, hsym]
+    smul_eq_mul, map_mul, RingHom.id_apply, hstar, hsym]
     rw [Finset.sum_comm, ← Finset.sum_add_distrib]
     refine Finset.sum_eq_zero fun a _ => ?_
     rw [← Finset.sum_add_distrib]
@@ -273,7 +273,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.fixed_frames_perpendicular_vectors : ∀ (D : D7) (u u' : D.what₂.Word) (F0 : Fb D u) (Λ : LatV D), Stand D u u' → IsBase D u F0 → IsRowLat D F0 Λ → IsSplit D F0 Λ → ∀ (P : LatW D) (φ : P →ₗ[𝓞 D.host.E] (hS D).V) (Z : GramM D), (∀ p, φ p ∈ XLam Λ (lf D F0)) → P ≤ L0X D Λ (lf D F0) → ∀ F' ∈ FixSet D Λ (lf D F0) ((Tu D u' : ℕ) : D.host.E) Z P φ, ∃ w : Fin (D.R.rS + 1) → (D.sp.X 0).V, (∀ b, IsWcomp D P (frame F' b) (w b) ∧ w b ∈ dualInH (D.sp.X 0).hT (perpW D (L0X D Λ (lf D F0)) P)) ∧ ((Tu D u : ℕ) : D.host.E) * (D.sp.X 0).hT (∑ b, Formalism.HermitianLatticeCounting.LatticeSumBounds.cofVec (Z.submatrix Fin.castSucc id) b • w b) (∑ b, Formalism.HermitianLatticeCounting.LatticeSumBounds.cofVec (Z.submatrix Fin.castSucc id) b • w b) = Gmat D ((Tu D u : ℕ) : D.host.E) ((Tu D u' : ℕ) : D.host.E) Z := by
-  first | exact @GlobalTheory.LoopC.WMem.main | exact GlobalTheory.LoopC.WMem.main | (intros; apply GlobalTheory.LoopC.WMem.main <;> assumption)
+  first | exact @GlobalTheory.LoopC.WMem.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.FixedFramesPerpendicularVectorsStatement =====
@@ -350,8 +350,7 @@ theorem gram_eq (F F' : FlagG S r T) (b b' : Fin (r + 1)) :
   induction b using Fin.lastCases <;> induction b' using Fin.lastCases <;>
     simp [FlagG.fvec, F.e_iso, F'.e_iso, F.z_orth, F'.z_orth, F.z_norm, F'.z_norm, hz]
 
-theorem mem_orth_iff (U : Submodule E S.V) (v : S.V) : v ∈ orth S U ↔ ∀ x ∈ U, S.hT x v = 0 := by
-  simp [orth, Submodule.mem_iInf]
+alias mem_orth_iff := _root_.Formalism.MainNotions.mem_orth_iff
 
 theorem hT_X_eq_zero (F : FlagG S r T) (v : S.V) (hv : ∀ a, S.hT (F.e a) v = 0) (x : S.V) (hx : x ∈ F.X) :
     S.hT x v = 0 := by
@@ -462,7 +461,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.frames_same_gram_differ_by_skew_solution : ∀ (D : D7) (u u' : D.what₂.Word) (F0 : Fb D u) (Λ : LatV D), Stand D u u' → IsBase D u F0 → IsRowLat D F0 Λ → ∀ (P : LatW D) (φ : P →ₗ[𝓞 D.host.E] (hS D).V) (Z : GramM D), (∀ p, φ p ∈ XLam Λ (lf D F0)) → ∀ F₁ ∈ FixSet D Λ (lf D F0) ((Tu D u' : ℕ) : D.host.E) Z P φ, ∀ F₂ ∈ FixSet D Λ (lf D F0) ((Tu D u' : ℕ) : D.host.E) Z P φ, (∀ b, ∃ w, IsWcomp D P (frame F₁ b) w ∧ IsWcomp D P (frame F₂ b) w) → ∃ x : Matrix (Fin D.R.rS) (Fin (D.R.rS + 1)) D.host.E, (∀ b, frame F₂ b = frame F₁ b + ∑ a, x a b • F0.e a) ∧ (∀ a b, x a b ∈ (ddS D ^ (-(D.R.rS : ℤ)) : FractionalIdeal (nonZeroDivisors (𝓞 D.host.E)) D.host.E)) ∧ xᴴ * Z.submatrix Fin.castSucc id + (Z.submatrix Fin.castSucc id)ᴴ * x = 0 := by
-  first | exact @GlobalTheory.LoopC.FrameDiff.frame_diff | exact GlobalTheory.LoopC.FrameDiff.frame_diff | (intros; apply GlobalTheory.LoopC.FrameDiff.frame_diff <;> assumption)
+  first | exact @GlobalTheory.LoopC.FrameDiff.frame_diff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.FramesSameGramDifferBySkewSolutionStatement =====
@@ -501,7 +500,7 @@ theorem minor_smul_eq_rowSpace_of_cofVec_orth (K V : Type) [Field K] [NumberFiel
     congr 1
     unfold Formalism.HermitianLatticeCounting.LatticeSumBounds.cofVec
     rw [hsub, ← RingHom.map_det, map_mul, map_pow, map_neg, map_one]
-  have h := congrFun ((Formalism.HermitianLatticeCounting.Final.LatticeSumBounds.kernelRowSpace K r (Y.map (algebraMap (𝓞 K) K))).2
+  have h := congrFun ((_root_.Formalism.HermitianLatticeCounting.P.cofactorVectorKernel K r (Y.map (algebraMap (𝓞 K) K))).2
     (fun b => φ (u b)) h0 b₀) b
   rw [hsub, ← RingHom.map_det, ← RingHom.map_adjugate] at h
 
@@ -549,7 +548,7 @@ theorem exists_reps_ideal_inv_lattice (K V : Type) [Field K] [NumberField K]
   have : Module.FinitePresentation (𝓞 K) P := Module.finitePresentation_of_finite _ _
   have : Module.Flat (𝓞 K) P := inferInstance
   have : Module.Projective (𝓞 K) P := Module.Flat.projective_of_finitePresentation
-  have hcard := Formalism.HermitianLatticeCounting.Final.LatticeSumBounds.projQuotCard K P J hJ
+  have hcard := _root_.Formalism.HermitianLatticeCounting.P.projective_quotient_card K P J hJ
   have hN : Ideal.absNorm J ≠ 0 := by rwa [Ne, Ideal.absNorm_eq_zero_iff]
   have hrk : finrank (𝓞 K) P ≤ finrank K (Submodule.span K (S0 : Set V)) := by
     obtain ⟨g, hg⟩ := exists_linearIndependent_of_le_finrank (R := 𝓞 K) (M := P) le_rfl
@@ -841,7 +840,7 @@ theorem dualPack : ∀ (K V : Type) [Field K] [NumberField K] [StarRing K] [AddC
       (one_le_sq_iff₀ (by positivity)).mp h1
     rw [inv_eq_one_div, div_le_iff₀ hIpos]
     exact h4
-  obtain ⟨hfin, hcard⟩ := Formalism.HermitianLatticeCounting.Final.LatticeSumBounds.boxCount ι s (S.toAddSubgroup.map Φ)
+  obtain ⟨hfin, hcard⟩ := _root_.Formalism.HermitianLatticeCounting.P.box_count_alt ι s (S.toAddSubgroup.map Φ)
     (Ideal.absNorm I : ℝ)⁻¹ (fun v => Real.sqrt (ρ v)) (inv_pos.mpr hIpos)
     (fun v => Real.sqrt_pos.mpr (hρ v)) (by
       rintro _ ⟨x, hx, rfl⟩ hx0
@@ -1135,9 +1134,6 @@ lemma Xflag_mono (j : ℕ) : Xflag F j ≤ Xflag F (j + 1) :=
 lemma mem_orth {U : Submodule E S.V} {y : S.V} : y ∈ orth S U ↔ ∀ x ∈ U, S.hT x y = 0 := by
   simp [orth, Submodule.mem_iInf]
 
-lemma hT_symm0 {x y : S.V} (h : S.hT x y = 0) : S.hT y x = 0 := by
-  rw [← S.herm.eq x y, h, map_zero]
-
 lemma X_iso {x y : S.V} (hx : x ∈ Xsp F) (hy : y ∈ Xsp F) : S.hT x y = 0 := by
   have h1 : ∀ a, S.hT (F.fl.e a) y = 0 := by
     intro a
@@ -1149,8 +1145,8 @@ lemma X_iso {x y : S.V} (hx : x ∈ Xsp F) (hy : y ∈ Xsp F) : S.hT x y = 0 := 
   have : Xsp F ≤ LinearMap.ker (S.hT y) := by
     refine Submodule.span_le.2 ?_
     rintro _ ⟨b, rfl⟩
-    exact hT_symm0 (h1 b)
-  exact hT_symm0 (this hx)
+    exact _root_.Formalism.MainNotions.hT_swap_zero (h1 b)
+  exact _root_.Formalism.MainNotions.hT_swap_zero (this hx)
 
 lemma NLam_one : LinearEquiv.refl E S.V ∈ NLam Λ F :=
   ⟨⟨fun _ _ => rfl, (gmap_iff _).2 fun _ => Iff.rfl⟩, fun j x _ => by simp, fun x _ => by simp⟩
@@ -1438,26 +1434,26 @@ lemma eich_single {u : D.what₂.Word} {F0 : Fb D u} {Λ : LatV D} (hb : IsBase 
     have : Xsp (lf D F0) ≤ LinearMap.ker ((hS D).hT F0.z) := by
       refine Submodule.span_le.2 ?_
       rintro _ ⟨a, rfl⟩
-      exact hT_symm0 (F0.z_orth a)
+      exact _root_.Formalism.MainNotions.hT_swap_zero (F0.z_orth a)
     exact this hy
   refine ⟨n, ⟨hn, fun b => ?_, fun p => ?_⟩, fun y τ => ?_⟩
   · refine Fin.lastCases ?_ (fun c => ?_) b
     · rw [frame_last, hnf]
       have a1 : (hS D).hT σ F0.z = 0 := by
-        apply hT_symm0
+        apply _root_.Formalism.MainNotions.hT_swap_zero
         rw [eσ, map_sub, h2, hXz x hx, sub_zero]
       have a2 : (hS D).hT (F0.e a) F0.z = 0 := F0.z_orth a
       simp [a1, a2]
     · rw [frame_castSucc]; exact hnX _ (heX c)
   · have hp : φ p ∈ Xsp (lf D F0) := (hφ p).2
     have a1 : (hS D).hT σ (D.sp.iXY 0 (p : (D.sp.X 0).V) + φ p) = 0 := by
-      apply hT_symm0
+      apply _root_.Formalism.MainNotions.hT_swap_zero
       have b1 : (hS D).hT (φ p) σ = 0 := mem_orth.1 hσ.2 _ hp
       rw [map_add (f := _), LinearMap.add_apply, b1, eσ, map_sub, iXY_isom, iXY_X hb _ hx,
         mem_perpE.1 h3 _ p.2]
       simp
     have a2 : (hS D).hT (F0.e a) (D.sp.iXY 0 (p : (D.sp.X 0).V) + φ p) = 0 := by
-      rw [map_add (f := _), X_iso (heX a) hp, hT_symm0 (iXY_X hb _ (heX a)), add_zero]
+      rw [map_add (f := _), X_iso (heX a) hp, _root_.Formalism.MainNotions.hT_swap_zero (iXY_X hb _ (heX a)), add_zero]
     rw [hnf, a1, a2]
     simp
   · have a1 : (hS D).hT (D.sp.iXY 0 τ) (F0.e a) = 0 := iXY_X hb _ (heX a)
@@ -1637,7 +1633,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.card_integral_frames_fixed_lift_le : ∀ (D : D7) (u u' : D.what₂.Word) (F0 : Fb D u) (Λ : LatV D), Stand D u u' → IsBase D u F0 → IsRowLat D F0 Λ → IsSplit D F0 Λ → ∀ (P : LatW D) (φ : P →ₗ[𝓞 D.host.E] (hS D).V) (Z : GramM D) (s : ℕ) (De Q : ℝ), 1 ≤ s → s ≤ D.R.k → (∀ p, φ p ∈ XLam Λ (lf D F0)) → SubOK D (L0X D Λ (lf D F0)) P s De → QOK D u u' Z Q → (cntCl (FixSet D Λ (lf D F0) ((Tu D u' : ℕ) : D.host.E) Z P φ) (TEqv D Λ (lf D F0)) : ℝ≥0∞) ≤ ENNReal.ofReal (fixB D s (NT D u) De Q) := by
-  first | exact @GlobalTheory.LoopC.FixedLift.card_frames_le | exact GlobalTheory.LoopC.FixedLift.card_frames_le | (intros; apply GlobalTheory.LoopC.FixedLift.card_frames_le <;> assumption)
+  first | exact @GlobalTheory.LoopC.FixedLift.card_frames_le
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.CardIntegralFramesFixedLiftLeStatement =====

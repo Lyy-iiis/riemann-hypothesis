@@ -85,6 +85,7 @@ import Mathlib.Tactic.Basify
 import Mathlib.Tactic.ENatToNat
 import Std.Tactic.BVDecide.Normalize.Prop
 import Mathlib.Tactic.Lemma
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ConstantCoeffNmul
 import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ConvEqOneOfForallPairing
 import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsLocalizationAway
 import Mathlib.RingTheory.Coalgebra.CoassocSimps
@@ -249,7 +250,7 @@ theorem coeff_subst_elim_zero {R : Type} [CommRing R] {d : ℕ}
   rw [if_pos]
   rintro (i | i) hi
   · simp at hi
-  · simp [Finsupp.embDomain_apply]
+  · simp
 
 theorem exists_isLift : ∀ (B O : Type) [CommRing B] [CommRing O] (θ : B →+* O), Function.Surjective θ → ∀ (d : ℕ) (μ : Fin d → MvPowerSeries (Fin d ⊕ Fin d) O), IsLaw μ → ∃ μ' : Fin d → MvPowerSeries (Fin d ⊕ Fin d) B, IsLift θ μ' ∧ ∀ i, map θ (μ' i) = μ i := by
   intro B O _ _ θ hθ d μ hμ
@@ -529,11 +530,6 @@ section Div
 
 variable {B Q : Type} [CommRing B] [CommRing Q] [Algebra B Q] {σ : Type} {d : ℕ}
 
-theorem in_mono {N N' : Ideal B} (h : N ≤ N') {f : MvPowerSeries σ Q} (hf : In N f) : In N' f :=
-  fun α => by
-    obtain ⟨b, hb, e⟩ := hf α
-    exact ⟨b, h hb, e⟩
-
 theorem in_span_smul (p : B) {f : MvPowerSeries σ Q} (hf : In (⊤ : Ideal B) f) :
     In (Ideal.span {p}) (algebraMap B Q p • f) := fun α => by
   obtain ⟨b, -, e⟩ := hf α
@@ -604,7 +600,7 @@ theorem exists_frob_matrix : ∀ (p : ℕ) [Fact p.Prime] (C : Type) [Field C] [
       rw [smul_sub, smul_smul, hc', one_smul]
     rw [heq]
     have hp := in_span_smul (p : F.B) (hb1 i')
-    exact ⟨in_mono le_top hp, fun _ _ => hp⟩
+    exact ⟨_root_.GlobalTheory.QLog.FrobQL.in_mono le_top hp, fun _ _ => hp⟩
   · have hcol : (fun l => ((Matrix.of fun l i => Sum.elim (fun i' => b1 i' l) (fun j => b2 j l) i) *
         blk d k (p : F.B) 1) l (Sum.inr j)) = fun l => b2 j l := by
       funext l
@@ -646,7 +642,7 @@ theorem exists_lift_isAdapted : ∀ (p : ℕ) [Fact p.Prime] (C : Type) [Field C
       rw [(hA j).2]
       by_cases hij : i = j
       · subst hij; simp
-      · simp [Pi.single_apply, hij]
+      · simp [hij]
     | inr j =>
       refine ⟨fun i => Classical.choose (hF.surj (Classical.choose ((hB.1 (Sum.inr j)).2.1 i))),
         fun i => ?_, fun j' h => by cases h⟩
@@ -681,7 +677,7 @@ theorem exists_lift_isAdapted : ∀ (p : ℕ) [Fact p.Prime] (C : Type) [Field C
       rw [he3, hw2 _ i rfl]
       by_cases hij : j = i
       · subst hij; simp
-      · simp [Pi.single_apply, hij]
+      · simp [hij]
 
 end GlobalTheory.QLog.LiftBasis
 end -- clump:auto
@@ -879,7 +875,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.HasPeriodReduceAlongThetaToIntegers =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.QuasiLogarithmPeriodEqTangentHodgeTate =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.QuasiLogarithmPeriodEqTangentHodgeTate", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.EqZeroOfForallPowDvd\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.CoeffSubstRestrictSumVariables\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.CoeffsInIdealSolutionOfUnipotentSeriesMatrix\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HasPAdicPowerSeriesValueAddSmulMap\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HasPAdicPowerSeriesValueMapOfContinuousEvaluatio\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PAdicEvaluationSubstCompatibleThickening\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PDivGroupFormalChartEvNatMultipleEqConvPower\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PderivSubstChainRule\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AbelianVarietyTheory.BlockTheory.DivisorBase.EpsilonPairingZeta\nimport Development.AbelianVarietyTheory.Definitions.Divisors.GhostFrobenius\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.QuasiLogarithmPeriodEqTangentHodgeTate", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.EqZeroOfForallPowDvd\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.CoeffSubstRestrictSumVariables\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.CoeffsInIdealSolutionOfUnipotentSeriesMatrix\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HasPAdicPowerSeriesValueAddSmulMap\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.HasPAdicPowerSeriesValueMapOfContinuousEvaluatio\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PAdicEvaluationSubstCompatibleThickening\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PDivGroupFormalChartEvNatMultipleEqConvPower\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.PderivSubstChainRule\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AbelianVarietyTheory.BlockTheory.DivisorBase.EpsilonPairingZeta\nimport Development.AbelianVarietyTheory.Definitions.Divisors.GhostFrobenius\nimport Development.AbelianVarietyTheory.Proofs.DivisorProofs.ConstantCoeffNmul\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1010,7 +1006,7 @@ private theorem dIn_univ_of_QL_of_isLaw {B Q : Type} [CommRing B] [CommRing Q] [
     have hleft : pderiv (R := Q) (Sum.inr i) (_root_.GlobalTheory.Katz.inL f) = 0 := by
       unfold _root_.GlobalTheory.Katz.inL
       rw [_root_.GlobalTheory.PSChain.pderiv_subst_chain _ (fun k => by simp) f (Sum.inr i)]
-      simp [pderiv_X]
+      simp
     have hright : pderiv (R := Q) (Sum.inr i) (_root_.GlobalTheory.Katz.inR f) =
         subst (fun k => (X (Sum.inr k) : MvPowerSeries (Fin d ⊕ Fin d) Q)) (pderiv (R := Q) i f) := by
       unfold _root_.GlobalTheory.Katz.inR
@@ -1047,35 +1043,13 @@ private theorem dIn_univ_of_QL_of_isLaw {B Q : Type} [CommRing B] [CommRing Q] [
       ext k
       by_cases hk : k = i
       · subst hk; simp; omega
-      · simp [Finsupp.single_apply, Ne.symm hk]
+      · simp [Ne.symm hk]
     have hαi : (((α - Finsupp.single i 1 : Fin d →₀ ℕ) i : ℕ) : Q) + 1 = (α i : Q) := by
       have : (α - Finsupp.single i 1 : Fin d →₀ ℕ) i + 1 = α i := by simp; omega
       rw [← this]
       push_cast
       ring
     rw [← hb, coeff_pderiv, hαe, hαi, mul_comm]
-
-open MvPowerSeries in
-set_option autoImplicit false in
-private theorem constantCoeff_nmul_eq_zero {d : ℕ} {R : Type} [CommRing R]
-    {μ : Fin d → MvPowerSeries (Fin d ⊕ Fin d) R} (hμ : ∀ i, constantCoeff (μ i) = 0) (k : ℕ) (i : Fin d) :
-    constantCoeff (_root_.GlobalTheory.QLog.nmul μ k i) = 0 := by
-  induction k generalizing i with
-  | zero => simp [_root_.GlobalTheory.QLog.nmul]
-  | succ k ih =>
-    have hstep : _root_.GlobalTheory.QLog.nmul μ (k + 1) i =
-        _root_.GlobalTheory.Katz.at2 (μ i) (_root_.GlobalTheory.QLog.nmul μ k) (fun j => X j) := by
-      unfold _root_.GlobalTheory.QLog.nmul
-      rw [Function.iterate_succ_apply']
-      rfl
-    rw [hstep]
-    unfold _root_.GlobalTheory.Katz.at2
-    have ha : ∀ j : Fin d ⊕ Fin d,
-        constantCoeff (Sum.elim (_root_.GlobalTheory.QLog.nmul μ k) (fun j => (X j : MvPowerSeries (Fin d) R)) j) = 0 := by
-      rintro (j | j)
-      · exact ih j
-      · simp
-    exact constantCoeff_subst_eq_zero (hasSubst_of_constantCoeff_zero ha) ha (hμ i)
 
 open MvPowerSeries in
 set_option autoImplicit false in
@@ -1121,7 +1095,7 @@ theorem _root_.GlobalTheory.QLogPeriod.hasPeriod_hodgeTate : ∀ (p : ℕ) [Fact
   rw [hs] at hval_s
   have hdiff : _root_.GlobalTheory.QLog.DIn (B := O) ⊤ f := dIn_univ_of_QL_of_isLaw c.12 hQL
   have hu0 : ∀ j, constantCoeff (_root_.GlobalTheory.QLog.nmul c.μ (p ^ n) j) = 0 :=
-    constantCoeff_nmul_eq_zero c.12.1 (p ^ n)
+    _root_.GlobalTheory.QLogDefect.constantCoeff_nmul c.12.1 (p ^ n)
   have hEu : (fun j => Ez (_root_.GlobalTheory.QLog.nmul c.μ (p ^ n) j)) = fun _ => (0 : O) := by
     funext j
     simp only [Ez, AlgHom.comp_apply]
@@ -1256,7 +1230,7 @@ private lemma subst_inr_zero_pderiv_coboundary_eq {Q : Type} [CommRing Q] {d : �
   rw [map_sub, map_sub, _root_.GlobalTheory.PSChain.pderiv_subst_chain _ hν0, _root_.GlobalTheory.PSChain.pderiv_subst_chain _ (by simp),
     _root_.GlobalTheory.PSChain.pderiv_subst_chain _ (by simp)]
   simp only [pderiv_X, Pi.single_apply, Sum.inr.injEq, reduceCtorEq, if_false, mul_zero,
-    Finset.sum_const_zero, sub_zero, mul_ite, mul_one, Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+    Finset.sum_const_zero, sub_zero, mul_ite, mul_one, Finset.sum_ite_eq', Finset.mem_univ, if_true]
   rw [← coe_substAlgHom he0]
 
   simp only [map_sub, map_sum, map_mul]
@@ -1675,10 +1649,6 @@ theorem window_matrices : ∀ (p : ℕ) [Fact p.Prime] (C : Type) [Field C] [IsA
     rw [hχ m' (tb m)] at h1
     have h2 : epsPairing hε G (tb m) (χ m') = tb.equivFun (tb m) m' := (epsEquiv hε).injective h1
     rw [h2, Module.Basis.equivFun_self]
-    all_goals
-      by_cases h : m = m'
-      · subst h; simp
-      · simp [Pi.single_apply, h, Ne.symm h]
   have hQLe : ∀ l, QL μ' ⊤ (e l) := hB.1
   have hDe : ∀ l, DIn (⊤ : Ideal F.B) (e l) := fun l =>
     GlobalTheory.QLogDiff.dIn_of_QL p F.B O F.Q F.θ F.frame d μ' hL ⊤ (e l) (hQLe l)

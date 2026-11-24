@@ -122,10 +122,9 @@ set_option synthInstance.maxHeartbeats 400000
 
 variable {D : D7}
 
-theorem mt_mul (S : HSp D) (a b : GA D S) : mt S (a * b) = mt S a * mt S b := by
-  simp [Formalism.L2.Theta.mt, map_mul]
+alias mt_mul := _root_.GlobalTheory.BesselCompare.mt_mul
 
-theorem mt_one (S : HSp D) : mt S 1 = 1 := by simp [Formalism.L2.Theta.mt]
+alias mt_one := _root_.GlobalTheory.BesselCompare.mt_one
 
 def locG (S : HSp D) {e : AE D} (he : e * e = e) (hc : cA D e = e) (κ : GA D S) : GA D S :=
   ⟨⟨locM e (mt S κ), locM e (mt S κ⁻¹), by rw [locM_mul he, ← mt_mul, mul_inv_cancel, mt_one, locM_one],
@@ -156,7 +155,7 @@ theorem cA_pe (v : Pl D) : cA D (pe D v) = pe D v := by
   simp [pe, cA, sigR, Algebra.TensorProduct.algebraMap_apply]
 
 theorem ext_AE {x y : AE D} (h1 : infPart D x = infPart D y) (h2 : ∀ w, compAt D w x = compAt D w y) : x = y :=
-  GlobalTheory.VacStabFixed.parts_ext h1 (GlobalTheory.LatticeLocalGlobal.ext_components _ _ fun w => h2 w)
+  _root_.GlobalTheory.SplitScalar.adele_ext h1 (GlobalTheory.LatticeLocalGlobal.ext_components _ _ fun w => h2 w)
 
 theorem pe_idem (v : Pl D) : pe D v * pe D v = pe D v :=
   ext_AE (by simp [inf_pe]) fun w => by rw [map_mul, comp_pe]; split_ifs <;> simp
@@ -187,8 +186,7 @@ theorem mem_grpAt {S : HSp D} {P : Pl D → Prop} {g : GA D S} :
   constructor
   · intro h i j
     have := congrArg (fun g : GL (Fin S.rank) (AE D ⧸ idAt D P) => g.1 i j) h
-    simp only [MonoidHom.comp_apply, Matrix.GeneralLinearGroup.map, Units.coe_map, MonoidHom.coe_coe,
-      RingHom.mapMatrix_apply, Matrix.map_apply, Units.val_one] at this
+    simp only [MonoidHom.comp_apply, Matrix.GeneralLinearGroup.map, Units.coe_map, Units.val_one] at this
     have h2 : Ideal.Quotient.mk (idAt D P) (mt S g i j) =
         Ideal.Quotient.mk (idAt D P) ((1 : Matrix (Fin S.rank) (Fin S.rank) (AE D)) i j) := by
       refine this.trans ?_
@@ -198,8 +196,7 @@ theorem mem_grpAt {S : HSp D} {P : Pl D → Prop} {g : GA D S} :
     apply Units.ext
     ext i j
     have h2 := Ideal.Quotient.eq.2 (h i j)
-    simp only [MonoidHom.comp_apply, Matrix.GeneralLinearGroup.map, Units.coe_map, MonoidHom.coe_coe,
-      RingHom.mapMatrix_apply, Matrix.map_apply, Units.val_one]
+    simp only [MonoidHom.comp_apply, Matrix.GeneralLinearGroup.map, Units.coe_map, Units.val_one]
     refine h2.trans ?_
     rw [Matrix.one_apply, Matrix.one_apply]; split_ifs <;> simp
 
@@ -288,7 +285,7 @@ theorem exists_list (S : HSp D) (L : Lat S) (P : Pl D → Prop) {κ : GA D S} (h
     (T : Finset (Pl D)) (hT : ∀ v ∈ T, P v) :
     ∃ l : List (GA D S), (∀ y ∈ l, ∃ v, P v ∧ InK S L (· = v) y) ∧ mt S l.prod = locM (peT D T) (mt S κ) := by
   induction T using Finset.induction_on with
-  | empty => exact ⟨[], by simp, by simp [peT, locM_zero, mt_one]⟩
+  | empty => exact ⟨[], by simp, by simp [peT, locM_zero]⟩
   | insert v T hv ih =>
     obtain ⟨l, hl, hp⟩ := ih fun u hu => hT u (Finset.mem_insert_of_mem hu)
     have hPv := hT v (Finset.mem_insert_self v T)

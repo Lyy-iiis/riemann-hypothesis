@@ -560,16 +560,8 @@ open BwdCut BwdBetaCut BwdNP BetaI
 variable {D : Formalism.BasicNotions.D7} (Zd : LocDat D) {u u' : D.what₂.Word} {F0 : FlagG (VS D) D.R.rS (CntLocal.Tn u)}
   {what₂ : Finset (Submodule (𝓞 D.host.E) (VS D).V)}
 
-theorem localSign_sq (p : PlF D) (a : Fin (D.R.rS + 1)) : TermLoc.sgnP D p a * TermLoc.sgnP D p a = 1 := by
-  unfold TermLoc.sgnP
-  split
-  · rename_i sg _
-    rw [← map_mul, Prod.mk_mul_mk, Formalism.L2.SG.Pf.FibD.neg_one_pow_sq, one_mul]
-    exact map_one sg.e.symm
-  · exact one_mul 1
-
 theorem hu_all (p : PlF D) (a : Fin (D.R.rS + 1)) : IsUnit (TermLoc.sgnP D p a * frFac Zd.δ p a) :=
-  IsUnit.mul ⟨Units.mkOfMulEqOne _ _ (localSign_sq p a), rfl⟩
+  IsUnit.mul ⟨Units.mkOfMulEqOne _ _ (_root_.Formalism.L2.SG.TermLoc.localSign_sq p a), rfl⟩
     (Formalism.L2.SG.Pf.StabShape.frFac_unit Zd.δ Zd.M (Zd.agree p) a)
 
 theorem frame_mem_UUE {Λ : Submodule (𝓞 D.host.E) (VS D).V} (hΛ : Submodule.IsFullLattice D.host.E Λ) {T T' : D.host.E}
@@ -675,7 +667,7 @@ theorem localOrthogonal_holds : PartialIsometryExtension Zd u u' F0 what₂ := b
       rw [h_eq, locF'_eq, LocFacts.localForm_smul_right, ← h_eq, localForm_baseChange,
         (PI.UnitaryGroupMassFormula.BetaLUniq.mem_orth (VS D)).1 hw₂g _ (OrthogonalLocalComplement.frame_mem_UUE hB.2.2.2.1.1 (lf D F0) F'₂ a),
         map_zero, mul_zero]
-    rw [OmL.h_sub_left, h1, h2, sub_zero]
+    rw [_root_.Formalism.L2.SG.Pf.ScalarFramePf.h_sub_left, h1, h2, sub_zero]
   have hgen := (hB.2.2.2.1.2 p).1
   have hdet : IsUnit ((locH Zd p).Zhat (locF' Zd p F'₂) (tLoc Zd p γ).f).det := by
     have h := hgen.1.2.2.2.1
@@ -924,7 +916,6 @@ theorem topE (M : Loc.Model F E) : IsTopologicalRing E := by
   haveI : Module.Finite F E := Module.finite_of_finrank_pos (by rw [M.L.rank]; norm_num)
   first
     | exact IsModuleTopology.isTopologicalRing F E
-    | exact IsModuleTopology.topologicalRing F E
 
 theorem t2E (M : Loc.Model F E) : T2Space E := by
   haveI := M.L.top
@@ -939,14 +930,10 @@ theorem t2E (M : Loc.Model F E) : T2Space E := by
 theorem int_mem {x : F} (h : IsIntegral 𝒪[F] x) : x ∈ 𝒪[F] := by
   first
     | exact (Valuation.integer.integers (ValuativeRel.valuation F)).mem_of_integral h
-    | (obtain ⟨y, hy⟩ := (Valuation.integer.integers (ValuativeRel.valuation F)).mem_of_integral h
-       rw [← hy]
-       exact y.2)
 
 theorem alg_int (x : 𝒪[F]) : algebraMap F E (x : F) = algebraMap 𝒪[F] E x := by
   first
     | rfl
-    | exact (IsScalarTower.algebraMap_apply 𝒪[F] F E x).symm
 
 private theorem R_eq_O_of_split_eq_none (M : Loc.Model F E) (hg : M.split = none) : M.R = M.L.O := by
   simp only [Loc.Model.R, hg]
@@ -972,7 +959,6 @@ theorem alg_mem_R (M : Loc.Model F E) (a : 𝒪[F]) : algebraMap F E (a : F) ∈
     rw [AlgEquiv.commutes]
     first
       | rfl
-      | simp
 
 private theorem splitG_e_mem_integers_of_mem_O (L : Loc.LocE F E) (g : Loc.SplitG L) {z : E} (hz : z ∈ L.O) :
     (g.e z).1 ∈ 𝒪[F] ∧ (g.e z).2 ∈ 𝒪[F] := by
@@ -1008,7 +994,6 @@ theorem R_denom (M : Loc.Model F E) (y : E) : ∃ a : 𝒪[F], a ≠ 0 ∧ algeb
   haveI : Nontrivial E := by
     first
       | exact Module.nontrivial_of_finrank_pos (R := F) (by rw [M.L.rank]; norm_num)
-      | exact Module.nontrivial_of_finrank_eq_succ M.L.rank
   haveI : IsFractionRing 𝒪[F] F := ValuationRing.instIsFractionRingInteger (ValuativeRel.valuation F)
   have hinj : ∀ x : 𝒪[F], algebraMap 𝒪[F] E x = 0 → x = 0 := by
     intro x hx

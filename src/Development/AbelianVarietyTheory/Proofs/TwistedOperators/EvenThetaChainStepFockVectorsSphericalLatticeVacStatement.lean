@@ -85,7 +85,7 @@ theorem GlobalTheory.EvenOnto.fock_sph_vac : ∀ D : D7, ForStep D fun c _ s s' 
   have fix : ∀ u ∈ latO s.V s'.V (s.Λ : Set (Fin s.V.rank → D.host.E)) (s'.Λ : Set (Fin s'.V.rank → D.host.E))
       (fun v => v ∉ c.S), heisO c.ψ s.V s'.V u p.f = p.f → heisO c.ψ s.V s'.V u (p.pt φ) = p.pt φ := fun u hu h0 =>
     GlobalTheory.Hk3.FiniteHeis.heisO_pureTensorO_of_finite c.ψ c.θ s.V s'.V hθ _ _ _ _ p.f hpt u
-      (GlobalTheory.VacGood.infPart_latO (hle hu)) h0 φ
+      (_root_.GlobalTheory.SplitScalar.latO_fin (hle hu)) h0 φ
   have hsph := hp.pre.sph
   have hS : GlobalTheory.IndefiniteRowSideFullHecke.SphericalVolumeLift.IsSphOff c.ψ s.V s'.V s.Λ s'.Λ c.S (p.pt φ) :=
     ⟨fun u hu => fix (2 • u) (AddSubgroup.nsmul_mem _ hu 2) (hsph.1 u hu),
@@ -113,7 +113,7 @@ open GlobalTheory.EvenOnto
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.evenThetaChainStep_fockVectors_spherical_latticeVacua : ∀ D : D7, ForStep D fun c _ s s' p => ∀ φ, IsThetaFunO c.ψ s.V s'.V (p.pt φ) ∧ GlobalTheory.IndefiniteRowSideFullHecke.SphericalVolumeLift.IsFockVec c.ψ c.θ s.V s'.V (cart s.M) (cart s'.M) (p.pt φ) ∧ GlobalTheory.IndefiniteRowSideFullHecke.SphericalVolumeLift.IsSphOff c.ψ s.V s'.V s.Λ s'.Λ c.S (p.pt φ) ∧ ∀ v ∉ c.S, GlobalTheory.FinZeta.VacFin c.ψ s.V s'.V v (p.pt φ) := by
-  first | exact @GlobalTheory.EvenOnto.fock_sph_vac | exact GlobalTheory.EvenOnto.fock_sph_vac | (intros; apply GlobalTheory.EvenOnto.fock_sph_vac <;> assumption)
+  first | exact @GlobalTheory.EvenOnto.fock_sph_vac
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.EvenThetaChainStepFockVectorsSphericalLatticeVacStatement =====

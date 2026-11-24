@@ -108,6 +108,7 @@ import ReciprocityTheory.NeutralLocalFields.Reciprocity
 import Mathlib.Tactic.ENatToNat
 import Mathlib.Algebra.Module.StablyFree.Basic
 import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.WdParameterMonodromyZeroIffPotentiallyCrystallin
+import Mathlib.Algebra.Azumaya.Basic
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.ClosedPhiOfClosedTr, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.ColInv, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.CoordEx, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.CoordWD, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.DvdMulEntriesRight, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.FixOfHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.FixWHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.FrExHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.FuncHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.InvUHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.LinkOp, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.LinkRec, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.LinkZHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.OpExHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.OpOneHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.PowDvdOfEv, Development.AbelianVarietyTheory.Proofs.SatakeParameters.MapNormEqOfMapPowEq, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.PowTrHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.SecUHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.TestTr, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.TrIdHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.TrLimHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.TrLinHolds, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.TraceEqNextCoeff, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.WeilPhi, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.ZeroAp, Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.ClosedPhiHolds
@@ -148,7 +149,7 @@ theorem closedTr_of (h1 : CoverJ) (h2 : FrEx) (h3 : OpEx2) (h4 : FixOf) (h5 : Ti
       simpa [jl, mapRep] using this
     · refine MonoidHom.ext fun g => LinearMap.ext fun v => ?_
       rw [hR]
-      simp [LocBridge.repE, Matrix.toLin'_apply]
+      simp [LocBridge.repE]
   obtain ⟨bk⟩ := GlobalTheory.BSP.nonempty_bk_of_finExt l Bw.Kw
   obtain ⟨τp, hτp⟩ := GlobalTheory.BSP.exists_isPer l Bw.Kw bk
   obtain ⟨N, F, F₀, rr, hF, hF₀, hlink⟩ := h2 l Bw.Kw Bw.LL bk τp hτp P AI T a Bw.LL_split (r.comp jl) _ (Cv.pull jl hjl) J'
@@ -651,10 +652,10 @@ theorem UpperTheory.Gal.ClosedPhiFromClosedTrace.frEx_holds :
     (_root_.GlobalTheory.LayerSst.main l K L₀ P AI T a Cl _ (Cv.tw.ρ' m) (Cv.lay m)).1 hsstCl
   have hfr : ∀ m, ∃ F : Frame bk N (Cv.tw.d' m) (fun g => (Cv.tw.ρ' m g).val),
       F.IsDR ∧ (IsCrys (P.PD K) (qRep (Cv.tw.ρ' m)) → F.IsCr) := fun m =>
-    GlobalTheory.T.exists_breuilKisinFrame_semistable_boundedJumps l K bk τp hτp P AI T N _ (Cv.tw.ρ' m) (Cv.cont' m) (hsst m)
+    _root_.GlobalTheory.BKLim.exists_frame_sst l K bk τp hτp P AI T N _ (Cv.tw.ρ' m) (Cv.cont' m) (hsst m)
       (_root_.GlobalTheory.LayerJumps.layer_DdR_bounds l K L₀ P AI T a Cl J N hL₀ hN _ (Cv.tw.ρ' m) (Cv.lay m) hCl)
   choose F hFdr hFcr using hfr
-  obtain ⟨F₀, -, hF₀cr, rr, hlink⟩ := GlobalTheory.T.exists_deRhamFrame_limitLattice_breuilKisinTower l K bk τp hτp Cv.d N Cv.ρ Cv.tw F hFdr
+  obtain ⟨F₀, -, hF₀cr, rr, hlink⟩ := _root_.GlobalTheory.BKLim.limit_frame_exists l K bk τp hτp Cv.d N Cv.ρ Cv.tw F hFdr
   have hFc : ∀ m, (F m).IsCr := fun m =>
     hFcr m ((_root_.GlobalTheory.LayerSst.main l K L₀ P AI T a Cl _ (Cv.tw.ρ' m) (Cv.lay m)).2 hcr)
   exact ⟨N, F, F₀, rr, hFc, hF₀cr hFc, hlink⟩
@@ -774,7 +775,7 @@ theorem invU_holds : InvU := by
   intro N k d ρ F Y Y' Q Q' hY hYY hQQ hε
   have hgal : ∀ g : ↥(GK K), τ ^ N • ((ρ g).val.map (Per.zA l) * Y.map (Per.σA (g : GQ l))) =
       Per.σA (g : GQ l) τ ^ N • (Y * F.ε g) :=
-    (GlobalTheory.T.frame_ainf_matrix_frobenius_galois_eqs l K bk τ hτ N d _ F Y Y' hY hYY).2.1
+    (_root_.GlobalTheory.FrameEq.frame_Y_eqs l K bk τ hτ N d _ F Y Y' hY hYY).2.1
   have e2 : (⇑alg ∘ ⇑(fI l)) = ⇑f := funext hif
   obtain ⟨W, hW⟩ := hw.pow N
   set A := Y.map f with hA
@@ -929,7 +930,7 @@ theorem linkRec_holds : LinkRec := by
       = (u * t) • (D4 * (Q₁.map φ * β₁')) - (u * s) • (Q * (D5 * β₁')) := by
     rw [hmap, e3, e1, e2, ← hu]
     simp only [Matrix.sub_mul, Matrix.smul_mul, smul_sub, smul_smul, Matrix.mul_assoc, h1,
-      Matrix.mul_smul, Matrix.mul_one, Matrix.mul_sub]
+      Matrix.mul_smul, Matrix.mul_one]
     module
   intro i j
   rw [key, Matrix.sub_apply, Matrix.smul_apply, Matrix.smul_apply, smul_eq_mul, smul_eq_mul,
@@ -1156,7 +1157,7 @@ private theorem opOne_pow (l : ℕ) [Fact l.Prime] (n : ℕ) (y : Per.Acris l) :
   | zero => simp
   | succ n ih =>
     rw [pow_succ, pow_succ, RingHom.mul_def, RingHom.mul_def, RingHom.comp_apply, RingHom.comp_apply]
-    rw [show Per.φB l (iB l y) = iB l (phiA l y) from GlobalTheory.MemLoc.PhiInj.φB_alg l y, ih]
+    rw [show Per.φB l (iB l y) = iB l (phiA l y) from _root_.GlobalTheory.CrisMaps.φB_phiA l y, ih]
 
 theorem UpperTheory.Gal.ClosedPhiFromClosedTrace.opOne_holds :
     OpOne2 := by
@@ -1409,7 +1410,7 @@ theorem secU_holds : CoreU → SecU := by
     intro f
     rw [← Matrix.map_mul, hA]
     ext i j
-    by_cases hij : i = j <;> simp [Matrix.one_apply, hij]
+    by_cases hij : i = j <;> simp [hij]
   have hfE : fB bk.E = (l : Per.Acris l) * v := hv
   have hfE0 : fB0 bk.E = (l : Per.Acris l) * w0 := hP0
   have hcoef : ∀ (c y : Per.Acris l), c * y = 1 → c ^ N * c ^ N * ((l : Per.Acris l) * y) ^ (2 * N) = (l : Per.Acris l) ^ (2 * N) := by
@@ -1492,7 +1493,7 @@ theorem UpperTheory.Gal.ClosedPhiFromClosedTrace.testTr_holds :
   simp only [Algebra.smul_def] at h2
   have h3 := congrArg T.eB h2
 
-  simp only [map_sum, map_mul, map_one, mul_one, RingEquiv.apply_symm_apply] at h3
+  simp only [map_sum, map_mul, mul_one, RingEquiv.apply_symm_apply] at h3
   have h4 : ∑ i, uB T (lam (t i)) * v₀ i = uB T (lam p) := h3
   simp only [Pi.smul_apply, smul_eq_mul]
   rw [← h4, Finset.mul_sum]
@@ -1673,7 +1674,7 @@ theorem UpperTheory.Gal.ClosedPhiFromClosedTrace.trLin_holds :
       rw [hexp (T y) i]
 
       simp only [hrepr, map_sum, map_mul, Matrix.mul_apply, X, Tm, Matrix.of_apply,
-      Matrix.map_apply, Finset.mul_sum, Finset.sum_mul]
+      Matrix.map_apply, Finset.sum_mul]
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun m _ => Finset.sum_congr rfl fun m' _ => by ring
     rw [Matrix.mul_apply]
@@ -1695,7 +1696,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.TrLinHolds =====
 
 -- ===== clump member: Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.TraceEqNextCoeff =====
--- clump-header: {"m": "Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.TraceEqNextCoeff", "h": "module\n\npublic import Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.IsOp2One\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PadicHodgePropertiesConjInvariant\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PotSemistableOfPotCrystallineDecompositionGroup\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.FiniteDimensionalFilDR\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.WdParameterMonodromyZeroIffPotentiallyCrystallin\npublic import Development.AutomorphicArithmetic.AutomorphicVarieties.PadicHodgeTheory.PstExact\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\npublic import Development.AbelianVarietyTheory.Proofs.SatakeParameters.CommuteIsNilpotentOfUnipotent\n\n"}
+-- clump-header: {"m": "Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.TraceEqNextCoeff", "h": "module\n\npublic import Development.AutomorphicArithmetic.Foundations.GaloisRepresentations.ClosedPhiFunctoriality.IsOp2One\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PadicHodgePropertiesConjInvariant\npublic import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.PotSemistableOfPotCrystallineDecompositionGroup\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.FiniteDimensionalFilDR\nimport Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.WdParameterMonodromyZeroIffPotentiallyCrystallin\npublic import Development.AutomorphicArithmetic.AutomorphicVarieties.PadicHodgeTheory.PstExact\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\npublic import Development.AbelianVarietyTheory.Proofs.SatakeParameters.CommuteIsNilpotentOfUnipotent\nimport Mathlib.Algebra.Azumaya.Basic\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1900,7 +1901,7 @@ theorem UpperTheory.Gal.ClosedPhiFromClosedTrace.zeroAp_holds :
     | zero =>
       refine ⟨Matrix.of fun i j => (hdiv' i j).choose, 0, ?_⟩
       ext i j
-      simp only [mul_zero, pow_zero, pow_one, one_smul, smul_zero, add_zero, Matrix.smul_apply,
+      simp only [mul_zero, pow_zero, pow_one, smul_zero, add_zero, Matrix.smul_apply,
         Matrix.of_apply, smul_eq_mul]
       rw [one_mul]
       exact (hdiv' i j).choose_spec

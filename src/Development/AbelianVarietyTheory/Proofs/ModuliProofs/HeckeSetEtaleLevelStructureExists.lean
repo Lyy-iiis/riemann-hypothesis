@@ -74,7 +74,7 @@ theorem exists_isClopen_equalizer {P C S : Scheme.{0}} (c : C ⟶ S) [IsFinite c
     have h0 : j ≫ l = pullback.snd l d ≫ d := pullback.condition
     have h1 := congrArg (· ≫ pullback.fst c c) h0
     have h2 := congrArg (· ≫ pullback.snd c c) h0
-    simp [l, d, pullback.lift_fst, pullback.lift_snd] at h1 h2
+    simp [l, d] at h1 h2
     rw [h1, h2]
   refine ⟨Set.range j, ⟨j.isClosedEmbedding.isClosed_range, j.isOpenEmbedding.isOpen_range⟩, ?_⟩
   intro T y
@@ -82,8 +82,8 @@ theorem exists_isClopen_equalizer {P C S : Scheme.{0}} (c : C ⟶ S) [IsFinite c
   · intro hy
     have e : y ≫ l = (y ≫ a) ≫ d := by
       apply pullback.hom_ext
-      · simp [l, d, pullback.lift_fst]
-      · simp [l, d, hy, pullback.lift_snd]
+      · simp [l, d]
+      · simp [l, d, hy]
     have e2 : pullback.lift y (y ≫ a) e ≫ j = y := pullback.lift_fst _ _ _
     rintro _ ⟨t, rfl⟩
     refine ⟨pullback.lift y (y ≫ a) e t, ?_⟩
@@ -137,24 +137,13 @@ theorem exists_power {C S : Scheme.{0}} (c : C ⟶ S) [IsFinite c] [Etale c] (n 
       · simp
       · simp [hy']
 
-theorem exists_eqLocus {P C S : Scheme.{0}} (c : C ⟶ S) [IsFinite c] [Etale c] (a b : P ⟶ C) (h : a ≫ c = b ≫ c) :
-    ∃ U : Set P, IsClopen U ∧ ∀ (T : Scheme.{0}) (y : T ⟶ P), y ≫ a = y ≫ b ↔ Set.range y ⊆ U := by
-  first
-  | (rename_i h_4 h_5; revert P C S c h_4 h_5 a b h; exact @_root_.GlobalTheory.ClopenEqualizer.exists_isClopen_equalizer)
-  | exact @_root_.GlobalTheory.ClopenEqualizer.exists_isClopen_equalizer
-  | exact _root_.GlobalTheory.ClopenEqualizer.exists_isClopen_equalizer
-  | (apply _root_.GlobalTheory.ClopenEqualizer.exists_isClopen_equalizer <;> assumption)
-  | (intros; apply _root_.GlobalTheory.ClopenEqualizer.exists_isClopen_equalizer <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.ClopenEqualizer.exists_isClopen_equalizer <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.ClopenEqualizer.exists_isClopen_equalizer ..)
-
 theorem exists_distinct {C S : Scheme.{0}} (c : C ⟶ S) [IsFinite c] [Etale c] (n : ℕ) :
     ∃ (P : Scheme.{0}) (π : P ⟶ S) (σ : Fin n → (P ⟶ C)), IsFinite π ∧ Etale π ∧ (∀ j, σ j ≫ c = π) ∧
       (∀ (k : Type) [Field k] (y : Sp k ⟶ P), Function.Injective fun j => y ≫ σ j) ∧
       ∀ (k : Type) [Field k] (x : Sp k ⟶ S) (u : Fin n → (Sp k ⟶ C)), (∀ j, u j ≫ c = x) → Function.Injective u →
         ∃ y : Sp k ⟶ P, y ≫ π = x := by
   obtain ⟨P, π, σ, h₁, h₂, h₃, h₄⟩ := exists_power c n
-  choose U hU hU' using fun a b : Fin n => exists_eqLocus c (σ a) (σ b) ((h₃ a).trans (h₃ b).symm)
+  choose U hU hU' using fun a b : Fin n => _root_.GlobalTheory.ClopenEqualizer.exists_isClopen_equalizer c (σ a) (σ b) ((h₃ a).trans (h₃ b).symm)
   have hV : IsClopen (⋂ a, ⋂ b, ⋂ _ : a ≠ b, (U a b)ᶜ) :=
     isClopen_iInter_of_finite fun a => isClopen_iInter_of_finite fun b =>
       isClopen_iInter_of_finite fun _ => (hU a b).compl

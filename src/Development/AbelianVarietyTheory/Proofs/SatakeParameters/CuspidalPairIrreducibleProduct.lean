@@ -331,7 +331,7 @@ theorem _root_.GlobalTheory.T.exists_central_scalar_distinct_geometricLemma_cell
         b.1 1 0 = 0 → ∀ (f : ∀ i, (Σ j, Fin (b.1 i j)) ≃ Fin (d i))
           (g : ∀ j, (Σ i, Fin (b.1 i j)) ≃ Fin (d (Equiv.swap 0 1 j))) y,
           cellFunctor f g (piTensor fun i => (σ i).π) z y = c' • y := by
-  first | exact @GlobalTheory.CellCentral.exists_central_scalar_ne_cell | exact GlobalTheory.CellCentral.exists_central_scalar_ne_cell | (intros; apply GlobalTheory.CellCentral.exists_central_scalar_ne_cell <;> assumption)
+  first | exact @GlobalTheory.CellCentral.exists_central_scalar_ne_cell
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.ExistsCentralScalarDistinctGeometricLemmaCellsStatement =====
@@ -515,7 +515,7 @@ theorem _root_.GlobalTheory.T.exists_intertwining_of_central_filtration_step : �
     (∀ t, t ≠ t₀ → ∀ y, subQuot (S t.succ) (S t.castSucc) z y = c' t • y) →
     Nonempty ((subQuot (S t₀.succ) (S t₀.castSucc)).Equiv τ) → (∀ y, τ z y = c • y) → Nontrivial Y →
     ∃ (φ : ρ.IntertwiningMap τ) (v : V), φ v ≠ 0 := by
-  first | exact @GlobalTheory.exists_intertwining_of_central_step | exact GlobalTheory.exists_intertwining_of_central_step | (intros; apply GlobalTheory.exists_intertwining_of_central_step <;> assumption)
+  first | exact @GlobalTheory.exists_intertwining_of_central_step
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.ExistsIntertwiningOfCentralFiltrationStepStatement =====
@@ -536,7 +536,7 @@ theorem _root_.GlobalTheory.T.geometricLemmaCell_one_block_swap_equiv : ∀ (k :
     ∃ (f : ∀ i, (Σ j, Fin (b.1 i j)) ≃ Fin (d i)) (g : ∀ j, (Σ i, Fin (b.1 i j)) ≃ Fin (d (Equiv.swap 0 1 j))),
       Nonempty ((cellFunctor f g (piTensor fun i => (σ i).π)).Equiv
         (piTensor fun j => (σ (Equiv.swap 0 1 j)).π)) := by
-  first | exact @GlobalTheory.OneBlockCell.cellFunctor_swap_equiv | exact GlobalTheory.OneBlockCell.cellFunctor_swap_equiv | (intros; apply GlobalTheory.OneBlockCell.cellFunctor_swap_equiv <;> assumption)
+  first | exact @GlobalTheory.OneBlockCell.cellFunctor_swap_equiv
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.GeometricLemmaCellOneBlockSwapEquivStatement =====
@@ -680,7 +680,7 @@ theorem isIrreducible_multiProd_two (hU : GlobalTheory.Published.UnlinkedProduct
   have hc : Fintype.card (Fin (d 0 + d 1)) = Fintype.card n := by
     rw [Fintype.card_fin, ← hd, ← Fintype.card_congr e]; simp
   let ψ : Fin (d 0 + d 1) ≃ n := Fintype.equivOfCardEq hc
-  obtain ⟨E₂⟩ := GlobalTheory.T.normalisedParabolicInduction_reindex_equiv k (Fin 2) (fun i => Fin (d i)) _ _ (stdBlocks d hd) ψ _ (piTensor fun i => (σ i).π)
+  obtain ⟨E₂⟩ := _root_.GlobalTheory.SmGL.Relabel.parInd_reindex k (Fin 2) (fun i => Fin (d i)) _ _ (stdBlocks d hd) ψ _ (piTensor fun i => (σ i).π)
   have h4 := isIrreducible_of_comp _ (GlobalTheory.Parabolic.isIrreducible_of_equiv E₂ h3)
   obtain ⟨E₃⟩ := (Placing.parInd_jac_placing k (Fin 2) n (fun i => Fin (d i)) ((stdBlocks d hd).trans ψ) e _).1
     (piTensor fun i => (σ i).π)

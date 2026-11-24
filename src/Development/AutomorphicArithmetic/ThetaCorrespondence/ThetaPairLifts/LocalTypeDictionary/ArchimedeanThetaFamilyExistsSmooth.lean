@@ -57,7 +57,7 @@ theorem exists_archimedean_theta_family : _root_.GlobalTheory.FunPr.ThetaLocalIn
   obtain ⟨r₀, hR, hinj⟩ := _root_.GlobalTheory.ArchUniq.exists_admissible_finite_factor (F := F) (Fin n × Fin d)
   have hex : ∀ (t : ℝ) (f : SInf F (Fin n × Fin d)), ∃ f₁ : SInf F (Fin n × Fin d),
       Acts (evI F) (om (1, γ (Multiplicative.ofAdd t))) ⇑f ⇑f₁ :=
-    fun t f => _root_.GlobalTheory.T.theta_action_archimedean_locality hP M ψ χX χW om hcm hstd hW _ (hγ.2 _) f
+    fun t f => _root_.GlobalTheory.ArchLocality.theta_action_local_at_archimedean_place hP M ψ χX χW om hcm hstd hW _ (hγ.2 _) f
   choose S hS using hex
   have key : ∀ t (f : SInf F (Fin n × Fin d)),
       om (1, γ (Multiplicative.ofAdd t)) (tens (evI F) ⇑f r₀) = tens (evI F) ⇑(S t f) r₀ :=
@@ -96,5 +96,5 @@ theorem _root_.GlobalTheory.T.archimedean_theta_family_exists_smooth : _root_.Gl
     ∃ T : ℝ → SInf F (Fin n × Fin d) →ₗ[ℂ] SInf F (Fin n × Fin d),
       (∀ t (f : SInf F (Fin n × Fin d)), Acts (evI F) (om (1, γ (Multiplicative.ofAdd t))) ⇑f ⇑(T t f)) ∧
       (∀ s t (f : SInf F (Fin n × Fin d)), T (s + t) f = T s (T t f)) ∧ ∀ f : SInf F (Fin n × Fin d), T 0 f = f := by
-  first | exact @_root_.GlobalTheory.ArchFamily.exists_archimedean_theta_family | exact _root_.GlobalTheory.ArchFamily.exists_archimedean_theta_family | (intros; apply _root_.GlobalTheory.ArchFamily.exists_archimedean_theta_family <;> assumption)
+  first | exact @_root_.GlobalTheory.ArchFamily.exists_archimedean_theta_family
 end

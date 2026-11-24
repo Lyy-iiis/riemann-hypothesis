@@ -164,8 +164,7 @@ lemma free_io (a : S) (x : A) : FreeOf a (io x : SlopeTestRemainingChoices S A) 
   intro i j
   exact mul_scalar_comm_of_entries_zero_or_one (eU a i j) x (fun k l => by
     first
-    | (simp only [eU, Matrix.of_apply]; split_ifs <;> simp)
-    | (rw [eU]; simp only [Matrix.of_apply]; split_ifs <;> simp))
+    | (simp only [eU, Matrix.of_apply]; split_ifs <;> simp))
 
 lemma free_mul {a : S} {x y : SlopeTestRemainingChoices S A} (hx : FreeOf a x) (hy : FreeOf a y) : FreeOf a (x * y) := fun i j => (hx i j).mul_right (hy i j)
 
@@ -203,7 +202,7 @@ lemma free_star {a : S} {x : SlopeTestRemainingChoices S A} (hx : FreeOf a x) : 
 lemma freeOf2_of_four_entries {a : S} {x y z w : SlopeTestRemainingChoices S A} (hx : FreeOf a x) (hy : FreeOf a y) (hz : FreeOf a z)
     (hw : FreeOf a w) : FreeOf2 a !![x, y; z, w] := by
   intro i j
-  fin_cases i <;> fin_cases j <;> first | exact hx | exact hy | exact hz | exact hw | simp [hx, hy, hz, hw]
+  fin_cases i <;> fin_cases j <;> first | exact hx | exact hy | exact hz | exact hw
 
 private lemma d0_eq_diagonal (b : SlopeTestRemainingChoices S A) : d0 b = !![b, 0; 0, b] := by
   first
@@ -514,7 +513,7 @@ theorem plusForm (L : LevelData A r) (f : FrameData S A) (a : S) (Ya : ℂ) (H :
   have hZ : (!![io L.ζi, 0; 0, io L.ζbi] * !![1, 0; io L.GG * f.l L Ya, io L.GG] : M2 (SlopeTestRemainingChoices S A)) =
       !![io L.ζi, 0; 0, io L.ζbi * io L.GG] * !![1, 0; f.l L Ya, 1] := by
     rw [Matrix.mul_fin_two, Matrix.mul_fin_two]
-    simp only [mul_one, mul_zero, zero_mul, add_zero, zero_add, one_mul, mul_assoc]
+    simp only [mul_one, mul_zero, zero_mul, add_zero, zero_add, mul_assoc]
   show f.RR * ins a (f.TT Ya) =
     star (ins a (!![io L.ζi, 0; 0, io L.ζbi] * !![1, 0; io L.GG * f.l L Ya, io L.GG]) * f.F) *
       ((wt L : SlopeTestRemainingChoices S A) ^ (f.N + 1) * (f.c * ins a !![f.q Ya • f.xi (Ya + 1), 0; 0, f.x Ya])) *
@@ -1109,7 +1108,7 @@ section Gen
 variable {B : Type} [Ring B]
 
 lemma comm_inv {x xi y : B} (h1 : x * xi = 1) (h2 : xi * x = 1) (h : Commute x y) : Commute xi y := by
-  first | exact GlobalTheory.CommuteInvLeft.commute_inv_left .. | (apply GlobalTheory.CommuteInvLeft.commute_inv_left <;> assumption) | (intros; apply GlobalTheory.CommuteInvLeft.commute_inv_left <;> assumption) | (apply @GlobalTheory.CommuteInvLeft.commute_inv_left <;> assumption) | (intros; apply @GlobalTheory.CommuteInvLeft.commute_inv_left <;> assumption) | (apply @GlobalTheory.CommuteInvLeft.commute_inv_left <;> first | assumption | infer_instance) | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x xi y h1 h2 h | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x xi y h1 h2 | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x xi y h1 | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x xi y | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x xi | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B
+  first | (apply GlobalTheory.CommuteInvLeft.commute_inv_left <;> assumption) | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x xi y h1 h2 h | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x xi y h1 h2 | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x xi y h1 | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x xi y | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x xi | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› x | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B ‹_› | exact @GlobalTheory.CommuteInvLeft.commute_inv_left B
 
 lemma star_inv [StarRing B] {x xi : B} (h1 : x * xi = 1) (h : star x = x) : star xi = xi := by
   have h3 : star xi * x = 1 := by
@@ -1804,7 +1803,7 @@ theorem frame_eq_word_module : Formalism.FourierDecayAlt.Fr.FrameWord :=
     frame_free_of_new_position frame_module_of_word).2
 
 theorem frame_of_recursive_word : Formalism.FourierDecayAlt.Fr.FrameAllRec :=
-  frame_rec_of_steps start_is_frame initial_module_structure plus_letter_maps_frames minus_letter_maps_frames
+  _root_.Formalism.FourierDecayAlt.P.Fr2.frameRecAssemble start_is_frame initial_module_structure plus_letter_maps_frames minus_letter_maps_frames
     frame_free_of_new_position
 
 end Formalism.FourierDecayAlt.P

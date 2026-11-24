@@ -1,5 +1,6 @@
 module
 
+import Mathlib
 public import GroundTheory.HeightsAndTheta.Heights.RemainderTerms.StatementsTop
 public import GroundTheory.HeightsAndTheta.Heights.RemainderTerms.StatementsComb
 public import GroundTheory.HeightsAndTheta.Heights.RemainderTerms.StatementsFlag
@@ -670,7 +671,7 @@ end -- clump:auto
 -- ===== end clump member: GroundTheory.HeightsAndTheta.Heights.RemainderTerms.PFlagIntegralTopComponent =====
 
 -- ===== clump member: GroundTheory.HeightsAndTheta.Heights.RemainderTerms.PFlagIntegralTopDegree =====
--- clump-header: {"m": "GroundTheory.HeightsAndTheta.Heights.RemainderTerms.PFlagIntegralTopDegree", "h": "module\n\npublic import GroundTheory.HeightsAndTheta.Heights.RemainderTerms.StatementsFlag\nimport GroundTheory.HeightsAndTheta.Heights.RemainderTerms.FlagBasic\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.MvPolynomial.IrreducibleQuadratic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "GroundTheory.HeightsAndTheta.Heights.RemainderTerms.PFlagIntegralTopDegree", "h": "module\n\nimport Mathlib\npublic import GroundTheory.HeightsAndTheta.Heights.RemainderTerms.StatementsFlag\nimport GroundTheory.HeightsAndTheta.Heights.RemainderTerms.FlagBasic\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.MvPolynomial.IrreducibleQuadratic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1599,8 +1600,7 @@ namespace GroundTheory.Heights₂.Heights
 
 namespace RestTerms
 
-theorem CoinvStepReduction.full : CoinvStepReduction.Statement :=
-  CoinvStepReduction.proof
+alias CoinvStepReduction.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CoinvStepReduction.proof
 
 theorem CoinvMonomialReduction.full : CoinvMonomialReduction.Statement :=
   CoinvMonomialReduction.proof CoinvStepReduction.full
@@ -1608,41 +1608,33 @@ theorem CoinvMonomialReduction.full : CoinvMonomialReduction.Statement :=
 theorem CoinvPolynomialReduction.full : CoinvPolynomialReduction.Statement :=
   CoinvPolynomialReduction.proof CoinvMonomialReduction.full
 
-theorem CoinvIdealRepresentation.full : CoinvIdealRepresentation.Statement :=
-  CoinvIdealRepresentation.proof
+alias CoinvIdealRepresentation.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CoinvIdealRepresentation.proof
 
-theorem HomogeneousComponentMul.full : HomogeneousComponentMul.Statement :=
-  HomogeneousComponentMul.proof
+alias HomogeneousComponentMul.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.HomogeneousComponentMul.proof
 
 theorem CoinvIdealComponent.full : CoinvIdealComponent.Statement :=
   CoinvIdealComponent.proof CoinvIdealRepresentation.full HomogeneousComponentMul.full
 
-theorem CoinvStaircaseDegree.full : CoinvStaircaseDegree.Statement :=
-  CoinvStaircaseDegree.proof
+alias CoinvStaircaseDegree.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CoinvStaircaseDegree.proof
 
 theorem CoinvStaircaseComponent.full : CoinvStaircaseComponent.Statement :=
   CoinvStaircaseComponent.proof CoinvStaircaseDegree.full
 
-theorem FlagCoeffBlockPermute.full : FlagCoeffBlockPermute.Statement :=
-  FlagCoeffBlockPermute.proof
+alias FlagCoeffBlockPermute.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagCoeffBlockPermute.proof
 
 theorem FlagAltCoeffInjective.full : FlagAltCoeffInjective.Statement :=
   FlagAltCoeffInjective.proof FlagCoeffBlockPermute.full
 
-theorem FlagInjSumBound.full : FlagInjSumBound.Statement :=
-  FlagInjSumBound.proof
+alias FlagInjSumBound.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagInjSumBound.proof
 
-theorem FlagStaircaseOrbit.full : FlagStaircaseOrbit.Statement :=
-  FlagStaircaseOrbit.proof
+alias FlagStaircaseOrbit.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagStaircaseOrbit.proof
 
-theorem FlagVandermondeHomogeneous.full : FlagVandermondeHomogeneous.Statement :=
-  FlagVandermondeHomogeneous.proof
+alias FlagVandermondeHomogeneous.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagVandermondeHomogeneous.proof
 
 theorem FlagAltTopDegree.full : FlagAltTopDegree.Statement :=
   FlagAltTopDegree.proof FlagCoeffBlockPermute.full FlagAltCoeffInjective.full FlagInjSumBound.full FlagStaircaseOrbit.full FlagVandermondeHomogeneous.full
 
-theorem FlagAntisymHomogeneous.full : FlagAntisymHomogeneous.Statement :=
-  FlagAntisymHomogeneous.proof
+alias FlagAntisymHomogeneous.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagAntisymHomogeneous.proof
 
 theorem FlagIntegralPermute.full : FlagIntegralPermute.Statement :=
   FlagIntegralPermute.proof FlagCoeffBlockPermute.full
@@ -1653,8 +1645,7 @@ theorem FlagIntegralAntisymmetrize.full : FlagIntegralAntisymmetrize.Statement :
 theorem FlagIntegralTopComponent.full : FlagIntegralTopComponent.Statement :=
   FlagIntegralTopComponent.proof FlagVandermondeHomogeneous.full
 
-theorem FlagHomogeneousComponentMul.full : FlagHomogeneousComponentMul.Statement :=
-  FlagHomogeneousComponentMul.proof
+alias FlagHomogeneousComponentMul.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagHomogeneousComponentMul.proof
 
 theorem FlagIntegralVandermondeMul.full : FlagIntegralVandermondeMul.Statement :=
   FlagIntegralVandermondeMul.proof FlagIntegralTopComponent.full FlagHomogeneousComponentMul.full FlagVandermondeHomogeneous.full
@@ -1665,20 +1656,15 @@ theorem FlagIntegralViaQuotient.full : FlagIntegralViaQuotient.Statement :=
 theorem FlagIntegralTopDegree.full : FlagIntegralTopDegree.Statement :=
   FlagIntegralTopDegree.proof FlagAltTopDegree.full FlagAntisymHomogeneous.full FlagIntegralViaQuotient.full
 
-theorem FlagIntegralVandermondePos.full : FlagIntegralVandermondePos.Statement :=
-  FlagIntegralVandermondePos.proof
+alias FlagIntegralVandermondePos.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagIntegralVandermondePos.proof
 
-theorem FlagSwapDivisible.full : FlagSwapDivisible.Statement :=
-  FlagSwapDivisible.proof
+alias FlagSwapDivisible.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagSwapDivisible.proof
 
-theorem FlagDiffPrime.full : FlagDiffPrime.Statement :=
-  FlagDiffPrime.proof
+alias FlagDiffPrime.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagDiffPrime.proof
 
-theorem FlagDiffNotDvd.full : FlagDiffNotDvd.Statement :=
-  FlagDiffNotDvd.proof
+alias FlagDiffNotDvd.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagDiffNotDvd.proof
 
-theorem FlagProdPrimesDvd.full : FlagProdPrimesDvd.Statement :=
-  FlagProdPrimesDvd.proof
+alias FlagProdPrimesDvd.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagProdPrimesDvd.proof
 
 theorem FlagVandermondeDvd.full : FlagVandermondeDvd.Statement :=
   FlagVandermondeDvd.proof FlagSwapDivisible.full FlagDiffPrime.full FlagDiffNotDvd.full FlagProdPrimesDvd.full
@@ -1686,98 +1672,74 @@ theorem FlagVandermondeDvd.full : FlagVandermondeDvd.Statement :=
 theorem FlagDividedDifferencePoly.full : FlagDividedDifferencePoly.Statement :=
   FlagDividedDifferencePoly.proof FlagVandermondeDvd.full
 
-theorem FlagSymmetricMulAntisym.full : FlagSymmetricMulAntisym.Statement :=
-  FlagSymmetricMulAntisym.proof
+alias FlagSymmetricMulAntisym.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagSymmetricMulAntisym.proof
 
-theorem FlagPowerSumSymmetric.full : FlagPowerSumSymmetric.Statement :=
-  FlagPowerSumSymmetric.proof
+alias FlagPowerSumSymmetric.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagPowerSumSymmetric.proof
 
 theorem FlagAntisymDecomposition.full : FlagAntisymDecomposition.Statement :=
   FlagAntisymDecomposition.proof FlagSymmetricMulAntisym.full FlagPowerSumSymmetric.full
 
-theorem FlagQuotientHomogeneous.full : FlagQuotientHomogeneous.Statement :=
-  FlagQuotientHomogeneous.proof
+alias FlagQuotientHomogeneous.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagQuotientHomogeneous.proof
 
-theorem FlagRestrictHomogeneous.full : FlagRestrictHomogeneous.Statement :=
-  FlagRestrictHomogeneous.proof
+alias FlagRestrictHomogeneous.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagRestrictHomogeneous.proof
 
-theorem FlagRestrictSymmetric.full : FlagRestrictSymmetric.Statement :=
-  FlagRestrictSymmetric.proof
+alias FlagRestrictSymmetric.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagRestrictSymmetric.proof
 
-theorem FlagRestrictPowerSum.full : FlagRestrictPowerSum.Statement :=
-  FlagRestrictPowerSum.proof
+alias FlagRestrictPowerSum.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagRestrictPowerSum.proof
 
 theorem FlagRestrictDecomposition.full : FlagRestrictDecomposition.Statement :=
   FlagRestrictDecomposition.proof FlagRestrictPowerSum.full
 
-theorem FlagPowerSumPreimage.full : FlagPowerSumPreimage.Statement :=
-  FlagPowerSumPreimage.proof
+alias FlagPowerSumPreimage.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagPowerSumPreimage.proof
 
-theorem FlagRestrictConstantCoeff.full : FlagRestrictConstantCoeff.Statement :=
-  FlagRestrictConstantCoeff.proof
+alias FlagRestrictConstantCoeff.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.FlagRestrictConstantCoeff.proof
 
 theorem LemmaA.full : LemmaA.Statement :=
   LemmaA.proof FlagIntegralTopDegree.full FlagIntegralVandermondePos.full FlagDividedDifferencePoly.full FlagAntisymDecomposition.full FlagVandermondeHomogeneous.full FlagAntisymHomogeneous.full FlagQuotientHomogeneous.full FlagRestrictHomogeneous.full FlagRestrictSymmetric.full FlagRestrictDecomposition.full FlagPowerSumPreimage.full FlagRestrictConstantCoeff.full FlagIntegralViaQuotient.full
 
-theorem SchAevalSignedRename.full : SchAevalSignedRename.Statement :=
-  SchAevalSignedRename.proof
+alias SchAevalSignedRename.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchAevalSignedRename.proof
 
-theorem SchAntisymmetrizePlace.full : SchAntisymmetrizePlace.Statement :=
-  SchAntisymmetrizePlace.proof
+alias SchAntisymmetrizePlace.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchAntisymmetrizePlace.proof
 
-theorem SchAlternantHomogeneous.full : SchAlternantHomogeneous.Statement :=
-  SchAlternantHomogeneous.proof
+alias SchAlternantHomogeneous.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchAlternantHomogeneous.proof
 
 theorem SchSmallBlockProduct.full : SchSmallBlockProduct.Statement :=
   SchSmallBlockProduct.proof SchAevalSignedRename.full SchAlternantHomogeneous.full
 
-theorem SchAlternantRenamePlace.full : SchAlternantRenamePlace.Statement :=
-  SchAlternantRenamePlace.proof
+alias SchAlternantRenamePlace.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchAlternantRenamePlace.proof
 
-theorem SchConcatExponent.full : SchConcatExponent.Statement :=
-  SchConcatExponent.proof
+alias SchConcatExponent.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchConcatExponent.proof
 
 theorem SchConcatAlternant.full : SchConcatAlternant.Statement :=
   SchConcatAlternant.proof SchAlternantRenamePlace.full SchConcatExponent.full
 
-theorem SchConcatAlternantZero.full : SchConcatAlternantZero.Statement :=
-  SchConcatAlternantZero.proof
+alias SchConcatAlternantZero.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchConcatAlternantZero.proof
 
-theorem SchBlockVandermondeOne.full : SchBlockVandermondeOne.Statement :=
-  SchBlockVandermondeOne.proof
+alias SchBlockVandermondeOne.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchBlockVandermondeOne.proof
 
-theorem SchSchurHomogeneous.full : SchSchurHomogeneous.Statement :=
-  SchSchurHomogeneous.proof
+alias SchSchurHomogeneous.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchSchurHomogeneous.proof
 
 theorem LemmaB.full : LemmaB.Statement :=
   LemmaB.proof SchAevalSignedRename.full SchAntisymmetrizePlace.full SchSmallBlockProduct.full SchConcatAlternant.full SchConcatAlternantZero.full SchBlockVandermondeOne.full SchSchurHomogeneous.full
 
-theorem CombCardYoungCells.full : CombCardYoungCells.Statement :=
-  CombCardYoungCells.proof
+alias CombCardYoungCells.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombCardYoungCells.proof
 
-theorem CombTableauRowCount.full : CombTableauRowCount.Statement :=
-  CombTableauRowCount.proof
+alias CombTableauRowCount.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombTableauRowCount.proof
 
-theorem CombTableauRowPrefix.full : CombTableauRowPrefix.Statement :=
-  CombTableauRowPrefix.proof
+alias CombTableauRowPrefix.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombTableauRowPrefix.proof
 
-theorem CombTableauRowLattice.full : CombTableauRowLattice.Statement :=
-  CombTableauRowLattice.proof
+alias CombTableauRowLattice.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombTableauRowLattice.proof
 
-theorem CombYoungRowCard.full : CombYoungRowCard.Statement :=
-  CombYoungRowCard.proof
+alias CombYoungRowCard.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombYoungRowCard.proof
 
 theorem CombWordOfTableau.full : CombWordOfTableau.Statement :=
   CombWordOfTableau.proof CombTableauRowCount.full CombTableauRowPrefix.full CombTableauRowLattice.full CombYoungRowCard.full
 
-theorem CombCellOfWordMem.full : CombCellOfWordMem.Statement :=
-  CombCellOfWordMem.proof
+alias CombCellOfWordMem.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombCellOfWordMem.proof
 
-theorem CombCellOfWordInj.full : CombCellOfWordInj.Statement :=
-  CombCellOfWordInj.proof
+alias CombCellOfWordInj.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombCellOfWordInj.proof
 
-theorem CombCellOfWordMono.full : CombCellOfWordMono.Statement :=
-  CombCellOfWordMono.proof
+alias CombCellOfWordMono.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombCellOfWordMono.proof
 
 theorem CombTableauOfWord.full : CombTableauOfWord.Statement :=
   CombTableauOfWord.proof CombCellOfWordMem.full CombCellOfWordInj.full CombCellOfWordMono.full
@@ -1785,17 +1747,14 @@ theorem CombTableauOfWord.full : CombTableauOfWord.Statement :=
 theorem CombTableEqWords.full : CombTableEqWords.Statement :=
   CombTableEqWords.proof CombCardYoungCells.full CombWordOfTableau.full CombTableauOfWord.full
 
-theorem CombCfUpdateZero.full : CombCfUpdateZero.Statement :=
-  CombCfUpdateZero.proof
+alias CombCfUpdateZero.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombCfUpdateZero.proof
 
 theorem CombCfAtStair.full : CombCfAtStair.Statement :=
   CombCfAtStair.proof CombCfUpdateZero.full
 
-theorem CombCfMonomialPsumOne.full : CombCfMonomialPsumOne.Statement :=
-  CombCfMonomialPsumOne.proof
+alias CombCfMonomialPsumOne.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombCfMonomialPsumOne.proof
 
-theorem CombDetDescFactorial.full : CombDetDescFactorial.Statement :=
-  CombDetDescFactorial.proof
+alias CombDetDescFactorial.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombDetDescFactorial.proof
 
 theorem CombCfVandermondePsumOne.full : CombCfVandermondePsumOne.Statement :=
   CombCfVandermondePsumOne.proof CombCfMonomialPsumOne.full CombDetDescFactorial.full
@@ -1806,26 +1765,21 @@ theorem FrobeniusDimensionFormula.full : FrobeniusDimensionFormula.Statement :=
 theorem LemmaC.full : LemmaC.Statement :=
   LemmaC.proof FrobeniusDimensionFormula.full
 
-theorem SchPowerSumHomWeighted.full : SchPowerSumHomWeighted.Statement :=
-  SchPowerSumHomWeighted.proof
+alias SchPowerSumHomWeighted.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchPowerSumHomWeighted.proof
 
 theorem SchWeightedPreimage.full : SchWeightedPreimage.Statement :=
   SchWeightedPreimage.proof SchPowerSumHomWeighted.full
 
-theorem SchPowerSumAtRootsOfUnity.full : SchPowerSumAtRootsOfUnity.Statement :=
-  SchPowerSumAtRootsOfUnity.proof
+alias SchPowerSumAtRootsOfUnity.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchPowerSumAtRootsOfUnity.proof
 
 theorem SchEvalPowerSumHom.full : SchEvalPowerSumHom.Statement :=
   SchEvalPowerSumHom.proof SchPowerSumAtRootsOfUnity.full
 
-theorem SchSchurRowsToK.full : SchSchurRowsToK.Statement :=
-  SchSchurRowsToK.proof
+alias SchSchurRowsToK.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchSchurRowsToK.proof
 
-theorem SchProdOneSubRootsOfUnity.full : SchProdOneSubRootsOfUnity.Statement :=
-  SchProdOneSubRootsOfUnity.proof
+alias SchProdOneSubRootsOfUnity.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchProdOneSubRootsOfUnity.proof
 
-theorem SchCompleteGenerating.full : SchCompleteGenerating.Statement :=
-  SchCompleteGenerating.proof
+alias SchCompleteGenerating.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchCompleteGenerating.proof
 
 theorem SchCompleteAtRootsOfUnity.full : SchCompleteAtRootsOfUnity.Statement :=
   SchCompleteAtRootsOfUnity.proof SchProdOneSubRootsOfUnity.full SchCompleteGenerating.full
@@ -1836,23 +1790,18 @@ theorem SchSchurEvalMatrix.full : SchSchurEvalMatrix.Statement :=
 theorem SchRootOfUnityBialternant.full : SchRootOfUnityBialternant.Statement :=
   SchRootOfUnityBialternant.proof SchSchurEvalMatrix.full
 
-theorem SchRootOfUnityRowsPerm.full : SchRootOfUnityRowsPerm.Statement :=
-  SchRootOfUnityRowsPerm.proof
+alias SchRootOfUnityRowsPerm.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchRootOfUnityRowsPerm.proof
 
-theorem SchRootOfUnityRowsEq.full : SchRootOfUnityRowsEq.Statement :=
-  SchRootOfUnityRowsEq.proof
+alias SchRootOfUnityRowsEq.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchRootOfUnityRowsEq.proof
 
-theorem SchHookResidues.full : SchHookResidues.Statement :=
-  SchHookResidues.proof
+alias SchHookResidues.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchHookResidues.proof
 
-theorem SchResidueCount.full : SchResidueCount.Statement :=
-  SchResidueCount.proof
+alias SchResidueCount.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchResidueCount.proof
 
 theorem SchNonHookResidues.full : SchNonHookResidues.Statement :=
   SchNonHookResidues.proof SchResidueCount.full
 
-theorem SchRootOfUnityVandermondeNe.full : SchRootOfUnityVandermondeNe.Statement :=
-  SchRootOfUnityVandermondeNe.proof
+alias SchRootOfUnityVandermondeNe.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchRootOfUnityVandermondeNe.proof
 
 theorem SchJTMatrixDetAtRoots.full : SchJTMatrixDetAtRoots.Statement :=
   SchJTMatrixDetAtRoots.proof SchRootOfUnityBialternant.full SchRootOfUnityRowsPerm.full SchRootOfUnityRowsEq.full SchHookResidues.full SchNonHookResidues.full SchRootOfUnityVandermondeNe.full
@@ -1863,8 +1812,7 @@ theorem SchSchurAtRootsOfUnity.full : SchSchurAtRootsOfUnity.Statement :=
 theorem SchurPowerSumCoefficient.full : SchurPowerSumCoefficient.Statement :=
   SchurPowerSumCoefficient.proof SchWeightedPreimage.full SchEvalPowerSumHom.full SchSchurHomogeneous.full SchSchurAtRootsOfUnity.full
 
-theorem SchStrictAntiSplit.full : SchStrictAntiSplit.Statement :=
-  SchStrictAntiSplit.proof
+alias SchStrictAntiSplit.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.SchStrictAntiSplit.proof
 
 theorem SchAltPartitionExpansion.full : SchAltPartitionExpansion.Statement :=
   SchAltPartitionExpansion.proof SchStrictAntiSplit.full
@@ -1872,17 +1820,14 @@ theorem SchAltPartitionExpansion.full : SchAltPartitionExpansion.Statement :=
 theorem FrobeniusCharacterFormula.full : FrobeniusCharacterFormula.Statement :=
   FrobeniusCharacterFormula.proof SchAltPartitionExpansion.full
 
-theorem CombSortLe.full : CombSortLe.Statement :=
-  CombSortLe.proof
+alias CombSortLe.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombSortLe.proof
 
 theorem CombSortShift.full : CombSortShift.Statement :=
   Comb.CombSortShift.proof CombSortLe.full
 
-theorem CombSortShiftDistinct.full : CombSortShiftDistinct.Statement :=
-  CombSortShiftDistinct.proof
+alias CombSortShiftDistinct.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombSortShiftDistinct.proof
 
-theorem CombPcntAppend.full : CombPcntAppend.Statement :=
-  CombPcntAppend.proof
+alias CombPcntAppend.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.CombPcntAppend.proof
 
 theorem CombExtendWord.full : CombExtendWord.Statement :=
   CombExtendWord.proof CombPcntAppend.full
@@ -1902,8 +1847,7 @@ theorem CharacterAtIdentity.full : CharacterAtIdentity.Statement :=
 theorem CoinvAboveTop.full : CoinvAboveTop.Statement :=
   CoinvAboveTop.proof CoinvPolynomialReduction.full CoinvIdealComponent.full CoinvStaircaseComponent.full
 
-theorem VandermondeOfHomogeneous.full : VandermondeOfHomogeneous.Statement :=
-  VandermondeOfHomogeneous.proof
+alias VandermondeOfHomogeneous.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.VandermondeOfHomogeneous.proof
 
 theorem RestPolynomialHomogeneous.full : RestPolynomialHomogeneous.Statement :=
   RestPolynomialHomogeneous.proof VandermondeOfHomogeneous.full
@@ -1935,11 +1879,9 @@ theorem OtherFactorFormula.full : OtherFactorFormula.Statement :=
 theorem OtherFactorBound.full : OtherFactorBound.Statement :=
   OtherFactorBound.proof OtherFactorFormula.full SameFactorFormula.full SchurSignCoefficient.full CharacterBound.full HookSumBound.full RectangleTablePos.intersectionNumber_baseChange RestPolynomialDecomposes.full
 
-theorem RestInnerTsumBound.full : RestInnerTsumBound.Statement :=
-  RestInnerTsumBound.proof
+alias RestInnerTsumBound.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.RestInnerTsumBound.proof
 
-theorem RestKSumBound.full : RestKSumBound.Statement :=
-  RestKSumBound.proof
+alias RestKSumBound.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.RestKSumBound.proof
 
 theorem RestPrimeBoundOfFactor.full : RestPrimeBoundOfFactor.Statement :=
   RestPrimeBoundOfFactor.proof RestInnerTsumBound.full RestKSumBound.full
@@ -1947,8 +1889,7 @@ theorem RestPrimeBoundOfFactor.full : RestPrimeBoundOfFactor.Statement :=
 theorem RestPrimeBound.full : RestPrimeBound.Statement :=
   RestPrimeBound.proof RestPrimeBoundOfFactor.full SameFactorBound.full OtherFactorBound.full
 
-theorem RestBoundOfPrimeBound.full : RestBoundOfPrimeBound.Statement :=
-  RestBoundOfPrimeBound.proof
+alias RestBoundOfPrimeBound.full := _root_.GroundTheory.Heights₂.Heights.RestTerms.RestBoundOfPrimeBound.proof
 
 theorem RestBound.full : RestBound.Statement :=
   RestBound.proof RestPrimeBound.full RestBoundOfPrimeBound.full

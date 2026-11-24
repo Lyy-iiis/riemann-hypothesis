@@ -473,7 +473,7 @@ end PI.SqPairLocal.Mdl
 
 namespace PI.SqPairLocal
 
-theorem modelEx_of (hF : FixedDVR) (hU : RealUnif) : ModelEx := Mdl.modelEx_of hF hU
+alias modelEx_of := _root_.PI.SqPairLocal.Mdl.modelEx_of
 
 end PI.SqPairLocal
 end -- clump:auto
@@ -1016,10 +1016,7 @@ section IntMulSec
 
 variable {E : Type} [Field E] [NumberField E] {N : ℕ}
 
-theorem exists_den (L'' : Submodule (𝓞 E) (Fin N → E))
-    (hsp : Submodule.span E (L'' : Set (Fin N → E)) = ⊤) (v : Fin N → E) :
-    ∃ d : 𝓞 E, d ≠ 0 ∧ d • v ∈ L'' := by
-  first | exact Bl.general_b_fact_left_bis.goal1 .. | (apply Bl.general_b_fact_left_bis.goal1 <;> assumption) | (intros; apply Bl.general_b_fact_left_bis.goal1 <;> assumption) | (apply @Bl.general_b_fact_left_bis.goal1 <;> assumption) | (intros; apply @Bl.general_b_fact_left_bis.goal1 <;> assumption) | (apply @Bl.general_b_fact_left_bis.goal1 <;> first | assumption | infer_instance)
+alias exists_den := _root_.Bl.general_b_fact_left_bis.goal1
 
 theorem exists_den_fg (L' L'' : Submodule (𝓞 E) (Fin N → E)) (hfg : L'.FG)
     (hsp : Submodule.span E (L'' : Set (Fin N → E)) = ⊤) :
@@ -1110,8 +1107,6 @@ private theorem exists_one_sub_pow_mul_pow_eq_mul {E : Type} [Field E] [NumberFi
   haveI : Finite (𝓞 E ⧸ Ideal.span {b}) := by
     first
     | exact (Ideal.absNorm_ne_zero_iff _).mp (fun h0 => hne (Ideal.absNorm_eq_zero_iff.mp h0))
-    | exact Ideal.finiteQuotientOfFreeOfNeBot _ hne
-    | infer_instance
   obtain ⟨x, y, hxy, h⟩ := Finite.exists_ne_map_eq_of_infinite
     (fun n : ℕ => Ideal.Quotient.mk (Ideal.span {b}) (ϖ ^ n))
   have key : ∀ x y : ℕ, x < y →
@@ -1137,8 +1132,6 @@ private theorem algebraMap_cj_eq_star {E : Type} [Field E] [NumberField E] [Star
     algebraMap (𝓞 E) E (cj E x) = star (algebraMap (𝓞 E) E x) := by
   first
   | rfl
-  | (simp [cj]; rfl)
-  | simp [cj]
 
 theorem locMat : LocMat := by
   classical
@@ -1149,8 +1142,6 @@ theorem locMat : LocMat := by
   have hϖ0 : M.ϖ ≠ 0 := by
     first
     | exact M.ϖ_ne
-    | exact StModel.ϖ_ne (M := M)
-    | exact StModel.ϖ_ne M
   obtain ⟨b, hb0, hb⟩ := exists_common_denominator' (Finset.univ.image (fun p : Fin N × Fin N => u p.1 p.2))
   obtain ⟨m, k, v, hv⟩ := exists_one_sub_pow_mul_pow_eq_mul M.ϖ b hb0
   set d : 𝓞 E := 1 - M.ϖ ^ (m + 1) with hd_def
@@ -1203,7 +1194,6 @@ theorem locMat : LocMat := by
     ext a c
     first
     | exact congrArg (fun X => X a c) key
-    | exact IsFractionRing.injective (𝓞 E) E (congrArg (fun X => X a c) key)
   obtain ⟨τ, hτ⟩ := (M.unit_of d hd).exists_left_inv
   have hσd : M.σ (M.j d) = M.j d := by rw [← M.j_cj, hdc]
   have hστ : M.σ τ * M.j d = 1 := by
@@ -1405,7 +1395,7 @@ theorem mem_hcompl_of_inert {Q : Ideal (𝓞 E)} (hQ : Q.IsPrime) (hc : Q.comap 
 theorem mem_loc_inert {Q : Ideal (𝓞 E)} (hQ : Q.IsPrime) (hc : Q.comap (cj E) = Q) {N : ℕ}
     (L : Submodule (𝓞 E) (Fin N → E)) (y : Fin N → E) :
     y ∈ loc (K := E) Q L ↔ ∃ s : 𝓞 E, s ∉ Q ∧ s • y ∈ L := by
-  simp [loc, locS, mem_hcompl_of_inert hQ hc]
+  simp only [loc, locS, Formalism.HermitianLatticesTheory.mem_locS, mem_hcompl_of_inert hQ hc]
 
 theorem mem_loc_stdLat {Q : Ideal (𝓞 E)} (hQ : Q.IsPrime) (hc : Q.comap (cj E) = Q) {N : ℕ}
     (x : Fin N → E) : x ∈ loc (K := E) Q (stdLat E N) ↔ ∀ i, IntAt Q (x i) := by

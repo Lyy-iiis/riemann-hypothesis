@@ -101,7 +101,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Asc
 
 theorem _root_.GlobalTheory.T.heisenbergVacuumCommutant_preserves_latticeVacua : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S T : HSp D) (Γ : AddSubgroup (WO S T)), (∀ f, VacG ψ S T Γ f → ∀ w ∈ Ann ψ S T Γ, VacG ψ S T Γ (heisO ψ S T w f)) ∧ (∀ w : WO S T, (∀ u ∈ Γ, u.map (infPart D) = 0) → w.map (finPart D) = 0 → w ∈ Ann ψ S T Γ) ∧ ∀ (v : VolM D T.rank S.rank) f f₀, VacG ψ S T Γ f → VacG ψ S T Γ f₀ → ∀ w, w ∉ Ann ψ S T Γ → thPair v.μ v.𝓕 f (heisO ψ S T w f₀) = 0 := by
-  first | exact @GlobalTheory.Asc.annVac | exact GlobalTheory.Asc.annVac | (intros; apply GlobalTheory.Asc.annVac <;> assumption)
+  first | exact @GlobalTheory.Asc.annVac
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.HeisenbergVacuumCommutantPreservesLatticeVacuaStatement =====
@@ -166,7 +166,7 @@ open GlobalTheory.Asc
 
 
 theorem _root_.GlobalTheory.T.continuous_thetaMatrixCoeff_heisenbergTranslate : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S T : HSp D) (μ : Measure (WO S T)) (𝓕 : Set (WO S T)), IsCovolOne (ratL T S) μ 𝓕 → ∀ f f₀ : WO S T → ℂ, IsThetaFunO ψ S T f → IsThetaFunO ψ S T f₀ → Continuous (fun w : WO S T => thPair μ 𝓕 f (heisO ψ S T w f₀)) := by
-  first | exact @GlobalTheory.MatCoefCont.continuous_thPair_heisO | exact GlobalTheory.MatCoefCont.continuous_thPair_heisO | (intros; apply GlobalTheory.MatCoefCont.continuous_thPair_heisO <;> assumption)
+  first | exact @GlobalTheory.MatCoefCont.continuous_thPair_heisO
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ContinuousThetaMatrixCoeffHeisenbergTranslateStatement =====
@@ -361,7 +361,7 @@ open GlobalTheory.Asc
 
 
 theorem _root_.GlobalTheory.T.fourierInversion_thetaMatrixCoeff_rationalTranslates : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S T : HSp D) (μ : Measure (WO S T)) (𝓕 : Set (WO S T)), IsCovolOne (ratL T S) μ 𝓕 → ∀ f f₀ : WO S T → ℂ, IsThetaFunO ψ S T f → IsThetaFunO ψ S T f₀ → ∀ w x : WO S T, Summable (fun γ : ratL T S => ‖thPair μ 𝓕 f (heisO ψ S T ((γ : WO S T) + w) f₀)‖) → ∑' γ : ratL T S, thPair μ 𝓕 f (heisO ψ S T ((γ : WO S T) + w) f₀) * heisO ψ S T ((γ : WO S T) + w) f₀ x = f x * star (heisO ψ S T w f₀ x) * heisO ψ S T w f₀ x := by
-  first | exact @GlobalTheory.TranslateCoefInversion.sum_coef_mul_translate | exact GlobalTheory.TranslateCoefInversion.sum_coef_mul_translate | (intros; apply GlobalTheory.TranslateCoefInversion.sum_coef_mul_translate <;> assumption)
+  first | exact @GlobalTheory.TranslateCoefInversion.sum_coef_mul_translate
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.FourierInversionThetaMatrixCoeffRationalTranslatStatement =====
@@ -495,7 +495,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.exists_bound_matrix_by_symplecticFormHomAtRealPlace : ∀ (D : D7) (S T : HSp D) (τ : D.what₂.Tau), ∃ (n : ℕ) (zs : Fin n → Matrix (Fin T.rank) (Fin S.rank) ℂ) (κ : ℝ), ∀ X : Matrix (Fin T.rank) (Fin S.rank) ℂ, ∑ i, ∑ j, ‖X i j‖ ≤ κ * ∑ l, |GlobalTheory.IndefiniteRowSideFullHecke.HermitianSymplecticScalars.symplAt S T τ (zs l) X| := by
-  first | exact @GlobalTheory.SymplBound.bound | exact GlobalTheory.SymplBound.bound | (intros; apply GlobalTheory.SymplBound.bound <;> assumption)
+  first | exact @GlobalTheory.SymplBound.bound
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsBoundMatrixBySymplecticFormHomAtRealPlaceStatement =====
@@ -511,7 +511,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.exists_compact_finiteComponents_of_annihilator_openSubgroup : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S T : HSp D) (U : AddSubgroup (WO S T)), IsOpen (U : Set (WO S T)) → ∃ Q : Set (WO S T), IsCompact Q ∧ ∀ w : WO S T, (∀ u ∈ U, u.map (infPart D) = 0 → ψ (symplO S T w u) = 1) → GlobalTheory.Unf.InBox Q w := by
-  first | exact @GlobalTheory.AnnihMat.annihilator_inBox_full | exact GlobalTheory.AnnihMat.annihilator_inBox_full | (intros; apply GlobalTheory.AnnihMat.annihilator_inBox_full <;> assumption)
+  first | exact @GlobalTheory.AnnihMat.annihilator_inBox_full
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsCompactFiniteComponentsOfAnnihilatorOpenSuStatement =====
@@ -575,7 +575,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 
 theorem _root_.GlobalTheory.T.norm_deriv_character_symplecticPairing_realLine : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ θ : InfFam D, IsInfFam θ → ∀ (S T : HSp D) (τ : D.what₂.Tau) (z : Matrix (Fin T.rank) (Fin S.rank) ℂ) (w : WO S T), ‖deriv (fun t : ℝ => ψ (symplO S T (lineAt θ τ z t) w)) 0‖ = 2 * Real.pi * |GlobalTheory.IndefiniteRowSideFullHecke.HermitianSymplecticScalars.symplAt S T τ z (compAt θ τ w)| := by
-  first | exact @GlobalTheory.LatSum.norm_deriv_psi_symplO_lineAt | exact GlobalTheory.LatSum.norm_deriv_psi_symplO_lineAt | (intros; apply GlobalTheory.LatSum.norm_deriv_psi_symplO_lineAt <;> assumption)
+  first | exact @GlobalTheory.LatSum.norm_deriv_psi_symplO_lineAt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.NormDerivCharacterSymplecticPairingRealLineStatement =====
@@ -750,7 +750,7 @@ open GlobalTheory.Asc
 
 
 theorem _root_.GlobalTheory.T.rationalTranslateSum_bounded_rapidDecay : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ θ : InfFam D, IsInfFam θ → ∀ (S T : HSp D) (c : WO S T → ℂ), (∃ U : AddSubgroup (WO S T), IsOpen (U : Set (WO S T)) ∧ ∀ w : WO S T, c w ≠ 0 → ∀ u ∈ U, u.map (infPart D) = 0 → ψ (symplO S T w u) = 1) → (∀ (τ : D.what₂.Tau) (z : Matrix (Fin T.rank) (Fin S.rank) ℂ) (k : ℕ), ∃ C : ℝ, ∀ w : WO S T, ‖deriv (fun t : ℝ => ψ (symplO S T (lineAt θ τ z t) w)) 0‖ ^ k * ‖c w‖ ≤ C) → ∃ C : ℝ, ∀ w : WO S T, Summable (fun γ : ratL T S => ‖c ((γ : WO S T) + w)‖) ∧ ∑' γ : ratL T S, ‖c ((γ : WO S T) + w)‖ ≤ C := by
-  first | exact @GlobalTheory.LatticeTranslateSum.sum_translates_bounded | exact GlobalTheory.LatticeTranslateSum.sum_translates_bounded | (intros; apply GlobalTheory.LatticeTranslateSum.sum_translates_bounded <;> assumption)
+  first | exact @GlobalTheory.LatticeTranslateSum.sum_translates_bounded
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.RationalTranslateSumBoundedRapidDecayStatement =====
@@ -819,7 +819,7 @@ open GlobalTheory.Asc
 
 
 theorem _root_.GlobalTheory.T.thetaMatrixCoeff_eq_zero_unless_orthogonal_level : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S T : HSp D) (μ : Measure (WO S T)) (𝓕 : Set (WO S T)), IsCovolOne (ratL T S) μ 𝓕 → ∀ f f₀ : WO S T → ℂ, IsThetaFunO ψ S T f → IsThetaFunO ψ S T f₀ → ∃ U : AddSubgroup (WO S T), IsOpen (U : Set (WO S T)) ∧ ∀ w : WO S T, thPair μ 𝓕 f (heisO ψ S T w f₀) ≠ 0 → ∀ u ∈ U, u.map (infPart D) = 0 → ψ (symplO S T w u) = 1 := by
-  first | exact @GlobalTheory.MatCoefLevel.matCoef_level | exact GlobalTheory.MatCoefLevel.matCoef_level | (intros; apply GlobalTheory.MatCoefLevel.matCoef_level <;> assumption)
+  first | exact @GlobalTheory.MatCoefLevel.matCoef_level
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ThetaMatrixCoeffEqZeroUnlessOrthogonalLevelStatement =====
@@ -844,20 +844,11 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7} {ψ : AddChar (AF D.host.F) ℂ}
 
-theorem symplOH_swap (S T : HSp D) (u v : WO S T) : symplOH S T v u = -symplOH S T u v := by
-  obtain ⟨l1, l2, l3, -⟩ := GlobalTheory.OrientedFormLaws.symplOH_laws D S T
-  have h := l3 (u + v)
-  rw [l1, l2, l2, l3, l3, zero_add, add_zero] at h
-  linear_combination h
-
-theorem symplO_zero_left (S T : HSp D) (w : WO S T) : symplO S T 0 w = 0 := by
-  rw [GlobalTheory.ThetaSquare.symplO_eq, GlobalTheory.ThetaSquare.symplOH_zero_left, add_zero]
-
 theorem heisO_comm (hψ : IsStdChar D ψ (-1)) (S T : HSp D) (u w : WO S T) (f : WO S T → ℂ) :
     heisO ψ S T u (heisO ψ S T w f) = ψ (symplO S T u w) • heisO ψ S T w (heisO ψ S T u f) := by
   have hc := (GlobalTheory.ThetaSquare.heisUnitary (V := S) (W := T) hψ).1
   obtain ⟨-, -, -, l4, -⟩ := GlobalTheory.OrientedFormLaws.symplOH_laws D S T
-  rw [hc, hc, smul_smul, ← AddChar.map_add_eq_mul, add_comm w u, symplOH_swap S T u w, ← l4]
+  rw [hc, hc, smul_smul, ← AddChar.map_add_eq_mul, add_comm w u, _root_.GlobalTheory.MixModel.symplOH_skew S T u w, ← l4]
   congr 2
   ring
 
@@ -882,7 +873,7 @@ theorem dRho_heisO (hψ : IsStdChar D ψ (-1)) {θ : InfFam D} (hθ : IsInfFam �
     rfl
   rw [e] at h2
   rw [(DS.1 _ hw x).unique h2]
-  simp only [map_zero, symplO_zero_left, AddChar.map_zero_eq_one, one_mul, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+  simp only [map_zero, _root_.GlobalTheory.SplitScalar.symplO_zero_left, AddChar.map_zero_eq_one, one_mul, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
   rw [GlobalTheory.OrientedHeis.heisO_zero]
 
 theorem step_bound (hψ : IsStdChar D ψ (-1)) {θ : InfFam D} (hθ : IsInfFam θ) (S T : HSp D) {μ : Measure (WO S T)}
@@ -984,7 +975,7 @@ open GlobalTheory.Asc
 
 
 theorem _root_.GlobalTheory.T.thetaMatrixCoeff_polynomialDecay_realDirections : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ θ : InfFam D, IsInfFam θ → ∀ (S T : HSp D) (μ : Measure (WO S T)) (𝓕 : Set (WO S T)), IsCovolOne (ratL T S) μ 𝓕 → ∀ f f₀ : WO S T → ℂ, IsThetaFunO ψ S T f → IsThetaFunO ψ S T f₀ → ∀ (τ : D.what₂.Tau) (z : Matrix (Fin T.rank) (Fin S.rank) ℂ) (k : ℕ), ∃ C : ℝ, ∀ w : WO S T, ‖deriv (fun t : ℝ => ψ (symplO S T (lineAt θ τ z t) w)) 0‖ ^ k * ‖thPair μ 𝓕 f (heisO ψ S T w f₀)‖ ≤ C := by
-  first | exact @GlobalTheory.RealDecay.realDecay | exact GlobalTheory.RealDecay.realDecay | (intros; apply GlobalTheory.RealDecay.realDecay <;> assumption)
+  first | exact @GlobalTheory.RealDecay.realDecay
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ThetaMatrixCoeffPolynomialDecayRealDirectionsStatement =====
@@ -1106,7 +1097,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Asc
 
 theorem _root_.GlobalTheory.T.moyal_orthogonality_heisenberg_thetaFunctions : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S T : HSp D) (v : VolM D T.rank S.rank) f f₀, IsThetaFunO ψ S T f → IsThetaFunO ψ S T f₀ → Integrable (fun w => thPair v.μ v.𝓕 f (heisO ψ S T w f₀)) v.μ ∧ ∀ x, ∫ w, thPair v.μ v.𝓕 f (heisO ψ S T w f₀) * heisO ψ S T w f₀ x ∂v.μ = thPair v.μ v.𝓕 f₀ f₀ * f x := by
-  first | exact @GlobalTheory.MoyalTheta.orthogonality | exact GlobalTheory.MoyalTheta.orthogonality | (intros; apply GlobalTheory.MoyalTheta.orthogonality <;> assumption)
+  first | exact @GlobalTheory.MoyalTheta.orthogonality
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.MoyalOrthogonalityHeisenbergThetaFunctionsStatement =====
@@ -1203,7 +1194,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.Asc
 
 theorem _root_.GlobalTheory.T.tame_functional_vacuum_irreducibility : ∀ D : D7, Irr D := by
-  first | exact @GlobalTheory.Irr.irr | exact GlobalTheory.Irr.irr | (intros; apply GlobalTheory.Irr.irr <;> assumption)
+  first | exact @GlobalTheory.Irr.irr
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.TameFunctionalVacuumIrreducibilityStatement =====

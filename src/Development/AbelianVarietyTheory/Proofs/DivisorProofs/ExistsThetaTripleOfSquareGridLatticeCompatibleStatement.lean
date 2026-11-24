@@ -136,7 +136,7 @@ theorem _root_.GlobalTheory.T.placesUnder_localData_mem_goodCharacter_ramificati
     (i j : Fin D.R.m) (B : _root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Base D.host.F D.host.E) (X : _root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Chars D.host.F D.host.E) (a a' : ℕ),
     X.α = alpha G t i j → X.β = beta G i j → X.IsGood B a a' →
     ∀ w ∈ locPl G t, w.under (𝓞 D.host.F) ∈ X.T := by
-  first | exact @GlobalTheory.BigNZ.LocalPlaceUnderMembership.under_locPl_mem | exact GlobalTheory.BigNZ.LocalPlaceUnderMembership.under_locPl_mem | (intros; apply GlobalTheory.BigNZ.LocalPlaceUnderMembership.under_locPl_mem <;> assumption)
+  first | exact @GlobalTheory.BigNZ.LocalPlaceUnderMembership.under_locPl_mem
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.PlacesUnderLocalDataMemGoodCharacterRamificationStatement =====
@@ -295,7 +295,7 @@ theorem isSkew_conjLat : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {
     have hA₁ := hV₁.sigOK (tauE D (τf w))
     rw [hV.sig] at hA
     rw [hV₁.sig] at hA₁
-    have h := GlobalTheory.SkewLat.hasSig_blk e (gramAt D (spV G i j) (τf w)) (gramAt D (spV₁ G i j) (τf w))
+    have h := _root_.GlobalTheory.SigBlockSum.hasSig_smul_blk e (gramAt D (spV G i j) (τf w)) (gramAt D (spV₁ G i j) (τf w))
       (Formalism.L2.Theta.xi_zero_im_pos D (τf w)) hA hA₁
     have hsum := h.1
     have hd : Fintype.card (Fin (spV G i j).rank ⊕ Fin (spV₁ G i j).rank) =
@@ -305,12 +305,12 @@ theorem isSkew_conjLat : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {
     have h2 := hV₁.rank
     simp only [Node.rank, Node.neg] at h1 h2 h hsum
     convert h using 2 <;> omega
-  case dual => exact fun y => dual_conjLat _ _ hV.sd hV₁.sd e y
+  case dual => exact fun y => _root_.GlobalTheory.SkewLat.pairLat_conj_trace_selfDual _ _ hV.sd hV₁.sd e y
   case cartan =>
     intro w
     show GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.IsCartan (Complex.I • (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.skewGram (spV G i j) (spV₁ G i j) e).map (B.emb w).1) _
     rw [GlobalTheory.SkewLat.I_smul_skewGram_map _ _ e (τf w) (B.emb w).1 (hB w)]
-    exact GlobalTheory.SkewLat.isCartan_blk e _ _ _ _ (Formalism.L2.Theta.xi_zero_im_pos D (τf w)) (W.cart_is _ hrV (τf w)) (W.cart_is _ hrV₁ (τf w))
+    exact _root_.GlobalTheory.CartanBlocks.isCartan_blk e _ _ _ _ (Formalism.L2.Theta.xi_zero_im_pos D (τf w)) (W.cart_is _ hrV (τf w)) (W.cart_is _ hrV₁ (τf w))
   case bas =>
     intro v
     show GlobalTheory.AdelicU.IsSplitBasis (B.τ v) Λ (if h : (v : HeightOneSpectrum (𝓞 D.host.F)) ∈ B.P then (hex ⟨v, h⟩).choose else 1)
@@ -336,7 +336,7 @@ theorem squareTriple_tied : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts
   obtain ⟨basV, hV⟩ := isHerm_conjLat hL W i j B τf hemb
   obtain ⟨ΛV', basV', hV'⟩ := GlobalTheory.T.exists_negConj_member_hermitianLatticeSpaceData hL W i j B τf hemb
   obtain ⟨basW, hW⟩ := isSkew_conjLat hL W i j e B τf hemb
-  obtain ⟨co, vac, dom, hMo⟩ := GlobalTheory.T.exists_goodSchrodingerModel_conjugateDoubled hL t i j M hM B hB _ _ rfl _ _ _ _ hV hW
+  obtain ⟨co, vac, dom, hMo⟩ := _root_.GlobalTheory.SquareModel.exists_isGood_model_conj hL t i j M hM B hB _ _ rfl _ _ _ _ hV hW
   obtain ⟨co', vac', dom', hMo'⟩ := GlobalTheory.T.squareModel_negSpace_goodSchroedinger hL t i j M hM B hB _ _ rfl _ _ _ _ hV' hW
   obtain ⟨om, hom⟩ := GlobalTheory.T.exists_weilRep_dualPair_characters_beta_quotient hL t i j hst B hB _ _ _ _ _ _ hV hW _ hMo
   obtain ⟨om', hom'⟩ := GlobalTheory.T.exists_weilRep_squarePair_characters_alpha_quotient hL t i j hst B hB _ _ _ _ _ _ hV' hW _ hMo'
@@ -351,7 +351,7 @@ theorem squareTriple_tied : ∀ {D : D7} {T : Type} {L : LevCh D T} {sc : Consts
   · exact ⟨hB, ⟨h1, h2, hκ, h3, h4, hV, hV', hW, hMo, hMo'⟩, hgood, hom, hom'⟩
   · refine ⟨rfl, rfl, fun v => ⟨fun hv => ?_, fun ⟨w, hw, hwv⟩ => ?_⟩, fun v w hw hwv => hτP v w hw hwv⟩
     · exact (hSQ v (by simpa [GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Chars.T, Finset.mem_union] using hv)).1
-    · have := under_gridLocalTensorPlace_mem_goodThetaCharacterPlaces hL t i j B _ _ _ rfl rfl hgood w hw
+    · have := _root_.GlobalTheory.BigNZ.LocalPlaceUnderMembership.under_locPl_mem hL t i j B _ _ _ rfl rfl hgood w hw
       rwa [hwv] at this
 
 end GlobalTheory.BigNZ.Tied
@@ -380,7 +380,7 @@ theorem _root_.GlobalTheory.T.exists_thetaTripleOfSquareGrid_latticeCompatible :
     ∃ (e : Num G i j) (Bs : _root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Base D.host.F D.host.E) (Γ : GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.Geo G i j) (X : _root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Chars D.host.F D.host.E)
       (om : _root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Rep D.sp.cm.sig Γ.V Γ.W) (om' : _root_.GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Rep D.sp.cm.sig Γ.V' Γ.W),
       IsTripleOf W M t i j e Bs Γ X ∧ IsTriple Bs Γ X om om' ∧ IsTied t i j e Bs Γ X := by
-  first | exact @GlobalTheory.BigNZ.Tied.squareTriple_tied | exact GlobalTheory.BigNZ.Tied.squareTriple_tied | (intros; apply GlobalTheory.BigNZ.Tied.squareTriple_tied <;> assumption)
+  first | exact @GlobalTheory.BigNZ.Tied.squareTriple_tied
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsThetaTripleOfSquareGridLatticeCompatibleStatement =====

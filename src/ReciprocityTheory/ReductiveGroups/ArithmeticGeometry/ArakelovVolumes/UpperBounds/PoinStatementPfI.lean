@@ -77,7 +77,6 @@ theorem psiF_rmul (X : Data E r) {x0 : Frame X.Ψ r} (hx0 : IsOrth X x0) (bb : �
   have hm : rmul y b ∈ X.dom := by
     first
       | exact OrthogonalFrameDomain.rmul_mem_dom X hy hb
-      | exact ReciprocityTheory.ChartRestriction.G.FD.OrthogonalFrameDomain.rmul_mem_dom X hy hb
   unfold psiF
   rw [Set.indicator_of_mem hm, Set.indicator_of_mem hy, hP.2 y hy b hb, hW.2.1 y hy b hb,
     kaY_rmul X hx0 hy hb bb]
@@ -116,7 +115,7 @@ theorem meas_densF' (X : Data E r) (x' : Frame X.Ψ r) :
   unfold densF
   refine Finset.measurable_prod _ fun τ _ => Finset.measurable_prod _ fun i _ => ?_
   have hc : Measurable fun z : V (nd X) => ‖dmin X.Gm (cpt X x' z) τ i.castSucc‖ ^ 2 :=
-    (((cont_dmin X τ _).comp (cont_cpt' X x')).norm.pow 2).measurable
+    (((_root_.ReciprocityTheory.ChartRestriction.G.AR.Up.ExtFPf.cont_dmin X τ _).comp (cont_cpt' X x')).norm.pow 2).measurable
   have e : (fun z : V (nd X) => ‖dmin X.Gm (cpt X x' z) τ i.castSucc‖ ^ (-2 : ℤ)) =
       fun z => (‖dmin X.Gm (cpt X x' z) τ i.castSucc‖ ^ 2)⁻¹ := by
     funext z; rw [zpow_neg, zpow_ofNat]

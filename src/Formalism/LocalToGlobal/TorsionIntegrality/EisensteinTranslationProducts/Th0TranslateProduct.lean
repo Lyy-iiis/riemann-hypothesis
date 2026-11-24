@@ -82,8 +82,6 @@ theorem even_theta_line : ThetaZeroLine := by
     first
       | (unfold opU herm
          fun_prop)
-      | (unfold opU
-         exact (hF.comp (differentiable_id.add_const _)).mul (by unfold herm; fun_prop))
   have hcond : ∀ ω ∈ L.lattice, ∀ z, semiChar L ω * opU L ω (opU L (-(ω₀ / 2)) F) z
       = opU L (-(ω₀ / 2)) F z := by
     intro ω hωl z
@@ -122,8 +120,6 @@ theorem even_theta_line : ThetaZeroLine := by
         first
           | (push_cast
              ring)
-          | push_cast
-          | norm_cast
       simp only [altE, hherm, Complex.ofReal_im]
     rw [h0alt]
     simp
@@ -135,7 +131,6 @@ theorem even_theta_line : ThetaZeroLine := by
     simp only [th0]
     first
       | rw [div_mul_cancel₀ _ hK]
-      | field_simp
   intro z
   rw [hback z, hback 0, hG', hlin, hlin, hth z]
   ring
@@ -183,9 +178,7 @@ section -- clump:auto
 
 namespace Formalism.L2.Th1.F
 
-theorem opUTh0 : OpUTh0 := operator_u_theta
-theorem th0Line : ThetaZeroLine := even_theta_line
-
+alias opUTh0 := _root_.Formalism.L2.Th1.F.operator_u_theta
 end Formalism.L2.Th1.F
 end -- clump:auto
 end -- clump:auto

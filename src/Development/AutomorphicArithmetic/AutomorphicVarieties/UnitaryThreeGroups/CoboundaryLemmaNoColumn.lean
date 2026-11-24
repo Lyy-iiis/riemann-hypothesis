@@ -104,7 +104,7 @@ private theorem corner_theta' {R : Type} [CommRing R] (a : GL (Fin 3) R)
   simp only [corner_eq']
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [Matrix.mul_apply, Fin.sum_univ_three, Fin.sum_univ_two, Jmat, Fin.rev,
+    simp [Matrix.mul_apply, Fin.sum_univ_three, Jmat, Fin.rev,
       Matrix.diagonal, e00, e01, e10, e11]
 
 theorem UpperTheory.V.U3.exists_lieElement_middleBlockPart :
@@ -135,7 +135,7 @@ theorem UpperTheory.V.U3.exists_lieElement_middleBlockPart :
     rw [e]; exact hd k hk
   have hD : (Matrix.diagonal ![-1, 1] : Matrix (Fin 2) (Fin 2) R) * Matrix.diagonal ![-1, 1] = 1 := by
     ext i j
-    fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.diagonal]
+    fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Matrix.diagonal]
   have hp : ∀ g h, (r g).right = 1 →
       corner (r (g * h)).mat = corner (r g).mat * corner (r h).mat := by
     intro g h hg
@@ -185,14 +185,10 @@ section -- clump:auto
 open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.Gal Formalism.MainNotions.N Formalism.BasicNotions Formalism.BasicNotions.Loc GlobalTheory.GalOfCusp Matrix IsLocalRing
 open UpperTheory.V UpperTheory.V.Base UpperTheory.V.HV UpperTheory.V.Alg UpperTheory.V.U3
 
-private theorem norm_le_one_of_int (l : ℕ) [Fact l.Prime] (x : PadicAlgCl l) (hx : IsIntegral ℤ_[l] x) :
-    ‖x‖ ≤ 1 :=
-  _root_.UpperTheory.Reformulated.B.NormLeOneOfIsIntegral.norm_le_one_of_isIntegral l x hx
-
 private theorem norm_unit {l : ℕ} [Fact l.Prime] (c : Coef l) {x : c.O} (hx : IsUnit x) :
     ‖algebraMap c.O (PadicAlgCl l) x‖ = 1 := by
   have hle : ∀ x : c.O, ‖algebraMap c.O (PadicAlgCl l) x‖ ≤ 1 := fun x =>
-    norm_le_one_of_int l _ ((Algebra.IsIntegral.isIntegral (R := ℤ_[l]) x).map c.O.val)
+    _root_.UpperTheory.Reformulated.B.NormLeOneOfIsIntegral.norm_le_one_of_isIntegral l _ ((Algebra.IsIntegral.isIntegral (R := ℤ_[l]) x).map c.O.val)
   obtain ⟨u, rfl⟩ := hx
   have h1 : ‖algebraMap c.O (PadicAlgCl l) u‖ * ‖algebraMap c.O (PadicAlgCl l) (u⁻¹ : c.Oˣ)‖ = 1 := by
     rw [← norm_mul, ← map_mul, Units.mul_inv, map_one, norm_one]

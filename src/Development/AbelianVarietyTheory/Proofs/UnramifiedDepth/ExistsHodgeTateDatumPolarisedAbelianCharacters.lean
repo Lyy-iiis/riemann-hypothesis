@@ -86,15 +86,6 @@ set_option autoImplicit false
 
 namespace GlobalTheory.ChF
 
-private theorem thetaBar_surj (p : ℕ) [Fact p.Prime] {C : Type} [Field C] [IsAlgClosed C] [CharZero C]
-    {v : Valuation C NNReal} (O : Type) [CommRing O] [Algebra O C] [Fact ¬IsUnit (p : O)]
-    [IsAdicComplete (Ideal.span {(p : O)}) O] (hv : v.Integers O) (ε : PreTilt O p)
-    (hε : IsPrimitiveRoot (((frobeniusEquiv (PreTilt O p) p).symm ε).untilt) p) :
-    Function.Surjective (Ainf.thetaBar p O hv ε hε) := by
-  intro y
-  obtain ⟨a, rfl⟩ := Ainf.theta_surj p O hv y
-  exact ⟨Ideal.Quotient.mk _ a, rfl⟩
-
 private theorem thetaBar_mul (p : ℕ) [Fact p.Prime] {C : Type} [Field C] [IsAlgClosed C] [CharZero C]
     {v : Valuation C NNReal} (O : Type) [CommRing O] [Algebra O C] [Fact ¬IsUnit (p : O)]
     [IsAdicComplete (Ideal.span {(p : O)}) O] (hv : v.Integers O) (ε : PreTilt O p)
@@ -169,7 +160,7 @@ private theorem htd_of_tower (p : ℕ) [Fact p.Prime] (C : Type) [Field C] [IsAl
   subst hTw
   have hπs : Function.Surjective
       (algebraMap (Ainf.R0 p O ε) ((Ainf.ainfTowerL p O hv ε hε).O : Type)) :=
-    thetaBar_surj p O hv ε hε
+    _root_.GlobalTheory.WdAinf.thetaBar_surj p O hv ε hε
   have hπk : RingHom.ker
       (algebraMap (Ainf.R0 p O ε) ((Ainf.ainfTowerL p O hv ε hε).O : Type)) ^ 2 = ⊥ := by
     rw [pow_two (RingHom.ker
@@ -193,18 +184,18 @@ private theorem htd_of_tower (p : ℕ) [Fact p.Prime] (C : Type) [Field C] [IsAl
   haveI : IsScalarTower (Ainf.R0 p O ε) ((Ainf.ainfTowerL p O hv ε hε).O : Type) C :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
   have hpC : ((p : ℕ) : C) ≠ 0 := Nat.cast_ne_zero.2 (Fact.out : p.Prime).ne_zero
-  have hcard := GlobalTheory.T.card_torsion_of_polarisedAbelianScheme_lift (Ainf.R0 p O ε) ((Ainf.ainfTowerL p O hv ε hε).O : Type) C G P ψ hψ p hpC
+  have hcard := _root_.GlobalTheory.ChF.card_torsion_of_isGrpPullback (Ainf.R0 p O ε) ((Ainf.ainfTowerL p O hv ε hε).O : Type) C G P ψ hψ p hpC
   have hinv : ∀ a, cjZ OE (cjZ OE a) = a := fun a => by simp [cjZ]
   have hros : ∀ a, ∃ t : LB.Gen (LB.LinComb Q (K := Fin 2)
       ![(lift (fst P.A P.A ≫ o.toRingAct.act a) (snd P.A P.A)).left ≫ ψ₂,
         (lift (fst P.A P.A) (snd P.A P.A ≫ o.toRingAct.act (cjZ OE a))).left ≫ ψ₂] ![1, -1]),
       t.IsGen := fun a =>
-    GlobalTheory.T.exists_generator_of_rosatiAdjoint_lambdaBundle _ P _ Q ψ₂ hQ hlam _ _ (o.toRingAct.hom a) (o.toRingAct.hom _) (o.rosati a)
+    _root_.GlobalTheory.RosGen.exists_gen_of_rosatiAdj _ P _ Q ψ₂ hQ hlam _ _ (o.toRingAct.hom a) (o.toRingAct.hom _) (o.rosati a)
   obtain ⟨B, e, Ad, he1, he2, he3, hAd, Dt, D, hD1, hD2, hD3, -⟩ :=
-    GlobalTheory.T.exists_periodTowerDatum_of_abelianScheme_symmetricBundle p O hv ε hε P.g G Q hGab hsm hQ hθ hQ1 hQ2 hQs hfin.1 hfin.2.1 hfin.2.2 hv'
+    _root_.GlobalTheory.AbelianPeriodDatum.main p O hv ε hε P.g G Q hGab hsm hQ hθ hQ1 hQ2 hQs hfin.1 hfin.2.1 hfin.2.2 hv'
       (fun x hx => hQp _ x hx) (hcard.trans (by rw [h₃])) P.A ψ ψ₂ P.isAb hψ hsq OE (cjZ OE)
       o.toRingAct hinv hros
-  obtain ⟨Y, hY, hYact⟩ := GlobalTheory.T.abelianFunctorNilChart_of_nilpotent_chart (Ainf.R0 p O ε) G B e he1 he2 he3
+  obtain ⟨Y, hY, hYact⟩ := _root_.GlobalTheory.ChF.bxChart_of_nilChart (Ainf.R0 p O ε) G B e he1 he2 he3
     (Ainf.ainfTowerL p O hv ε hε).O P.A ψ hψ P.g F.F X hX
   have hα0 : ∀ a j, MvPowerSeries.constantCoeff (α a j) = 0 := by
     intro a j
@@ -245,7 +236,7 @@ open ReciprocityTheory.ChartRestriction.G.Chart (sp spMap)
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.exists_hodgeTateDatum_formalGroupCharacters : ∀ (p : ℕ) [Fact p.Prime] (C : Type) [Field C] [IsAlgClosed C] [CharZero C] (v : Valuation C NNReal) (O : Type) [CommRing O] [Algebra O C], v.Integers O → ∀ [Fact ¬IsUnit (p : O)] [IsAdicComplete (Ideal.span {(p : O)}) O] [Algebra ℤ_[p] O] (T : Type) [CommRing T] [IsNoetherianRing T] (P₀ : Out.PolAV (Geo.Tor.Sp T)) (io : T →+* O) (P : Out.PolAV (Geo.Tor.Sp O)) (φ : P.A.left ⟶ P₀.A.left), Geo.Tor.IsGrpPullback P.A P₀.A (Geo.Tor.spMap io) φ → Geo.Tor.LBIso P.L (P₀.L.pull φ) → P.g = P₀.g → 1 ≤ P.g → ∀ (g : ℕ), P.g = g → ∀ (OE : Type) [CommRing OE] [StarRing OE] (o : P.OAct OE) (F : FGLaw O g) (X : Fam P.A g), NilChart P.A F.F X → ∀ α : OE → Fin g → PS O 1 g, (∀ a, Reads X X (o.act a) (α a)) → ∃ (cp : O) (_ : HodgeTateSetting p v O (ℤ_[p] ⊗[ℤ] OE) (sigE p OE) cp) (H : HodgeTateDatum p g v O (ℤ_[p] ⊗[ℤ] OE) (sigE p OE) cp) (S : Matrix (Fin g) (Fin g) O), H.P = 0 ∧ H.PL = 0 ∧ IsUnit S ∧ (∀ a : OE, lin (α a) * S = S * H.ρL (1 ⊗ₜ[ℤ] a)) ∧ ∀ i, ∃ u : PS O 1 g, IsCh F.F u ∧ Sᵀ *ᵥ dl u = fun l => H.Ht l i := by
-  first | exact @GlobalTheory.ChF.exists_htd_chars | exact GlobalTheory.ChF.exists_htd_chars | (intros; apply GlobalTheory.ChF.exists_htd_chars <;> assumption)
+  first | exact @GlobalTheory.ChF.exists_htd_chars
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.UnramifiedDepth.ExistsHodgeTateDatumFormalGroupCharactersStatement =====
@@ -289,7 +280,7 @@ open ReciprocityTheory.ChartRestriction.G.Chart (sp spMap)
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.exists_polarisedAbelianScheme_baseChange_ringAction : ∀ (T O : Type) [CommRing T] [CommRing O] (io : T →+* O) (P₀ : Out.PolAV (Geo.Tor.Sp T)), ∃ (P : Out.PolAV (Geo.Tor.Sp O)) (φ : P.A.left ⟶ P₀.A.left), Geo.Tor.IsGrpPullback P.A P₀.A (Geo.Tor.spMap io) φ ∧ Geo.Tor.LBIso P.L (P₀.L.pull φ) ∧ P.g = P₀.g ∧ ∀ (OE : Type) [CommRing OE] [StarRing OE] (o₀ : P₀.OAct OE), ∃ o : P.OAct OE, ∀ a, (o.act a).left ≫ φ = φ ≫ (o₀.act a).left := by
-  first | exact @GlobalTheory.exists_polBaseChange_oAct | exact GlobalTheory.exists_polBaseChange_oAct | (intros; apply GlobalTheory.exists_polBaseChange_oAct <;> assumption)
+  first | exact @GlobalTheory.exists_polBaseChange_oAct
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.UnramifiedDepth.ExistsPolarisedAbelianSchemeBaseChangeRingActionStatement =====
@@ -411,7 +402,7 @@ open ReciprocityTheory.ChartRestriction.G.Chart (sp spMap)
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.nilpotentChart_baseChange_formalGroup : ∀ (R R' : Type) [CommRing R] [CommRing R'] (β : R →+* R') (G : Over (Spec (CommRingCat.of R))) [GrpObj G] [IsCommMonObj G] (G' : Over (Spec (CommRingCat.of R'))) [GrpObj G'] [IsCommMonObj G'] (π : G'.left ⟶ G.left), Geo.Tor.IsGrpPullback G' G (Spec.map (CommRingCat.ofHom β)) π → ∀ (d : ℕ) (F : Fin d → PS R 2 d) (X : Fam G d), NilChart G F X → ∃ X' : Fam G' d, NilChart G' (fun i => MvPowerSeries.map β (F i)) X' ∧ ∀ (f : G ⟶ G) (f' : G' ⟶ G') (α : Fin d → PS R 1 d), f'.left ≫ π = π ≫ f.left → Reads X X f α → Reads X' X' f' (fun i => MvPowerSeries.map β (α i)) := by
-  first | exact @GlobalTheory.ChF.nilChart_baseChange | exact GlobalTheory.ChF.nilChart_baseChange | (intros; apply GlobalTheory.ChF.nilChart_baseChange <;> assumption)
+  first | exact @GlobalTheory.ChF.nilChart_baseChange
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.UnramifiedDepth.NilpotentChartBaseChangeFormalGroupStatement =====

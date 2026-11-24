@@ -370,28 +370,23 @@ theorem fderiv_F0E_low (m : ℕ) (e : ℤ) (x : M2 n) (h0 : x.det ≠ 0) (h : (u
 theorem low_blocks (R : Matrix (Fin n) (Fin n) ℂ) :
     lowQ R = fromBlocks ((-1 / 2 : ℂ) • R) ((Complex.I / 2) • R) ((Complex.I / 2) • R) ((1 / 2 : ℂ) • R) := by
   rw [lowQ_eq, Cm, Cmi, fromBlocks_multiply, fromBlocks_multiply]
-  congr 1 <;> ext i j <;> simp [Matrix.smul_apply, Matrix.mul_apply, Matrix.one_apply] <;> ring_nf <;>
+  congr 1 <;> ext i j <;> simp [Matrix.smul_apply] <;> ring_nf <;>
     simp [Complex.I_sq] <;> ring
 
 def raiseR (S : Matrix (Fin n) (Fin n) ℂ) : M2 n := mX 1 0 S 1 - 1
 
-private theorem Cm_mul_Cmi : Cm n * Cmi n = 1 := by
-  unfold Cm Cmi
-  rw [Matrix.fromBlocks_multiply, ← Matrix.fromBlocks_one]
-  congr 1 <;> ext i j <;> simp [Matrix.one_apply] <;> split_ifs <;> ring_nf <;> simp [Complex.I_sq] <;> ring
-
 theorem raise_eq (S : Matrix (Fin n) (Fin n) ℂ) : raiseR S = Cm n * fromBlocks 0 0 S 0 * Cmi n := by
-  have hinv : (Cm n)⁻¹ = Cmi n := Matrix.inv_eq_right_inv Cm_mul_Cmi
+  have hinv : (Cm n)⁻¹ = Cmi n := Matrix.inv_eq_right_inv _root_.PositivityTheory.Rg.Sw.LVs.cm_mul_cmi
   have hb : (fromBlocks 1 0 S 1 : M2 n) = fromBlocks 0 0 S 0 + 1 := by
     rw [← Matrix.fromBlocks_one, Matrix.fromBlocks_add]
     simp
   unfold raiseR mX
-  rw [hinv, hb, Matrix.mul_add, Matrix.add_mul, Matrix.mul_one, Cm_mul_Cmi, add_sub_cancel_right]
+  rw [hinv, hb, Matrix.mul_add, Matrix.add_mul, Matrix.mul_one, _root_.PositivityTheory.Rg.Sw.LVs.cm_mul_cmi, add_sub_cancel_right]
 
 theorem raise_blocks (S : Matrix (Fin n) (Fin n) ℂ) :
     raiseR S = fromBlocks ((-1 / 2 : ℂ) • S) ((-Complex.I / 2) • S) ((-Complex.I / 2) • S) ((1 / 2 : ℂ) • S) := by
   rw [raise_eq, Cm, Cmi, fromBlocks_multiply, fromBlocks_multiply]
-  congr 1 <;> ext i j <;> simp [Matrix.smul_apply, Matrix.mul_apply, Matrix.one_apply] <;> ring_nf <;>
+  congr 1 <;> ext i j <;> simp [Matrix.smul_apply] <;> ring_nf <;>
     simp [Complex.I_sq] <;> ring
 
 theorem sig_fromBlocks (A B C D : Matrix (Fin n) (Fin n) ℂ) :
@@ -403,7 +398,7 @@ theorem sig_fromBlocks (A B C D : Matrix (Fin n) (Fin n) ℂ) :
 theorem sig_low (R : Matrix (Fin n) (Fin n) ℂ) : sig (lowQ R) = raiseR Rᴴ := by
   rw [low_blocks, raise_blocks, sig_fromBlocks]
   simp only [Matrix.conjTranspose_smul]
-  congr 1 <;> ext i j <;> simp [Matrix.smul_apply] <;> ring_nf <;> simp [Complex.conj_I] <;> ring_nf
+  congr 1 <;> ext i j <;> simp [Matrix.smul_apply] <;> ring_nf <;> simp [Complex.conj_I]
 
 theorem raiseR_smul (c : ℂ) (S : Matrix (Fin n) (Fin n) ℂ) : raiseR (c • S) = c • raiseR S := by
   rw [raise_blocks, raise_blocks, Matrix.fromBlocks_smul]
@@ -495,10 +490,10 @@ theorem toBlocks₁₂_mul' (A B : M2 n) :
   simp
 
 theorem mul_cm₁₁ (x : M2 n) : (x * Cm n).toBlocks₁₁ = Nm x := by
-  simp [toBlocks₁₁_mul', Cm, Nm, Matrix.mul_smul]
+  simp [toBlocks₁₁_mul', Cm, Nm]
 
 theorem mul_cm₁₂ (x : M2 n) : (x * Cm n).toBlocks₁₂ = Nm' x := by
-  simp [toBlocks₁₂_mul', Cm, Nm', Matrix.mul_smul, Matrix.mul_neg]
+  simp [toBlocks₁₂_mul', Cm, Nm']
 
 theorem det_ne_of_inG {x : M2 n} (hx : InG x) : x.det ≠ 0 := by
   intro h0
@@ -783,7 +778,7 @@ end PositivityTheory.Rg.Sw.HSt.CRSec
 
 namespace PositivityTheory.Rg.Sw.HSt
 
-theorem locSec : LocSec := CRSec.locSec
+alias locSec := _root_.PositivityTheory.Rg.Sw.HSt.CRSec.locSec
 
 end PositivityTheory.Rg.Sw.HSt
 end -- clump:auto
@@ -925,7 +920,7 @@ theorem norm_sq_det_cayley_blocks_eq (M : M2 n) (h : InG M) : ‖(u1 M).det‖ ^
     rw [← sub_eq_zero, ← hb]
     abel
   have e1 : u1 M * (u1 M)ᴴ = u2 M * (u2 M)ᴴ := by
-    simp [u1, u2, Matrix.add_mul, Matrix.mul_add, Matrix.smul_mul, Matrix.mul_smul, smul_smul, key]
+    simp [u1, u2, Matrix.add_mul, Matrix.mul_add, smul_smul, key]
     abel
   have hn : ∀ u : Matrix (Fin n) (Fin n) ℂ, ((‖u.det‖ ^ 2 : ℝ) : ℂ) = (u * uᴴ).det := by
     intro u
@@ -952,8 +947,7 @@ theorem zkey (a b c d : Matrix (Fin n) (Fin n) ℂ) (E1 : aᴴ * c - cᴴ * a = 
   have h4 : dᴴ * a = 1 + bᴴ * c := by
     rw [← E2']
     abel
-  simp [Matrix.add_mul, Matrix.mul_add, Matrix.sub_mul, Matrix.mul_sub, Matrix.smul_mul, Matrix.mul_smul,
-    smul_smul]
+  simp [Matrix.add_mul, Matrix.mul_add, Matrix.mul_sub, smul_smul]
   rw [h1, h3, h2, h4]
   simp only [smul_add]
   abel
@@ -1001,7 +995,7 @@ private theorem conjTranspose_I_smul_add_sub_eq_two_I (a b c d : Matrix (Fin n) 
   have h4 : dᴴ * a = 1 + bᴴ * c := by
     rw [← E2']
     abel
-  simp [Matrix.add_mul, Matrix.mul_add, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+  simp [Matrix.add_mul, Matrix.mul_add, smul_smul]
   rw [h1, h3, h2, h4]
   simp only [smul_add]
   module

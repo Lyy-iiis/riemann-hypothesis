@@ -637,7 +637,7 @@ theorem exists_pair_of_annihilator_any : ∀ (F : Type) [Field F] [NumberField F
     by_contra h
     push_neg at h
     exact hne (by ext t; simpa using h t)
-  obtain ⟨n, hn⟩ := GlobalTheory.CharConductor.exists_conductor_exponent F v ψ hcont hnorm hne'
+  obtain ⟨n, hn⟩ := _root_.GlobalTheory.ConductorAdicCompletion.exists_conductor_adicCompletion F v ψ hcont hnorm hne'
   obtain ⟨a, ha⟩ := exists_valuation_eq F v n
   have ha0 : a ≠ 0 := by
     intro h; rw [h, map_zero] at ha; exact WithZero.zero_ne_coe ha
@@ -684,7 +684,7 @@ theorem exists_pair_of_annihilator_any : ∀ (F : Type) [Field F] [NumberField F
       have := h _ hl'
       rw [hψ₀] at this
       convert this using 2
-      simp only [mul_sub, dotProduct_smul, smul_eq_mul, smul_dotProduct]
+      simp only [mul_sub, dotProduct_smul, smul_eq_mul]
       rw [← mul_assoc, mul_inv_cancel₀ ha0, one_mul]
 
   obtain ⟨c', hc', hbd₀⟩ : ∃ c' : Fv F v, c' ≠ 0 ∧ ∀ l ∈ Λ₀, ∀ i,

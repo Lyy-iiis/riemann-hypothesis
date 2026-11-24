@@ -700,7 +700,7 @@ theorem REder_X (K : Type) [CommRing K] (k : ℕ) (a b : Fin k) (i j : Fin k) :
   by_cases h : i = b
   · subst h
     simp [Pi.single_apply, mul_ite]
-  · simp [Pi.single_apply, h]
+  · simp [h]
 
 end PI.RL.W
 end -- clump:auto
@@ -740,7 +740,7 @@ theorem keyCov : KeyCov := by
       rw [Matrix.updateRow_self, if_pos rfl]
       by_cases hj : j = Fin.last m
       · subst hj; simp
-      · simp [Pi.single_apply, hj]
+      · simp [hj]
     · rw [Matrix.updateRow_ne hic, hG, REder_X, if_neg hic]
   simp_rw [hrow]
   have hz : ∀ (M : Matrix (Fin (m + 1)) (Fin (m + 1)) (MvPolynomial (Fin (m + 1) × Fin (m + 1)) K))
@@ -763,7 +763,7 @@ theorem keyCov : KeyCov := by
     intro j
     split_ifs <;> rfl
   · intro h; exact absurd (Finset.mem_univ b) h
-  simp only [hbc, if_false, if_true, eq_self_iff_true, ite_true, ite_false]
+  simp only [hbc, if_false, if_true]
   by_cases hab : a = b
   · subst hab
     rw [if_pos rfl, if_neg hbc, sub_zero]
@@ -907,8 +907,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-theorem rowWtSpan_of (h1 : PI.RW.BideterminantMem) (h2 : PI.RW.BideterminantSpan) : PI.RowWtSpan :=
-  PI.RWS.rowWtSpan_of_bideterminant h1 h2
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Formalism.PeriodIntegrals.OrbitalBoundsConclusion.RowWtSpan =====
@@ -1178,7 +1176,7 @@ theorem RE_eq_rowDiv (K : Type) [CommRing K] (k : ℕ) (a b : Fin k) (f : MvPoly
     RE K k a b f = rowDiv K a b 1 f := by
   unfold rowDiv
   induction f using MvPolynomial.induction_on with
-  | C r => rw [RE_C]; simp [rowGen, Polynomial.algebraMap_apply, MvPolynomial.algebraMap_eq, Polynomial.coeff_C]
+  | C r => rw [RE_C]; simp [rowGen, Polynomial.algebraMap_apply, MvPolynomial.algebraMap_eq]
   | add p q hp hq => rw [RE_add, map_add (f := _), Polynomial.coeff_add, hp, hq]
   | mul_X p v hp =>
     rw [RE_mul, map_mul, Polynomial.mul_coeff_one, rowGen_coeff_zero, rowGen_coeff_zero, hp, RE_X]
@@ -1191,7 +1189,7 @@ theorem RE_eq_rowDiv (K : Type) [CommRing K] (k : ℕ) (a b : Fin k) (f : MvPoly
 theorem restAdj : RestAdj := by
   intro K _ k a b P Q
   rw [RE_eq_rowDiv, RE_eq_rowDiv]
-  exact Formalism.L2.G.Model.TS.Top.fockRRowDivAdj K k k a b 1 P Q
+  exact _root_.Formalism.L2.G.Model.TS.fock_pairing_divided_adjoint K k k a b 1 P Q
 
 theorem restStab : RestStab := by
   intro K _ _ k ν a b P hP
@@ -1379,7 +1377,7 @@ theorem bideterminant_span_holds : PI.RW.BideterminantSpan := by
     rw [h0]
     exact Submodule.zero_mem _
 
-theorem dual_weyl_weights_bounded : Formalism.MainNotions.TestSideCounting.RestWt := rowWtSpan_of bidetMem bideterminant_span_holds
+theorem dual_weyl_weights_bounded : Formalism.MainNotions.TestSideCounting.RestWt := _root_.PI.RWS.rowWtSpan_of_bideterminant bidetMem bideterminant_span_holds
 
 theorem letter_operators_holds : Formalism.MainNotions.TestSideCounting.RestTheta := row_letter_rule
 
@@ -1387,13 +1385,11 @@ theorem onePos_of_OB (hOB : Formalism.MainNotions.TestSideCounting.OpBound) : Fo
   Formalism.MainNotions.TestSideCounting.onePos_of_opBound hOB letter_operators_holds dual_weyl_weights_bounded
 
 theorem tensor_operators_of_one_position (h : Formalism.MainNotions.TestSideCounting.OnePos) : Formalism.MainNotions.TestSideCounting.TenOp :=
-  adjointTensorOfSingle_valid Formalism.L2.G.Model.TS.Top.fockRBlock h
+  adjointTensorOfSingle_valid _root_.Formalism.L2.G.Model.TS.fock_pairing_block h
 
 theorem tenOp_of_OB (hOB : Formalism.MainNotions.TestSideCounting.OpBound) : Formalism.MainNotions.TestSideCounting.TenOp := tensor_operators_of_one_position (onePos_of_OB hOB)
 
-theorem operator_weight_bound_holds : Formalism.MainNotions.TestSideCounting.OpBound := operator_words_bound
-
-theorem tensor_operators_holds : Formalism.MainNotions.TestSideCounting.TenOp := tenOp_of_OB operator_weight_bound_holds
+theorem tensor_operators_holds : Formalism.MainNotions.TestSideCounting.TenOp := tenOp_of_OB _root_.operator_words_bound
 
 end Formalism.MainNotions.TestSideWords
 end -- clump:auto

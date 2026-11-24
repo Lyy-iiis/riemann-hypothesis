@@ -130,7 +130,7 @@ theorem linearIndependent_complex : ∀ (D : D7) (S T : HSp D) (B : Base S T), B
     simp only [Fintype.card_fin, Fintype.card_sum] at this
     omega
   have hcf : Function.Injective (HarmLattice.cf B.w.lam) :=
-    (injective_iff_map_eq_zero _).2 fun G hG => Subtype.ext (GlobalTheory.T.coeffPolynomial_eq_zero_of_vanishing_on_GLFamily D _ B.w.lam G fun x => congrFun hG x)
+    (injective_iff_map_eq_zero _).2 fun G hG => Subtype.ext (_root_.GlobalTheory.ExportSeries.eq_zero_of_coefFn_id_eq_zero D _ B.w.lam G fun x => congrFun hG x)
   have hb := (GlobalTheory.CoefModel.linearIndependent_mapVV σ B.w.lam).map' (HarmLattice.cf B.w.lam) (LinearMap.ker_eq_bot.2 hcf)
   refine linearIndependent_iff'.2 fun s c h a ha => (Module.forall_dual_apply_eq_zero_iff F (c a)).1 fun φ => ?_
   refine linearIndependent_iff'.1 hli s (fun a => φ (c a)) (funext fun y => ?_) a ha
@@ -172,7 +172,7 @@ open GlobalTheory.HeightCounting.Up (PrN)
 
 theorem _root_.GlobalTheory.T.linearIndependent_complex_of_subfield_coeffLattice : ∀ (D : D7) (S T : HSp D) (B : Base S T), B.Good → ∀ (K : Type) [Field K] [NumberField K] (σ : K →+* ℂ) (emb : D.what₂.Tau → (D.host.E →+* K)) (O : Subring ℂ), IsCoefRing σ emb O → ∀ F : Subfield ℂ, O ≤ F.toSubring →
   ∀ (I : Type) (f : I → Bridge.Gf S → PolF D T.rank S.rank), (∀ a h, f a h ∈ B.coefLat σ emb O h) → LinearIndependent F f → LinearIndependent ℂ f := by
-  first | exact @GlobalTheory.PlaceIndep.linearIndependent_complex | exact GlobalTheory.PlaceIndep.linearIndependent_complex | (intros; apply GlobalTheory.PlaceIndep.linearIndependent_complex <;> assumption)
+  first | exact @GlobalTheory.PlaceIndep.linearIndependent_complex
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.LinearIndependentComplexOfSubfieldCoeffLatticeStatement =====

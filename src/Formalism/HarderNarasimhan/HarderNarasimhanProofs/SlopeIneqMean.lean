@@ -112,11 +112,11 @@ private lemma norm_sum_smul_map_le_mul_of_bounded {A : Submodule ℤ E} {B : Sub
 
   have hyE : (((∑ i, round ((n : ℝ) * c i) • b i : A)) : E) =
       ∑ i, ((round ((n : ℝ) * c i) : ℤ) : ℝ) • ((b i : A) : E) := by
-    simp [Submodule.coe_sum, Int.cast_smul_eq_zsmul]
+    simp [Int.cast_smul_eq_zsmul]
   have heF : ((e (∑ i, round ((n : ℝ) * c i) • b i) : B) : F) =
       ∑ i, ((round ((n : ℝ) * c i) : ℤ) : ℝ) • ((e (b i) : B) : F) := by
 
-    simp [map_sum, map_zsmul, Submodule.coe_sum, Int.cast_smul_eq_zsmul]
+    simp [map_sum, Int.cast_smul_eq_zsmul]
   have dF : (n : ℝ) • ∑ i, c i • ((e (b i) : B) : F) =
       ((e (∑ i, round ((n : ℝ) * c i) • b i) : B) : F) +
         ∑ i, ((n : ℝ) * c i - (round ((n : ℝ) * c i) : ℝ)) • ((e (b i) : B) : F) := by
@@ -184,7 +184,7 @@ theorem rank_range_eq_and_degree_le {G : Type*} [AddCommGroup G] (α : G →+ E)
   have hA := Formalism.F.covolEqGram E (LinearMap.range α.toIntLinearMap) _ b
   have hB := Formalism.F.covolEqGram F (LinearMap.range β.toIntLinearMap) _ (b.map e)
   simp only [Basis.map_apply] at hB
-  have hG := Formalism.F.gramDetLe E F _ (fun i => ((b i : LinearMap.range α.toIntLinearMap) : E))
+  have hG := _root_.Formalism.F.gram_det_le E F _ (fun i => ((b i : LinearMap.range α.toIntLinearMap) : E))
     (fun i => ((e (b i) : LinearMap.range β.toIntLinearMap) : F)) C
     (fun c => norm_sum_smul_map_le_mul_of_bounded e.toLinearMap C hC.le hy b c)
   simp only [Fintype.card_fin] at hG
@@ -223,15 +223,11 @@ theorem norm_starProjection_le {G : Type*} [AddCommGroup G] (α : G →+ E) (β 
   push_neg at hC
   have hw : α g - (span ℝ (α '' S))ᗮ.starProjection (α g) ∈ span ℝ (α '' S) := by
     first
-    | exact (Submodule.orthogonal_orthogonal (span ℝ (α '' S))) ▸
-        Submodule.sub_starProjection_mem_orthogonal (K := (span ℝ (α '' S))ᗮ) (α g)
     | (have hd := Submodule.starProjection_add_starProjection_orthogonal
           (K := span ℝ (α '' S)) (α g)
        rw [sub_eq_of_eq_add hd.symm]
        first
-       | exact Submodule.starProjection_apply_mem _ _
-       | exact ((span ℝ (α '' S)).orthogonalProjection (α g)).2
-       | simp)
+       | exact Submodule.starProjection_apply_mem _ _)
   obtain ⟨n, c, gg, hf⟩ := Submodule.mem_span_set'.mp hw
   have hs : ∀ i, ∃ s ∈ S, α s = (gg i : E) := fun i => (gg i).2
   choose s hsS hsα using hs
@@ -308,14 +304,10 @@ private lemma mem_of_starProjection_orthogonal_eq_zero {X : Type*} [NormedAddCom
     x ∈ K := by
   have hw : x - Kᗮ.starProjection x ∈ K := by
     first
-    | exact (Submodule.orthogonal_orthogonal K) ▸
-        Submodule.sub_starProjection_mem_orthogonal (K := Kᗮ) x
     | (have hd := Submodule.starProjection_add_starProjection_orthogonal (K := K) x
        rw [sub_eq_of_eq_add hd.symm]
        first
-       | exact Submodule.starProjection_apply_mem _ _
-       | exact (K.orthogonalProjection x).2
-       | simp)
+       | exact Submodule.starProjection_apply_mem _ _)
   rwa [h, sub_zero] at hw
 
 private theorem slopeIneq_of_lemma {R V W E F : Type*} [Ring R] [AddCommGroup V] [Module R V]
@@ -598,15 +590,9 @@ variable {K : Type} [Field K] [NumberField K] [StarRing K]
   {V ι : Type} [AddCommGroup V] [Module K V] [Fintype ι] [DecidableEq ι]
   {W κ : Type} [AddCommGroup W] [Module K W] [Fintype κ] [DecidableEq κ]
 
-theorem realize_apply0 (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ) (x : V)
-    (v : InfinitePlace K) (i : ι) :
-    (Formalism.HermitianLatticesTheory.realize b X x) (v, i, 0) = (Formalism.HermitianLatticesTheory.fcoord b X v x i).re := by
-  simp [Formalism.HermitianLatticesTheory.realize, Formalism.HermitianLatticesTheory.realizeRaw]
+alias realize_apply0 := _root_.Formalism.HN.PlaceLattice.realize_apply0
 
-theorem realize_apply1 (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ) (x : V)
-    (v : InfinitePlace K) (i : ι) :
-    (Formalism.HermitianLatticesTheory.realize b X x) (v, i, 1) = (Formalism.HermitianLatticesTheory.fcoord b X v x i).im := by
-  simp [Formalism.HermitianLatticesTheory.realize, Formalism.HermitianLatticesTheory.realizeRaw]
+alias realize_apply1 := _root_.Formalism.HN.PlaceLattice.realize_apply1
 
 theorem norm_sq_realize (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ) (x : V) :
     ‖Formalism.HermitianLatticesTheory.realize b X x‖ ^ 2 = ∑ v, Formalism.HermitianLatticesTheory.normAt b X v x ^ 2 := by
@@ -636,7 +622,6 @@ theorem fcoord_map (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ)
     rw [← LinearMap.toMatrix_mulVec_repr b b' φ x]
     first
       | simp [Matrix.mulVec, dotProduct, map_sum, map_mul, Formalism.HermitianLatticesTheory.vecAt]
-      | simp [Matrix.mulVec, Matrix.dotProduct, map_sum, map_mul, Formalism.HermitianLatticesTheory.vecAt]
   simp only [Formalism.HermitianLatticesTheory.fcoord, hv, Matrix.mulVec_mulVec, Matrix.mul_assoc, Matrix.mul_nonsing_inv _ (hX v),
     Matrix.mul_one]
 
@@ -651,8 +636,6 @@ theorem normAt_map_le (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι �
   convert this using 1
   all_goals first
     | rfl
-    | simp [Matrix.toEuclideanLin_apply]
-    | (congr 1; simp [Matrix.toEuclideanLin_apply])
 
 theorem opNormAt_smul (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ) (b' : Basis κ K W)
     (X' : InfinitePlace K → Matrix κ κ ℂ) (hX' : ∀ v, IsUnit (X' v).det) (c : InfinitePlace K → ℝ)
@@ -666,7 +649,6 @@ theorem opNormAt_smul (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι �
   simp only [opNormAt, hi, Matrix.smul_mul, map_smul, norm_smul]
   first
     | rw [norm_inv, Complex.norm_real, Real.norm_of_nonneg (hc v).le]
-    | simp [norm_inv, abs_of_pos (hc v)]
 
 theorem opNormAt_pos (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ) (b' : Basis κ K W)
     (X' : InfinitePlace K → Matrix κ κ ℂ) (hX : ∀ v, IsUnit (X v).det)

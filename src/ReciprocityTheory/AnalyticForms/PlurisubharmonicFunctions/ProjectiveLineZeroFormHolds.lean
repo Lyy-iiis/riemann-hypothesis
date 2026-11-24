@@ -90,7 +90,7 @@ theorem insertNth_eq_add {D : ℕ} (j : Fin (D + 1)) (w : Fin D → ℂ) (ζ : �
   · subst hk
     simp
   · obtain ⟨i, rfl⟩ := Fin.exists_succAbove_eq hk
-    simp [Pi.single_apply]
+    simp
 
 theorem levi_insertNth {D : ℕ} (j : Fin (D + 1)) (u : (Fin (D + 1) → ℂ) → ℝ)
     (hu : ContDiff ℝ 2 u) (w : Fin D → ℂ) (ζ : ℂ) :
@@ -123,7 +123,7 @@ theorem levi_insertNth {D : ℕ} (j : Fin (D + 1)) (u : (Fin (D + 1) → ℂ) �
     ext k
     by_cases hk : k = j
     · subst hk; simp
-    · simp [Pi.single_apply, hk]
+    · simp [hk]
   rw [hAI, hAv]
   rfl
 
@@ -169,7 +169,7 @@ theorem ddcCoordDens_insertNth {D : ℕ} (j : Fin (D + 1)) {u : (Fin (D + 1) →
 
 theorem greenCoord_thm : GreenCoordStatement := by
   intro D j u hu hs
-  obtain ⟨hI, hE⟩ := greenParam_thm (Fin D → ℂ) (volume : Measure (Fin D → ℂ)) (uPair j u)
+  obtain ⟨hI, hE⟩ := _root_.ReciprocityTheory.AnForm.A.greenParam_main (Fin D → ℂ) (volume : Measure (Fin D → ℂ)) (uPair j u)
     (uPair_contDiff j hu) (uPair_hasCompactSupport j hs)
   have hπ : Real.pi ≠ 0 := Real.pi_ne_zero
   have hmp := (volume_preserving_piFinSuccAbove (fun _ : Fin (D + 1) => ℂ) j).symm
@@ -640,7 +640,6 @@ theorem log_norm_integral_formula_unit : PoincareLelongUnitPower := by
   rw [integral_congr_ae hae, integral_add (hI1.const_mul _) hI2]
   first
     | rw [integral_const_mul]
-    | rw [integral_mul_left]
   rw [hE1, hE2, add_zero]
 
 theorem log_norm_integral_formula_snc : PoincareLelongNormalCrossing := by
@@ -676,7 +675,6 @@ theorem log_norm_integral_formula_snc : PoincareLelongNormalCrossing := by
   refine Finset.sum_congr rfl (fun i _ => ?_)
   first
     | rw [integral_const_mul]
-    | rw [integral_mul_left]
   rw [hE i]
 
 end ReciprocityTheory.AnForm.A

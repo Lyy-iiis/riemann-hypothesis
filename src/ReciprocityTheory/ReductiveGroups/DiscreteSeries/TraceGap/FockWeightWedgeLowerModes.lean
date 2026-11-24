@@ -74,7 +74,7 @@ variable {n : ℕ}
 def oppCount (ε : Fin n → Bool) (a : Fin n) : ℕ := (univ.filter fun b => ε b ≠ ε a).card
 
 theorem dot_root_right (u : Fin n → ℝ) (a b : Fin n) : dot u (root a b) = u a - u b := by
-  simp [dot, root, mul_sub, Finset.sum_sub_distrib, Pi.single_apply, mul_boole]
+  simp [dot, root, mul_sub, Finset.sum_sub_distrib, Pi.single_apply]
 
 theorem dot_sum_root_right (u : Fin n → ℝ) (Ph : Finset (Fin n × Fin n)) :
     dot u (∑ x ∈ Ph, root x.1 x.2) = ∑ x ∈ Ph, (u x.1 - u x.2) := by
@@ -107,12 +107,12 @@ theorem sum_root_apply (Ph : Finset (Fin n × Fin n)) (c : Fin n) :
     by_cases h : x.1 = c
     · rw [h]; simp
     · have h' : ¬ c = x.1 := fun e => h e.symm
-      simp [Pi.single_apply, h, h']
+      simp [h, h']
   · refine Finset.sum_congr rfl fun x _ => ?_
     by_cases h : x.2 = c
     · rw [h]; simp
     · have h' : ¬ c = x.2 := fun e => h e.symm
-      simp [Pi.single_apply, h, h']
+      simp [h, h']
 
 theorem card_fst_le (ε : Fin n → Bool) (Ph : Finset (Fin n × Fin n))
     (hnc : ∀ x ∈ Ph, ε x.1 ≠ ε x.2) (c : Fin n) :
@@ -236,20 +236,6 @@ theorem gb_rhoN_eq (ε : Fin n → Bool) {a b : Fin n} (hab : a < b) (he : ε a 
   push_cast at h'
   linarith
 
-theorem gb_rhoC_ge (ε : Fin n → Bool) {a b : Fin n} (hab : a < b) (he : ε a = ε b) :
-    1 ≤ rhoC ε a - rhoC ε b := by
-  have h := lfD_cnt (fun c => ε c = ε a) hab
-  have h1 : (univ.filter fun c => c = a ∧ ε c = ε a).card = 1 := by
-    rw [lfD_single]; simp
-  have h2 : (univ.filter fun c => c = b ∧ ε c = ε a).card = 1 := by
-    rw [lfD_single]; simp [he]
-  simp only [rhoC, ← he]
-  rw [h1, h2] at h
-  have h' := congrArg (Nat.cast : ℕ → ℝ) h
-  push_cast at h'
-  have : (0 : ℝ) ≤ ((univ.filter fun c => a < c ∧ c < b ∧ ε c = ε a).card : ℝ) := Nat.cast_nonneg _
-  linarith
-
 theorem gb_phSum_le (ε : Fin n → Bool) {Ph : Finset (Fin n × Fin n)} (hnc : ∀ x ∈ Ph, ε x.1 ≠ ε x.2)
     (a : Fin n) : phSum Ph a ≤ oppCount ε a := by
   unfold phSum; rw [sum_root_apply]
@@ -302,8 +288,8 @@ theorem dirac_block {ε : Fin n → Bool} {lam : Fin n → ℝ} (hg : Gap3 ε la
     have oc' : (2:ℝ) ≤ oppCount ε c := by exact_mod_cast oc
     linarith
   · push Not at hc
-    obtain ⟨N, hN⟩ := HW.kIrrHW_int ε hF hW' a b hab he
-    have hC := gb_rhoC_ge ε hab he
+    obtain ⟨N, hN⟩ := _root_.ReciprocityTheory.ChartRestriction.DS.HW.kIrrHW_int' ε hF hW' a b hab he
+    have hC := _root_.ReciprocityTheory.ChartRestriction.DS.HW.rhoC_sub_ge_one ε hab he
     have hR := gb_rhoN_eq ε hab he hc
     simp only [lowK, Pi.add_apply, Pi.sub_apply] at hN
     have : (0:ℝ) ≤ N := Nat.cast_nonneg _

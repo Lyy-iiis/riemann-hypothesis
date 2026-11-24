@@ -86,7 +86,7 @@ theorem exists_local_finite_parts_F_k : ∀ (F E : Type) [Field F] [NumberField 
       ∀ p ∈ N, ∃ f : Fin m → SchwartzMap (κ → mixedEmbedding.mixedSpace F) ℂ,
         om p Φ = ∑ i, pureA F (f i) (g i) := by
   intro F E _ _ _ _ _ σ B hB nS nT JS JT hJS hJT ξ₀ hξ₀ hσξ χS χT hS hT hrS hrT ω hω JA JB ξ hJA hJB κ _ co hco om hom Φ hΦ p0
-  obtain ⟨pres, impl⟩ := _root_.GlobalTheory.T.weil_representation_pair_continuous F E σ B hB nS nT JS JT hJS hJT ξ₀ hξ₀ hσξ χS χT hS hT hrS hrT ω hω JA JB ξ hJA hJB κ co
+  obtain ⟨pres, impl⟩ := _root_.GlobalTheory.TransportHeisF.pres_impl_k F E σ B hB nS nT JS JT hJS hJT ξ₀ hξ₀ hσξ χS χT hS hT hrS hrT ω hω JA JB ξ hJA hJB κ co
     hco om hom
   obtain ⟨L₁, L₂, hL₁, hL₂, hinv⟩ := _root_.GlobalTheory.SchrFixFin.exists_fix F B.ψ hB.std.1 κ Φ hΦ
   obtain ⟨N, hN, L₁', L₂', hL₁', hL₁c, hL₂', hNL⟩ := _root_.GlobalTheory.WeilTransNbhd.exists_nhds_finite_preimage F E σ nT nS JA JB ξ κ co L₁ L₂ hL₁ hL₂ p0
@@ -152,7 +152,7 @@ theorem _root_.GlobalTheory.T.weil_pair_commuting_actions : ∀ (F E : Type) [Fi
       (∀ i, g i ∈ SB (κ → FiniteAdeleRing (𝓞 F) F)) ∧ (∀ i j, g i (y j) = if i = j then 1 else 0) ∧
       ∀ p ∈ N, ∃ f : Fin m → SchwartzMap (κ → mixedEmbedding.mixedSpace F) ℂ,
         om p Φ = ∑ i, pureA F (f i) (g i) := by
-  first | exact @_root_.GlobalTheory.WeilContF.exists_local_finite_parts_F_k | exact _root_.GlobalTheory.WeilContF.exists_local_finite_parts_F_k | (intros; apply _root_.GlobalTheory.WeilContF.exists_local_finite_parts_F_k <;> assumption)
+  first | exact @_root_.GlobalTheory.WeilContF.exists_local_finite_parts_F_k
 end
 end -- clump:auto
 end -- clump:auto

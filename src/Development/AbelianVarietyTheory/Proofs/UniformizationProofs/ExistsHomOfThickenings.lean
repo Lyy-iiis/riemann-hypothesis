@@ -70,7 +70,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.exists_projective_algebraisation_formal_embedding : ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] [IsAdicComplete (IsLocalRing.maximalIdeal V) V] (Y : ∀ e : ℕ, Over (Spec (CommRingCat.of (V ⧸ (IsLocalRing.maximalIdeal V) ^ (e + 1))))) (β : ∀ e, (Y e).left ⟶ (Y (e + 1)).left), (∀ e, IsPullback (β e) (Y e).hom (Y (e + 1)).hom (thickTrans V (IsLocalRing.maximalIdeal V) e)) → (∀ e, Flat (Y e).hom) → ∀ (H : ∀ e, LB (Y e).left) (v : ∀ e, LB.Iso (H e) ((H (e + 1)).pull (β e))), (∀ e, (H e).IsLB ∧ (v e).IsGen) → ∀ (n : ℕ) (s : ∀ e, Fin (n + 1) → LB.Sec (H e)), (∀ e, (∀ j, (∀ z (k : (H (e + 1)).ι) (k' : (H e).ι), (β e) z ∈ (H (e + 1)).U k → z ∈ (H e).U k' → gs (β e) z _ ((s (e + 1) j).f k) = (Geo.Tor.gw (v e) (𝟙 _) z k k').val * gs (𝟙 _) z _ ((s e j).f k')))) → VeryAmpleBy (Y 0).hom (H 0) (s 0) → ∃ (B : Over (Spec (CommRingCat.of V))) (H' : LB B.left) (s' : Fin (n + 1) → LB.Sec H') (b : ∀ e, (Y e).left ⟶ B.left) (w : ∀ e, LB.Iso (H e) (H'.pull (b e))), H'.IsLB ∧ VeryAmpleBy B.hom H' s' ∧ (∀ e, IsPullback (b e) (Y e).hom B.hom (thick V (IsLocalRing.maximalIdeal V) e)) ∧ (∀ e, β e ≫ b (e + 1) = b e) ∧ (∀ e, (w e).IsGen ∧ (∀ j, (∀ z (k : (H').ι) (k' : (H e).ι), (b e) z ∈ (H').U k → z ∈ (H e).U k' → gs (b e) z _ ((s' j).f k) = (Geo.Tor.gw (w e) (𝟙 _) z k k').val * gs (𝟙 _) z _ ((s e j).f k')))) ∧ ∀ (t : ℕ) (F : MvPolynomial (Fin (n + 1)) V), F.IsHomogeneous t → (∀ e, (∀ k : (H e).ι, MvPolynomial.eval₂Hom (cst ((Y (e)).hom ≫ thick V (IsLocalRing.maximalIdeal V) (e)) ((H e).U k)) (fun j => (s e j).f k) (F) = 0)) → (∀ k : (H').ι, MvPolynomial.eval₂Hom (cst (B.hom) ((H').U k)) (fun j => (s' j).f k) (F) = 0) := by
-  first | exact @GlobalTheory.Unif.exists_projective_of_formal_embedding | exact GlobalTheory.Unif.exists_projective_of_formal_embedding | (intros; apply GlobalTheory.Unif.exists_projective_of_formal_embedding <;> assumption)
+  first | exact @GlobalTheory.Unif.exists_projective_of_formal_embedding
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.UniformizationProofs.ExistsProjectiveAlgebraisationFormalEmbeddingStatement =====
@@ -94,10 +94,7 @@ def Carries (φ : X' ⟶ X) {H : LB X} {H' : LB X'} (w : LB.Iso H' (H.pull φ)) 
   ∀ j z (k : H.ι) (k' : H'.ι), φ z ∈ H.U k → z ∈ H'.U k' →
     gs φ z _ ((s j).f k) = (Geo.Tor.gw w (𝟙 _) z k k').val * gs (𝟙 _) z _ ((s' j).f k')
 
-theorem gs_stalk (r : X'' ⟶ X') (q : X' ⟶ X) (z : X'') (W : X.Opens) (h : q (r z) ∈ W)
-    (a : Γ(X, W)) : (r.stalkMap z).hom (gs q (r z) W a) = gs (r ≫ q) z W a := by
-  rw [gs_eq q (r z) W h, gs_eq (r ≫ q) z W h]
-  exact Scheme.Hom.germ_stalkMap_apply r (q ⁻¹ᵁ W) z h _
+alias gs_stalk := _root_.GlobalTheory.Unif.PolyStep.gs_stalkMap
 
 theorem Carries.at {φ : X' ⟶ X} {H : LB X} {H' : LB X'} {w : LB.Iso H' (H.pull φ)} {s : κ → LB.Sec H}
     {s' : κ → LB.Sec H'} (h : Carries φ w s s') (r : X'' ⟶ X') (j : κ) (z : X'') (k : H.ι) (k' : H'.ι)

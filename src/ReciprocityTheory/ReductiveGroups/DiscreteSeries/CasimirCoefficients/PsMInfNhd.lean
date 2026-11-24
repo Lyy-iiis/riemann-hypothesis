@@ -77,6 +77,7 @@ import Mathlib.RingTheory.PiTensorProduct
 import Mathlib.Tactic.Linter.Style
 import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
 import ReciprocityTheory.ReductiveGroups.DiscreteSeries.CasimirCoefficients.KFactsA
+import ReciprocityTheory.ReductiveGroups.DiscreteSeries.CasimirCoefficients.PhiCasA
 import Std.Tactic.BVDecide.Normalize.Prop
 
 -- This file was produced by scripts/clump.py from the modules listed below.
@@ -554,9 +555,6 @@ lemma contDiff_lead (i : ℕ) : ContDiff ℂ 1 (fun z : Matrix (Fin n) (Fin n) �
   have he : ∀ a b : Fin n, ContDiff ℂ 1 (fun z : Matrix (Fin n) (Fin n) ℂ => z a b) := by
     intro a b
     first
-    | exact contDiff_apply_apply ℂ ℂ a b
-    | exact contDiff_apply_apply a b
-    | exact ((ContinuousLinearMap.proj b).comp (ContinuousLinearMap.proj a)).contDiff
     | fun_prop
   unfold lead
   by_cases h : i ≤ n
@@ -571,13 +569,7 @@ lemma contDiffAt_phiM (μ : Fin n → ℤ) {z : Matrix (Fin n) (Fin n) ℂ} (hz 
   first
   | exact contDiffAt_prod fun i _ => InfKA.contDiffAt_zpow (contDiff_lead _).contDiffAt (hz i) _
 
-lemma isOpen_omega' : IsOpen (OmegaSet n) := by
-  have e : OmegaSet n = ⋂ i : Fin n, {z | lead ((i : ℕ) + 1) z ≠ 0} := by
-    ext z
-    simp [OmegaSet]
-  rw [e]
-  first
-  | exact isOpen_iInter_of_finite fun i => isOpen_ne_fun (contDiff_lead _).continuous continuous_const
+alias isOpen_omega' := _root_.ReciprocityTheory.ChartRestriction.DS.S7.isOpen_omega
 
 lemma continuousOn_fderiv_phiM (μ : Fin n → ℤ) : ContinuousOn (fderiv ℂ (PhiM μ)) (OmegaSet n) := by
   exact ContDiffOn.continuousOn_fderiv_of_isOpen
@@ -609,9 +601,6 @@ lemma toMK_inv_eq (k : KG ε) : toMK k⁻¹ = (toMK k)ᴴ := by
   have hv : toMK k * toMK k⁻¹ = 1 := by
     first
     | exact Units.mul_inv _
-    | (simp only [toMK, toM]; simp)
-    | (unfold toMK toM; simp)
-    | (unfold toMK; simp)
   calc toMK k⁻¹ = (star (toMK k) * toMK k) * toMK k⁻¹ := by rw [hu, Matrix.one_mul]
     _ = star (toMK k) * (toMK k * toMK k⁻¹) := by rw [Matrix.mul_assoc]
     _ = (toMK k)ᴴ := by rw [hv, Matrix.mul_one]; rfl
@@ -642,11 +631,11 @@ def DkL (T : KType ε Λ) (μ : Fin n → ℤ) (x : Matrix (Fin n) (Fin n) ℂ) 
         (toMK k⁻¹ * x * toMK k * Y - Y * (toMK k⁻¹ * x * toMK k)) • (T.op k * projW T * T.op k⁻¹) +
       PhiM μ (toMK k⁻¹ * x * toMK k) • (T.op k * (T.dτ Y * projW T - projW T * T.dτ Y) * T.op k⁻¹)
   map_add' Y Y' := by
-    simp only [Matrix.mul_add, Matrix.add_mul, map_add (f := _), map_sub, add_mul, mul_add, sub_mul, mul_sub,
+    simp only [map_add (f := _), map_sub, add_mul, mul_add, sub_mul, mul_sub,
       add_smul, sub_smul, smul_add, smul_sub]
     abel
   map_smul' c Y := by
-    simp only [Matrix.mul_smul, Matrix.smul_mul, map_smul, map_sub, smul_mul_assoc, mul_smul_comm,
+    simp only [map_smul, map_sub, smul_mul_assoc, mul_smul_comm,
       mul_sub, sub_mul, smul_sub, smul_eq_mul, RingHom.id_apply, smul_add]
     module
 
@@ -731,7 +720,7 @@ lemma integral_Ek_inK [CompactSpace (KG ε)] (T : KType ε Λ) (μ : Fin n → �
     rw [_root_.mul_inv_rev, hmk, hmk, hinv_t, hγ, hBk]
     simp only [Matrix.mul_assoc]
   · simp only [Ek, DkL_apply, hγ0, mul_one, Complex.ofReal_zero, zero_smul, neg_zero, NormedSpace.exp_zero,
-      Matrix.one_mul, Matrix.mul_one, hBk]
+      Matrix.one_mul, hBk]
 
 lemma Ek_decomp (T : KType ε Λ) (μ : Fin n → ℤ) (x : Matrix (Fin n) (Fin n) ℂ)
     (φ : Matrix (Fin n) (Fin n) ℂ →L[ℂ] ℂ) (A P Q : Matrix (Fin n) (Fin n) ℂ) (k : KG ε) :
@@ -744,7 +733,6 @@ lemma Ek_decomp (T : KType ε Λ) (μ : Fin n → ℤ) (x : Matrix (Fin n) (Fin 
   simp only [Ek, h1, map_add (f := _), map_smul, smul_eq_mul]
   first
   | module
-  | (simp only [smul_add, add_smul, smul_smul, mul_comm]; abel)
 
 lemma integral_Ek_block [CompactSpace (KG ε)] (T : KType ε Λ) (μ : Fin n → ℤ) {x : Matrix (Fin n) (Fin n) ℂ}
     (hx : x.PosDef) (φ : Matrix (Fin n) (Fin n) ℂ →L[ℂ] ℂ) (A : Matrix (Fin n) (Fin n) ℂ)
@@ -800,7 +788,7 @@ end -- clump:auto
 -- ===== end clump member: ReciprocityTheory.ReductiveGroups.DiscreteSeries.CasimirCoefficients.ContinuousOnFderivPhiM =====
 
 -- ===== clump member: ReciprocityTheory.ReductiveGroups.DiscreteSeries.CasimirCoefficients.PhiPart =====
--- clump-header: {"m": "ReciprocityTheory.ReductiveGroups.DiscreteSeries.CasimirCoefficients.PhiPart", "h": "module\n\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.CasimirCoefficients.IsClosedKset\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Lemma\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\npublic import Mathlib.Analysis.Calculus.ContDiff.Basic\npublic import Mathlib.Analysis.Calculus.ContDiff.Operations\npublic import Mathlib.Analysis.Calculus.Deriv.Add\npublic import Mathlib.Analysis.Calculus.Deriv.Mul\npublic import Mathlib.Analysis.Calculus.Deriv.ZPow\n\n"}
+-- clump-header: {"m": "ReciprocityTheory.ReductiveGroups.DiscreteSeries.CasimirCoefficients.PhiPart", "h": "module\n\npublic import ReciprocityTheory.ReductiveGroups.DiscreteSeries.CasimirCoefficients.IsClosedKset\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Lemma\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\npublic import Mathlib.Analysis.Calculus.ContDiff.Basic\npublic import Mathlib.Analysis.Calculus.ContDiff.Operations\npublic import Mathlib.Analysis.Calculus.Deriv.Add\npublic import Mathlib.Analysis.Calculus.Deriv.Mul\npublic import Mathlib.Analysis.Calculus.Deriv.ZPow\nimport ReciprocityTheory.ReductiveGroups.DiscreteSeries.CasimirCoefficients.PhiCasA\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -817,43 +805,6 @@ attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 variable {n : ℕ}
 
-private theorem contDiff_lead_casimir_coefficients (j : ℕ) :
-    ContDiff ℂ 1 (fun w : Matrix (Fin n) (Fin n) ℂ => lead j w) := by
-  by_cases h : j ≤ n
-  · have e : (fun w : Matrix (Fin n) (Fin n) ℂ => lead j w) =
-        fun w => (w.submatrix (Fin.castLE h) (Fin.castLE h)).det := funext fun w => dif_pos h
-    rw [e]
-    simp only [Matrix.det_apply, Matrix.submatrix_apply, Units.smul_def, zsmul_eq_mul]
-    refine ContDiff.sum fun σ _ => contDiff_const.mul ?_
-    refine contDiff_prod fun p _ => ?_
-    exact contDiff_pi.1 (contDiff_pi.1 (contDiff_id (𝕜 := ℂ) (E := Matrix (Fin n) (Fin n) ℂ))
-      (Fin.castLE h (σ p))) (Fin.castLE h p)
-  · have e : (fun w : Matrix (Fin n) (Fin n) ℂ => lead j w) = fun _ => 0 := funext fun w => dif_neg h
-    rw [e]
-    exact contDiff_const
-
-private theorem differentiableAt_PhiM_of_mem_OmegaSet (μ : Fin n → ℤ) {z : Matrix (Fin n) (Fin n) ℂ} (hz : z ∈ OmegaSet n) :
-    DifferentiableAt ℂ (PhiM μ) z := by
-  have hz' : ∀ i : Fin n, lead ((i : ℕ) + 1) z ≠ 0 := hz
-  have key : ∀ i : Fin n, ContDiffAt ℂ 1
-      (fun w : Matrix (Fin n) (Fin n) ℂ => lead ((i : ℕ) + 1) w ^ (-(μ i - muNext μ i))) z := by
-    intro i
-    have hd : ContDiffAt ℂ 1 (fun w : Matrix (Fin n) (Fin n) ℂ => lead ((i : ℕ) + 1) w) z :=
-      (contDiff_lead_casimir_coefficients ((i : ℕ) + 1)).contDiffAt
-    have key' : ∀ k : ℤ,
-        ContDiffAt ℂ 1 (fun w : Matrix (Fin n) (Fin n) ℂ => lead ((i : ℕ) + 1) w ^ k) z := by
-      intro k
-      cases k with
-      | ofNat p => simpa using hd.pow p
-      | negSucc p =>
-        simp only [zpow_negSucc]
-        exact (hd.pow (p + 1)).inv (pow_ne_zero _ (hz' i))
-    exact key' _
-  have hc : ContDiffAt ℂ 1 (fun w : Matrix (Fin n) (Fin n) ℂ =>
-      ∏ i : Fin n, lead ((i : ℕ) + 1) w ^ (-(μ i - muNext μ i))) z :=
-    contDiffAt_prod fun i _ => key i
-  exact hc.differentiableAt one_ne_zero
-
 private theorem fderiv_PhiM_of_lead_curve (μ : Fin n → ℤ) {z V : Matrix (Fin n) (Fin n) ℂ} (hz : z ∈ OmegaSet n)
     (D : ℕ → ℂ) (hlead : ∀ (t : ℂ) (i : Fin n), lead ((i : ℕ) + 1) (z + t • V) =
       (∏ a ∈ Finset.range ((i : ℕ) + 1), (1 + t * D a)) * lead ((i : ℕ) + 1) z) :
@@ -864,7 +815,7 @@ private theorem fderiv_PhiM_of_lead_curve (μ : Fin n → ℤ) {z V : Matrix (Fi
     exact (((hasDerivAt_id (0 : ℂ)).smul_const V).const_add z).congr_deriv (one_smul ℂ V)
   have hΦ : HasFDerivAt (PhiM μ) (fderiv ℂ (PhiM μ) z) (z + (0 : ℂ) • V) := by
     rw [zero_smul, add_zero]
-    exact (differentiableAt_PhiM_of_mem_OmegaSet μ hz).hasFDerivAt
+    exact (_root_.ReciprocityTheory.ChartRestriction.DS.S7.differentiableAt_phiM μ hz).hasFDerivAt
   have h1 := hΦ.comp_hasDerivAt (0 : ℂ) hc
   set p : Fin n → ℂ → ℂ := fun i t => ∏ a ∈ Finset.range ((i : ℕ) + 1), (1 + t * D a) with hp
   have hfun : (PhiM μ ∘ fun t : ℂ => z + t • V) =
@@ -1041,15 +992,15 @@ theorem phiM_part (μ : Fin n → ℤ) {z B : Matrix (Fin n) (Fin n) ℂ} (hz : 
   have e1 : B + lowMinusUp B = X1 := by
     ext a b
     rcases lt_trichotomy a b with h | rfl | h
-    · simp [lowMinusUp, hX1, h, lt_asymm h, ne_of_lt h] <;> ring
+    · simp [lowMinusUp, hX1, h, lt_asymm h, ne_of_lt h]
     · simp [lowMinusUp, hX1]
-    · simp [lowMinusUp, hX1, h, lt_asymm h, (ne_of_lt h).symm] <;> ring
+    · simp [lowMinusUp, hX1, h] <;> ring
   have e2 : B - lowMinusUp B = X2 := by
     ext a b
     rcases lt_trichotomy a b with h | rfl | h
-    · simp [lowMinusUp, hX2, h, lt_asymm h, ne_of_lt h] <;> ring
+    · simp [lowMinusUp, hX2, h, lt_asymm h] <;> ring
     · simp [lowMinusUp, hX2]
-    · simp [lowMinusUp, hX2, h, lt_asymm h, (ne_of_lt h).symm] <;> ring
+    · simp [lowMinusUp, hX2, h, lt_asymm h, (ne_of_lt h).symm]
   have hL : IsLowerTri X1 := fun a b hab => by simp [hX1, lt_asymm hab, ne_of_lt hab]
   have hU : IsUpperTri X2 := fun a b hab => by simp [hX2, lt_asymm hab, (ne_of_lt hab).symm]
   have hsplit : B * z + z * B = (z * lowMinusUp B - lowMinusUp B * z) + (X1 * z + z * X2) := by
@@ -1556,7 +1507,7 @@ lemma infR_skew (T : KType ε (lowK ε lam)) (μ : Fin n → ℤ) (hμ : IsMu la
     {x : Matrix (Fin n) (Fin n) ℂ} (hx : x.PosDef) {A : Matrix (Fin n) (Fin n) ℂ} (hA : inK ε A) :
     fderiv ℂ (psM T μ) x (x * A) = -(T.dτ A * psM T μ x) ∧
       fderiv ℂ (psM T μ) x (A * x) = -(psM T μ x * T.dτ A) := by
-  obtain ⟨hAs, hAb⟩ := (inK_iff ε A).1 hA
+  obtain ⟨hAs, hAb⟩ := (_root_.ReciprocityTheory.ChartRestriction.DS.S7.kfa_inK_iff ε A).1 hA
   have hH : IsBlock ε (Complex.I • A) := by
     intro i j hij
     rw [Matrix.smul_apply, hAb i j hij, smul_zero]

@@ -138,7 +138,7 @@ theorem sum_le_sum_of_threshold {α : Type*} [DecidableEq α] (e : α → ℤ) (
     Finset.sum_le_sum_of_subset_of_nonneg Finset.inter_subset_right (fun i hi hni => by
       have : i ∉ U := fun h => hni (Finset.mem_inter.2 ⟨h, hi⟩)
       linarith [hU' i hi this])
-  simp only [Finset.sum_sub_distrib, Finset.sum_const, smul_eq_mul] at h1 h2
+  simp only [Finset.sum_sub_distrib, Finset.sum_const] at h1 h2
   rw [hc] at h2
   linarith
 
@@ -217,15 +217,6 @@ theorem KO_det {m : Type} [Fintype m] [DecidableEq m] {κ : GL m k} (hκ : κ �
   rw [h3] at this
   exact lt_irrefl _ this
 
-theorem card_filter_lt (N n : ℕ) (hn : n ≤ N) : (Finset.univ.filter fun i : Fin N => (i : ℕ) < n).card = n := by
-  first
-  | exact @_root_.GlobalTheory.CardValuationLt.card_val_lt
-  | exact _root_.GlobalTheory.CardValuationLt.card_val_lt
-  | (apply _root_.GlobalTheory.CardValuationLt.card_val_lt <;> assumption)
-  | (intros; apply _root_.GlobalTheory.CardValuationLt.card_val_lt <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.CardValuationLt.card_val_lt <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.CardValuationLt.card_val_lt ..)
-
 theorem indic_antitone (N n : ℕ) : Antitone (indic (Finset.univ.filter fun i : Fin N => (i : ℕ) < n)) := by
   intro a b hab
   simp only [indic, Finset.mem_filter, Finset.mem_univ, true_and]
@@ -235,7 +226,7 @@ theorem indic_antitone (N n : ℕ) : Antitone (indic (Finset.univ.filter fun i :
 theorem sum_indic (N n : ℕ) (hn : n ≤ N) :
     ∑ i : Fin N, indic (Finset.univ.filter fun i : Fin N => (i : ℕ) < n) i = n := by
   simp only [indic, Finset.sum_boole, Finset.filter_mem_eq_inter, Finset.univ_inter]
-  exact_mod_cast card_filter_lt N n hn
+  exact_mod_cast _root_.GlobalTheory.CardValuationLt.card_val_lt N n hn
 
 theorem val_torus_prod (ϖ : kˣ) {ι : Type*} [Fintype ι] (e : ι → ℤ) :
     valuation k (∏ x, (ϖ : k) ^ e x) = valuation k (ϖ : k) ^ ∑ x, e x := by
@@ -535,11 +526,7 @@ theorem pot_nonneg {N : ℕ} {ν : Fin N → ℤ} (h : ∀ i, 0 ≤ ν i) : 0 �
 theorem pos_iff_lt {N : ℕ} {e : Fin N → ℤ} (ha : Antitone e) (i : Fin N) :
     0 < e i ↔ (i : ℕ) < (Finset.univ.filter fun j => 0 < e j).card := by
   first
-  | exact @_root_.GlobalTheory.PositiveIffLtCard.pos_iff_lt_card
-  | exact _root_.GlobalTheory.PositiveIffLtCard.pos_iff_lt_card
   | (apply _root_.GlobalTheory.PositiveIffLtCard.pos_iff_lt_card <;> assumption)
-  | (intros; apply _root_.GlobalTheory.PositiveIffLtCard.pos_iff_lt_card <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.PositiveIffLtCard.pos_iff_lt_card <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.PositiveIffLtCard.pos_iff_lt_card ..)
 
 theorem nonneg_of_dom {N : ℕ} {ν e : Fin N → ℤ} (hν : Antitone ν) (he : ∀ i, 0 ≤ e i)
@@ -635,7 +622,7 @@ theorem vanish_dominant {N : ℕ} {ϖ : kˣ} {c : ℕ → ℂ} {h : GL (Fin N) k
   obtain ⟨i₀, hi₀⟩ := hzero
   have hi₀pos : 0 < e i₀ := lt_of_le_of_ne (he i₀) (Ne.symm hi₀)
   obtain ⟨n₀, hn₀⟩ : ∃ n₀, n₀ = (Finset.univ.filter fun j => 0 < e j).card := ⟨_, rfl⟩
-  have key : ∀ i, 0 < e i ↔ (i : ℕ) < n₀ := fun i => hn₀ ▸ pos_iff_lt ha i
+  have key : ∀ i, 0 < e i ↔ (i : ℕ) < n₀ := fun i => hn₀ ▸ _root_.GlobalTheory.PositiveIffLtCard.pos_iff_lt_card ha i
   have hn₀N : n₀ ≤ N := by rw [hn₀]; exact (Finset.card_le_univ _).trans (by simp)
   obtain ⟨s, hs⟩ : ∃ s : Finset (Fin N), s = Finset.univ.filter fun i : Fin N => (i : ℕ) < n₀ := ⟨_, rfl⟩
   have hind : ∀ i, indic s i = if 0 < e i then 1 else 0 := by
@@ -1099,7 +1086,6 @@ theorem term_eq (q N : ℕ) (hq : 0 < q) (α : Fin N → ℂˣ) (S : Finset (Fin
   push_cast [Nat.cast_sub hnN]
   simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib, ← Finset.mul_sum, Finset.sum_const,
     nsmul_eq_mul]
-  push_cast
   linear_combination hc
 
 end GlobalTheory.SatakeSubsetSum

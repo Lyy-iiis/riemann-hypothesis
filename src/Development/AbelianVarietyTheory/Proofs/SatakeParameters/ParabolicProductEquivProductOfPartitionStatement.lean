@@ -258,7 +258,7 @@ theorem commutes_multiProd' {p u : ℕ} (x : Irr k p) {dτ : Fin u → ℕ} (τ 
     have hN : p = N := by omega
     subst hN
     have A := ind₂_unit_right h₁ x.π x.smooth (fun a => (τ a).π) e
-    have B := GlobalTheory.T.parabolicInductionTwoBlocks_empty_product_left k p 0 h₂ _ x.π x.smooth _ _ (fun a => (τ a).π) e
+    have B := _root_.GlobalTheory.ProdReorder.ind₂_unit_left k p 0 h₂ _ x.π x.smooth _ _ (fun a => (τ a).π) e
     exact eqvT A (eqvS B)
   | succ u => exact _root_.GlobalTheory.ProdReorder.commutes_multiProd k p u x dτ τ hC T N e h₁ h₂
 
@@ -286,7 +286,7 @@ theorem reorderClaim_zero : ReorderClaim k 0 := by
   subst hN
   have A : Nonempty ((multiProd e fun a => (σ a).π).Equiv (multiProd e₂ fun j => (σ (ι₂ j)).π)) :=
     multiProd_empty (k := k) _ _ e e₂
-  have B := GlobalTheory.T.parabolicInductionTwoBlocks_empty_product_left k 0 0 h _ _ (isSmooth_multiProd' e₂ fun j => (σ (ι₂ j)).π) _ _
+  have B := _root_.GlobalTheory.ProdReorder.ind₂_unit_left k 0 0 h _ _ (isSmooth_multiProd' e₂ fun j => (σ (ι₂ j)).π) _ _
     (fun i => (σ (ι₁ i)).π) e₁
   exact eqvT A (eqvS B)
 
@@ -548,7 +548,7 @@ open GlobalTheory.PRep GlobalTheory.SmGL GlobalTheory.SplitWeil
 
 
 theorem _root_.GlobalTheory.T.parabolicProduct_equiv_product_of_partition : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (s : ℕ) (d : Fin s → ℕ) (σ : ∀ a, Irr k (d a)) (S : Finset (Fin s)) (r t : ℕ) (e : (Σ a, Fin (d a)) ≃ Fin (r + t)) (e₁ : (Σ a : Fin Sᶜ.card, Fin (d (Sᶜ.orderEmbOfFin rfl a))) ≃ Fin r) (e₂ : (Σ b : Fin S.card, Fin (d (S.orderEmbOfFin rfl b))) ≃ Fin t), (∀ a b, a ∉ S → b ∈ S → ∀ (n : Type) [Fintype n] [DecidableEq n] (f : (Σ i : Fin 2, Fin (d (![a, b] i))) ≃ n) (f' : (Σ i : Fin 2, Fin (d (![a, b] (Equiv.swap 0 1 i)))) ≃ n), Nonempty ((multiProd f fun i => (σ (![a, b] i)).π).Equiv (multiProd f' fun i => (σ (![a, b] (Equiv.swap 0 1 i))).π))) → Nonempty ((multiProd e fun a => (σ a).π).Equiv (prod₂ (multiProd e₁ fun a => (σ (Sᶜ.orderEmbOfFin rfl a)).π) (multiProd e₂ fun b => (σ (S.orderEmbOfFin rfl b)).π))) := by
-  first | exact @GlobalTheory.ProdReorder.reorder_split | exact GlobalTheory.ProdReorder.reorder_split | (intros; apply GlobalTheory.ProdReorder.reorder_split <;> assumption)
+  first | exact @GlobalTheory.ProdReorder.reorder_split
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.ParabolicProductEquivProductOfPartitionStatement =====

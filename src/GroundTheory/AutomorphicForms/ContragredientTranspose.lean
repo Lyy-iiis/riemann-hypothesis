@@ -52,6 +52,7 @@ import Mathlib.Topology.Sheaves.Init
 import Mathlib.RingTheory.WittVector.IsPoly
 import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Tactic.ReduceModChar
+import Mathlib.MeasureTheory.Measure.HasOuterApproxClosedProd
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: GroundTheory.AutomorphicForms.WhittakerLocal, GroundTheory.AutomorphicForms.ContragredientTranspose
@@ -155,7 +156,7 @@ end -- clump:auto
 -- ===== end clump member: GroundTheory.AutomorphicForms.WhittakerLocal =====
 
 -- ===== clump member: GroundTheory.AutomorphicForms.ContragredientTranspose =====
--- clump-header: {"m": "GroundTheory.AutomorphicForms.ContragredientTranspose", "h": "module\n\npublic import GroundTheory.AutomorphicForms.ContragredientTranspose.GelfandKazhdan\npublic import GroundTheory.AutomorphicForms.ContragredientTranspose.Character\npublic import GroundTheory.AutomorphicForms.WhittakerGroups\npublic import GroundTheory.AutomorphicForms.MeasuresGL\npublic import GroundTheory.AutomorphicForms.WhittakerLocal\npublic import GroundTheory.PowerSubgroups.CountableNeighbourhoods.MapThetaTInvariant\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "GroundTheory.AutomorphicForms.ContragredientTranspose", "h": "module\n\npublic import GroundTheory.AutomorphicForms.ContragredientTranspose.GelfandKazhdan\npublic import GroundTheory.AutomorphicForms.ContragredientTranspose.Character\npublic import GroundTheory.AutomorphicForms.WhittakerGroups\npublic import GroundTheory.AutomorphicForms.MeasuresGL\npublic import GroundTheory.AutomorphicForms.WhittakerLocal\npublic import GroundTheory.PowerSubgroups.CountableNeighbourhoods.MapThetaTInvariant\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.WittVector.IsPoly\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Tactic.TypeStar\nimport Mathlib.Topology.Sheaves.Init\nimport Mathlib.MeasureTheory.Measure.HasOuterApproxClosedProd\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -182,11 +183,6 @@ theorem isIrreducible_comp {G : Type*} [Group G] {V : Type*} [AddCommGroup V] [M
     Representation.IsIrreducible (ρ.comp α.toMonoidHom) :=
   (OrderIso.isSimpleOrder_iff (subrepCompOrderIso ρ α)).2 inferInstance
 
-theorem map_thetaT_eq [MeasurableSpace (GL (Fin n) F)] [BorelSpace (GL (Fin n) F)]
-    (μ : Measure (GL (Fin n) F)) [μ.IsHaarMeasure] :
-    μ.map (thetaT : GL (Fin n) F ≃* GL (Fin n) F) = μ :=
-  _root_.GroundTheory.Variant₂.N1.map_thetaT_eq_self μ
-
 theorem nonempty_equiv_contragredient {V : Type*} [AddCommGroup V] [Module ℂ V]
     (π : Representation ℂ (GL (Fin n) F) V) (hπ : IsAdmissible π) [π.IsIrreducible] :
     Nonempty ((contragredient π).Equiv
@@ -203,7 +199,7 @@ theorem nonempty_equiv_contragredient {V : Type*} [AddCommGroup V] [Module ℂ V
   apply nonempty_equiv_of_distChar_eq (μ := μ) (isAdmissible_contragredient hπ)
     (isAdmissible_comp _ hc hc' hπ)
   refine LinearMap.ext fun f => ?_
-  rw [distChar_contragredient, distChar_comp μ _ hc hc' (map_thetaT_eq μ) hπ]
+  rw [distChar_contragredient, distChar_comp μ _ hc hc' (_root_.GroundTheory.Variant₂.N1.map_thetaT_eq_self μ) hπ]
   have e : compHomeoL (mulEquivHomeo (thetaT : GL (Fin n) F ≃* GL (Fin n) F) hc hc').symm f =
       compHomeoL transposeHomeo (compHomeoL (Homeomorph.inv (GL (Fin n) F)) f) :=
     Subtype.ext (funext fun x => rfl)

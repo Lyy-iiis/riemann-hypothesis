@@ -140,7 +140,7 @@ theorem atPl_mul (w : ι) (L L' : Module.End ℂ (V w)) : atPl w (L * L') = atPl
   funext i
   by_cases h : i = w
   · subst h; simp
-  · simp only [Function.update_of_ne h]; first | rfl | simp [Module.End.mul_eq_comp]
+  · simp only [Function.update_of_ne h]; first | rfl
 
 theorem atPl_comm {w w' : ι} (hw : w ≠ w') (L : Module.End ℂ (V w)) (L' : Module.End ℂ (V w')) :
     atPl w L * atPl w' L' = atPl w' L' * atPl w L := by
@@ -149,9 +149,9 @@ theorem atPl_comm {w w' : ι} (hw : w ≠ w') (L : Module.End ℂ (V w)) (L' : M
   congr 1
   funext i
   by_cases h : i = w
-  · subst h; simp only [Function.update_self, Function.update_of_ne hw]; first | rfl | simp [Module.End.mul_eq_comp]
+  · subst h; simp only [Function.update_self, Function.update_of_ne hw]; first | rfl
   · by_cases h' : i = w'
-    · subst h'; simp only [Function.update_self, Function.update_of_ne h]; first | rfl | simp [Module.End.mul_eq_comp]
+    · subst h'; simp only [Function.update_self, Function.update_of_ne h]; first | rfl
     · simp only [Function.update_of_ne h, Function.update_of_ne h']
 
 end Place
@@ -301,21 +301,6 @@ namespace GlobalTheory.FockBottom
 section Alg
 
 variable {V Z : Type} [AddCommGroup V] [Module ℂ V] [AddCommGroup Z] [Module ℂ Z]
-
-theorem isExp_mem {L U : Module.End ℂ V} (hU : IsExp L U) (N : Submodule ℂ V) (hN : ∀ v ∈ N, L v ∈ N) {T : V}
-    (hT : T ∈ N) : U T ∈ N := by
-  rw [← Submodule.Quotient.mk_eq_zero, ← Module.forall_dual_apply_eq_zero_iff ℂ]
-  intro l'
-  have hp : ∀ n : ℕ, (L ^ n) T ∈ N := fun n => by
-    induction n with
-    | zero => simpa using hT
-    | succ n ih => rw [pow_succ', Module.End.mul_apply]; exact hN _ ih
-  have h := hU T (l' ∘ₗ N.mkQ)
-  have e : (fun n : ℕ => ((n.factorial : ℂ))⁻¹ * (l' ∘ₗ N.mkQ) ((L ^ n) T)) = fun _ => 0 := by
-    funext n
-    simp [(Submodule.Quotient.mk_eq_zero N).2 (hp n)]
-  rw [e] at h
-  exact h.unique hasSum_zero
 
 theorem isExp_eig {L U : Module.End ℂ V} (hU : IsExp L U) (q : V →ₗ[ℂ] Z) (L0 : Module.End ℂ Z)
     (h : ∀ v, q (L v) = L0 (q v)) {T : V} {μ : ℂ} (hT : L0 (q T) = μ • q T) : q (U T) = Complex.exp μ • q T := by
@@ -612,7 +597,6 @@ theorem UpperTheory.TP.RP.expFirst :
     congr 2
     rw [Matrix.trace_kronecker, Matrix.trace_one]
     simp only [Fintype.card_sum, Fintype.card_fin, add_zero]
-    push_cast
     linear_combination (-(Y.trace / 2)) * hc
   have hgm : (g : Matrix (Fin n) (Fin n) ℂ) =
       (NormedSpace.exp Y).submatrix (Equiv.sumEmpty (Fin n) (Fin 0)).symm
@@ -881,7 +865,7 @@ private theorem derR_X {n d : ℕ} (Y : Mat d 0) (b : Ix n 0) (f : Ix d 0) :
     derR (n := n) Y (X (b, f)) = ∑ c, Y c f • (X (b, c) : PP n d) := by
   unfold derR
   simp only [der_sum_apply, Derivation.smul_apply, pderiv_X, Pi.single_apply, Prod.mk.injEq]
-  simp [ite_and, Finset.sum_ite_eq, Finset.sum_ite_eq']
+  simp [ite_and, Finset.sum_ite_eq]
 
 private theorem om_eq {n d : ℕ} (a : Ix n 0) (c e : Ix d 0) :
     FockH1Action.omE (p := n) (q := 0) (r := d) (s := 0) (a, c) (a, e) =
@@ -1153,7 +1137,7 @@ private theorem isExp_partial (L U : ∀ i, Module.End ℂ (V i)) (hL : ∀ i, L
       by_cases h : i = a
       · subst h
         simp [ha]
-      · simp [h, Function.update_of_ne h]
+      · simp [h]
     rw [e, Finset.sum_insert ha]
     refine isExp_add (isExp_atPl (hU a)) ih ?_ fun v => ?_
     · refine Commute.sum_right _ _ _ fun w hw => atPl_comm ?_ _ _
@@ -1258,7 +1242,7 @@ private theorem cartan_pos {m : ℕ} (r : ℝ) (hr : 0 < r) (θ : Matrix (Fin m)
     have := hp v hv0
     rw [hθ] at this
     have e : ((-v) ⬝ᵥ ((r : ℂ) • (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ star v).re = -(r * ∑ i, Complex.normSq (v i)) := by
-      simp [dotProduct, Matrix.smul_mulVec, Complex.mul_conj, Finset.mul_sum, Complex.normSq_apply]
+      simp [dotProduct, Matrix.smul_mulVec, Finset.mul_sum, Complex.normSq_apply]
       exact Finset.sum_congr rfl fun i _ => by ring
     rw [e] at this
     have : 0 ≤ r * ∑ i, Complex.normSq (v i) := mul_nonneg hr.le (Finset.sum_nonneg fun i _ => Complex.normSq_nonneg _)
@@ -1276,7 +1260,7 @@ private theorem sig_pos {m : ℕ} (hm : 0 < m) (z : ℂ) (h : HasSig (z • (1 :
   have hs0 : 0 ≤ s := Finset.sum_nonneg fun i _ => Complex.normSq_nonneg _
   have e2 : z * (s : ℂ) = 1 := by
     have : (Aᵀ * (z • (1 : Matrix (Fin m) (Fin m) ℂ)) * A.map star) (Sum.inl a) (Sum.inl a) = z * (s : ℂ) := by
-      simp [Matrix.mul_apply, hs, Finset.mul_sum, Complex.mul_conj, Matrix.smul_mul, mul_assoc]
+      simp [Matrix.mul_apply, hs, Finset.mul_sum, Complex.mul_conj, mul_assoc]
     rw [← this, e]
     simp
   have hsne : (s : ℂ) ≠ 0 := fun h0 => by rw [h0] at e2; simp at e2
@@ -1322,7 +1306,7 @@ theorem UpperTheory.TP.RP.frames :
       (Complex.I * (B.emb w).1 δ) • (1 : Matrix (Fin d) (Fin d) ℂ) := fun w => by
     rw [hWJ]
     ext i j
-    by_cases h : i = j <;> simp [Matrix.one_apply, h]
+    by_cases h : i = j <;> simp [h]
   have hθX : ∀ w, X.θ w = 1 := fun w => by
     have := hX.cartan w
     rw [hM w] at this

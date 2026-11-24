@@ -284,8 +284,7 @@ theorem scalar (z : Fin 2 × Fin 2 → Fin 2 × Fin 2 → ℂ) (Y Y' : ℂ) (hY 
       refine (mul_eq_zero.mp ?_).resolve_left hne
       rw [← h]
       simp only [nine, Fintype.sum_prod_type, Fin.sum_univ_two, Prod.mk.injEq, Fin.isValue,
-        Fin.val_zero, Fin.val_one, zero_ne_one, one_ne_zero, and_true, and_false, true_and, false_and,
-        if_true, if_false, add_zero, zero_add]
+        Fin.val_zero, Fin.val_one, zero_ne_one, one_ne_zero, and_true, and_false, if_true, if_false, add_zero, zero_add]
       ring)
   obtain ⟨h1, h2, h3, h4, h5, h6, h7, h8, h9⟩ := h9
   exact ⟨h1, h2, h3, h4, h5, h6, h7, h8, h9⟩
@@ -330,7 +329,7 @@ theorem chatA_single {A : Type*} [Ring A] [Algebra ℂ A] {m : ℕ} (E : Fin m �
     · congr 1
       rw [Pi.single_eq_same, mul_one, ← two_mul, pow_mul]
       norm_num
-    · simp [Pi.single_apply, hj]
+    · simp [hj]
   · exact Finset.sum_eq_zero fun j _ => by simp [hγ i hi]
 
 theorem coefA {n : ℕ} (j j' : Fin (n + 2)) (h : j < j') :
@@ -339,7 +338,7 @@ theorem coefA {n : ℕ} (j j' : Fin (n + 2)) (h : j < j') :
       if j = 0 ∧ j' = 1 then 1 else 0 := by
   have hC : j' ≠ 0 := by
     rintro rfl
-    simp [Fin.lt_def] at h
+    simp at h
   by_cases hA : j = 0 <;> by_cases hB : j' = 1 <;> simp [Pi.single_apply, hA, hB, hC]
 
 theorem coefB {n : ℕ} (γ γ' : Fin (n + 2) → ℂ) (hγ : ∀ j : Fin (n + 2), 2 ≤ j.val → γ j = 0 ∧ γ' j = 0)
@@ -381,7 +380,7 @@ theorem second_capelli_minor_standard_basis {A : Type*} [Ring A] [Algebra ℂ A]
           mul_zero, zero_mul, zero_smul]
     · rw [if_neg h, if_neg]
       rintro ⟨rfl, rfl, rfl, rfl⟩
-      exact h ⟨by simp [Fin.lt_def], by simp [Fin.lt_def]⟩
+      exact h ⟨by simp, by simp⟩
   simp only [key]
   simp only [ite_and, Finset.sum_ite_eq', Finset.mem_univ, if_true]
 
@@ -485,8 +484,6 @@ theorem Formalism.FourierDecayAlt.P.generator_gl_level : Formalism.FourierDecayA
 theorem Formalism.FourierDecayAlt.P.generator_action_preserved : Formalism.FourierDecayAlt.Q.EabPres := qnEabPres
 
 theorem Formalism.FourierDecayAlt.P.quantum_minor_left_hermitian : Formalism.FourierDecayAlt.Q.QMinorLeftH := quantum_minor_left
-
-theorem Formalism.FourierDecayAlt.P.right_differential_skew : Formalism.FourierDecayAlt.Q.RdSkew := qnRdSkew
 
 theorem Formalism.FourierDecayAlt.P.right_action_rule : Formalism.FourierDecayAlt.Q.RuleRight := _root_.Formalism.FourierDecayAlt.Q.QRR.ruleRight_main
 

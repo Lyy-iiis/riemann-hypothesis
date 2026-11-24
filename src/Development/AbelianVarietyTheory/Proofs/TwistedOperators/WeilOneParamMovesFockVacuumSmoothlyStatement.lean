@@ -550,7 +550,7 @@ theorem hasDerivAt_diag_sum_prod_pairing
     conv_lhs => rw [← e.sum_repr x]
 
     simp only [map_sum, map_smul, LinearMap.sum_apply, LinearMap.smul_apply, Finset.mul_sum,
-    Complex.real_smul, Finset.sum_mul]
+    Complex.real_smul]
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
     ring
@@ -654,11 +654,6 @@ section -- clump:auto
 
 open MeasureTheory
 
-theorem _root_.GlobalTheory.T.isUnit_upperRightBlock_of_heisenbergDerivative_solution : ∀ {V : Type} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V] (β : V →ₗ[ℝ] V →ₗ[ℝ] ℝ), (∀ q, (∀ x, β x q = 0) → q = 0) →
-    ∀ (J : (V × V) →ₗ[ℝ] (V × V)) (g : V → ℂ), Continuous g → g ≠ 0 →
-    (∀ w x, GlobalTheory.GaussLine.dHeis β (J w) g x = Complex.I * GlobalTheory.GaussLine.dHeis β w g x) →
-    IsUnit (GlobalTheory.FockFamily.blockB J) := by
-  first | exact @GlobalTheory.FockFamily.isUnit_blockB_of_solution | exact GlobalTheory.FockFamily.isUnit_blockB_of_solution | (intros; apply GlobalTheory.FockFamily.isUnit_blockB_of_solution <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.IsUnitUpperRightBlockOfHeisenbergDerivativeSolutStatement =====
@@ -804,7 +799,7 @@ theorem fock_vacua_family : ∀ {V : Type} [NormedAddCommGroup V] [NormedSpace �
   intro V _ _ _ β hβ J hJ _ hex
   choose g0 hg0ne hg0 using hex
   have hunit : ∀ t, IsUnit (GlobalTheory.FockFamily.blockB (J t)) := fun t =>
-    GlobalTheory.T.isUnit_upperRightBlock_of_heisenbergDerivative_solution β hβ (J t) (g0 t) (g0 t).continuous (fun h => hg0ne t (SchwartzMap.ext (fun x => congrFun h x))) (hg0 t)
+    _root_.GlobalTheory.FockFamily.isUnit_blockB_of_solution β hβ (J t) (g0 t) (g0 t).continuous (fun h => hg0ne t (SchwartzMap.ext (fun x => congrFun h x))) (hg0 t)
   obtain ⟨hB, hD⟩ := _root_.GlobalTheory.FockFamily.contDiff_blockB_blockD J hJ
   obtain ⟨hsm, hjoint⟩ := _root_.GlobalTheory.FockFamily.fockForm_family_contDiff β J hB hD hunit
   have hray : ∀ t (g : SchwartzMap V ℂ), (∀ w x, GlobalTheory.GaussLine.dHeis β (J t w) ⇑g x =
@@ -1086,12 +1081,6 @@ section -- clump:auto
 
 open MeasureTheory
 
-theorem _root_.GlobalTheory.T.gaussianPairingIntegral_contDiff_ne_zero_diag : ∀ {V : Type} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] (μ : Measure V) [μ.IsAddHaarMeasure] (M : ℝ → V →ₗ[ℝ] V →ₗ[ℝ] ℂ),
-    (∀ x y, ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) fun t => M t x y) →
-    (∀ t₀ : ℝ, ∃ ε > 0, ∀ᶠ t in nhds t₀, ∀ x, (M t x x).re ≤ -(ε * ‖x‖ ^ 2)) →
-    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun p : ℝ × ℝ => ∫ x, Complex.exp (M p.1 x x) * starRingEnd ℂ (Complex.exp (M p.2 x x)) ∂μ) ∧
-    ∀ u, ∫ x, Complex.exp (M u x x) * starRingEnd ℂ (Complex.exp (M u x x)) ∂μ ≠ 0 := by
-  first | exact @GlobalTheory.GaussPairing.gauss_pairing_smooth_ne_zero | exact GlobalTheory.GaussPairing.gauss_pairing_smooth_ne_zero | (intros; apply GlobalTheory.GaussPairing.gauss_pairing_smooth_ne_zero <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.GaussianPairingIntegralContDiffNeZeroDiagStatement =====
@@ -1445,7 +1434,7 @@ theorem GlobalTheory.WeilVacuum.smooth_flow : ∀ {V : Type} [NormedAddCommGroup
     _root_.GlobalTheory.FockFamily.fock_vacua_family β hβ J hJsm hJsq (fun t => ⟨T t f₀, hne t, hFock t⟩)
   set cc : ℝ → ℂ := fun t => T t f₀ 0 with hccdef
   have hrep : ∀ t x, T t f₀ x = cc t * Complex.exp (M t x x) := fun t x => hMuniq t (T t f₀) (hFock t) x
-  obtain ⟨hK, hKne⟩ := GlobalTheory.T.gaussianPairingIntegral_contDiff_ne_zero_diag μ M hMs hMdec
+  obtain ⟨hK, hKne⟩ := _root_.GlobalTheory.GaussPairing.gauss_pairing_smooth_ne_zero μ M hMs hMdec
   set K : ℝ → ℝ → ℂ := fun u v => ∫ x, Complex.exp (M u x x) * starRingEnd ℂ (Complex.exp (M v x x)) ∂μ with hKdef
   have hexp : ∀ u v, ∫ x, T u f₀ x * starRingEnd ℂ (T v f₀ x) ∂μ = cc u * starRingEnd ℂ (cc v) * K u v := by
     intro u v
@@ -1544,7 +1533,7 @@ theorem _root_.GlobalTheory.T.weilOneParam_moves_fockVacuum_smoothly : ∀ {V : 
     ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun p : ℝ × V => T p.1 f₀ p.2) ∧
     ∃ (n : ℕ) (qs qs' : Fin n → V) (cs : Fin n → ℂ) (c : ℂ), ∀ x,
       HasDerivAt (fun t => T t f₀ x) (∑ i, cs i * (β x (qs i) : ℂ) * (β x (qs' i) : ℂ) * f₀ x + c * f₀ x) 0 := by
-  first | exact @GlobalTheory.WeilVacuum.smooth_flow | exact GlobalTheory.WeilVacuum.smooth_flow | (intros; apply GlobalTheory.WeilVacuum.smooth_flow <;> assumption)
+  first | exact @GlobalTheory.WeilVacuum.smooth_flow
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.WeilOneParamMovesFockVacuumSmoothlyStatement =====

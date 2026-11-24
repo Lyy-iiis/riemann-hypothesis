@@ -173,7 +173,7 @@ theorem finite_range (X : Tower Ω ε) (M : ℕ) (hM : 0 < M) : Finite (rhoF X M
   exact Finite.of_equiv _ (QuotientGroup.quotientKerEquivRange (rhoF X M)).toEquiv
 
 theorem sl_neg_one (X : Tower Ω ε) (f : X.K) : X.sl (ofSL (-1)) f = f := by
-  apply GlobalTheory.KZ.SiegelSL.an_injective X
+  apply _root_.GlobalTheory.KZ.SiegelModel.an_injective X
   obtain ⟨φ, -, hφ, -⟩ := X.an_exp f
   rw [X.an_sl _ _ _ hφ, hφ]
   congr 1
@@ -217,7 +217,7 @@ theorem admissible_of_integral_conj_le (M c : ℕ) (hc : 1 < c) (hc6 : Nat.Copri
     exact hcop.dvd_of_dvd_mul_left ⟨m, h2⟩
   rintro ⟨h0, h1⟩
   apply hab
-  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons] at h0 h1
+  simp only [Matrix.cons_val_zero, Matrix.cons_val_one] at h0 h1
   exact ⟨key a h0, key b h1⟩
 
 theorem siegel_inv {Ω : Type} [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] {ε : Ω →+* ℂ} (X : Tower Ω ε)

@@ -150,7 +150,7 @@ theorem _root_.GlobalTheory.T.exists_coset_rep_hecke_element_principal_level : �
     Formalism.L2.NTheta.IsIdemAt e P → ϖ ∈ P.asIdeal → ϖ ∉ P.asIdeal ^ 2 →
     Formalism.L2.NTheta.IsHeckeElt (Wc D i) e (ϖ : D.host.E) k a₀ →
     ∃ a ∈ Rc, a⁻¹ * a₀ ∈ Lev.levG (Wc D i) (R.βW i) (R.datWp i R.triv) := by
-  first | exact @GlobalTheory.HeckeDC.exists_rep | exact GlobalTheory.HeckeDC.exists_rep | (intros; apply GlobalTheory.HeckeDC.exists_rep <;> assumption)
+  first | exact @GlobalTheory.HeckeDC.exists_rep
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -171,17 +171,6 @@ namespace GlobalTheory.HeckeConjPart
 open Formalism.L2.NTheta GlobalTheory.SplitPlace IsDedekindDomain
 
 variable {D : D7}
-
-theorem le_unif {x : WithZero (Multiplicative ℤ)} (h : x < 1) :
-    x ≤ ((Multiplicative.ofAdd (-1 : ℤ) : Multiplicative ℤ) : WithZero (Multiplicative ℤ)) := by
-  rcases eq_or_ne x 0 with rfl | hx
-  · exact zero_le'
-  obtain ⟨u, rfl⟩ := WithZero.ne_zero_iff_exists.1 hx
-  rw [← WithZero.coe_one, WithZero.coe_lt_coe] at h
-  rw [WithZero.coe_le_coe]
-  rw [← Multiplicative.toAdd_lt, toAdd_one] at h
-  rw [← Multiplicative.toAdd_le, toAdd_ofAdd]
-  omega
 
 theorem ratio_int {P : HeightOneSpectrum (𝓞 D.host.E)} {e : Formalism.L2.Theta.AE D} (he : IsIdemAt e P)
     {ϖ : 𝓞 D.host.E} (hP : ϖ ∈ P.asIdeal) (hP2 : ϖ ∉ P.asIdeal ^ 2) {y : 𝓞 D.host.E} (hy : y ∈ P.asIdeal) :
@@ -207,7 +196,7 @@ theorem ratio_int {P : HeightOneSpectrum (𝓞 D.host.E)} {e : Formalism.L2.Thet
     change ¬ Valued.v (φ ((y : D.host.E)⁻¹)) ≤ 1 at hn
     rw [map_inv₀, map_inv₀, not_le, one_lt_inv₀ (zero_lt_iff.2 ((Valuation.ne_zero_iff _).2 ((map_ne_zero φ).2 fun h0 => hy0 (RingOfIntegers.coe_eq_zero_iff.1 h0))))] at hn
     have hϖv : Valued.v (φ ϖ) = _ := hu
-    have h6 := le_unif hn
+    have h6 := _root_.Formalism.UG.P.satake_lt_one_le hn
     rw [← hϖv] at h6
     rw [div_le_one₀ (by rw [hϖv]; exact zero_lt_iff.2 WithZero.coe_ne_zero)]
     exact h6
@@ -319,7 +308,7 @@ theorem _root_.GlobalTheory.T.conjPrime_smul_lattice_heckeElement_le : ∀ (D : 
     Formalism.L2.NTheta.IsIdemAt e P → ϖ ∈ P.asIdeal → ϖ ∉ P.asIdeal ^ 2 →
     Formalism.L2.NTheta.IsHeckeElt V e (ϖ : D.host.E) k a₀ →
     (Formalism.L2.Col.conjPrime₂ P).asIdeal • latG V (g * a₀) ≤ latG V g := by
-  first | exact @GlobalTheory.HeckeConjPart.conj_part | exact GlobalTheory.HeckeConjPart.conj_part | (intros; apply GlobalTheory.HeckeConjPart.conj_part <;> assumption)
+  first | exact @GlobalTheory.HeckeConjPart.conj_part
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -419,7 +408,7 @@ theorem exists_index_pow {F : Type} [Field F] [NumberField F] {v : HeightOneSpec
     rw [← LinearMap.ker_eq_bot, Matrix.ker_toLin'_eq_bot_iff]
     intro c hc
     exact Matrix.eq_zero_of_mulVec_eq_zero hne hc
-  obtain ⟨m, ⟨u, hu⟩, hc⟩ := GlobalTheory.HL.LatDet.card_coker (Pi.basisFun (Formalism.UG.Ov F v) (Fin n)) hirr _ hinj
+  obtain ⟨m, ⟨u, hu⟩, hc⟩ := _root_.GlobalTheory.CardQuotientPow.main (Pi.basisFun (Formalism.UG.Ov F v) (Fin n)) hirr _ hinj
   rw [LinearMap.det_toLin'] at hu
   refine ⟨m, ?_, ?_⟩
   · have h1 := congrArg (fun x : Formalism.UG.Ov F v => Valued.v (x : v.adicCompletion F)) hu
@@ -574,7 +563,7 @@ theorem exists_local_matrix : ∀ (D : D7) (P : Formalism.L2.DIV.Pl D.host.E) (e
     obtain ⟨u, hu⟩ : ∃ u, u = (t⁻¹ • (T⁻¹).1) *ᵥ (Pi.single j 1 : Fin n → Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv D.host.F v) := ⟨_, rfl⟩
     have hTu : (t • T.1) *ᵥ u = Pi.single j 1 := by
       rw [hu, Matrix.mulVec_mulVec]
-      simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, inv_mul_cancel₀ ht, mul_inv_cancel₀ ht, one_smul,
+      simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, inv_mul_cancel₀ ht, one_smul,
         Units.mul_inv, Matrix.one_mulVec]
     have hy := (hΛ (fun i => finPart D (s (u i)))).2 (by
       intro l
@@ -684,7 +673,7 @@ theorem exists_local_matrix : ∀ (D : D7) (P : Formalism.L2.DIV.Pl D.host.E) (e
     obtain ⟨u, hud⟩ : ∃ u, u = (t⁻¹ • (T⁻¹).1) *ᵥ (fun j => (b j : v.adicCompletion D.host.F)) := ⟨_, rfl⟩
     have hTu : (t • T.1) *ᵥ u = fun j => (b j : v.adicCompletion D.host.F) := by
       rw [hud, Matrix.mulVec_mulVec]
-      simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, inv_mul_cancel₀ ht, mul_inv_cancel₀ ht, one_smul,
+      simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, inv_mul_cancel₀ ht, one_smul,
         Units.mul_inv, Matrix.one_mulVec]
     have hy := (hΛ (fun i => finPart D (s (u i)))).2 (by
       intro l
@@ -765,7 +754,7 @@ theorem _root_.GlobalTheory.T.exists_localHeckeMatrix_intermediateLattice : ∀ 
       Valued.v Z.1.det = Valued.v (π (finPart D (incA D (ϖ : D.host.E)))) ^ k ∧
       ∀ y : Fin n → GlobalTheory.SplitPlace.RF D, (finPart D e • y ∈ GlobalTheory.AdLat.hat D.host.F (M : Set (Fin n → D.host.E)) ↔
         ∀ i, (((Z⁻¹).1 * (t • T.1)) *ᵥ fun j => π (y j)) i ∈ Formalism.UG.Ov D.host.F v) := by
-  first | exact @GlobalTheory.HeckeLocMatrix.exists_local_matrix | exact GlobalTheory.HeckeLocMatrix.exists_local_matrix | (intros; apply GlobalTheory.HeckeLocMatrix.exists_local_matrix <;> assumption)
+  first | exact @GlobalTheory.HeckeLocMatrix.exists_local_matrix
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -800,7 +789,7 @@ theorem smul_mem_hat (D : D7) {n : ℕ} (L : Submodule (𝓞 D.host.E) (Fin n �
       apply AddSubgroup.subset_closure
       refine ⟨b * c, fun v => ?_, x • w, L.smul_mem x hw, ?_⟩
       · have hbv := hb v
-        simp only [Formalism.MainNotions.StandardLattice.intAf, Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.evalV, Set.mem_setOf_eq] at hbv
+        simp only [Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.evalV] at hbv
         exact mul_mem hbv (hc v)
       · funext i
         simp only [Pi.smul_apply, smul_eq_mul, Algebra.TensorProduct.tmul_mul_tmul]
@@ -969,7 +958,7 @@ theorem _root_.GlobalTheory.T.exists_local_matrix_chart_split_idempotent_complet
     ∃ C : GL (Fin n) (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv D.host.F v), ∀ y : Fin n → GlobalTheory.SplitPlace.RF D,
       finPart D e • y ∈ GlobalTheory.AdLat.hat D.host.F (L : Set (Fin n → D.host.E)) ↔
         ∀ i, ((C⁻¹ : GL (Fin n) (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv D.host.F v)).1 *ᵥ fun j => π (y j)) i ∈ Formalism.UG.Ov D.host.F v := by
-  first | exact @GlobalTheory.HatLocalChart.exists_chart | exact GlobalTheory.HatLocalChart.exists_chart | (intros; apply GlobalTheory.HatLocalChart.exists_chart <;> assumption)
+  first | exact @GlobalTheory.HatLocalChart.exists_chart
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1235,7 +1224,7 @@ theorem _root_.GlobalTheory.T.idempotent_part_completed_lattice_local_chart : �
       finPart D e • y ∈ latGHat V x ↔
         ∀ i, ((t • ((GlobalTheory.SplitPlace.comp V π B x⁻¹).1 * (B⁻¹ : GL (Fin V.rank) (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Fv D.host.F v)).1)) *ᵥ
           fun j => π (y j)) i ∈ Formalism.UG.Ov D.host.F v := by
-  first | exact @GlobalTheory.EPartChart.latGHat_chart | exact GlobalTheory.EPartChart.latGHat_chart | (intros; apply GlobalTheory.EPartChart.latGHat_chart <;> assumption)
+  first | exact @GlobalTheory.EPartChart.latGHat_chart
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1255,19 +1244,7 @@ namespace GlobalTheory.HeckeLocLift
 open IsDedekindDomain Formalism.L2.NTheta
 open scoped Matrix
 
-theorem span_smul_top {D : D7} {n : ℕ} (P : Formalism.L2.DIV.Pl D.host.E) (L : Submodule (𝓞 D.host.E) (Fin n → D.host.E))
-    (hL : Submodule.span D.host.E (L : Set (Fin n → D.host.E)) = ⊤) :
-    Submodule.span D.host.E ((P.asIdeal • L : Submodule (𝓞 D.host.E) (Fin n → D.host.E)) : Set (Fin n → D.host.E)) = ⊤ := by
-  obtain ⟨x, hx, hx0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot P.ne_bot
-  have hx0' : ((x : D.host.E)) ≠ 0 := fun h => hx0 (RingOfIntegers.ext h)
-  rw [eq_top_iff, ← hL, Submodule.span_le]
-  intro w hw
-  have hm : x • w ∈ (P.asIdeal • L : Submodule (𝓞 D.host.E) (Fin n → D.host.E)) := Submodule.smul_mem_smul hx hw
-  have : w = (x : D.host.E)⁻¹ • (x • w) := by
-    rw [← algebraMap_smul D.host.E x w]
-    rw [smul_smul, inv_mul_cancel₀ (by simpa using hx0'), one_smul]
-  rw [this]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span hm)
+alias span_smul_top := _root_.GlobalTheory.HeckeLocMatrix.span_smul_top
 
 theorem exists_hecke_ePart : ∀ (D : D7) (V : HSp D) (P : Formalism.L2.DIV.Pl D.host.E) (e : AE D) (ϖ : 𝓞 D.host.E) (k : ℕ) (g : GA D V)
     (M : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)),
@@ -1335,7 +1312,7 @@ theorem _root_.GlobalTheory.T.exists_heckeElement_idempotentPart_splitPlace_latt
     ∃ a₀ : GA D V, Formalism.L2.NTheta.IsHeckeElt V e (ϖ : D.host.E) k a₀ ∧ ∀ v ∈ latG V g,
       (finPart D e • finVec V v ∈ latGHat V (g * a₀) ↔
         finPart D e • finVec V v ∈ GlobalTheory.AdLat.hat D.host.F (M : Set (Fin V.rank → D.host.E))) := by
-  first | exact @GlobalTheory.HeckeLocLift.exists_hecke_ePart | exact GlobalTheory.HeckeLocLift.exists_hecke_ePart | (intros; apply GlobalTheory.HeckeLocLift.exists_hecke_ePart <;> assumption)
+  first | exact @GlobalTheory.HeckeLocLift.exists_hecke_ePart
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1460,7 +1437,7 @@ open NumberField
 theorem _root_.GlobalTheory.T.hecke_element_keeps_one_sub_idempotent_part_lattice : ∀ (D : D7) (V : HSp D) (e : AE D) (ϖ : D.host.E) (k : ℕ) (g a₀ : GA D V),
     Formalism.L2.Theta.IsSplitIdem D e → Formalism.L2.NTheta.IsHeckeElt V e ϖ k a₀ →
     ∀ y ∈ latGHat V g, (1 - finPart D e) • y ∈ latGHat V (g * a₀) := by
-  first | exact @GlobalTheory.HeckeOffParts.off_parts | exact GlobalTheory.HeckeOffParts.off_parts | (intros; apply GlobalTheory.HeckeOffParts.off_parts <;> assumption)
+  first | exact @GlobalTheory.HeckeOffParts.off_parts
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1480,7 +1457,7 @@ open NumberField
 theorem _root_.GlobalTheory.T.one_sub_idempotent_smul_mem_completion_prime_mul : ∀ (D : D7) (P : Formalism.L2.DIV.Pl D.host.E) (e : AE D) (n : ℕ) (L : Submodule (𝓞 D.host.E) (Fin n → D.host.E)),
     Formalism.L2.NTheta.IsIdemAt e P → ∀ y ∈ GlobalTheory.AdLat.hat D.host.F (L : Set (Fin n → D.host.E)),
       (1 - finPart D e) • y ∈ GlobalTheory.AdLat.hat D.host.F ((P.asIdeal • L : Submodule (𝓞 D.host.E) (Fin n → D.host.E)) : Set (Fin n → D.host.E)) := by
-  first | exact @GlobalTheory.ComplOffPlace.one_sub_smul_mem | exact GlobalTheory.ComplOffPlace.one_sub_smul_mem | (intros; apply GlobalTheory.ComplOffPlace.one_sub_smul_mem <;> assumption)
+  first | exact @GlobalTheory.ComplOffPlace.one_sub_smul_mem
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -1498,31 +1475,6 @@ open NumberField
 
 namespace GlobalTheory.HeckeLocStep
 
-open Formalism.L2.Theta
-open scoped TensorProduct
-
-theorem smul_mem_hat (D : D7) {n : ℕ} (L : Submodule (𝓞 D.host.E) (Fin n → D.host.E))
-    {a : Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Af D.host.F ⊗[D.host.F] D.host.E} (ha : a ∈ intAE D)
-    {y : Fin n → GlobalTheory.AdLat.RA D.host.F D.host.E} (hy : y ∈ GlobalTheory.AdLat.hat D.host.F (L : Set (Fin n → D.host.E))) :
-    a • y ∈ GlobalTheory.AdLat.hat D.host.F (L : Set (Fin n → D.host.E)) := by
-  induction ha using AddSubgroup.closure_induction generalizing y with
-  | mem w hw =>
-    obtain ⟨b, hb, x, rfl⟩ := hw
-    induction hy using AddSubgroup.closure_induction with
-    | mem z hz =>
-      obtain ⟨c, hc, m, hm, rfl⟩ := hz
-      refine AddSubgroup.subset_closure ⟨b * c, fun v => ?_, x • m, L.smul_mem x hm, ?_⟩
-      · exact mul_mem (hb v) (hc v)
-      · funext i
-        simp [Algebra.TensorProduct.tmul_mul_tmul]
-        rfl
-    | zero => rw [smul_zero]; exact zero_mem _
-    | add z z' _ _ h h' => rw [smul_add]; exact add_mem h h'
-    | neg z _ h => rw [smul_neg]; exact neg_mem h
-  | zero => rw [zero_smul]; exact zero_mem _
-  | add a b _ _ h h' => rw [add_smul]; exact add_mem (h hy) (h' hy)
-  | neg a _ h => rw [neg_smul]; exact neg_mem (h hy)
-
 end GlobalTheory.HeckeLocStep
 
 namespace GlobalTheory.HeckeLocStep
@@ -1536,20 +1488,6 @@ theorem hat_mono {D : D7} {n : ℕ} {L L' : Submodule (𝓞 D.host.E) (Fin n →
   rintro _ ⟨a, ha, x, hx, rfl⟩
   exact ⟨a, ha, x, h hx, rfl⟩
 
-theorem span_smul_top {D : D7} {n : ℕ} (P : Formalism.L2.DIV.Pl D.host.E) (L : Submodule (𝓞 D.host.E) (Fin n → D.host.E))
-    (hL : Submodule.span D.host.E (L : Set (Fin n → D.host.E)) = ⊤) :
-    Submodule.span D.host.E ((P.asIdeal • L : Submodule (𝓞 D.host.E) (Fin n → D.host.E)) : Set (Fin n → D.host.E)) = ⊤ := by
-  obtain ⟨x, hx, hx0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot P.ne_bot
-  have hx0' : ((x : D.host.E)) ≠ 0 := fun h => hx0 (RingOfIntegers.ext h)
-  rw [eq_top_iff, ← hL, Submodule.span_le]
-  intro w hw
-  have hm : x • w ∈ (P.asIdeal • L : Submodule (𝓞 D.host.E) (Fin n → D.host.E)) := Submodule.smul_mem_smul hx hw
-  have : w = (x : D.host.E)⁻¹ • (x • w) := by
-    rw [← algebraMap_smul D.host.E x w]
-    rw [smul_smul, inv_mul_cancel₀ (by simpa using hx0'), one_smul]
-  rw [this]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span hm)
-
 theorem mem_iff_ePart : ∀ (D : D7) (V : HSp D) (P : Formalism.L2.DIV.Pl D.host.E) (e : AE D) (g : GA D V)
     (M : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)),
     Formalism.L2.NTheta.IsIdemAt e P → P.asIdeal • latG V g ≤ M → M ≤ latG V g →
@@ -1561,14 +1499,14 @@ theorem mem_iff_ePart : ∀ (D : D7) (V : HSp D) (P : Formalism.L2.DIV.Pl D.host
     have hc := (IsNoetherian.noetherian (M.comap (latG V g).subtype)).map (latG V g).subtype
     rwa [Submodule.map_comap_subtype, inf_eq_right.2 hMΛ] at hc
   have hMsp : Submodule.span D.host.E (M : Set (Fin V.rank → D.host.E)) = ⊤ :=
-    eq_top_iff.2 ((span_smul_top P _ h2).symm.le.trans (Submodule.span_mono hPM))
+    eq_top_iff.2 ((_root_.GlobalTheory.HeckeLocMatrix.span_smul_top P _ h2).symm.le.trans (Submodule.span_mono hPM))
   have hrat := (GlobalTheory.AdLat.hat_rational_points_and_approx D.host.F D.host.E V.rank M hMfg hMsp).1
   have hint : finPart D e ∈ intAE D := GlobalTheory.SplitPlace.idem_mem he.1.1
   have hvM : ∀ {w}, w ∈ M → GlobalTheory.AdLat.fv D.host.F w ∈ GlobalTheory.AdLat.hat D.host.F (M : Set (Fin V.rank → D.host.E)) :=
     fun hw => (hrat _).2 hw
   constructor
   · intro hm
-    exact smul_mem_hat D M hint (hvM hm)
+    exact _root_.GlobalTheory.HeckeLocMatrix.smul_mem_hat D M hint (hvM hm)
   · intro h
     refine (hrat v).1 ?_
     have hΛ : GlobalTheory.AdLat.fv D.host.F v ∈ GlobalTheory.AdLat.hat D.host.F ((latG V g : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) : Set (Fin V.rank → D.host.E)) :=
@@ -1603,7 +1541,7 @@ theorem exists_hecke : ∀ (D : D7) (V : HSp D) (P : Formalism.L2.DIV.Pl D.host.
     refine (mem_iff_ePart D V P e g M he hPM hMΛ v hg).2 ((hloc v hg).1 ?_)
     have := (mem_latG_iff D V (g * a₀) v).1 ha
     rw [(GlobalTheory.Member.latG_lattice_and_completion D V (g * a₀)).2.2.2.2.1] at this ⊢
-    exact smul_mem_hat D _ hint this
+    exact _root_.GlobalTheory.HeckeLocMatrix.smul_mem_hat D _ hint this
   · intro hv
     have hg := hMΛ hv
     refine ⟨(mem_latG_iff D V (g * a₀) v).2 ?_, hg⟩
@@ -1637,7 +1575,7 @@ theorem _root_.GlobalTheory.T.exists_heckeElement_lattice_between_prime_mul_spli
     M.toAddSubgroup.relIndex (latG V g).toAddSubgroup = Ideal.absNorm P.asIdeal ^ k →
     ∃ a₀ : GA D V, Formalism.L2.NTheta.IsHeckeElt V e (ϖ : D.host.E) k a₀ ∧ latG V (g * a₀) ⊓ latG V g = M ∧
       (Formalism.L2.Col.conjPrime₂ P).asIdeal • latG V (g * a₀) ≤ latG V g := by
-  first | exact @GlobalTheory.HeckeLocStep.exists_hecke | exact GlobalTheory.HeckeLocStep.exists_hecke | (intros; apply GlobalTheory.HeckeLocStep.exists_hecke <;> assumption)
+  first | exact @GlobalTheory.HeckeLocStep.exists_hecke
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto

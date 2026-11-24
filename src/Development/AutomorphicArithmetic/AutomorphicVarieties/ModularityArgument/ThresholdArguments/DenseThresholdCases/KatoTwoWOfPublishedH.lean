@@ -409,7 +409,7 @@ private theorem algNorm_diag {a : Weil h →* (w.adicCompletion E)ˣ} {ha : IsLo
   have e := GlobalTheory.RecT.SphLaw.sat ((GlobalTheory.RecT.lawsT_iff a ha rc).2 L) (IrrGL.of σ.ρ σ.smooth σ.irred) α hx
   rw [algNorm, L.nu, e, WD.lpTw_mk]
   refine WD.sound ⟨.refl _ _, fun g v => funext fun i => ?_, fun v => rfl⟩
-  simp [mul_zpow, mul_comm, mul_left_comm, mul_assoc]
+  simp [mul_zpow, mul_comm, mul_assoc]
   change (_ : ℂ) * ((_ : ℂ) * v i) = _ * (_ * v i)
   ring
 end UpperTheory.V.Z.Kato.WeilSphericalRecords
@@ -477,6 +477,7 @@ private theorem eq_one_of_root {x : WD h} (hu : x.unr) (t : Ine (F := E) A) {z :
     (hz : (x.charPol (ineIncl h t)).IsRoot z) : z = 1 := by
   obtain ⟨m, b, rfl⟩ := x.exists_rep
   rw [WD.unr_mk] at hu
+  haveI : Module.Free ℂ (Fin m → ℂ) := Module.Free.of_basis (Pi.basisFun ℂ (Fin m))
   rw [WD.charPol_mk, hu.2 t, ← Module.End.hasEigenvalue_iff_isRoot_charpoly] at hz
   obtain ⟨v, hv⟩ := hz.exists_hasEigenvector
   have h3 := hv.apply_eq_smul
@@ -508,7 +509,7 @@ theorem UpperTheory.V.Z.Kato.WeilSphericalRecords.recSph_alt :
   choose α hα using fun i => exists_unr (hun i)
   obtain rfl : ξ = fun i => GlobalTheory.SmGL.unrChar _ (α i) := funext hα
   have hs' : HasSupport σ.ρ (GlobalTheory.RoadU.chars _ hξ) := hs.of_equiv (IrrGL.equivOf σ.ρ σ.smooth σ.irred).symm
-  obtain ⟨-, hq⟩ := (UpperTheory.Gal.LocD.ofSupport_holds _ n σ.V σ.ρ _ hξ).1 hs'
+  obtain ⟨-, hq⟩ := (_root_.UpperTheory.Gal.LocD.ofSupport _ n σ.V σ.ρ _ hξ).1 hs'
   have hN : (resCard (w.adicCompletion E) : ℂ) = (Ideal.absNorm w.asIdeal : ℂ) := by
     have := GlobalTheory.CompanionTheory.ResCardAbsNorm.resCard_completion_eq_absNorm E w
     exact_mod_cast this
@@ -664,20 +665,6 @@ theorem exists_cuspidal_satake_prod_eq_hecke_poly_of_not_dvd_level : _root_.Uppe
     simpa only [zpow_natCast] using hpoly
 end GlobalTheory.NewformAutAtL
 end
-section
-open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.Gal Formalism.MainNotions.N GlobalTheory.GalOfCusp UpperTheory.V UpperTheory.V.Af UpperTheory.V.HV GlobalTheory.Ord2
-open GlobalTheory.WeilDeligne GlobalTheory.Pst GlobalTheory.CuspRep GlobalTheory.LocLanglands GlobalTheory.LocGL Formalism.BasicNotions Formalism.BasicNotions.Loc
-open scoped Matrix
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
-
-theorem _root_.GlobalTheory.T.exists_cuspidal_attached_satake_eq_hecke_poly_of_not_dvd : _root_.UpperTheory.V.Af.Hypotheses' → ∀ (e : ℕ) (g : Newform (2 * e + 1)) (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [Algebra ℚ Ω]
-    [IsAlgClosure ℚ Ω] (ι : Qbar l ≃+* ℂ) (V : G ℚ Ω →* GL (Fin 2) (Qbar l)), 1 ≤ e →
-    g.Att ι (tw V (cycBar ℚ Ω l ^ (-(e : ℤ)))) → ¬ l ∣ g.M →
-    ∃ π : TR.CuspSub ℚ 2, π.IsRegAlg ∧ AttR ι V π ∧ ∀ w : HeightOneSpectrum (𝓞 ℚ), ((l : ℕ) : 𝓞 ℚ) ∈ w.asIdeal →
-      ∃ B, π.HasSat w B ∧
-        ((algSat 2 l B).map fun b => Polynomial.X - Polynomial.C ((l : ℂ) ^ e * b)).prod = g.heckePoly l := by
-  first | exact @_root_.GlobalTheory.NewformAutAtL.exists_cuspidal_satake_prod_eq_hecke_poly_of_not_dvd_level | exact _root_.GlobalTheory.NewformAutAtL.exists_cuspidal_satake_prod_eq_hecke_poly_of_not_dvd_level | (intros; apply _root_.GlobalTheory.NewformAutAtL.exists_cuspidal_satake_prod_eq_hecke_poly_of_not_dvd_level <;> assumption)
-end
 end
 end -- clump:auto
 end -- clump:auto
@@ -697,7 +684,7 @@ open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.
 namespace UpperTheory.V.Z.Kato.WeilSphericalRecords
 theorem frobRoot_alt : _root_.UpperTheory.V.Af.Hypotheses' → LocQ → FrobRoot := by
   intro P hQ l _ Ω _ _ _ ι e V A κ g hl he hc hirr hdet hA hex hatt hgM σ hσ
-  obtain ⟨π, hreg, hπ, hsat⟩ := _root_.GlobalTheory.T.exists_cuspidal_attached_satake_eq_hecke_poly_of_not_dvd P e g l Ω ι V he hatt hgM
+  obtain ⟨π, hreg, hπ, hsat⟩ := _root_.GlobalTheory.NewformAutAtL.exists_cuspidal_satake_prod_eq_hecke_poly_of_not_dvd_level P e g l Ω ι V he hatt hgM
   obtain ⟨v, hv, hlv⟩ := hA
   obtain ⟨B, hB, hpoly⟩ := hsat v hlv
   obtain ⟨b, hb, hrel⟩ :=
@@ -875,26 +862,6 @@ end GlobalTheory.FlagFrob
 
 end
 
-section
-open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.Gal Formalism.MainNotions.N GlobalTheory.GalOfCusp UpperTheory.V UpperTheory.V.Af UpperTheory.V.HV GlobalTheory.Ord2
-open GlobalTheory.WeilDeligne GlobalTheory.Pst GlobalTheory.CuspRep GlobalTheory.LocLanglands GlobalTheory.LocGL Formalism.BasicNotions Formalism.BasicNotions.Loc
-open scoped Matrix
-attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
-
-
-theorem _root_.GlobalTheory.T.weilDeligne_frobenius_eigenvalue_of_full_flag : ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime]
-    (ι : Qbar l ≃+* ℂ) (n M : ℕ), 1 ≤ M → ∀ (m : Fin n → ℤ) (r : G F Ω →* GL (Fin n) (Qbar l)), Continuous r →
-    ∀ (w : HeightOneSpectrum (𝓞 F)) (A : ValuationSubring Ω) (h : IsPlaceOver A w)
-      (O : Type) [CommRing O] [Algebra ℤ_[l] O] [TopologicalSpace O]
-      (Bw : LocBridge l F Ω (Dec (F := F) A) O) (hj : Induces Bw) (κ : Fin n → ↥(Dec (F := F) A) →* (Qbar l)ˣ),
-      FlagAt M m r A κ → IsPstAt (Loc.PP l) Bw (r.comp (Dec (F := F) A).subtype) →
-      ∀ (i : Fin n) (φ : ↥(Weil h)), deg φ = 1 →
-        (WD.charPol (wdAt (Loc.PP l) ι Bw h hj (r.comp (Dec (F := F) A).subtype)) φ).IsRoot
-          (((normV w : ℕ) : ℂ) ^ m i * ι ((κ i (Subgroup.inclusion (Weil_le_Dec h) φ) *
-            cycBar F Ω l (φ : G F Ω) ^ (-m i) : (Qbar l)ˣ) : Qbar l)) := by
-  first | exact @GlobalTheory.FlagFrob.isRoot_charPol_wdAt | exact GlobalTheory.FlagFrob.isRoot_charPol_wdAt | (intros; apply GlobalTheory.FlagFrob.isRoot_charPol_wdAt <;> assumption)
-
-end
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.AutomorphicVarieties.ModularityArgument.KatoQuadraticCharacters.NewformTwistNorms.WeilDeligneFrobeniusEigenvalueOfFullFlag =====
@@ -947,7 +914,6 @@ private theorem tri_avg {G : Type} [Group G] [Finite G] {n : ℕ} (R : G →* Ma
     congr 3
     funext i
     rw [← hm]
-    congr 2
     group
 
 theorem tridiagonal_weil_deligne : UpperTheory.V.Af.Wd.TriDiag := by
@@ -985,7 +951,7 @@ theorem tridiagonal_weil_deligne : UpperTheory.V.Af.Wd.TriDiag := by
   rw [LinearMap.toMatrix_apply, h3, map_smul, Basis.repr_self, Matrix.diagonal_apply]
   by_cases h : i = j
   · subst h; simp
-  · simp [h, Finsupp.single_apply, Ne.symm h]
+  · simp [h]
 
 end UpperTheory
 end -- clump:auto
@@ -1166,9 +1132,9 @@ theorem UpperTheory.V.Af.weil_deligne_above_of_printed_results :
     · have hc : Continuous fun g : ↥(Dec (F := F) A) =>
           ((r.comp (Dec (F := F) A).subtype g : GL (Fin n) (Om l)) : Matrix (Fin n) (Fin n) (Om l)) :=
         Units.continuous_val.comp (hr.comp continuous_subtype_val)
-      have hp' := GlobalTheory.T.isPotSemistable_independent_of_inducingEmbedding l _ _ (Loc.tiedP l) F Ω A O O' Bw Bw' hj hj' n _ hc hp
+      have hp' := _root_.GlobalTheory.Pst.PstBridge.isPstAt_indep_bridge l _ _ (Loc.tiedP l) F Ω A O O' Bw Bw' hj hj' n _ hc hp
       have h1 := (GlobalTheory.PstLaws.wdParameterAt_monodromy_zero_iff_potCrystalline Bw' h hj' (Loc.PP l) ι _ hp').2 hpc
-      rw [← GlobalTheory.T.weilDeligneParamAbove_l_independent_localEmbedding l _ _ (Loc.tiedP l) ι F Ω A w O O' Bw Bw' h hj hj' n _ hc hp hp', e] at h1
+      rw [← _root_.GlobalTheory.Pst.BridgeParam.wdAt_indep_bridge l _ _ (Loc.tiedP l) ι F Ω A w O O' Bw Bw' h hj hj' n _ hc hp hp', e] at h1
       exact (mono0_wdPst ι Bw h hj hV).1 h1
   obtain ⟨b₀, hb₀⟩ := T
   obtain ⟨b, hb⟩ := UpperTheory.tridiagonal_weil_deligne _ ↥(Ine (F := F) A) n ((wdRho (Loc.PP l) ι Bw h hj ρ).comp (ineIncl h))
@@ -1259,7 +1225,7 @@ theorem UpperTheory.V.Z.Kato.WeilSphericalRecords.local_k_of_printed_rec_compat_
   · have hBσ := (hsat.2 _ π.finPart (hiso σ hσ) B).1 hBs
     let φ : ↥(Weil hA) := ⟨τ, mem_Weil_of_isFrob hA hτ⟩
     have hd : deg φ = 1 := deg_eq_one_iff.2 hτ
-    have h1 := GlobalTheory.T.weilDeligne_frobenius_eigenvalue_of_full_flag K Ω l ι 2 1 le_rfl m r hc w A hA _ Bw hj κ hfa hpst 0 φ hd
+    have h1 := _root_.GlobalTheory.FlagFrob.isRoot_charPol_wdAt K Ω l ι 2 1 le_rfl m r hc w A hA _ Bw hj κ hfa hpst 0 φ hd
     rw [hwd] at h1
     obtain ⟨b, hb, hzb⟩ := hFrob K Ω A w hA rc hrc 2 σ B hpl hBσ φ hd _ h1
     refine ⟨b, hb, ?_⟩
@@ -1482,11 +1448,11 @@ private theorem range_of_sign {K Ω : Type} [Field K] [NumberField K] [Field Ω]
 private theorem dualTw_det {Γ k : Type} [Group Γ] [Field k] (r : Γ →* GL (Fin 2) k) :
     DualTw r (Matrix.GeneralLinearGroup.det.comp r) := by
   refine ⟨⟨!![0, 1; -1, 0], !![0, -1; 1, 0], ?_, ?_⟩, fun s => ?_⟩
-  · ext i j; fin_cases i <;> fin_cases j <;> simp [Matrix.mul_fin_two]
-  · ext i j; fin_cases i <;> fin_cases j <;> simp [Matrix.mul_fin_two]
+  · ext i j; fin_cases i <;> fin_cases j <;> simp
+  · ext i j; fin_cases i <;> fin_cases j <;> simp
   · have e : (r s : Matrix (Fin 2) (Fin 2) k) = !![(r s : Matrix (Fin 2) (Fin 2) k) 0 0, (r s : Matrix (Fin 2) (Fin 2) k) 0 1;
         (r s : Matrix (Fin 2) (Fin 2) k) 1 0, (r s : Matrix (Fin 2) (Fin 2) k) 1 1] := Matrix.eta_fin_two _
-    simp only [MonoidHom.comp_apply, Matrix.GeneralLinearGroup.val_det_apply, Matrix.coe_units_inv]
+    simp only [MonoidHom.comp_apply, Matrix.GeneralLinearGroup.val_det_apply]
     rw [e, Matrix.det_fin_two_of]
     ext i j; fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_two] <;> ring
 private theorem polar_of_lift (hP : _root_.UpperTheory.V.Af.Hypotheses') {K Ω : Type} [Field K] [NumberField K] [IsCMField K] (hK : Module.finrank ℚ K = 2)
@@ -1868,7 +1834,7 @@ private theorem sources_of_spherical (P : _root_.UpperTheory.V.Af.HypothesesH') 
     rcases hα' with h1 | h1
     · rw [h1, RingEquiv.symm_apply_apply, hun]
     · rw [h1, map_inv₀, RingEquiv.symm_apply_apply, norm_inv, hun, inv_one]
-  obtain ⟨hal, hpow⟩ := GlobalTheory.T.newform_unit_root_not_root_of_unity_odd_weight l ι e g α hl2 he hlev hroot hαn
+  obtain ⟨hal, hpow⟩ := _root_.GlobalTheory.Ord2.root_facts l ι e g α hl2 he hlev hroot hαn
   refine ⟨⟨g, χ⁻¹, A, κ, hlev, hal, kills_inv hχ, ?_, hA, hfl, fun s hs => ?_⟩, fun A' κ' hA' hfl' => ?_⟩
   · rw [tw_tw] at hg
     rw [mul_assoc]

@@ -150,8 +150,7 @@ theorem zhat_nm (Λ : Submodule (𝓞 E) S.V) {T T' : E} (F : LFlag S r T) (Fs F
   simp only [map_sum, LinearMap.sum_apply, LinearMap.map_smulₛₗ₂, map_smul, Matrix.mul_apply,
   Matrix.conjTranspose_apply, smul_eq_mul, Finset.mul_sum, Finset.sum_mul]
   refine Finset.sum_congr rfl fun c _ => Finset.sum_congr rfl fun d _ => ?_
-  simp only [show ∀ x y, ZhatL F Fs x y = S.hT (frame F x) (frame Fs y) from fun _ _ => rfl, starRingEnd_apply,
-    RingHom.id_apply]
+  simp only [show ∀ x y, ZhatL F Fs x y = S.hT (frame F x) (frame Fs y) from fun _ _ => rfl, starRingEnd_apply]
   ring
 
 theorem phase_move (Λ : Submodule (𝓞 E) S.V) {T T' : E} (F : LFlag S r T) (Fs F2 : LFlag S r T')
@@ -167,7 +166,7 @@ theorem phase_move (Λ : Submodule (𝓞 E) S.V) {T T' : E} (F : LFlag S r T) (F
   have e : (vn.conjTranspose * Ls) * ptMat w * (Us * epsConj um) = L2 * ptMat w * U2 := by
     rw [← h2, hZ, zhatOM_mul, hs]; simp only [Matrix.mul_assoc]
   have hds := simple_decomposition_holds E (r + 1) w _ _ _ _
-    (Formalism.MainNotions.BridgeLemma.bru_lo_mul (isLoUni_conjT hvn) hLs) (Formalism.MainNotions.BridgeLemma.bru_up_mul hUs (isUpUni_epsConj hum))
+    (Formalism.MainNotions.BridgeLemma.bru_lo_mul (isLoUni_conjT hvn) hLs) (_root_.GlobalTheory.UpperUnipotentMul.isUpUni_mul hUs (isUpUni_epsConj hum))
     hL2 hU2 e
   rw [sgLo_mul (isLoUni_conjT hvn) hLs, sgUp_mul hUs (isUpUni_epsConj hum), sgLo_conjT, sgUp_epsConj] at hds
   linear_combination -hds
@@ -276,7 +275,7 @@ theorem finPhaseC_of (hNR : Formalism.L2.SG.PairVal.NormRepExists D u u' (X.Fu u
   have hrow := (Y.rowsOK u).1 s.1.lam s.1.mem
   have hmk : mk s.1.lam (lf D (X.Fu u)) (PD D s.1.lam (lf D (X.Fu u)) u') ⟨s.1.frame, s.1.rep.2.2.2.2⟩ =
       mk s.1.lam (lf D (X.Fu u)) (PD D s.1.lam (lf D (X.Fu u)) u') ⟨hex.choose.1, hP''⟩ := hmk''.symm
-  obtain ⟨n, hn, m, hm, hfr, -⟩ := (Formalism.L2.SG.Closed.TermEqIff_holds D u u' (X.Fu u) s.1.lam hrow _ _).1 hmk
+  obtain ⟨n, hn, m, hm, hfr, -⟩ := (_root_.term_eq_iff_relation D u u' (X.Fu u) s.1.lam hrow _ _).1 hmk
 
   obtain ⟨vn, um, hvn, hum, hvnF, humF, hsum⟩ := Formalism.L2.SG.Pf.UnitriangularPhases.phase_move s.1.lam (lf D (X.Fu u)) s.1.frame
     hex.choose.1 hn hm hfr _ hL hU hL'' hU'' hZ hZ''
@@ -515,7 +514,7 @@ theorem phaseTieC_holds (hP : Formalism.MainNotions.S.Lat.PrimeHyp D u (Formalis
     Formalism.L2.SG.Pf.RowForm.PhaseTieC X Y u u' κ :=
   Formalism.L2.SG.Pf.PhaseLiftCell.phaseAgreement_of_lift X Y u u' κ (liftAtSomeC_holds X Y u u' κ)
     (Formalism.L2.SG.Pf.FinitePhaseConjugation.finPhaseC_of (hNR := Formalism.L2.SG.Pf.normRepExists_of
-      (Formalism.L2.SG.Pf.NormRepX.norm_representative_holds D u u' hP) (Formalism.L2.SG.Closed.TermFun_holds D u u') (Y.rowsOK u))
+      (Formalism.L2.SG.Pf.NormRepX.norm_representative_holds D u u' hP) (_root_.term_function_const D u u') (Y.rowsOK u))
       (h1 := liftAtSomeC_holds X Y u u' κ))
 
 end Formalism.L2.SG.Pf.LiftedPhaseAgreement

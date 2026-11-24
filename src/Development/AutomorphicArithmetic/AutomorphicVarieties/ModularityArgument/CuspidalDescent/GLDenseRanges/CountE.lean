@@ -543,8 +543,7 @@ private lemma indep_fin {τ : Representation ℂ G W'} {ρ : Representation ℂ 
       have hrel : ∑ i, (Fin.cons (1 : ℂ) (fun j => -c j) : Fin (n + 1) → ℂ) i • b i = 0 := by
         rw [Fin.sum_univ_succ]
         ext v
-        simp only [Fin.cons_zero, Fin.cons_succ, one_smul, LinearMap.add_apply, LinearMap.sum_apply,
-          LinearMap.smul_apply, LinearMap.zero_apply, neg_smul, Finset.sum_neg_distrib]
+        simp only [Fin.cons_zero, Fin.cons_succ, one_smul, LinearMap.add_apply, LinearMap.zero_apply, neg_smul, Finset.sum_neg_distrib]
         rw [← hT v, hA]
         simp only [hc, map_smul]
         simp
@@ -1321,17 +1320,12 @@ section Transfer
 
 variable {G G' W W' : Type} [Group G] [Group G'] [AddCommGroup W] [Module ℂ W] [AddCommGroup W'] [Module ℂ W']
 
-private lemma irr_iff (ρ : Representation ℂ G W) :
-    ρ.IsIrreducible ↔ Nontrivial W ∧
-      ∀ N : Submodule ℂ W, (∀ g, ∀ v ∈ N, ρ g v ∈ N) → N = ⊥ ∨ N = ⊤ :=
-  _root_.UpperTheory.Reformulated.B.Ra6.irr_iff ρ
-
 private lemma transfer (ρ : Representation ℂ G W) (ρ' : Representation ℂ G' W') (φ : G' → G)
     (hφ : Function.Surjective φ) (e : W' ≃ₗ[ℂ] W)
     (h : ∀ g x, e (ρ' g x) = ρ (φ g) (e x)) (hρ : AbsIrr ρ) : AbsIrr ρ' := by
   obtain ⟨h1, h2⟩ := hρ
-  obtain ⟨hW, hN⟩ := (irr_iff ρ).1 h1
-  refine ⟨(irr_iff ρ').2 ⟨e.toEquiv.nontrivial, fun N hN' => ?_⟩, fun f hf => ?_⟩
+  obtain ⟨hW, hN⟩ := (_root_.UpperTheory.Reformulated.B.Ra6.irr_iff ρ).1 h1
+  refine ⟨(_root_.UpperTheory.Reformulated.B.Ra6.irr_iff ρ').2 ⟨e.toEquiv.nontrivial, fun N hN' => ?_⟩, fun f hf => ?_⟩
   · have hinv : ∀ g, ∀ v ∈ N.map e.toLinearMap, ρ g v ∈ N.map e.toLinearMap := by
       rintro g _ ⟨x, hx, rfl⟩
       obtain ⟨g', rfl⟩ := hφ g
@@ -1391,7 +1385,7 @@ private lemma Pp_equiv {α β : Type} (f : β ≃ α) (h : Pp α) : Pp β := by
   rfl
 
 private lemma absIrr_triv : AbsIrr (Representation.trivial ℂ Unit ℂ) := by
-  refine ⟨(irr_iff _).2 ⟨inferInstance, fun N _ => eq_bot_or_eq_top N⟩, fun f _ => ⟨f 1, ?_⟩⟩
+  refine ⟨(_root_.UpperTheory.Reformulated.B.Ra6.irr_iff _).2 ⟨inferInstance, fun N _ => eq_bot_or_eq_top N⟩, fun f _ => ⟨f 1, ?_⟩⟩
   refine LinearMap.ext_ring ?_
   simp
 

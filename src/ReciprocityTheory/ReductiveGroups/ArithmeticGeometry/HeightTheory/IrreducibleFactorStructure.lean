@@ -473,12 +473,12 @@ theorem relation_map_comm_transvection (c : ι) (i k : Fin (d.D + 1)) (hik : i �
       · have e1 : ∀ r', φ r' = -∑ l ∈ Finset.univ.erase (d.jc c),
             X (r', l) * C (ratio (Ω := Ω c) (d.w l c) (d.w (d.jc c) c)) := by
           intro r'
-          simp only [hφ, Data.relationEliminateColumn, MvPolynomial.aeval_X, h2, eq_self_iff_true, if_true]
+          simp only [hφ, Data.relationEliminateColumn, MvPolynomial.aeval_X, h2, if_true]
 
         rw [e1 r, e1 k, map_neg, map_sum]
         by_cases h1 : r = i
 
-        · simp only [h1, eq_self_iff_true, if_true, map_mul, hX, hC, map_neg, map_sum, add_mul,
+        · simp only [h1, if_true, map_mul, hX, hC, map_neg, map_sum, add_mul,
           Finset.sum_add_distrib, mul_neg, Finset.mul_sum, mul_assoc, neg_add]
 
         · simp only [h1, if_false, add_zero, map_mul, hX, hC, map_neg, map_sum]
@@ -491,7 +491,7 @@ theorem relation_map_comm_transvection (c : ι) (i k : Fin (d.D + 1)) (hik : i �
     change _ = trv (R := Ω c) (D := d.D) (N := d.N) i k Polynomial.X (φ a)
     rw [hφtrv a]
     by_cases h1 : a = i
-    · simp only [h1, eq_self_iff_true, if_true, Polynomial.map_add (f := _), Polynomial.map_mul, Polynomial.map_C,
+    · simp only [h1, if_true, Polynomial.map_add (f := _), Polynomial.map_mul, Polynomial.map_C,
         Polynomial.map_X]
       rfl
     · simp only [h1, if_false, add_zero, Polynomial.map_C]
@@ -991,17 +991,6 @@ variable {K : Type} [Field K] [NumberField K] {ι : Type} [Fintype ι]
   [∀ c, Algebra (𝓞 K) (A c)]
   {𝒜 : (c : ι) → WT → Submodule (Ω c) (A c)}
 
-theorem ratio_self' {Ω V : Type*} [Field Ω] [AddCommGroup V] [Module Ω V] {f : V} (hf : f ≠ 0) :
-    ratio (Ω := Ω) f f = 1 := by
-  have hex : ∃ a : Ω, f = a • f := ⟨1, (one_smul Ω f).symm⟩
-  unfold ratio
-  rw [dite_eq_left hex]
-  have hs := hex.choose_spec
-  have h0 : (hex.choose - 1) • f = 0 := by rw [sub_smul, ← hs, one_smul, sub_self]
-  rcases smul_eq_zero.mp h0 with h | h
-  · exact sub_eq_zero.mp h
-  · exact absurd h hf
-
 namespace Data
 
 variable (d : Data K ι Ω WT A)
@@ -1019,7 +1008,7 @@ theorem substitution_comp_relation (hd : d.AxH 𝒜) (c : ι) :
         MvPolynomial.X (Sum.inr t.1.succ) * MvPolynomial.X (Sum.inl (0, t.2)) :
           MvPolynomial ((Fin (d.D + 2) × Fin (d.N + 1)) ⊕ Fin (d.D + 2)) K))) =
       ((d.pluckerSubstitution c).restrictScalars K).comp (d.relationEliminateColumn c) := by
-  have hy : d.affineCoord c (d.jc c) = 1 := ratio_self' (hd.w_base c)
+  have hy : d.affineCoord c (d.jc c) = 1 := _root_.ReciprocityTheory.ChartRestriction.G.T0.ratio_self_height (hd.w_base c)
   have hs : ∀ a, d.affineRowCombination c a = ∑ k, X (a, k) * C (d.affineCoord c k) := fun a => rfl
   have hphi_inl : ∀ p, d.linearSubstitution c (X (Sum.inl p)) = X p := by
     intro p
@@ -1039,7 +1028,7 @@ theorem substitution_comp_relation (hd : d.AxH 𝒜) (c : ι) :
   split_ifs with ht
   · set_option synthInstance.maxHeartbeats 100000 in
       rw [map_neg, map_sum]
-    simp only [map_mul, hrho, MvPolynomial.aeval_C, MvPolynomial.algebraMap_eq]
+    simp only [map_mul, hrho]
 
     have htot : ∑ k, (d.affineRowCombination c 0 * X (t.1.succ, k) - d.affineRowCombination c t.1.succ * X (0, k)) *
         C (d.affineCoord c k) = 0 := by
@@ -1056,7 +1045,7 @@ theorem substitution_comp_relation (hd : d.AxH 𝒜) (c : ι) :
 theorem substitution_vanishes_of_relation (hd : d.AxH 𝒜) (c : ι) (Q : KTp K d.D d.N) (hQ : d.relationEliminateColumn c Q = 0) :
     d.linearSubstitution c (bilinearSubstitution Q) = 0 := by
   have h := congrArg (fun φ => φ Q) (d.substitution_comp_relation hd c)
-  simp only [AlgHom.comp_apply, AlgHom.restrictScalars_apply, hQ, map_zero] at h
+  simp only [AlgHom.comp_apply, hQ, map_zero] at h
   exact h
 
 theorem substitution_split_irreducible (hd : d.AxH 𝒜) (c : ι) (F0 : KTp K d.D d.N) (hirr : Irreducible F0) (d0 : ℕ)

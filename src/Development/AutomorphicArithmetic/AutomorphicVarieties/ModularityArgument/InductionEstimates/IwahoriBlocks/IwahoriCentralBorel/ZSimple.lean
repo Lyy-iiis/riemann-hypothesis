@@ -139,7 +139,7 @@ private theorem mem_of_translates (π : UnitaryRep G H) {τ Q : Submodule ℂ H}
     induction hv using Submodule.span_induction with
     | mem x hx =>
       obtain ⟨γ, rfl⟩ := hx
-      exact Submodule.subset_span ⟨g * γ, by simp [UnitaryRep.map_mul_apply]⟩
+      exact Submodule.subset_span ⟨g * γ, by simp⟩
     | zero => simp
     | add x y _ _ hx hy =>
       rw [map_add (f := _)]
@@ -481,7 +481,7 @@ theorem UpperTheory.V.Z.InvariantSubmoduleMonicPolynomial.IwahoriBlocks.xSimple 
       SimpleIn (rS ι) (Xs μ τ κ p (im w)) ∧ SchurIn (rS ι) (Xs μ τ κ p (im w)) := by
   intro K _ _ _ μ _ τ κ p hτ hR r w ι hw hι
   have hp : IdemA κ p := hR.1
-  obtain ⟨hX, hX'⟩ := xMem μ τ κ p hp
+  obtain ⟨hX, hX'⟩ := _root_.UpperTheory.Reformulated.B.Gul4.xMem μ τ κ p hp
   have hstab := fun φ hφ => (hX' hτ w ι hw hι φ hφ).2
   obtain ⟨J, hJi, hJ, hJr, hJU⟩ := exists_injection_into_l2_cusp μ τ κ p hτ hp (im w)
   obtain ⟨-, hcw, hco, -, -, hlev⟩ := (embEx 2 w hw).2 ι hι
@@ -788,8 +788,8 @@ theorem UpperTheory.V.Z.InvariantSubmoduleMonicPolynomial.IwahoriBlocks.x12 :
   intro K _ _ _ μ _ τ₁ τ₂ κ p₁ p₂ c₁ c₂ r₁ r₂ r w ι hw hι
   obtain ⟨s₁, sc₁⟩ := xSimple μ τ₁ κ p₁ c₁ r₁ w ι hw hι
   obtain ⟨s₂, -⟩ := xSimple μ τ₂ κ p₂ c₂ r₂ w ι hw hι
-  have m₁ := (xMem μ τ₁ κ p₁ r₁.1).2 c₁ w ι hw hι
-  have m₂ := (xMem μ τ₂ κ p₂ r₂.1).2 c₂ w ι hw hι
+  have m₁ := (_root_.UpperTheory.Reformulated.B.Gul4.xMem μ τ₁ κ p₁ r₁.1).2 c₁ w ι hw hι
+  have m₂ := (_root_.UpperTheory.Reformulated.B.Gul4.xMem μ τ₂ κ p₂ r₂.1).2 c₂ w ι hw hι
   set X₁ := Xs μ τ₁ κ p₁ (im w) with hX₁
   set X₂ := Xs μ τ₂ κ p₂ (im w) with hX₂
   have hstab : ∀ p, ∀ F ∈ tensFn X₁ X₂, tr (fin1 (ι (L₁ w p))) (fin1 (ι (L₂ w p))) F ∈ tensFn X₁ X₂ := fun p =>
@@ -1022,7 +1022,7 @@ theorem UpperTheory.V.Z.InvariantSubmoduleMonicPolynomial.IwahoriBlocks.xOcc :
   haveI : T2Space (G1 K 2) := by
     set_option synthInstance.maxHeartbeats 100000 in
       infer_instance
-  obtain ⟨hmem, hmem2⟩ := xMem μ τ κ p hp
+  obtain ⟨hmem, hmem2⟩ := _root_.UpperTheory.Reformulated.B.Gul4.xMem μ τ κ p hp
   have hstab := hmem2 hτ w ι hw hι
   obtain ⟨J, hJi, hJ1, hJ2, hJ3⟩ := exists_injection_into_l2_cusp μ τ κ p hτ hp (im w)
   obtain ⟨φ, hφ, hφ0⟩ := (Submodule.ne_bot_iff _).1 hX
@@ -1101,7 +1101,7 @@ theorem UpperTheory.V.Z.InvariantSubmoduleMonicPolynomial.IwahoriBlocks.xOcc :
         by_cases hj : j = i
         · subst hj
           simp [g2]
-        · simp [g2, hj, Pi.mulSingle_eq_of_ne hj]
+        · simp [g2, hj]
       have hn : ι g2 * h' ∈ levOn (im w) U := by
         refine (hlev U _).2 ⟨g2, h', rfl, fun j => ?_, hc, hint⟩
         by_cases hj : j = i

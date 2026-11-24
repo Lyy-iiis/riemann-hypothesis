@@ -157,13 +157,11 @@ theorem prF_eq (t : Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF
     rw [tauF_tmul]
     first
     | rfl
-    | simp only [prF, Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sndA, cE, AlgHom.toRingHom_eq_coe, RingHom.coe_coe,
-        Algebra.TensorProduct.map_tmul, AlgHom.snd_apply, AlgHom.id_apply, Algebra.TensorProduct.comm_tmul]
   | add x y hx hy => rw [map_add (f := _), map_add (f := _), map_add (f := _), hx, hy]
 
 theorem kset_iff (x : I.Gf) : x ∈ I.Kset ↔
     ∀ v : HeightOneSpectrum (𝓞 I.F), compV v (psi0 I x) ∈ Kloc v (I.L : Set (Fin I.n → I.E)) := by
-  obtain ⟨e, he⟩ := Formalism.L2.SG.Closed.AdBridgeIso_holds I
+  obtain ⟨e, he⟩ := _root_.Formalism.L2.SG.Pf.adelic_isomorphism_exists I
   have hfin : I.fmat x = ofHAFin I (e (1, x)) := (he (1, x)).2
   have key := adelic_compact_finite_places I (e (1, x))
   have hm : Formalism.UG.bc (prF I)
@@ -239,8 +237,6 @@ theorem mem_hsub_iff (x : X.B.I.Gf) :
         ratV (F := X.B.I.F) (Formalism.MainNotions.S.Af X.B.I.F) (tupH (frameOf X u) b) := by
     first
     | exact mem_stabT _ _ _ _ _
-    | exact mem_stabT _ _
-    | simp only [Hsub, mem_stabT]
   rw [hs]
   simp only [linear_adelic_action_fixed_iff]
   change (∀ y ∈ fixSet X u, _) ↔ _
@@ -292,8 +288,6 @@ theorem mem_gamR_iff (h : Hfin X u) : h ∈ gamR X u ↔
         HFin (Formalism.MainNotions.S.Af X.B.I.F) X.B.I.cm.sig X.B.I.J := by
     first
     | exact Iff.rfl
-    | (simp only [gamR, Subgroup.mem_comap, MulEquiv.coe_toMonoidHom, Subgroup.mem_subgroupOf, psiH_val,
-        HFinIn]; exact Iff.rfl)
   have e2 : psi0 X.B.I ((h : X.B.I.Gf) : GL (Fin X.B.I.n) (X.B.I.E ⊗[X.B.I.F] Formalism.MainNotions.S.Af X.B.I.F)) ∈
         HFin (Formalism.MainNotions.S.Af X.B.I.F) X.B.I.cm.sig X.B.I.J ↔
       ∃ M ∈ Formalism.UG.UJ (starRingEnd X.B.I.E) X.B.I.J,
@@ -322,7 +316,6 @@ theorem mem_gamR_iff (h : Hfin X u) : h ∈ gamR X u ↔
 theorem mem_kR_iff (h : Hfin X u) : h ∈ kR X u ↔ (h : X.B.I.Gf) ∈ X.B.I.Kset := by
   rw [kset_iff]
   first
-  | exact Iff.rfl
   | (simp only [kR, Subgroup.mem_comap, Subgroup.mem_subgroupOf, Kf, Subgroup.mem_iInf]; exact Iff.rfl)
 
 end OnX
@@ -353,19 +346,8 @@ section Kset
 
 variable (I : Formalism.MainNotions.S.AutInst)
 
-theorem kset_inv' {x : I.Gf} (hx : x ∈ I.Kset) : x⁻¹ ∈ I.Kset :=
-  (Formalism.UG.stabGL I.Lf).inv_mem hx
-
-theorem kset_mul' {x y : I.Gf} (hx : x ∈ I.Kset) (hy : y ∈ I.Kset) : x * y ∈ I.Kset :=
-  (Formalism.UG.stabGL I.Lf).mul_mem hx hy
-
 theorem kset_act {k : I.Gf} (hk : k ∈ I.Kset) (w : Fin I.n → I.E ⊗[I.F] Formalism.MainNotions.S.Af I.F) :
     I.fmat k *ᵥ w ∈ I.Lf ↔ w ∈ I.Lf := (hk w).symm
-
-theorem fmat_mul' (x y : I.Gf) : I.fmat (x * y) = I.fmat x * I.fmat y := rfl
-
-theorem fmat_inv_mul' (x : I.Gf) : I.fmat x⁻¹ * I.fmat x = 1 := by
-  simp [Formalism.MainNotions.S.AutInst.fmat]
 
 end Kset
 
@@ -382,7 +364,7 @@ theorem mem_lat (h : Hfin X u) (y : (VS D).V) :
     y ∈ lat X u h ↔ X.B.I.fmat ((h : X.B.I.Gf))⁻¹ *ᵥ incl X.B.I (X.crd y) ∈ X.B.I.Lf := by
   rw [← SetLike.mem_coe, lat_coe]
   show X.B.I.fmat (((h : X.B.I.Gf)) * X.xu u)⁻¹ *ᵥ incl X.B.I (X.crd y) ∈ X.B.I.Lf ↔ _
-  rw [_root_.mul_inv_rev, fmat_mul', ← Matrix.mulVec_mulVec, kset_act X.B.I (kset_inv' X.B.I (X.xu_K u))]
+  rw [_root_.mul_inv_rev, _root_.Formalism.L2.SG.Pf.unitaryCongruence.fmat_mul, ← Matrix.mulVec_mulVec, kset_act X.B.I (_root_.Formalism.L2.SG.Pf.unitaryCongruence.K_inv X.B.I (X.xu_K u))]
 
 theorem matE_fix (M : GL (Fin X.B.I.n) X.B.I.E)
     (hfix : ∀ y ∈ fixSet X u, (M : Matrix _ _ _).map (Formalism.UG.inclE (F := X.B.I.F) (Formalism.MainNotions.S.Af X.B.I.F)) *ᵥ
@@ -409,9 +391,6 @@ theorem matE_stab (M : GL (Fin X.B.I.n) X.B.I.E) (hM : M ∈ Formalism.UG.UJ (st
     rw [X.flagZVector u]
     exact matE_fix X u M hfix _ (Or.inr rfl)
 
-theorem hfin_fix (g : Hfin X u) (y : Fin X.B.I.n → X.B.I.E) (hy : y ∈ fixSet X u) :
-    X.B.I.fmat (g : X.B.I.Gf) *ᵥ incl X.B.I y = incl X.B.I y := g.2 y hy
-
 theorem mem_gmap (γ : (VS D).V ≃ₗ[D.host.E] (VS D).V) (Λ : Submodule (𝓞 D.host.E) (VS D).V) (y : (VS D).V) :
     y ∈ Formalism.HermitianLatticesTheory.gmap γ Λ ↔ γ.symm y ∈ Λ := by
   simp only [Formalism.HermitianLatticesTheory.gmap, Submodule.mem_map]
@@ -430,10 +409,10 @@ theorem lat_act (g h k : Hfin X u) (M : GL (Fin X.B.I.n) X.B.I.E)
   have hinc : incl X.B.I (X.crd ((matE X M).symm y)) = X.B.I.fmat ((g : X.B.I.Gf))⁻¹ *ᵥ incl X.B.I (X.crd y) := by
     have h1 := matE_incl X M ((matE X M).symm y)
     rw [LinearEquiv.apply_symm_apply, ← hM] at h1
-    rw [h1, Matrix.mulVec_mulVec, fmat_inv_mul', Matrix.one_mulVec]
+    rw [h1, Matrix.mulVec_mulVec, _root_.Formalism.L2.SG.Pf.unitaryCongruence.fmat_inv_mul, Matrix.one_mulVec]
   rw [hinc, Matrix.mulVec_mulVec]
   show X.B.I.fmat (((g : X.B.I.Gf) * (h : X.B.I.Gf) * (k : X.B.I.Gf)))⁻¹ *ᵥ incl X.B.I (X.crd y) ∈ X.B.I.Lf ↔ _
-  rw [_root_.mul_inv_rev, fmat_mul', ← Matrix.mulVec_mulVec, kset_act X.B.I (kset_inv' X.B.I hk), _root_.mul_inv_rev, fmat_mul']
+  rw [_root_.mul_inv_rev, _root_.Formalism.L2.SG.Pf.unitaryCongruence.fmat_mul, ← Matrix.mulVec_mulVec, kset_act X.B.I (_root_.Formalism.L2.SG.Pf.unitaryCongruence.K_inv X.B.I hk), _root_.mul_inv_rev, _root_.Formalism.L2.SG.Pf.unitaryCongruence.fmat_mul]
 
 end Lat
 
@@ -487,11 +466,11 @@ theorem cls_rel (hR : IsRowReps D (X.Fu u) what₂) (hL : LatRowLat X u) (hI : L
       rw [e4] at hK
       have e5 : (k : X.B.I.Gf) = X.xu u * ((X.xu u)⁻¹ * (k : X.B.I.Gf) * X.xu u) * (X.xu u)⁻¹ := by group
       rw [e5]
-      exact kset_mul' X.B.I (kset_mul' X.B.I (X.xu_K u) hK) (kset_inv' X.B.I (X.xu_K u))
+      exact _root_.Formalism.L2.SG.Pf.unitaryCongruence.K_mul X.B.I (_root_.Formalism.L2.SG.Pf.unitaryCongruence.K_mul X.B.I (X.xu_K u) hK) (_root_.Formalism.L2.SG.Pf.unitaryCongruence.K_inv X.B.I (X.xu_K u))
   · rintro ⟨g, hg, k, hk, rfl⟩
     obtain ⟨M, hM, hMf⟩ := gamR_mat hg
     have hst : matE X M ∈ stabF D (X.Fu u) := matE_stab X u M hM (fun y hy => by
-      rw [← hMf]; exact hfin_fix X u g y hy)
+      rw [← hMf]; exact _root_.Formalism.L2.SG.PoincareInHH.Cut.hfin_fix X u g y hy)
     have e1 := (cls_spec hR hL h).2
     have e2 : Eqv X u (lat X u h) (lat X u (g * h * k)) :=
       ⟨matE X M, hst, (lat_act X u g h k M hMf ((mem_kR_iff X u k).1 hk)).symm⟩

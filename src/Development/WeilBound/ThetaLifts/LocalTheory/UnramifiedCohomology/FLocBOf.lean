@@ -279,14 +279,14 @@ theorem push {G : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [T
 
 namespace Tp
 
-theorem ae_ring : IsTopologicalRing (AE F E) := IsModuleTopology.isTopologicalRing (AF F) _
-theorem ae_smul : ContinuousSMul (AF F) (AE F E) := IsModuleTopology.toContinuousSMul (AF F) _
+alias ae_ring := _root_.PositivityTheory.ThK.kc_ring
+alias ae_smul := _root_.PositivityTheory.ThK.kc_smul
 theorem ae_top : T2Space (AE F E) ∧ LocallyCompactSpace (AE F E) ∧ SecondCountableTopology (AE F E) := by
   haveI := GlobalTheory.AdelicUnitaryTop.t2Space_adeleRing_numberField F
   haveI := GlobalTheory.AdelicUnitaryTop.secondCountable_adele F
   obtain ⟨e⟩ := GlobalTheory.AdelicUnitaryTop.nonempty_homeomorph (F := F) (E := E) (AF F)
   exact ⟨e.isEmbedding.t2Space, e.isClosedEmbedding.locallyCompactSpace, e.secondCountableTopology⟩
-theorem ae_t2 : T2Space (AE F E) := ae_top.1
+alias ae_t2 := _root_.PositivityTheory.ThK.adele_t2Space
 theorem ae_lc : LocallyCompactSpace (AE F E) := ae_top.2.1
 theorem ae_sc : SecondCountableTopology (AE F E) := ae_top.2.2
 
@@ -667,7 +667,7 @@ theorem tate' (hI : IdeleFub) (hJ : IdealId0) (hS : StabEx) {B : Base F E} {M : 
       have q : algebraMap (AF F) (AE F E) (idem F v) * algebraMap (AF F) (AE F E) (idem F v) =
           algebraMap (AF F) (AE F E) (idem F v) := by rw [← map_mul, idem_sq]
       rw [Subgroup.coe_mul, Units.val_mul, map_mul, hl₀, map_add (f := _), map_smul, map_smul, map_natCast, map_one]
-      simp only [Algebra.smul_def, smul_eq_mul, map_mul, map_sub, map_one, map_natCast, Algebra.algebraMap_self, RingHom.id_apply]
+      simp only [Algebra.smul_def, map_mul, map_sub, map_one, map_natCast, Algebra.algebraMap_self]
       linear_combination ((N : AE F E) * c l.1.1 - c l.1.1) * q
     have h0 : (0 : ℝ) < absE F E l₀.1 := by
       refine lt_of_le_of_ne NNReal.zero_le_coe fun e => ?_

@@ -409,7 +409,7 @@ theorem haarProductClosedCompact_holds : Formalism.D.haarProductClosedCompact :=
     intro h
     have := l4 (fun _ => 1) measurable_const (fun _ _ _ => rfl)
     rw [h] at this
-    simp only [lintegral_zero_measure, lintegral_const, one_mul] at this
+    simp only [lintegral_const, one_mul] at this
     exact hμ (Measure.measure_univ_eq_zero.1 this.symm)
   obtain ⟨c, c0, ct, hc⟩ := exists_eq_smul_subgroup P hP l μP l1 l2 l3 l0 p1 p2 p3 p4
   refine ⟨c, c0, ct, fun Φ hΦ => ?_⟩
@@ -450,20 +450,6 @@ open MeasureTheory MeasureTheory.Measure Topology Set
 open scoped NNReal ENNReal Pointwise
 
 namespace PositivityTheory.ThKR.Sieg
-
-section Retract
-
-variable {H N : Type} [Group H] [TopologicalSpace H] [IsTopologicalGroup H] [LocallyCompactSpace H]
-  [SecondCountableTopology H] [T2Space H] [MeasurableSpace H] [BorelSpace H]
-  [Group N] [TopologicalSpace N] [IsTopologicalGroup N] [LocallyCompactSpace N]
-  [SecondCountableTopology N] [T2Space N] [MeasurableSpace N] [BorelSpace N]
-
-theorem char_eq_of_retract (ι : N →* H) (hι : Continuous ι) (π : H → N) (hπ : Continuous π)
-    (hmul : ∀ x p, π (ι x * p) = x * π p) (φ : H ≃ₜ* H) (ψ : N ≃ₜ* N) (h1 : ∀ p, π (φ p) = ψ (π p))
-    (h2 : ∀ p, (ι (π (φ p)))⁻¹ * φ p = (ι (π p))⁻¹ * p) : mulEquivHaarChar φ = mulEquivHaarChar ψ :=
-  _root_.UpperTheory.Reformulated.B.Yhb4.main ι hι π hπ hmul φ ψ h1 h2
-
-end Retract
 
 section Heis
 

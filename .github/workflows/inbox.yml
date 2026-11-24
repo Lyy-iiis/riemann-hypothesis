@@ -40,8 +40,9 @@ jobs:
     steps:
       - name: Check out this workflow's own copy of the scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        # The default checkout uses GitHub's trusted event commit. After a fork PR merges,
+        # that commit can also equal the PR's merge SHA, which checkout rejects as an explicit ref.
         with:
-          ref: ${{ github.workflow_sha }}
           persist-credentials: false
           sparse-checkout: scripts
       - name: Put pull requests in the inbox and take them out

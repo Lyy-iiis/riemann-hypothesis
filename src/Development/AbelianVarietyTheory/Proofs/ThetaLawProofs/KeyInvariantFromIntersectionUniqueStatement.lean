@@ -146,7 +146,7 @@ theorem box_indep {K : Type} [Field K] (A : Over (Sp K)) [GrpObj A] (hA : IsAbel
       (fun _ _ => b i)
     choose d hd using fun i : Fin N => exists_boxSec (L := L) (fun c : Fin n => (Out.powPr A c).left) (Out.powObj A n).hom
       (fun I : Fin n → Fin N => q (Fin.cons i I)) (fun I c => b (I c))
-    have H := (GlobalTheory.T.section_lin_comb_fiber_product_separated K _ L hL A (Out.powObj A n) Unit (Fin n) (fun _ => 𝟙 A.left) (fun _ => m)
+    have H := (_root_.GlobalTheory.SectionsProduct.main K _ L hL A (Out.powObj A n) Unit (Fin n) (fun _ => 𝟙 A.left) (fun _ => m)
       (fun c => (Out.powPr A c).left) (fun _ => m)).2 N a d (fun c hc => hb c fun i => fn_ext fun y hy => by
         have hy' : (𝟙 A.left : A.left ⟶ A.left) y ∈ LB.wchart L (fun _ : Unit => 𝟙 A.left) (fun _ => i) :=
           Set.mem_iInter.2 fun _ => hy
@@ -646,7 +646,6 @@ theorem isCx_of_isMul {x : KeyIn R} {n l d : ℕ} {s : Fin x.P.g → RR x n} {z 
     refine h1.symm.trans ?_
     have h2 : valT (T := R) (z a).left (x.P.L.U (ch a)) (fam x s i (ch a)) = 0 := hz.2.1 a i
     rw [valT_eq _ _ (hz.1 a)] at h2
-    beta_reduce
     rw [valT_eq _ _ (hz.1 a), map_mul, h2, zero_mul]
     rfl
 
@@ -824,7 +823,7 @@ open GlobalTheory.KeyKa
 
 
 theorem _root_.GlobalTheory.T.keyInvariantFromIntersection_unique : Out.Laws → ∀ (K : Type) [Field K] [CharZero K] (x : KeyIn K) (n l l' : ℕ) (al : ℕ → Matrix (Fin 4) (Fin 4) ℤ) (s : Fin x.P.g → RR x n) (κ κ' : Kˣ), admitted x.P.g n l l' al → KaVal x n l l' al s κ → KaVal x n l l' al s κ' → κ = κ' := by
-  first | exact @GlobalTheory.KaUnique.kaVal_unique | exact GlobalTheory.KaUnique.kaVal_unique | (intros; apply GlobalTheory.KaUnique.kaVal_unique <;> assumption)
+  first | exact @GlobalTheory.KaUnique.kaVal_unique
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ThetaLawProofs.KeyInvariantFromIntersectionUniqueStatement =====

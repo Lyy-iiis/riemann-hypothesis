@@ -980,12 +980,12 @@ theorem exists_primitive_norm_neg : ∀ (F E : Type) [Field F] [NumberField F] [
     push_cast
     rfl
   · simp only [map_add (f := _), LinearMap.add_apply, LinearMap.map_smulₛₗ, LinearMap.smul_apply,
-      LinearMap.map_smul, smul_eq_mul, hee, hff, hef, hfe, mul_zero, mul_one, zero_add, add_zero,
+      smul_eq_mul, hee, hff, hef, hfe, mul_zero, mul_one, zero_add, add_zero,
       starRingEnd_apply]
     linear_combination h1 + h2 - (T : E) * hwE
   · intro γ hγ
     have hfz : S.hT f (γ • (α • e + b • f)) = γ * α := by
-      simp only [map_add (f := _), LinearMap.map_smul, smul_eq_mul, hff, hfe, RingHom.id_apply]; ring
+      simp only [map_add (f := _), LinearMap.map_smul, smul_eq_mul, hff, hfe]; ring
     have hγα : γ * α ∈ c := hfz ▸ hfc _ hγ
     obtain ⟨o1, ho1⟩ := hPc p0 hp0 _ hγα
     obtain ⟨o2, ho2⟩ := hPc w hwP _ hγα
@@ -994,8 +994,7 @@ theorem exists_primitive_norm_neg : ∀ (F E : Type) [Field F] [NumberField F] [
     have E2 : (o2 : E) = w * γ := mul_right_cancel₀ hα0 (by rw [ho2]; ring)
     have E3 : (o3 : E) = -(T : E) * γ * star (w : E) := by
       have hez : S.hT (α • e) (γ • (α • e + b • f)) = γ * (star α * b) := by
-        simp only [map_add (f := _), LinearMap.map_smulₛₗ, LinearMap.smul_apply, LinearMap.map_smul,
-          smul_eq_mul, hee, hef, starRingEnd_apply, RingHom.id_apply]; ring
+        simp only [map_add (f := _), LinearMap.map_smulₛₗ, LinearMap.smul_apply, smul_eq_mul, hee, hef, starRingEnd_apply, RingHom.id_apply]; ring
       rw [hez, h1] at ho3
       change (o3 : E) = _ at ho3
       rw [ho3]; ring
@@ -1720,7 +1719,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 theorem exists_transport {D : D7} (F : ∀ u, Formalism.L2.Forms.Forms0 D u)
     (X : HidaSetting D) (hK : X.LevelSubgroupCharacter) (hι : ∃ ιA, GlobalTheory.St.IsAdeleIso X ιA) (u : D.what₂.Word) :
     ∃ Tr : Transport X u (F u), LevelMatch X Tr hK := by
-  obtain ⟨wt, hw⟩ := GlobalTheory.St.WittT.wittExists D X u
+  obtain ⟨wt, hw⟩ := _root_.GlobalTheory.St.WittT.wittExists_holds D X u
   obtain ⟨ιA, hι⟩ := hι
   obtain ⟨g0, hg0⟩ := GlobalTheory.St.G.genusMatch_holds D F X u wt ιA hw hι
   obtain ⟨h0, hL, hKm⟩ := GlobalTheory.St.G.levelConj_holds D F X hK u wt ιA g0 hw hι hg0
@@ -1738,7 +1737,7 @@ theorem exists_setting (hSW : HeckeCharacterZeroLocus.SiegelWeilU.SiegelWeilUnit
         Formalism.L2.SG.LocVol.IsStdChar ψ ∧
         Formalism.L2.SG.MassDataConc.MeasCompatψ X ψ ∧ (∀ w, Formalism.L2.SG.LocVol.LocCompatX X ψ w) ∧
         ∀ hK : X.LevelSubgroupCharacter, ∀ u, ∃ Tr : Transport X u (F u), LevelMatch X Tr hK := by
-  have hB : BesselNVGap := Formalism.L2.SG.Closed.BesselNVGap_holds
+  have hB : BesselNVGap := _root_.Formalism.L2.SG.BesselDiscreteSeries.besselNVGap
   have hC : CoefWeightedLoc := Formalism.L2.SG.Closed.CoefWeightedLoc_holds
   let A := Formalism.L2.SG.InstExistsPf.instanceOfRecord D
   obtain ⟨L⟩ := GlobalTheory.St.Lat.latExists_of_forms0 D (F D.u₀)

@@ -76,11 +76,6 @@ noncomputable section
 
 namespace GlobalTheory.MBLow.TrAdapt
 
-theorem spMap_comp' {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B) (g : B →+* C) :
-    spMap (g.comp f) = spMap g ≫ spMap f := by
-  show Spec.map _ = Spec.map _ ≫ Spec.map _
-  rw [← Spec.map_comp, ← CommRingCat.ofHom_comp]
-
 theorem dualMap_comp {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B) (g : B →+* C) :
     (dualMap g).comp (dualMap f) = dualMap (g.comp f) :=
   RingHom.ext fun z => TrivSqZeroExt.ext (by simp [dualMap]) (by simp [dualMap])
@@ -101,7 +96,7 @@ def rhoE : TE R F' ⟶ TE R F :=
         spMap (algebraMap (FractionRing R) F) ≫ spMap (algebraMap R (FractionRing R)) =
       spMap (algebraMap F' (DualNumber F')) ≫ spMap (algebraMap (FractionRing R) F') ≫
         spMap (algebraMap R (FractionRing R))
-    simp only [← spMap_comp']
+    simp only [← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
     apply congrArg spMap
     ext r <;> simp [dualMap, he, TrivSqZeroExt.algebraMap_eq_inl])
 
@@ -111,7 +106,7 @@ def sigE : TF (R := R) F' ⟶ TF (R := R) F :=
   Over.homMk (spMap (e : F →+* F')) (by
     show spMap (e : F →+* F') ≫ spMap (algebraMap (FractionRing R) F) ≫ spMap (algebraMap R (FractionRing R)) =
       spMap (algebraMap (FractionRing R) F') ≫ spMap (algebraMap R (FractionRing R))
-    simp only [← spMap_comp']
+    simp only [← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
     congr 1
     exact RingHom.ext fun r => by simp [he])
 
@@ -122,7 +117,7 @@ theorem sigE_left : (sigE e he).left = spMap (e : F →+* F') := rfl
 theorem red_comm : (sigE e he).left ≫ redE F = redE F' ≫ (rhoE e he).left := by
   rw [sigE_left, rhoE_left]
   show spMap _ ≫ spMap _ = spMap _ ≫ spMap _
-  rw [← spMap_comp', ← spMap_comp']
+  rw [← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp]
   congr 1
   exact RingHom.ext fun z => by simp [dualMap]
 
@@ -181,7 +176,7 @@ theorem adapted_map [CharZero F] [CharZero F'] (D : DegPre R) {N : NumD F} (ν :
         (val_pull hJ _ _ _))).symm)
       rw [Category.id_comp, Category.id_comp, red_comm]
   · refine (hgm' _).1.trans ?_
-    rw [hb i, ← Category.assoc, rhoE_left, ← spMap_comp', dualMap_comp, toF_comp e he]
+    rw [hb i, ← Category.assoc, rhoE_left, ← _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.spMap_comp, dualMap_comp, toF_comp e he]
   · exact Over.OverMorphism.ext ((hgm' _).1.trans ((congrArg (fun q => (rhoE e he).left ≫ q.left) (ht l).1).trans
       (congrArg Over.Hom.left hzT)))
   · obtain ⟨χ₀, rfl⟩ := I.e.surjective χ
@@ -361,7 +356,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.degenerationDataValuesIso_transport_formsLevelsFamilies : ∀ (F F' : Type) [Field F] [Field F'] (e : F ≃+* F') (N : NumD F) (N' : NumD F') (I : NumD.Hom (e : F →+* F') N N'), Function.Bijective I.φ → (∀ x, I.h x = 1) → I.lam = 1 → (∀ (k : ℕ) (β : N.Form k), ∃ β' : N'.Form k, ∀ a b, β'.be (I.e a) (I.e b) = β.be a b) ∧ ∀ (m g : ℕ), Odd m → ∀ (ζ : Fˣ) (q : (Fin (2 * g) → ZMod (m ^ 2)) → N.QT (m ^ 2)), QLevel N g (m ^ 2) ζ q → ∃ q' : (Fin (2 * g) → ZMod (m ^ 2)) → N'.QT (m ^ 2), QLevel N' g (m ^ 2) (Units.map (e : F →+* F').toMonoidHom ζ) q' ∧ ∀ a (f : N.X → N.A → F) (f' : N'.X → N'.A → F'), IsEvFam N m (q a) f → (∀ α x, f' (I.e α) (I.φ x) = e (f α x)) → IsEvFam N' m (q' a) f' := by
-  first | exact @GlobalTheory.MBLow.TrNum.transport | exact GlobalTheory.MBLow.TrNum.transport | (intros; apply GlobalTheory.MBLow.TrNum.transport <;> assumption)
+  first | exact @GlobalTheory.MBLow.TrNum.transport
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DegenerationDataValuesIsoTransportFormsLevelsFamStatement =====
@@ -720,7 +715,7 @@ open scoped CategoryTheory.Obj
 attribute [local instance] Over.cartesianMonoidalCategory
 
 theorem _root_.GlobalTheory.T.archimedeanExistence_of_complex_isomorphic_field : ∀ κ : Rule, Funct κ → Arch κ → ArchF κ := by
-  first | exact @GlobalTheory.MBLow.archF_of_arch | exact GlobalTheory.MBLow.archF_of_arch | (intros; apply GlobalTheory.MBLow.archF_of_arch <;> assumption)
+  first | exact @GlobalTheory.MBLow.archF_of_arch
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ArchimedeanExistenceOfComplexIsomorphicFieldStatement =====

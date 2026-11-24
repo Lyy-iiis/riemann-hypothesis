@@ -111,7 +111,6 @@ theorem nk_pos (hdet : Zm.det ≠ 0) : 0 < nk Zm := by
     simp [h] at h2
     first
       | exact hdet h2.symm
-      | exact hdet h2
   exact Finset.sum_pos' (fun i _ => Complex.normSq_nonneg _)
     ⟨b, Finset.mem_univ _, Complex.normSq_pos.mpr hb⟩
 
@@ -142,7 +141,6 @@ theorem sum_kap_be (hdet : Zm.det ≠ 0) :
 theorem sqrt_div_mul_eq_sqrt_mul (hT : 0 < T) (hT' : 0 < T') : Real.sqrt (T / T') * T' = Real.sqrt (T * T') := by
   have h1 : T * T' = (T / T') * T' ^ 2 := by
     field_simp
-    try ring
   rw [h1, Real.sqrt_mul (div_nonneg hT.le hT'.le), Real.sqrt_sq hT'.le]
 
 theorem xco_fco (hT : 0 < T) (hT' : 0 < T') (hdet : Zm.det ≠ 0) (a b : Fin (r + 1)) :
@@ -402,7 +400,7 @@ theorem fco_gram (hT : 0 < T) (hT' : 0 < T') (a a' : Fin (r + 1)) :
     hco T' (fco T T' a) (fco T T' a') = if a = Fin.last r ∧ a' = Fin.last r then -((T : ℝ) : ℂ) else 0 := by
   have hs : ((Real.sqrt (T / T') : ℝ) : ℂ) * conj ((Real.sqrt (T / T') : ℝ) : ℂ) = ((T / T' : ℝ) : ℂ) := by
     rw [Complex.conj_ofReal, ← Complex.ofReal_mul, Real.mul_self_sqrt (div_pos hT hT').le]
-  simp only [hco, fco, Pi.zero_apply, map_zero, mul_zero, zero_mul, Finset.sum_const_zero, add_zero, zero_add]
+  simp only [hco, fco, Pi.zero_apply, map_zero, mul_zero, zero_mul, Finset.sum_const_zero, add_zero]
   by_cases ha : a = Fin.last r <;> by_cases ha' : a' = Fin.last r
   · subst ha ha'
     simp only [if_true, and_self]
@@ -430,7 +428,7 @@ theorem dual_coordinates_kronecker (hT : 0 < T) (hT' : 0 < T') (hdet : Zm.det �
   have hu : IsUnit Zm.det := isUnit_iff_ne_zero.mpr hdet
   have h := congrArg (fun M => conj (M b.castSucc c)) (Matrix.nonsing_inv_mul Zm hu)
 
-  simp only [Matrix.mul_apply, map_sum, map_mul, Matrix.one_apply, Complex.star_def] at h
+  simp only [Matrix.mul_apply, map_sum, map_mul, Matrix.one_apply] at h
   simp only [Complex.star_def]
   rw [h]
   by_cases hc : c = b.castSucc
@@ -449,14 +447,13 @@ theorem xco_ysco (hT : 0 < T) (hT' : 0 < T') (hdet : Zm.det ≠ 0) (hG : 0 < gPo
 theorem ysco_ysco (hT : 0 < T) (hT' : 0 < T') (hdet : Zm.det ≠ 0) (hG : 0 < gPoly (T * T') Zm) (b e : Fin r) :
     hco T' (ysco T T' Zm b) (ysco T T' Zm e) = 0 := by
   have hx : ∀ (c : Fin r) (d : Fin r), hco T' (xco T T' Zm c.castSucc) (y0 T T' Zm d) = if c = d then 1 else 0 := by
-    intro c d; rw [hco_symm, dual_coordinates_kronecker T T' Zm hT hT' hdet]; simp [Fin.castSucc_inj, eq_comm]
+    intro c d; rw [hco_symm, dual_coordinates_kronecker T T' Zm hT hT' hdet]; simp [Fin.castSucc_inj]
   have hy : ∀ (c : Fin r) (d : Fin r), hco T' (y0 T T' Zm d) (xco T T' Zm c.castSucc) = if c = d then 1 else 0 := by
     intro c d; rw [dual_coordinates_kronecker T T' Zm hT hT' hdet]; simp [Fin.castSucc_inj]
   have hxx : ∀ (c d : Fin r), hco T' (xco T T' Zm c.castSucc) (xco T T' Zm d.castSucc) = 0 := by
     intro c d; rw [xco_gram T T' Zm hT hT' hdet hG, Ap_cs]
   simp only [ysco, hco_sub_left, hco_sub_right, hco_smul_left, hco_smul_right, hco_sum_left, hco_sum_right, hx, hy,
-    hxx, mul_zero, Finset.sum_const_zero, mul_ite, mul_one, Finset.sum_ite_eq', Finset.mem_univ, if_true,
-    Finset.sum_ite_eq]
+    hxx, mul_zero, Finset.sum_const_zero, mul_ite, mul_one, Finset.sum_ite_eq', Finset.mem_univ, if_true]
   simp only [sub_zero, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true]
   rw [← hco_symm T' (y0 T T' Zm e) (y0 T T' Zm b)]
   simp only [map_div₀, map_one, map_ofNat]
@@ -476,7 +473,7 @@ theorem cofco_xco (hT : 0 < T) (hT' : 0 < T') (hdet : Zm.det ≠ 0) (b : Fin (r 
 theorem cofco_self (hT : 0 < T) (hT' : 0 < T') :
     hco T' (cofco T T' Zm) (cofco T T' Zm) = -((T : ℝ) : ℂ) * ((Complex.normSq (kap Zm (Fin.last r)) : ℝ) : ℂ) := by
   simp only [cofco, hco_sum_left, hco_sum_right, hco_smul_left, hco_smul_right, fco_gram T T' hT hT']
-  simp only [mul_ite, mul_zero, Finset.sum_ite_irrel, Finset.sum_const_zero]
+  simp only [mul_ite, mul_zero]
   rw [Finset.sum_eq_single (Fin.last r), Finset.sum_eq_single (Fin.last r)]
   · simp only [and_self, if_true, kap, Complex.conj_conj, Complex.normSq_eq_conj_mul_self]; ring
   · intro a _ ha; simp [ha]
@@ -491,20 +488,19 @@ theorem pco_xco (hT : 0 < T) (hT' : 0 < T') (hdet : Zm.det ≠ 0) (hG : 0 < gPol
     mul_zero, Finset.sum_const_zero, sub_zero, ysco_xco T T' Zm hT hT' hdet hG]
   induction d using Fin.lastCases with
   | last =>
-    simp only [Ap_last, if_false]
-    simp only [mul_ite, mul_one, mul_zero, Finset.sum_const_zero, sub_zero]
+    simp only [Ap_last]
+    simp only [mul_ite, mul_one, mul_zero]
     have : ∀ b : Fin r, ¬ (Fin.last r = b.castSucc) := fun b h => Fin.castSucc_ne_last b h.symm
     simp only [this, if_false, Finset.sum_const_zero, sub_zero]
     field_simp; ring
   | cast d =>
-    simp only [Ap_cs', mul_zero, add_zero, mul_ite, mul_one, Fin.castSucc_inj, Finset.sum_ite_eq',
-      Finset.sum_ite_eq, Finset.mem_univ, if_true, sub_self]
+    simp only [Ap_cs', mul_zero, add_zero, mul_ite, mul_one, Fin.castSucc_inj, Finset.sum_ite_eq, Finset.mem_univ, if_true, sub_self]
 
 theorem pco_ysco (hT : 0 < T) (hT' : 0 < T') (hdet : Zm.det ≠ 0) (hG : 0 < gPoly (T * T') Zm) (e : Fin r) :
     hco T' (pco T T' Zm) (ysco T T' Zm e) = 0 := by
   simp only [pco, hco_add_left, hco_sub_left, hco_smul_left, hco_sum_left, xco_ysco T T' Zm hT hT' hdet hG,
     ysco_ysco T T' Zm hT hT' hdet hG, mul_zero, Finset.sum_const_zero, sub_zero, mul_ite, mul_one,
-    Fin.castSucc_inj, Finset.sum_ite_eq, Finset.mem_univ, if_true, if_false, add_zero]
+    Fin.castSucc_inj]
   simp [Fin.castSucc_ne_last, eq_comm]
 
 theorem pco_self (hT : 0 < T) (hT' : 0 < T') (hdet : Zm.det ≠ 0) (hG : 0 < gPoly (T * T') Zm) :
@@ -644,15 +640,14 @@ theorem secM_spec (S : B.RealPlaceData k r Wp Wq) (ν' : Fin (2 * r + k + 1) →
     all_goals try fin_cases i
     all_goals try fin_cases j
     all_goals simp only [hYdef, Yv, uB, Fin.zero_eta, Fin.mk_one, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.head_cons, hcv]
+      hcv]
     all_goals simp [hxx, hxy, hyx, hyy, hnx, hny, hnn, hxn, hyn, Ap, Fin.castSucc_inj, Fin.castSucc_ne_last,
       h_w_ee hz', h_w_ee hν, h_w_es hz', h_w_es hν, h_ee_w hz', h_ee_w hν, h_es_w hz', h_es_w hν, hzz, hνz,
-      hνν, hzν, hs2]
+      hνν, hzν]
     all_goals first
       | (intro h; exact Fin.castSucc_ne_last _ h.symm)
       | (split_ifs <;> simp_all)
       | (exact_mod_cast hs2.symm)
-      | (simp only [hT'def, ← hs2]; push_cast; ring)
   have h4 : ∀ x, (∀ j, herm (Hpk k r) x (uB S.z' ν' j) = 0) → ∀ i, herm (Hpk k r) x (Y i) = 0 := by
     intro x hx i
     have he : ∀ a, herm (Hpk k r) x (ee k r a) = 0 := fun a => hx (Sum.inl (Sum.inl a))
@@ -696,9 +691,9 @@ theorem secM_spec (S : B.RealPlaceData k r Wp Wq) (ν' : Fin (2 * r + k + 1) →
     rcases cast_or_last a with ha | ⟨a', rfl⟩
     · subst ha
       rw [fvec_lastI, hsq]
-      simp [cvec, fco, Fin.castSucc_ne_last, (Fin.castSucc_ne_last _).symm]
+      simp [cvec, fco, (Fin.castSucc_ne_last _).symm]
     · rw [fvec_cs]
-      simp [cvec, fco, Fin.castSucc_ne_last, Fin.castSucc_inj, Pi.single_apply, ite_smul]
+      simp [cvec, fco, Fin.castSucc_ne_last, Fin.castSucc_inj, ite_smul]
   have hZ : Zhat k r S.z S.z' (m₀ * σ) = Zm := by
     ext a b
     rw [reduced_matrix_of_stabilizer m₀ σ hmU hme μ hμ.ne' hmz a b, hσf, hff, hcv, xco_fco T T' Zm hT hT' hdet]
@@ -746,7 +741,7 @@ theorem secM_spec (S : B.RealPlaceData k r Wp Wq) (ν' : Fin (2 * r + k + 1) →
         rw [nco, smul_smul, div_mul_div_comm, mul_comm (ph Zm), div_self (mul_ne_zero hsG0 hph), one_smul]
       simp only [hddef]
       rw [hn, pco]
-      simp only [neg_smul, neg_div]
+      simp only [neg_smul]
       abel
     have hinv : (m₀ * σ)⁻¹ *ᵥ D.cofL S (m₀ * σ) = cvec k S.z' ν' d := by
       have : (m₀ * σ) *ᵥ cvec k S.z' ν' d = D.cofL S (m₀ * σ) := by
@@ -763,7 +758,7 @@ theorem secM_spec (S : B.RealPlaceData k r Wp Wq) (ν' : Fin (2 * r + k + 1) →
     rw [hph']
     push_cast
     field_simp
-    first | exact hnorm.symm | linear_combination -hnorm | linear_combination (-(((sGT' T T' Zm : ℝ) : ℂ))) * hnorm
+    first | exact hnorm.symm
   ·
     intro u hu
     set v := m₀⁻¹ *ᵥ u with hvdef
@@ -899,21 +894,6 @@ def rearr (k r : ℕ) (w : Equiv.Perm (Fin (r + 1))) :
 @[simp] theorem rearr_apply (w : Equiv.Perm (Fin (r + 1))) (q : OD.RR k r w) :
     rearr k r w q = ((q.1.2.1, q.2.2.1), ((q.1.1, q.1.2.2), (q.2.1, q.2.2.2))) := rfl
 
-private theorem measurePreserving_swap4 {α β γ δ : Type} [MeasurableSpace α] [MeasurableSpace β] [MeasurableSpace γ]
-    [MeasurableSpace δ] (μa : Measure α) (μb : Measure β) (μc : Measure γ) (μd : Measure δ) [SFinite μa]
-    [SFinite μb] [SFinite μc] [SFinite μd] :
-    MeasurePreserving (Dx2.SL.swap4 : (α × β) × γ × δ ≃ᵐ (α × γ) × β × δ) ((μa.prod μb).prod (μc.prod μd))
-      ((μa.prod μc).prod (μb.prod μd)) := by
-  have e1 := measurePreserving_prodAssoc μa μb (μc.prod μd)
-  have e2 := MeasurePreserving.symm _ (measurePreserving_prodAssoc μb μc μd)
-  have e3 := (Measure.measurePreserving_swap (μ := μb) (ν := μc)).prod (MeasurePreserving.id μd)
-  have e4 := measurePreserving_prodAssoc μc μb μd
-  have e5 := MeasurePreserving.symm _ (measurePreserving_prodAssoc μa μc (μb.prod μd))
-  have h := (e5.comp ((MeasurePreserving.id μa).prod (e4.comp (e3.comp e2)))).comp e1
-  convert h using 1
-  funext p
-  rfl
-
 theorem mp_rearr (S : B.RealPlaceData k r Wp Wq) (w : Equiv.Perm (Fin (r + 1))) {μ0 μ0' : Measure (Mt k r)}
     (hμ0 : B.IsHaarOn (C2.N0set k r S.z) μ0) (hμ0' : B.IsHaarOn (C2.N0set k r S.z') μ0') :
     MeasurePreserving (rearr k r w) (OD.nuR S w μ0 μ0')
@@ -931,7 +911,7 @@ theorem mp_rearr (S : B.RealPlaceData k r Wp Wq) (w : Equiv.Perm (Fin (r + 1))) 
   haveI t4 : SFinite (volume : Measure (G.UT (r + 1) → ℂ)) := inferInstance
   have h1 := (inE_mp S.μW (volume : Measure (C2.LPidx w → ℂ)) μ0).prod
     (inE_mp S.μW' (volume : Measure (G.UT (r + 1) → ℂ)) μ0')
-  have h2 := measurePreserving_swap4 (volume : Measure (C2.LPidx w → ℂ)) (S.μW.prod μ0)
+  have h2 := _root_.Formalism.FourierDecayAlt.P.Dx2.SL.measurePreserving_prod_middle_swap (volume : Measure (C2.LPidx w → ℂ)) (S.μW.prod μ0)
     (volume : Measure (G.UT (r + 1) → ℂ)) (S.μW'.prod μ0')
   exact h2.comp h1
 
@@ -957,27 +937,6 @@ noncomputable section
 variable {k r : ℕ} {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
   [InnerProductSpace ℂ Wq]
 
-private theorem herm_hpk_bvec_esI (v : Fin (2 * r + k + 1) → ℂ) (a : Fin r) :
-    herm (Hpk k r) v (bvec (esI k r a)) = v (eI k r a) := by
-  have ha := a.isLt
-  have he : (eI k r a).val = a.val := rfl
-  have hs : (esI k r a).val = 2 * r + k - a.val := rfl
-  unfold herm bvec
-  rw [← Pi.single_star, star_one, single_dotProduct, one_mul, Matrix.mulVec, dotProduct,
-    Finset.sum_eq_single (eI k r a)]
-  · have h1 : Hpk k r (esI k r a) (eI k r a) = 1 := by
-      simp only [Hpk]
-      rw [if_neg (fun h => absurd h.1 (by omega)), if_pos ⟨by omega, by omega⟩]
-    rw [h1, one_mul]
-  · intro j _ hj
-    have hj' : j.val ≠ a.val := fun h => hj (Fin.ext (h.trans he.symm))
-    have h0 : Hpk k r (esI k r a) j = 0 := by
-      simp only [Hpk]
-      rw [if_neg (fun h => absurd h.1 (by omega)), if_neg (fun h => hj' (by have := h.2; omega)),
-        if_neg (fun h => absurd h.2.1 (by omega))]
-    rw [h0, zero_mul]
-  · simp
-
 theorem ell_eq (z : Fin (2 * r + k + 1) → ℂ) (g : B.Mat k r) : ell k r z g = C2.simpleUp (C2.uMap k r z g) := by
   unfold ell C2.simpleUp
   rw [Fin.sum_univ_castSucc]
@@ -986,7 +945,7 @@ theorem ell_eq (z : Fin (2 * r + k + 1) → ℂ) (g : B.Mat k r) : ell k r z g =
   have ha : a.val + 1 < r + 1 := by omega
   rw [dite_eq_left ha]
   simp only [C2.uMap, Fin.val_castSucc, a.isLt, dite_true]
-  rw [herm_hpk_bvec_esI]
+  rw [_root_.PI.StabPairsW.herm_es]
   simp only [fvec]
   by_cases h1 : a.val + 1 < r
   · simp [h1, bvec, Matrix.mulVec_single]
@@ -1111,7 +1070,7 @@ theorem fibInt_left (Bs : B.RealPlaceData k r Wp Wq) {μ0 μ0' : Measure (Mt k r
     (hμ0 : B.IsHaarOn (C2.N0set k r Bs.z) μ0) (hμ0' : B.IsHaarOn (C2.N0set k r Bs.z') μ0')
     (F : B.Mat k r → (Wq →L[ℂ] Wp)) (g : B.Mat k r) {n1 : B.Mat k r} (hn1 : n1 ∈ C2.N0set k r Bs.z) :
     PBI.fibInt Bs μ0 μ0' F (n1⁻¹ * g) = PBI.fibInt Bs μ0 μ0' F g := by
-  have hdet : IsUnit n1.det := Formalism.FourierDecayAlt.P.StabilizerDisintegration.A.isUnit_N hn1.1
+  have hdet : IsUnit n1.det := _root_.Formalism.FourierDecayAlt.P.Dx2.OrbJ.isUnit_of_N hn1.1
   haveI := Formalism.FourierDecayAlt.P.B7.sf Bs.haarW
   haveI := Formalism.FourierDecayAlt.P.B7.sf Bs.haarW'
   haveI := Formalism.FourierDecayAlt.P.B7.sf hμ0
@@ -1141,7 +1100,7 @@ theorem fibInt_right (Bs : B.RealPlaceData k r Wp Wq) {μ0 μ0' : Measure (Mt k 
     (hμ0 : B.IsHaarOn (C2.N0set k r Bs.z) μ0) (hμ0' : B.IsHaarOn (C2.N0set k r Bs.z') μ0')
     (F : B.Mat k r → (Wq →L[ℂ] Wp)) (g : B.Mat k r) {n1 : B.Mat k r} (hn1 : n1 ∈ C2.N0set k r Bs.z') :
     PBI.fibInt Bs μ0 μ0' F (g * n1) = PBI.fibInt Bs μ0 μ0' F g := by
-  have hdet : IsUnit n1.det := Formalism.FourierDecayAlt.P.StabilizerDisintegration.A.isUnit_N hn1.1
+  have hdet : IsUnit n1.det := _root_.Formalism.FourierDecayAlt.P.Dx2.OrbJ.isUnit_of_N hn1.1
   haveI := Formalism.FourierDecayAlt.P.B7.sf Bs.haarW
   haveI := Formalism.FourierDecayAlt.P.B7.sf Bs.haarW'
   haveI := Formalism.FourierDecayAlt.P.B7.sf hμ0
@@ -1188,7 +1147,7 @@ theorem conj_fix {z : Fin (2 * r + k + 1) → ℂ} (hz : C2.StdZ k r z) {v : Mat
       ∀ b, (C2.tauM k r z v * n * (C2.tauM k r z v)⁻¹) *ᵥ fvec k r z b = fvec k r z b := by
   set τ := C2.tauM k r z v with hτdef
   have hτN : τ ∈ Nset k r := Formalism.FourierDecayAlt.P.StabilizerDisintegration.A.tau_N hz hv
-  have hτdet : IsUnit τ.det := Formalism.FourierDecayAlt.P.StabilizerDisintegration.A.isUnit_N hτN
+  have hτdet : IsUnit τ.det := _root_.Formalism.FourierDecayAlt.P.Dx2.OrbJ.isUnit_of_N hτN
   refine ⟨Formalism.QuantumDeterminants.WeylGroupFacts.mem_n_mul (Formalism.QuantumDeterminants.WeylGroupFacts.mem_n_mul hτN hn) (Formalism.QuantumDeterminants.WeylGroupFacts.mem_n_inv hτN), ?_⟩
 
   have h1W : (1 : B.Mat k r) ∈ UWset k r z := by
@@ -1247,8 +1206,8 @@ theorem fib_indep (ν' : Fin (2 * r + k + 1) → ℂ) (m₀ : B.Mat k r) (hbase 
   set τ' := C2.tauM k r S.z' u' with hτ'_def
   have hτN : τ ∈ Nset k r := A.tau_N hz hv
   have hτN' : τ' ∈ Nset k r := A.tau_N hz' hu'
-  have uτ := A.isUnit_N hτN
-  have uτ' := A.isUnit_N hτN'
+  have uτ := _root_.Formalism.FourierDecayAlt.P.Dx2.OrbJ.isUnit_of_N hτN
+  have uτ' := _root_.Formalism.FourierDecayAlt.P.Dx2.OrbJ.isUnit_of_N hτN'
   have hGG := Formalism.FourierDecayAlt.P.unitary_group_closed k r
   have hg1 : τ⁻¹ * γ0 * τ' ∈ B.GV k r :=
     hGG.mul_mem _ (hGG.mul_mem _ (hGG.inv_mem _ hτN.1) _ hγe) _ hτN'.1
@@ -1261,7 +1220,7 @@ theorem fib_indep (ν' : Fin (2 * r + k + 1) → ℂ) (m₀ : B.Mat k r) (hbase 
   have hpos1 : 0 < Gf k r S.z S.z' (τ⁻¹ * γ0 * τ') := by
     rw [PBI.gf_eq_gPoly, hZ1]
     rw [PBI.gf_eq_gPoly] at hpos0
-    obtain ⟨h1, h2⟩ := Formalism.FourierDecayAlt.P.StabilizerDisintegration.minorsLU r vᴴ (Zhat k r S.z S.z' γ0) u' (A.UT_star hv) hu'
+    obtain ⟨h1, h2⟩ := Formalism.FourierDecayAlt.P.StabilizerDisintegration.minorsLU r vᴴ (Zhat k r S.z S.z' γ0) u' (_root_.Formalism.FourierDecayAlt.P.C2x2.ut_conjT hv) hu'
     unfold PBI.gPoly at hpos0 ⊢
     rw [h1, h2]; exact hpos0
   obtain ⟨s, hs, s', hs', hgs⟩ := Formalism.FourierDecayAlt.P.fibre_orbit_description k r S.z S.z' ⟨S.k_pos, hz, hz'⟩ _ hg1 g2 hg2
@@ -1274,7 +1233,7 @@ theorem fib_indep (ν' : Fin (2 * r + k + 1) → ℂ) (m₀ : B.Mat k r) (hbase 
   obtain ⟨hnB'', hfB''⟩ := conj_fix hz' hu' hnB huB
   have uhA : IsUnit hA.det := Dx2.OrbJ.isUnit_of_G hhA.1
   have uhB : IsUnit hB.det := Dx2.OrbJ.isUnit_of_G hhB.1
-  have unA : IsUnit nA.det := A.isUnit_N hnA
+  have unA : IsUnit nA.det := _root_.Formalism.FourierDecayAlt.P.Dx2.OrbJ.isUnit_of_N hnA
 
   have cA : hA⁻¹ * τ⁻¹ = τ⁻¹ * hA⁻¹ := by
     have := A.tau_comm hhA v
@@ -1460,10 +1419,10 @@ section -- clump:auto
 namespace Formalism.FourierDecayAlt.P
 
 theorem phi_zero_hermitian_curvature : Formalism.FourierDecayAlt.KB.PhiZero :=
-  phi_zero_of_parts pbi_sectionExists_proof fibre_integral_smooth fibre_integral_cells
+  phi_zero_of_parts pbi_sectionExists_proof _root_.Formalism.FourierDecayAlt.P.SmoothExtensionClosedSet.fibIntSmooth fibre_integral_cells
 
 theorem density_constant : Formalism.FourierDecayAlt.KB.DensC :=
-  pb_densC_of phi_zero_hermitian_curvature vector_vanishes_big_cell
+  pb_densC_of phi_zero_hermitian_curvature _root_.Formalism.FourierDecayAlt.P.PBM.bigCellVan
 
 end Formalism.FourierDecayAlt.P
 end -- clump:auto

@@ -309,11 +309,6 @@ theorem stalkMap_gs {Z : Scheme.{0}} (r : Z ⟶ Y) (q : Y ⟶ X) (z : Z) (W : X.
   rw [gs_eq q (r z) W h, gs_eq (r ≫ q) z W h]
   exact Scheme.Hom.germ_stalkMap_apply r (q ⁻¹ᵁ W) z h _
 
-theorem valAt'_ne (x : Sp ℂ ⟶ X) {U : X.Opens} (h : ⊤ ≤ x ⁻¹ᵁ U) (f : Γ(X, U)ˣ) : valAt' x U f.val ≠ 0 := fun h0 => by
-  have := gm_eq_toStalk x U h f
-  rw [h0, map_zero] at this
-  exact Units.ne_zero _ this
-
 theorem val_zpow_eq {W : ((Sp ℂ).presheaf.stalk pt)ˣ} {c : ℂ} (h : W.val = toStalk c) (k : ℤ) :
     (W ^ k).val = toStalk (c ^ k) := by
   have hc : c ≠ 0 := fun h0 => W.ne_zero (by rw [h, h0, map_zero])
@@ -336,7 +331,7 @@ theorem gw_eq_toStalk (w : LB.Iso L' (L.pull F)) {y : Sp ℂ ⟶ Y} {j : L.ι} {
   gm_eq_toStalk y _ (le_isoChart hj hk) _
 
 theorem isoVal_ne (w : LB.Iso L' (L.pull F)) {y : Sp ℂ ⟶ Y} {j : L.ι} {k : L'.ι} (hj : ⊤ ≤ (y ≫ F) ⁻¹ᵁ L.U j)
-    (hk : ⊤ ≤ y ⁻¹ᵁ L'.U k) : isoVal w y j k ≠ 0 := valAt'_ne y (le_isoChart hj hk) _
+    (hk : ⊤ ≤ y ⁻¹ᵁ L'.U k) : isoVal w y j k ≠ 0 := _root_.GlobalTheory.valAt'_unit_ne_zero y (le_isoChart hj hk) _
 
 theorem isoVal_trans {w : LB.Iso L' (L.pull F)} (hw : w.IsGen) {y : Sp ℂ ⟶ Y} {j j' : L.ι} {k k' : L'.ι}
     (hj : ⊤ ≤ (y ≫ F) ⁻¹ᵁ L.U j) (hj' : ⊤ ≤ (y ≫ F) ⁻¹ᵁ L.U j') (hk : ⊤ ≤ y ⁻¹ᵁ L'.U k) (hk' : ⊤ ≤ y ⁻¹ᵁ L'.U k') :
@@ -418,7 +413,7 @@ theorem genVal_double (hL : L.IsLB) {mu : LB.Gen (LB.LinComb L (K := Fin 2) ![((
       ∀ i, ⊤ ≤ (u.ex (z + z)).left ⁻¹ᵁ L.U i → u.fr i (z + z) = e ^ 4 * u.fr i (z + l + (z + l))) (z : Fin g → ℂ) :
     genVal u hL mu (u.ex z).left ![z + z, z] = genVal u hL mu (u.ex 0).left ![0 + 0, 0] := by
   have hd := differentiable_genVal (u := u) hL hmu (𝟙 A.left) (q := fun z : Fin g → ℂ => z) differentiable_id
-    (z := fun z => ![z + z, z]) (fun k => by fin_cases k <;> simp <;> fun_prop)
+    (z := fun z => ![z + z, z]) (fun k => by fin_cases k <;> simp)
     (fun w => by rw [Category.comp_id]; exact isLift_double u w)
   simp only [Category.comp_id] at hd
   refine entire_apply_eq_of_periodic_of_span_real hd u.full (fun z l hl => ?_) z 0
@@ -663,7 +658,7 @@ open GlobalTheory.KeyPow GlobalTheory.KeyKa
 open GlobalTheory.KeyEq
 
 theorem _root_.GlobalTheory.T.thetaNormalForm_translate_halfPeriod : Out.Laws → ThetaUnifAV → ∀ (x x' : KeyIn ℂ) (g : ℕ) (h : x.P.g = g) (u : HolUnif x.P.A x.P.L g) (τ : Matrix (Fin g) (Fin g) ℂ) (a b a' b' : Fin g → ℂ) (m n : Fin g → ℤ) (ν : ℂˣ), charHalf g a b → charHalf g a' b' → Wit x h u τ a b → (∀ i, ∃ k : ℤ, a' i = a i + n i / 2 + k) → (∀ i, ∃ k : ℤ, b' i = b i + m i / 2 + k) → IsTrl x' x (u.ex (frac τ 2 m n)) ν → ∃ (h' : x'.P.g = g) (u' : HolUnif x'.P.A x'.P.L g) (φ : x'.P.A ≅ x.P.A) (c : ℂ), IsMonHom φ.hom ∧ (∀ z, u'.ex z ≫ φ.hom = u.ex z) ∧ c ^ 8 * (ν : ℂ) ^ 2 = 1 ∧ (∀ z, z ∈ u'.Λ ↔ z ∈ u.Λ) ∧ u'.IsRig x'.rig ∧ u'.IsFn x'.th (fun z => c * thetaChar τ a' b' z) ∧ ∀ i : Fin g, u'.IsDiff (Pi.single i (2 * Real.pi * Complex.I)⁻¹) (x'.v (i.cast h'.symm)) := by
-  first | exact @GlobalTheory.HalfTranslate.normalForm_translate | exact GlobalTheory.HalfTranslate.normalForm_translate | (intros; apply GlobalTheory.HalfTranslate.normalForm_translate <;> assumption)
+  first | exact @GlobalTheory.HalfTranslate.normalForm_translate
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ThetaLawProofs.ThetaNormalFormTranslateHalfPeriodStatement =====
@@ -812,8 +807,6 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.KeyPow GlobalTheory.KeyKa
 open GlobalTheory.KeyEq
 
-theorem _root_.GlobalTheory.T.keyNormalFormDetRatio_twoTorsion_translate : Out.Laws → ThetaUnifAV → ∀ (x x' : KeyIn ℂ) (p : 𝟙_ (Over (Sp ℂ)) ⟶ x.P.A) (ν : ℂˣ) (t : ℂ), IsTrl x' x p ν → Val x t → Val x' (t * (ν : ℂ) ^ 2) := by
-  first | exact @GlobalTheory.KeyEq.val_of_isTrl | exact GlobalTheory.KeyEq.val_of_isTrl | (intros; apply GlobalTheory.KeyEq.val_of_isTrl <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ThetaLawProofs.KeyNormalFormDetRatioTwoTorsionTranslateStatement =====
@@ -929,7 +922,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.KeyPow GlobalTheory.KeyFam GlobalTheory.ZM GlobalTheory.AbLaw
 
 theorem _root_.GlobalTheory.T.thetaFrameValueKnown_of_polarizedPullback : Out.Laws → ∀ (K : Type) [Field K] (y y' : KeyIn K) (φ : y'.P.A.left ⟶ y.P.A.left), PolPB y'.P y.P (𝟙 _) φ → Known K y → Known K y' := by
-  first | exact @GlobalTheory.KnownScale.known_of_polPB | exact GlobalTheory.KnownScale.known_of_polPB | (intros; apply GlobalTheory.KnownScale.known_of_polPB <;> assumption)
+  first | exact @GlobalTheory.KnownScale.known_of_polPB
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ThetaLawProofs.ThetaFrameValueKnownOfPolarizedPullbackStatement =====
@@ -1288,7 +1281,7 @@ theorem known_of_translate : Out.Laws → ThetaUnifAV → ∀ (K : Type) [Field 
     have b : f (t₀ * (ν : K) ^ 2) = f t₀ * ((Units.map f.toMonoidHom ν : ℂˣ) : ℂ) ^ 2 := by
       rw [map_mul, map_pow]; rfl
     rw [b]
-    exact GlobalTheory.T.keyNormalFormDetRatio_twoTorsion_translate laws hU x x' p _ _ hp a
+    exact _root_.GlobalTheory.KeyEq.val_of_isTrl laws hU x x' p _ _ hp a
   obtain ⟨φ, hφ⟩ := polPB_of_eq hP
   exact GlobalTheory.T.thetaFrameValueKnown_of_polarizedPullback laws K y₁ y' φ hφ k₁
 
@@ -1310,7 +1303,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.KeyPow GlobalTheory.KeyFam GlobalTheory.ZM GlobalTheory.AbLaw
 
 theorem _root_.GlobalTheory.T.thetaFrameValueKnown_of_twoTorsion_translate : Out.Laws → ThetaUnifAV → ∀ (K : Type) [Field K] (y y' : KeyIn K) (e : y'.P.A ≅ y.P.A) (t : 𝟙_ (Over (Sp K)) ⟶ y.P.A), IsMonHom e.hom → t ^ 2 = 1 → LBIso y'.P.L (y.P.L.pull (e.hom ≫ ((toUnit y.P.A ≫ t) * 𝟙 y.P.A)).left) → Known K y → Known K y' := by
-  first | exact @GlobalTheory.KnownTwist.known_of_translate | exact GlobalTheory.KnownTwist.known_of_translate | (intros; apply GlobalTheory.KnownTwist.known_of_translate <;> assumption)
+  first | exact @GlobalTheory.KnownTwist.known_of_translate
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ThetaLawProofs.ThetaFrameValueKnownOfTwoTorsionTranslateStatement =====

@@ -428,7 +428,7 @@ theorem exists_std : ∀ {R : Type} [CommRing R] [TopologicalSpace R] [IsTopolog
           have hγ : d.e.symm (0, Pi.single i (((u : Rˣ) : R) * z)) ∈ Γ := by
             rw [hΓ, LinearEquiv.apply_symm_apply]
             refine ⟨fun j => by simp, fun j => ?_⟩
-            by_cases hj : j = i <;> simp [Pi.single_apply, hj, hz]
+            by_cases hj : j = i <;> simp [hj, hz]
           have h3 := hall _ hγ
           rw [hB1, LinearEquiv.apply_symm_apply] at h3
           simp only [zero_dotProduct, dotProduct_single, zero_sub] at h3
@@ -443,7 +443,7 @@ theorem exists_std : ∀ {R : Type} [CommRing R] [TopologicalSpace R] [IsTopolog
         have hγ : d.e.symm (Pi.single i z, 0) ∈ Γ := by
           rw [hΓ, LinearEquiv.apply_symm_apply]
           refine ⟨fun j => ?_, fun j => by simp⟩
-          by_cases hj : j = i <;> simp [Pi.single_apply, hj, hz]
+          by_cases hj : j = i <;> simp [hj, hz]
         have h3 := hall _ hγ
         rw [hB1, LinearEquiv.apply_symm_apply] at h3
         simp only [single_dotProduct, dotProduct_zero, sub_zero] at h3
@@ -503,7 +503,7 @@ theorem exists_std : ∀ {R : Type} [CommRing R] [TopologicalSpace R] [IsTopolog
     rwa [← hyg']
   · intro h0
     have h5 := congrArg (fun g : GlobalTheory.WeilM.SB (κ → R) => (g : (κ → R) → ℂ) 0) h0
-    simp [ind, Set.indicator_apply] at h5
+    simp [ind] at h5
 
 end GlobalTheory.CompanionTheory.StdLattice
 end -- clump:auto
@@ -530,16 +530,11 @@ theorem c_ne (x y : X) : S.c x y ≠ 0 := by
   rw [h, norm_zero] at this
   exact zero_ne_one this
 
-theorem c_swap (x y : X) : S.c x y * S.c y x = 1 := by
-  have h := S.c_self (x + y)
-  rw [S.c_add_left, S.c_add_right, S.c_add_right, S.c_self, S.c_self] at h
-  linear_combination h
-
 theorem rho_comm (x y : X) (v : M) :
     S.rho x (S.rho y v) = S.c x y ^ 2 • S.rho y (S.rho x v) := by
   rw [S.rho_rho, S.rho_rho, smul_smul, add_comm y x]
   congr 1
-  linear_combination (-S.c x y) * c_swap S x y
+  linear_combination (-S.c x y) * _root_.GlobalTheory.CompanionTheory.FinHeis.Sys.c_mul_c_swap S x y
 
 theorem eigen {al : X → ℂ} {Γ : AddSubgroup X} {φ : M} (hs : IsSemi S al Γ) (hl : Law S al Γ φ)
     {γ : X} (hγ : γ ∈ Γ) (x : X) :
@@ -670,16 +665,11 @@ open GlobalTheory.CompanionTheory.FinHeis
 
 variable {X M : Type} [AddCommGroup X] [AddCommGroup M] [Module ℂ M]
 
-theorem c_mul_swap (S : Sys X M) (x y : X) : S.c x y * S.c y x = 1 := by
-  have h := S.c_self (x + y)
-  rw [S.c_add_left, S.c_add_right, S.c_add_right, S.c_self, S.c_self] at h
-  simpa using h
-
 theorem rho_comm (S : Sys X M) (x y : X) (v : M) :
     S.rho x (S.rho y v) = S.c x y ^ 2 • S.rho y (S.rho x v) := by
   rw [S.9 x y v, S.9 y x v, smul_smul, add_comm y x]
   congr 1
-  have h := GlobalTheory.CompanionTheory.FinHeis.LawLine.c_mul_swap S x y
+  have h := _root_.GlobalTheory.CompanionTheory.FinHeis.Sys.c_mul_c_swap S x y
   calc S.c x y = S.c x y * (S.c x y * S.c y x) := by rw [h, mul_one]
     _ = S.c x y ^ 2 * S.c y x := by ring
 

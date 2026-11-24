@@ -112,8 +112,8 @@ private theorem sum_matrix_single_diag_one_eq_one {F : Type} [Field F] {n : Type
   ext u v
   by_cases h : u = v
   · subst h
-    simp [Matrix.sum_apply, Matrix.single_apply, Matrix.one_apply]
-  · simp [Matrix.sum_apply, Matrix.single_apply, Matrix.one_apply, h]
+    simp [Matrix.sum_apply, Matrix.single_apply]
+  · simp [Matrix.sum_apply, Matrix.single_apply, h]
     have he : (Finset.univ.filter fun w : n => w = u ∧ w = v) = ∅ := by
       rw [Finset.filter_eq_empty_iff]
       rintro w - ⟨rfl, rfl⟩
@@ -195,8 +195,8 @@ private theorem separate {F : Type} [Field F] {σ : Type} (d : σ → Type)
     ext u v
     by_cases h : u = v
     · subst h
-      simp [Matrix.sum_apply, Matrix.single_apply, Matrix.one_apply]
-    · simp [Matrix.sum_apply, Matrix.single_apply, Matrix.one_apply, h]
+      simp [Matrix.sum_apply, Matrix.single_apply]
+    · simp [Matrix.sum_apply, Matrix.single_apply, h]
       have he : (Finset.univ.filter fun w : d s => w = u ∧ w = v) = ∅ := by
         rw [Finset.filter_eq_empty_iff]
         rintro w - ⟨rfl, rfl⟩
@@ -931,7 +931,7 @@ theorem UpperTheory.V.Pa.Det.psiMu :
       have hs := (hP s).2 i
       simp only [pushCh, MonoidHom.comp_apply, Units.coe_map, MonoidHom.coe_coe] at hs
       rw [← hs]
-      simp only [pushRep, mat, MonoidHom.comp_apply, Units.coeHom_apply, Units.val_mul, Matrix.mul_apply,
+      simp only [mat, MonoidHom.comp_apply, Units.coeHom_apply, Units.val_mul, Matrix.mul_apply,
         Finset.sum_mul, Fintype.sum_prod_type, Matrix.GeneralLinearGroup.map_apply]
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
@@ -1561,13 +1561,6 @@ section -- clump:auto
 
 open Matrix IsLocalRing UpperTheory.V.Alg UpperTheory.V.W UpperTheory.V.Pa
 
-private theorem UpperTheory.V.Pa.Det.exists_ne_zero_smul_mem_span_image {A F M N : Type} [CommRing A] [IsDomain A] [Field F] [Algebra A F]
-    [IsFractionRing A F] [AddCommGroup M] [Module A M] [AddCommGroup N] [Module A N] [Module F N]
-    [IsScalarTower A F N] (φ : M →ₗ[A] N) (T : Set M) (y : N)
-    (hy : y ∈ Submodule.span F (φ '' T)) :
-    ∃ d : A, d ≠ 0 ∧ ∃ w ∈ Submodule.span A T, d • y = φ w :=
-  _root_.UpperTheory.Reformulated.B.SpanImageDenominators.exists_ne_zero_smul_mem_span_image φ T y hy
-
 theorem UpperTheory.V.Pa.Det.spanInt :
     ∀ {K ι : Type} [Field K] {n a : ℕ} (r : ι → Matrix (Fin n) (Fin n) (PowerSeries K)) (S : Set ι), Submodule.span (FractionRing (PowerSeries K)) ((fun i => (r i).map (algebraMap (PowerSeries K) (FractionRing (PowerSeries K)))) '' S) = Ev (FractionRing (PowerSeries K)) (FractionRing (PowerSeries K)) n a → ∀ Z ∈ Ev (PowerSeries K) (PowerSeries K) n a, ∃ s : ℕ, (PowerSeries.X : PowerSeries K) ^ s • Z ∈ Submodule.span (PowerSeries K) (r '' S) := by
   intro K ι _ n a r S h Z hZ
@@ -1585,7 +1578,7 @@ theorem UpperTheory.V.Pa.Det.spanInt :
     refine ⟨fun _ => Submodule.mem_top, fun hij => ?_⟩
     have : Z i j = 0 := (Submodule.mem_bot _).1 ((hZ i j).2 hij)
     simp [this]
-  obtain ⟨d, hd, w, hw, e⟩ := UpperTheory.V.Pa.Det.exists_ne_zero_smul_mem_span_image φ _ _ hmem
+  obtain ⟨d, hd, w, hw, e⟩ := _root_.UpperTheory.Reformulated.B.SpanImageDenominators.exists_ne_zero_smul_mem_span_image φ _ _ hmem
   rw [← map_smul] at e
   have e' := hinj e
   obtain ⟨s, u, rfl⟩ := IsDiscreteValuationRing.eq_unit_mul_pow_irreducible hd
@@ -1699,7 +1692,7 @@ private theorem chi_ofRep {G : Type} [Group G] (ρ : G →* Matrix (Fin n) (Fin 
   rw [map_sub, MonoidAlgebra.mapRingHom_single, Matrix.charpoly]
   congr 1
   ext i j : 2
-  by_cases h : i = j <;> simp [GDet.repAlg, Matrix.charmatrix, h, Matrix.one_apply, Matrix.diagonal_apply]
+  by_cases h : i = j <;> simp [GDet.repAlg, Matrix.charmatrix, h]
 
 private theorem map_ofRep {G : Type} [Group G] (ρ : G →* Matrix (Fin n) (Fin n) R)
     (f : R →+* S) : (GDet.ofRep ρ).map f = GDet.ofRep (f.mapMatrix.toMonoidHom.comp ρ) := by

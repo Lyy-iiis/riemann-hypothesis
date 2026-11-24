@@ -160,9 +160,9 @@ theorem exists_form_of_bounded {ι : Type} [Fintype ι] [DecidableEq ι]
     refine Continuous.integral_pos_of_hasCompactSupport_nonneg_nonzero (x := 1)
       (Complex.continuous_re.comp (hφc x x)) (HasCompactSupport.of_compactSpace _) ?_ ?_
     · intro k
-      simp only [Pi.zero_apply, Function.comp_apply, hre]
+      simp only [Pi.zero_apply, hre]
       exact Finset.sum_nonneg fun i _ => sq_nonneg _
-    · simp only [Function.comp_apply, hre]
+    · simp only [hre]
       have hN1 : N 1 = 1 := by simp [N]
       rw [hN1, Matrix.one_mulVec]
       obtain ⟨i, hi⟩ := Function.ne_iff.mp hx
@@ -181,16 +181,6 @@ noncomputable section
 open MeasureTheory Topology Matrix
 
 namespace GlobalTheory.InvFormBdd
-
-theorem norm_eval_le {σ : Type} (P : MvPolynomial σ ℂ) (v : σ → ℂ) (hv : ∀ s, ‖v s‖ ≤ 1) :
-    ‖MvPolynomial.eval v P‖ ≤ ∑ d ∈ P.support, ‖AddMonoidAlgebra.coeff P d‖ := by
-  first
-  | exact @_root_.GlobalTheory.EvalNormCoefficientBound.norm_eval_le_sum_norm_coeff
-  | exact _root_.GlobalTheory.EvalNormCoefficientBound.norm_eval_le_sum_norm_coeff
-  | (apply _root_.GlobalTheory.EvalNormCoefficientBound.norm_eval_le_sum_norm_coeff <;> assumption)
-  | (intros; apply _root_.GlobalTheory.EvalNormCoefficientBound.norm_eval_le_sum_norm_coeff <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.EvalNormCoefficientBound.norm_eval_le_sum_norm_coeff <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.EvalNormCoefficientBound.norm_eval_le_sum_norm_coeff ..)
 
 theorem norm_emb_le_one {L : Type} [Field L] [NumberField L] [IsCMField L] {n : ℕ}
     (g : Matrix.GeneralLinearGroup (Fin n) L) (hg : g ∈ GQ0 L n) (τ : L →+* ℂ) (i j : Fin n) :
@@ -237,7 +227,7 @@ theorem GlobalTheory.InvFormBdd.exists_isInvForm : ∀ (L : Type) [Field L] [Num
         (g : Matrix (Fin n) (Fin n) L).map (Algebra.TensorProduct.includeLeftRingHom) := by
       rw [← e]; rfl
     rw [hf, hP γ g e']
-    refine (norm_eval_le _ _ fun p => norm_emb_le_one g hg _ _ _).trans ?_
+    refine (_root_.GlobalTheory.EvalNormCoefficientBound.norm_eval_le_sum_norm_coeff _ _ fun p => norm_emb_le_one g hg _ _ _).trans ?_
     refine le_trans ?_ (Finset.single_le_sum (f := fun i => ∑ j, ∑ d ∈ (P i j).support, ‖AddMonoidAlgebra.coeff (P i j) d‖)
       (fun i _ => Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => norm_nonneg _) (Finset.mem_univ i))
     exact Finset.single_le_sum (f := fun j => ∑ d ∈ (P i j).support, ‖AddMonoidAlgebra.coeff (P i j) d‖)

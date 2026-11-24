@@ -90,19 +90,6 @@ section -- clump:auto
 open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.Gal Formalism.MainNotions.N GlobalTheory.GalOfCusp UpperTheory.V UpperTheory.V.Af UpperTheory.V.HV GlobalTheory.Ord2 GlobalTheory.KZ GlobalTheory.K4 GlobalTheory.CyclotomicQExpansion
 open scoped Matrix MatrixGroups
 
-theorem _root_.GlobalTheory.T.untwisted_representation_ordinary_triangular_shape : ∀ (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] (ι : Qbar l ≃+* ℂ) (e : ℕ) (S : Finset Pl)
-    (A : ValuationSubring Ω) (W : R2 Ω l) (g : Newform (2 * e + 1)) (ψ : ZMod l → Qbar l),
-  Nf e S A W → SrcUr ι e A W g →
-  (∃ χ : G ℚ Ω →* (Qbar l)ˣ, KillsMu l χ ∧
-    (∀ s ∈ Ine (F := ℚ) A, mat W s 1 1 * (cycBar ℚ Ω l s : Qbar l) ^ (e : ℤ) * ((dt W s : Qbar l)⁻¹ * (χ s : Qbar l)) = 1) ∧
-    ∀ s : G ℚ Ω, (χ s : Qbar l) = ψ ((((cycMod (F := ℚ) (Ω := Ω) l 1 s : ZMod (l ^ 1))).val : ℕ) : ZMod l)) →
-  ∃ ρ : (Ω ≃ₐ[ℚ] Ω) →* GL (Fin 2) (Qbar l),
-    (∀ s, (ρ s : Matrix (Fin 2) (Fin 2) (Qbar l)) = rhoK W e ψ s) ∧ Continuous ρ ∧
-    (∀ s ∈ Dec (F := ℚ) A, (ρ s : Matrix (Fin 2) (Fin 2) (Qbar l)) 1 0 = 0) ∧
-    (∀ s ∈ Ine (F := ℚ) A, (ρ s : Matrix (Fin 2) (Fin 2) (Qbar l)) 1 1 = 1) ∧
-    ∃ F : Finset Ω, ∀ s ∈ Ine (F := ℚ) A, (∀ y ∈ F, s y = y) →
-      (ρ s : Matrix (Fin 2) (Fin 2) (Qbar l)) 0 0 = ((cycZ ℚ Ω l s : ℤ_[l]) : Qbar l) ^ (2 * e) := by
-  first | (exact @GlobalTheory.RhoAdm.rho_ordinary_shape) | (exact GlobalTheory.RhoAdm.rho_ordinary_shape) | (intros; apply GlobalTheory.RhoAdm.rho_ordinary_shape  <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FoundationProofs.UntwistedRepresentationOrdinaryTriangularShapeStatement =====
@@ -562,7 +549,7 @@ theorem UpperTheory.V.Z.Kato.Joint.chiQuad :
       rw [map_inv]
       rfl
     rw [hw] at hdet
-    simp only [mul_inv_rev, inv_inv, Units.val_mul, Units.val_pow_eq_pow_val, Units.val_zpow_eq_zpow_val,
+    simp only [mul_inv_rev, inv_inv, Units.val_mul, Units.val_zpow_eq_zpow_val,
       Units.val_inv_eq_inv_val, map_mul, map_pow, map_inv₀, map_zpow₀, hcyc, map_natCast] at hdet
     set a := ι ((χ σ : (Qbar l)ˣ) : Qbar l) with ha_def
     set δ := ι ((dt W σ : (Qbar l)ˣ) : Qbar l) with hδ_def
@@ -583,7 +570,6 @@ theorem UpperTheory.V.Z.Kato.Joint.chiQuad :
     show a ^ 4 * g.χ (u σ : ZMod g.M) ^ 2 = 1
     rw [hus, hχp, mul_pow, hδ]
     field_simp
-    try ring
   obtain ⟨c, hc1, hcd⟩ := Nat.chineseRemainder ((Nat.Prime.coprime_iff_not_dvd hlp).mpr hl) 1 d
   have hcop : c.Coprime (l * g.M) := by
     apply Nat.Coprime.mul_right
@@ -1102,8 +1088,8 @@ section -- clump:auto
 namespace UpperTheory.V.Z.Kato.Joint
 
 theorem kato_global_admissibility_of_admissible (hA : AdmTop) : AdmFR := by
-  have hK : NewformPartOfTowerModule := fun {Ω} _ _ _ ε X => GlobalTheory.T.heckeProjector_newform_galoisImage ε X
-  have hR : AdmRho := GlobalTheory.T.untwisted_representation_ordinary_triangular_shape
+  have hK : NewformPartOfTowerModule := fun {Ω} _ _ _ ε X => _root_.GlobalTheory.KZ.HeckeProj.heckeProj_newform ε X
+  have hR : AdmRho := _root_.GlobalTheory.RhoAdm.rho_ordinary_shape
   exact admissibleFunctional_of_projection hA hK hR jEx rhoFrob unif LocFacts₂ finP coefUb thLin thOp chiStab thP lamEig2 chiQuad aqBd
 
 end UpperTheory.V.Z.Kato.Joint

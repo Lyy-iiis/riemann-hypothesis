@@ -179,11 +179,6 @@ namespace GlobalTheory.DualLine
 
 variable {D : D7}
 
-theorem cA_cA' (x : AE D) : cA D (cA D x) = x := by
-  induction x using TensorProduct.inductionOn with
-  | tmul c e => show c ⊗ₜ[D.host.F] star (star e) = _; rw [star_star]
-  | add x y hx hy => rw [map_add (f := _), map_add (f := _), hx, hy]
-
 theorem cA_gA (S : HSp D) (a b : Fin S.rank) : cA D (gA S a b) = incA D (S.gram b a) :=
   congrArg (incA D) (GlobalTheory.LatVac.gram_star S a b)
 
@@ -210,7 +205,7 @@ theorem mem_of_hA {S : HSp D} {L : Lat S} (hL : IsSelfDualC S L) {v : Pl D} {y :
       exact (GlobalTheory.FinPl.LatMem.mul_indP (hyAt a)).symm
     rw [e1]
 
-    simp only [hA, map_sum, map_mul, cA_cA', cA_gA, hcw, Finset.mul_sum, Finset.sum_mul]
+    simp only [hA, map_sum, map_mul, _root_.Formalism.L2.Theta.cA_cA, cA_gA, hcw, Finset.mul_sum, Finset.sum_mul]
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun a' _ => Finset.sum_congr rfl fun k _ => ?_
     ring
@@ -279,7 +274,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 theorem _root_.GlobalTheory.T.dualIsotropicLine_mem_completion_iff : ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S S₀ : HSp D) (ρ : ℕ) (d : HypDec S S₀ ρ)
     (L : Lat S) (L₀ : Lat S₀) (𝔟 : ℕ → FI D) (v : Pl D), IsSelfDualC S L → MonoId d L L₀ 𝔟 v → ∀ i : Fin ρ, 𝔟 i ≠ 0 →
       ∀ t ∈ idAt D (· = v), colMul d.jY i t ∈ latV S L (· = v) ↔ cA D t ∈ idV (𝔟 i)⁻¹ v := by
-  first | exact @GlobalTheory.DualLine.dualLine_mem_iff | exact GlobalTheory.DualLine.dualLine_mem_iff | (intros; apply GlobalTheory.DualLine.dualLine_mem_iff <;> assumption)
+  first | exact @GlobalTheory.DualLine.dualLine_mem_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.DualIsotropicLineMemCompletionIffStatement =====

@@ -97,14 +97,14 @@ private theorem wt_single_add_eq (LL : Letters N) (j : ℕ) (c' : Fin r) (i : Fi
   · by_cases hc : c = c'
     · subst hc
       by_cases hi : (i : ℕ) < j
-      · cases hv : LL.vec i <;> simp [hi, hv] <;> ring
+      · cases hv : LL.vec i <;> simp [hi]
       · simp [hi]
     · have h0 : (Finsupp.single (i, c) 1 : Fin N × Fin r →₀ ℕ) (i, c') = 0 := by
-        simp [Finsupp.single_apply, hc]
+        simp [hc]
       simp [h0, hc]
   · intro k _ hk
     have h0 : (Finsupp.single (i, c) 1 : Fin N × Fin r →₀ ℕ) (k, c') = 0 := by
-      simp [Finsupp.single_apply, Ne.symm hk]
+      simp [Ne.symm hk]
     simp [h0]
   · simp
 
@@ -206,14 +206,14 @@ theorem glAct_X (LL : Letters N) (j : ℕ) (a b c : Fin r) (i : Fin N) :
   · by_cases hi : (i : ℕ) < j
     · cases hv : LL.vec i
       · by_cases hac : a = c
-        · subst hac; simp [hi, hv, pderiv_X]
-        · simp [hi, hv, pderiv_X, Pi.single_apply, hac, Ne.symm hac]
+        · subst hac; simp [hi, pderiv_X]
+        · simp [hi, pderiv_X, hac, Ne.symm hac]
       · by_cases hbc : b = c
-        · subst hbc; simp [hi, hv, pderiv_X]
-        · simp [hi, hv, pderiv_X, Pi.single_apply, hbc, Ne.symm hbc]
+        · subst hbc; simp [hi, pderiv_X]
+        · simp [hi, pderiv_X, hbc, Ne.symm hbc]
     · simp [hi]
   · intro k _ hk
-    split_ifs <;> simp [pderiv_X, Pi.single_apply, Ne.symm hk, hk]
+    split_ifs <;> simp [pderiv_X, Ne.symm hk]
   · simp
 
 theorem X_mul_mem {σ : Type} (v : σ) (Q : Set (σ →₀ ℕ)) (g : MvPolynomial σ ℚ_[p]) :
@@ -222,10 +222,7 @@ theorem X_mul_mem {σ : Type} (v : σ) (Q : Set (σ →₀ ℕ)) (g : MvPolynomi
     Set.image_subset_iff]
   exact Iff.rfl
 
-theorem wt_single_add (LL : Letters N) (j : ℕ) (c' : Fin r) (i : Fin N) (c : Fin r) (m : Fin N × Fin r →₀ ℕ) :
-    wt LL j c' (Finsupp.single (i, c) 1 + m) = wt LL j c' m +
-      (if (i : ℕ) < j then (if LL.vec i then (1 : ℤ) else -1) else 0) * (if c = c' then 1 else 0) := by
-  exact wt_single_add_eq LL j c' i c m
+alias wt_single_add := _root_.Formalism.InvariantFactorPaths.L4.wt_single_add_eq
 
 theorem abs_wt_le (LL : Letters N) (j : ℕ) (c : Fin r) (m : Fin N × Fin r →₀ ℕ) :
     |wt LL j c m| ≤ ((∑ v, m v : ℕ) : ℤ) := by

@@ -168,7 +168,6 @@ private theorem algebraMap_integers_injective {E : Type} [Field E] [NumberField 
     Function.Injective (algebraMap (𝓞 E) E) := by
   first
     | exact IsFractionRing.injective (𝓞 E) E
-    | exact FaithfulSMul.algebraMap_injective (𝓞 E) E
 
 private theorem mul_not_mem_of_not_mem {E : Type} [Field E] [NumberField E] [StarRing E] {P : HeightOneSpectrum (𝓞 E)} {s t : 𝓞 E}
     (hs : s ∉ P.asIdeal) (ht : t ∉ P.asIdeal) : s * t ∉ P.asIdeal :=
@@ -208,7 +207,6 @@ private theorem mk_mul_redP_eq_of_mul_eq {E : Type} [Field E] [NumberField E] [S
   haveI : P.asIdeal.IsMaximal := by
     first
       | exact P.isMaximal
-      | exact P.isPrime.isMaximal P.ne_bot
   have hs0 : Ideal.Quotient.mk P.asIdeal s ≠ 0 := by
     rwa [Ne, Ideal.Quotient.eq_zero_iff_mem]
   obtain ⟨b, hb⟩ := Ideal.Quotient.exists_inv hs0
@@ -228,25 +226,6 @@ private theorem mk_mul_redP_eq_of_mul_eq {E : Type} [Field E] [NumberField E] [S
     _ = Ideal.Quotient.mk P.asIdeal s * Ideal.Quotient.mk P.asIdeal r' := by rw [hc]
     _ = Ideal.Quotient.mk P.asIdeal s' * Ideal.Quotient.mk P.asIdeal r := by
       rw [← map_mul, ← map_mul, key]
-
-private theorem redP_add_twisted_eisenstein_coset {E : Type} [Field E] [NumberField E] [StarRing E] {P : HeightOneSpectrum (𝓞 E)} {a b : E} (ha : IntAt P a) (hb : IntAt P b) :
-    redP P (a + b) = redP P a + redP P b := by
-  obtain ⟨r1, s1, hs1, h1⟩ := ha
-  obtain ⟨r2, s2, hs2, h2⟩ := hb
-  have hs := mul_not_mem_of_not_mem hs1 hs2
-  have e3 := mk_mul_redP_eq_of_mul_eq (a := a + b) (s2 * r1 + s1 * r2) (s1 * s2) hs (by
-    simp only [map_add (f := _), map_mul]
-    rw [← h1, ← h2]
-    ring)
-  have e1 := mk_mul_redP_eq_of_mul_eq r1 s1 hs1 h1
-  have e2 := mk_mul_redP_eq_of_mul_eq r2 s2 hs2 h2
-  have hs0 : Ideal.Quotient.mk P.asIdeal (s1 * s2) ≠ 0 := by
-    rwa [Ne, Ideal.Quotient.eq_zero_iff_mem]
-  apply mul_left_cancel₀ hs0
-  rw [e3]
-  simp only [map_add (f := _), map_mul]
-  rw [← e1, ← e2]
-  ring
 
 private theorem redP_mul_twisted_eisenstein_coset {E : Type} [Field E] [NumberField E] [StarRing E] {P : HeightOneSpectrum (𝓞 E)} {a b : E} (ha : IntAt P a) (hb : IntAt P b) :
     redP P (a * b) = redP P a * redP P b := by
@@ -287,7 +266,7 @@ private theorem redP_det_twisted_eisenstein_coset {E : Type} [Field E] [NumberFi
       map_one' := by simpa using redP_natCast (P := P) 1
       map_mul' := fun a b => redP_mul_twisted_eisenstein_coset a.2 b.2
       map_zero' := by simpa using redP_natCast (P := P) 0
-      map_add' := fun a b => redP_add_twisted_eisenstein_coset a.2 b.2 }
+      map_add' := fun a b => _root_.PI.TwistedEisensteinNonvanishing.W.reduction_add' a.2 b.2 }
   let MS : Matrix (Fin r) (Fin r) S := Matrix.of fun i j => ⟨M i j, hM i j⟩
   have h1 : ((MS.det : S) : E) = M.det := by
     change S.subtype MS.det = M.det
@@ -351,7 +330,7 @@ theorem test_function_periodicity : PhiPerP := by
       congr 1
       ext i j
       simp only [Matrix.of_apply]
-      rw [redP_add_twisted_eisenstein_coset (h2.1 _ _ (hi i) (hj j)) (hε1 _ _), hεr, add_zero]
+      rw [_root_.PI.TwistedEisensteinNonvanishing.W.reduction_add' (h2.1 _ _ (hi i) (hj j)) (hε1 _ _), hεr, add_zero]
   · exfalso
     apply h2
     refine ⟨fun p p' hp hp' => ?_, fun p p' hp hp' hp'' => ?_⟩
@@ -385,11 +364,9 @@ theorem bounded_matrix_entries : BddEntP := by
   · have h1 := (hmem _).mp (hb _ (he s)).2 l
     first
       | exact h1
-      | simpa using h1
   · have h1 := (hmem _).mp (hb _ (he s)).1 l
     first
       | exact h1
-      | simpa using h1
 
 end PI.TwistedEisensteinNonvanishing.W
 end -- clump:auto
@@ -629,7 +606,7 @@ theorem qt_transvec (t : TransvectionStruct ι E) :
     by_cases h : k = t.i
     · subst h
       simp [TransvectionStruct.toMatrix, Matrix.transvection, Matrix.add_mulVec,
-        Matrix.single_mulVec, em] <;> ring
+        Matrix.single_mulVec, em]
     · simp [TransvectionStruct.toMatrix, Matrix.transvection, Matrix.add_mulVec,
         Matrix.single_mulVec, em, h]
   exact qt_congr (qt_em hN hp hq hK t.i t.j one_ne_zero t.c 0 (Or.inl t.hij.symm)) hmv (by rw [t.det])
@@ -648,7 +625,7 @@ theorem qt_diag (D : ι → E) (hD : ∀ i, D i ≠ 0) :
         by_cases hk : k = a
         · subst hk
           simp [em, ha]
-        · simp [em, hk, Function.update_apply]
+        · simp [em, hk]
       · rw [Finset.sum_insert ha, zpow_add₀ hK, mul_comm]
   refine qt_congr (key Finset.univ) (fun v => by funext k; simp [Matrix.mulVec_diagonal]) ?_
   rw [Matrix.det_diagonal, vq_prod (s := Finset.univ) (f := D) (hf := fun i _ => hD i)]
@@ -695,7 +672,7 @@ theorem qt_transl (τ : ι → E) : QT P (fun v : ι → E => v + τ) (1 : K) :=
         by_cases hk : k = a
         · subst hk
           simp [em, ha]
-        · simp [em, hk, Function.update_apply]
+        · simp [em, hk]
       · rw [vq_one, zpow_zero, one_mul]
         all_goals assumption
   exact qt_congr (key Finset.univ) (fun v => by funext k; simp) rfl
@@ -1052,7 +1029,7 @@ theorem character_argument_constant_shift : ChArgP := by
       rw [xxw_entry, dif_pos]
       · rfl
       · refine ⟨by omega, Or.inr ⟨by omega, Or.inr ?_⟩⟩
-        simp only [Fin.val_mk]
+        simp only
         omega
     simp only [atN, dif_pos hn]
     rw [map_sub, Pi.sub_apply, Pi.sub_apply, Pi.sub_apply, h0] at h2
@@ -1310,7 +1287,7 @@ theorem gh_apply {M N : ℕ} (f : (Fin M → E) →ₗ[E] (Fin N → E)) (v : Fi
     f v l = ∑ m : Fin M, v m * f (eN E M m.1) l := by
   conv_lhs => rw [gh_decomp v]
 
-  simp [map_sum, Finset.sum_apply, mul_comm]
+  simp [map_sum, Finset.sum_apply]
 
 theorem gh_atN_add {N : ℕ} (v w : Fin N → E) (i : ℕ) : atN (v + w) i = atN v i + atN w i := by
   unfold atN

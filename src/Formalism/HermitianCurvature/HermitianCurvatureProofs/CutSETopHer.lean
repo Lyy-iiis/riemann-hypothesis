@@ -728,7 +728,6 @@ theorem waveOut_glue (l : Fin r) (c : Fin r → ℂ) (t : ℂ) (c' : Cf r l.succ
   rw [dite_eq_right (by simp)]
   first
   | exact Function.update_self l t c
-  | simp
 
 theorem waveOut_dens (μ : Measure (Mt k r)) (l : Fin r) (s : ℂ) {W : Module.End ℂ (RadSp k r z z' π π')}
     (hW : multiplicationOperator W (fun c' _ => fsv s (c' l))) (u v : Ix S → RadSp k r z z' π π') (c : Fin r → ℂ) (t : ℂ) :
@@ -844,8 +843,7 @@ theorem boundary_torus_adjoin : CutSH.BTlAdjoin := by
     intro Y i j
     fin_cases i <;> fin_cases j <;>
       simp only [Wd.Ts, site, Formalism.YangianSpanCharacter.T.Tm, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
-        Matrix.cons_val_one, Matrix.head_cons, Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_fin_const,
-        Fin.zero_eta, Fin.mk_one]
+        Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one, Fin.zero_eta, Fin.mk_one]
     · exact gadd _ _ (galg Y) gp
     · exact gneg _ gc
     · exact gci
@@ -955,7 +953,7 @@ theorem unipotent_scalar_identity : CutSH.UUiwScalar := by
     · intro u v
       have hU : YangianSpanCharacter.T.Uinv (A := A) (if l.plus = true then s else star s) i j ∈ (⊥ : Subalgebra ℂ A) := by
         fin_cases i <;> fin_cases j <;>
-          simp [YangianSpanCharacter.T.Uinv, Subalgebra.one_mem, Subalgebra.zero_mem, Subalgebra.algebraMap_mem]
+          simp [YangianSpanCharacter.T.Uinv]
       simp only [Wd.lift0, Matrix.map_apply, Wd.io, Matrix.scalar_apply, Matrix.diagonal_apply]
       exact ite_zero_mem_bot_subalgebra _ _ hU
 
@@ -1333,7 +1331,7 @@ theorem lev_ind_her {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace �
 
 theorem levTransportHer_of (hJ : PTie.JFScale) (hS : PTie.SliceStepHer) : PTie.LevTransportHer := by
   intro Wp Wq _ _ _ _ _ _ P z z' π π' X μ L st l0 Bs hD hl1 hl2 hz hz' hπ hπ' i c hc
-  obtain ⟨T, h1, h2, h3, h4, hN⟩ := Formalism.FourierDecayAlt.P.exists_normalized_tower P.k P.r Wp Wq Bs
+  obtain ⟨T, h1, h2, h3, h4, hN⟩ := _root_.Formalism.FourierDecayAlt.P.HaarMassHermitianCurvature.towerAt P.k P.r Wp Wq Bs
   obtain ⟨κ0, hκ0⟩ := hJ P.k P.r Wp Wq Bs T.base h1.symm h2.symm h3.symm h4.symm
   have e1 : T.base.z = z := h1.trans hz
   have e2 : T.base.z' = z' := h2.trans hz'
@@ -1352,9 +1350,6 @@ end Formalism.FourierDecayAlt.P.PTieH
 
 namespace Formalism.FourierDecayAlt.P
 
-theorem ptie_levTransportHer_of : Formalism.FourierDecayAlt.P.PTie.JFScale → Formalism.FourierDecayAlt.P.PTie.SliceStepHer →
-    Formalism.FourierDecayAlt.P.PTie.LevTransportHer := PTieH.levTransportHer_of
-
 end Formalism.FourierDecayAlt.P
 end -- clump:auto
 end -- clump:auto
@@ -1369,7 +1364,7 @@ section -- clump:auto
 namespace Formalism.FourierDecayAlt.P
 
 theorem ptie_levTransportHer_of_sliceStep (hS : Formalism.FourierDecayAlt.P.PTie.SliceStepHer) : Formalism.FourierDecayAlt.P.PTie.LevTransportHer :=
-  ptie_levTransportHer_of jacquet_scaling hS
+  _root_.Formalism.FourierDecayAlt.P.PTieH.levTransportHer_of _root_.Formalism.FourierDecayAlt.P.PTieJ.jfScale hS
 
 end Formalism.FourierDecayAlt.P
 end -- clump:auto
@@ -1385,7 +1380,7 @@ namespace Formalism.FourierDecayAlt.P
 
 theorem cutSH_sliceStepHer_of_sfg (h7 : CutSH.SliceFamGood) : PTie.SliceStepHer :=
   CutSH.sliceStepHer_of CutSH.family_orbital_valid CutSH.family_algebraic CutSH.representation_linear
-    cell_compatibility_identity h7 CutSH.slice_family_orbital operator_class_closed boundary_torus_adjoin
+    _root_.Formalism.FourierDecayAlt.P.CutSH.cell_compatibility h7 CutSH.slice_family_orbital operator_class_closed boundary_torus_adjoin
     unipotent_scalar_identity
 
 theorem cutSH_levTransportHer_of_sfg (h7 : CutSH.SliceFamGood) : PTie.LevTransportHer :=

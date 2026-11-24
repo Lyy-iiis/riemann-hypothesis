@@ -140,7 +140,7 @@ lemma swapHom_pderiv (n : Fin b × Fin a) (Q : LPol b a) :
       linear_combination (-(swapHom ε ε' p)) * hs
     · have h' : m.swap ≠ n.swap := fun e => h (Prod.swap_injective e).symm
       simp only [pderiv_mul, pderiv_X_of_ne (Ne.symm h), pderiv_X_of_ne h', map_mul, hp, swapHom_X,
-        pderiv_C, mul_zero, zero_mul, add_zero, zero_add]
+        pderiv_C, mul_zero, zero_mul, add_zero]
       ring
 
 lemma swapHom_rai (i : Fin b) (j : Fin a) (Q : LPol b a) :
@@ -149,11 +149,11 @@ lemma swapHom_rai (i : Fin b) (j : Fin a) (Q : LPol b a) :
   have hs := C_sg_mul_self (σ := Fin a × Fin b) (ε j)
   by_cases h : ε' i = ε j
   · rw [if_pos h, if_pos h.symm]
-    simp only [LinearMap.smul_apply, LinearMap.mulLeft_apply, swapHom_smul, swapHom_C, map_mul, swapHom_X, conj_sg,
+    simp only [LinearMap.smul_apply, LinearMap.mulLeft_apply, swapHom_C, map_mul, swapHom_X, conj_sg,
       swSign, smul_eq_C_mul, Prod.swap_prod_mk]
     linear_combination (C (GlobalTheory.IndefiniteRowSideFullHecke.RaisingLoweringOperators.sgn (ε' i)) * X (j, i) * swapHom ε ε' Q) * hs
   · rw [if_neg h, if_neg (Ne.symm h)]
-    simp only [LinearMap.smul_apply, LinearMap.neg_apply, Derivation.coeFn_coe, map_neg, swapHom_smul, swapHom_C,
+    simp only [LinearMap.smul_apply, LinearMap.neg_apply, Derivation.coeFn_coe, map_neg, swapHom_C,
       swapHom_pderiv, map_mul, conj_sg, swSign, smul_eq_C_mul, Prod.swap_prod_mk]
     linear_combination (-(C (GlobalTheory.IndefiniteRowSideFullHecke.RaisingLoweringOperators.sgn (ε' i)) * pderiv (j, i) (swapHom ε ε' Q))) * hs
 
@@ -163,11 +163,11 @@ lemma swapHom_low (i : Fin b) (j : Fin a) (Q : LPol b a) :
   have hs := C_sg_mul_self (σ := Fin a × Fin b) (ε j)
   by_cases h : ε' i = ε j
   · rw [if_pos h, if_pos h.symm]
-    simp only [LinearMap.smul_apply, Derivation.coeFn_coe, swapHom_smul, swapHom_C, swapHom_pderiv, map_mul, conj_sg,
+    simp only [LinearMap.smul_apply, Derivation.coeFn_coe, swapHom_C, swapHom_pderiv, map_mul, conj_sg,
       swSign, smul_eq_C_mul, Prod.swap_prod_mk]
     linear_combination (C (GlobalTheory.IndefiniteRowSideFullHecke.RaisingLoweringOperators.sgn (ε' i)) * pderiv (j, i) (swapHom ε ε' Q)) * hs
   · rw [if_neg h, if_neg (Ne.symm h)]
-    simp only [LinearMap.smul_apply, LinearMap.mulLeft_apply, swapHom_smul, swapHom_C, map_mul, swapHom_X, conj_sg,
+    simp only [LinearMap.smul_apply, LinearMap.mulLeft_apply, swapHom_C, map_mul, swapHom_X, conj_sg,
       swSign, smul_eq_C_mul, Prod.swap_prod_mk]
     linear_combination (C (GlobalTheory.IndefiniteRowSideFullHecke.RaisingLoweringOperators.sgn (ε' i)) * X (j, i) * swapHom ε ε' Q) * hs
 
@@ -234,8 +234,6 @@ open GlobalTheory.Chain GlobalTheory.ChainFr GlobalTheory.PairLift GlobalTheory.
 open scoped TensorProduct InnerProductSpace ComplexConjugate
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem _root_.GlobalTheory.T.fock_sign_transpose_exchanges_local_gl_actions : ∀ (a b : ℕ) (ε : Fin a → Bool) (ε' : Fin b → Bool), ∃ j : LPol b a ≃+ LPol a b, (∀ (c : ℂ) P, j (c • P) = conj c • j P) ∧ ∀ P : LPol b a, (∀ Y : Matrix (Fin b) (Fin b) ℂ, j (locT ε ε' Y P) = locS ε' ε (Y.map (starRingEnd ℂ)) (j P)) ∧ ∀ X : Matrix (Fin a) (Fin a) ℂ, j (locS ε ε' (X.map (starRingEnd ℂ)) P) = locT ε' ε X (j P) := by
-  first | exact @GlobalTheory.Chain.RealIt.SwapFock.locS_locT_exchange | exact GlobalTheory.Chain.RealIt.SwapFock.locS_locT_exchange | (intros; apply GlobalTheory.Chain.RealIt.SwapFock.locS_locT_exchange <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.FockSignTransposeExchangesLocalGlActionsStatement =====
@@ -493,20 +491,11 @@ theorem gram_det_ne {D : D7} {V : HSp D} {S : D.what₂.Tau → SPar} (M : DSMod
     exact zero_ne_one this
   exact mul_ne_zero (mul_ne_zero (star_ne_zero.2 h1) h2) h1
 
-section Exp
-
-attribute [local instance] Matrix.linftyOpNormedRing Matrix.linftyOpNormedAlgebra
-
-theorem exp_cont {n : ℕ} (X : Matrix (Fin n) (Fin n) ℂ) : Continuous fun t : ℝ => NormedSpace.exp (t • X) :=
-  NormedSpace.exp_continuous.comp (continuous_id.smul continuous_const)
-
-end Exp
-
 variable {D : D7} {V : HSp D} {S : D.what₂.Tau → SPar}
 
 theorem cont_rep_exp (M : DSModel V S) (τ : D.what₂.Tau) {X : Matrix (Fin V.rank) (Fin V.rank) ℂ}
     (hX : X ∈ lieAt V τ) (x : M.H τ) : Continuous fun t : ℝ => M.rep τ (NormedSpace.exp (t • X)) x :=
-  ((GlobalTheory.HolDict.ModelRep.model_rep D V S M τ).2.1.2.2 x).comp_continuous (exp_cont X)
+  ((GlobalTheory.HolDict.ModelRep.model_rep D V S M τ).2.1.2.2 x).comp_continuous (_root_.Formalism.IndefR.SchurOrthogonalityAlt.expS_continuous X)
     (fun t => SchurOrthogonalityAlt.gp_exp_mem τ hX t)
 
 theorem inner_rep_exp (M : DSModel V S) (τ : D.what₂.Tau) {X : Matrix (Fin V.rank) (Fin V.rank) ℂ}
@@ -565,7 +554,7 @@ theorem exists_adj {L L' E F : Type} [AddCommGroup L] [Module ℂ L] [AddCommGro
     simp only [inner_add_left, ← hf, map_add (f := _), LinearMap.add_apply, inner_add_right]
   · intro c Q w
     refine ext_inner_right ℂ fun y => ?_
-    simp only [inner_smul_left, ← hf, hjs, map_smul, LinearMap.smul_apply, inner_smul_right, Complex.conj_conj]
+    simp only [inner_smul_left, ← hf, hjs, map_smul, LinearMap.smul_apply, inner_smul_right]
   · intro Q w₁ w₂
     refine ext_inner_right ℂ fun y => ?_
     simp only [inner_add_left, ← hf]
@@ -575,7 +564,7 @@ theorem exists_adj {L L' E F : Type} [AddCommGroup L] [Module ℂ L] [AddCommGro
 
 theorem adj_locIt : ∀ (D : D7) (V W : HSp D) (S S' : D.what₂.Tau → SPar) (M : DSModel V S) (M' : DSModel W S') (τ : D.what₂.Tau) (aS aT : ℚ) (A : LPol W.rank V.rank →ₗ[ℂ] M'.H τ →ₗ[ℂ] M.H τ), LocIt M M' τ aS aT A → ∃ A' : LPol V.rank W.rank →ₗ[ℂ] M.H τ →ₗ[ℂ] M'.H τ, LocIt M' M τ aT aS A' := by
   intro D V W S S' M M' τ aS aT A hA
-  obtain ⟨j, hjc, hj⟩ := GlobalTheory.T.fock_sign_transpose_exchanges_local_gl_actions V.rank W.rank (M.ε τ) (M'.ε τ)
+  obtain ⟨j, hjc, hj⟩ := _root_.GlobalTheory.Chain.RealIt.SwapFock.locS_locT_exchange V.rank W.rank (M.ε τ) (M'.ε τ)
   obtain ⟨A', hA'⟩ := exists_adj A j hjc hA.adj
   haveI := (GlobalTheory.HolDict.ModelRep.model_rep D V S M τ).1
   haveI := (GlobalTheory.HolDict.ModelRep.model_rep D W S' M' τ).1
@@ -654,7 +643,7 @@ theorem adj_locIt : ∀ (D : D7) (V W : HSp D) (S S' : D.what₂.Tau → SPar) (
         have em : (M.fr τ * -X * (M.fr τ)⁻¹).map (starRingEnd ℂ) = -(M.fr τ * X * (M.fr τ)⁻¹).map (starRingEnd ℂ) := by
           rw [Matrix.mul_neg, Matrix.neg_mul, Matrix.map_neg _ (map_neg _)]
         rw [em, locS_neg, Matrix.trace_neg, mul_neg, neg_smul, LinearMap.neg_apply, hP₁]
-        simp only [map_sub, map_add (f := _), map_neg, LinearMap.sub_apply, LinearMap.add_apply, LinearMap.neg_apply]
+        simp only [map_sub, map_neg, LinearMap.sub_apply, LinearMap.neg_apply]
         abel
       rw [hv] at h1
       have h2 : HasDerivAt (fun s : ℝ => M.rep τ (NormedSpace.exp ((-s) • X)) (A (j.symm Q) y))
@@ -735,7 +724,7 @@ open scoped TensorProduct InnerProductSpace ComplexConjugate
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.localFockIntertwiner_adjoint_exchangedPair : ∀ (D : D7) (V W : HSp D) (S S' : D.what₂.Tau → SPar) (M : DSModel V S) (M' : DSModel W S') (τ : D.what₂.Tau) (aS aT : ℚ) (A : LPol W.rank V.rank →ₗ[ℂ] M'.H τ →ₗ[ℂ] M.H τ), LocIt M M' τ aS aT A → ∃ A' : LPol V.rank W.rank →ₗ[ℂ] M.H τ →ₗ[ℂ] M'.H τ, LocIt M' M τ aT aS A' := by
-  first | exact @GlobalTheory.AdjLocIt.adj_locIt | exact GlobalTheory.AdjLocIt.adj_locIt | (intros; apply GlobalTheory.AdjLocIt.adj_locIt <;> assumption)
+  first | exact @GlobalTheory.AdjLocIt.adj_locIt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.LocalFockIntertwinerAdjointExchangedPairStatement =====

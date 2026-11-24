@@ -65,20 +65,17 @@ variable {G : Type} [Group G] [TopologicalSpace G] {Qp K₀ K : Type} [Field Qp]
     [CommRing O] [Algebra O LL] [TopologicalSpace LL] {v : AddValuation LL (WithTop ℚ)} {n₀ : ℕ}
     (W : LocWach PD LL O v n₀) {k : Type} [Field k] [Algebra O k]
 
-theorem mem_del (g : W.Gam) : g ∈ W.DelF ↔ IsOfFinOrder g := by
-  rw [W.DelF_def, isOfFinOrder_iff_pow_eq_one]
-
-theorem one_mem_del : (1 : W.Gam) ∈ W.DelF := (mem_del W 1).2 IsOfFinOrder.one
+theorem one_mem_del : (1 : W.Gam) ∈ W.DelF := (_root_.GlobalTheory.WachTie.mem_DelF_iff W 1).2 IsOfFinOrder.one
 
 theorem prod_del {M : Type} [CommMonoid M] (f : W.Gam → M) {d : W.Gam} (hd : d ∈ W.DelF) :
     ∏ δ ∈ W.DelF, f (d * δ) = ∏ δ ∈ W.DelF, f δ := by
-  rw [mem_del] at hd
+  rw [_root_.GlobalTheory.WachTie.mem_DelF_iff] at hd
   refine Finset.prod_nbij' (fun δ => d * δ) (fun δ => d⁻¹ * δ) ?_ ?_ ?_ ?_ ?_
   · intro a ha
-    rw [mem_del] at ha ⊢
+    rw [_root_.GlobalTheory.WachTie.mem_DelF_iff] at ha ⊢
     exact hd.mul ha
   · intro a ha
-    rw [mem_del] at ha ⊢
+    rw [_root_.GlobalTheory.WachTie.mem_DelF_iff] at ha ⊢
     exact hd.inv.mul ha
   · intro a _
     simp
@@ -91,11 +88,7 @@ theorem sum_del {M : Type} [AddCommMonoid M] (f : W.Gam → M) {d : W.Gam} (hd :
     ∑ δ ∈ W.DelF, f (d * δ) = ∑ δ ∈ W.DelF, f δ :=
   prod_del W (M := Multiplicative M) f hd
 
-theorem γD_smulA (T : LocLat G Qp LL O) (g : W.Gam) (a : LetA O n₀) (x : W.DD T) :
-    W.γD T g (a • x) = W.γA g a • W.γD T g x := by
-  have := W.γD_smul T g (algebraMap (LetA O n₀) W.EE a) x
-  rw [algebraMap_smul, W.γE_ext, algebraMap_smul] at this
-  exact this
+alias γD_smulA := _root_.GlobalTheory.WachTie.MatF.γD_smulA
 
 theorem trace_mem (T : LocLat G Qp LL O) (x : W.DD T) : ∑ δ ∈ W.DelF, W.γD T δ x ∈ DΔ W T := by
   intro d hd
@@ -353,7 +346,7 @@ open GlobalTheory.PhiGam GlobalTheory.AdmLoc GlobalTheory.Models GlobalTheory.To
 open scoped LaurentSeries PowerSeries
 
 theorem _root_.GlobalTheory.T.wachDeltaInvariants_reduction_isLattice : ∀ {l : ℕ} [Fact l.Prime] {P : LocPrime l} (H : LocHW l P) (S : TopSit P) (k : Type) [Field k] [Algebra S.O k] [CharP k l], S.IsRes k → ∀ {R : RingPG k l} (ι : k⸨X⸩ →ₐ[k] k⸨X⸩) (F : DFun R S.n S.G) (τ : ZMod S.n → ZMod (Module.finrank ℚ_[l] ↥(K0 S.K))) (γ : (S.W H).Gam) (p : Pres (S.W H) F ι τ γ), GlobalTheory.IndefiniteRowSideFullHecke.OnePlusPowerCharacters.IsCyclotomic R ι → (∀ i, (S.W H).emb (τ i) = S.emb i) → ((S.W H).χΓ γ : S.O) = 1 + (l : S.O) → GlobalTheory.WachUse.QN (S.W H) → ∀ (T : LocLat S.G ℚ_[l] ↥S.LL.1 S.O) (A : Ob k S.G) q (U : ZMod S.n → Multiset ℤ), Onto T A q → KerIs S.Γ.lam q → CrysWith (P.PD S.K) S.emb T.ρ U → ∃ N : Lats k S.n A.m, (∀ i y, y ∈ N i ↔ ∃ x : ↥(DΔ (S.W H) T), (x : (S.W H).DD T) ∈ (S.W H).N T ∧ p.j T A q i x = y) ∧ ∀ i, IsLat (N i) := by
-  first | exact @GlobalTheory.Present.RedLat.red_isLat | exact GlobalTheory.Present.RedLat.red_isLat | (intros; apply GlobalTheory.Present.RedLat.red_isLat <;> assumption)
+  first | exact @GlobalTheory.Present.RedLat.red_isLat
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.WachDeltaInvariantsReductionIsLatticeStatement =====

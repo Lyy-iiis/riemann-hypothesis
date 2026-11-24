@@ -624,14 +624,6 @@ open ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestric
 
 namespace FubiniStudyChowHeightFormula₂.Adr
 
-variable {R : Type} [CommRing R] {I : Ideal R} {X : Scheme.{0}} {κ : DividedPowers I} {s : X ⟶ Sp R}
-
-theorem exists_adj (S : Thick (dp0 R) s) (hS : InN κ S) (d n : ℕ) (hn : 1 ≤ n) :
-    ∃ (P : Thick (dp0 R) s) (i : S ⟶ P) (y : Fin d → P.B), InN κ P ∧ IsLev P.δ n ∧ (∀ k, y k ∈ P.J) ∧
-      ∀ (V : Thick (dp0 R) s), IsLev V.δ n → ∀ (φ : S ⟶ V) (z : Fin d → V.B), (∀ k, z k ∈ V.J) →
-        ∃! ψ : P ⟶ V, i ≫ ψ = φ ∧ ∀ k, ψ.φ (y k) = z k :=
-  exists_adj' S hS d n hn
-
 end FubiniStudyChowHeightFormula₂.Adr
 end -- clump:auto
 end -- clump:auto
@@ -707,7 +699,7 @@ theorem res_etale {U V : X.affineOpens} (h : V.1 ≤ U.1) : (Sec.res s h : Sec s
   have e : V.1 ≤ (𝟙 X : X ⟶ X) ⁻¹ᵁ U.1 := h
   have H := (𝟙 X : X ⟶ X).etale_appLE U.2 V.2 e
   have key : ((𝟙 X : X ⟶ X).appLE U.1 V.1 e).hom = (Sec.res s h : Sec s U.1 →+* Sec s V.1) := by
-    simp only [Scheme.Hom.appLE, Scheme.Hom.id_app, Category.id_comp]
+    simp only [Scheme.Hom.appLE, Scheme.Hom.id_app]
     rfl
   rw [key] at H
   exact H
@@ -760,7 +752,7 @@ theorem chart_cover (hs : Smooth s) : ⨆ U : Chart s, U.1.1 = ⊤ := by
       rw [← CommRingCat.comp_apply]
       have key := Scheme.Hom.appLE_map s (U := ⊤) (V := V) (V' := X.basicOpen g) le_top
         (homOfLE (X.basicOpen_le g)).op
-      simp only [secMap, Category.assoc]
+      simp only [secMap]
       exact congrArg (fun φ => ConcreteCategory.hom ((Scheme.ΓSpecIso (CommRingCat.of R)).inv ≫ φ) r) key
     let tr : MvPolynomial (Fin d) R →+* Sec s W.1 := (e : Localization.Away g →+* Γ(X, X.basicOpen g)).comp g'
     refine ⟨d, { tr with commutes' := fun r => ?_ }, ?_⟩
@@ -880,7 +872,7 @@ theorem exists_coprod (U : Chart s) (S : Thick (dp0 R) s) (hS : InN κ S) (h : �
   obtain ⟨fS, hfS⟩ := @exists_hom_of_le R _ X s U.1 S.B₀ S.ring₀ S.x h
   choose zS hzS using fun k : Fin d => S.surj (fS (t (MvPolynomial.X k)))
   obtain ⟨jS, -⟩ := exists_lift_of_coord U.1 t ht S fS hfS zS hzS
-  obtain ⟨P, i, y, hP, hlev, hy, huniv⟩ := exists_adj S hS d n hn
+  obtain ⟨P, i, y, hP, hlev, hy, huniv⟩ := _root_.FubiniStudyChowHeightFormula₂.Adr.exists_adj' S hS d n hn
   have hbπ : ∀ {T : Thick (dp0 R) s} (a : bas s U.1 ⟶ T) (c : Sec s U.1.1), T.π (a.φ c) = a.φ₀ c :=
     fun a c => (a.comm c).symm
   have hyπ : ∀ k, P.π (y k) = 0 := fun k => (P.ker _).2 (hy k)

@@ -280,7 +280,7 @@ theorem hsEq : HSEq := by
     rw [hD, Matrix.diagonal_conjTranspose]
     congr 1
     funext i
-    simp [Pi.star_apply, Complex.star_def]
+    simp [Pi.star_apply]
   have hAh : Aᴴ = W * D * Wᴴ := by
     rw [hA, Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, hDh,
       Matrix.mul_assoc]
@@ -399,7 +399,7 @@ lemma emb_compress {k : ℕ} (hk : k ≤ n) (f : Fin n → ℂ) :
     (emb hk)ᴴ * diagonal f * emb hk = diagonal (fun i => f (Fin.castLE hk i)) := by
   ext i j
   simp only [emb, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.of_apply, diagonal_apply]
-  simp [Finset.sum_ite_eq', Finset.sum_ite_eq, (Fin.castLE_injective hk).eq_iff]
+  simp [Finset.sum_ite_eq', (Fin.castLE_injective hk).eq_iff]
   rcases eq_or_ne i j with rfl | h
   · simp
   · simp [h, h.symm]
@@ -1012,7 +1012,6 @@ theorem star_range [StarRing E] {x : E} (hx : x ∈ (algebraMap (𝓞 E) E).rang
   have hint : IsIntegral ℤ (starRingEnd E (algebraMap (𝓞 E) E o)) := by
     first
     | exact (RingOfIntegers.isIntegral_coe o).map (starRingEnd E).toIntAlgHom
-    | exact (o.2).map (starRingEnd E).toIntAlgHom
   exact RingHom.mem_range.mpr ⟨⟨_, hint⟩, rfl⟩
 
 theorem mem_oLat {k : ℕ} (v : Fin k → E) :
@@ -1020,8 +1019,6 @@ theorem mem_oLat {k : ℕ} (v : Fin k → E) :
   unfold oLat
   first
   | (rw [LinearMap.mem_range]; rfl)
-  | exact Iff.rfl
-  | (simp [LinearMap.mem_range, LinearMap.compLeft]; rfl)
 
 theorem dualL_oLat (k : ℕ) : dualL (oLat E k) = oLat E k := by
   ext t
@@ -1032,7 +1029,7 @@ theorem dualL_oLat (k : ℕ) : dualL (oLat E k) = oLat E k := by
       intro c
       have hs : (Pi.single c 1 : Fin k → E) ∈ oLat E k := by
         rw [mem_oLat]
-        exact ⟨Pi.single c 1, by funext d; by_cases h : d = c <;> simp [Pi.single_apply, h]⟩
+        exact ⟨Pi.single c 1, by funext d; by_cases h : d = c <;> simp [h]⟩
       have := ht' _ hs
       simpa [dotProduct, Pi.single_apply] using this
     choose x hx using fun c => RingHom.mem_range.mp (h1 c)
@@ -1202,7 +1199,6 @@ theorem lattice_indexOf : IndexOf := by
       have e : Finsupp.linearCombination I.E v (hδu.repr ⟨δ *ᵥ z, hδspan z⟩) = δ *ᵥ z := by
         first
         | exact hδu.linearCombination_repr _
-        | exact hδu.total_repr _
       rw [Finsupp.linearCombination_apply, Finsupp.sum_fintype _ _ (by simp)] at e
       exact e.symm
     have hGu : ∀ c, G (u c) = Finsupp.single c 1 := fun c => hδu.repr_eq_single c _ rfl
@@ -1345,8 +1341,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-theorem poincareSeries_finite (G : Type*) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G] [SecondCountableTopology G] [T2Space G] [MeasurableSpace G] [BorelSpace G] (μ : MeasureTheory.Measure G) [μ.IsHaarMeasure] : Formalism.L2.SG.PoincareSeriesSquareIntegrable.PoincareSeriesFinite G μ :=
-  PI.PoincareSeriesFinite.UnitaryGroupMassFormula.poincareSeriesFinite G μ
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Formalism.PeriodIntegrals.OrbitalBoundsConclusion.PoincareSeriesFinite =====
@@ -1470,8 +1464,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-theorem fold_l2_bound_b (G : Type*) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G] [SecondCountableTopology G] [T2Space G] [MeasurableSpace G] [BorelSpace G] (μ : MeasureTheory.Measure G) [μ.IsHaarMeasure] : Formalism.L2.SG.PoincareSeriesSquareIntegrable.PoincareSeriesMemLp G μ :=
-  PI.PoincareSeriesMemLp.UnitaryGroupMassFormula.fold_L2_double_coset G μ
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Formalism.PeriodIntegrals.OrbitalBoundsConclusion.PoincareSeriesMemLp =====
@@ -1626,23 +1618,11 @@ open MeasureTheory Formalism.MainNotions.S
 
 namespace Formalism.L2.SG.Closed
 
-section Fold
-
-variable (G : Type*) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G]
-  [SecondCountableTopology G] [T2Space G] [MeasurableSpace G] [BorelSpace G]
-  (μ : Measure G) [μ.IsHaarMeasure]
-
-theorem fold_L2_first : Formalism.L2.SG.PoincareSeriesSquareIntegrable.PoincareSeriesFinite G μ := poincareSeries_finite G μ
-theorem fold_L2_second : Formalism.L2.SG.PoincareSeriesSquareIntegrable.PoincareSeriesMemLp G μ := fold_l2_bound_b G μ
-
-end Fold
-
 theorem SchurConv_holds : Formalism.L2.SG.ProjRows.SchurConv := schur_orthogonality_idempotent
 theorem ConvProj_holds : Formalism.L2.SG.ProjRows.ConvProj := convolution_projection
 theorem ProdConv_holds : Formalism.L2.SG.ProjRows.ProdConv := isConvIdempotent_pi
-theorem RegUnitary_holds : Formalism.L2.SG.ProjRows.RegUnitary := Formalism.L2.SG.Pf.regular_representation_unitary
 theorem ProjRowsR_holds : Formalism.L2.SG.ProjRows.ProjRowsR :=
-  Formalism.L2.SG.ProjRows.projRowsR_of SchurConv_holds ConvProj_holds ProdConv_holds RegUnitary_holds
+  Formalism.L2.SG.ProjRows.projRowsR_of SchurConv_holds ConvProj_holds ProdConv_holds _root_.Formalism.L2.SG.Pf.regular_representation_unitary
 
 theorem GfUnimod_holds : Formalism.L2.SG.Pf.GfUnimod := fun I μf _ _ =>
   (PI.WAU.adUnimod_of PI.WAU.kg_subgroup PI.WAU.maximal_compact_isCompact PI.WAU.compact_countable
@@ -1654,9 +1634,6 @@ theorem AutKCompact_holds : Formalism.L2.SG.Pf.AutKCompact := PI.WAU.maximal_com
 
 theorem RowsBij_holds : Formalism.L2.SG.RowsDef.RowsBij :=
   Formalism.L2.SG.Pf.rows_bijective ProjRowsR_holds UnimodGf_holds
-
-theorem level_subgroup_is_group {D : Formalism.BasicNotions.D7} (X : Formalism.L2.SG.HidaSetting.HidaSetting D) : X.LevelSubgroupCharacter :=
-  Formalism.L2.SG.Pf.level_subgroup_character_unitary X
 
 theorem level_subgroup_properties {D : Formalism.BasicNotions.D7} (X : Formalism.L2.SG.HidaSetting.HidaSetting D) : X.LevelSubgroupNormalized :=
   Formalism.L2.SG.Pf.levelSubgroupNormalized_of_compact X AutKCompact_holds
@@ -1682,7 +1659,7 @@ theorem LatCount_holds (I : AutInst) : Formalism.L2.SG.Count.LatCount I := by
   rw [lattice_tau_eq_size_tau] at h
   exact h
 
-theorem DistTri_holds : Formalism.MainNotions.LeviCoordinates.DistTri := symDist_of exp_triangle_inequality
+theorem DistTri_holds : Formalism.MainNotions.LeviCoordinates.DistTri := _root_.PI.SymDistWork.symDist_of exp_triangle_inequality
 
 end Count
 

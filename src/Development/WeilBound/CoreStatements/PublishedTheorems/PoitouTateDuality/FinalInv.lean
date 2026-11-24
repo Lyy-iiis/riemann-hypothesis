@@ -542,8 +542,7 @@ theorem hasse_kummer_unram' (N : ℕ+)
     apply Additive.toMul.injective
     apply Units.ext
     rw [hwc']
-    simp only [toMul_add, toMul_sub, toMul_zsmul, Units.val_mul, Units.val_div_eq_div_val,
-      Units.val_zpow_eq_zpow_val, bf]
+    simp only [toMul_add, toMul_zsmul, Units.val_mul, Units.val_zpow_eq_zpow_val, bf]
     rw [hc', coe_unitsInvariant]
     have hL : ((Additive.toMul (((zRepOfMonoidEnd (galUnitsHom K Ω)) (s 0))
           (Additive.ofMul (Yu ^ (urChar K Ω N (s 1)).val)) -
@@ -552,8 +551,7 @@ theorem hasse_kummer_unram' (N : ℕ+)
         (s 0) Y ^ a1 * (Y ^ a01)⁻¹ * Y ^ a0 := by
       show ((Additive.toMul ((Additive.ofMul (galUnitsHom K Ω (s 0) (Yu ^ a1)) : Additive Ωˣ) -
           Additive.ofMul (Yu ^ a01) + Additive.ofMul (Yu ^ a0)) : Ωˣ) : Ω) = _
-      simp only [toMul_add, toMul_sub, toMul_ofMul, Units.val_mul, Units.val_div_eq_div_val,
-        coe_galUnitsHom_apply, Units.val_inv_eq_inv_val, Units.val_pow_eq_pow_val, Yu, Units.val_mk0,
+      simp only [toMul_add, toMul_sub, toMul_ofMul, Units.val_mul, coe_galUnitsHom_apply, Units.val_inv_eq_inv_val, Units.val_pow_eq_pow_val, Yu, Units.val_mk0,
         map_pow, div_eq_mul_inv]
     refine Eq.trans hL ?_
     rw [hκ (s 0), mul_pow]
@@ -1341,31 +1339,7 @@ namespace PositivityTheory.Lit1.PTN
 
 attribute [local instance 2000] Rep.hV2
 
-theorem invCmp (Kf : FiniteSubfield) [NumberField Kf.1] [IsAlgClosure Kf.1 (AlgebraicClosure ℚ)]
-    (S : Set (HeightOneSpectrum (𝓞 Kf.1))) [Fintype S] {l r : ℕ} [Fact l.Prime] (hr : 0 < r)
-    (hS : ∀ v : HeightOneSpectrum (𝓞 Kf.1), ((l : ℕ) : 𝓞 Kf.1) ∈ v.asIdeal → v ∈ S)
-    (ζ : AlgebraicClosure ℚ) (hζ : IsPrimitiveRoot ζ (l ^ r))
-    (inv : InvFam Kf.1 (AlgebraicClosure ℚ) l r) (hinv : InvNormalised ζ inv)
-    (ιs : ∀ v : S, AlgebraicClosure ℚ →ₐ[Kf.1]
-      AlgebraicClosure ((v : HeightOneSpectrum (𝓞 Kf.1)).adicCompletion Kf.1))
-    (v : S) (A : ValuationSubring (AlgebraicClosure ℚ)) (hA : IsPlaceOver A v.1)
-    (ev : (AlgebraicClosure ((v : HeightOneSpectrum (𝓞 Kf.1)).adicCompletion Kf.1) ≃ₐ[
-        (v : HeightOneSpectrum (𝓞 Kf.1)).adicCompletion Kf.1]
-        AlgebraicClosure ((v : HeightOneSpectrum (𝓞 Kf.1)).adicCompletion Kf.1)) ≃* Dec (F := Kf.1) A)
-    (hev : ∀ σ x, ιs v (((ev σ : Dec (F := Kf.1) A) : G Kf.1 (AlgebraicClosure ℚ)) x) = σ (ιs v x))
-    (hevc : Continuous ev) (z : Z2 (muLoc Kf.1 l r A))
-    (x : cocycles (Rep.res (gsFinFamily S ιs v).toMonoidHom (gsRoots S (l ^ r))) 2)
-    (hzx : ∀ s : Fin 2 → (AlgebraicClosure ((v : HeightOneSpectrum (𝓞 Kf.1)).adicCompletion Kf.1) ≃ₐ[
-        (v : HeightOneSpectrum (𝓞 Kf.1)).adicCompletion Kf.1]
-        AlgebraicClosure ((v : HeightOneSpectrum (𝓞 Kf.1)).adicCompletion Kf.1)),
-      ((((Additive.toMul (cochainOf _ (cocycleι _ 2 x) s) :
-          rootsOfUnity (l ^ r) (maxUnramifiedOutside Kf.1 (AlgebraicClosure ℚ) S)) :
-          (maxUnramifiedOutside Kf.1 (AlgebraicClosure ℚ) S)ˣ) :
-          maxUnramifiedOutside Kf.1 (AlgebraicClosure ℚ) S) : AlgebraicClosure ℚ) =
-        ζ ^ (z.1 (ev (s 0), ev (s 1))).val) :
-    zmodToQZ (l ^ r) (inv A (Submodule.Quotient.mk z)) =
-      - gsLocalInvRootsQZ S ιs (l ^ r) v (cohomologyπ _ 2 x) := by
-  apply invCmp' <;> assumption
+alias invCmp := _root_.PositivityTheory.Lit1.PTN.invCmp'
 
 end PositivityTheory.Lit1.PTN
 end -- clump:auto

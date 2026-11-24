@@ -357,7 +357,7 @@ variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchim
 
 theorem blockIndex_false_eq_castAdd₂ (i t : ℕ) (a : Fin (i + 1)) :
     eGP (i + 1) t ⟨false, a⟩ = (Fin.castAdd (t + 1) a : Fin ((i + 1) + (t + 1))) :=
-  Fin.ext (by rw [GlobalTheory.CompanionTheory.BZMir.GpExists.blockIndex_false_val]; simp)
+  Fin.ext (by rw [_root_.GlobalTheory.CompanionTheory.LeibPhi.blockIndex_false_val]; simp)
 
 theorem blockIndex_true_eq_natAdd₂ (i t : ℕ) (b : Fin (t + 1)) :
     eGP (i + 1) t ⟨true, b⟩ = (Fin.natAdd (i + 1) b : Fin ((i + 1) + (t + 1))) :=
@@ -652,7 +652,7 @@ theorem equiv_eC {i t : ℕ} (ψ : AddChar k Circle) (hψ : Continuous ψ) {τ :
     rw [mul_assoc] at b
     simp only [Function.comp, map_smul]
     rw [b, hA, last_inv, ← hA]
-    simp only [T, LinearMap.smul_apply, LinearMap.comp_apply, map_smul, Units.smul_def]
+    simp only [T, LinearMap.smul_apply, LinearMap.comp_apply]
   have key : (((dpow (i + 1) (-1 / 2) g * dpow (t + 1) (-1 / 2) A : ℂˣ) : ℂ)) * (((dpow (t + 1) 1 A : ℂˣ) : ℂ) * (κ : ℂ)) = 1 := by
     have := congrArg (fun u : ℂˣ => (u : ℂ)) (scalar_one g A)
     simpa only [Units.val_mul, Units.val_one, hκ] using this

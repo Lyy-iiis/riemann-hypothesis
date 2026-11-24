@@ -68,7 +68,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory GlobalTheory.AbLaw
 
 theorem _root_.GlobalTheory.T.finrank_mumfordBundle_cech_homology_origin : ∀ (K : Type) [Field K] [IsAlgClosed K] (P : PolAV (Spec (CommRingCat.of K))) (R : Type) [CommRing R] (t : Spec (CommRingCat.of R) ⟶ P.A.left) (Y : Scheme.{0}) (π : Y ⟶ (P.A ⊗ P.A).left) (f : Y ⟶ Spec (CommRingCat.of R)), IsPullback π f (fst P.A P.A).left t → IsOpenImmersion t → (∃ p q, t p = η[P.A].left q) → ∀ D : Fin (P.g + 1) → Y.Opens, (∀ i, IsAffineOpen (D i)) → ⨆ i, D i = ⊤ → ∀ n, Module.Finite K ((cechLB (f ≫ t ≫ P.A.hom) ((translDiff P.A P.L (𝟙 P.A)).pull π) D).homology n) ∧ Module.finrank K ((cechLB (f ≫ t ≫ P.A.hom) ((translDiff P.A P.L (𝟙 P.A)).pull π) D).homology n) = if n = P.g then 1 else 0 := by
-  first | exact @GlobalTheory.OriginCohom.finrank_cechLB_homology | exact GlobalTheory.OriginCohom.finrank_cechLB_homology | (intros; apply GlobalTheory.OriginCohom.finrank_cechLB_homology <;> assumption)
+  first | exact @GlobalTheory.OriginCohom.finrank_cechLB_homology
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.CoherentCohomologyProofs.FinrankMumfordBundleCechHomologyOriginStatement =====
@@ -239,8 +239,8 @@ theorem finrank_cechLB_translDiff : ∀ (K : Type) [Field K] [IsAlgClosed K] (P 
     (fun j => (fst P.A P.A).left ⁻¹ᵁ V j) hM hsep' hD hc
     (by rw [← Scheme.Hom.preimage_iSup, hBc, Scheme.Hom.preimage_top])
     (by rw [← Scheme.Hom.preimage_iSup, hVc, Scheme.Hom.preimage_top])
-    (fun i _ h => isAffineOpen_preimage_inf _ (hB i) h)
-    (fun j _ h => isAffineOpen_preimage_inf _ (hV j) h)
+    (fun i _ h => _root_.GlobalTheory.AbLaw.isAffineOpen_preimage_inf_of_isSeparated _ (hB i) h)
+    (fun j _ h => _root_.GlobalTheory.AbLaw.isAffineOpen_preimage_inf_of_isSeparated _ (hV j) h)
     (fun i j => (over_affineOpen P (hV j) B hB hBc _ hM).1 i) n
   have e₂ := trunc₂HomologyIsoFstSingleton (0 : Fin (r + 1)) (secCube (P.A ⊗ P.A).hom
     (translDiff P.A P.L (𝟙 P.A)) fun u : Fin (P.g + 1) ⊕ₗ Fin (r + 1) =>

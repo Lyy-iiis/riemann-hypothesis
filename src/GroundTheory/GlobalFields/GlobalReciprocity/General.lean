@@ -595,15 +595,11 @@ def powerSubgroup (U : Subgroup Gal(ℚ̄/ℚ)) (s : Gal(ℚ̄/ℚ))
     (hU : ∀ (k : ℤ), ∀ x ∈ U, s ^ k * x * (s ^ k)⁻¹ ∈ U) : Subgroup Gal(ℚ̄/ℚ) := by
   first
   | exact @GroundTheory.Variant₂.N1.mulZPowers U s hU
-  | exact GroundTheory.Variant₂.N1.mulZPowers ..
-  | (intros; apply GroundTheory.Variant₂.N1.mulZPowers <;> assumption)
 
 theorem le_powerSubgroup (U : Subgroup Gal(ℚ̄/ℚ)) (s : Gal(ℚ̄/ℚ))
     (hU : ∀ (k : ℤ), ∀ x ∈ U, s ^ k * x * (s ^ k)⁻¹ ∈ U) : U ≤ powerSubgroup U s hU := by
   first
   | exact @GroundTheory.Variant₂.N1.le_powerSubgroup₂ U s hU
-  | exact GroundTheory.Variant₂.N1.le_powerSubgroup₂ ..
-  | (intros; apply GroundTheory.Variant₂.N1.le_powerSubgroup₂ <;> assumption)
 
 section Fields
 
@@ -622,11 +618,6 @@ theorem fixingSubgroup_powerField :
     (powerField K L m s hs).1.fixingSubgroup = powerGroup K L m s hs :=
   fixingSubgroup_ofOpenSubgroup _
 
-theorem ofOpenSubgroup_le {U U' : OpenSubgroup Gal(ℚ̄/ℚ)} (h : U' ≤ U) :
-    ofOpenSubgroup U ≤ ofOpenSubgroup U' := fun _ hx ↦
-  (IntermediateField.mem_fixedField_iff _ _).2 fun τ hτ ↦
-    (IntermediateField.mem_fixedField_iff _ _).1 hx τ (h hτ)
-
 theorem le_ofOpenSubgroup {F : FiniteSubfield} {U : OpenSubgroup Gal(ℚ̄/ℚ)}
     (h : (U : Subgroup Gal(ℚ̄/ℚ)) ≤ F.1.fixingSubgroup) : F ≤ ofOpenSubgroup U := fun x hx ↦
   (IntermediateField.mem_fixedField_iff _ _).2 fun _ hτ ↦
@@ -636,7 +627,7 @@ theorem le_layerField : L ≤ layerField L m :=
   le_ofOpenSubgroup fun _ hτ ↦ hτ.1
 
 theorem powerField_le_layerField : powerField K L m s hs ≤ layerField L m :=
-  ofOpenSubgroup_le fun x hx ↦ ⟨0, by simpa using hx⟩
+  _root_.GroundTheory.Global.FiniteSubfield.ofOpenSubgroup_le fun x hx ↦ ⟨0, by simpa using hx⟩
 
 theorem le_powerField : K ≤ powerField K L m s hs := by
   refine le_ofOpenSubgroup fun τ ⟨k, u, hu, hτu⟩ ↦ ?_
@@ -1319,9 +1310,7 @@ theorem range_ideleNorm_mem_nhds_one :
 
 end IdeleNorm
 
-theorem Abelianization.of_injective_of_isMulCommutative {G : Type*} [Group G] [IsMulCommutative G] :
-    Function.Injective (Group.Abelianization.of : G →* Group.Abelianization G) := by
-  rw [← MonoidHom.ker_eq_bot_iff, Group.Abelianization.ker_of, commutator_eq_bot]
+alias Abelianization.of_injective_of_isMulCommutative := _root_.GroundTheory.Global.abelianization_of_injective
 
 namespace IdeleClassLimit
 

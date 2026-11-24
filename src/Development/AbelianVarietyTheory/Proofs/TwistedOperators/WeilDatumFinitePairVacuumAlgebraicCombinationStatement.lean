@@ -81,10 +81,7 @@ namespace GlobalTheory.FinWeilAlg
 
 variable {D : D7} {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D}
 
-theorem heisO_smul' (w : WO S T) (c : ℂ) (f : WO S T → ℂ) : heisO ψ S T w (c • f) = c • heisO ψ S T w f := by
-  funext z
-  simp only [heisO, Pi.smul_apply, smul_eq_mul]
-  ring
+alias heisO_smul' := _root_.GlobalTheory.ThetaAllChar.heisO_smul
 
 theorem heisO_sum' {ι : Type} (s : Finset ι) (w : WO S T) (F : ι → WO S T → ℂ) :
     heisO ψ S T w (∑ i ∈ s, F i) = ∑ i ∈ s, heisO ψ S T w (F i) := by
@@ -313,7 +310,7 @@ theorem om_vac_algComb : ∀ {D : D7} {ψ : AddChar (AF D.host.F) ℂ} {θ : Inf
   refine ⟨a⁻¹, ∑ i, c i • heisO ψ S T (actO S T x h (u i)) (heisO ψ S T w v), ?_, ?_⟩
   · refine isAlgComb_finset _ _ fun i _ => ?_
     refine GlobalTheory.MovedAlg.IsAlgComb.smul ?_ (GlobalTheory.MovedAlg.IsAlgComb.Heisenberg₂ hψalg
-      (GlobalTheory.FinApprox.actO_fin _ _ (GlobalTheory.VacUnique.latO_inf S T _ _ _ (hu i)))
+      (_root_.GlobalTheory.LatNhds.actO_fin _ _ (GlobalTheory.VacUnique.latO_inf S T _ _ _ (hu i)))
       (GlobalTheory.MovedAlg.IsAlgComb.Heisenberg₂ hψalg hw (isAlgComb_self v)))
     rcases hc i with e | e <;> rw [e]
     · exact isAlgebraic_one
@@ -344,7 +341,7 @@ theorem _root_.GlobalTheory.T.weilDatum_finite_pair_vacuum_algebraic_combination
     {χS χT : (Formalism.L2.Theta.AE D)ˣ →* Circle} {om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)}, IsVacO ψ θ S T sS sT (ΛS : Set (Fin S.rank → D.host.E)) (ΛT : Set (Fin T.rank → D.host.E)) v → IsSelfDualC S ΛS → IsSelfDualC T ΛT →
     (∀ τ, IsCartanInv (gramAt D S τ) (sS τ)) → (∀ τ, IsCartanInv (gramAt D T τ) (sT τ)) → IsWeilDatumO ψ S T χS χT om →
     ∀ x ∈ GfC S, ∀ h ∈ GfC T, ∃ (κ : ℂ) (F : WO S T → ℂ), GlobalTheory.MovedAlg.IsAlgComb ψ S T v F ∧ om (x, h) v = κ • F := by
-  first | exact @GlobalTheory.FinWeilAlg.om_vac_algComb | exact GlobalTheory.FinWeilAlg.om_vac_algComb | (intros; apply GlobalTheory.FinWeilAlg.om_vac_algComb <;> assumption)
+  first | exact @GlobalTheory.FinWeilAlg.om_vac_algComb
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.WeilDatumFinitePairVacuumAlgebraicCombinationStatement =====

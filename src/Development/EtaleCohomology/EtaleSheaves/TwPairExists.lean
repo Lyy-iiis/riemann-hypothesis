@@ -324,7 +324,7 @@ theorem d_phi {N : ℕ} {U : Scheme.{0}} (x : Sx E N U) (s t : ℤ) (hst : s + 1
     Sec.map (K.d s t) (phi μ hk α.1 β.1 x s c) = ((k.negOnePow : ℤˣ) : ℤ) • phi μ hk α.1 β.1 x t (Pr.d N c) := by
   rw [phi_eq, phi_eq]
   refine Finsupp.induction_linear c ?_ ?_ ?_
-  · simp only [map_zero, secmap_zero', smul_zero]
+  · simp only [map_zero, smul_zero]
   · intro f g hf hg
     rw [map_add (f := _), map_add (f := _), map_add (f := _), secmap_add', hf, hg, smul_add]
   · intro z a
@@ -769,7 +769,7 @@ theorem LateralTheory.EtaleFoundations.simplicial_subinterval_of_subinterval_alo
       first
         | (have hm := ConcreteCategory.congr_hom hn x
            simp only [ConcreteCategory.comp_apply] at hm
-           first | exact hm | exact hm.symm)
+           first | exact hm.symm)
         | exact (congrFun hn x).symm
         | (rw [← types_comp_apply, ← hn]; rfl)
   · intro p r a b
@@ -1038,8 +1038,7 @@ theorem dT_dT (I J : Cx R) (U : Scheme.{0}) (w : ℤ) (x : Tens I J U w) :
   apply DirectSum.linearMap_ext; intro p; apply TensorProduct.ext'; intro a b
   simp only [LinearMap.comp_apply, LinearMap.zero_apply]
   rw [dT_lof, map_add (f := _), map_zsmul, dT_lof, dT_lof]
-  simp only [sec_dd, TensorProduct.zero_tmul, TensorProduct.tmul_zero, map_zero, zero_add, add_zero, smul_add,
-    smul_zero, Int.negOnePow_succ, Units.val_neg, neg_smul, smul_smul]
+  simp only [sec_dd, TensorProduct.zero_tmul, TensorProduct.tmul_zero, map_zero, zero_add, add_zero, smul_zero, Int.negOnePow_succ, Units.val_neg, neg_smul]
   exact neg_add_cancel _
 
 theorem tensorDifferential_comp_eq_zero (I J : Cx R) (w : ℤ) : dP I J w ≫ dP I J (w + 1) = 0 := by
@@ -1605,7 +1604,7 @@ theorem lam_res {I J I' J' K : Cx R} (ν : Pair I' J' K) (f : I ⟶ I') (g : J �
     simp only [LinearMap.comp_apply, Tens.res, tmap, DirectSum.lmap_lof, TensorProduct.map_tmul, Pair.lift,
       DirectSum.toModule_lof, TensorProduct.lift.tmul]
     have e := ν.nat k p.1.1 p.1.2 w p.2 (Sec.map (f.f p.1.1) a) (Sec.map (g.f p.1.2) b)
-    rw [secmap_res, secmap_res] at e
+    rw [_root_.LateralTheory.EtaleFoundations.EtaleTensorTripleProductLeibnizSeparated.res_map, _root_.LateralTheory.EtaleFoundations.EtaleTensorTripleProductLeibnizSeparated.res_map] at e
     exact e.symm
   exact congrArg (fun m => m x) key
 
@@ -1839,18 +1838,13 @@ open LateralTheory.EtaleFoundations
 theorem cup_spec0 : t_cup_spec0 := LateralTheory.Fin.EtaleCupProductNaturalInCoefficients.etale_cup_product_compatibility_specification_of_components
 theorem cup_assoc0 : EtaleCochainCupAssociativeOfPairing :=
   etale_cochain_cup_assoc_of_cup_spec_and_alexander_whitney_assoc cup_spec0 (t_aw_assoc0_of etale_chain_cochain_eval_basic_properties_hold simplicial_subinterval_of_subinterval_along_etale)
-theorem secSep : EtaleTensorTripleProductLeibnizSeparated.SecSep := etale_sheaf_sections_separated_holds
 theorem tens_tri : EtaleTensorPairProductAssociative :=
   etale_tensor_triple_product_of_family_and_leibniz (etale_tensor_triple_product_family_of_gluing LateralTheory.Fin.EtaleSheafSectionsSeparatedAndGlue.intersectionNumber_baseChange)
-    (etale_tensor_triple_product_leibniz_of_separated secSep)
+    (etale_tensor_triple_product_leibniz_of_separated _root_.LateralTheory.EtaleFoundations.etale_sheaf_sections_separated_holds)
 theorem tens_ex : tt_tens_ex := tt_tens_ex_of tt_tens_pre_of etale_presheaf_tensor_data_sheafification_is_tensor_complex
-theorem univ_exdeg : twpair_tens_univ_exdeg := twpair_tens_univ_exdeg_of
-theorem tens_univ : twpair_tens_univ := twpair_tens_univ_of univ_exdeg
+theorem tens_univ : twpair_tens_univ := twpair_tens_univ_of _root_.LateralTheory.EtaleFoundations.twpair_tens_univ_exdeg_of
 theorem tens_ge : tt_tens_ge := tt_tens_ge_of (by intro R _ I J K τ hτ; exact (tens_univ R τ hτ).2.1)
 theorem res_side : tt_res_side := tt_res_side_of tens_univ LateralTheory.Fin.EtaleTensorPairQuasiIsoOfFlatQuasiIso.intersectionNumber_baseChange
-theorem twres_ext : EtaleTwistResolutionUniversalExtension := LateralTheory.Fin.EtaleTwistResolutionUniversalExtension.intersectionNumber_baseChange
-theorem cup_compat : EtaleCupProductNaturalInCoefficients := LateralTheory.Fin.EtaleCupProductNaturalInCoefficients.intersectionNumber_baseChange
-
 theorem holds_of (hts : EtaleTateTwistSectionsLocallyGenerated) :
     EtaleTwistedCupProductAssociative ∧ EtaleTwistResolutionPairingCupUnique := by
   have hsec : TwMulGenMap.twSec := hts
@@ -1863,9 +1857,9 @@ theorem holds_of (hts : EtaleTateTwistSectionsLocallyGenerated) :
   have twist : tt_twist_side := tt_twist_side_of tw_mul LateralTheory.Fin.EtaleTateTwistSheafFlat.intersectionNumber_baseChange LateralTheory.Fin.EtaleComplexPairingFlipExists.intersectionNumber_baseChange
     LateralTheory.Fin.EtaleTensorPairQuasiIsoOfFlatQuasiIso.intersectionNumber_baseChange
   have twres : EtaleTensorPairTwistResolutionMul := etale_tensor_twisted_resolution_of_existence_bound_and_sides tens_ex tens_ge twist res_side
-  have pa : t_pair_assoc := t_pair_assoc_of twres tens_tri twres_ext cup_compat cup_assoc0 t_pa_tens_ex_of
+  have pa : t_pair_assoc := t_pair_assoc_of twres tens_tri _root_.LateralTheory.Fin.EtaleTwistResolutionUniversalExtension.etale_twisted_resolution_exists_of_flat_sections _root_.LateralTheory.Fin.EtaleCupProductNaturalInCoefficients.etale_cup_product_compatible_with_cochains_of_components cup_assoc0 t_pa_tens_ex_of
     t_pa_tens_univ_of t_pa_precomp_of t_pa_cpush_id_of t_pa_cpush_htpy_of
-  have tp : EtaleTwistResolutionPairingCupUnique := etale_tate_twist_cup_pairing_of_tensor_and_resolution_properties tens_ex tens_univ twres twres_ext cup_compat twpair_zc_fun_of
+  have tp : EtaleTwistResolutionPairingCupUnique := etale_tate_twist_cup_pairing_of_tensor_and_resolution_properties tens_ex tens_univ twres _root_.LateralTheory.Fin.EtaleTwistResolutionUniversalExtension.etale_twisted_resolution_exists_of_flat_sections _root_.LateralTheory.Fin.EtaleCupProductNaturalInCoefficients.etale_cup_product_compatible_with_cochains_of_components twpair_zc_fun_of
   exact ⟨etale_twisted_cup_assoc_of_twisted_pairing_exists_assoc (t_twpair_ex_of tp) pa, tp⟩
 
 theorem ringAssoc : LateralTheory.E.CupProductRingLaws.LeafRingAssoc := (holds_of LateralTheory.CohomologicalPurity.LeafAWCutTw.twSec).1

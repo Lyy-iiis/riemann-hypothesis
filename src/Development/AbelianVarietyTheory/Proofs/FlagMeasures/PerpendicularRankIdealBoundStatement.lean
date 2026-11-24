@@ -55,6 +55,7 @@ import Mathlib.RingTheory.HopfAlgebra.Basic
 import Mathlib.Tactic.Linter.HaveILetI
 import Mathlib.Tactic.ReduceModChar
 import Mathlib.Topology.Sheaves.Presheaf
+import Mathlib.RingTheory.PicardGroup
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AbelianVarietyTheory.Proofs.FlagMeasures.SpanInfEq, Development.AbelianVarietyTheory.Proofs.FlagMeasures.PerpendicularRankIdealBound, Development.AbelianVarietyTheory.Proofs.FlagMeasures.PerpendicularRankIdealBoundStatement
@@ -122,13 +123,7 @@ theorem span_inf_eq {K : Type} [Field K] [NumberField K] {V : Type} [AddCommGrou
     rw [this]
     exact Submodule.smul_mem _ _ (Submodule.subset_span hmem)
 
-theorem main : ∀ {K : Type} [inst : Field K] [NumberField K] {V : Type} [inst_2 : AddCommGroup V]
-    [inst_3 : Module K V] [inst_4 : Module (NumberField.RingOfIntegers K) V]
-    [inst_5 : IsScalarTower (NumberField.RingOfIntegers K) K V]
-    (L : Submodule (NumberField.RingOfIntegers K) V), Submodule.IsFullLattice K L →
-    ∀ (T : Submodule K V),
-    Submodule.span K (↑(L ⊓ Submodule.restrictScalars (NumberField.RingOfIntegers K) T) : Set V) = T :=
-  fun L hL T => span_inf_eq L hL T
+alias main := _root_.GlobalTheory.SpanInfEq.span_inf_eq
 
 end GlobalTheory.SpanInfEq
 end -- clump:auto
@@ -136,7 +131,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.SpanInfEq =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.PerpendicularRankIdealBound =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FlagMeasures.PerpendicularRankIdealBound", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.SemilocalFrames.RowMinor\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.DefiniteLatticeDiscriminantModuleCardDetSq\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.SpanInfEq\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.StandardBaseFlagComplementIntegralLattice\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.StandardBaseFlagComplementIntegralLatticeStatement\nimport Formalism.HermitianLattices.HermitianLatticesProofs.DualLattice\nimport Formalism.SharpRestriction.CuspSpanNormBounds.AbsoluteAmplitudeSecondOfSource\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Int\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Presheaf\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.FlagMeasures.PerpendicularRankIdealBound", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.SemilocalFrames.RowMinor\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.DefiniteLatticeDiscriminantModuleCardDetSq\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.SpanInfEq\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.StandardBaseFlagComplementIntegralLattice\npublic import Development.AbelianVarietyTheory.Proofs.FlagMeasures.StandardBaseFlagComplementIntegralLatticeStatement\nimport Formalism.HermitianLattices.HermitianLatticesProofs.DualLattice\nimport Formalism.SharpRestriction.CuspSpanNormBounds.AbsoluteAmplitudeSecondOfSource\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Algebra.Order.Star.Int\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.ENatToNat\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Presheaf\nimport Mathlib.RingTheory.PicardGroup\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -293,8 +288,8 @@ theorem key (h : V →ₗ⋆[K] V →ₗ[K] K) (hs : h.IsSymm) (hn : h.Nondegene
       L ⊓ (⨅ p ∈ P, LinearMap.ker (h p) : Submodule K V).restrictScalars (𝓞 K) := by
   have hc := isCompl_perp h ha P
   have hT := mem_perp h P
-  have hsA := span_inf L hL (Submodule.span K (P : Set V))
-  have hsT := span_inf L hL (⨅ p ∈ P, LinearMap.ker (h p) : Submodule K V)
+  have hsA := _root_.GlobalTheory.SpanInfEq.span_inf_eq L hL (Submodule.span K (P : Set V))
+  have hsT := _root_.GlobalTheory.SpanInfEq.span_inf_eq L hL (⨅ p ∈ P, LinearMap.ker (h p) : Submodule K V)
   set A := Submodule.span K (P : Set V) with hA
   set T := (⨅ p ∈ P, LinearMap.ker (h p) : Submodule K V) with hTdef
   obtain ⟨-, hdd, -⟩ := Formalism.HermitianLatticesTheory.dualLattice (𝓞 K) K V h hs hn star_range L hL
@@ -414,7 +409,7 @@ theorem main : ∀ (D : D7) (u u' : D.what₂.Word) (F0 : Fb D u) (Λ : LatV D),
   · have h1 := Submodule.finrank_add_eq_of_isCompl (isCompl_perp (D.sp.X 0).hT ha P)
     unfold rkW at hrk ⊢
     unfold perpW
-    rw [span_inf L hLfull]
+    rw [_root_.GlobalTheory.SpanInfEq.span_inf_eq L hLfull]
     unfold perpE
     omega
   · obtain ⟨a1, a2, -⟩ := GlobalTheory.LoopC.DetCard.main D L hL.fg hpd hi
@@ -423,7 +418,7 @@ theorem main : ∀ (D : D7) (u u' : D.what₂.Word) (F0 : Fb D u) (Λ : LatV D),
     obtain ⟨b1, b2, b3⟩ := GlobalTheory.LoopC.DetCard.main D (sat D L P) hMfg hpd hMi
     obtain ⟨c1, c2⟩ := b3 P (fun x hx => ⟨hPL hx, Submodule.subset_span hx⟩) (by
       unfold rkW sat
-      rw [span_inf L hLfull])
+      rw [_root_.GlobalTheory.SpanInfEq.span_inf_eq L hLfull])
     obtain ⟨I₁, p1, p2, p3⟩ := exists_ideal_smul_le _ _ a1
     obtain ⟨I₂, q1, q2, q3⟩ := exists_ideal_smul_le _ _ b1
     refine ⟨_, ?_, ?_, key (D.sp.X 0).hT (D.sp.X 0).herm (D.sp.X 0).nondeg ha L P hLfull hi hPL I₁ I₂ p3 q3⟩
@@ -457,7 +452,7 @@ open scoped ENNReal Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.perpendicular_rank_ideal_bound : ∀ (D : D7) (u u' : D.what₂.Word) (F0 : Fb D u) (Λ : LatV D), Stand D u u' → IsBase D u F0 → IsRowLat D F0 Λ → ∀ (P : LatW D) (s : ℕ) (Q : ℝ), s ≤ D.R.k → SubOK D (L0X D Λ (lf D F0)) P s Q → rkW D (perpW D (L0X D Λ (lf D F0)) P) = s ∧ ∃ I : Ideal (𝓞 D.host.E), I ≠ ⊥ ∧ (Ideal.absNorm I : ℝ) ≤ Q ^ 2 * NT D u ^ 2 ∧ I • dualInH (D.sp.X 0).hT (perpW D (L0X D Λ (lf D F0)) P) ≤ perpW D (L0X D Λ (lf D F0)) P := by
-  first | exact @GlobalTheory.LoopC.PerpDisc.main | exact GlobalTheory.LoopC.PerpDisc.main | (intros; apply GlobalTheory.LoopC.PerpDisc.main <;> assumption)
+  first | exact @GlobalTheory.LoopC.PerpDisc.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FlagMeasures.PerpendicularRankIdealBoundStatement =====

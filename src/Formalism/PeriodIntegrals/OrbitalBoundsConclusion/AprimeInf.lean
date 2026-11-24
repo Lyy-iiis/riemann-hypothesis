@@ -576,7 +576,7 @@ theorem norm_reimE_sq {a b : ℕ} (M : Matrix (Fin a) (Fin b) ℂ) :
   rw [Fintype.sum_prod_type]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [Fintype.sum_bool, Complex.sq_norm, Complex.normSq_apply]
-  simp [reimE, reim, Real.norm_eq_abs, sq_abs, sq]
+  simp [reimE, reim, Real.norm_eq_abs, sq]
 
 
 
@@ -1345,9 +1345,6 @@ open PI.AprimeInfW
 
 theorem aprimeInf_of_hinfCompact (hC : MassDataMassesW.HinfCompact) (hV : GaugeVolUD) : Formalism.L2.SG.Pf.NcReal.AprimeInf :=
   aprimeInf_of_grp hC (grpStd_full expProdU_holds hV) nuBridge placeJacAll_holds
-
-theorem aprime_infinite_real (hC : MassDataMassesW.HinfCompact) (hV : GaugeVolUD) : Formalism.L2.SG.Pf.NcReal.AprimeInf :=
-  aprimeInf_of_hinfCompact hC hV
 
 end PI.AprimeInfAsm
 end -- clump:auto

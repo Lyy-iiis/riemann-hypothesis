@@ -148,15 +148,7 @@ theorem dosetInd_mem_hecke (K : Subgroup G) (g : G) : dosetInd ℂ K g ∈ Hecke
 
 variable [AddCommGroup V] [Module ℂ V]
 
-theorem mem_fixed_iff {ρ : Representation ℂ G V} {K : Subgroup G} {v : V} :
-    v ∈ fixed ρ K ↔ ∀ k ∈ K, ρ k v = v := by
-  constructor
-  · intro h k hk
-    have := (show ∀ h : K, ρ h v = (((1 : K →* ℂˣ) h : ℂˣ) : ℂ) • v from h) ⟨k, hk⟩
-    simpa using this
-  · intro h
-    exact (show ∀ h : K, ρ h v = (((1 : K →* ℂˣ) h : ℂˣ) : ℂ) • v from fun k => by
-      simpa using h k k.2)
+alias mem_fixed_iff := _root_.GlobalTheory.LGrp.mem_fixed
 
 theorem pairing_translate_eq_zero (ρ : Representation ℂ G V) (K : Subgroup G)
     (hc : IsCommensurated K) (B : V →ₗ[ℂ] V →ₗ⋆[ℂ] ℂ)
@@ -458,7 +450,7 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.spherical_eigenvector_generates_irreducible_subrepresentation : ∀ {G V : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [AddCommGroup V] [Module ℂ V] (ρ : Representation ℂ G V) (K : Subgroup G), IsOpen (K : Set G) → IsCommensurated K → IsUnitarisable ρ → ∀ x : V, x ≠ 0 → x ∈ fixed ρ K → (∀ h ∈ Hecke ℂ K, ∃ c : ℂ, heckeVec ρ K h x = c • x) → ∃ (U : Submodule ℂ V) (hU : ∀ g, ∀ y ∈ U, ρ g y ∈ U) (hx : x ∈ U), IsIrrSmooth (GlobalTheory.PRep.sub ρ U hU) ∧ IsUnitarisable (GlobalTheory.PRep.sub ρ U hU) ∧ ∀ y ∈ fixed (GlobalTheory.PRep.sub ρ U hU) K, ∃ c : ℂ, y = c • (⟨x, hx⟩ : U) := by
-  first | exact @GlobalTheory.spherical_eigenvector_generates_irreducible | exact GlobalTheory.spherical_eigenvector_generates_irreducible | (intros; apply GlobalTheory.spherical_eigenvector_generates_irreducible <;> assumption)
+  first | exact @GlobalTheory.spherical_eigenvector_generates_irreducible
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.SphericalEigenvectorGeneratesIrreducibleSubrepreStatement =====

@@ -207,7 +207,7 @@ theorem _root_.GlobalTheory.T.hodge_component_twist_frame_compat : ∀ (E : Type
     x' ≫ pullback.fst _ _ = x ≫ pullback.fst _ _ ≫ Φ.hom → x' ≫ pullback.snd _ _ = x ≫ pullback.snd _ _ →
     A.cst = A'.cst → x ≫ pullback.snd _ _ = spMap A.cst → (∀ p ∈ S, A'.R p = A.R p) →
     ∀ z : Sp ℂ ⟶ A'.X, A'.Interior z ↔ A.Interior (z ≫ e.hom) := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.TwistInterior.interior_iff | exact GlobalTheory.CompanionTheory.Ar.TwistInterior.interior_iff | (intros; apply GlobalTheory.CompanionTheory.Ar.TwistInterior.interior_iff <;> assumption)
+  first | exact @GlobalTheory.CompanionTheory.Ar.TwistInterior.interior_iff
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.GeometryProofs.HodgeComponentTwistFrameCompatStatement =====
@@ -730,7 +730,7 @@ theorem htOm_eq_of_dvr : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] 
     (twistMap c g)
   obtain ⟨k₁, hk₁⟩ := sabMap_congr_base (Category.id_comp ξ) n₁
   obtain ⟨k₂, hk₂⟩ := sabMap_congr_base (Category.id_comp ξ) n₂
-  refine PositivityTheory.UnitarySelfGeneration.lattice_stalk_dvr_twisted_models E H D l B b g X Ω ξ (x ≫ s₀) o t t' k₁ k₂ V M M' n q hgen hn hFT (fun e => ?_) hq
+  refine _root_.GlobalTheory.CompanionTheory.Ar.OmDvrK.htOm_eq_of_dvr E H D l B b g X Ω ξ (x ≫ s₀) o t t' k₁ k₂ V M M' n q hgen hn hFT (fun e => ?_) hq
   obtain ⟨w, hw, hw'⟩ := htie e
   have hp := c.cart.1
   let v0 : (epsAt (𝟙 (Sp Ω))).left ⟶ o.t.G.left :=

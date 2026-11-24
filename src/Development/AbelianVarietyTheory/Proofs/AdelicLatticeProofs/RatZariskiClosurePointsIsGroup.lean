@@ -68,7 +68,7 @@ theorem coeff_eq_contraction {V W : Type} [AddCommGroup V] [Module ℚ V] [AddCo
       = TensorProduct.rid ℚ V (LinearMap.lTensor V (b.coord i) t) := by
   induction t using TensorProduct.induction_on with
   | zero => simp
-  | tmul v w => simp [TensorProduct.equivFinsuppOfBasisRight_apply_tmul_apply]
+  | tmul v w => simp
   | add x y hx hy => simp only [map_add (f := _), Finsupp.add_apply, hx, hy]
 
 theorem eq_zero_of_contractions {V W : Type} [AddCommGroup V] [Module ℚ V] [AddCommGroup W]
@@ -95,17 +95,6 @@ open scoped Kronecker ComplexOrder TensorProduct
 
 namespace GlobalTheory.ClassFin
 
-theorem tensor_eq_zero_of_forall_contract {V W : Type} [AddCommGroup V] [Module ℚ V] [AddCommGroup W]
-    [Module ℚ W] (t : V ⊗[ℚ] W)
-    (h : ∀ m : W →ₗ[ℚ] ℚ, TensorProduct.rid ℚ V (LinearMap.lTensor V m t) = 0) : t = 0 := by
-  first
-  | exact @_root_.GlobalTheory.CoefficientContraction.eq_zero_of_contractions
-  | exact _root_.GlobalTheory.CoefficientContraction.eq_zero_of_contractions
-  | (apply _root_.GlobalTheory.CoefficientContraction.eq_zero_of_contractions <;> assumption)
-  | (intros; apply _root_.GlobalTheory.CoefficientContraction.eq_zero_of_contractions <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.CoefficientContraction.eq_zero_of_contractions <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.CoefficientContraction.eq_zero_of_contractions ..)
-
 theorem aeval_sum_elim_eq_zero_of_tensor {ι : Type} [Fintype ι] [DecidableEq ι] (Γ : Set (Matrix ι ι ℂ))
     (hΓ : ∀ σ : ℂ ≃+* ℂ, ∀ g ∈ Γ, g.map σ ∈ Γ)
     (t : MvPolynomial (ι × ι) ℚ ⊗[ℚ] MvPolynomial (ι × ι) ℚ)
@@ -120,7 +109,7 @@ theorem aeval_sum_elim_eq_zero_of_tensor {ι : Type} [Fintype ι] [DecidableEq �
   set ex : MvPolynomial (ι × ι) ℚ →ₐ[ℚ] R := MvPolynomial.aeval (fun ij : ι × ι => x ij.1 ij.2) with hex
   set ey : MvPolynomial (ι × ι) ℚ →ₐ[ℚ] R := MvPolynomial.aeval (fun ij : ι × ι => y ij.1 ij.2) with hey
   have key : TensorProduct.map ex.toLinearMap ey.toLinearMap t = 0 := by
-    apply tensor_eq_zero_of_forall_contract
+    apply _root_.GlobalTheory.CoefficientContraction.eq_zero_of_contractions
     intro m
     have h1 : TensorProduct.rid ℚ _ (LinearMap.lTensor _ (m ∘ₗ ey.toLinearMap) t) ∈ vanI Γ := by
       intro g hg

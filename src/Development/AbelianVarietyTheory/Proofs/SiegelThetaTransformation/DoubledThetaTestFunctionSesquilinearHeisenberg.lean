@@ -104,8 +104,7 @@ theorem hD_sub_conj (hW : W.IsHermitian) (h1 : W * imH Z = 1) (d b d' b' : Fin N
       conj (hD W (star b' + Z *ᵥ star d') (b' + d' ᵥ* Z) (star b + Z *ᵥ star d) (b + d ᵥ* Z)) =
       2 * I * ((b ⬝ᵥ star d' + d' ⬝ᵥ star b) - (b' ⬝ᵥ star d + d ⬝ᵥ star b')) := by
   rw [conj_hD W hW, hD_per Z W h1, hD_per Z W h1]
-  simp only [dotProduct_add _ (star _), add_dotProduct _ _ (star _), ← dotProduct_mulVec,
-    dotProduct_add d, dotProduct_add d']
+  simp only [dotProduct_add _ (star _), add_dotProduct _ _ (star _), ← dotProduct_mulVec]
   ring
 
 theorem gauss_per (h1 : W * imH Z = 1) (u u' d b : Fin N → ℂ) :
@@ -233,7 +232,7 @@ theorem trace_pair (b d : Fin r → E) : ((Algebra.trace ℚ E (∑ a, b a * cc 
     ∑ τ : X.Ψ, (Data.emb τ.1 b ⬝ᵥ star (Data.emb τ.1 d) +
       Data.emb τ.1 d ⬝ᵥ star (Data.emb τ.1 b)) := by
   rw [X.trace_eq_Psi]
-  simp [dotProduct, Data.emb, DblPer.emb_cc, mul_comm]
+  simp [dotProduct, Data.emb, _root_.ReciprocityTheory.ChartRestriction.G.FD.emb_cc, mul_comm]
 
 theorem trace_bv (a₁ a₂ d : Fin r → E) :
     Algebra.trace ℚ E (∑ a, bv X a₁ a₂ a * cc (d a)) = -(1 / 2) * EF X (a₁ + a₂) d := by

@@ -104,7 +104,7 @@ open scoped TensorProduct Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.level_places_under_injective : ∀ {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : Formalism.MainNotions.G.Inst D L} {Gl : Formalism.MainNotions.G.LatInst D} {Kc : Formalism.MainNotions.G.Consts} {Yd : DivX D} {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Yd cX} (W : RealPack ex), PkHyp W → Function.Injective (fun i : {PP // PP ∈ (pk W).Pg ∨ QAll W PP} => HeightOneSpectrum.under (𝓞 D.host.F) i.1) := by
-  first | exact @GlobalTheory.Fam.PlaceInj.under_injective | exact GlobalTheory.Fam.PlaceInj.under_injective | (intros; apply GlobalTheory.Fam.PlaceInj.under_injective <;> assumption)
+  first | exact @GlobalTheory.Fam.PlaceInj.under_injective
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DecoratedLatticeProofs.LevelPlacesUnderInjectiveStatement =====
@@ -120,20 +120,6 @@ open scoped TensorProduct Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 namespace GlobalTheory.RLatMove
-
-theorem card_eq_of_frame {k : Type} [Field k] {n : ℕ} {Y : Type} [Fintype Y] [DecidableEq Y]
-    (F : Frame k n Y) : Fintype.card Y = n := by
-  apply le_antisymm
-  · calc Fintype.card Y = (1 : Matrix Y Y k).rank := Matrix.rank_one.symm
-      _ = (F.γ * F.β).rank := by rw [F.γβ]
-      _ ≤ F.γ.rank := Matrix.rank_mul_le_left _ _
-      _ ≤ Fintype.card (Fin n) := Matrix.rank_le_card_width _
-      _ = n := Fintype.card_fin n
-  · calc n = Fintype.card (Fin n) := (Fintype.card_fin n).symm
-      _ = (1 : Matrix (Fin n) (Fin n) k).rank := Matrix.rank_one.symm
-      _ = (F.β * F.γ).rank := by rw [F.βγ]
-      _ ≤ F.β.rank := Matrix.rank_mul_le_left _ _
-      _ ≤ Fintype.card Y := Matrix.rank_le_card_width _
 
 def frameGL {k : Type} [Field k] {n : ℕ} {Y : Type} [Fintype Y] [DecidableEq Y]
     (F : Frame k n Y) (B : GL Y k) (σ : Fin n ≃ Y) : GL (Fin n) k where
@@ -201,7 +187,7 @@ theorem move_main : ∀ {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : Form
         GlobalTheory.SymBridge.IsOrd GlobalTheory.SymBridge.zPos e := by
       intro PP h
       obtain ⟨eqv, heqv⟩ := GlobalTheory.SymBridge.PhiAgreeProof.zPos_equiv D.R.k ((l PP h).s + 1) D.R.t j
-      have hcard := card_eq_of_frame (FY PP h j _ (hsj PP h))
+      have hcard := _root_.GlobalTheory.LocMod.Frame.card_eq (FY PP h j _ (hsj PP h))
       simp only [Fintype.card_sum, Fintype.card_fin, Fintype.card_prod] at hcard
       have hr : D.R.k + ((l PP h).s + 1) + j * D.R.t = (Yc D j).rank := by
         rw [← hcard]; have := hsj PP h; omega

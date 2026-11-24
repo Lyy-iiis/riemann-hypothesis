@@ -492,7 +492,7 @@ theorem single_vecMul_aR {r : ℕ} {l : Fin n} (hl : r ≤ (l : ℕ)) (t : ℝ) 
   · subst hj
     rw [h1 _ _ (by simp [h])]
     simp
-  · simp [Pi.single_apply, hj]
+  · simp [hj]
 
 theorem height_eq {r : ℕ} {l : Fin n} (hl : r ≤ (l : ℕ)) (γ₀ : GL (Fin n) K) (u : IdeleGroup K)
     (X : UPos n r → 𝔸[K]) (t : ℝ) (q : AdelicGLn.AdelicGL K n) :
@@ -686,7 +686,7 @@ section -- clump:auto
 namespace PositivityTheory.Rg.Rs
 
 theorem expNeg_of (h : An.Count) : ExpNeg :=
-  expNegGlue_holds dict_holds (l2glue_holds h GlobalTheory.CompanionTheory.SiegelEscape.escape)
+  _root_.PositivityTheory.Rg.Rs.JExpNegGlue.main dict_holds (l2glue_holds h GlobalTheory.CompanionTheory.SiegelEscape.escape)
 
 theorem sqIntCrit_of (h1 : InitBnd) (h2 : FinTr) (h3 : An.BoxVol) : SqIntCrit :=
   sqIntGlue_holds dict_holds niceAut_holds h1 h2 killPoly_holds

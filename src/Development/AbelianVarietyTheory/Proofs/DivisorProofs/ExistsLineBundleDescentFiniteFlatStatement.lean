@@ -224,7 +224,7 @@ theorem _root_.GlobalTheory.T.descentDatum_frame_cocycle_unit : ∀ {X Y : Schem
       ∀ w : ↥(Triple f), f (pullback.fst f f (pullback.fst (pullback.snd f f) (pullback.fst f f) w)) ∈ V →
         gm (pullback.fst (pullback.snd f f) (pullback.fst f f)) w _ c *
           gm (pullback.snd (pullback.snd f f) (pullback.fst f f)) w _ c = gm (pr13 f) w _ c := by
-  first | exact @GlobalTheory.LBDescent.frame_cocycle | exact GlobalTheory.LBDescent.frame_cocycle | (intros; apply GlobalTheory.LBDescent.frame_cocycle <;> assumption)
+  first | exact @GlobalTheory.LBDescent.frame_cocycle
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DescentDatumFrameCocycleUnitStatement =====
@@ -360,7 +360,7 @@ theorem _root_.GlobalTheory.T.exists_lineBundle_of_descentInvariant_frames : ∀
         pullback.snd f f z ∈ L.U j →
         gm (pullback.fst f f) z _ (s i) * gm (𝟙 _) z _ (φ i j) = gm (pullback.snd f f) z _ (s j)) →
     ∃ L' : LB Y, L'.IsLB ∧ LBIso L (L'.pull f) := by
-  first | exact @GlobalTheory.LBDescent.exists_lb_of_invariant_frames | exact GlobalTheory.LBDescent.exists_lb_of_invariant_frames | (intros; apply GlobalTheory.LBDescent.exists_lb_of_invariant_frames <;> assumption)
+  first | exact @GlobalTheory.LBDescent.exists_lb_of_invariant_frames
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLineBundleOfDescentInvariantFramesStatement =====
@@ -534,7 +534,7 @@ open GlobalTheory.LBDescent
 theorem _root_.GlobalTheory.T.exists_lineBundle_trivial_near_fibre_finite : ∀ {X Y : Scheme.{0}} (f : X ⟶ Y) [IsFinite f] (L : LB X), L.IsLB → ∀ y : Y, ∃ V : Y.Opens, y ∈ V ∧
     ∃ t : ∀ i, Γ(X, f ⁻¹ᵁ V ⊓ L.U i)ˣ, ∀ (i j : L.ι) (x : X), f x ∈ V → x ∈ L.U i → x ∈ L.U j →
       gm (𝟙 X) x _ (t i) = gm (𝟙 X) x _ (L.g i j) * gm (𝟙 X) x _ (t j) := by
-  first | exact @GlobalTheory.LBDescent.exists_trivial_near_fibre | exact GlobalTheory.LBDescent.exists_trivial_near_fibre | (intros; apply GlobalTheory.LBDescent.exists_trivial_near_fibre <;> assumption)
+  first | exact @GlobalTheory.LBDescent.exists_trivial_near_fibre
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLineBundleTrivialNearFibreFiniteStatement =====
@@ -598,13 +598,6 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.LBDescent
 open TensorProduct
 
-theorem _root_.GlobalTheory.T.exists_tensorSquare_equiv_fibreSquare_sections : ∀ {X Y : Scheme.{0}} (f : X ⟶ Y) [IsFinite f] (V₀ : Y.Opens), IsAffineOpen V₀ →
-    ∀ (h : pullback.fst f f ⁻¹ᵁ f ⁻¹ᵁ V₀ ≤ pullback.snd f f ⁻¹ᵁ f ⁻¹ᵁ V₀),
-    letI : Algebra Γ(Y, V₀) Γ(X, f ⁻¹ᵁ V₀) := (f.app V₀).hom.toAlgebra
-    ∃ e : Γ(X, f ⁻¹ᵁ V₀) ⊗[Γ(Y, V₀)] Γ(X, f ⁻¹ᵁ V₀) ≃+* Γ(pullback f f, pullback.fst f f ⁻¹ᵁ f ⁻¹ᵁ V₀),
-      ∀ a b : Γ(X, f ⁻¹ᵁ V₀), e (a ⊗ₜ b) =
-        ((pullback.fst f f).app (f ⁻¹ᵁ V₀)).hom a * ((pullback.snd f f).appLE (f ⁻¹ᵁ V₀) _ h).hom b := by
-  first | exact @GlobalTheory.LBDescent.exists_tensorSquare_equiv_sections | exact GlobalTheory.LBDescent.exists_tensorSquare_equiv_sections | (intros; apply GlobalTheory.LBDescent.exists_tensorSquare_equiv_sections <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsTensorSquareEquivFibreSquareSectionsStatement =====
@@ -711,7 +704,7 @@ theorem _root_.GlobalTheory.T.exists_unit_basicOpen_of_coboundary_identity : ∀
     m * s = (f.app V₀).hom r ^ n →
     ∃ u : Γ(X, f ⁻¹ᵁ Y.basicOpen r)ˣ, ∀ z : ↥(pullback f f), f (pullback.fst f f z) ∈ Y.basicOpen r →
       gm (pullback.fst f f) z _ u * gm (𝟙 _) z _ c = gm (pullback.snd f f) z _ u := by
-  first | exact @GlobalTheory.LBDescent.coboundary_unit_basicOpen | exact GlobalTheory.LBDescent.coboundary_unit_basicOpen | (intros; apply GlobalTheory.LBDescent.coboundary_unit_basicOpen <;> assumption)
+  first | exact @GlobalTheory.LBDescent.coboundary_unit_basicOpen
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUnitBasicOpenOfCoboundaryIdentityStatement =====
@@ -780,10 +773,6 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.LBDescent
 open TensorProduct
 
-theorem _root_.GlobalTheory.T.finite_faithfullyFlat_algebra_over_affine_open : ∀ {X Y : Scheme.{0}} (f : X ⟶ Y) [IsFinite f] [Flat f] [Surjective f] [IsLocallyNoetherian Y] (V₀ : Y.Opens), IsAffineOpen V₀ →
-    letI : Algebra Γ(Y, V₀) Γ(X, f ⁻¹ᵁ V₀) := (f.app V₀).hom.toAlgebra
-    IsNoetherianRing Γ(Y, V₀) ∧ Module.Finite Γ(Y, V₀) Γ(X, f ⁻¹ᵁ V₀) ∧ Module.FaithfullyFlat Γ(Y, V₀) Γ(X, f ⁻¹ᵁ V₀) := by
-  first | exact @GlobalTheory.finiteFlatSurj_affine_algebra | exact GlobalTheory.finiteFlatSurj_affine_algebra | (intros; apply GlobalTheory.finiteFlatSurj_affine_algebra <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteFaithfullyFlatAlgebraOverAffineOpenStatement =====
@@ -1075,20 +1064,6 @@ attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.LBDescent
 open TensorProduct
 
-theorem _root_.GlobalTheory.T.unit_cocycle_descends_on_triple_overlaps : ∀ {X Y : Scheme.{0}} (f : X ⟶ Y) [IsFinite f] (V V₀ : Y.Opens), IsAffineOpen V₀ →
-    ∀ (h : pullback.fst f f ⁻¹ᵁ f ⁻¹ᵁ V₀ ≤ pullback.snd f f ⁻¹ᵁ f ⁻¹ᵁ V₀)
-      (hle : pullback.fst f f ⁻¹ᵁ f ⁻¹ᵁ V₀ ≤ pullback.fst f f ⁻¹ᵁ f ⁻¹ᵁ V) (c : Γ(pullback f f, pullback.fst f f ⁻¹ᵁ f ⁻¹ᵁ V)ˣ),
-    (∀ w : ↥(Triple f), f (pullback.fst f f (pullback.fst (pullback.snd f f) (pullback.fst f f) w)) ∈ V →
-        gm (pullback.fst (pullback.snd f f) (pullback.fst f f)) w _ c *
-          gm (pullback.snd (pullback.snd f f) (pullback.fst f f)) w _ c = gm (pr13 f) w _ c) →
-    letI : Algebra Γ(Y, V₀) Γ(X, f ⁻¹ᵁ V₀) := (f.app V₀).hom.toAlgebra
-    ∀ e : Γ(X, f ⁻¹ᵁ V₀) ⊗[Γ(Y, V₀)] Γ(X, f ⁻¹ᵁ V₀) ≃+* Γ(pullback f f, pullback.fst f f ⁻¹ᵁ f ⁻¹ᵁ V₀),
-      (∀ a b : Γ(X, f ⁻¹ᵁ V₀), e (a ⊗ₜ b) =
-        ((pullback.fst f f).app (f ⁻¹ᵁ V₀)).hom a * ((pullback.snd f f).appLE (f ⁻¹ᵁ V₀) _ h).hom b) →
-      Algebra.TensorProduct.includeLeft (R := Γ(Y, V₀)) (S := Γ(Y, V₀)) (A := Γ(X, f ⁻¹ᵁ V₀) ⊗[Γ(Y, V₀)] Γ(X, f ⁻¹ᵁ V₀)) (B := Γ(X, f ⁻¹ᵁ V₀)) (e.symm (res hle c).val) *
-          Algebra.TensorProduct.map (Algebra.TensorProduct.includeRight (R := Γ(Y, V₀)) (A := Γ(X, f ⁻¹ᵁ V₀)) (B := Γ(X, f ⁻¹ᵁ V₀))) (AlgHom.id Γ(Y, V₀) Γ(X, f ⁻¹ᵁ V₀)) (e.symm (res hle c).val) =
-        Algebra.TensorProduct.map (Algebra.TensorProduct.includeLeft (R := Γ(Y, V₀)) (S := Γ(Y, V₀)) (A := Γ(X, f ⁻¹ᵁ V₀)) (B := Γ(X, f ⁻¹ᵁ V₀))) (AlgHom.id Γ(Y, V₀) Γ(X, f ⁻¹ᵁ V₀)) (e.symm (res hle c).val) := by
-  first | exact @GlobalTheory.LBDescent.CocycleTensor.cocycle_tensor_of_pointwise | exact GlobalTheory.LBDescent.CocycleTensor.cocycle_tensor_of_pointwise | (intros; apply GlobalTheory.LBDescent.CocycleTensor.cocycle_tensor_of_pointwise <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.UnitCocycleDescendsOnTripleOverlapsStatement =====
@@ -1125,9 +1100,9 @@ theorem coboundary_locally_of_cocycle : ∀ {X Y : Scheme.{0}} (f : X ⟶ Y) [Is
     exact hz
   have hle : pullback.fst f f ⁻¹ᵁ f ⁻¹ᵁ V₀ ≤ pullback.fst f f ⁻¹ᵁ f ⁻¹ᵁ V := fun z hz => hV₀V hz
   letI : Algebra Γ(Y, V₀) Γ(X, f ⁻¹ᵁ V₀) := (f.app V₀).hom.toAlgebra
-  obtain ⟨hN, hF, hFF⟩ := GlobalTheory.T.finite_faithfullyFlat_algebra_over_affine_open f V₀ hV₀
-  obtain ⟨e, he⟩ := GlobalTheory.T.exists_tensorSquare_equiv_fibreSquare_sections f V₀ hV₀ h
-  have hcoc := GlobalTheory.T.unit_cocycle_descends_on_triple_overlaps f V V₀ hV₀ h hle c hc e he
+  obtain ⟨hN, hF, hFF⟩ := _root_.GlobalTheory.finiteFlatSurj_affine_algebra f V₀ hV₀
+  obtain ⟨e, he⟩ := _root_.GlobalTheory.LBDescent.exists_tensorSquare_equiv_sections f V₀ hV₀ h
+  have hcoc := _root_.GlobalTheory.LBDescent.CocycleTensor.cocycle_tensor_of_pointwise f V V₀ hV₀ h hle c hc e he
   let c₀ : (Γ(X, f ⁻¹ᵁ V₀) ⊗[Γ(Y, V₀)] Γ(X, f ⁻¹ᵁ V₀))ˣ := Units.map e.symm.toMonoidHom (res hle c)
   obtain ⟨r, hr, m, s, n, hm, hs⟩ := _root_.GlobalTheory.FlatDescent.hilbert90_local_of_cocycle _ _ c₀ hcoc
     (Ideal.comap (Y.presheaf.germ V₀ y hyV₀).hom (IsLocalRing.maximalIdeal _)) inferInstance
@@ -1166,7 +1141,7 @@ theorem _root_.GlobalTheory.T.finiteFlat_unitCocycle_locally_coboundary : ∀ {X
     ∀ y ∈ V, ∃ V' : Y.Opens, V' ≤ V ∧ y ∈ V' ∧ ∃ u : Γ(X, f ⁻¹ᵁ V')ˣ,
       ∀ z : ↥(pullback f f), f (pullback.fst f f z) ∈ V' →
         gm (pullback.fst f f) z _ u * gm (𝟙 _) z _ c = gm (pullback.snd f f) z _ u := by
-  first | exact @GlobalTheory.LBDescent.coboundary_locally_of_cocycle | exact GlobalTheory.LBDescent.coboundary_locally_of_cocycle | (intros; apply GlobalTheory.LBDescent.coboundary_locally_of_cocycle <;> assumption)
+  first | exact @GlobalTheory.LBDescent.coboundary_locally_of_cocycle
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.FiniteFlatUnitCocycleLocallyCoboundaryStatement =====
@@ -1254,7 +1229,7 @@ theorem _root_.GlobalTheory.T.twisted_frame_invariant_under_descentDatum : ∀ {
       ∀ (z : ↥(pullback f f)) (i j : L.ι), f (pullback.fst f f z) ∈ V' → pullback.fst f f z ∈ L.U i →
         pullback.snd f f z ∈ L.U j →
         gm (pullback.fst f f) z _ (s i) * gm (𝟙 _) z _ (φ i j) = gm (pullback.snd f f) z _ (s j) := by
-  first | exact @GlobalTheory.LBDescent.twist_frame_descent | exact GlobalTheory.LBDescent.twist_frame_descent | (intros; apply GlobalTheory.LBDescent.twist_frame_descent <;> assumption)
+  first | exact @GlobalTheory.LBDescent.twist_frame_descent
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.TwistedFrameInvariantUnderDescentDatumStatement =====
@@ -1298,7 +1273,7 @@ attribute [local instance] Over.cartesianMonoidalCategory
 
 
 theorem _root_.GlobalTheory.T.exists_lineBundle_descent_finiteFlat : ∀ (X Y : Scheme.{0}) (f : X ⟶ Y) [IsFinite f] [Flat f] [Surjective f] [IsLocallyNoetherian Y] (L : LB X), L.IsLB → ∀ (φ : ∀ i j, Γ(pullback f f, GlobalTheory.LBDescent.chart f L i j)ˣ), GlobalTheory.LBDescent.DescCompat f L φ → GlobalTheory.LBDescent.DescCocycle f L φ → ∃ L' : LB Y, L'.IsLB ∧ LBIso L (L'.pull f) := by
-  first | exact @GlobalTheory.LBDescent.exists_descent | exact GlobalTheory.LBDescent.exists_descent | (intros; apply GlobalTheory.LBDescent.exists_descent <;> assumption)
+  first | exact @GlobalTheory.LBDescent.exists_descent
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLineBundleDescentFiniteFlatStatement =====

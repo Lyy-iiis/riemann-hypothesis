@@ -219,17 +219,6 @@ theorem exists_bound_local (y : Matrix (Fin n) (Fin n) F) (hs : y.charpoly.Separ
       rw [← Matrix.map_pow, Matrix.map_apply, hf]; exact hB k a b⟩ i j
   rwa [Matrix.map_apply, hf] at this
 
-theorem isCompact_bdd [ProperSpace F] (M : ℝ) :
-    IsCompact {g : GL (Fin n) F | (∀ i j, ‖(g : Matrix (Fin n) (Fin n) F) i j‖ ≤ M) ∧
-      ∀ i j, ‖((g⁻¹ : GL (Fin n) F) : Matrix (Fin n) (Fin n) F) i j‖ ≤ M} := by
-  first
-  | exact @_root_.GlobalTheory.BoundedUnitsCompact.isCompact_bounded_units
-  | exact _root_.GlobalTheory.BoundedUnitsCompact.isCompact_bounded_units
-  | (apply _root_.GlobalTheory.BoundedUnitsCompact.isCompact_bounded_units <;> assumption)
-  | (intros; apply _root_.GlobalTheory.BoundedUnitsCompact.isCompact_bounded_units <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.BoundedUnitsCompact.isCompact_bounded_units <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.BoundedUnitsCompact.isCompact_bounded_units ..)
-
 end Local
 
 theorem norm_le_sum {F : Type} [NormedField F] {n : ℕ} (A : Matrix (Fin n) (Fin n) F) (i j : Fin n) :
@@ -256,7 +245,7 @@ theorem main : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E →
   obtain ⟨M, hM⟩ := exists_bound_local (y.1.val) hs
   refine ⟨Subtype.val ⁻¹' {g : GLw n w | (∀ i j, ‖(g : Matrix (Fin n) (Fin n) (w.adicCompletion E)) i j‖ ≤ M) ∧
       ∀ i j, ‖((g⁻¹ : GLw n w) : Matrix (Fin n) (Fin n) (w.adicCompletion E)) i j‖ ≤ M},
-    (GlobalTheory.LocFinU.isClosed_UL n w).isClosedEmbedding_subtypeVal.isCompact_preimage (isCompact_bdd (n := n) M), ?_⟩
+    (GlobalTheory.LocFinU.isClosed_UL n w).isClosedEmbedding_subtypeVal.isCompact_preimage (_root_.GlobalTheory.BoundedUnitsCompact.isCompact_bounded_units (n := n) M), ?_⟩
   have hbd : ∀ s ∈ twCent (MonoidHom.id (UL n w)) y, IsCompact (closure (Subgroup.zpowers s : Set (UL n w))) →
       ∀ i j, ‖(s.1 : Matrix (Fin n) (Fin n) (w.adicCompletion E)) i j‖ ≤ M := by
     intro s hs' hcs
@@ -273,7 +262,7 @@ theorem main : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E →
         subset_closure (Subgroup.npow_mem_zpowers s k)
       have e : ((s ^ k).1 : Matrix (Fin n) (Fin n) (w.adicCompletion E)) =
           (s.1 : Matrix (Fin n) (Fin n) (w.adicCompletion E)) ^ k := by
-        simp [Subgroup.coe_pow, Units.val_pow_eq_pow_val]
+        simp [Units.val_pow_eq_pow_val]
       rw [← e]
       exact (norm_le_sum _ a b).trans (hB ⟨_, hk, rfl⟩)
   intro t ht hc

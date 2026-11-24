@@ -1251,13 +1251,13 @@ theorem secondJetIntegralGeneral_holds : TwoG := by
   have cX : ∀ i : Fin 2, MvPowerSeries.constantCoeff (Xv i : MvPowerSeries (Fin 2) ℂ_[p]) = 0 := fun i => by
     simp [Xv]
   have x00 : MvPowerSeries.coeff E0 (Xv 0 : MvPowerSeries (Fin 2) ℂ_[p]) = 1 := by
-    simp [Xv, MvPowerSeries.coeff_X, E0, E1, Finsupp.single_eq_single_iff]
+    simp [Xv, MvPowerSeries.coeff_X, E0]
   have x01 : MvPowerSeries.coeff E1 (Xv 0 : MvPowerSeries (Fin 2) ℂ_[p]) = 0 := by
-    simp [Xv, MvPowerSeries.coeff_X, E0, E1, Finsupp.single_eq_single_iff]
+    simp [Xv, MvPowerSeries.coeff_X, E1, Finsupp.single_eq_single_iff]
   have x10 : MvPowerSeries.coeff E0 (Xv 1 : MvPowerSeries (Fin 2) ℂ_[p]) = 0 := by
-    simp [Xv, MvPowerSeries.coeff_X, E0, E1, Finsupp.single_eq_single_iff]
+    simp [Xv, MvPowerSeries.coeff_X, E0, Finsupp.single_eq_single_iff]
   have x11 : MvPowerSeries.coeff E1 (Xv 1 : MvPowerSeries (Fin 2) ℂ_[p]) = 1 := by
-    simp [Xv, MvPowerSeries.coeff_X, E0, E1, Finsupp.single_eq_single_iff]
+    simp [Xv, MvPowerSeries.coeff_X, E1]
   obtain ⟨ma0, ma1, ma2⟩ := coeff_mulBy_low_degree hlog a (cX 0)
   obtain ⟨mb0, mb1, mb2⟩ := coeff_mulBy_low_degree hlog b (cX 1)
   obtain ⟨u0, u1, u2⟩ := coeff_be_low_degree ph hlog ma0 (cX 1) (by rw [ma2, x01, mul_zero]) x10
@@ -1274,7 +1274,7 @@ theorem secondJetIntegralGeneral_holds : TwoG := by
       MvPowerSeries.coeff bivariateExponentMonomial (D ^ n) / (n.factorial : ℂ_[p])) = _
     rw [hs, Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_one, pow_two,
       coeff_expXY_mul hD0 hD0, d0, d1]
-    simp [MvPowerSeries.coeff_one, expXY_ne_zero]
+    simp [MvPowerSeries.coeff_one]
   have hint : ‖MvPowerSeries.coeff bivariateExponentMonomial D‖ ≤ 1 := by
     rw [← hexp]; exact hsim.2 bivariateExponentMonomial
   have hjet : jet ex ph 2 = 2 * (PowerSeries.coeff 1 ph * PowerSeries.coeff 2 ex +
@@ -1511,8 +1511,7 @@ open PI.FglGram PI.UnitaryGroupMassFormula.PhGram
 
 variable {p : ℕ} [Fact p.Prime] {l ex ph : PowerSeries ℂ_[p]} {σ : Type}
 
-theorem cc_l (hd : Data l ex ph) : PowerSeries.constantCoeff l = 0 := by
-  exact PI.UnitaryGroupMassFormula.PhGram.cc_l hd
+alias cc_l := _root_.PI.UnitaryGroupMassFormula.PhGram.cc_l
 
 theorem ex_l (hd : Data l ex ph) : PowerSeries.subst l ex = PowerSeries.X :=
   (PI.FglPhSplit.Wk.compositionalInverseSymm ℂ_[p] l ex hd.1 hd.2.1).2
@@ -1687,9 +1686,9 @@ end PI.UnitaryGroupMassFormula.PhGram.ExpandW
 
 namespace PI.UnitaryGroupMassFormula.PhGram
 
-theorem expand_of (hGA : GoodAdd) (hBS : BiaddSub) : Expand := ExpandW.expand_of hGA hBS
+alias expand_of := _root_.PI.UnitaryGroupMassFormula.PhGram.ExpandW.expand_of
 
-theorem sumFirst_of (hGA : GoodAdd) (hBS : BiaddSub) : SumFirst := ExpandW.sumFirst_of hGA hBS
+alias sumFirst_of := _root_.PI.UnitaryGroupMassFormula.PhGram.ExpandW.sumFirst_of
 
 theorem gram_bilinear_expansion : Expand := expand_of goodAdd biaddSub
 
@@ -1737,7 +1736,6 @@ theorem cube_of_two_identities_holds : CubeOfTwoIdentities := by
 
 theorem phGramG_holds : PhGramG := by
   first
-  | exact phase_gram'
   | (intro p _ g; intros; apply phase_gram' <;> first | exact fglData g ‹_› | assumption)
   | (unfold PhGramG; done)
 

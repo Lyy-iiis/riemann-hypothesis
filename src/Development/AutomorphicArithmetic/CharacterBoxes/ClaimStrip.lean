@@ -54,11 +54,7 @@ theorem prim_zero {N : ℕ} [NeZero N] (χ : DirichletCharacter ℂ N) [NeZero �
     (hs0 : 0 < s.re) (hs1 : s.re < 1) (h : DirichletCharacter.LFunction χ s = 0) :
     DirichletCharacter.LFunction χ.primitiveCharacter s = 0 := by
   have hs : s ≠ 1 := by rintro rfl; norm_num at hs1
-  have key := DirichletCharacter.LFunction_changeLevel χ.conductor_dvd_level
-    χ.primitiveCharacter (Or.inr hs)
-  rw [χ.changeLevel_primitiveCharacter, h] at key
-  exact (mul_eq_zero.mp key.symm).resolve_right <| Finset.prod_ne_zero_iff.mpr fun p hp =>
-    factor_ne_zero _ hs0 p (Nat.prime_of_mem_primeFactors hp)
+  exact (LFunction_eq_zero_iff_primitiveCharacter χ hs0 (Or.inr hs)).mp h
 
 theorem gamma_ne_zero {M : ℕ} [NeZero M] (φ : DirichletCharacter ℂ M) {t : ℂ} (ht : 0 < t.re) :
     DirichletCharacter.gammaFactor φ t ≠ 0 := by
@@ -70,19 +66,15 @@ theorem gamma_ne_zero {M : ℕ} [NeZero M] (φ : DirichletCharacter ℂ M) {t : 
 theorem prim_reflect {M : ℕ} [NeZero M] (ψ : DirichletCharacter ℂ M) (hψ : ψ.IsPrimitive) {s : ℂ}
     (hs0 : 0 < s.re) (hs1 : s.re < 1) (h : DirichletCharacter.LFunction ψ s = 0) :
     DirichletCharacter.LFunction ψ⁻¹ (1 - s) = 0 := by
-  have hs0' : s ≠ 0 := fun e => by rw [e, Complex.zero_re] at hs0; exact lt_irrefl _ hs0
   have ht0 : 0 < (1 - s).re := by rw [Complex.sub_re, Complex.one_re]; linarith
-  have ht0' : 1 - s ≠ 0 := fun e => by rw [e, Complex.zero_re] at ht0; exact lt_irrefl _ ht0
   have hc : DirichletCharacter.completedLFunction ψ s = 0 := by
-    rw [DirichletCharacter.LFunction_eq_completed_div_gammaFactor ψ s (Or.inl hs0'),
-      div_eq_zero_iff] at h
+    rw [DirichletCharacter.LFunction_eq_completed_div_gammaFactor ψ s
+      (Or.inl (ne_zero_of_re_pos hs0)), div_eq_zero_iff] at h
     exact h.resolve_right (gamma_ne_zero ψ hs0)
-  have hψ' : (ψ⁻¹).IsPrimitive := by
-    rw [DirichletCharacter.isPrimitive_def, DirichletCharacter.conductor_inv]; exact hψ
-  have fe := hψ'.completedLFunction_one_sub s
+  have fe := hψ.inv.completedLFunction_one_sub s
   rw [inv_inv, hc, mul_zero] at fe
-  rw [DirichletCharacter.LFunction_eq_completed_div_gammaFactor ψ⁻¹ (1 - s) (Or.inl ht0'), fe,
-    zero_div]
+  rw [DirichletCharacter.LFunction_eq_completed_div_gammaFactor ψ⁻¹ (1 - s)
+    (Or.inl (ne_zero_of_re_pos ht0)), fe, zero_div]
 
 theorem strip (h : HalfPlane) : Strip := by
   unfold HalfPlane at h

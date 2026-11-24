@@ -86,6 +86,7 @@ import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ValuationLtOneO
 import GroundTheory.PAdicHodge.BdRTGalois
 import GroundTheory.LocalFields.PadicLogSeries
 import Mathlib.Tactic.Polynomial.Basic
+import Mathlib.NumberTheory.Padics.LocalField
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ExistsGaloisExtensionOfEmbedding, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.FiniteFieldEmbeddingsDifferFrobenius, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LubinTateSequenceNormBounds, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LubinTateTeichmullerSequenceCompatibility, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.TeichmullerCharacterEqResidueLift, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.TeichmullerCompatibleSequenceApproximation, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.TeichmullerFixedPointApproximation, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.TeichmullerResidueCongruence, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.UniformizerDividesFrobeniusDifference, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.UniformizerResidueFieldFinitePower, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.FrobPowRead, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.GaloisActionPeriodProduct, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HodgeTateCharacterWeight, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.PeriodProductFiltrationLevels, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SenPeriodFiniteExtension, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SenUnramifiedCharacterPeriod, Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LubinTatePeriodNotFiltered, Development.WeilBound.CoreStatements.PublishedTheorems.HeckeLAdicCharacters.Outright
@@ -892,25 +893,7 @@ open GlobalTheory.CompanionTheory.LTPer.Tilt
 
 namespace GlobalTheory.CompanionTheory.LTPer.Tilt
 
-theorem frob_pow_read {l : ℕ} [Fact l.Prime] (N : ℕ) (a y : Tl l) (b : ℕ → Tl l) (D : ℕ) :
-    (a - ∑ i ∈ Finset.range D, b i * y ^ i) ^ l ^ N =
-      a ^ l ^ N - ∑ i ∈ Finset.range D, b i ^ l ^ N * (y ^ l ^ N) ^ i := by
-  rw [sub_pow_char_pow, sum_pow_char_pow]
-  refine congrArg _ (Finset.sum_congr rfl fun i _ => ?_)
-  rw [mul_pow, ← pow_mul, ← pow_mul, mul_comm i]
-
 theorem oc_eq {l : ℕ} [Fact l.Prime] (K : FinExt l) (c : ↥(OL K)) : oc K c = omC (((c : ↥K.1) : Om l)) := rfl
-
-theorem sys_pow_iter {l : ℕ} [Fact l.Prime] {f : ℕ} {u : ℕ → Tl l} (h : ∀ n, u (n + 1) ^ l ^ f = u n)
-    (n m : ℕ) : u (n + m) ^ l ^ (f * m) = u n := by
-  induction m with
-  | zero => simp
-  | succ m ih =>
-    have e : u (n + (m + 1)) ^ l ^ (f * (m + 1)) = (u (n + m + 1) ^ l ^ f) ^ l ^ (f * m) := by
-      rw [← pow_mul, ← pow_add, ← add_assoc]
-      congr 2
-      ring
-    rw [e, h, ih]
 
 theorem fix_ringHom {l : ℕ} [Fact l.Prime] (K : FinExt l) (π : ↥(OL K)) (f : ℕ) (hf : 0 < f)
     (hl : ‖(l : ℂ_[l])‖ ≤ ‖oc K π‖) (h1 : ‖oc K π‖ < 1)
@@ -993,7 +976,7 @@ theorem gal_clause {l : ℕ} [Fact l.Prime] {R : Type} [CommRing R] (g : GQ l) (
     (x ^ l ^ i) ^ D ∣ actT g (x ^ l ^ i) -
       ∑ j ∈ Finset.range D, ((iterateFrobenius (Tl l) l i).comp r₀) (c j) * (x ^ l ^ i) ^ j := by
   have h := pow_dvd_pow_of_dvd hd (l ^ i)
-  rw [frob_pow_read] at h
+  rw [_root_.GlobalTheory.CompanionTheory.LTPer.Tilt.GalDiv.pow_read] at h
   have e1 : (x ^ l ^ i) ^ D = (x ^ D) ^ l ^ i := by rw [← pow_mul, ← pow_mul, mul_comm]
   have e2 : actT g (x ^ l ^ i) = actT g x ^ l ^ i := map_pow _ _ _
   have e3 : ∀ j, ((iterateFrobenius (Tl l) l i).comp r₀) (c j) = r₀ (c j) ^ l ^ i := fun j => by
@@ -1046,7 +1029,7 @@ theorem GlobalTheory.CompanionTheory.LTPer.Tilt.tilt_period : ∀ {l : ℕ} [Fac
       rw [h0, sh_zero, zero_sub, norm_neg] at h
       exact absurd (hzgt n hn) (not_lt.2 h)
     intro n
-    rw [← sys_pow_iter hu1 n 2]
+    rw [← _root_.GlobalTheory.CompanionTheory.LTPer.Tilt.GalDiv.pow_compat hu1 n 2]
     exact pow_ne_zero _ (h2 _ (by omega))
   have hfer : ∀ c : ↥(OL K), ‖oc K c ^ l ^ f - oc K c‖ ≤ ‖oc K π‖ := by
     intro c
@@ -1397,7 +1380,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SenPeriodFiniteExtension =====
 
 -- ===== clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SenUnramifiedCharacterPeriod =====
--- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SenUnramifiedCharacterPeriod", "h": "module\n\npublic import Formalism.SharpRestriction.LevelLetterCocycles.DataNLoc\npublic import GroundTheory.PAdicHodge.LocalBridge\npublic import GroundTheory.PAdicHodge.NormalizedTraceTower\npublic import GroundTheory.PAdicHodge.SenTateCharTower\nimport GroundTheory.LocalFields.PadicLogSeries\npublic import GroundTheory.PAdicHodge.BCrisEigenChar\nimport GroundTheory.PAdicHodge.BCrisEigenFrob\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.LocalPrimeGaloisActionPeriodT\nimport Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.TripleAtt\nimport Development.AbelianVarietyTheory.PublishedTheorems.AutomorphicForms₂.ExistsUniqueHcharOfFiniteOrder\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.EvalMod\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HasPeriods\nimport Formalism.ConjugateSelfDual.Statement\nimport Formalism.LocalToGlobal.UnitaryNorms.IsUnitaryNormOf\npublic import GroundTheory.PAdicHodge.AInfGalois\nimport ReciprocityTheory.GaloisValuations.GlobalA\nimport ReciprocityTheory.NeutralLocalFields.Reciprocity\n\n"}
+-- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.BlockDecomposition.SenUnramifiedCharacterPeriod", "h": "module\n\npublic import Formalism.SharpRestriction.LevelLetterCocycles.DataNLoc\npublic import GroundTheory.PAdicHodge.LocalBridge\npublic import GroundTheory.PAdicHodge.NormalizedTraceTower\npublic import GroundTheory.PAdicHodge.SenTateCharTower\nimport GroundTheory.LocalFields.PadicLogSeries\npublic import GroundTheory.PAdicHodge.BCrisEigenChar\nimport GroundTheory.PAdicHodge.BCrisEigenFrob\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Development.AbelianVarietyTheory.Definitions.AutomorphicMembership.LocalPrimeGaloisActionPeriodT\nimport Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.TripleAtt\nimport Development.AbelianVarietyTheory.PublishedTheorems.AutomorphicForms₂.ExistsUniqueHcharOfFiniteOrder\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.EvalMod\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HasPeriods\nimport Formalism.ConjugateSelfDual.Statement\nimport Formalism.LocalToGlobal.UnitaryNorms.IsUnitaryNormOf\npublic import GroundTheory.PAdicHodge.AInfGalois\nimport ReciprocityTheory.GaloisValuations.GlobalA\nimport ReciprocityTheory.NeutralLocalFields.Reciprocity\nimport Mathlib.NumberTheory.Padics.LocalField\n\n"}
 section -- clump:auto
 @[expose] public section
 

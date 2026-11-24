@@ -114,7 +114,7 @@ theorem exists_re_pos_of_congr_diagonal {n : ℕ} (H Q : Matrix (Fin n) (Fin n) 
       ((Matrix.isUnit_iff_isUnit_det Q).mpr (isUnit_iff_ne_zero.mpr hQ)) u
   have hs : star (Q *ᵥ v) = Q.map star *ᵥ star v := by
     ext i
-    simp [Matrix.mulVec, dotProduct, star_sum, mul_comm]
+    simp [Matrix.mulVec, dotProduct, star_sum]
   have key : (Q *ᵥ v) ⬝ᵥ H *ᵥ star (Q *ᵥ v) = v ⬝ᵥ (Qᵀ * H * Q.map star) *ᵥ star v := by
     rw [hs, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, Matrix.dotProduct_mulVec v Qᵀ,
       Matrix.vecMul_transpose]
@@ -423,11 +423,7 @@ theorem exists_ne_zero_smul_mem_of_mem_span {E : Type} [Field E] [NumberField E]
     (hx : x ∈ Submodule.span E (L : Set (Fin n → E))) :
     ∃ d : 𝓞 E, d ≠ 0 ∧ d • x ∈ L := by
   first
-  | exact @_root_.GlobalTheory.HermitianEigenvalueInequality.main
-  | exact _root_.GlobalTheory.HermitianEigenvalueInequality.main
   | (apply _root_.GlobalTheory.HermitianEigenvalueInequality.main <;> assumption)
-  | (intros; apply _root_.GlobalTheory.HermitianEigenvalueInequality.main <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.HermitianEigenvalueInequality.main <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.HermitianEigenvalueInequality.main ..)
 
 theorem isLattice_lowLat : ∀ (E : Type) [Field E] [NumberField E] (n n₁ : ℕ) (L : Submodule (𝓞 E) (Fin n → E))
@@ -811,10 +807,7 @@ open GlobalTheory.AdelicU (splitPrime IsSplitBasis)
 section Helpers
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E} {n n₁ : ℕ}
 
-theorem sigma_sigma (h : IsCMExt F E σ) (a : E) : σ (σ a) = a := by
-  obtain ⟨τ⟩ : Nonempty (E →+* ℂ) := inferInstance
-  apply τ.injective
-  rw [h.2.2.2, h.2.2.2, star_star]
+alias sigma_sigma := _root_.GlobalTheory.AdelicU.cm_conj_conj
 
 theorem form_smul_left (J : Matrix (Fin n) (Fin n) E) (c : E) (a b : Fin n → E) :
     form σ J (c • a) b = c * form σ J a b := by
@@ -831,7 +824,7 @@ theorem form_map (τ : E →+* ℂ) (hτ : ∀ a, τ (σ a) = star (τ a)) (J : 
   simp only [form, dotProduct, Matrix.mulVec, Matrix.smul_apply, Matrix.map_apply, Pi.star_apply, smul_eq_mul,
   map_sum, map_mul, hτ, Finset.mul_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
-  simp only [Finset.mul_sum, mul_assoc, mul_left_comm]
+  simp only [mul_assoc, mul_left_comm]
 
 end Helpers
 

@@ -101,10 +101,10 @@ theorem num_alg (M y C D Pt t lg lm : ℝ) (hM : 1 ≤ M) (hy : M ^ 5 ≤ y) (hC
         _ ≤ D * M ^ 2 * (169 * M ^ 2) := mul_le_mul_of_nonneg_left hlm2 (by positivity)
     calc lg * lm ^ 2 / M ^ 6 ≤ D * M ^ 2 * (169 * M ^ 2) / M ^ 6 :=
           div_le_div_of_nonneg_right h2 (by positivity)
-      _ = 169 * D * (M ^ 2)⁻¹ := by field_simp <;> ring
+      _ = 169 * D * (M ^ 2)⁻¹ := by field_simp
   have e1 : M * (4 * y * (C * (Pt + lg * lm ^ 2 / M ^ 12)) / (M ^ 5)⁻¹)
       = 4 * C * y * (M ^ 6 * Pt + lg * lm ^ 2 / M ^ 6) := by
-    field_simp <;> ring
+    field_simp
   have h1 : M * (4 * y * (C * (Pt + lg * lm ^ 2 / M ^ 12)) / (M ^ 5)⁻¹)
       ≤ 4 * C * y * ((M ^ 2)⁻¹ + 169 * D * (M ^ 2)⁻¹) := by
     rw [e1]; exact mul_le_mul_of_nonneg_left (add_le_add hA hB) (by positivity)
@@ -115,7 +115,7 @@ theorem num_alg (M y C D Pt t lg lm : ℝ) (hM : 1 ≤ M) (hy : M ^ 5 ≤ y) (hC
     have hc : 0 ≤ 4 * M * ((M ^ 5)⁻¹ * y + 1) := by positivity
     calc M * (4 * ((M ^ 5)⁻¹ * y + 1) * lg) = 4 * M * ((M ^ 5)⁻¹ * y + 1) * lg := by ring
       _ ≤ 4 * M * ((M ^ 5)⁻¹ * y + 1) * (D * M ^ 2) := mul_le_mul_of_nonneg_left hlg hc
-      _ = 4 * D * (y * (M ^ 2)⁻¹ + M ^ 3) := by field_simp <;> ring
+      _ = 4 * D * (y * (M ^ 2)⁻¹ + M ^ 3) := by field_simp
       _ ≤ 4 * D * (y * (M ^ 2)⁻¹ + y * (M ^ 2)⁻¹) :=
           mul_le_mul_of_nonneg_left (by linarith) (by positivity)
       _ = 8 * D * y * (M ^ 2)⁻¹ := by ring
@@ -1608,15 +1608,9 @@ noncomputable section
 
 namespace Formalism.HermitianLattices.Ext.PrimesInProgressions
 
-theorem explicitS_proof' : ExplicitS := smoothed_explicit_formula
-
-theorem logDensityM_proof' : LogDensityM := Dens.log_density_bound
-
-theorem deuringHeilbronnMB_proof' : DeuringHeilbronnMB := deuring_heilbronn_lossy
-
 theorem pnt_progressions_relative_weak_holds : Formalism.HermitianLattices.Ext.LogarithmicIntegralBounds.PNTAPRelW :=
   prime_count_of_psi (glue_ranges psi_relative_near_range
-    (psi_relative_far_range explicitS_proof' differenced_explicit_formula (zero_sum_bound_lossy logDensityM_proof' deuringHeilbronnMB_proof')))
+    (psi_relative_far_range _root_.Formalism.HermitianLattices.Ext.PrimesInProgressions.smoothed_explicit_formula differenced_explicit_formula (zero_sum_bound_lossy _root_.Formalism.HermitianLattices.Ext.PrimesInProgressions.Dens.log_density_bound _root_.Formalism.HermitianLattices.Ext.PrimesInProgressions.deuring_heilbronn_lossy)))
 
 end Formalism.HermitianLattices.Ext.PrimesInProgressions
 end -- clump:auto

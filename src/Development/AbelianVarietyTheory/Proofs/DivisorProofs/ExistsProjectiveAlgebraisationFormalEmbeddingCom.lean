@@ -331,7 +331,7 @@ theorem exists_form_of_compatible_fractions : ∀ (A : Type) [CommRing A] [IsNoe
         have e2 : ({a, j} : Finset (Fin (n + 1))).erase a = {j} := by
           ext k; simp only [Finset.mem_erase, Finset.mem_insert, Finset.mem_singleton]; aesop
         rw [e1, e2]
-        simp only [xProd, Finset.prod_singleton, Finset.prod_pair hab]
+        simp only [xProd, Finset.prod_singleton]
         rw [awayFrac_eq_iff]
         obtain ⟨L, hL⟩ := hc a j
         refine ⟨L, ?_⟩
@@ -443,7 +443,7 @@ theorem comp_lift (e e' : ℕ) (P : MvPolynomial σ R) (hP : ∀ m, AddMonoidAlg
   rw [Polynomial.coeff_monomial]
   by_cases h : e' = e
   · subst h; simp
-  · simp [Finsupp.single_apply, h, Ne.symm h]
+  · simp [h]
 
 theorem comp_sub (e : ℕ) (Q₁ Q₂ : MvPolynomial σ (reesAlgebra I)) :
     comp e (Q₁ - Q₂) = comp e Q₁ - comp e Q₂ := by
@@ -635,7 +635,7 @@ theorem exists_homogeneous_correction_succ : ∀ (R : Type) [CommRing R] [IsNoet
     · exact hva
     · obtain ⟨j₀, hj, w, hw, hr⟩ := tower I Y β hβ H v hH s hs e
       exact GlobalTheory.AbLaw.veryAmpleBy_of_isNilpotent _ _ _ (Ideal.Quotient.factor_surjective _)
-        (GlobalTheory.Degen.isNilpotent_ker_factor_pow I _)
+        (_root_.GlobalTheory.Degen.PolyStepLocal.nilpotent_ker I _)
         _ _ _ _ j₀ hj _ _ w n _ _ (hH _).1 (hH _).1 ((isGen_iff _).2 hw) hr hva
   have hVAR : ∀ e, VeryAmpleBy ((Y e).hom ≫ thick R I e) (H e) (s e) := fun e =>
     veryAmpleBy_comp_quotient _ _ _ _ (hVA e)
@@ -674,7 +674,7 @@ theorem GlobalTheory.FormalAlg.exists_projective_of_formal_embedding : ∀ (R : 
     · exact hva
     · obtain ⟨j₀, hj, w, hw, hr⟩ := tower _ Y β hβ H v hH s hs e
       exact GlobalTheory.AbLaw.veryAmpleBy_of_isNilpotent _ _ _ (Ideal.Quotient.factor_surjective _)
-        (GlobalTheory.Degen.isNilpotent_ker_factor_pow I _)
+        (_root_.GlobalTheory.Degen.PolyStepLocal.nilpotent_ker I _)
         _ _ _ _ j₀ hj _ _ w n _ _ (hH _).1 (hH _).1 ((isGen_iff _).2 hw) hr hva
   have c₁ : ∀ e, β e ≫ (Y (e + 1)).hom ≫ thick V I (e + 1) = (Y e).hom ≫ thick V I e := fun e => by
     rw [← Category.assoc, (hβ e).w, Category.assoc, thickTrans_comp]

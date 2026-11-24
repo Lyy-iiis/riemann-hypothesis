@@ -783,9 +783,7 @@ theorem _root_.GlobalTheory.CuspGL.isCharacter_of_isIrreducibleCharacter_complex
   exact ⟨n, ρ, hρ⟩
 
 open Polynomial in
-theorem _root_.GlobalTheory.CuspGL.generalLinearGroupCardComplex_finiteField_ne_zero (F : Type) [Field F] [Finite F] (d : ℕ) : _root_.GlobalTheory.CuspGL.glCard F d ≠ 0 := by
-  unfold _root_.GlobalTheory.CuspGL.glCard
-  exact_mod_cast Nat.card_pos.ne'
+alias _root_.GlobalTheory.CuspGL.generalLinearGroupCardComplex_finiteField_ne_zero := _root_.GlobalTheory.CuspGL.MassMult.glCard_ne_zero
 
 
 open Polynomial in
@@ -925,7 +923,6 @@ private theorem character_elliptic_eq_coeff_sum_lemma (F : Type) [Field F] [Fini
     refine congrArg Multiset.sum (Multiset.map_congr rfl fun i _ => ?_)
     simp only [Function.comp_apply, map_pow, ← pow_mul, hωdef]
     rw [hqdef]
-    try ring
   have hmodω : ∀ s t : ℕ, s % m = t % m → ω ^ s = ω ^ t := fun s t hst => by
     rw [← pow_mod_orderOf ω s, ← pow_mod_orderOf ω t, ← hω.eq_orderOf, hst]
   have hcop : Nat.Coprime q m := by

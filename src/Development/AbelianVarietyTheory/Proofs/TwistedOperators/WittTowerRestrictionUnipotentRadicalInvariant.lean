@@ -219,7 +219,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.exists_rationalLevi_scaling_isotropicFrame : ∀ (D : D7) (V V' : HSp D) (r : ℕ) (C C' : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → adj D C * V.gram * C' = 1 → adj D C' * V.gram * C' = 0 → adj D C' * V.gram * B = 0 → ∃ a : GA D V, a ∈ GQ V ∧ HMul.hMul (matHom V a).1 (C.map (incA D)) = (2 : AE D) • C.map (incA D) ∧ HMul.hMul (matHom V a).1 (B.map (incA D)) = B.map (incA D) ∧ (2 : AE D) • HMul.hMul (matHom V a).1 (C'.map (incA D)) = C'.map (incA D) := by
-  first | exact @GlobalTheory.LeviScale.exists_levi_scale | exact GlobalTheory.LeviScale.exists_levi_scale | (intros; apply GlobalTheory.LeviScale.exists_levi_scale <;> assumption)
+  first | exact @GlobalTheory.LeviScale.exists_levi_scale
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ExistsRationalLeviScalingIsotropicFrameStatement =====
@@ -234,7 +234,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.thetaRestriction_invariant_rationalLeviScaling : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → ∀ a : GA D V, a ∈ GQ V → HMul.hMul (matHom V a).1 (C.map (incA D)) = (2 : AE D) • C.map (incA D) → HMul.hMul (matHom V a).1 (B.map (incA D)) = B.map (incA D) → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χS χT ω → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (ratMx D W.rank r) μ 𝓨 → ∃ l : ℂ, ∀ f, IsThetaFunO ψ V W f → res V V' W C B μ 𝓨 (ω (a, 1) f) = l • res V V' W C B μ 𝓨 f := by
-  first | exact @GlobalTheory.LeviRes.res_levi | exact GlobalTheory.LeviRes.res_levi | (intros; apply GlobalTheory.LeviRes.res_levi <;> assumption)
+  first | exact @GlobalTheory.LeviRes.res_levi
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.ThetaRestrictionInvariantRationalLeviScalingStatement =====
@@ -482,14 +482,12 @@ theorem commutator_matrix {n r k : ℕ} (s : R →+* R) (hs : ∀ x, s (s x) = x
   have hM1 : M - 1 = X + Y + t • (S + X * Y) := by rw [hM]; abel
   refine ⟨M, Mi, Ai, cT s c' * G * ν * q, ?_, ?_, AAi, ?_, ?_, ?_, ?_, ?_⟩
   · rw [hM, hMi]
-    simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_one, Matrix.one_mul,
-      Matrix.mul_smul, Matrix.smul_mul, smul_add, smul_sub, Matrix.mul_assoc, XX, XS, YX, YY, YS, SX, SY, SS, z XX, z XS,
-      z YX, z YY, z YS, z SX, z SY, z SS, Matrix.mul_zero, smul_zero]
+    simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_sub, Matrix.mul_one, Matrix.one_mul,
+      Matrix.mul_smul, Matrix.smul_mul, smul_add, Matrix.mul_assoc, XX, XS, YX, YY, YS, SX, SY, SS, z XX, z YX, z SX, Matrix.mul_zero, smul_zero]
     module
   · rw [hM, hMi]
-    simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_one, Matrix.one_mul,
-      Matrix.mul_smul, Matrix.smul_mul, smul_add, smul_sub, Matrix.mul_assoc, XX, XS, YX, YY, YS, SX, SY, SS, z XX, z XS,
-      z YX, z YY, z YS, z SX, z SY, z SS, Matrix.mul_zero, smul_zero]
+    simp only [Matrix.mul_add, Matrix.add_mul, Matrix.sub_mul, Matrix.mul_one, Matrix.one_mul,
+      Matrix.mul_smul, Matrix.smul_mul, smul_add, smul_sub, Matrix.mul_assoc, XX, XS, YX, YY, YS, SX, SY, SS, z XX, z YX, z SX, Matrix.mul_zero, smul_zero]
     module
   · have hsM : adjG s G Gi M = 1 - Y - X + t • (X * Y - S + X * Y) := by
       rw [hM, adjG_add, adjG_add, adjG_add, adjG_one s G Gi hG2, adjG_smul, adjG_add, hadj X Y, stX, stY, stS, hst, ← Matrix.mul_assoc p N q, E1,
@@ -497,9 +495,9 @@ theorem commutator_matrix {n r k : ℕ} (s : R →+* R) (hs : ∀ x, s (s x) = x
       abel
     have e : adjG s G Gi M * M = 1 := by
       rw [hsM, hM]
-      simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_one, Matrix.one_mul,
+      simp only [Matrix.mul_add, Matrix.add_mul, Matrix.sub_mul, Matrix.mul_one, Matrix.one_mul,
         Matrix.mul_smul, Matrix.smul_mul, smul_add, smul_sub, Matrix.mul_assoc, XX, XS, YX, YY, YS, SX, SY, SS, z XX,
-        z XS, z YX, z YY, z YS, z SX, z SY, z SS, Matrix.mul_zero, smul_zero]
+        z YX, z SX, Matrix.mul_zero, smul_zero]
       linear_combination (norm := module) ht • (X * Y)
     calc cT s M * G * M = G * (adjG s G Gi M * M) := by
           unfold adjG; simp only [Matrix.mul_assoc]; rw [← Matrix.mul_assoc G Gi, hG1, Matrix.one_mul]
@@ -532,9 +530,8 @@ theorem commutator_matrix {n r k : ℕ} (s : R →+* R) (hs : ∀ x, s (s x) = x
         Matrix.add_mul, AS, Matrix.smul_mul, SAi, AXY]
       module
     rw [AMAi, hMi, hνd]
-    simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_one, Matrix.one_mul,
-      Matrix.mul_smul, Matrix.smul_mul, smul_add, smul_sub, Matrix.mul_assoc, XX, XS, YX, YY, YS, SX, SY, SS, z XX, z XS,
-      z YX, z YY, z YS, z SX, z SY, z SS, Matrix.mul_zero, smul_zero]
+    simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_sub, Matrix.mul_one, Matrix.one_mul,
+      Matrix.mul_smul, Matrix.smul_mul, smul_add, Matrix.mul_assoc, XX, XS, YX, YY, YS, SX, SY, SS, z XX, z YX, z SX, Matrix.mul_zero, smul_zero]
     linear_combination (norm := module) ht • (S + X * Y)
 
 theorem resolution {E : Type} [Field E] {n r k : ℕ} (s : E →+* E) (hs : ∀ x, s (s x) = x)
@@ -622,9 +619,6 @@ theorem map_inv_gram {D : D7} (V : HSp D) :
   · rw [← Matrix.map_mul, Matrix.mul_nonsing_inv _ hdet, Matrix.map_one _ (map_zero _) (map_one _)]
   · rw [← Matrix.map_mul, Matrix.nonsing_inv_mul _ hdet, Matrix.map_one _ (map_zero _) (map_one _)]
 
-theorem gram_herm' {D : D7} (V : HSp D) : cT (D.sp.cm.sig : D.host.E →+* D.host.E) V.gram = V.gram := by
-  funext i j; exact V.herm.eq (V.frame j) (V.frame i)
-
 theorem unitary_of {D : D7} (V : HSp D) (g : GA D V) :
     cT (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR (AF D.host.F) D.sp.cm.sig) (matHom V g).1 * V.gram.map (incA D) * (matHom V g).1 =
       V.gram.map (incA D) := g.2
@@ -684,10 +678,10 @@ theorem commutator_levi : ∀ (D : D7) (V V' : HSp D) (r : ℕ) (C C' : Matrix (
   have hcc : cT (D.sp.cm.sig : D.host.E →+* D.host.E) C * V.gram * C = 0 := hsp.frame.2.2
   have hcc'' : cT (D.sp.cm.sig : D.host.E →+* D.host.E) C * V.gram * C' = 1 := hcc'
   have hc'c'' : cT (D.sp.cm.sig : D.host.E →+* D.host.E) C' * V.gram * C' = 0 := hc'c'
-  have hres := resolution _ hσ V.gram (gram_herm' V) C C' B V'.gram V'.gram⁻¹ (Matrix.nonsing_inv_mul _ hdet') hsp.rank
+  have hres := resolution _ hσ V.gram (_root_.GlobalTheory.AutFunCounterexample.gram_herm V) C C' B V'.gram V'.gram⁻¹ (Matrix.nonsing_inv_mul _ hdet') hsp.rank
     hcc hcc' hc'c' hc'b hsp.orth hsp.isom
   have hGhR : cT (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR (AF D.host.F) D.sp.cm.sig) (V.gram.map (incA D)) = V.gram.map (incA D) := by
-    rw [cT_map_incA, gram_herm']
+    rw [cT_map_incA, _root_.GlobalTheory.AutFunCounterexample.gram_herm]
   have hccR := map_form C V.gram C
   rw [hcc, Matrix.map_zero _ (map_zero _)] at hccR
   have hcc'R := map_form C V.gram C'
@@ -736,7 +730,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.unipotent_levi_matrix_action_identity : ∀ (D : D7) (V V' : HSp D) (r : ℕ) (C C' : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → adj D C * V.gram * C' = 1 → adj D C' * V.gram * C' = 0 → adj D C' * V.gram * B = 0 → ∀ a : GA D V, HMul.hMul (matHom V a).1 (C.map (incA D)) = (2 : AE D) • C.map (incA D) → HMul.hMul (matHom V a).1 (B.map (incA D)) = B.map (incA D) → (2 : AE D) • HMul.hMul (matHom V a).1 (C'.map (incA D)) = C'.map (incA D) → ∀ g : GA D V, HMul.hMul ((matHom V g).1 - 1) (C.map (incA D)) = 0 → HMul.hMul ((Formalism.UG.cT (D.sp.cm.sig : D.host.E →+* D.host.E) C * V.gram).map (incA D)) ((matHom V g).1 - 1) = 0 → (∀ x : Fin V.rank → D.host.E, (Formalism.UG.cT (D.sp.cm.sig : D.host.E →+* D.host.E) C * V.gram).mulVec x = 0 → ∃ y : Fin r → AE D, ((matHom V g).1 - 1).mulVec (fun i => incA D (x i)) = (C.map (incA D)).mulVec y) → ∃ m : GA D V, m ∈ NI V C ∧ g = a * m * a⁻¹ * m⁻¹ := by
-  first | exact @GlobalTheory.UnipLevi.commutator_levi | exact GlobalTheory.UnipLevi.commutator_levi | (intros; apply GlobalTheory.UnipLevi.commutator_levi <;> assumption)
+  first | exact @GlobalTheory.UnipLevi.commutator_levi
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnipotentLeviMatrixActionIdentityStatement =====
@@ -855,10 +849,6 @@ theorem weilRepresentation_source_mul (g g' : GA D V) (f : WO V W → ℂ) : ω 
   have : (g * g', (1 : GA D W)) = (g, 1) * (g', 1) := by simp
   rw [this, map_mul]; rfl
 
-theorem weilRepresentation_source_one (f : WO V W → ℂ) : ω (1, 1) f = f := by
-  have : ((1 : GA D V), (1 : GA D W)) = 1 := rfl
-  rw [this, map_one]; rfl
-
 theorem unit_product_rescale_disjoint_finsets {C : Matrix (Fin V.rank) (Fin r) D.host.E} {B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E}
     (hs : GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition.IsIsoSplit V V' C B) (hω : IsWeilDatumO ψ V W χS χT ω)
     {μ : Measure (Mx D W.rank r)} {𝓨 : Set (Mx D W.rank r)}
@@ -914,14 +904,14 @@ theorem unit_product_rescale_disjoint_finsets {C : Matrix (Fin V.rank) (Fin r) D
     simp only [hh] at this
     show ∫ y in 𝓨, ω (g, 1) f _ ∂μ = (c : ℂ) • ∫ y in 𝓨, f _ ∂μ
     rw [this, smul_eq_mul]
-  · exact ⟨1, one_ne_zero, fun f _ => by rw [weilRepresentation_source_one, one_smul]⟩
+  · exact ⟨1, one_ne_zero, fun f _ => by rw [_root_.GlobalTheory.UnipMean.om_one, one_smul]⟩
   · rintro a b - - ⟨c, hc, ha⟩ ⟨d, hd, hb⟩
     exact ⟨c * d, mul_ne_zero hc hd, fun f hf => by
       rw [weilRepresentation_source_mul, ha _ (hω.om_pres _ _ hf), hb f hf, smul_smul]⟩
   · rintro a - ⟨c, hc, ha⟩
     refine ⟨c⁻¹, inv_ne_zero hc, fun f hf => ?_⟩
     have := ha _ (hω.om_pres (a⁻¹, 1) f hf)
-    rw [← weilRepresentation_source_mul, mul_inv_cancel, weilRepresentation_source_one] at this
+    rw [← weilRepresentation_source_mul, mul_inv_cancel, _root_.GlobalTheory.UnipMean.om_one] at this
     rw [this, smul_smul, inv_mul_cancel₀ hc, one_smul]
 
 end Main
@@ -950,7 +940,7 @@ open GlobalTheory.IndefiniteRowSideFullHecke.AdjointIsotropicDecomposition
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.unipotentRadical_stabiliser_scales_restriction : ∀ (D : D7) (V V' W : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E) (B : Matrix (Fin V.rank) (Fin V'.rank) D.host.E), IsIsoSplit V V' C B → ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle) (ω : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)), IsWeilDatumO ψ V W χS χT ω → ∀ (μ : Measure (Mx D W.rank r)) (𝓨 : Set (Mx D W.rank r)), IsCovolOne (ratMx D W.rank r) μ 𝓨 → ∀ g : GA D V, g ∈ NI V C → ∃ c : ℂ, ∀ f, IsThetaFunO ψ V W f → res V V' W C B μ 𝓨 (ω (g, 1) f) = c • res V V' W C B μ 𝓨 f := by
-  first | exact @GlobalTheory.SourceUnip.scal | exact GlobalTheory.SourceUnip.scal | (intros; apply GlobalTheory.SourceUnip.scal <;> assumption)
+  first | exact @GlobalTheory.SourceUnip.scal
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnipotentRadicalStabiliserScalesRestrictionStatement =====

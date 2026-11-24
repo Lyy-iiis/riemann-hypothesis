@@ -156,7 +156,7 @@ theorem coeff_single_op {τ : Type} {μ : Fin d → MvPowerSeries (Fin d ⊕ Fin
   unfold op
   rw [coeff_single_linear_substitution_pair _ _ _ hu hv]
   simp only [hμ, addLaw, map_add (f := _), GlobalTheory.FormalCalc.coeff_single_X]
-  simp [add_mul, Finset.sum_add_distrib]
+  simp
 
 theorem coeff_single_coc {μ : Fin d → MvPowerSeries (Fin d ⊕ Fin d) R}
     (hμ0 : ∀ i, constantCoeff (μ i) = 0)
@@ -186,8 +186,7 @@ theorem coeff_single_coc {μ : Fin d → MvPowerSeries (Fin d ⊕ Fin d) R}
     unfold swap at h
     rw [coeff_single_linear_substitution_pair _ _ _ (fun _ => constantCoeff_X _) (fun _ => constantCoeff_X _)] at h
     simp only [GlobalTheory.FormalCalc.coeff_single_X] at h
-    simp only [Sum.inr.injEq, reduceCtorEq, if_false, mul_zero, Finset.sum_const_zero, zero_add,
-      mul_ite, mul_one, Finset.sum_ite_eq', Finset.mem_univ, if_true] at h
+    simp only [Sum.inr.injEq, reduceCtorEq, if_false, mul_zero, Finset.sum_const_zero, mul_ite, mul_one] at h
     rw [← h]
     simp [hinl]
 
@@ -203,7 +202,7 @@ theorem start : ∀ (p : ℕ) [Fact p.Prime] (k : Type) [Field k] [CharP k p] [P
           algebraMap (WittVector p k) (Fr p k) (p * w) := by
   intro p _ k _ _ _ d μ hμ c hc w
   classical
-  have hL := GlobalTheory.T.formal_group_law_linear_coeff_additive p k d μ hμ
+  have hL := _root_.GlobalTheory.Katz.coeff_law_of_degree_le_one p k d μ hμ
   have hdeg : ∀ s : Fin d ⊕ Fin d, (Finsupp.single s 1).degree ≤ 1 := fun s => by
     rw [Finsupp.degree_single]
   have hμk : ∀ i s, coeff (Finsupp.single s 1) (μ i) = coeff (Finsupp.single s 1) (addLaw k d i) :=
@@ -1466,17 +1465,6 @@ namespace GlobalTheory
 
 namespace Katz
 
-theorem exists_seq_of_step {A : Type} (P : ℕ → A → Prop) (Q : ℕ → A → A → Prop) (a₀ : A)
-    (h₀ : P 0 a₀) (hs : ∀ n a, P n a → ∃ b, P (n + 1) b ∧ Q n a b) :
-    ∃ F : ℕ → A, F 0 = a₀ ∧ ∀ n, P n (F n) ∧ Q n (F n) (F (n + 1)) := by
-  first
-  | exact @_root_.GlobalTheory.SequenceFromIteration.exists_seq_of_step
-  | exact _root_.GlobalTheory.SequenceFromIteration.exists_seq_of_step
-  | (apply _root_.GlobalTheory.SequenceFromIteration.exists_seq_of_step <;> assumption)
-  | (intros; apply _root_.GlobalTheory.SequenceFromIteration.exists_seq_of_step <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.SequenceFromIteration.exists_seq_of_step <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.SequenceFromIteration.exists_seq_of_step ..)
-
 theorem exists_limit_of_steps {R σ : Type} [CommRing R] (F : ℕ → MvPowerSeries σ R)
     (hF : ∀ n (α : σ →₀ ℕ), α.degree ≠ n + 2 → coeff α (F (n + 1)) = coeff α (F n)) :
     ∃ f : MvPowerSeries σ R, ∀ n (α : σ →₀ ℕ), α.degree < n + 2 → coeff α f = coeff α (F n) := by
@@ -1501,7 +1489,7 @@ theorem exists_quasiLog_red (p : ℕ) [Fact p.Prime] (k : Type) [Field k] [CharP
     intro α i
     obtain ⟨v, hv⟩ := hf₀ α
     exact ⟨(α i : WittVector p k) * (1 * v), by rw [hv, map_mul _ (α i : WittVector p k), map_natCast]⟩
-  obtain ⟨F, hF0, hF⟩ := exists_seq_of_step
+  obtain ⟨F, hF0, hF⟩ := _root_.GlobalTheory.SequenceFromIteration.exists_seq_of_step
     (fun n (f : MvPowerSeries (Fin d) (Fr p k)) => f ∈ quasiInt p k (Fin d) ∧
       ∀ γ : Fin d ⊕ Fin d →₀ ℕ, γ.degree < n + 2 → ∃ w : WittVector p k,
         coeff γ (cob1 (fun i => Katz.lift p (μ i)) f - Katz.lift p c) =
@@ -1746,7 +1734,7 @@ theorem Katz.reductionMap : ∀ (p : ℕ) [Fact p.Prime] (k : Type) [Field k] [C
   have hlinsmul : ∀ (r : WittVector p k) (f : MvPowerSeries (Fin d) (Fr p k)),
       lin (r • f) = fun i => algebraMap _ (Fr p k) r * lin f i := by
     intro r f; funext i
-    simp only [lin, ← algebraMap_smul (Fr p k) r f, coeff_smul, smul_eq_mul]
+    simp only [lin, ← algebraMap_smul (Fr p k) r f, coeff_smul]
   have hcobs : ∀ (r : WittVector p k) (f : MvPowerSeries (Fin d) (Fr p k)),
       cob1 (fun i => Katz.lift p (μ i)) (r • f) = r • cob1 (fun i => Katz.lift p (μ i)) f := by
     intro r f

@@ -14,6 +14,7 @@ public import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ExistsUn
 public import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LocalBridgeLubinTateField
 public import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LubinTateUnramifiedDegreeOne
 public import GroundTheory.LocalFields.ExplicitQp
+public import Mathlib.NumberTheory.Padics.LocalField
 public import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.TeichmullerNearPowerExists
 public import Development.AbelianVarietyTheory.PublishedTheorems.GaloisCohomology₂.HeckeLAdicCharacterDeRham
 public import Development.WeilBound.CoreStatements.CrystallinePeriodRings.LocTied6
@@ -685,7 +686,7 @@ theorem exists_ltIter_mem_one (ϖ' : B) (hϖ : ϖ * ϖ' = 1) (θ : B →+* C) (h
   obtain ⟨N, hN⟩ := hc m
   obtain ⟨s, hs, hd⟩ := hN (n + N) (by omega)
   have e := (hθ _).mpr hd
-  simp only [map_sub, map_mul, map_pow, map_zero, sub_zero] at e
+  simp only [map_sub, map_mul, map_pow, sub_zero] at e
   have e2 : ‖θ ϖ‖ ^ c * (‖θ ϖ'‖ ^ (n + N) * ‖θ (ltIter ϖ q (n + N) Q)‖) = ‖θ ϖ‖ ^ m * ‖θ s‖ := by
     have := congrArg norm (sub_eq_zero.mp e)
     simpa only [norm_mul, norm_pow] using this
@@ -879,7 +880,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LubinTateLimitKernelZero =====
 
 -- ===== clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LubinTateNormCyclotomic =====
--- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LubinTateNormCyclotomic", "h": "module\n\npublic import GroundTheory.LocalFields.LocalArtinBaseChange\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.PadicIsNonarchimedeanLocalField\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HasPeriods\npublic import Development.WeilBound.CoreStatements.CrystallinePeriodRings.InstCommRingBcris\npublic import GroundTheory.PAdicHodge.FieldOfNormsCyclBase\npublic import GroundTheory.PAdicHodge.UnramifiedClosure\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.MemFiniteExtPadicRingOfIntegersIffNormLeOne\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ExistsUniformizerGaloisAction\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LocalBridgeLubinTateField\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LubinTateUnramifiedDegreeOne\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ValuationLtOneOfEq\npublic import GroundTheory.LocalFields.ExplicitQp\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.RootsOfUnity.AlgebraicallyClosed\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.TripleAtt\nimport Development.AbelianVarietyTheory.PublishedTheorems.AutomorphicForms₂.ExistsUniqueHcharOfFiniteOrder\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.EvalMod\nimport Formalism.LocalToGlobal.UnitaryNorms.IsUnitaryNormOf\nimport ReciprocityTheory.NeutralLocalFields.Reciprocity\n\n"}
+-- clump-header: {"m": "Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LubinTateNormCyclotomic", "h": "module\n\npublic import GroundTheory.LocalFields.LocalArtinBaseChange\npublic import Development.AbelianVarietyTheory.Proofs.FoundationProofs.PadicIsNonarchimedeanLocalField\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.HasPeriods\npublic import Development.WeilBound.CoreStatements.CrystallinePeriodRings.InstCommRingBcris\npublic import GroundTheory.PAdicHodge.FieldOfNormsCyclBase\npublic import GroundTheory.PAdicHodge.UnramifiedClosure\npublic import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.MemFiniteExtPadicRingOfIntegersIffNormLeOne\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ExistsUniformizerGaloisAction\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LocalBridgeLubinTateField\npublic import Development.AutomorphicSpectrum.Proofs.BlockDecomposition.LubinTateUnramifiedDegreeOne\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ValuationLtOneOfEq\npublic import GroundTheory.LocalFields.ExplicitQp\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.RingTheory.RootsOfUnity.AlgebraicallyClosed\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.TripleAtt\nimport Development.AbelianVarietyTheory.PublishedTheorems.AutomorphicForms₂.ExistsUniqueHcharOfFiniteOrder\nimport Development.AutomorphicSpectrum.Proofs.BlockDecomposition.EvalMod\nimport Formalism.LocalToGlobal.UnitaryNorms.IsUnitaryNormOf\nimport ReciprocityTheory.NeutralLocalFields.Reciprocity\npublic import Mathlib.NumberTheory.Padics.LocalField\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1650,14 +1651,6 @@ theorem actB_FB (g : GQ l) (k : ℕ) (x : Formalism.Per6.BdRp l) (hx : x ∈ FB 
 theorem tch_pow (x : Tl l) (n : ℕ) : tch l (x ^ n) = tch l x ^ n := by
   simp only [tch, map_pow]
 
-theorem near_pow_of_sub {B : Type} [CommRing B] {S : Subring B} {ϖ : B} {a b : B} (ha : a ∈ S) (hb : b ∈ S)
-    (h : ∃ s ∈ S, a - b = ϖ * s) (M : ℕ) : ∃ s ∈ S, a ^ M - b ^ M = ϖ * s := by
-  obtain ⟨s, hs, e⟩ := h
-  obtain ⟨c, hc⟩ := sub_dvd_pow_sub_pow (⟨a, ha⟩ : ↥S) ⟨b, hb⟩ M
-  refine ⟨s * c, S.mul_mem hs c.2, ?_⟩
-  have h3 : a ^ M - b ^ M = (a - b) * (c : B) := by simpa using congrArg Subtype.val hc
-  rw [h3, e]; ring
-
 theorem iter_near {B : Type} [CommRing B] {S : Subring B} {ϖ : B} (hϖ : ϖ ∈ S) (q : ℕ) {Q b : B} (hQ : Q ∈ S)
     (hb : b ∈ S) (h : ∃ s ∈ S, Q - b = ϖ * s) (n : ℕ) :
     ltIter ϖ q n Q ∈ S ∧ ∃ s ∈ S, ltIter ϖ q n Q - b ^ (q ^ n) = ϖ * s := by
@@ -1668,7 +1661,7 @@ theorem iter_near {B : Type} [CommRing B] {S : Subring B} {ϖ : B} (hϖ : ϖ ∈
     have e : ltIter ϖ q (n + 1) Q = ϖ * ltIter ϖ q n Q + ltIter ϖ q n Q ^ q := by
       simp only [ltIter, Function.iterate_succ_apply']
     have hbn : b ^ (q ^ n) ∈ S := S.pow_mem hb _
-    obtain ⟨s, hs, e2⟩ := near_pow_of_sub h1 hbn h2 q
+    obtain ⟨s, hs, e2⟩ := _root_.GlobalTheory.CompanionTheory.LTPer.LogConv.pow_congr' h1 hbn h2 q
     refine ⟨by rw [e]; exact S.add_mem (S.mul_mem hϖ h1) (S.pow_mem h1 _), ltIter ϖ q n Q + s,
       S.add_mem h1 hs, ?_⟩
     rw [e, pow_succ q n, pow_mul]
@@ -1724,7 +1717,7 @@ theorem pre_period (HT : TiltLeaf) (K : FinExt l) (χ : ↥(GK K) →* (↥K.1)�
     exact ⟨a, ha, by simpa [ltIter] using e⟩
   have hnilQ : ∃ M : ℕ, 0 < M ∧ Near S ϖ (FB l 1) 1 (Q ^ M) := by
     obtain ⟨M, hM, s, hs, e⟩ := hnil0
-    obtain ⟨s', hs', e'⟩ := near_pow_of_sub hQS (hvS 0) hQ0 M
+    obtain ⟨s', hs', e'⟩ := _root_.GlobalTheory.CompanionTheory.LTPer.LogConv.pow_congr' hQS (hvS 0) hQ0 M
     refine ⟨M, hM, s + s', S.add_mem hs hs', ?_⟩
     have : Q ^ M - ϖ ^ 1 * (s + s') = tch l (v 0) ^ M - ϖ ^ 1 * s := by
       rw [pow_one] at *

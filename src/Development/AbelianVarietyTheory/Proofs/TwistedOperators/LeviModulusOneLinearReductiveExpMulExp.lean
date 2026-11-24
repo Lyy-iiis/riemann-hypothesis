@@ -61,6 +61,7 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Bas
 import Mathlib.Tactic.Linter.HaveILetI
 import Mathlib.Tactic.Polynomial.Basic
 import Mathlib.Tactic.ReduceModChar
+import Mathlib.RingTheory.PicardGroup
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AbelianVarietyTheory.Proofs.TwistedOperators.AbsDetOnStableSubspaceConjTranspose, Development.AbelianVarietyTheory.Proofs.TwistedOperators.AbsDetOnStableSubspaceExpSmul, Development.AbelianVarietyTheory.Proofs.TwistedOperators.LeviModulusOneLinearReductiveExpMulExp
@@ -203,7 +204,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.AbsDetOnStableSubspaceExpSmul =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.LeviModulusOneLinearReductiveExpMulExp =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.TwistedOperators.LeviModulusOneLinearReductiveExpMulExp", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.TwistedInnerProducts.IsAdmOnOfFiniteDimensional\npublic import Development.AbelianVarietyTheory.PublishedTheorems.TwistedTraceFormula.ExistsStandardIndModule\npublic import Development.AbelianVarietyTheory.Definitions.SemilocalFrames.DefClassNum\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.AbsDetOnStableSubspaceConjTranspose\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.AbsDetOnStableSubspaceExpSmul\npublic import Mathlib.Analysis.CStarAlgebra.Classes\npublic import Mathlib.Analysis.Normed.Algebra.Exponential\npublic import Mathlib.Topology.Instances.Matrix\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.PosDefConjTransposeMulSelfEqExpPolynomial\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnitaryExistsSkewLog\nimport Development.AbelianVarietyTheory.Proofs.FlagMeasures.IsotropicFlagLeviMaxCompactClosedSubgroups\nimport Formalism.RealPlaceAnalysis.RealPlaceTaylor.KoszulLowersPower\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Matrix.HermitianFunctionalCalculus\nimport Mathlib.Analysis.Normed.Algebra.MatrixExponential\nimport Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.TwistedOperators.LeviModulusOneLinearReductiveExpMulExp", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.TwistedInnerProducts.IsAdmOnOfFiniteDimensional\npublic import Development.AbelianVarietyTheory.PublishedTheorems.TwistedTraceFormula.ExistsStandardIndModule\npublic import Development.AbelianVarietyTheory.Definitions.SemilocalFrames.DefClassNum\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.AbsDetOnStableSubspaceConjTranspose\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.AbsDetOnStableSubspaceExpSmul\npublic import Mathlib.Analysis.CStarAlgebra.Classes\npublic import Mathlib.Analysis.Normed.Algebra.Exponential\npublic import Mathlib.Topology.Instances.Matrix\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.PosDefConjTransposeMulSelfEqExpPolynomial\npublic import Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnitaryExistsSkewLog\nimport Development.AbelianVarietyTheory.Proofs.FlagMeasures.IsotropicFlagLeviMaxCompactClosedSubgroups\nimport Formalism.RealPlaceAnalysis.RealPlaceTaylor.KoszulLowersPower\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Matrix.HermitianFunctionalCalculus\nimport Mathlib.Analysis.Normed.Algebra.MatrixExponential\nimport Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Coalgebra.IsFrobenius\nimport Mathlib.RingTheory.HopfAlgebra.Basic\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.HaveILetI\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Tactic.Polynomial.Basic\nimport Mathlib.Tactic.ReduceModChar\nimport Mathlib.Topology.Sheaves.Init\nimport Mathlib.RingTheory.PicardGroup\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -228,12 +229,6 @@ theorem exists_herm_log (n : ℕ) (g : Matrix (Fin n) (Fin n) ℂ) : IsUnit g �
     ∃ (L : Matrix (Fin n) (Fin n) ℂ) (p : Polynomial ℂ), Lᴴ = L ∧ NormedSpace.exp L = gᴴ * g ∧
       L = Polynomial.aeval (gᴴ * g) p :=
   _root_.GlobalTheory.posDef_conjTranspose_mul_self_eq_exp_polynomial n g
-
-theorem exists_unitary_log (n : ℕ) (k : Matrix (Fin n) (Fin n) ℂ) : kᴴ * k = 1 →
-    ∃ (X : Matrix (Fin n) (Fin n) ℂ) (p : Polynomial ℂ), Xᴴ = -X ∧ NormedSpace.exp X = k ∧
-      X = Polynomial.aeval k p :=
-  _root_.GlobalTheory.unitary_exists_skew_log n k
-
 
 open scoped Matrix.Norms.L2Operator in
 theorem herm_exp_inj (n : ℕ) (A B : Matrix (Fin n) (Fin n) ℂ) (hA : Aᴴ = A) (hB : Bᴴ = B)
@@ -351,7 +346,7 @@ theorem exists_pos_part {W : Flag n a} {g : Matrix (Fin n) (Fin n) ℂ} (hg : g 
     ∃ Y : Matrix (Fin n) (Fin n) ℂ, (∀ t : ℝ, NormedSpace.exp (t • Y) ∈ mats (leviOne ε W)) ∧
       (g * NormedSpace.exp (-Y))ᴴ * (g * NormedSpace.exp (-Y)) = 1 := by
   obtain ⟨hU, hM, hD⟩ := mem_mats_leviOne.1 hg
-  obtain ⟨L, p, hLs, hLe, hLp⟩ := exists_herm_log n g (isUnit_of_inUJ hU)
+  obtain ⟨L, p, hLs, hLe, hLp⟩ := _root_.GlobalTheory.posDef_conjTranspose_mul_self_eq_exp_polynomial n g (isUnit_of_inUJ hU)
   have hhk : ∀ i, ∀ y ∈ W i, (gᴴ * g) *ᵥ y ∈ W i := fun i y hy => by
     rw [← Matrix.mulVec_mulVec]; exact (hM i _ (hM i y hy).1).2
   have hLk : ∀ i, ∀ y ∈ W i, L *ᵥ y ∈ W i := fun i => hLp ▸ aeval_keeps (hhk i) p
@@ -369,10 +364,10 @@ theorem exists_pos_part {W : Flag n a} {g : Matrix (Fin n) (Fin n) ℂ} (hg : g 
   have hEs : ∀ s : ℝ, (NormedSpace.exp (s • L))ᴴ = NormedSpace.exp (s • L) := fun s => by
     rw [← Matrix.exp_conjTranspose, conjTranspose_smul, hLs, star_trivial]
   have hdet : ∀ i s, detOn (NormedSpace.exp (s • L)) (W i) = 1 := fun i s => by
-    obtain ⟨c, hc⟩ := detOn_exp_smul n L (W i) (hLk i)
+    obtain ⟨c, hc⟩ := _root_.GlobalTheory.FlagMeas.detOn_exp_smul n L (W i) (hLk i)
     have h1 := hc 1
     rw [one_smul, hLe, detOn_mul (fun y hy => (hM i y hy).2) (fun y hy => (hM i y hy).1),
-      detOn_conjTranspose n g (W i) (fun y hy => (hM i y hy).1) (fun y hy => (hM i y hy).2), hD i, one_mul,
+      _root_.GlobalTheory.FlagMeas.DetAdj.detOn_conjTranspose n g (W i) (fun y hy => (hM i y hy).1) (fun y hy => (hM i y hy).2), hD i, one_mul,
       one_mul, eq_comm, Real.exp_eq_one_iff] at h1
     rw [hc s, h1, mul_zero, Real.exp_zero]
   have hmem : ∀ s : ℝ, NormedSpace.exp (s • L) ∈ mats (leviOne ε W) := fun s => by
@@ -398,7 +393,7 @@ theorem exists_unit_part {W : Flag n a} {k : Matrix (Fin n) (Fin n) ℂ} (hk : k
     ∃ X : Matrix (Fin n) (Fin n) ℂ, (∀ t : ℝ, NormedSpace.exp (t • X) ∈ mats (leviOne ε W)) ∧
       NormedSpace.exp X = k := by
   obtain ⟨hU, hM, hD⟩ := mem_mats_leviOne.1 hk
-  obtain ⟨X, q, hXs, hXe, hXq⟩ := exists_unitary_log n k hu
+  obtain ⟨X, q, hXs, hXe, hXq⟩ := _root_.GlobalTheory.unitary_exists_skew_log n k hu
   have hkJ : Commute k (Jm ε) := by
     have h1 : k * kᴴ = 1 := mul_eq_one_comm.mp hu
     show k * Jm ε = Jm ε * k
@@ -425,7 +420,7 @@ theorem exists_unit_part {W : Flag n a} {k : Matrix (Fin n) (Fin n) ℂ} (hk : k
           simp only [Matrix.mul_assoc, Jm_mul_self, Matrix.mul_one]
       _ = Jm ε := by rw [hJE, hEE, Matrix.one_mul]
   · have h := detOn_mul (hk2 i) (hk1 i)
-    rw [hEE, detOn_one, detOn_conjTranspose n _ (W i) (hk1 i) (hk2 i)] at h
+    rw [hEE, detOn_one, _root_.GlobalTheory.FlagMeas.DetAdj.detOn_conjTranspose n _ (W i) (hk1 i) (hk2 i)] at h
     nlinarith [detOn_nonneg (NormedSpace.exp (t • X)) (W i)]
 
 theorem exists_exp_mul_exp {W : Flag n a} {g : Matrix (Fin n) (Fin n) ℂ} (hg : g ∈ mats (leviOne ε W)) :
@@ -463,7 +458,7 @@ theorem isLinRed_leviOne : ∀ (n : ℕ) (ε : Fin n → Bool) (a : ℕ) (j : Fi
     obtain ⟨hU, hM, hD⟩ := mem_mats_leviOne.1 hg
     refine mem_mats_leviOne.2 ⟨inUJ_conjTranspose hU, fun i y hy => ⟨(hM i y hy).2, by
       rw [conjTranspose_conjTranspose]; exact (hM i y hy).1⟩, fun i => ?_⟩
-    rw [detOn_conjTranspose n g (W i) (fun y hy => (hM i y hy).1) (fun y hy => (hM i y hy).2)]
+    rw [_root_.GlobalTheory.FlagMeas.DetAdj.detOn_conjTranspose n g (W i) (fun y hy => (hM i y hy).1) (fun y hy => (hM i y hy).2)]
     exact hD i
 
 end GlobalTheory.LeviPolar

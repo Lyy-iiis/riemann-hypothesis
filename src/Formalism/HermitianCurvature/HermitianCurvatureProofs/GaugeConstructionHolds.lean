@@ -156,7 +156,7 @@ theorem hasDerivAt_genW {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
   refine hcomp.congr_of_eventuallyEq ?_
   have hc : Filter.Tendsto (fun t : ℝ => (x.1, x.2 * NormedSpace.exp ((t : ℂ) • genW k r w))) (nhds 0) (nhds x) := by
     have h := hγ.continuousAt.tendsto
-    first | (rw [hγ0] at h; exact h) | exact hγ0 ▸ h | (simp only [hγ0] at h; exact h)
+    first | (simp only [hγ0] at h; exact h)
   filter_upwards [hc (hU.mem_nhds hx)] with t ht
   exact he _ ht (glev_mul_exp hxG w t)
 
@@ -182,9 +182,9 @@ theorem hs_apply (p i m : Fin (2 * r + k + 1)) :
     (Hpk k r * Matrix.single p p (1 : ℂ)) i m = if m = p then Hpk k r i p else 0 := by
   rw [Matrix.mul_apply, Finset.sum_eq_single p]
   · by_cases hm : m = p
-    · subst hm; simp [Matrix.single_apply]
-    · simp [Matrix.single_apply, Ne.symm hm, hm]
-  · intro l _ hl; simp [Matrix.single_apply, Ne.symm hl]
+    · subst hm; simp
+    · simp [Ne.symm hm, hm]
+  · intro l _ hl; simp [Ne.symm hl]
   · intro h; exact absurd (Finset.mem_univ p) h
 
 theorem hpk_single (p : Fin (2 * r + k + 1)) (hp : r ≤ p.val ∧ p.val ≤ r + k) :
@@ -379,7 +379,7 @@ theorem rotation_finite_from_matrix : GTRRFinFrom := by
       (NF.muZ P.k P.r Bs.μsec (q.1.2 * Complex.exp ((φ : ℂ) * Complex.I))) ∈
         NF.Fib P.k P.r Bs.z Bs.z' Bs.μsec Bs.π Bs.π' (q.1.2 * Complex.exp ((φ : ℂ) * Complex.I)) := by
     intro φ
-    have hm := Formalism.FourierDecayAlt.P.radical_reduction_mem Wp Wq P.k P.r Bs.z Bs.z' Bs.μsec Bs.π Bs.π' hB Φ.1 Φ.2
+    have hm := _root_.Formalism.FourierDecayAlt.P.NFRadRedA.radRedMem Wp Wq P.k P.r Bs.z Bs.z' Bs.μsec Bs.π Bs.π' hB Φ.1 Φ.2
     have hx : ((q.1.1, q.1.2 * Complex.exp ((φ : ℂ) * Complex.I)) : (Fin P.r → ℂ) × ℂ) ∈ NF.QR P.k P.r Bs.z Bs.z' :=
       ⟨hcq, by rw [normSq_rot]; exact ann_tz P Bs hpl hζq⟩
     have h2 := hm.2.1 _ hx
@@ -662,21 +662,21 @@ theorem nu_rot (hk : 1 ≤ k) (w s : ℂ) (φ : ℝ) :
   ext i j
   simp only [dOne, dTwo, Matrix.diagonal_mul, Matrix.mul_diagonal, Matrix.smul_apply, smul_eq_mul]
   rcases eq_or_ne i 0 with rfl | hi0 <;> rcases eq_or_ne j 0 with rfl | hj0
-  · simp [nu, vecMulVec, Matrix.one_apply, Pi.single_apply, hl, hl.symm]
+  · simp [nu, vecMulVec, Pi.single_apply, hl]
     linear_combination (-(Complex.exp (↑φ * Complex.I) * (starRingEnd ℂ) w)) * he
   · rcases eq_or_ne j (Fin.last k) with rfl | hjl
-    · simp [nu, vecMulVec, Matrix.one_apply, Pi.single_apply, hl, hl.symm]
-    · simp [nu, vecMulVec, Matrix.one_apply, Pi.single_apply, hl, hl.symm, hj0, hjl, Ne.symm hj0, Ne.symm hjl]
+    · simp [nu, vecMulVec, Pi.single_apply, hl, hl.symm]
+    · simp [nu, vecMulVec, Pi.single_apply, hl, hj0, hjl, Ne.symm hj0]
   · rcases eq_or_ne i (Fin.last k) with rfl | hil
-    · simp [nu, vecMulVec, Matrix.one_apply, Pi.single_apply, hl, hl.symm]
+    · simp [nu, vecMulVec, Pi.single_apply, hl, hl.symm]
       ring
-    · simp [nu, vecMulVec, Matrix.one_apply, Pi.single_apply, hl, hl.symm, hi0, hil, Ne.symm hi0, Ne.symm hil]
+    · simp [nu, vecMulVec, Pi.single_apply, hl, hi0, hil]
   · rcases eq_or_ne i (Fin.last k) with rfl | hil <;> rcases eq_or_ne j (Fin.last k) with rfl | hjl
-    · simp [nu, vecMulVec, Matrix.one_apply, Pi.single_apply, hl, hl.symm]
+    · simp [nu, vecMulVec, Pi.single_apply, hl.symm]
       ring
-    · simp [nu, vecMulVec, Matrix.one_apply, Pi.single_apply, hl, hl.symm, hj0, hjl, Ne.symm hj0, Ne.symm hjl]
-    · simp [nu, vecMulVec, Matrix.one_apply, Pi.single_apply, hl, hl.symm, hi0, hil, Ne.symm hi0, Ne.symm hil]
-    · simp [nu, vecMulVec, Matrix.one_apply, Pi.single_apply, hi0, hil, hj0, hjl, Ne.symm hi0, Ne.symm hil, Ne.symm hj0, Ne.symm hjl]
+    · simp [nu, vecMulVec, Pi.single_apply, hj0, hjl, Ne.symm hjl]
+    · simp [nu, vecMulVec, Pi.single_apply, hl.symm, hi0, hil]
+    · simp [nu, vecMulVec, Matrix.one_apply, Pi.single_apply, hil, hj0, hjl]
 
 theorem wZ_rot (T T' : ℝ) (ζ e : ℂ) : wZ T T' (ζ * e) = wZ T T' ζ * e := by
   unfold wZ; ring
@@ -720,8 +720,8 @@ theorem dOne_fix_last (φ : ℝ) (c : ℂ) :
   simp only [dOne]
   rw [mulVec_diagonal]
   by_cases hj : j = Fin.last k
-  · simp [dOne, hj]
-  · simp [dOne, hj, Pi.single_apply]
+  · simp [hj]
+  · simp [hj]
 
 theorem dTwo_fix_last (hk : 1 ≤ k) (φ : ℝ) (c : ℂ) :
     dTwo k φ *ᵥ (c • Pi.single (Fin.last k) 1) = c • Pi.single (Fin.last k) 1 := by
@@ -734,8 +734,8 @@ theorem dTwo_fix_last (hk : 1 ≤ k) (φ : ℝ) (c : ℂ) :
       have := congrArg Fin.val h
       simp at this
       omega
-    simp [dTwo, hj, h0]
-  · simp [dTwo, hj, Pi.single_apply]
+    simp [hj, h0]
+  · simp [hj]
 
 end block2
 
@@ -754,10 +754,6 @@ theorem jV_smul' {k r : ℕ} (c : ℂ) (u : Fin (k + 1) → ℂ) : jV k r (c •
 theorem smul_one_mulVec' {k : ℕ} (c : ℂ) (u : Fin (k + 1) → ℂ) :
     (c • (1 : Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ)) *ᵥ u = c • u := by
   rw [smul_mulVec, one_mulVec]
-
-theorem herm_smul_left' {ι : Type*} [Fintype ι] (H : Matrix ι ι ℂ) (c : ℂ) (v w : ι → ℂ) :
-    herm H (c • v) w = c * herm H v w := by
-  simp [herm, Matrix.mulVec_smul, dotProduct_smul]
 
 private theorem herm_Hb_self_eq_ofReal_re {k : ℕ} (u : Fin (k + 1) → ℂ) :
     herm (Hb k) u u = ((herm (Hb k) u u).re : ℂ) := by
@@ -856,7 +852,7 @@ theorem rotation_section_holds : GTRRSec := by
           simp only [NF.muZ, zc]
           conv_lhs => rw [← hzj', emb_mulVec_jV, smul_one_mulVec', jV_smul', hzj']
           rw [mulVec_smul]
-        rw [hv, herm_smul_left', (sec_vec hz hz' hsec hζ).2.2, Complex.normSq_mul]
+        rw [hv, _root_.Formalism.FourierDecayAlt.P.SettingConstruction.herm_smul_left, (sec_vec hz hz' hsec hζ).2.2, Complex.normSq_mul]
         have h1 : Complex.normSq (Complex.exp ((φ : ℂ) * Complex.I)) = 1 := by
           rw [Complex.normSq_eq_norm_sq, Complex.norm_exp_ofReal_mul_I]
           norm_num
@@ -898,7 +894,6 @@ theorem rotation_wirtinger_holds : GTRRWirt := by
       ((0 : Fin r → ℂ), x.2 * Complex.I) 0 := by
     first
     | exact (hasDerivAt_const (0 : ℝ) x.1).prodMk h2
-    | exact (hasDerivAt_const (0 : ℝ) x.1).prod h2
   have hx : x = ((x.1, x.2 * Complex.exp ((((0 : ℝ) : ℂ)) * Complex.I)) : MA.E r) := by simp
   have hc := hu.hasFDerivAt.comp_hasDerivAt_of_eq (0 : ℝ) hγ hx
   have hdir1 : MA.dirE (M.vz (r := r)) = ((0 : Fin r → ℂ), (1 : ℂ)) := by simp [MA.dirE, M.vz]

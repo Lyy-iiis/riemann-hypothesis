@@ -462,7 +462,7 @@ theorem homLat_le_span (P : HeightOneSpectrum O) {p : ℕ} (ρ : E →+* Qq) (hp
         simp only [A, Matrix.smul_mulVec, Matrix.vecMulVec_mulVec, Pi.smul_apply, smul_eq_mul,
           Algebra.smul_def]
         rw [← hr']
-        simp [Matrix.mulVec, mul_comm, mul_assoc, mul_left_comm]
+        simp [Matrix.mulVec, mul_comm, mul_assoc]
       rw [e]
       exact N'.smul_mem r hn'
     obtain ⟨t, ht, htY⟩ := hY A hA
@@ -956,7 +956,7 @@ theorem completion_ringEquiv_of_dense : ∀ {E : Type} [Field E] [NumberField E]
     exact congrArg₂ (· / ·) (hint a) (hint b)
   have hf : ∀ x : E, Valued.v (((algebraMap Qq (v.adicCompletion Qq)).comp ρ) x) = P.valuation E x :=
     fun x => by rw [RingHom.comp_apply, GlobalTheory.Idele.valued_algebraMap, hval]
-  obtain ⟨ψ, -, hψ, hψv⟩ := exists_extension P v _ hf
+  obtain ⟨ψ, -, hψ, hψv⟩ := _root_.GlobalTheory.ValuationExtensionContinuous.exists_extension P v _ hf
   have hψW : ∀ y : W, algebraMap Qq (v.adicCompletion Qq) (algebraMap W Qq y) ∈ Set.range ψ := by
     intro y
     choose x z hxz using fun n : ℕ => h2 y n

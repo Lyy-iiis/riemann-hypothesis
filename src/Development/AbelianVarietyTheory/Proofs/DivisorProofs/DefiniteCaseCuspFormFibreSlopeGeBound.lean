@@ -138,6 +138,7 @@ import Formalism.LocalToGlobal.ProjectiveLattices.FrameProofs
 import Mathlib.Algebra.Ring.IsFormallyReal
 import Mathlib.RingTheory.PiTensorProduct
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.HeightTheory.HDiscAA
+import Formalism.SharpRestriction.GenusPolyhedralBounds.RelativeIndexClassSets.LogSupSumLeOfNonvanishingDetLimit
 
 -- This file was produced by scripts/clump.py from the modules listed below.
 -- Members: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DualWeylOrthonormalBasisValuesAtUnitarySumSqLeOn, Development.AbelianVarietyTheory.Proofs.DivisorProofs.MulNormDualWeylTensorEvaluationLeFibreNorm, Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntegralCoordinatesFormsAndFibreNormBound, Development.AbelianVarietyTheory.Proofs.DivisorProofs.UnitaryMinorLeOneAndHadamardColumns, Development.AbelianVarietyTheory.Proofs.DivisorProofs.DualWeylGramDeterminantLeDimPowDim, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsLocalBasisLatticeOfInverseAdelicMatrixFami, Development.AbelianVarietyTheory.Proofs.DivisorProofs.GramDeterminantSmulStandardBasisInverseFrames, Development.AbelianVarietyTheory.Proofs.DivisorProofs.LatticeSlopeSqLocalMatricesEqDeterminants, Development.AbelianVarietyTheory.Proofs.DivisorProofs.MatCharPowEqDetPow, Development.AbelianVarietyTheory.Proofs.DivisorProofs.SlopeDualWeylFibreLatticeGe, Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaLineDegreeGeHalfDetLieDefinitePoint, Development.AbelianVarietyTheory.Proofs.DivisorProofs.DefiniteCaseCuspFormFibreSlopeGeBound
@@ -197,7 +198,7 @@ theorem evalAt_intVec {n : ℕ} (la : Fin n → ℕ) (y : Matrix (Fin n) (Fin n)
     exact ((onBasis la).sum_repr _).symm
 
   rw [h, Submodule.coe_sum, map_sum]
-  simp [Submodule.coe_smul, map_smul]
+  simp [map_smul]
 
 variable {T : Type} [Fintype T] [DecidableEq T] {N : T → ℕ}
 
@@ -216,7 +217,7 @@ theorem norm_sum_mul_le {ι : Type} [Fintype ι] (a b : ι → ℂ) :
     ‖∑ i, a i * b i‖ ≤ Real.sqrt (∑ i, ‖a i‖ ^ 2) * Real.sqrt (∑ i, ‖b i‖ ^ 2) := by
   calc ‖∑ i, a i * b i‖ ≤ ∑ i, ‖a i‖ * ‖b i‖ := by
         refine (norm_sum_le _ _).trans (le_of_eq ?_)
-        simp [norm_mul]
+        simp
     _ ≤ _ := Real.sum_mul_le_sqrt_mul_sqrt _ _ _
 
 theorem mul_norm_tval_le_fibNorm : ∀ (T : Type) [Fintype T] [DecidableEq T] (N : T → ℕ) (la : ∀ t, Fin (N t) → ℕ), (∀ t, Antitone (la t)) → ∀ (x : TIdx la → ℂ) (X : ∀ t, Matrix (Fin (N t)) (Fin (N t)) ℂ) (u : ∀ t, UN (N t)) (s : ℝ), 0 ≤ s → s * ‖tval la x (fun t => X t * (u t).1)‖ ≤ Real.sqrt (∑ I, ‖(fibY la s X *ᵥ x) I‖ ^ 2) := by
@@ -345,7 +346,7 @@ theorem mem_range_of_le_one {w : HeightOneSpectrum (𝓞 c.F)} {T : CDVR} {io : 
     (ho : OverLa w T.V io e) {b : c.F} (hb : w.valuation c.F b ≤ 1) : io b ∈ Set.range (algebraMap T.V T.Fr) := by
   by_cases h0 : b = 0
   · exact ⟨0, by simp [h0]⟩
-  refine GlobalTheory.ArcQ.RecFr.mem_of_vV_nonneg ?_
+  refine _root_.Formalism.L2.PjFree.mem_range_of_vV_nonneg ?_
   rw [ho.2]
   refine mul_nonneg (Nat.cast_nonneg _) ?_
   have := (WithZero.log_le_log ((Valuation.ne_zero_iff _).2 h0) one_ne_zero).2 hb
@@ -482,7 +483,7 @@ theorem exists_ortho {σ : c.F →+* ℂ} {r : ℕ} {U : Unf Xo c σ r} {ξ : �
       fun _ => 1 := by
     funext b
     have h3 : (ρ : ℂ) * ((2 * Real.pi * ξ : ℝ) : ℂ) * ρ = 1 := by exact_mod_cast hρκ
-    simp only [Y, Matrix.conjTranspose_smul, Matrix.conjTranspose_one, Matrix.smul_mul, Matrix.mul_smul, Matrix.mul_one,
+    simp only [Y, Matrix.conjTranspose_smul, Matrix.conjTranspose_one, Matrix.mul_smul, Matrix.mul_one,
       smul_smul, Complex.star_def, Complex.conj_ofReal]
     rw [← mul_assoc, h3, one_smul]
   rw [hG, norm_one, one_pow, mul_one] at hm1
@@ -724,7 +725,7 @@ theorem exists_locBasis_inv : ∀ (K : Type) [Field K] [NumberField K] (n : ℕ)
   obtain ⟨hdet, hfin⟩ := hA
   have hu : IsUnit (A P).det := isUnit_iff_ne_zero.2 (hdet P)
   have hone : ∀ (w : HeightOneSpectrum (𝓞 K)) (j k : Fin n), w.valuation K ((Pi.single j 1 : Fin n → K) k) ≤ 1 :=
-    fun w j k => by by_cases hk : k = j <;> simp [Pi.single_apply, hk]
+    fun w j k => by by_cases hk : k = j <;> simp [hk]
   obtain ⟨s, hs, hint⟩ := exists_denom_notMem (fun w => A w * (A P)⁻¹)
     ((hfin.union (finite_not_intAt (A P)⁻¹)).subset fun w hw => by
       by_contra hn
@@ -803,8 +804,7 @@ theorem GlobalTheory.DefPt.det_gramPl_smul_single : ∀ (K : Type) [Field K] [Nu
       ((‖v.embedding t‖ ^ 2 : ℝ) : ℂ) • Matrix.reindex eqv eqv ((Y v.embedding)ᴴ * Y v.embedding) := by
     ext a b
     simp only [Formalism.HN.gramPl, Formalism.HermitianLatticesTheory.majAt, hf, Matrix.of_apply, Matrix.smul_apply, Matrix.reindex_apply,
-      Matrix.submatrix_apply, Matrix.mul_apply, Matrix.conjTranspose_apply, dotProduct, Pi.star_apply,
-      smul_eq_mul, Finset.mul_sum, star_mul']
+      Matrix.submatrix_apply, Matrix.mul_apply, Matrix.conjTranspose_apply, smul_eq_mul, Finset.mul_sum, star_mul']
     refine Finset.sum_congr rfl fun i _ => ?_
     have := Complex.conj_mul' (v.embedding t)
     push_cast
@@ -848,7 +848,7 @@ theorem smul_single_mem {ι : Type} [Fintype ι] [DecidableEq ι] (A : HeightOne
     (d : 𝓞 K) (hd : ∀ w, IntAt w ((d : K) • A w)) (i : ι) : (d : K) • (Pi.single i 1 : ι → K) ∈ locLat A := by
   intro w j
   have : (A w *ᵥ ((d : K) • (Pi.single i 1 : ι → K))) j = ((d : K) • A w) j i := by
-    simp [Matrix.mulVec_smul, Matrix.mulVec, dotProduct, Pi.single_apply, mul_comm]
+    simp [Matrix.mulVec, dotProduct, Pi.single_apply, mul_comm]
   rw [this]; exact hd w j i
 
 theorem isAdelic_reindex {ι : Type} [Fintype ι] [DecidableEq ι] {n : ℕ} (e : ι ≃ Fin n)
@@ -924,7 +924,7 @@ theorem log_relIndex {n : ℕ} (A : HeightOneSpectrum (𝓞 K) → Matrix (Fin n
         | (funext i; simp [Pi.basisFun_apply])
     · have hx : x = ∑ i, (x i / t) • ((t : K) • (Pi.single i 1 : Fin n → K)) := by
         funext j
-        simp [Finset.sum_apply, Pi.single_apply, smul_smul, div_mul_cancel₀ _ htK]
+        simp [Finset.sum_apply, Pi.single_apply]
         rw [Algebra.smul_def, show algebraMap (𝓞 K) K t = (t : K) from rfl, mul_div_cancel₀ _ htK]
       rw [SetLike.mem_coe, hx]
       exact Submodule.sum_mem _ fun i _ => Submodule.smul_mem _ _ (Submodule.subset_span ⟨i, rfl⟩)
@@ -997,7 +997,7 @@ theorem GlobalTheory.LocMatSlope.slope_sq_locLat : ∀ (K : Type) [Field K] [Num
     intro x _
     have hx : x = ∑ i : ι, (x i / (d : K)) • ((d : K) • (Pi.single i 1 : ι → K)) := by
       funext j
-      simp [Finset.sum_apply, Pi.single_apply, smul_smul, div_mul_cancel₀ _ hdK]
+      simp [Finset.sum_apply, Pi.single_apply]
       rw [Algebra.smul_def, show algebraMap (𝓞 K) K d = (d : K) from rfl, mul_div_cancel₀ _ hdK]
     rw [hx]
     exact Submodule.sum_mem _ fun i _ => Submodule.smul_mem _ _
@@ -1057,7 +1057,7 @@ theorem GlobalTheory.LocMatSlope.slope_sq_locLat : ∀ (K : Type) [Field K] [Num
   unfold lineDeg at hnum
   have hsplit : ∀ w, (vAdd w ((d : K) ^ n * (A w).det) : ℝ) = n * (vAdd w (d : K) : ℝ) + (vAdd w (A w).det : ℝ) :=
     fun w => by
-      rw [GlobalTheory.LatDetDeg.vAdd_mul' w (pow_ne_zero _ hdK) (hA.1 w), GlobalTheory.LatDetDeg.vAdd_pow' w hdK]
+      rw [_root_.Formalism.BasicNotions.Examples₂.PlacesToy.vAdd_mul w (pow_ne_zero _ hdK) (hA.1 w), GlobalTheory.LatDetDeg.vAdd_pow' w hdK]
       push_cast; ring
   have hfd := finite_vAdd (K := K) hdK
   have hfdet : (Function.support fun w => (vAdd w (A w).det : ℝ)).Finite := by
@@ -1830,7 +1830,7 @@ end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaLineDegreeGeHalfDetLieDefinitePoint =====
 
 -- ===== clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.DefiniteCaseCuspFormFibreSlopeGeBound =====
--- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.DefiniteCaseCuspFormFibreSlopeGeBound", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.EigLatLe\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.DegreeDualDetLieEqNegFlatSectionDegree\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsInjectiveDualWeylTensorCuspFormsRationalPo\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.IsAdelicOne\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FibreActionPreservesAdelicMatrices\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntegralCoordinatesFormsAndFibreNormBound\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsLatticeLatticeOfLocalMatrixFamily\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.NonemptyDefiniteRationalPointDataComponent\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SlopeDualWeylFibreLatticeGe\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaLineDegreeGeHalfDetLieDefinitePoint\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
+-- clump-header: {"m": "Development.AbelianVarietyTheory.Proofs.DivisorProofs.DefiniteCaseCuspFormFibreSlopeGeBound", "h": "module\n\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.EigLatLe\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.DegreeDualDetLieEqNegFlatSectionDegree\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsInjectiveDualWeylTensorCuspFormsRationalPo\npublic import Development.AbelianVarietyTheory.Definitions.Divisors.IsAdelicOne\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FibreActionPreservesAdelicMatrices\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IntegralCoordinatesFormsAndFibreNormBound\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.IsLatticeLatticeOfLocalMatrixFamily\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.NonemptyDefiniteRationalPointDataComponent\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.SlopeDualWeylFibreLatticeGe\npublic import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaLineDegreeGeHalfDetLieDefinitePoint\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Basify\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.Linter.Style\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Formalism.SharpRestriction.GenusPolyhedralBounds.RelativeIndexClassSets.LogSupSumLeOfNonvanishingDetLimit\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -1841,13 +1841,6 @@ open CategoryTheory NumberField IsDedekindDomain Module Formalism.BasicNotions F
 open scoped Matrix Classical
 
 namespace GlobalTheory.DefFibre
-
-theorem vAdd_pow' {K : Type} [Field K] [NumberField K] (w : HeightOneSpectrum (𝓞 K)) (x : K) (n : ℕ) :
-    vAdd w (x ^ n) = n * vAdd w x := by
-  simp [vAdd, map_pow, WithZero.log_pow]
-
-theorem vAdd_one' {K : Type} [Field K] [NumberField K] (w : HeightOneSpectrum (𝓞 K)) : vAdd w (1 : K) = 0 := by
-  simp [vAdd]
 
 theorem subsingleton_idx : ∀ (N : ℕ) (la : Fin N → ℕ), N = 0 → Subsingleton (Idx la) := by
   rintro N la rfl
@@ -1887,9 +1880,9 @@ theorem fibreAt_defCase : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E]
     exact ⟨hIntOne w _, hIntOne w _⟩
   have ha0 : ∀ w, P.a w ^ n ≠ 0 := fun w => pow_ne_zero _ (P.loc w).1
   have hsupp1 : (Function.support fun w => vAdd w (P.a w)).Finite :=
-    P.fin.subset fun w hw h => hw (by simp only; rw [h.1, vAdd_one'])
+    P.fin.subset fun w hw h => hw (by simp only; rw [h.1, _root_.Formalism.BasicNotions.Examples₂.PlacesToy.vAdd_one])
   have hsupp : (Function.support fun w => vAdd w (P.a w ^ n)).Finite :=
-    hsupp1.subset fun w hw h => hw (by simp only at h ⊢; rw [vAdd_pow', h, mul_zero])
+    hsupp1.subset fun w hw h => hw (by simp only at h ⊢; rw [_root_.Formalism.MainNotions.Gaps.SizeBoundsAlt.vAdd_pow', h, mul_zero])
   have hspos : ∀ σ, 0 < (Real.sqrt (P.N σ))⁻¹ ^ n := fun σ =>
     pow_pos (inv_pos.2 (Real.sqrt_pos.2 (P.arch σ).1)) n
   have hsconj : ∀ σ, (Real.sqrt (P.N ((starRingEnd ℂ).comp σ)))⁻¹ ^ n = (Real.sqrt (P.N σ))⁻¹ ^ n := fun σ => by
@@ -1908,7 +1901,7 @@ theorem fibreAt_defCase : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E]
     Fintype.card_pos_iff.1 ((dim_eq_card _) ▸ dim_pos (hanti τ))
 
   have hline : lineDeg (fun σ => (Real.sqrt (P.N σ))⁻¹ ^ n) (fun w => (vAdd w (P.a w ^ n) : ℝ)) = n * P.degTh := by
-    simp only [PtData.degTh, lineDeg, vAdd_pow', Int.cast_mul, Int.cast_natCast, Real.log_pow]
+    simp only [PtData.degTh, lineDeg, _root_.Formalism.MainNotions.Gaps.SizeBoundsAlt.vAdd_pow', Int.cast_mul, Int.cast_natCast, Real.log_pow]
     have hf := fin_mul (ρ := fun w => (vAdd w (P.a w) : ℝ)) (hsupp1.subset fun w hw => by simpa [Function.mem_support] using hw) (lw c.F)
     simp only [mul_assoc]
     rw [← mul_finsum, ← Finset.mul_sum]

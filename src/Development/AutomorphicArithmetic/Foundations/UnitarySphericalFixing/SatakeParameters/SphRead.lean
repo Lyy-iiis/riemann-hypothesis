@@ -156,7 +156,6 @@ namespace GlobalTheory.InertLevel
 
 variable {L : Type} [Field L] [NumberField L] [IsCMField L] {n : ℕ}
 
-
 open GlobalTheory.InertUmax in
 def idemAt (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) : AL L :=
   (1 : L) ⊗ₜ[maximalRealSubfield L] sgl L v 1
@@ -333,7 +332,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.exists_level_full_at_inert_place_principal_elsewhere : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (N : ℕ), 0 < N → ∃ U : Subgroup (GAf L n), (∀ κ, NG.Cong L n N κ → κ ∈ U) ∧ (∀ κ, TrivOutside {v} κ → (κ ∈ U ↔ κ ∈ Umax L n)) ∧ ∀ κ ∈ U, ∃ a b : GAf L n, κ = a * b ∧ a ∈ Umax L n ∧ TrivOutside {v} a ∧ NG.Cong L n N b ∧ ∀ x : GAf L n, TrivOutside {v} x → b * x = x * b := by
-  first | exact @GlobalTheory.InertLevel.exists_level | exact GlobalTheory.InertLevel.exists_level | (intros; apply GlobalTheory.InertLevel.exists_level <;> assumption)
+  first | exact @GlobalTheory.InertLevel.exists_level
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsLevelFullAtInertPlacePrincipalElsewhereStatement =====
@@ -354,7 +353,7 @@ theorem exists_satU_eigenvector : ∀ {K : Type} [Field K] [Valued K (WithZero (
   have hcomm : ∀ a b : Formalism.UG.Hecke ℂ (Formalism.UG.KU σ n), T a.1 * T b.1 = T b.1 * T a.1 := by
     intro a b
     rw [← hmul _ a.2 _ b.2, ← hmul _ b.2 _ a.2, GlobalTheory.UnitarySwap.heckeCommU K ϖ σ q n ℂ hU _ a.2 _ b.2]
-  obtain ⟨x, hx0, hx⟩ := GlobalTheory.exists_common_eigenvector_of_commute
+  obtain ⟨x, hx0, hx⟩ := _root_.GlobalTheory.UnimodularLatticeLemma.main
     (fun b : Formalism.UG.Hecke ℂ (Formalism.UG.KU σ n) => T b.1) hcomm
   choose c hc using hx
   have hinj : Function.Injective fun a : ℂ => a • x := smul_left_injective ℂ hx0
@@ -402,7 +401,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.exists_satU_eigenvector_alt : ∀ {K : Type} [Field K] [Valued K (WithZero (Multiplicative ℤ))] [CompleteSpace K] (ϖ : K) (σ : K →+* K) (q n : ℕ), Formalism.UG.IsUnramInv ϖ σ q → ∀ (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] (T : (Formalism.UG.GU σ n → ℂ) → Module.End ℂ V), (∀ h₁ ∈ Formalism.UG.Hecke ℂ (Formalism.UG.KU σ n), ∀ h₂ ∈ Formalism.UG.Hecke ℂ (Formalism.UG.KU σ n), T (h₁ + h₂) = T h₁ + T h₂) → (∀ (c : ℂ), ∀ h ∈ Formalism.UG.Hecke ℂ (Formalism.UG.KU σ n), T (c • h) = c • T h) → T (Formalism.UG.dosetInd ℂ (Formalism.UG.KU σ n) 1) = 1 → (∀ h₁ ∈ Formalism.UG.Hecke ℂ (Formalism.UG.KU σ n), ∀ h₂ ∈ Formalism.UG.Hecke ℂ (Formalism.UG.KU σ n), T (Formalism.UG.conv (Formalism.UG.KU σ n) h₁ h₂) = T h₁ * T h₂) → ∀ x₀ : V, x₀ ≠ 0 → ∃ α : Fin (n / 2) → ℂ, ∃ x : V, x ≠ 0 ∧ ∀ h ∈ Formalism.UG.Hecke ℂ (Formalism.UG.KU σ n), T h x = Formalism.UG.SatU ϖ q h α • x := by
-  first | exact @GlobalTheory.HeckeSatakeEigen.exists_satU_eigenvector | exact GlobalTheory.HeckeSatakeEigen.exists_satU_eigenvector | (intros; apply GlobalTheory.HeckeSatakeEigen.exists_satU_eigenvector <;> assumption)
+  first | exact @GlobalTheory.HeckeSatakeEigen.exists_satU_eigenvector
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsSatUEigenvectorStatement =====
@@ -470,7 +469,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.heckeFunI_add_and_smul : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (w : HeightOneSpectrum (𝓞 L)) (Dv : InertDatum L n v w) (U : Subgroup (GAf L n)), (∀ κ, TrivOutside {v} κ → (κ ∈ U ↔ κ ∈ Umax L n)) → ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (h₁ h₂ : Formalism.UG.GU Dv.σw n → ℂ), h₁ ∈ Formalism.UG.Hecke ℂ (Formalism.UG.KU Dv.σw n) → h₂ ∈ Formalism.UG.Hecke ℂ (Formalism.UG.KU Dv.σw n) → ∀ (c : ℂ) (f : GAf L n → W), heckeFunI L n U Dv (h₁ + h₂) f = heckeFunI L n U Dv h₁ f + heckeFunI L n U Dv h₂ f ∧ heckeFunI L n U Dv (c • h₁) f = c • heckeFunI L n U Dv h₁ f := by
-  first | exact @GlobalTheory.InertHeckeAdd.heckeFunI_add_smul | exact GlobalTheory.InertHeckeAdd.heckeFunI_add_smul | (intros; apply GlobalTheory.InertHeckeAdd.heckeFunI_add_smul <;> assumption)
+  first | exact @GlobalTheory.InertHeckeAdd.heckeFunI_add_smul
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HeckeFunIAddSmulStatement =====
@@ -489,127 +488,8 @@ open TensorProduct
 
 namespace GlobalTheory.InertSurj
 
-theorem exists_supported (L : Type) [Field L] [NumberField L] [IsCMField L]
-    (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L)))
-    (m : L ⊗[maximalRealSubfield L] v.adicCompletion (maximalRealSubfield L)) :
-    ∃ z : AL L, compAt L v z = m ∧ ∀ u, u ≠ v → compAt L u z = 0 := by
-  let b : Module.Basis (Fin 2) (maximalRealSubfield L) L := Module.finBasisOfFinrankEq _ _
-    (Algebra.IsQuadraticExtension.finrank_eq_two (maximalRealSubfield L) L)
-  obtain ⟨a, c, h⟩ := GlobalTheory.InertUmax.tensor_decomp b m
-  refine ⟨b 0 ⊗ₜ[maximalRealSubfield L] GlobalTheory.InertUmax.sgl L v a +
-    b 1 ⊗ₜ[maximalRealSubfield L] GlobalTheory.InertUmax.sgl L v c, ?_, ?_⟩
-  · rw [map_add (f := _), GlobalTheory.InertUmax.compAt_tmul, GlobalTheory.InertUmax.compAt_tmul, GlobalTheory.InertUmax.sgl_same,
-      GlobalTheory.InertUmax.sgl_same, h]
-  · intro u hu
-    rw [map_add (f := _), GlobalTheory.InertUmax.compAt_tmul, GlobalTheory.InertUmax.compAt_tmul, GlobalTheory.InertUmax.sgl_ne L v a hu,
-      GlobalTheory.InertUmax.sgl_ne L v c hu, tmul_zero, tmul_zero, add_zero]
-
-theorem compAt_conjAL (L : Type) [Field L] [NumberField L] [IsCMField L]
-    (u : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (z : AL L) :
-    compAt L u (conjAL L z) = Formalism.UG.sigR (IsCMField.complexConj L).toAlgHom
-      (u.adicCompletion (maximalRealSubfield L)) (compAt L u z) := by
-  induction z using TensorProduct.induction_on with
-  | zero => simp
-  | tmul a b =>
-    rw [GlobalTheory.InertUmax.compAt_tmul]
-    simp [conjAL, Formalism.UG.sigR, Algebra.TensorProduct.map_tmul, GlobalTheory.InertUmax.compAt_tmul]
-  | add a b ha hb => simp only [map_add (f := _), ha, hb]
-
-theorem loc_surj : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (w : HeightOneSpectrum (𝓞 L)) (Dv : InertDatum L n v w) (y : GL (Fin n) (w.adicCompletion L)), y ∈ Formalism.UG.GU Dv.σw n → ∃ x : GAf L n, TrivOutside {v} x ∧ Dv.loc x = y := by
-  intro L _ _ _ n v w Dv y hy
-  classical
-  let sig := Formalism.UG.sigR (IsCMField.complexConj L).toAlgHom (v.adicCompletion (maximalRealSubfield L))
-  let eS : w.adicCompletion L →+* L ⊗[maximalRealSubfield L] v.adicCompletion (maximalRealSubfield L) :=
-    Dv.e.symm.toRingHom
-  have hcomm : ∀ a, sig (eS a) = eS (Dv.σw a) := by
-    intro a
-    apply Dv.e.injective
-    have h := Dv.comm (eS a)
-    simp only [eS, RingEquiv.toRingHom_eq_coe, RingEquiv.coe_toRingHom, RingEquiv.apply_symm_apply] at h ⊢
-    exact h
-  let Pm : Matrix (Fin n) (Fin n) (w.adicCompletion L) := (Dv.P : Matrix (Fin n) (Fin n) _)
-  let Qm : Matrix (Fin n) (Fin n) (w.adicCompletion L) := ((Dv.P⁻¹ : GL (Fin n) _) : Matrix (Fin n) (Fin n) _)
-  let Ym : Matrix (Fin n) (Fin n) (w.adicCompletion L) := (y : Matrix (Fin n) (Fin n) _)
-  have hPQ : Pm * Qm = 1 := by simp [Pm, Qm]
-  have hy' : Formalism.UG.cT Dv.σw Ym * Formalism.UG.antiJ (w.adicCompletion L) n * Ym =
-      Formalism.UG.antiJ (w.adicCompletion L) n := hy
-  let X := Pm * Ym * Qm
-  have hX : Formalism.UG.cT Dv.σw X * X = 1 := by
-    have hP := Dv.Panti
-    change Formalism.UG.cT Dv.σw Pm * Pm = _ at hP
-    calc Formalism.UG.cT Dv.σw X * X
-        = Formalism.UG.cT Dv.σw Qm * (Formalism.UG.cT Dv.σw Ym * (Formalism.UG.cT Dv.σw Pm * Pm) * Ym) * Qm := by
-          simp only [X, Formalism.UG.cT_mul, Matrix.mul_assoc]
-      _ = Formalism.UG.cT Dv.σw Qm * (Formalism.UG.cT Dv.σw Pm * Pm) * Qm := by rw [hP, hy']
-      _ = Formalism.UG.cT Dv.σw (Pm * Qm) * (Pm * Qm) := by
-          simp only [Formalism.UG.cT_mul, Matrix.mul_assoc]
-      _ = 1 := by rw [hPQ, Formalism.UG.cT_one, Matrix.one_mul]
-  have hX' : X * Formalism.UG.cT Dv.σw X = 1 := mul_eq_one_comm.mp hX
-  let M := X.map eS
-  have hMc : conjT sig M = (Formalism.UG.cT Dv.σw X).map eS := by
-    ext i j
-    simp [M, conjT, Formalism.UG.cT, hcomm]
-  have hM : M * conjT sig M = 1 := by
-    rw [hMc]
-    change X.map eS * (Formalism.UG.cT Dv.σw X).map eS = 1
-    rw [← Matrix.map_mul, hX', Matrix.map_one _ (map_zero _) (map_one _)]
-  choose lift hlv hlw using GlobalTheory.InertSurj.exists_supported L v
-  let E : AL L := (1 : L) ⊗ₜ[maximalRealSubfield L] GlobalTheory.InertUmax.sgl L v 1
-  have hEv : compAt L v E = 1 := by
-    rw [GlobalTheory.InertUmax.compAt_tmul, GlobalTheory.InertUmax.sgl_same]; rfl
-  have hEw : ∀ u, u ≠ v → compAt L u E = 0 := by
-    intro u hu
-    rw [GlobalTheory.InertUmax.compAt_tmul, GlobalTheory.InertUmax.sgl_ne L v 1 hu, tmul_zero]
-  let Z : Matrix (Fin n) (Fin n) (AL L) := M.map lift + (1 - E) • (1 : Matrix (Fin n) (Fin n) (AL L))
-  have hZv : Z.map (compAt L v) = M := by
-    ext i j
-    simp only [Z, Matrix.map_apply, Matrix.add_apply, Matrix.smul_apply, smul_eq_mul, map_add (f := _), map_mul,
-      map_sub, map_one, hEv, hlv, sub_self, zero_mul, add_zero]
-  have hZw : ∀ u, u ≠ v → Z.map (compAt L u) = 1 := by
-    intro u hu
-    ext i j
-    simp only [Z, Matrix.map_apply, Matrix.add_apply, Matrix.smul_apply, smul_eq_mul, map_add (f := _), map_mul,
-      map_sub, map_one, hEw u hu, hlw _ u hu, sub_zero, one_mul, zero_add]
-    rw [Matrix.one_apply, Matrix.one_apply]
-    split_ifs <;> simp
-  have hZconj : ∀ u, (conjT (conjAL L) Z).map (compAt L u) =
-      conjT (Formalism.UG.sigR (IsCMField.complexConj L).toAlgHom (u.adicCompletion (maximalRealSubfield L)))
-        (Z.map (compAt L u)) := by
-    intro u
-    ext i j
-    simp [conjT, GlobalTheory.InertSurj.compAt_conjAL]
-  have hZZ : Z * conjT (conjAL L) Z = 1 := by
-    ext i j
-    rw [← sub_eq_zero]
-    apply GlobalTheory.InertUmax.eq_zero_of_compAt
-    intro u
-    have key : (Z * conjT (conjAL L) Z).map (compAt L u) = 1 := by
-      rw [Matrix.map_mul, hZconj]
-      rcases eq_or_ne u v with rfl | hu
-      · rw [hZv]; exact hM
-      · rw [hZw u hu, conjT_one, Matrix.one_mul]
-    have h1 := congrFun (congrFun key i) j
-    have h2 := congrFun (congrFun (Matrix.map_one (compAt L u) (map_zero _) (map_one _)) i) j
-    simp only [Matrix.map_apply] at h1 h2
-    rw [map_sub, h1, h2, sub_self]
-  have hZZ' : conjT (conjAL L) Z * Z = 1 := mul_eq_one_comm.mp hZZ
-  let g : GL (Fin n) (AL L) := ⟨Z, conjT (conjAL L) Z, hZZ, hZZ'⟩
-  have hg : g ∈ ReciprocityTheory.Aut.GA L n := hZZ
-  refine ⟨⟨g, hg⟩, ?_, ?_⟩
-  · intro u hu
-    exact hZw u (by simpa using hu)
-  · have hb : Formalism.UG.bc (n := Fin n)
-        (Dv.e : L ⊗[maximalRealSubfield L] v.adicCompletion (maximalRealSubfield L) →+* w.adicCompletion L)
-        (Matrix.GeneralLinearGroup.map (compAt L v) (((⟨g, hg⟩ : GAf L n)) : GL (Fin n) (AL L))) =
-        Dv.P * y * Dv.P⁻¹ := by
-      apply Units.ext
-      change (Z.map (compAt L v)).map _ = X
-      rw [hZv]
-      ext i j
-      simp [M, eS]
-    unfold InertDatum.loc
-    rw [hb]
-    group
+theorem loc_surj : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (w : HeightOneSpectrum (𝓞 L)) (Dv : InertDatum L n v w) (y : GL (Fin n) (w.adicCompletion L)), y ∈ Formalism.UG.GU Dv.σw n → ∃ x : GAf L n, TrivOutside {v} x ∧ Dv.loc x = y :=
+  @GlobalTheory.T.exists_trivOutside_inertLocal_eq
 
 end GlobalTheory.InertSurj
 end -- clump:auto
@@ -626,7 +506,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.inertLocal_surjective_from_trivOutside : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (w : HeightOneSpectrum (𝓞 L)) (Dv : InertDatum L n v w) (y : GL (Fin n) (w.adicCompletion L)), y ∈ Formalism.UG.GU Dv.σw n → ∃ x : GAf L n, TrivOutside {v} x ∧ Dv.loc x = y := by
-  first | exact @GlobalTheory.InertSurj.loc_surj | exact GlobalTheory.InertSurj.loc_surj | (intros; apply GlobalTheory.InertSurj.loc_surj <;> assumption)
+  first | exact @GlobalTheory.InertSurj.loc_surj
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.InertLocalSurjectiveFromTrivOutsideStatement =====
@@ -645,19 +525,6 @@ noncomputable section
 open GlobalTheory.SatInd
 
 namespace GlobalTheory.InertConvMul
-
-theorem eq_of_coset {G : Type} [Group G] {K : Subgroup G} {k : Type} {H : G → k}
-    (hH : ∀ (a : G) (c : K), H (a * c) = H a) {a b : G} (hab : (a : G ⧸ K) = b) : H a = H b := by
-  have hc := QuotientGroup.eq.1 hab
-  have := hH a ⟨a⁻¹ * b, hc⟩
-  change H (a * (a⁻¹ * b)) = H a at this
-  rw [mul_inv_cancel_left] at this
-  exact this.symm
-
-theorem finsum_eq_of_support_subset_range {α β M : Type} [AddCommMonoid M] {F : α → M} {e : β → α}
-    (he : Function.Injective e) (hs : Function.support F ⊆ Set.range e) :
-    ∑ᶠ c, F c = ∑ᶠ d, F (e d) := by
-  rw [← finsum_mem_range he, ← finsum_mem_inter_support, Set.inter_eq_right.2 hs, finsum_mem_support]
 
 variable {L : Type} [Field L] [NumberField L] [IsCMField L] {n : ℕ}
   {v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))} {w : HeightOneSpectrum (𝓞 L)}
@@ -699,7 +566,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.inertHeckeOperator_convolution_eq_comp : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (w : HeightOneSpectrum (𝓞 L)) (Dv : InertDatum L n v w) (U : Subgroup (GAf L n)), (∀ κ, TrivOutside {v} κ → (κ ∈ U ↔ κ ∈ Umax L n)) → ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (h₁ h₂ : Formalism.UG.GU Dv.σw n → ℂ), h₁ ∈ Formalism.UG.Hecke ℂ (Formalism.UG.KU Dv.σw n) → h₂ ∈ Formalism.UG.Hecke ℂ (Formalism.UG.KU Dv.σw n) → ∀ f : GAf L n → W, (∀ κ ∈ U, NG.rt L n κ f = f) → heckeFunI L n U Dv (Formalism.UG.conv (Formalism.UG.KU Dv.σw n) h₁ h₂) f = heckeFunI L n U Dv h₁ (heckeFunI L n U Dv h₂ f) := by
-  first | exact @GlobalTheory.InertConvMul.heckeFunI_conv_mul | exact GlobalTheory.InertConvMul.heckeFunI_conv_mul | (intros; apply GlobalTheory.InertConvMul.heckeFunI_conv_mul <;> assumption)
+  first | exact @GlobalTheory.InertConvMul.heckeFunI_conv_mul
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.InertHeckeOperatorConvolutionEqCompStatement =====
@@ -716,59 +583,9 @@ open Formalism.UG
 
 namespace GlobalTheory.InertHeckeOne
 
-
 open Classical in
-theorem heckeFunI_one : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (w : HeightOneSpectrum (𝓞 L)) (Dv : InertDatum L n v w) (U : Subgroup (GAf L n)), (∀ κ, TrivOutside {v} κ → (κ ∈ U ↔ κ ∈ Umax L n)) → ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (f : GAf L n → W), (∀ κ ∈ U, NG.rt L n κ f = f) → heckeFunI L n U Dv (Formalism.UG.dosetInd ℂ (Formalism.UG.KU Dv.σw n) 1) f = f := by
-  intro L _ _ _ n v w Dv U hU W _ _ f hf
-  have hfU : ∀ κ ∈ U, ∀ g, f (g * κ) = f g := fun κ hκ g => congrFun (hf κ hκ) g
-  have key : ∀ x : GAf L n, TrivOutside {v} x →
-      Dv.hval (Formalism.UG.dosetInd ℂ (Formalism.UG.KU Dv.σw n) 1) (Dv.loc x) = if x ∈ U then 1 else 0 := by
-    intro x hx
-    have hg := GlobalTheory.T.inertLocal_mem_unitaryGroup_antidiagonalForm L n v w Dv x
-    unfold InertDatum.hval
-    rw [dite_eq_left hg]
-    by_cases hxU : x ∈ U
-    · rw [if_pos hxU]
-      have hK := GlobalTheory.T.inertLocal_mem_integralPoints_of_latticeStabilizer L n v w Dv x ((hU x hx).1 hxU) hg
-      unfold Formalism.UG.dosetInd
-      rw [Set.indicator_of_mem]
-      · rfl
-      · rw [DoubleCoset.mem_doubleCoset]
-        exact ⟨_, hK, 1, one_mem _, by simp⟩
-    · rw [if_neg hxU]
-      unfold Formalism.UG.dosetInd
-      apply Set.indicator_of_notMem
-      intro hmem
-      rw [DoubleCoset.mem_doubleCoset] at hmem
-      obtain ⟨a, ha, b, hb, e⟩ := hmem
-      have hK : (⟨Dv.loc x, hg⟩ : Formalism.UG.GU Dv.σw n) ∈ Formalism.UG.KU Dv.σw n := by
-        rw [e, mul_one]; exact mul_mem ha hb
-      have hK' := hK
-      simp only [Formalism.UG.KU, Subgroup.mem_subgroupOf, Formalism.UG.intPts, Subgroup.mem_inf] at hK'
-      apply hxU
-      refine (hU x hx).2 (GlobalTheory.InertUmax.mem_Umax_of_trivOutside_of_loc_integral L n v w Dv x hx ?_)
-      intro i j
-      exact GlobalTheory.InertUmax.entries_mem_of_range _ _ hK'.2 i j
-  funext g
-  unfold heckeFunI
-  have h1 : TrivOutside {v} (1 : GAf L n) := by
-    intro u _
-    simp
-  rw [finsum_eq_single _ ((1 : GAf L n) : GAf L n ⧸ U)]
-  · have hc : ∃ x : GAf L n, (x : GAf L n ⧸ U) = ((1 : GAf L n) : GAf L n ⧸ U) ∧ TrivOutside {v} x := ⟨1, rfl, h1⟩
-    rw [dite_eq_left hc]
-    have hmem : hc.choose ∈ U := by
-      have := QuotientGroup.eq.1 hc.choose_spec.1.symm
-      simpa using this
-    rw [key _ hc.choose_spec.2, if_pos hmem, one_smul, hfU _ hmem]
-  · intro c hc1
-    split_ifs with hc
-    · rw [key _ hc.choose_spec.2, if_neg, zero_smul]
-      intro hmem
-      apply hc1
-      rw [← hc.choose_spec.1]
-      exact QuotientGroup.eq.2 (by simpa using U.inv_mem hmem)
-    · rfl
+theorem heckeFunI_one : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (w : HeightOneSpectrum (𝓞 L)) (Dv : InertDatum L n v w) (U : Subgroup (GAf L n)), (∀ κ, TrivOutside {v} κ → (κ ∈ U ↔ κ ∈ Umax L n)) → ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (f : GAf L n → W), (∀ κ ∈ U, NG.rt L n κ f = f) → heckeFunI L n U Dv (Formalism.UG.dosetInd ℂ (Formalism.UG.KU Dv.σw n) 1) f = f :=
+  @GlobalTheory.T.inertHeckeOperator_sphericalUnit_eq_id
 
 end GlobalTheory.InertHeckeOne
 end -- clump:auto
@@ -784,7 +601,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.inertHeckeOperator_maximalCompact_indicator_eq_id : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (w : HeightOneSpectrum (𝓞 L)) (Dv : InertDatum L n v w) (U : Subgroup (GAf L n)), (∀ κ, TrivOutside {v} κ → (κ ∈ U ↔ κ ∈ Umax L n)) → ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (f : GAf L n → W), (∀ κ ∈ U, NG.rt L n κ f = f) → heckeFunI L n U Dv (Formalism.UG.dosetInd ℂ (Formalism.UG.KU Dv.σw n) 1) f = f := by
-  first | exact @GlobalTheory.InertHeckeOne.heckeFunI_one | exact GlobalTheory.InertHeckeOne.heckeFunI_one | (intros; apply GlobalTheory.InertHeckeOne.heckeFunI_one <;> assumption)
+  first | exact @GlobalTheory.InertHeckeOne.heckeFunI_one
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.InertHeckeOperatorMaximalCompactIndicatorEqIdStatement =====
@@ -948,7 +765,7 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formal
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
 theorem _root_.GlobalTheory.T.exists_satakeParameter_inertDatum_of_dictionary_spherical : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (F : FinIso L n) (π : NG.AutRep L n) (U : Submodule ℂ (UA L n → ℂ)), Dict F π U → ∀ (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (w : HeightOneSpectrum (𝓞 L)), NG.OverPl w v → π.SphAt v → ∀ Dv : InertDatum L n v w, ∃ α, NG.SatAt π Dv α := by
-  first | exact @GlobalTheory.SatExist.exists_satAt | exact GlobalTheory.SatExist.exists_satAt | (intros; apply GlobalTheory.SatExist.exists_satAt <;> assumption)
+  first | exact @GlobalTheory.SatExist.exists_satAt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsSatakeParameterInertDatumOfDictionarySpherStatement =====
@@ -980,9 +797,8 @@ section -- clump:auto
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.N Formalism.ConjugateSelfDual ReciprocityTheory.Gal ReciprocityTheory.Aut Formalism.AUTREP Formalism.L2 Formalism.L2.Host Formalism.L2.NT NumberField IsDedekindDomain Polynomial GlobalTheory.HeightCounting GlobalTheory.RowTie GlobalTheory.SplitRead GlobalTheory.NPin
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
 
-
 theorem _root_.GlobalTheory.T.exists_satakeParameter_spherical_inertPlace : ∀ (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ) (π : NG.AutRep L n) (v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))) (w : HeightOneSpectrum (𝓞 L)), NG.OverPl w v → ∀ Dv : InertDatum L n v w, π.SphAt v → ∃ α, NG.SatAt π Dv α := by
-  first | exact @GlobalTheory.SatInertEx.exists_satAt | exact GlobalTheory.SatInertEx.exists_satAt | (intros; apply GlobalTheory.SatInertEx.exists_satAt <;> assumption)
+  first | exact @GlobalTheory.SatInertEx.exists_satAt
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.SatakeParameters.ExistsSatakeParameterSphericalInertPlaceStatement =====

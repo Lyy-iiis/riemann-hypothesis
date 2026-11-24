@@ -268,7 +268,6 @@ theorem sizes (c : ℝ) : GBig fun {D} _ _ {sc} G _ C x b => ∀ (i j : Fin D.R.
     have p2 := D.host.pde_prime.pos
     have p3 := D.host.pde'_prime.pos
     have p4 := (leastSplitAuxiliaryPrimeThetaChain_spec D).1.pos
-    push_cast at hl
     rw [Real.log_pow, Real.log_pow, Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) (by positivity), Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) (by positivity)] at hl
@@ -423,7 +422,7 @@ theorem norm_heckeL_one_le : ∀ (E : Type) [Field E] [NumberField E] [IsCMField
   obtain ⟨i₀⟩ := GlobalTheory.LValNe.nonempty_of_isCMType hφ
   have hn : ∃ i, n i ≠ 0 := ⟨i₀, by have := hpos i₀; simp only [hn_def]; omega⟩
   have hn' : ∃ i, (fun i => -n i) i ≠ 0 := ⟨i₀, by have := hpos i₀; simp only [hn_def]; omega⟩
-  have hu' := GlobalTheory.Published.HeckeFEModel.isUnitary_inv hu
+  have hu' := _root_.Formalism.L2.Host.HChar.IsUnitary.inv hu
   have hinv := GlobalTheory.Published.HeckeFEModel.hasInf_inv hinf'
   obtain ⟨Λc, hΛc, hbc⟩ := hB E I φ hφ χ n hu hinf' hn
   obtain ⟨Λc', hΛc', -⟩ := hB E I φ hφ χ⁻¹ (fun i => -n i) hu' hinv hn'

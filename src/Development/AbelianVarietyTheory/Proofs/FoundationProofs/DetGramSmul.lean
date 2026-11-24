@@ -235,13 +235,6 @@ section -- clump:auto
 open scoped Matrix
 open NumberField
 
-theorem _root_.GlobalTheory.T.exists_int_span_generators_of_isLattice_pi
-    (E : Type) [Field E] [NumberField E] (n : ℕ) (Λ : Submodule (𝓞 E) (Fin n → E))
-    (hΛ : Submodule.IsFullLattice E Λ) :
-    ∃ u : Fin (Module.finrank ℚ E * n) → Fin n → E,
-      (∀ x, x ∈ Λ ↔ x ∈ Submodule.span ℤ (Set.range u)) ∧
-      Submodule.span ℚ (Set.range u) = ⊤ :=
-  GlobalTheory.exists_intGenerators_card_eq_of_isLattice_pi E n Λ hΛ
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsIntGeneratorsCardEqOfIsLatticePiStatement =====
@@ -279,7 +272,7 @@ theorem gram_det_index_sublattice (U V ι κ : Type) [AddCommGroup U] [NormedAdd
     ext i j
     simp only [Matrix.submatrix_apply, Matrix.gram_apply, Matrix.mul_apply, Matrix.transpose_apply, hAr]
     rw [hphi i, hphi j, inner_sum]
-    simp only [sum_inner, real_inner_smul_left, real_inner_smul_right, Finset.sum_mul, Finset.mul_sum]
+    simp only [sum_inner, real_inner_smul_left, real_inner_smul_right, Finset.sum_mul]
     refine Finset.sum_congr rfl fun b _ => Finset.sum_congr rfl fun a _ => ?_
     ring
   have hdetA : Ar.det = (Am.det : ℝ) := by
@@ -564,7 +557,7 @@ theorem red_inf (E : Type) [Field E] [NumberField E] (R : Type) [NormedCommRing 
   have hc₁' : 0 < c₁ := by positivity
   obtain ⟨C, hC1, hC2⟩ := _root_.GlobalTheory.matrix_inv_entries_bounded R n G hGc hG1 ‖ε.symm.toContinuousLinearMap‖ c₁⁻¹ (inv_pos.2 hc₁')
   refine ⟨⌈c₁ * C⌉₊.factorial, max C ‖ε.symm.toContinuousLinearMap‖, Nat.factorial_pos _, fun Λ hΛ g => ?_⟩
-  obtain ⟨u, hu, hu'⟩ := GlobalTheory.T.exists_int_span_generators_of_isLattice_pi E n Λ hΛ
+  obtain ⟨u, hu, hu'⟩ := _root_.GlobalTheory.exists_intGenerators_card_eq_of_isLattice_pi E n Λ hΛ
   let φ : (Fin n → E) →ₗ[ℤ] EuclideanSpace ℝ (Fin (finrank ℝ (Fin n → R))) := AddMonoidHom.toIntLinearMap
     { toFun := fun x => ε ((fun i => τ (x i)) ᵥ* g.1)
       map_zero' := by simp [← Pi.zero_def]

@@ -361,9 +361,6 @@ theorem wts {D : D7} (i : Fin D.R.m) {P : D.what₂.Tau → SPar} (hP : P = parA
   obtain ⟨x₁, x₂, x₃, hx⟩ := GlobalTheory.JointHarm.weights_of_minors D i _ rfl M h
   exact ⟨x₁, x₂, x₃, fun τ => ⟨(hx τ).1, (hx τ).2.1, (hx τ).2.2.1⟩⟩
 
-theorem one_mem_K {n : ℕ} (ε : Fin n → Bool) : (1 : Matrix (Fin n) (Fin n) ℂ) ∈ Formalism.REAL.Kset ε :=
-  ⟨one_mem _, by simp⟩
-
 theorem ioHarm_holds (D : D7) : IoHarm D := by
   classical
   rintro i M M' ψ θ χS χT ω hθ hω hχ c hc hpr BV f hf io hio
@@ -376,7 +373,7 @@ theorem ioHarm_holds (D : D7) : IoHarm D := by
     GlobalTheory.LowSmooth.shape_at M' τ (D.hc τ) hrk (hpq τ) rfl
   have hBS : ∀ τ, (BV τ)ᴴ * gramAt D (Vc D i) τ * BV τ = 1 := fun τ => adapted_one (hf τ).onS
   have hBu : ∀ τ, IsUnit (BV τ) := fun τ => IsUnit.of_mul_eq_one_right _ (hBS τ)
-  obtain ⟨τ₀⟩ : Nonempty D.what₂.Tau := ⟨D.eTau.symm ⟨1, by simp [Formalism.FrobeniusOrbits.Psi]⟩⟩
+  obtain ⟨τ₀⟩ : Nonempty D.what₂.Tau := ⟨D.eTau.symm ⟨1, by simp⟩⟩
   have hth : IsThetaFunO ψ (Vc D i) (Wc D i) f := (hf τ₀).theta
   set pt := pureTensorO ψ θ (Vc D i) (Wc D i) (fun _ => 1) (cart M') BV (onb M') f with hpt_def
   have hptθ : ∀ P, IsThetaFunO ψ (Vc D i) (Wc D i) (pt P) := fun P =>
@@ -467,7 +464,7 @@ theorem ioHarm_holds (D : D7) : IoHarm D := by
   have hρ : ∀ u ∈ GinfC (Vc D i), ∀ x w, io x w ∈ N → io x (c.ρ u w) ∈ N := by
     intro u hu x w hm
     obtain ⟨-, b⟩ := hact u hu 1 (one_mem _) fun τ => by
-      rw [hc1, Matrix.mul_one, hfr]; exact one_mem_K _
+      rw [hc1, Matrix.mul_one, hfr]; exact _root_.GlobalTheory.Dec.FormF.one_K _
     have e : io x (c.ρ u w) = GlobalTheory.JointHarm.fact M'.ε x₁ x₂ x₃
         (fun τ => M'.fr τ * compAt θ τ (Formalism.L2.Theta.mt (Wc D i) 1) * (M'.fr τ)⁻¹)
         (fun τ => (BV τ)⁻¹ * compAt θ τ (Formalism.L2.Theta.mt (Vc D i) u) * BV τ) (io x w) :=
@@ -521,7 +518,7 @@ theorem ioHarm_holds (D : D7) : IoHarm D := by
           rw [this]
           exact hk
         · rw [hs.2.2 ρ hρ, Matrix.mul_one, hfr]
-          exact one_mem_K _
+          exact _root_.GlobalTheory.Dec.FormF.one_K _
       obtain ⟨-, b⟩ := hact 1 (one_mem _) h hs.1 hcomp
       have e : io (PiTensorProduct.tprod ℂ (Function.update v τ u)) w = GlobalTheory.JointHarm.fact M'.ε x₁ x₂ x₃
           (fun ρ => M'.fr ρ * compAt θ ρ (Formalism.L2.Theta.mt (Wc D i) h) * (M'.fr ρ)⁻¹)
@@ -548,7 +545,7 @@ theorem ioHarm_holds (D : D7) : IoHarm D := by
               _ = _ := by simp only [Matrix.mul_assoc]
           · rw [hs.2.2 ρ hρ, Matrix.one_mul, Matrix.mul_one]
         exact anti_conj (infMat_mul_inv θ (Wc D i) ρ h) hcomm hcX
-      · simp only [Prod.mk_mul_mk, one_mul, mul_one]
+      · simp only [Prod.mk_mul_mk, mul_one]
         rw [oneP_mul hθ hh hX t]
     intro v
     have hv : ∀ ρ, v₀ ρ ≠ 0 := fun ρ h0 => by
@@ -607,7 +604,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.ArchRec
 
 theorem _root_.GlobalTheory.T.lowestKTypeFockMap_harmonic_of_discreteSeries : GlobalTheory.Published.DiscreteSeriesCover → GlobalTheory.Published.HarishChandraModules → ∀ D : D7, IoHarm D := by
-  first | exact @GlobalTheory.ArchRec.IoHarmPf.ioHarm | exact GlobalTheory.ArchRec.IoHarmPf.ioHarm | (intros; apply GlobalTheory.ArchRec.IoHarmPf.ioHarm <;> assumption)
+  first | exact @GlobalTheory.ArchRec.IoHarmPf.ioHarm
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.TwistedOperators.LowestKTypeFockMapHarmonicOfDiscreteSeriesStatement =====

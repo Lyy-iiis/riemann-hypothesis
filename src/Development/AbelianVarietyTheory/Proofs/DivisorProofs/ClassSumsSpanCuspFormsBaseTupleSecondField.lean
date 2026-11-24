@@ -144,7 +144,7 @@ theorem move_at_point : Formalism.MainNotions.ModuliIntegralCharts.H1.ChartIndep
   intro hci E _ _ _ H Dw l Xo c _ r g X bas idx e q0 n hr eL hs hrr hn hdir hty _ nab hnab Λ h hU hh hT hT'
   have hw := cmHost_idempotent_trace_eq_one H
   have hwi : IsIntegral ℤ (H.w0 : E) := H.w0.isIntegral_coe
-  obtain ⟨hU', hmv, hu, -⟩ := (GlobalTheory.T.pushforward_preserves_harmonic_polynomials_and_lattices E H Dw l c n 0 h hh).2 Λ
+  obtain ⟨hU', hmv, hu, -⟩ := (_root_.GlobalTheory.PushKeeps.push_keeps E H Dw l c n 0 h hh).2 Λ
   have hΛ := mem_vset Λ l.three_le hU hT
   have hΛ' := mem_vset (actLat h Λ) l.three_le (hU' hU) hT'
   have hΛ1 : Λ.La ∈ Vset E n 1 := (GenLatCmp.genLat_vset E n _).2.2.1 1 _ (one_dvd _) hΛ
@@ -176,7 +176,7 @@ theorem move_at_point : Formalism.MainNotions.ModuliIntegralCharts.H1.ChartIndep
     (hN.2.2.trans inf_le_left)
   obtain ⟨-, -, -, hz2, -⟩ := ZLat.exists_reps_sum E r X g bas idx n hs hn _ hwi hw L hL _ hΛ1' N' hN'.1
     (hN'.2.2.trans inf_le_left)
-  haveI := finite_levQ Dw l
+  haveI := _root_.GlobalTheory.finite_levQ Dw l
   haveI := Fintype.ofFinite (Fin n → LevQ Dw l)
   generalize unitv (projA X bas (H.w0 : E) (tens Λ.La L) v₀) = u at hcol hu1 hp1
   generalize unitv (projA X bas (H.w0 : E) (tens (actLat h Λ).La L) v₀) = u' at hcol hu2 hp2
@@ -889,7 +889,7 @@ open scoped TensorProduct Classical
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.thetaKernel_finitePoint_mem_span_rationalFormLifts : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : Formalism.L2.DIV.FamIn D.what₂.LL G Pl0 T0 D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A), GlobalTheory.Hk3.Core R F → ∀ (i : Fin D.R.m) (t : T0), VStd D i → ∀ h ∈ GfC (Vc D i), ∀ (w : (R.cV i).W) (u : ∀ ρ, lowT (R.MW i (sg0 D A)) ρ), (fun g : GA D (Wc D i) => thetaKO (R.ωP i t) h g (R.ptP i t (R.ioP i (PiTensorProduct.tprod ℂ u) w))) ∈ Submodule.span ℂ (Set.range fun x₀ : A.fam.amb.FL i t => (R.thF i t (jVx R i t x₀) (fun ρ => u ρ) : GA D (Wc D i) → ℂ)) := by
-  first | exact @GlobalTheory.KernelSpanCore.kernel_mem_span_core | exact GlobalTheory.KernelSpanCore.kernel_mem_span_core | (intros; apply GlobalTheory.KernelSpanCore.kernel_mem_span_core <;> assumption)
+  first | exact @GlobalTheory.KernelSpanCore.kernel_mem_span_core
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ThetaKernelFinitePointMemSpanRationalFormLiftsStatement =====
@@ -1168,7 +1168,7 @@ theorem kernel_eq_shortVal (hC : GlobalTheory.Hk3.Core R F) (hT : TieIn T R κ v
   refine Eq.trans (congrArg (fun z => ka * (_ * z)) e1.symm) ?_
   refine Eq.trans ?_ (congrArg (fun z => _ * z) hgeo.symm)
   have halg : ∀ s : O.c'.F, algebraMap O.c'.F ℂ s = inC O.c' s := fun _ => rfl
-  simp only [cmpConst, halg, map_mul, map_inv₀, map_natCast, map_one, inv_one, one_mul]
+  simp only [cmpConst, halg, map_mul, map_inv₀, map_natCast, inv_one, one_mul]
   have key : ∀ s c m k e a z n th : ℂ, ka * (s * (c * m * k) * (e * a * z) * n * th) =
       ka * s * c * m * e * (a * n * z * k * th) := fun s c m k e a z n th => by ring
   exact key _ _ _ _ _ _ _ _ _

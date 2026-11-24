@@ -503,7 +503,7 @@ theorem locSec_parab_mir_one (k : Type) [Field k] [ValuativeRel k] [TopologicalS
     by_cases hj : j = Fin.last (i + t)
     · subst hj
       simp [GlobalTheory.BZMir.eLast]
-    · simp [GlobalTheory.BZMir.eLast, Matrix.one_apply, Pi.single_apply, hj, Ne.symm hj]
+    · simp [GlobalTheory.BZMir.eLast, hj, Ne.symm hj]
   have hrow : ∀ q p : GL (Fin (i + t + 1)) k, p ∈ GlobalTheory.BZMir.Mir k (i + t) →
       (↑(q * p)⁻¹ : Matrix (Fin (i + t + 1)) (Fin (i + t + 1)) k) (Fin.last (i + t)) =
         (↑q⁻¹ : Matrix (Fin (i + t + 1)) (Fin (i + t + 1)) k) (Fin.last (i + t)) := by
@@ -1018,11 +1018,6 @@ open scoped TensorProduct
 
 namespace GlobalTheory.CompanionTheory.BZRes
 
-theorem exists_nhds_one_tube {G : Type} [Group G] [TopologicalSpace G] {C : Set G} (hC : IsCompact C)
-    {n : Set (G × G)} (hn : IsOpen n) (h : ∀ c ∈ C, (c, (1 : G)) ∈ n) :
-    ∃ O ∈ 𝓝 (1 : G), ∀ c ∈ C, ∀ u ∈ O, (c, u) ∈ n :=
-  _root_.UpperTheory.Reformulated.B.Ylb7.main hC hn h
-
 theorem finite_image_of_rightInvariant {P : Type} [Group P] [TopologicalSpace P] [IsTopologicalGroup P] {W : Type}
     (φ : P → W) (K' : Subgroup P) (hK' : IsOpen (K' : Set P)) (hinv : ∀ (p : P), ∀ κ ∈ K', φ (p * κ) = φ p)
     {C : Set P} (hC : IsCompact C) : (φ '' C).Finite := by
@@ -1074,12 +1069,12 @@ theorem exists_openSubgroup_consistent {G : Type} [Group G] [TopologicalSpace G]
       exact K'.one_mem
     exact this
   have hC' : IsCompact ((Subtype.val : P → G) '' C) := hC.image continuous_subtype_val
-  obtain ⟨OP, hOP, hOPc⟩ := exists_nhds_one_tube hC' (n := {z : G × G | z.1⁻¹ * z.2 * z.1 ∈ U})
+  obtain ⟨OP, hOP, hOPc⟩ := _root_.UpperTheory.Reformulated.B.Ylb7.main hC' (n := {z : G × G | z.1⁻¹ * z.2 * z.1 ∈ U})
     (hU.preimage (by fun_prop)) (by
       rintro _ ⟨c, -, rfl⟩
       simpa using h1U)
   obtain ⟨O, hO, hOs⟩ := hL UQ (hUQ.mem_nhds h1UQ) OP hOP
-  obtain ⟨O₁, hO₁, hO₁c⟩ := exists_nhds_one_tube hC'
+  obtain ⟨O₁, hO₁, hO₁c⟩ := _root_.UpperTheory.Reformulated.B.Ylb7.main hC'
     (n := {z : G × G | z.1 * z.2 * z.1⁻¹ ∈ interior O ∧ x * z.1 * z.2 ∈ Y})
     ((isOpen_interior.preimage (by fun_prop)).inter (hY.preimage (by fun_prop))) (by
       rintro _ ⟨c, hc, rfl⟩
@@ -1323,7 +1318,7 @@ theorem two_orbits [NonarchimedeanGroup G] {Q P : Subgroup G} {w : G}
     ⟨(resInd σ H₁ hH₁ τ₁ E₁ hE₁).codRestrict _ mem1, fun p => by
       ext f y
       show E₁ (f.1.1 ((1 : G) * (y : G) * (p : G))) = E₁ (f.1.1 ((1 : G) * ((y * p : P) : G)))
-      simp [mul_assoc]⟩
+      simp⟩
   have hRs : Function.Surjective R := fun φ => by
     obtain ⟨f, hf, -⟩ := exists_lift h1 σ hσ H₁ hH₁ τ₁ E₁ hE₁ Set.univ isOpen_univ (fun _ => trivial) φ
     exact ⟨f, Subtype.ext hf⟩

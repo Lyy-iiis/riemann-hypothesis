@@ -181,7 +181,7 @@ theorem inSS_pL (Bs : B.RealPlaceData k r Wp Wq) {x : Mt k r × Mt k r}
 
 theorem sgs_pL (x : Mt k r × Mt k r) (g : B.Mat k r) :
     B.sgs (pL x) g = (Matrix.of x.1 : B.Mat k r)⁻¹ * (Matrix.of x.2 : B.Mat k r)⁻¹ * g := by
-  simp only [B.sgs, pL, Prod.fst, Prod.snd, Equiv.apply_symm_apply, Matrix.mul_one]
+  simp only [B.sgs, pL, Equiv.apply_symm_apply, Matrix.mul_one]
 
 theorem contDiff_lmul (σ : B.Mat k r) : ContDiff ℝ (⊤ : ℕ∞) (fun g : B.Mat k r => σ * g) := by
   refine contDiff_pi.2 fun i => contDiff_pi.2 fun j => ?_
@@ -259,22 +259,22 @@ theorem zb_last_row (i0 s : ℕ) (hh : Matrix (Fin i0) (Fin i0) ℂ) (t : ℂ) (
     (ha' : a + 1 < i0 + s) (hb : b = i0) : C3.Zb i0 s hh t a b = 0 := by
   subst hb
   unfold C3.Zb
-  split_ifs <;> first | rfl | omega | (exfalso; omega)
+  split_ifs <;> first | rfl | omega
 
 theorem zb_col_last (i0 s : ℕ) (hh : Matrix (Fin i0) (Fin i0) ℂ) (t : ℂ) (hs : 2 ≤ s) (a : ℕ) (ha : a ≠ i0)
     (ha' : a + 1 < i0 + s) : C3.Zb i0 s hh t a (i0 + s - 1) = 0 := by
   unfold C3.Zb
-  split_ifs <;> first | rfl | omega | (exfalso; omega)
+  split_ifs <;> first | rfl | omega
 
 theorem corner_matrix_last_entry (i0 s : ℕ) (hh : Matrix (Fin i0) (Fin i0) ℂ) (t : ℂ) (hs : 2 ≤ s) :
     C3.Zb i0 s hh t i0 (i0 + s - 1) = t := by
   unfold C3.Zb
-  split_ifs <;> first | rfl | omega | (exfalso; omega)
+  split_ifs <;> first | rfl | omega
 
 theorem corner_matrix_first_line_zero (i0 s : ℕ) (hh : Matrix (Fin i0) (Fin i0) ℂ) (t : ℂ) (hs : 2 ≤ s) (b : ℕ) (hb : b + 1 < i0 + s) :
     C3.Zb i0 s hh t i0 b = 0 := by
   unfold C3.Zb
-  split_ifs <;> first | rfl | omega | (exfalso; omega)
+  split_ifs <;> first | rfl | omega
 
 theorem herm_bvec_right (v : Fin (2 * r + k + 1) → ℂ) (p : Fin (2 * r + k + 1)) :
     herm (Hpk k r) v (bvec p) = WeylGroupFacts.sgn k r p * v (WeylGroupFacts.tau k r p) := by
@@ -283,7 +283,7 @@ theorem herm_bvec_right (v : Fin (2 * r + k + 1) → ℂ) (p : Fin (2 * r + k + 
     by_cases h : q = p
     · subst h
       simp
-    · simp [Pi.single_apply, h]
+    · simp [h]
   unfold herm bvec
   rw [hs, single_dotProduct, one_mul, SignAntidiagonal.mulVec_hpk]
 
@@ -453,7 +453,7 @@ theorem ptEntry_append (h : C.LPt) (s : ℕ) (t : ℂ) (a b : ℕ) :
     obtain ⟨s1, t1⟩ := blk
     have hsz : D.ptSize ((s1, t1) :: h) = s1 + D.ptSize h := by simp [D.ptSize]
     rw [List.cons_append, hsz, ptEntry_cons, ih]
-    split_ifs <;> first | rfl | omega | (rw [ptEntry_cons]; split_ifs <;> first | rfl | omega)
+    split_ifs <;> first | rfl | omega | (rw [ptEntry_cons]; split_ifs <;> first | rfl)
 
 theorem ptMatN_zb (h : C.LPt) (s : ℕ) (t : ℂ) (n : ℕ) (hn : n = D.ptSize h + s) (a b : Fin n) :
     D.ptMatN (h ++ [(s, t)]) n a b = C3.Zb (D.ptSize h) s (D.ptMatN h (D.ptSize h)) t a.val b.val := by
@@ -602,9 +602,6 @@ section point
 variable {k r : ℕ} {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
   [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp] [FiniteDimensional ℂ Wq]
 
-theorem ptSize_app (h : C.LPt) (s : ℕ) (t : ℂ) : D.ptSize (h ++ [(s, t)]) = D.ptSize h + s := by
-  simp [D.ptSize]
-
 theorem smoothOnH_of_loc {E : Type} [NormedAddCommGroup E] [NormedSpace ℂ E] {f : B.Mat k r → E}
     (hf : ∀ x ∈ B.GV k r, Formalism.FourierDecayAlt.P.CapelliWordSumExpansion.Loc ⊤ f x) : SmoothOnH (Hpk k r) f := by
   intro g₀ hg₀
@@ -636,7 +633,7 @@ theorem pt_poly (hKA : KrAA) (Bs : B.RealPlaceData k r Wp Wq) {G : B.Mat k r →
     have := Formalism.FourierDecayAlt.P.BigCellZetaMinors.dmin_sgs Bs hp g l
     rwa [sgs_pL] at this
 
-  have hsz : D.ptSize h + s = r + 1 := by rw [← ptSize_app h s t]; exact hq.2
+  have hsz : D.ptSize h + s = r + 1 := by rw [← _root_.Formalism.FourierDecayAlt.P.Dx2.SL.ptSize_append h s t]; exact hq.2
   have ht : t ≠ 0 := (hq.1 (s, t) (by simp)).2
   set i0 := D.ptSize h with hi0
   set hh := D.ptMatN h i0 with hhh
@@ -692,7 +689,7 @@ theorem pt_poly (hKA : KrAA) (Bs : B.RealPlaceData k r Wp Wq) {G : B.Mat k r →
   · rw [← hcy y, hD₁]
     set u : ℂ := (y : ℂ) + ((2 * r + k : ℕ) : ℂ) / 2 with hu
 
-    have hX1 := (Formalism.FourierDecayAlt.P.operators_commute_translations' (Wq →L[ℂ] Wp) k r Bs.z Bs.z' r le_rfl u 0 K Bs.z_mem Bs.z'_mem
+    have hX1 := (_root_.operators_commute_translations (Wq →L[ℂ] Wp) k r Bs.z Bs.z' r le_rfl u 0 K Bs.z_mem Bs.z'_mem
       (smoothOnH_of_loc hKloc) 1 h1S n0 hn0S γ hγ).1
     have e1 : (fun g => K (1 * g * n0)) = K := by
       funext g; rw [Matrix.one_mul, hKn0]
@@ -703,7 +700,7 @@ theorem pt_poly (hKA : KrAA) (Bs : B.RealPlaceData k r Wp Wq) {G : B.Mat k r →
       intro g hg
       unfold PBN.aaTop
       rw [hdσ]
-      have hX0 := (Formalism.FourierDecayAlt.P.operators_commute_translations' (Wq →L[ℂ] Wp) k r Bs.z Bs.z' r le_rfl u 0 G Bs.z_mem Bs.z'_mem
+      have hX0 := (_root_.operators_commute_translations (Wq →L[ℂ] Wp) k r Bs.z Bs.z' r le_rfl u 0 G Bs.z_mem Bs.z'_mem
         (smoothOnH_of_ckOn hG.1) σ hσS 1 h1S' g hg).1
       have e2 : (fun x => G (σ * x * 1)) = Gσ := by funext x; rw [Matrix.mul_one]
       rw [e2, Matrix.mul_one] at hX0

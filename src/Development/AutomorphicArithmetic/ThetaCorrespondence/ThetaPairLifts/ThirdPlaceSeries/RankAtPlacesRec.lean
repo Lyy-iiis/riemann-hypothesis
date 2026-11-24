@@ -73,7 +73,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.OnCmp GlobalTheory.BigOn GlobalTheory.RealIndexBound
 
 theorem _root_.GlobalTheory.T.baseTupleThetaSpan_hasType : ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m) (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A), GlobalTheory.Hk3.Core R F → ∀ (i : Fin D.R.m), R.LUnif → FormsDetermined R i → ∀ (v : HeightOneSpectrum (𝓞 D.what₂.LL)), v ∈ R.twPl → R.tup_mu_on → (∀ x, (((R.C.delAt (Formalism.EigenvalueLevelCeiling.plc v)).1 x : ℂˣ) : ℂ) ∈ D.what₂.embLL.range) → (∀ u : F.P0, (R.FW i).chi u = 1) → ∀ x ∈ thetaBase R i F.P0 F.ψ0⁻¹ 1 v (ownAt D v), ∀ u : F.P0, (R.FW i).ρ u x = ((F.ψ0⁻¹ u : D.what₂.LLˣ) : D.what₂.LL) • x := by
-  first | exact @GlobalTheory.BaseKernelType.thetaBase_hasType | exact GlobalTheory.BaseKernelType.thetaBase_hasType | (intros; apply GlobalTheory.BaseKernelType.thetaBase_hasType <;> assumption)
+  first | exact @GlobalTheory.BaseKernelType.thetaBase_hasType
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.BaseTupleThetaSpanHasTypeStatement =====
@@ -117,7 +117,7 @@ open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.Glob
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 theorem _root_.GlobalTheory.T.multiplicitySpace_eq_zero_of_lowestKTypes : ∀ (D : D7) (V : HSp D) (S : D.what₂.Tau → SPar) (M : DSModel V S) (θ : InfFam D), IsInfFam θ → (∀ τ, lowT M τ ≠ ⊥) → ∀ (J : Set (GA D V)) (χ : GA D V → ℂ), ∀ T ∈ Mult θ M J χ, (∀ v : ∀ ρ, lowT M ρ, T (fun ρ => v ρ) = 0) → T = 0 := by
-  first | exact @GlobalTheory.LowTypeDetermined.eq_zero_of_lowT | exact GlobalTheory.LowTypeDetermined.eq_zero_of_lowT | (intros; apply GlobalTheory.LowTypeDetermined.eq_zero_of_lowT <;> assumption)
+  first | exact @GlobalTheory.LowTypeDetermined.eq_zero_of_lowT
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.MultiplicitySpaceEqZeroOfLowestKTypesStatement =====
@@ -159,8 +159,7 @@ theorem main {K : Type} [Field K] [NumberField K] {Z : Type} [AddCommGroup Z] [M
 
 end GlobalTheory.TargetLemmaCollection
 
-theorem GlobalTheory.TargetLemmaCollection.target : ∀ {K : Type} [inst : Field K] [NumberField K] {Z : Type} [inst_2 : AddCommGroup Z] [inst_3 : Module K Z] [inst_4 : Module (NumberField.RingOfIntegers K) Z] [IsScalarTower (NumberField.RingOfIntegers K) K Z] {A : Submodule (NumberField.RingOfIntegers K) Z} {x : Z}, x ∈ Submodule.span K (↑A : Set Z) → ∃ (d : NumberField.RingOfIntegers K), d ≠ (0 : NumberField.RingOfIntegers K) ∧ d • x ∈ A :=
-  fun hx => GlobalTheory.TargetLemmaCollection.main hx
+alias GlobalTheory.TargetLemmaCollection.target := _root_.GlobalTheory.TargetLemmaCollection.main
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.ImportsExtraAlt =====
@@ -188,16 +187,6 @@ section Gen
 variable {K : Type} [Field K] [NumberField K]
 variable {Z : Type} [AddCommGroup Z] [Module K Z] [Module (𝓞 K) Z] [IsScalarTower (𝓞 K) K Z]
 
-theorem exists_smul_mem_of_mem_span {A : Submodule (𝓞 K) Z} {x : Z} (hx : x ∈ Submodule.span K (A : Set Z)) :
-    ∃ d : 𝓞 K, d ≠ 0 ∧ d • x ∈ A := by
-  first
-  | exact @_root_.GlobalTheory.TargetLemmaCollection.target
-  | exact _root_.GlobalTheory.TargetLemmaCollection.target
-  | (apply _root_.GlobalTheory.TargetLemmaCollection.target <;> assumption)
-  | (intros; apply _root_.GlobalTheory.TargetLemmaCollection.target <;> assumption)
-  | (intros; apply @_root_.GlobalTheory.TargetLemmaCollection.target <;> first | assumption | infer_instance)
-  | (intros; exact _root_.GlobalTheory.TargetLemmaCollection.target ..)
-
 theorem span_cut {A : Submodule (𝓞 K) Z} (hA : Submodule.span K (A : Set Z) = ⊤) (W : Submodule K Z) :
     Submodule.span K (Formalism.EigenvalueLevelCeiling.cut W A : Set Z) = W := by
   apply le_antisymm
@@ -205,7 +194,7 @@ theorem span_cut {A : Submodule (𝓞 K) Z} (hA : Submodule.span K (A : Set Z) =
     intro x hx
     exact (Submodule.mem_inf.1 hx).2
   · intro w hw
-    obtain ⟨d, hd, hm⟩ := exists_smul_mem_of_mem_span (A := A) (x := w) (by rw [hA]; trivial)
+    obtain ⟨d, hd, hm⟩ := _root_.GlobalTheory.TargetLemmaCollection.main (A := A) (x := w) (by rw [hA]; trivial)
     have hd' : algebraMap (𝓞 K) K d ≠ 0 := (map_ne_zero_iff _ (IsFractionRing.injective (𝓞 K) K)).2 hd
     have hmem : d • w ∈ Formalism.EigenvalueLevelCeiling.cut W A := by
       refine Submodule.mem_inf.2 ⟨hm, ?_⟩
@@ -316,7 +305,7 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 open GlobalTheory.OnCmp GlobalTheory.BigOn GlobalTheory.RealIndexBound
 
 theorem _root_.GlobalTheory.T.eigenlattice_local_containment_at_pairs : ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (Bs : DefBase K) (Df : DefSide Bs) (S : IndefData Df) (P : Type) [Group P] [Finite P] (c : OnConst) (O : OnObj S P c), LeafSpan O → LeafData O → LeafProj O → (∀ j (g : P), O.e j ∘ₗ O.ρ j g = O.ρ j g ∘ₗ O.e j) → (AtPair S fun v => ∀ j, (O.ThJ v j).FG ∧ O.ThJ v j ≤ (Formalism.EigenvalueLevelCeiling.eig (O.ρ j) O.U O.ψ).restrictScalars (𝓞 K) ∧ Formalism.HermitianLatticesTheory.localization₂ v.asIdeal (O.Th0 v j) ≤ Formalism.HermitianLatticesTheory.localization₂ v.asIdeal (O.ThJ v j)) → RankAtPlaces O := by
-  first | exact @GlobalTheory.OnRankAlg.rankAtPlaces_alg | exact GlobalTheory.OnRankAlg.rankAtPlaces_alg | (intros; apply GlobalTheory.OnRankAlg.rankAtPlaces_alg <;> assumption)
+  first | exact @GlobalTheory.OnRankAlg.rankAtPlaces_alg
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DivisorProofs.EigenlatticeLocalContainmentAtPairsStatement =====
@@ -367,7 +356,7 @@ theorem rank_at_twisted_places_of_rec_span (hR : p.PointConditions') (hm : More 
       GlobalTheory.TraceClassRank.CompareOffOwn (T := (r.used v).full) (R := R2 p) (hrec.1.ok.laws v).p (fw2 p) j (r.lev j)
         (F2 p).P0 (F2 p).ψ0⁻¹ 1 v (ownAt D v)) :
     GlobalTheory.TraceClassRank.RankAtPlaces O := by
-  obtain ⟨hC, hOk, hLU, -⟩ := _root_.GlobalTheory.T.links2_of_single_index_twisted _ _ _ _ _ _ _ _ _ _ p hR hm.1
+  obtain ⟨hC, hOk, hLU, -⟩ := _root_.GlobalTheory.BigOn.links2_of_rows_alt _ _ _ _ _ _ _ _ _ _ p hR hm.1
   obtain ⟨hc, hinj, z, act, y, ht⟩ := hrec.1.tied
   have hX := hOk.irr
   have h1 := hC.grp.levels

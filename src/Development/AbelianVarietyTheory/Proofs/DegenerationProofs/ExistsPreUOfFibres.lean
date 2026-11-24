@@ -372,7 +372,7 @@ open GlobalTheory.UU
 open GlobalTheory.LN
 
 theorem _root_.GlobalTheory.T.nonempty_formalUniformisationTower : Laws → Laws2 → ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] (I : Ideal R), admitted R I → ∀ (G : Over (Spec (CommRingCat.of R))) [GrpObj G] [IsCommMonObj G] (P : CP G), IsSemiAbelian G → HypW G P.L.L → IsProper (pullback.snd G.hom (jK R)) → SplitOver G I → ∃ (X : Type) (_ : AddCommGroup X) (_ : Module.Free ℤ X) (_ : Module.Finite ℤ X), Nonempty (TowerR I P X) := by
-  first | exact @GlobalTheory.FormalTower.nonempty_towerR | exact GlobalTheory.FormalTower.nonempty_towerR | (intros; apply GlobalTheory.FormalTower.nonempty_towerR <;> assumption)
+  first | exact @GlobalTheory.FormalTower.nonempty_towerR
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.DegenerationProofs.NonemptyFormalUniformisationTowerStatement =====
@@ -631,11 +631,7 @@ theorem isLocalRing_quot (hI : I ≠ ⊤) (e : ℕ) : IsLocalRing (R ⧸ I ^ (e 
 
 
 omit [IsDomain R] [IsLocalRing R] [IsCommMonObj G] in
-theorem isGrpPullback_thickMap (e : ℕ) :
-    IsGrpPullback (thickObj R I e G) (thickObj R I (e + 1) G) (thickTrans R I e) (thickMap R I e G) :=
-  (isGrpPullback_pullback G (thick R I (e + 1))).cancel
-    ((isGrpPullback_pullback G (thick R I e)).congr (thickTrans_comp R I e).symm
-      ((pullback.lift_fst _ _ _).trans (Category.comp_id _)).symm) (pullback.lift_snd _ _ _)
+alias isGrpPullback_thickMap := _root_.GlobalTheory.WeightPoint.isGrpPullback_thickMap
 
 theorem exists_preU (hG : GlobalFnsSt)
     (hc : ∀ (D : DegPre R) (e : ℕ) (g : GtCoord I D e G) (g' : GtCoord I D (e + 1) G),

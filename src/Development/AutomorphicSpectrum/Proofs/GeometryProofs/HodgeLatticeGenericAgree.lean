@@ -187,27 +187,7 @@ noncomputable section
 
 namespace GlobalTheory.CompanionTheory.Ar.Flat.GenAgree
 
-theorem iotaMulti_rows {K V : Type} [Field K] [AddCommGroup V] [Module K V] {n : ℕ}
-    (M : Matrix (Fin n) (Fin n) K) (z : Fin n → V) :
-    exteriorPower.ιMulti K n (fun i => ∑ j, M i j • z j) = M.det • exteriorPower.ιMulti K n z := by
-  have hA : (exteriorPower.ιMulti K n).compLinearMap (Fintype.linearCombination K z) =
-      (Matrix.detRowAlternating : (Fin n → K) [⋀^Fin n]→ₗ[K] K).smulRight
-        (exteriorPower.ιMulti K n z) := by
-    refine (Pi.basisFun K (Fin n)).ext_alternating fun u hu => ?_
-    let s : Equiv.Perm (Fin n) := Equiv.ofBijective u (Finite.injective_iff_bijective.1 hu)
-    have e : (fun i => Pi.basisFun K (Fin n) (u i)) = (fun i => Pi.basisFun K (Fin n) i) ∘ s := rfl
-    rw [e, AlternatingMap.map_perm, AlternatingMap.map_perm]
-    congr 1
-    have e1 : (Matrix.detRowAlternating : (Fin n → K) [⋀^Fin n]→ₗ[K] K)
-        (fun i => Pi.basisFun K (Fin n) i) = 1 := by
-      change Matrix.det (Matrix.of fun i => Pi.basisFun K (Fin n) i) = 1
-      rw [show (Matrix.of fun i => Pi.basisFun K (Fin n) i) = 1 from by
-        ext i j; simp [Matrix.one_apply, Pi.single_apply, eq_comm], Matrix.det_one]
-    rw [AlternatingMap.smulRight_apply, e1, one_smul, AlternatingMap.compLinearMap_apply]
-    congr 1
-    funext i
-    simp [Fintype.linearCombination_apply, Pi.basisFun_apply]
-  exact AlternatingMap.congr_fun hA M
+alias iotaMulti_rows := _root_.GlobalTheory.CompanionTheory.Ar.Flat.WedgeFrame.wedge_rows
 
 variable {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ : Spec (CommRingCat.of Ω) ⟶ X}
 
@@ -333,7 +313,7 @@ theorem key (𝓗 : HodgeLat L ρ bar (p + q)) {σ σ' : E →+* Ω} {v : Fin p 
     have hreg' : ∀ j, θ (b j) ∈ regAt ξ x := fun j => hθL _ (hbL j)
     have e : ((0 : V), θ) = ∑ j, (⟨θ (b j), hreg' j⟩ : regAt ξ x) • c j := by
       have e0 : ∀ j, (⟨θ (b j), hreg' j⟩ : regAt ξ x) • c j = θ (b j) • c j := fun j => rfl
-      simp only [e0, hc]
+      simp only [hc]
       refine Prod.ext ?_ ?_
       · simp [Prod.fst_sum]
       · simp only [Prod.snd_sum, Prod.smul_snd]

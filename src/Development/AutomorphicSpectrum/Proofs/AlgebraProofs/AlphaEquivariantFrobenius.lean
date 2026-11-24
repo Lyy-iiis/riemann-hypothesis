@@ -106,7 +106,7 @@ theorem Lz_snd {ψ : Pt R 1 d} (hψ : Z ψ) (j : Fin d) (f : PS R 2 d) :
     Finset.sum_const_zero, zero_add, evsum hb, evm hb]
   refine Finset.sum_congr rfl fun c _ => ?_
   rw [ev2 hb (Z_pt 0) (Z_comp1 hψ (Z_pt 1)), ev1 hb (Z_pt 1), ep_comp1 ψ hb (Z_pt 1)]
-  simp only [ep_pt hb, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, germComp1_zero_of_noConstantCoeff hψ,
+  simp only [ep_pt hb, Matrix.cons_val_zero, Matrix.cons_val_one, germComp1_zero_of_noConstantCoeff hψ,
     ev_at_zero, cc_pderiv, lin]
 
 variable (p : ℕ) [hp : Fact p.Prime] [CharP R p]
@@ -181,18 +181,6 @@ private theorem Lz_ev_ptPow_pt {R : Type} [CommRing R] {d : ℕ} (p : ℕ) [Fact
     ep_zero hq]
   congr 1
 
-private theorem ev_ph1_zero_eq_one {R : Type} [CommRing R] {d n : ℕ} {O : Type} [CommRing O] [StarRing O]
-    (B : FB R d O) {x y : Pt R n d} (hx : Z x) (hy : Z y) : ev ![x, y, 0] B.ph1 = 1 := by
-  have hxy : ZZ ![x, y] := ZZ_cons hx (ZZ_cons hy ZZ_nil)
-  have e := congrArg (ev ![x, y]) B.cocycleLeft_zero_thd
-  rw [ev3 hxy (Z_pt 0) (Z_pt 1) Z_zero, ep_pt hxy, ep_pt hxy, ep_zero hxy] at e
-  simpa [ev_one] using e
-
-private theorem ev_pow1_zero_eq_one {R : Type} [CommRing R] {d n : ℕ} {O : Type} [CommRing O] [StarRing O]
-    (B : FB R d O) {x : Pt R n d} (hx : Z x) (k : ℕ) : ev ![x, 0] (pow1 B k) = 1 := by
-  rw [first_power_eq_prod_at B hx Z_zero]
-  exact Finset.prod_eq_one fun j _ => ev_ph1_zero_eq_one B (Z_comp1 (Z_act B.A _) hx) hx
-
 private theorem ev_zero_ad_eq_one {R : Type} [CommRing R] {d n : ℕ} {O : Type} [CommRing O] [StarRing O]
     (B : FB R d O) {x : Pt R n d} (hx : Z x) (a : O) : ev ![x, 0] (B.ad a) = 1 := by
   have hx' : ZZ ![x] := ZZ_cons hx ZZ_nil
@@ -211,13 +199,13 @@ private theorem ev_act_Lz_pow1_add_ev_act_prime_Lz_ad {R : Type} [CommRing R] {d
   have e1 : ev (n := 1) ![pt R d 0, 0]
       (ev ![comp1 (B.A.act (p : O)) (pt R d 0), pt R d 1] (B.ad a)) = 1 := by
     rw [ev2 hb (Z_comp1 (Z_act _ _) (Z_pt 0)) (Z_pt 1), ep_comp1 _ hb (Z_pt 0), ep_pt hb, ep_pt hb]
-    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, germCompOne_identityPoint_left]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, germCompOne_identityPoint_left]
     exact ev_zero_ad_eq_one B (Z_act _ _) a
   have e2 : ev (n := 1) ![pt R d 0, 0]
       (ev ![comp1 (B.A.act a) (pt R d 0), pt R d 1] (pow1 B p)) = 1 := by
     rw [ev2 hb (Z_comp1 (Z_act _ _) (Z_pt 0)) (Z_pt 1), ep_comp1 _ hb (Z_pt 0), ep_pt hb, ep_pt hb]
-    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, germCompOne_identityPoint_left]
-    exact ev_pow1_zero_eq_one B (Z_act _ _) p
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, germCompOne_identityPoint_left]
+    exact _root_.PositivityTheory.HtPt.Cb.first_power_zero_right B (Z_act _ _) p
   have e3 : Lz j (B.ad a ^ p) = 0 := by
     simp only [Lz, d_pow_p, evz hb]
   have e4 : ev (n := 1) ![pt R d 0, 0] (B.ad a ^ p) = 1 := by

@@ -77,12 +77,9 @@ theorem tan_comp {S : Scheme.{0}} {R : Type} [CommRing R] {A B : Over S} [GrpObj
   unfold IsTanAt at ht ⊢
   rw [Over.comp_left, ← Category.assoc, ht, ← Over.comp_left, MonObj.one_comp]
 
-theorem one_left {S : Scheme.{0}} {X A : Over S} [GrpObj A] : (1 : X ⟶ A).left = X.hom ≫ η[A].left := by
-  rw [Hom.one_def]; simp
+alias one_left := _root_.ReciprocityTheory.ChartRestriction.G.Chart.one_left'
 
-theorem spMap_comp {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (a : A →+* B) (b : B →+* C) :
-    spMap b ≫ spMap a = spMap (b.comp a) := by
-  simp [spMap, ← Spec.map_comp]
+alias spMap_comp := _root_.GlobalTheory.CompanionTheory.Ar.LieFin.spMap_comp'
 
 theorem bc_one {R V : Type} [CommRing R] [CommRing V] (f : R →+* V) {A : Over (Sp R)} [GrpObj A] :
     spMap (dualMap f) ≫ (1 : epsR R ⟶ A).left = (1 : epsAt (spMap f ≫ 𝟙 (Sp R)) ⟶ A).left := by
@@ -97,7 +94,7 @@ theorem bc_eps {R V : Type} [CommRing R] [CommRing V] (f : R →+* V) (N : ℕ) 
     spMap (dualMap f) ≫ spMap (GlobalTheory.CompanionTheory.Ar.epsMul (N : R)) = spMap (GlobalTheory.CompanionTheory.Ar.epsMul (N : V)) ≫ spMap (dualMap f) := by
   rw [spMap_comp, spMap_comp]
   congr 1
-  ext a <;> simp [dualMap, GlobalTheory.CompanionTheory.Ar.epsMul, TrivSqZeroExt.algebraMap_eq_inl, mul_comm]
+  ext a <;> simp [dualMap, GlobalTheory.CompanionTheory.Ar.epsMul, TrivSqZeroExt.algebraMap_eq_inl]
 
 theorem pow_left {R : Type} [CommRing R] {A : Over (Sp R)} [GrpObj A] [IsCommMonObj A] (v : epsR R ⟶ A)
     (hv : IsLieBasis ![v]) (N : ℕ) :

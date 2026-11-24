@@ -577,8 +577,6 @@ open NumberField MeasureTheory Matrix Formalism.MainNotions.GlobalTheoryTheory.G
 open Formalism.UG (cT)
 open scoped TensorProduct NNReal ENNReal
 
-theorem _root_.GlobalTheory.T.adelic_tensor_rational_approximation : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (ε : ℝ), 0 < ε → ∃ N : ℕ, 1 ≤ N ∧ ∀ b : AF F ⊗[F] E, ∃ q : ℕ, 1 ≤ q ∧ q ≤ N ∧ ∃ c : E, (q : AF F ⊗[F] E) * b - inclR (F := F) (AF F) c ∈ boxE F E ε := by
-  first | exact @GlobalTheory.CompanionTheory.RedCov.Simple.Dirichlet.dirichlet | exact GlobalTheory.CompanionTheory.RedCov.Simple.Dirichlet.dirichlet | (intros; apply GlobalTheory.CompanionTheory.RedCov.Simple.Dirichlet.dirichlet <;> assumption)
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.BlockDecomposition.AdelicTensorRationalApproximationStatement =====
@@ -1010,7 +1008,7 @@ theorem simple_bound : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [Num
     calc K * ε ^ d ≤ K * ε := mul_le_mul_of_nonneg_left h1 hK.le
       _ = K / (K + 1) := by rw [hεdef]; ring
       _ < 1 := by rw [div_lt_one (by positivity)]; linarith
-  obtain ⟨N, hN1, hN⟩ := GlobalTheory.T.adelic_tensor_rational_approximation F E ε hε
+  obtain ⟨N, hN1, hN⟩ := _root_.GlobalTheory.CompanionTheory.RedCov.Simple.Dirichlet.dirichlet F E ε hε
   have hN0 : (0 : ℝ) < N := by exact_mod_cast hN1
   refine ⟨(K + 1) * N, by positivity, ?_⟩
   intro ω hω s κ hκ e he hNM j' hj'
@@ -1047,7 +1045,7 @@ theorem simple_bound : ∀ (F E : Type) [Field F] [NumberField F] [Field E] [Num
     exact e1.symm
   have hiso : hE σ J ((q : E) • Xᵀ j - c • Xᵀ 0) ((q : E) • Xᵀ j - c • Xᵀ 0) = 0 := by
     refine (hBf _ _).symm.trans ?_
-    simp only [map_sub, map_smulₛₗ, LinearMap.sub_apply, LinearMap.smul_apply, hg, smul_zero, mul_zero, sub_zero]
+    simp only [map_sub, map_smulₛₗ, LinearMap.sub_apply, LinearMap.smul_apply, hg, smul_zero, sub_zero]
   have hNM' := hNM.2.2 _ hu0 hiso
 
   obtain ⟨A, hAdef⟩ : ∃ A, A = Real.exp (-s 0) := ⟨_, rfl⟩

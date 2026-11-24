@@ -410,7 +410,7 @@ theorem UpperTheory.Gal.productCup_of_system.idJ_of :
   choose w hwm hwt using fun k => (hD F K d x hc τ hτ a ha (omG x j • φ k)).2
   have hwB : ∀ k, w k ∈ omB ℂ K (rB ℂ K (xv x) {j}) (d - a) := by
     intro k
-    refine (GlobalTheory.T.twistedDual_regularForms_finiteCover ℂ F K d (xv x) hc τ hτ {j} (by simp) a (d - a) (by omega) (w k) (hwm k)).1 ?_
+    refine (_root_.GlobalTheory.PD.twistedDual_omB ℂ F K d (xv x) hc τ hτ {j} (by simp) a (d - a) (by omega) (w k) (hwm k)).1 ?_
     intro y hy
     have hy' : y ∈ ⋀[K]^a Ω[K⁄ℂ] := GlobalTheory.PD.mem_deg_of_mem_omB _ _ _ hy
     rw [ext_comm a (d - a) y (w k) hy' (hwm k), map_zsmul, map_zsmul]
@@ -866,7 +866,7 @@ private theorem ind_of {d : ℕ} {K S E : Type} [Field K] [Algebra ℂ K] [CommR
         · exact absurd hb ha
       · rintro rfl; exact ⟨h0, Or.inl rfl⟩
     have s0 : GlobalTheory.cubeSign ({0, i} : Finset (Fin (d + 1))) 0 = 1 := by
-      simp [GlobalTheory.cubeSign, Finset.filter_eq_empty_iff]
+      simp [GlobalTheory.cubeSign]
     have si : GlobalTheory.cubeSign ({0, i} : Finset (Fin (d + 1))) i = -1 := by
       have hp : (0 : Fin (d + 1)) < i := Fin.pos_iff_ne_zero.2 h
       have : ({0, i} : Finset (Fin (d + 1))).filter (· < i) = {0} := by
@@ -878,7 +878,7 @@ private theorem ind_of {d : ℕ} {K S E : Type} [Field K] [Algebra ℂ K] [CommR
         · rintro rfl; exact ⟨Or.inl rfl, hp⟩
       simp [GlobalTheory.cubeSign, this]
     rw [wd_apply', Finset.sum_pair h0, e0, ei, s0, si]
-    simp [app, inlE, sub_eq_add_neg, add_comm]
+    simp [app, inlE, sub_eq_add_neg]
   have hr : π (wd (fun l : Mi d => (Algebra.lmul ℂ S) (app (fun _ => 1) T.mu (inrE l : Fin (d + 1) ⊕ₗ Mi d)))
       (fun L' => detC T.rowMu (uni {0, i} L')) L) = 0 := by
 
@@ -1258,11 +1258,11 @@ theorem UpperTheory.Gal.productCup_of_system.prB_of :
       ∀ v ∈ omB ℂ K (rB ℂ K (xv x) (Finset.univ.erase i)) a,
       (LinearMap.mul ℂ (DR ℂ K)).compr₂ (trF ℂ τ ρ) u v = 0 := by
     intro i hi u hu v hv
-    have hvq : v ∈ ⋀[K]^a Ω[K⁄ℂ] := ((GlobalTheory.T.kahlerFormsOverSubalgebra_closure_properties ℂ K _ a 0).2.1 v hv).2.2.1
-    have hmem := (GlobalTheory.T.twistedDual_regularForms_finiteCover ℂ F K d (xv x) h τ hτ (Finset.univ.erase i) hi (d - a) a
+    have hvq : v ∈ ⋀[K]^a Ω[K⁄ℂ] := ((_root_.GlobalTheory.PD.omB_alg ℂ K _ a 0).2.1 v hv).2.2.1
+    have hmem := (_root_.GlobalTheory.PD.twistedDual_omB ℂ F K d (xv x) h τ hτ (Finset.univ.erase i) hi (d - a) a
       (by omega) v hvq).2 hv u hu
-    exact GlobalTheory.T.residue_functional_vanishes_on_omega_forms ℂ F d (xv x) h.pd ρ hρ i _ hi (Finset.notMem_erase i _) _ hmem
-  obtain ⟨ε, hε⟩ := GlobalTheory.T.cechDifferential_adjoint_cupProductPairing ℂ d _ _ (fun I => omB ℂ K (rB ℂ K (xv x) I) (d - a))
+    exact _root_.GlobalTheory.PD.ResVan.resvan ℂ F d (xv x) h.pd ρ hρ i _ hi (Finset.notMem_erase i _) _ hmem
+  obtain ⟨ε, hε⟩ := _root_.GlobalTheory.PD.CupAdj.cech_adj ℂ d _ _ (fun I => omB ℂ K (rB ℂ K (xv x) I) (d - a))
     (fun I => omB ℂ K (rB ℂ K (xv x) I) a) ((LinearMap.mul ℂ (DR ℂ K)).compr₂ (trF ℂ τ ρ))
     (mono _) (mono _) hvan ((d : ℤ) - (q : ℕ))
   obtain ⟨y', hy', rfl⟩ := hy
@@ -1626,9 +1626,9 @@ theorem UpperTheory.Gal.productCup_of_system.pInt_of :
     · rw [h0, map_zero]
     obtain ⟨hI, _, _, hm⟩ := hcu _ _ h0
     exact resP_eq_zero ρ _ _
-      (fun f hf => GlobalTheory.T.residue_functional_vanishes_on_omega_forms ℂ F d (xv x) hx.pd ρ hρ i _ hI (by simp) f hf) hm
+      (fun f hf => _root_.GlobalTheory.PD.ResVan.resvan ℂ F d (xv x) hx.pd ρ hρ i _ hI (by simp) f hf) hm
   refine ⟨fun L => ((-1 : ℤ) ^ (d + 1)) • resP (DR ℂ K) ρ (c (uni Finset.univ L)), ?_, ?_⟩
-  · simp only [Lef.omCx, GlobalTheory.PD.cech, GlobalTheory.PD.cechC, Submodule.mem_pi]
+  · simp only [Lef.omCx, GlobalTheory.PD.cech, GlobalTheory.PD.cechC]
     intro L _
     by_cases h0 : c (uni Finset.univ L) = 0
     · simp [h0]

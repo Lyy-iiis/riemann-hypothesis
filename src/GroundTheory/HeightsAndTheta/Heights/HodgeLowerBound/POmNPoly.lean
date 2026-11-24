@@ -80,12 +80,6 @@ namespace PtsPencil
 
 variable {K : Type} [Fintype K] {ι : K → Type} [∀ k, Fintype (ι k)]
 
-theorem cxHessian_congr {D : ℕ} {f f' : (Fin D → ℂ) → ℝ} {y : Fin D → ℂ} (h : f =ᶠ[𝓝 y] f') :
-    cxHessian f y = cxHessian f' y := by
-  have h2 : fderiv ℝ (fderiv ℝ f) y = fderiv ℝ (fderiv ℝ f') y := (h.fderiv (𝕜 := ℝ)).fderiv_eq
-  ext i j
-  simp only [cxHessian, h2]
-
 theorem cxHessian_lin {D : ℕ} {f g ψ : (Fin D → ℂ) → ℝ} {y : Fin D → ℂ} (a b : ℝ)
     (hf : ∀ᶠ y' in 𝓝 y, ContDiffAt ℝ 2 f y') (hg : ∀ᶠ y' in 𝓝 y, ContDiffAt ℝ 2 g y')
     (hψ : ψ =ᶠ[𝓝 y] fun y' => a * f y' + b * g y') :
@@ -138,7 +132,7 @@ theorem sheetDensity_congr {e : ℕ} (Q : Ideal (MRing ι))
     have hmc : ∀ᶠ y' in 𝓝 y, hγ.choose y' ∈ mcPts Q := hγ.choose_spec.2.mono fun _ h => h.2.1
     have hH : (fun k => cxHessian (fun y' => φ k (hγ.choose y')) y) =
         fun k => cxHessian (fun y' => φ' k (hγ.choose y')) y :=
-      funext fun k => cxHessian_congr (hmc.mono fun y' hy' => h k _ hy')
+      funext fun k => _root_.ReciprocityTheory.ChartRestriction.G.Geo.cxHessian_congr (hmc.mono fun y' hy' => h k _ hy')
     simp only [maDensity, hH]
   · simp only [sheetDensity, dif_neg hγ]
 
@@ -377,13 +371,11 @@ theorem log_NbarQ_affine (X : ComponentSetting D O Lt) (B : ℕ) (t : ℝ) {z : 
     intro q
     unfold ComponentSetting.NbarQ
     rw [smoothRep_h _ hz, log_hermOfFun _ _ hz']
-    beta_reduce
     rw [log_refNorm_lin _ _ _ _ hz', ← hEw, ← hVw, mul_pow, pow_one, Nat.cast_one, one_mul]
   have hM : Real.log ((muReg X.H X.S B t).h z) = Real.log (refNorm (muTwDeg X.H B) z) +
       Real.log (Ew * Vw / refNorm (muTwDeg X.H B) (orbitRep z)) := by
     unfold muReg
     rw [smoothRep_h _ hz, log_hermOfFun _ _ hz']
-    beta_reduce
     rw [hreg, ← hEw, ← hVw]
   have hLRw : ∀ q : ℕ, Real.log (refNorm ((q : ℤ) • muTwDeg X.H B + ((1 : ℕ) : ℤ) • D.a') (orbitRep z)) =
       q * Real.log (refNorm (muTwDeg X.H B) (orbitRep z)) + Real.log (refNorm D.a' (orbitRep z)) := fun q => by

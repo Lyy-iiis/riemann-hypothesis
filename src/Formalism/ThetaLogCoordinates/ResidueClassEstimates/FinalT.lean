@@ -676,8 +676,7 @@ lemma pos_row {r K Ns n : ℕ} {la : ℕ → ℤ} {L : ℝ} (h2 : 2 * Ns ≤ K) 
     rw [Finset.sum_image, Finset.sum_filter]
     intro x hx y hy hxy
     have hxy' : x - i = y - i := hxy
-    simp only [Finset.coe_filter, Finset.mem_filter, Finset.mem_Ico, Set.mem_setOf_eq,
-      Finset.mem_coe] at hx hy
+    simp only [Finset.coe_filter, Finset.mem_Ico, Set.mem_setOf_eq] at hx hy
     omega
   rw [hS]
   generalize hDdef : ((Ico (i + 1) n).filter (fun j => la j = 0)).image (fun j => j - i) = D
@@ -752,8 +751,7 @@ lemma neg_row {r K Ns n : ℕ} {la : ℕ → ℤ} {L : ℝ} (h2 : 2 * Ns ≤ K) 
     rw [Finset.sum_image, Finset.sum_filter]
     intro x hx y hy hxy
     have hxy' : j - x = j - y := hxy
-    simp only [Finset.coe_filter, Finset.mem_filter, Finset.mem_range, Set.mem_setOf_eq,
-      Finset.mem_coe] at hx hy
+    simp only [Finset.coe_filter, Finset.mem_range, Set.mem_setOf_eq] at hx hy
     omega
   rw [hS]
   generalize hDdef : ((range j).filter (fun i => la i = 0)).image (fun i => j - i) = D
@@ -1203,7 +1201,7 @@ lemma HStrip.tailPos_le {n : ℕ} {a b : ℕ → ℤ} (h : HStrip n a b) (u : �
 lemma wsize_eq_tails (n : ℕ) (a : ℕ → ℤ) : wsize n a = tailPos n a 0 - tailPos n (revW n a) 0 := by
   unfold wsize tailPos revW
   rw [Finset.sum_filter, Finset.sum_filter]
-  simp only [Nat.zero_le, if_true, ite_true]
+  simp only [Nat.zero_le, if_true]
   have h := Finset.sum_range_reflect (fun m => max (-(a m)) 0) n
   try simp only at h
   rw [h, ← Finset.sum_sub_distrib]
