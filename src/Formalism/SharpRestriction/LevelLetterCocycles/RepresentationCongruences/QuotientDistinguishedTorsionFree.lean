@@ -7,7 +7,6 @@ public import Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongr
 -- Members: Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongruences.CoeffEqZeroOfSumEqZero, Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongruences.QuotientDistinguishedTorsionFree
 
 -- ===== clump member: Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongruences.CoeffEqZeroOfSumEqZero =====
--- clump-header: {"m": "Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongruences.CoeffEqZeroOfSumEqZero", "h": "module\n\npublic import Mathlib.RingTheory.PowerSeries.WeierstrassPreparation\npublic import Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongruences.EqZeroOfForallMemCoeffFiltration\nimport Mathlib.Tactic.TypeStar\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -169,7 +168,6 @@ end -- clump:auto
 -- ===== end clump member: Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongruences.CoeffEqZeroOfSumEqZero =====
 
 -- ===== clump member: Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongruences.QuotientDistinguishedTorsionFree =====
--- clump-header: {"m": "Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongruences.QuotientDistinguishedTorsionFree", "h": "module\n\npublic import Mathlib.RingTheory.DiscreteValuationRing.Basic\npublic import Mathlib.RingTheory.LocalRing.ResidueField.Defs\npublic import Mathlib.RingTheory.PowerSeries.Order\npublic import Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongruences.CoeffEqZeroOfSumEqZero\nimport Formalism.SharpRestriction.LevelLetterCocycles.RepresentationCongruences.EqZeroOfForallMemCoeffFiltration\nimport Mathlib.Tactic.TypeStar\n\n"}
 section -- clump:auto
 @[expose] public section
 

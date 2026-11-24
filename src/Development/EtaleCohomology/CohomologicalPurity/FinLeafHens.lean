@@ -52,7 +52,6 @@ import Mathlib.Algebra.Category.Ring.FilteredColimits
 -- Members: Development.EtaleCohomology.CohomologicalPurity.LeafCoeqPf, Development.EtaleCohomology.CohomologicalPurity.LeafColHensPf, Development.EtaleCohomology.CohomologicalPurity.LeafColUnivPf, Development.EtaleCohomology.CohomologicalPurity.LeafCompPf, Development.EtaleCohomology.CohomologicalPurity.LeafDiagPf, Development.EtaleCohomology.CohomologicalPurity.LeafHensCut, Development.EtaleCohomology.CohomologicalPurity.LeafInvPf, Development.EtaleCohomology.CohomologicalPurity.LeafRootHensPf, Development.EtaleCohomology.CohomologicalPurity.LeafRootStdPf, Development.EtaleCohomology.CohomologicalPurity.LeafStagePf, Development.EtaleCohomology.CohomologicalPurity.LeafSupPf, Development.EtaleCohomology.CohomologicalPurity.FinLeafHens
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafCoeqPf =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafCoeqPf", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafHensCutDef\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -120,7 +119,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafCoeqPf =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafColHensPf =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafColHensPf", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafHensCutDef\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -195,7 +193,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafColHensPf =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafColUnivPf =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafColUnivPf", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafHensCutDef\nimport Mathlib.Tactic.Linter.Style\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -239,7 +236,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafColUnivPf =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafCompPf =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafCompPf", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafHensCutDef\nimport Mathlib.Tactic.Linter.Style\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -307,7 +303,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafCompPf =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafDiagPf =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafDiagPf", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafHensCutDef\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -396,7 +391,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafDiagPf =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafHensCut =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafHensCut", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafIndExc\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafHensCutDef\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -460,7 +454,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafHensCut =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafInvPf =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafInvPf", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafHensCutDef\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\nimport Mathlib.Topology.Sheaves.Init\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -524,7 +517,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafInvPf =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafRootHensPf =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafRootHensPf", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafRootPf\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -606,7 +598,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafRootHensPf =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafRootStdPf =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafRootStdPf", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafRootPf\npublic import Mathlib.RingTheory.Etale.StandardEtale\nimport Mathlib.Tactic.Lemma\nimport Mathlib.Tactic.Linter.HaveILetI\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -744,7 +735,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafRootStdPf =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafStagePf =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafStagePf", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafHensCutDef\nimport Mathlib.Algebra.Category.Ring.FilteredColimits\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -835,7 +825,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafStagePf =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.LeafSupPf =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.LeafSupPf", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafHensCutDef\nimport Mathlib.Tactic.Linter.Style\n\n"}
 section -- clump:auto
 @[expose] public section
 
@@ -947,7 +936,6 @@ end -- clump:auto
 -- ===== end clump member: Development.EtaleCohomology.CohomologicalPurity.LeafSupPf =====
 
 -- ===== clump member: Development.EtaleCohomology.CohomologicalPurity.FinLeafHens =====
--- clump-header: {"m": "Development.EtaleCohomology.CohomologicalPurity.FinLeafHens", "h": "module\n\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafRootPf\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafIndExc\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafCoeqPf\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafColHensPf\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafColUnivPf\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafCompPf\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafDiagPf\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafHensCut\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafInvPf\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafRootHensPf\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafRootStdPf\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafStagePf\npublic import Development.EtaleCohomology.CohomologicalPurity.LeafSupPf\nimport Mathlib.Algebra.Order.Floor.Extended\nimport Mathlib.Algebra.Order.Floor.Semifield\nimport Mathlib.Algebra.Order.Interval.Basic\nimport Mathlib.Analysis.Complex.UpperHalfPlane.Basic\nimport Mathlib.Analysis.Normed.Algebra.GelfandRadius\nimport Mathlib.Analysis.SpecialFunctions.Bernstein\nimport Mathlib.Analysis.SpecialFunctions.Gamma.Basic\nimport Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp\nimport Mathlib.Combinatorics.Enumerative.DyckWord\nimport Mathlib.Combinatorics.SimpleGraph.Triangle.Removal\nimport Mathlib.Data.NNRat.Floor\nimport Mathlib.Data.Nat.Choose.Multinomial\nimport Mathlib.Geometry.Euclidean.Volume.Basic\nimport Mathlib.NumberTheory.Chebyshev\nimport Mathlib.NumberTheory.Height.NumberField\nimport Mathlib.NumberTheory.Height.Projectivization\nimport Mathlib.NumberTheory.LucasLehmer\nimport Mathlib.NumberTheory.SelbergSieve\nimport Mathlib.RingTheory.Radical.NatInt\nimport Mathlib.Tactic.Echelon.Zsqrtd\nimport Mathlib.Tactic.Inclusion.Extension.Core.Core\nimport Mathlib.Tactic.Inclusion.Extension.Interval.BinarySplit\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp\nimport Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Hypotheses\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Basic\nimport Mathlib.Tactic.Inclusion.Extension.IntervalInt.Hypotheses\nimport Mathlib.Tactic.NormNum.Irrational\nimport Mathlib.Tactic.NormNum.IsCoprime\nimport Mathlib.Tactic.NormNum.IsSquare\nimport Mathlib.Tactic.NormNum.LegendreSymbol\nimport Mathlib.Tactic.NormNum.ModEq\nimport Mathlib.Tactic.NormNum.NatFib\nimport Mathlib.Tactic.NormNum.NatLog\nimport Mathlib.Tactic.NormNum.NatSqrt\nimport Mathlib.Tactic.NormNum.Ordinal\nimport Mathlib.Tactic.NormNum.Parity\nimport Mathlib.Tactic.NormNum.Prime\nimport Mathlib.Tactic.NormNum.RealSqrt\n\n"}
 section -- clump:auto
 @[expose] public section
 
