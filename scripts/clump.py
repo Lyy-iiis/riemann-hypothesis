@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Combine small modules into larger files ("clumps") along the import graph, and undo it.
+"""Combine small modules into larger files ("clumps") along the import graph.
 
 A clump is a coarsening of the import graph: a module R (the clump root) together with
 modules whose only project importer lies inside the clump.  Contracting such a set can never
@@ -12,24 +12,24 @@ written verbatim between seam markers, inside its own `section ... end`, with an
 namespaces it left open closed explicitly:
 
     -- ===== clump member: A.B.C =====
-    -- clump-header: {"m": "A.B.C", "h": "module\\n\\npublic import X\\n..."}
-    section
+    section -- clump:auto
     <original body of A/B/C.lean, verbatim>
     end -- clump:auto
     -- ===== end clump member: A.B.C =====
 
-`clump.py unclump` splits clump files back into the original files, byte for byte, provided
-the member bodies were not edited.  If they were, it still restores the edited bodies; the
-original import headers are restored as recorded.
+Clumping is one-way.  The clump file has one import block, the union of its members' imports,
+and the members' own import headers are not kept.  The original files are in git history, in
+the parent of the commit that made the clump (9fcb91b4faf for the clumps made in #324).
 
 Usage:
     clump.py plan   ROOT [--max-lines N] [--out plan.json]
     clump.py apply  ROOT plan.json
-    clump.py unclump ROOT
     clump.py blame  ROOT build.log...   # members containing build errors, for clump-exclude.txt
 
-Members that fail to compile once clumped (e.g. because a sibling member's declarations or
-imports change how a name resolves) are listed in scripts/clump-exclude.txt and stay standalone.
+Modules that fail to compile once clumped (e.g. because a sibling member's declarations or
+imports change how a name resolves) are listed in scripts/clump-exclude.txt so that `plan`
+leaves them standalone.  A member that is already in a clump has to be moved back to its own
+file by hand.
 """
 
 import argparse
@@ -42,7 +42,6 @@ import sys
 
 SEAM_BEGIN = "-- ===== clump member: "
 SEAM_END = "-- ===== end clump member: "
-HEADER_TAG = "-- clump-header: "
 AUTO = " -- clump:auto"
 CLUMP_MARK = "-- This file was produced by scripts/clump.py from the modules listed below."
 
@@ -291,16 +290,10 @@ def render(root, order, mods):
     out += ["", CLUMP_MARK]
     out += ["-- Members: " + ", ".join(order), ""]
     for m in order:
-        mod = by[m]
-        body = mod.body
-        trailing_nl = body.endswith("\n")
-        if trailing_nl:
+        body = by[m].body
+        if body.endswith("\n"):
             body = body[:-1]
-        info = {"m": m, "h": mod.header}
-        if not trailing_nl:
-            info["nonl"] = True
         out.append(SEAM_BEGIN + m + " =====")
-        out.append(HEADER_TAG + json.dumps(info, ensure_ascii=False))
         out.append("section" + AUTO)
         out.append(body)
         out += closers(open_scopes(body))
@@ -319,50 +312,6 @@ def apply(root, clumps):
                 os.remove(os.path.join(root, mods[m].path))
         with open(os.path.join(root, mods[r].path), "w", encoding="utf-8") as f:
             f.write(text)
-
-
-# ---------------------------------------------------------------------------
-# Unclumping
-
-def unclump_text(text):
-    lines = text.split("\n")
-    i, out = 0, {}
-    while i < len(lines):
-        if not lines[i].startswith(SEAM_BEGIN):
-            i += 1
-            continue
-        info = json.loads(lines[i + 1][len(HEADER_TAG):])
-        name = info["m"]
-        j = i + 2
-        assert lines[j] == "section" + AUTO, (name, lines[j])
-        k = j + 1
-        while lines[k] != SEAM_END + name + " =====":
-            k += 1
-        body = [l for l in lines[j + 1:k] if not l.endswith(AUTO)]
-        body = "\n".join(body) + ("" if info.get("nonl") else "\n")
-        out[name] = info["h"] + body
-        i = k + 1
-    return out
-
-
-def unclump(root):
-    out = subprocess.run(["git", "-C", root, "ls-files", "-z", "--cached", "--others",
-                          "--exclude-standard", "src/*.lean"],
-                         capture_output=True, check=True).stdout.decode()
-    n = 0
-    for p in out.split("\0"):
-        if not p or not os.path.exists(os.path.join(root, p)):
-            continue
-        with open(os.path.join(root, p), encoding="utf-8") as f:
-            text = f.read()
-        if CLUMP_MARK not in text:
-            continue
-        for name, content in unclump_text(text).items():
-            q = os.path.join(root, "src", *name.split(".")) + ".lean"
-            with open(q, "w", encoding="utf-8") as f:
-                f.write(content)
-        n += 1
-    print(f"unclumped {n} files")
 
 
 # ---------------------------------------------------------------------------
@@ -426,7 +375,6 @@ def main():
     b = sub.add_parser("blame", help="list clump members containing errors in build logs")
     b.add_argument("root"); b.add_argument("logs", nargs="+")
     a = sub.add_parser("apply"); a.add_argument("root"); a.add_argument("plan")
-    u = sub.add_parser("unclump"); u.add_argument("root")
     args = ap.parse_args()
     if args.cmd == "plan":
         mods = load(args.root)
@@ -440,8 +388,6 @@ def main():
             apply(args.root, json.load(f))
     elif args.cmd == "blame":
         print("\n".join(blame(args.root, args.logs)))
-    else:
-        unclump(args.root)
 
 
 if __name__ == "__main__":
