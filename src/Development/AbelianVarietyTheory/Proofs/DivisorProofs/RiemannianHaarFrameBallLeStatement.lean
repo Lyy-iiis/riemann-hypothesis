@@ -271,7 +271,11 @@ theorem GlobalTheory.SUVol.Degenerate.riemHaar_le_one : ∀ (E : Type) [Field E]
     · exact Or.inl h
     · right
       have : r ^ 2 ≤ 1 := by omega
-      nlinarith
+      by_contra hne
+      have h2 : 2 ≤ r := by omega
+      have := Nat.mul_le_mul h2 h2
+      rw [sq] at *
+      omega
   haveI := realSU_subsingleton Ψ G h
   haveI : CompactSpace (realSU Ψ G) := Finite.compactSpace
   set K := (realLie Ψ G).comap (fromFrame x) with hK
@@ -808,7 +812,7 @@ theorem riemLie_frameBox_le : ∀ (E : Type) [Field E] [NumberField E] [IsCMFiel
   have h2 : 2 * t * √2 ≤ 3 * t := by
     have hs : √2 ≤ 3 / 2 := by
       rw [Real.sqrt_le_left (by norm_num)]; norm_num
-    nlinarith
+    exact (mul_le_mul_of_nonneg_left hs (by linarith : (0 : ℝ) ≤ 2 * t)).trans_eq (by ring)
   exact pow_le_pow_left₀ (by positivity) h2 _
 
 end GlobalTheory.CovTop.VolUp.FrameBox
@@ -942,7 +946,7 @@ theorem tangentHaar_le_two_mul_lam : ∀ (E : Type) [Field E] [NumberField E] [I
     · have hr1 : 0 < ρ / (1 + ε / 3) := div_pos hρ0 hκ0
       have hr2 : ρ / (1 + ε / 3) < ρ := div_lt_self hρ0 (by linarith)
       have hr3 : (1 - ε) * ρ < ρ / (1 + ε / 3) := by
-        rw [lt_div_iff₀ hκ0]; nlinarith [mul_pos hρ0 hε0, mul_pos (mul_pos hρ0 hε0) hε0]
+        rw [lt_div_iff₀ hκ0]; linarith [mul_pos hρ0 hε0, mul_pos (mul_pos hρ0 hε0) hε0]
       have H2 := (H X hXb (ρ / (1 + ε / 3)) ⟨hr1, by linarith⟩).2
       rw [mul_div_cancel₀ _ hκ0.ne'] at H2
       calc ν (closedBall X ((1 - ε) * ρ)) ≤ ν (ball X (ρ / (1 + ε / 3))) :=
@@ -954,19 +958,19 @@ theorem tangentHaar_le_two_mul_lam : ∀ (E : Type) [Field E] [NumberField E] [I
         _ ≤ μ (chartExp Ψ G hG '' closedBall 0 ρ) := measure_mono (image_mono ball_subset_closedBall)
         _ = ν (closedBall 0 ρ) := (hνsub _ measurableSet_closedBall hcl0).symm
     · have hr1 : 0 < (1 + ε / 3) * ρ := by positivity
-      have hr2 : (1 + ε / 3) * ρ < δ := by nlinarith
+      have hr2 : (1 + ε / 3) * ρ < δ := (mul_lt_mul_of_pos_right hκ2 hρ0).trans (by linarith)
       have H1 := (H X hXb ((1 + ε / 3) * ρ) ⟨hr1, hr2⟩).1
       have hsq : (1 + ε / 3) * ((1 + ε / 3) * ρ) ≤ (1 + ε) * ρ := by
-        nlinarith [mul_pos (mul_pos hρ0 hε0) (by linarith : (0:ℝ) < 3 - ε)]
+        linarith [mul_pos (mul_pos hρ0 hε0) (by linarith : (0:ℝ) < 3 - ε)]
       calc ν (closedBall 0 ρ) ≤ ν (ball 0 ((1 + ε / 3) * ρ)) :=
-            measure_mono (closedBall_subset_ball (by nlinarith))
+            measure_mono (closedBall_subset_ball (lt_mul_of_one_lt_left hρ0 (by linarith)))
         _ = μ (chartExp Ψ G hG '' ball 0 ((1 + ε / 3) * ρ)) :=
-            hνsub _ measurableSet_ball (hball 0 _ (by rw [norm_zero]; nlinarith))
+            hνsub _ measurableSet_ball (hball 0 _ (by rw [norm_zero]; linarith [mul_lt_mul_of_pos_right hκ2 hρ0]))
         _ = μ ((fun h => chartExp Ψ G hG X * h) '' (chartExp Ψ G hG '' ball 0 ((1 + ε / 3) * ρ))) :=
             (himg _ _).symm
         _ ≤ μ (chartExp Ψ G hG '' ball X ((1 + ε / 3) * ((1 + ε / 3) * ρ))) := measure_mono H1
         _ = ν (ball X ((1 + ε / 3) * ((1 + ε / 3) * ρ))) :=
-            (hνsub _ measurableSet_ball (hball X _ (by nlinarith))).symm
+            (hνsub _ measurableSet_ball (hball X _ (by linarith [mul_lt_mul_of_pos_right (by linarith : 1 + ε < 2) hρ0, hsq]))).symm
         _ ≤ ν (closedBall X ((1 + ε) * ρ)) :=
             measure_mono (ball_subset_closedBall.trans (closedBall_subset_closedBall hsq))
   obtain ⟨c, hc0, hct, hup, hdown⟩ := Formalism.BasicNotions.Examples₂.CD.exists_density lam ν hq hpos
@@ -1159,7 +1163,7 @@ theorem riemHaar_frBall_le : ∀ (E : Type) [Field E] [NumberField E] [IsCMField
   have hr2 : 3 ≤ r ^ 2 - 1 := by
     have : r ≠ 1 := fun h => hd (by rw [h]; simp)
     have : 2 ≤ r := by omega
-    have : 4 ≤ r ^ 2 := by nlinarith
+    have : 4 ≤ r ^ 2 := by rw [sq]; exact Nat.mul_le_mul this this
     omega
   have hd3 : 3 ≤ Ψ.card * (r ^ 2 - 1) := le_trans hr2 (Nat.le_mul_of_pos_left _ hΨ)
   obtain ⟨lam, hlam, hmap⟩ := exists_lam Ψ G x hx
